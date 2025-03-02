@@ -1227,4 +1227,67 @@
 <script type="module" src="../js/firebase-config.js"></script>
 <script type="module" src="../js/patient-form.js"></script>
 
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="../js/firebase-config.js"></script>
+<script type="module">
+    import { savePatient, getPatientById, updatePatient } from "../js/patients.js";
+    
+    // Obtener ID de paciente de la URL (si existe)
+    const urlParams = new URLSearchParams(window.location.search);
+    const patientId = urlParams.get('id');
+    
+    // Si hay ID, cargar datos del paciente
+    if (patientId) {
+        document.getElementById('formTitle').textContent = "Editar Paciente";
+        loadPatient(patientId);
+    }
+    
+    // Cargar datos del paciente
+    async function loadPatient(id) {
+        try {
+            const patient = await getPatientById(id);
+            if (patient) {
+                // Completar formulario con datos del paciente
+                document.getElementById('firstName').value = patient.firstName || '';
+                document.getElementById('lastName').value = patient.lastName || '';
+                document.getElementById('rut').value = patient.rut || '';
+                // Completar el resto de campos...
+            }
+        } catch (error) {
+            console.error("Error al cargar paciente:", error);
+            alert("Error al cargar datos del paciente");
+        }
+    }
+    
+    // Enviar formulario
+    document.getElementById('patientForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        try {
+            // Recopilar datos del formulario
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                rut: document.getElementById('rut').value,
+                // Recopilar el resto de campos...
+            };
+            
+            if (patientId) {
+                // Actualizar paciente existente
+                await updatePatient(patientId, formData);
+                alert("Paciente actualizado correctamente");
+            } else {
+                // Guardar nuevo paciente
+                await savePatient(formData);
+                alert("Paciente guardado correctamente");
+                document.getElementById('patientForm').reset();
+            }
+        } catch (error) {
+            console.error("Error al guardar paciente:", error);
+            alert("Error al guardar el paciente: " + error.message);
+        }
+    });
+</script>
+
 </body>
