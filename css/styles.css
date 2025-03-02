@@ -180,3 +180,28 @@ a:hover {
 .spinner-border {
     color: var(--primary-color);
 }
+
+/* Estilos para botones de acción rápida */
+.acciones-rapidas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.acciones-rapidas button {
+    min-width: 150px;
+    padding: 15px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.acciones-rapidas button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Ocultar mensaje de carga al cargar datos */
+.cargando-mensaje {
+    font-style: italic;
+    color: #6c757d;
+}
