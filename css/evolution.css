@@ -1,4 +1,4 @@
-/* Estilos para el módulo de Evoluciones */
+/* Estilos para módulo de evoluciones */
 
 /* Estilos para la lista de evoluciones */
 #evolutionsList {
@@ -6,87 +6,56 @@
     overflow-y: auto;
 }
 
-.evolution-item {
-    border-left: 4px solid transparent;
+#evolutionsList .list-group-item {
+    border-left: 3px solid transparent;
     transition: all 0.2s ease;
 }
 
-.evolution-item:hover {
-    background-color: #f8f9fa;
+#evolutionsList .list-group-item:hover {
+    background-color: rgba(0, 123, 255, 0.05);
 }
 
-.evolution-item.active {
-    border-left-color: #007bff;
+#evolutionsList .list-group-item.active {
     background-color: rgba(0, 123, 255, 0.1);
+    border-left-color: #007bff;
 }
 
-.evolution-item .evolution-date {
-    font-size: 0.8rem;
-    color: #6c757d;
-}
-
-.evolution-item .evolution-session {
-    font-weight: bold;
-}
-
-.evolution-item .evolution-response {
-    font-size: 0.8rem;
-    margin-top: 2px;
-}
-
-.evolution-response-Excelente {
-    color: #28a745;
-}
-
-.evolution-response-Buena {
-    color: #17a2b8;
-}
-
-.evolution-response-Regular {
-    color: #fd7e14;
-}
-
-.evolution-response-Mala {
-    color: #dc3545;
-}
-
-.evolution-response-SinCambios {
-    color: #6c757d;
+/* Estilos para el selector de paciente */
+.selected-patient {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
 }
 
 /* Estilos para estructura SOAP */
 .soap-container {
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
-    overflow: hidden;
 }
 
 .soap-section {
-    margin-bottom: 1rem;
+    padding: 1rem;
     border-bottom: 1px solid #dee2e6;
-    padding: 0.5rem;
 }
 
 .soap-section:last-child {
     border-bottom: none;
-    margin-bottom: 0;
 }
 
 .soap-header {
+    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
-    margin-bottom: 0.5rem;
 }
 
 .soap-letter {
+    width: 25px;
+    height: 25px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: #007bff;
-    color: white;
     font-weight: bold;
     margin-right: 0.5rem;
 }
@@ -95,165 +64,62 @@
     font-weight: bold;
 }
 
-/* Estilos para los detalles de evolución */
-.evolution-detail-card {
-    border-left: 4px solid #007bff;
-    margin-bottom: 1rem;
-}
-
-.evolution-detail-header {
-    background-color: #f8f9fa;
-    font-weight: bold;
-    padding: 0.5rem;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.evolution-detail-content {
-    padding: 0.75rem;
-}
-
-.evolution-metrics {
-    background-color: #f8f9fa;
+/* Estilos para visualización de SOAP */
+.soap-display {
+    border: 1px solid #dee2e6;
     border-radius: 0.25rem;
-    padding: 0.75rem;
-    margin-top: 1rem;
 }
 
-.evolution-metrics .metric-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.5rem;
+.soap-item {
+    padding: 1rem;
     border-bottom: 1px solid #dee2e6;
 }
 
-.evolution-metrics .metric-item:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
+.soap-item:last-child {
     border-bottom: none;
 }
 
-.evolution-metrics .metric-label {
+.soap-content {
+    margin-top: 0.5rem;
+    white-space: pre-line;
+}
+
+/* Estilos para métricas */
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+}
+
+.metric-label {
     font-weight: bold;
 }
 
-.evolution-metrics .metric-value {
-    text-align: right;
-}
-
-.evolution-techniques {
-    font-style: italic;
-    color: #6c757d;
-    margin-top: 1rem;
-}
-
-.evolution-response {
-    margin-top: 1rem;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    font-weight: bold;
-    text-align: center;
-}
-
-.evolution-response.Excelente {
-    background-color: rgba(40, 167, 69, 0.1);
-    color: #28a745;
-}
-
-.evolution-response.Buena {
-    background-color: rgba(23, 162, 184, 0.1);
-    color: #17a2b8;
-}
-
-.evolution-response.Regular {
-    background-color: rgba(253, 126, 20, 0.1);
-    color: #fd7e14;
-}
-
-.evolution-response.Mala {
-    background-color: rgba(220, 53, 69, 0.1);
-    color: #dc3545;
-}
-
-.evolution-response.SinCambios {
-    background-color: rgba(108, 117, 125, 0.1);
-    color: #6c757d;
-}
-
-/* Estilos para el seguimiento de objetivos */
-.objective-progress {
-    height: 0.5rem;
-    border-radius: 0.25rem;
-}
-
-.objective-status {
-    font-size: 0.8rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    display: inline-block;
-}
-
-.objective-status.en-progreso {
-    background-color: rgba(0, 123, 255, 0.1);
-    color: #007bff;
-}
-
-.objective-status.completado {
-    background-color: rgba(40, 167, 69, 0.1);
-    color: #28a745;
-}
-
-.objective-status.retrasado {
-    background-color: rgba(253, 126, 20, 0.1);
-    color: #fd7e14;
-}
-
-.objective-status.estancado {
-    background-color: rgba(220, 53, 69, 0.1);
-    color: #dc3545;
-}
-
-/* Estilos para gráficos de progreso */
+/* Estilos para gráficos */
 .progress-chart-container {
     height: 300px;
     position: relative;
+    margin-bottom: 1.5rem;
 }
 
-/* Estilos para tabla comparativa */
+/* Estilos para comparativa */
 .positive-change {
     color: #28a745;
+    font-weight: bold;
 }
 
 .negative-change {
     color: #dc3545;
-}
-
-.no-change {
-    color: #6c757d;
+    font-weight: bold;
 }
 
 .mcid-achieved {
     background-color: rgba(40, 167, 69, 0.1);
 }
 
-.mcid-not-achieved {
-    background-color: rgba(220, 53, 69, 0.1);
-}
-
-/* Media queries para responsividad */
+/* Responsive */
 @media (max-width: 768px) {
     .progress-chart-container {
         height: 250px;
-        margin-bottom: 1.5rem;
-    }
-    
-    .soap-container {
-        flex-direction: column;
-    }
-    
-    .soap-section {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 1rem;
     }
 }
