@@ -2302,4 +2302,65 @@ async function loadPatientTreatmentPlan(patientId) {
         const treatmentsRef = collection(db, 'treatments');
         
         // Buscar el plan de tratamiento del paciente
-        const treatmentQuery = query
+        const treatmentQuery = query(treatmentsRef, where('patientId', '==', patientId));
+        const treatmentSnapshot = await getDocs(treatmentQuery);
+        
+        // Reiniciar plan actual
+        currentTreatmentPlan = {
+            objectives: [],
+            exercises: [],
+            sessions: [],
+            recommendations: [],
+            frequency: '',
+            estimatedSessions: 0,
+            sessionDuration: 0
+        };
+        
+        if (!treatmentSnapshot.empty) {
+            // Cargar datos del plan existente
+            const treatmentData = treatmentSnapshot.docs[0].data();
+            
+            currentTreatmentPlan.objectives = treatmentData.objectives || [];
+            currentTreatmentPlan.exercises = treatmentData.exercises || [];
+            currentTreatmentPlan.sessions = treatmentData.sessions || [];
+            currentTreatmentPlan.recommendations = treatmentData.recommendations || [];
+            currentTreatmentPlan.frequency = treatmentData.frequency || '';
+            currentTreatmentPlan.estimatedSessions = treatmentData.estimatedSessions || 0;
+            currentTreatmentPlan.sessionDuration = treatmentData.sessionDuration || 0;
+            
+            // Actualizar campos del formulario
+            document.getElementById('treatmentFrequency').value = currentTreatmentPlan.frequency;
+            document.getElementById('estimatedSessions').value = currentTreatmentPlan.estimatedSessions;
+            document.getElementById('sessionDuration').value = currentTreatmentPlan.sessionDuration;
+            
+            // Mostrar datos en pestañas
+            displaySmartObjectives();
+            displayExercises();
+            displaySessions();
+            renderSessionsCalendar(currentTreatmentPlan.frequency, currentTreatmentPlan.estimatedSessions);
+            updateTimeline();
+            updateTreatmentSummary();
+            
+            // Generar recomendaciones basadas en evidencia (si no hay)
+            if (!currentTreatmentPlan.recommendations || currentTreatmentPlan.recommendations.length === 0) {
+                generateEvidenceBasedRecommendations(patientId);
+            } else {
+                displayRecommendations();
+            }
+        } else {
+            // No hay plan existente, mostrar formularios vacíos
+            displaySmartObjectives();
+            displayExercises();
+            displaySessions();
+            initializeSessionsCalendar();
+            initializeTimeline();
+            updateTreatmentSummary();
+            
+            // Generar recomendaciones basadas en evidencia
+            generateEvidenceBasedRecommendations(patientId);
+        }
+    } catch (error) {
+        console.error('Error al cargar plan de tratamiento:', error);
+        alert('Hubo un error al cargar el plan de tratamiento. Por favor intente nuevamente.');
+    }
+}
