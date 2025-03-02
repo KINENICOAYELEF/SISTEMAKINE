@@ -4,31 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evoluciones - Sistema Kinesiológico</title>
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.min.css">
+    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/evolution.css">
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar del dashboard (se incluirá desde dashboard.js) -->
-            <div id="sidebar-container"></div>
-            
-            <!-- Contenido principal -->
-            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1><i class="fas fa-chart-line"></i> Evoluciones</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0" id="patientInfoBanner">
-                        <!-- Información del paciente seleccionado se mostrará aquí -->
+            <!-- Sidebar (menú lateral) -->
+            <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="sidebar-header mb-3">
+                        <h5 class="text-center">Sistema Kinesiológico</h5>
+                        <hr>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../dashboard.html">
+                                <i class="fas fa-home"></i> Panel Principal
+                            </a>
+                        </li>
+                        
+                        <li class="nav-header mt-3">PACIENTES</li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="patient-form.html">
+                                <i class="fas fa-user-plus"></i> Formulario de Ingreso
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="records.html">
+                                <i class="fas fa-users"></i> Listado de Pacientes
+                            </a>
+                        </li>
+                        
+                        <li class="nav-header mt-3">EVALUACIÓN</li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="diagnosis.html">
+                                <i class="fas fa-stethoscope"></i> Diagnóstico Kinesiológico
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="treatment.html">
+                                <i class="fas fa-clipboard-list"></i> Plan de Tratamiento
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="evolution.html">
+                                <i class="fas fa-chart-line"></i> Evoluciones
+                            </a>
+                        </li>
+                        
+                        <li class="nav-header mt-3">ANÁLISIS</li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard-analysis.html">
+                                <i class="fas fa-chart-bar"></i> Dashboard y Análisis
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <hr>
+                    <div class="sidebar-footer">
+                        <button id="logoutBtn" class="btn btn-outline-danger btn-sm w-100">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
                     </div>
                 </div>
-
-                <div class="alert alert-info" id="noPatientSelected">
-                    <i class="fas fa-info-circle"></i> Seleccione un paciente para registrar o ver evoluciones.
+            </div>
+            
+            <!-- Contenido principal -->
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Barra superior -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="fas fa-chart-line"></i> Evoluciones</h1>
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown me-2">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="patientDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Seleccionar Paciente
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="patientDropdown" id="patientsList">
+                                <li><a class="dropdown-item" href="#">Cargando pacientes...</a></li>
+                            </ul>
+                        </div>
+                        <div id="selectedPatientInfo" class="selected-patient d-none">
+                            <span class="badge bg-primary">Paciente: <span id="patientName">-</span></span>
+                        </div>
+                    </div>
                 </div>
-
-                <div id="evolutionContainer" class="d-none">
+                
+                <!-- Alerta de selección de paciente -->
+                <div class="alert alert-info" id="noPatientSelected">
+                    <i class="fas fa-info-circle"></i> Selecciona un paciente para ver o registrar sus evoluciones.
+                </div>
+                
+                <!-- Contenedor de evoluciones (oculto inicialmente) -->
+                <div id="evolutionsContainer" class="d-none">
                     <div class="row mb-4">
                         <!-- Panel izquierdo: Lista de evoluciones -->
                         <div class="col-md-4">
@@ -42,6 +117,10 @@
                                 <div class="card-body p-0">
                                     <div class="list-group list-group-flush" id="evolutionsList">
                                         <!-- Aquí se listarán las evoluciones -->
+                                        <div class="text-center py-4 text-muted">
+                                            <i class="fas fa-spinner fa-spin"></i>
+                                            <p>Cargando evoluciones...</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -139,70 +218,28 @@
                                                 <div class="card-body">
                                                     <div class="row mb-3">
                                                         <div class="col-md-4">
-                                                            <label for="evolutionPSFS" class="form-label">PSFS (0-10)</label>
-                                                            <div class="input-group">
-                                                                <input type="number" class="form-control" id="evolutionPSFS" min="0" max="10" step="0.1">
-                                                                <span class="input-group-text"><i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Patient-Specific Functional Scale"></i></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label for="evolutionGROC" class="form-label">GROC (-7 a +7)</label>
-                                                            <div class="input-group">
-                                                                <input type="number" class="form-control" id="evolutionGROC" min="-7" max="7" step="1">
-                                                                <span class="input-group-text"><i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Global Rating of Change"></i></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label for="evolutionSANE" class="form-label">SANE (0-100)</label>
-                                                            <div class="input-group">
-                                                                <input type="number" class="form-control" id="evolutionSANE" min="0" max="100" step="1">
-                                                                <span class="input-group-text"><i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Single Assessment Numeric Evaluation"></i></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-4">
                                                             <label for="evolutionPain" class="form-label">Dolor (0-10)</label>
                                                             <input type="number" class="form-control" id="evolutionPain" min="0" max="10" step="1">
                                                         </div>
-                                                        <div class="col-md-8">
-                                                            <label for="evolutionROM" class="form-label">Rangos de Movimiento</label>
-                                                            <input type="text" class="form-control" id="evolutionROM" placeholder="Ej: Flexión 90°, Extensión 15°">
+                                                        <div class="col-md-4">
+                                                            <label for="evolutionPSFS" class="form-label">PSFS (0-10)</label>
+                                                            <input type="number" class="form-control" id="evolutionPSFS" min="0" max="10" step="0.1">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="evolutionSANE" class="form-label">SANE (0-100)</label>
+                                                            <input type="number" class="form-control" id="evolutionSANE" min="0" max="100" step="1">
                                                         </div>
                                                     </div>
                                                     
                                                     <div class="row">
                                                         <div class="col-md-6">
+                                                            <label for="evolutionROM" class="form-label">Rangos de Movimiento</label>
+                                                            <input type="text" class="form-control" id="evolutionROM" placeholder="Ej: Flexión 90°, Extensión 15°">
+                                                        </div>
+                                                        <div class="col-md-6">
                                                             <label for="evolutionStrength" class="form-label">Fuerza Muscular</label>
                                                             <input type="text" class="form-control" id="evolutionStrength" placeholder="Ej: Cuádriceps 4/5, Glúteos 3+/5">
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <label for="evolutionFunctionalTests" class="form-label">Tests Funcionales</label>
-                                                            <input type="text" class="form-control" id="evolutionFunctionalTests" placeholder="Ej: Single Leg Squat, Step Down Test">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="card mb-3">
-                                                <div class="card-header bg-light">
-                                                    <h6 class="mb-0">Seguimiento de Objetivos</h6>
-                                                </div>
-                                                <div class="card-body p-0">
-                                                    <div class="table-responsive">
-                                                        <table class="table mb-0">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Objetivo</th>
-                                                                    <th>Progreso</th>
-                                                                    <th>Estado</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="objectivesProgressTable">
-                                                                <!-- Aquí se listarán los objetivos del plan -->
-                                                            </tbody>
-                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
@@ -224,7 +261,7 @@
                     </div>
                     
                     <!-- Panel de visualización de progreso -->
-                    <div class="row">
+                    <div class="row mt-4">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -272,7 +309,11 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="comparativeTable">
-                                                                <!-- Aquí se mostrará la comparativa -->
+                                                                <tr>
+                                                                    <td colspan="6" class="text-center text-muted">
+                                                                        Seleccione un paciente para ver la comparativa
+                                                                    </td>
+                                                                </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -289,16 +330,1001 @@
         </div>
     </div>
 
-    <!-- Scripts comunes -->
+    <!-- Bootstrap JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <!-- Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.umd.min.js"></script>
+    <!-- jsPDF para exportación a PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
-    <!-- Firebase Scripts -->
-    <script type="module" src="../js/firebase-config.js"></script>
-    <script type="module" src="../js/evolution.js"></script>
+    <!-- Script del módulo de evoluciones -->
+    <script type="module">
+        import { auth, db } from "../js/firebase-config.js";
+        import { 
+            saveEvolution, 
+            getPatientEvolutions, 
+            getEvolutionById, 
+            updateEvolution, 
+            deleteEvolution 
+        } from "../js/evolutions.js";
+        import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { 
+            getAllPatients, 
+            getPatientById 
+        } from "../js/patients.js";
+        import { 
+            collection, 
+            getDocs, 
+            query, 
+            where, 
+            orderBy 
+        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // Variables globales
+        let currentPatient = null;
+        let currentEvolutions = [];
+        let charts = {};
+
+        // Verificar autenticación
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuario autenticado
+                console.log("Usuario autenticado:", user.email);
+                
+                // Inicializar módulo
+                initModule();
+            } else {
+                // No hay usuario autenticado, redirigir al login
+                window.location.href = '../index.html';
+            }
+        });
+
+        // Función para cerrar sesión
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = '../index.html';
+            } catch (error) {
+                console.error("Error al cerrar sesión:", error);
+                alert("Error al cerrar sesión");
+            }
+        });
+
+        // Inicializar módulo
+        async function initModule() {
+            // Cargar pacientes para el selector
+            await loadPatients();
+            
+            // Verificar si hay un paciente en URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const patientId = urlParams.get('id');
+            
+            if (patientId) {
+                // Cargar paciente específico
+                await selectPatient(patientId);
+            }
+            
+            // Inicializar eventos
+            initEvents();
+        }
+
+        // Cargar lista de pacientes
+        async function loadPatients() {
+            try {
+                const patients = await getAllPatients();
+                const patientsList = document.getElementById('patientsList');
+                
+                if (patients.length === 0) {
+                    patientsList.innerHTML = `
+                        <li><a class="dropdown-item" href="#">No hay pacientes registrados</a></li>
+                    `;
+                    return;
+                }
+                
+                patientsList.innerHTML = '';
+                
+                patients.forEach(patient => {
+                    const item = document.createElement('li');
+                    item.innerHTML = `
+                        <a class="dropdown-item patient-item" href="#" data-id="${patient.id}">
+                            ${patient.firstName || ''} ${patient.lastName || ''} ${patient.rut ? `(${patient.rut})` : ''}
+                        </a>
+                    `;
+                    patientsList.appendChild(item);
+                });
+                
+                // Agregar eventos a los ítems
+                document.querySelectorAll('.patient-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const patientId = e.currentTarget.getAttribute('data-id');
+                        selectPatient(patientId);
+                    });
+                });
+                
+            } catch (error) {
+                console.error("Error al cargar pacientes:", error);
+                document.getElementById('patientsList').innerHTML = `
+                    <li><a class="dropdown-item" href="#">Error al cargar pacientes</a></li>
+                `;
+            }
+        }
+
+        // Seleccionar un paciente
+        async function selectPatient(patientId) {
+            try {
+                // Obtener datos del paciente
+                const patient = await getPatientById(patientId);
+                
+                if (!patient) {
+                    console.error("Paciente no encontrado:", patientId);
+                    return;
+                }
+                
+                // Guardar paciente actual
+                currentPatient = patient;
+                
+                // Actualizar UI
+                document.getElementById('patientName').textContent = `${patient.firstName || ''} ${patient.lastName || ''}`;
+                document.getElementById('patientDropdown').textContent = `${patient.firstName || ''} ${patient.lastName || ''}`;
+                document.getElementById('selectedPatientInfo').classList.remove('d-none');
+                document.getElementById('noPatientSelected').classList.add('d-none');
+                document.getElementById('evolutionsContainer').classList.remove('d-none');
+                
+                // Cargar evoluciones del paciente
+                await loadPatientEvolutions(patientId);
+                
+                // Actualizar URL para bookmarking
+                const url = new URL(window.location);
+                url.searchParams.set('id', patientId);
+                window.history.replaceState({}, '', url);
+                
+            } catch (error) {
+                console.error("Error al seleccionar paciente:", error);
+                alert("Error al cargar datos del paciente");
+            }
+        }
+
+        // Cargar evoluciones del paciente
+        async function loadPatientEvolutions(patientId) {
+            try {
+                // Obtener evoluciones
+                const evolutions = await getPatientEvolutions(patientId);
+                
+                // Guardar en variable global
+                currentEvolutions = evolutions;
+                
+                // Mostrar en la lista
+                displayEvolutionsList(evolutions);
+                
+                // Actualizar gráficos
+                updateCharts(evolutions);
+                
+                // Actualizar tabla comparativa
+                updateComparativeTable(evolutions);
+                
+            } catch (error) {
+                console.error("Error al cargar evoluciones:", error);
+                document.getElementById('evolutionsList').innerHTML = `
+                    <div class="alert alert-danger m-3">
+                        Error al cargar evoluciones
+                    </div>
+                `;
+            }
+        }
+
+        // Mostrar lista de evoluciones
+        function displayEvolutionsList(evolutions) {
+            const container = document.getElementById('evolutionsList');
+            
+            if (evolutions.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4 text-muted">
+                        <i class="fas fa-clipboard-list fa-2x mb-2"></i>
+                        <p>No hay evoluciones registradas</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            evolutions.forEach(evolution => {
+                const date = new Date(evolution.date);
+                const formattedDate = date.toLocaleDateString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+                
+                const item = document.createElement('a');
+                item.href = '#';
+                item.className = 'list-group-item list-group-item-action';
+                item.setAttribute('data-id', evolution.id);
+                
+                item.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <h6 class="mb-1">Sesión ${evolution.sessionNumber}</h6>
+                        <small>${formattedDate}</small>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Respuesta: ${evolution.response}</small>
+                        <span class="badge bg-${getResponseBadgeClass(evolution.response)}">${evolution.response}</span>
+                    </div>
+                `;
+                
+                // Evento para mostrar detalles
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showEvolutionDetails(evolution.id);
+                    
+                    // Activar ítem seleccionado
+                    document.querySelectorAll('#evolutionsList a').forEach(el => {
+                        el.classList.remove('active');
+                    });
+                    item.classList.add('active');
+                });
+                
+                container.appendChild(item);
+            });
+        }
+
+        // Obtener clase para badge según respuesta
+        function getResponseBadgeClass(response) {
+            switch (response) {
+                case 'Excelente': return 'success';
+                case 'Buena': return 'info';
+                case 'Regular': return 'warning';
+                case 'Mala': return 'danger';
+                case 'Sin cambios': return 'secondary';
+                default: return 'primary';
+            }
+        }
+
+        // Mostrar detalles de una evolución
+        async function showEvolutionDetails(evolutionId) {
+            try {
+                const evolution = currentEvolutions.find(e => e.id === evolutionId);
+                
+                if (!evolution) {
+                    console.error("Evolución no encontrada:", evolutionId);
+                    return;
+                }
+                
+                const container = document.getElementById('evolutionDetailContainer');
+                
+                // Formatear fecha
+                const date = new Date(evolution.date);
+                const formattedDate = date.toLocaleDateString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+                
+                // Mostrar detalles
+                container.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <h5>Sesión ${evolution.sessionNumber} - ${formattedDate}</h5>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary edit-evolution-btn" data-id="${evolution.id}">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-evolution-btn" data-id="${evolution.id}">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div class="soap-display mb-4">
+                        <div class="soap-item">
+                            <div class="soap-header">
+                                <span class="soap-letter">S</span>
+                                <span class="soap-title">Subjetivo</span>
+                            </div>
+                            <div class="soap-content">${evolution.subjective}</div>
+                        </div>
+                        
+                        <div class="soap-item">
+                            <div class="soap-header">
+                                <span class="soap-letter">O</span>
+                                <span class="soap-title">Objetivo</span>
+                            </div>
+                            <div class="soap-content">${evolution.objective}</div>
+                        </div>
+                        
+                        <div class="soap-item">
+                            <div class="soap-header">
+                                <span class="soap-letter">A</span>
+                                <span class="soap-title">Análisis</span>
+                            </div>
+                            <div class="soap-content">${evolution.analysis}</div>
+                        </div>
+                        
+                        <div class="soap-item">
+                            <div class="soap-header">
+                                <span class="soap-letter">P</span>
+                                <span class="soap-title">Plan</span>
+                            </div>
+                            <div class="soap-content">${evolution.plan}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-display p-3 bg-light rounded mb-3">
+                        <h6 class="mb-3">Métricas Cuantitativas</h6>
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <div class="metric-item">
+                                    <span class="metric-label">Dolor:</span>
+                                    <span class="metric-value">${evolution.metrics?.pain !== undefined ? evolution.metrics.pain + '/10' : 'N/A'}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="metric-item">
+                                    <span class="metric-label">PSFS:</span>
+                                    <span class="metric-value">${evolution.metrics?.psfs !== undefined ? evolution.metrics.psfs + '/10' : 'N/A'}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="metric-item">
+                                    <span class="metric-label">SANE:</span>
+                                    <span class="metric-value">${evolution.metrics?.sane !== undefined ? evolution.metrics.sane + '/100' : 'N/A'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6 mb-2">
+                                <div class="metric-item">
+                                    <span class="metric-label">ROM:</span>
+                                    <span class="metric-value">${evolution.metrics?.rom || 'N/A'}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <div class="metric-item">
+                                    <span class="metric-label">Fuerza:</span>
+                                    <span class="metric-value">${evolution.metrics?.strength || 'N/A'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="techniques-display mb-3">
+                        <h6>Técnicas Aplicadas</h6>
+                        <p>${evolution.techniques}</p>
+                    </div>
+                    
+                    <div class="response-display mb-3">
+                        <h6>Respuesta al Tratamiento</h6>
+                        <div class="alert alert-${getResponseBadgeClass(evolution.response)} d-inline-block">
+                            ${evolution.response}
+                        </div>
+                    </div>
+                    
+                    ${evolution.notes ? `
+                        <div class="notes-display">
+                            <h6>Notas Adicionales</h6>
+                            <p>${evolution.notes}</p>
+                        </div>
+                    ` : ''}
+                `;
+                
+                // Mostrar contenedor de detalles y ocultar formulario
+                document.getElementById('evolutionDetailContainer').classList.remove('d-none');
+                document.getElementById('newEvolutionForm').classList.add('d-none');
+                document.getElementById('evolutionDetailTitle').textContent = 'Detalles de Evolución';
+                
+                // Agregar eventos a los botones
+                document.querySelector('.edit-evolution-btn').addEventListener('click', () => {
+                    editEvolution(evolutionId);
+                });
+                
+                document.querySelector('.delete-evolution-btn').addEventListener('click', () => {
+                    deleteEvolutionHandler(evolutionId);
+                });
+                
+            } catch (error) {
+                console.error("Error al mostrar detalles de evolución:", error);
+                alert("Error al cargar detalles de la evolución");
+            }
+        }
+
+        // Inicializar eventos
+        function initEvents() {
+            // Botón para nueva evolución
+            document.getElementById('newEvolutionBtn').addEventListener('click', showNewEvolutionForm);
+            
+            // Botón para cancelar nueva evolución
+            document.getElementById('cancelEvolutionBtn').addEventListener('click', hideNewEvolutionForm);
+            
+            // Formulario de evolución
+            document.getElementById('evolutionForm').addEventListener('submit', saveEvolutionHandler);
+            
+            // Botones de exportación
+            document.getElementById('exportProgressBtn').addEventListener('click', exportToPDF);
+            document.getElementById('printProgressBtn').addEventListener('click', printProgress);
+        }
+
+        // Mostrar formulario para nueva evolución
+        function showNewEvolutionForm() {
+            if (!currentPatient) {
+                alert('Debe seleccionar un paciente primero');
+                return;
+            }
+            
+            // Resetear formulario
+            document.getElementById('evolutionForm').reset();
+            document.getElementById('evolutionId').value = '';
+            
+            // Establecer fecha actual
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('evolutionDate').value = today;
+            
+            // Establecer número de sesión siguiente
+            const nextSessionNumber = currentEvolutions.length > 0 ? 
+                Math.max(...currentEvolutions.map(e => e.sessionNumber)) + 1 : 1;
+            document.getElementById('evolutionSessionNumber').value = nextSessionNumber;
+            
+            // Mostrar formulario y ocultar detalles
+            document.getElementById('evolutionDetailContainer').classList.add('d-none');
+            document.getElementById('newEvolutionForm').classList.remove('d-none');
+            document.getElementById('evolutionDetailTitle').textContent = 'Nueva Evolución';
+        }
+
+        // Ocultar formulario de nueva evolución
+        function hideNewEvolutionForm() {
+            document.getElementById('evolutionDetailContainer').classList.remove('d-none');
+            document.getElementById('newEvolutionForm').classList.add('d-none');
+            document.getElementById('evolutionDetailTitle').textContent = 'Detalles de Evolución';
+        }
+
+        // Guardar evolución
+        async function saveEvolutionHandler(e) {
+            e.preventDefault();
+            
+            if (!currentPatient) {
+                alert('Debe seleccionar un paciente primero');
+                return;
+            }
+            
+            try {
+                // Obtener datos del formulario
+                const evolutionId = document.getElementById('evolutionId').value;
+                const date = document.getElementById('evolutionDate').value;
+                const sessionNumber = parseInt(document.getElementById('evolutionSessionNumber').value);
+                const subjective = document.getElementById('evolutionSubjective').value;
+                const objective = document.getElementById('evolutionObjective').value;
+                const analysis = document.getElementById('evolutionAnalysis').value;
+                const plan = document.getElementById('evolutionPlan').value;
+                const techniques = document.getElementById('evolutionTechniques').value;
+                const response = document.getElementById('evolutionResponse').value;
+                const notes = document.getElementById('evolutionNotes').value;
+                
+                // Métricas
+                const metrics = {
+                    pain: document.getElementById('evolutionPain').value ? 
+                        parseFloat(document.getElementById('evolutionPain').value) : undefined,
+                    psfs: document.getElementById('evolutionPSFS').value ? 
+                        parseFloat(document.getElementById('evolutionPSFS').value) : undefined,
+                    sane: document.getElementById('evolutionSANE').value ? 
+                        parseFloat(document.getElementById('evolutionSANE').value) : undefined,
+                    rom: document.getElementById('evolutionROM').value,
+                    strength: document.getElementById('evolutionStrength').value
+                };
+                
+                // Crear objeto de evolución
+                const evolutionData = {
+                    date,
+                    sessionNumber,
+                    subjective,
+                    objective,
+                    analysis,
+                    plan,
+                    techniques,
+                    response,
+                    notes,
+                    metrics
+                };
+                
+                if (evolutionId) {
+                    // Actualizar evolución existente
+                    await updateEvolution(evolutionId, evolutionData);
+                    
+                    // Actualizar en array local
+                    const index = currentEvolutions.findIndex(e => e.id === evolutionId);
+                    if (index !== -1) {
+                        currentEvolutions[index] = {
+                            id: evolutionId,
+                            patientId: currentPatient.id,
+                            ...evolutionData
+                        };
+                    }
+                    
+                    alert('Evolución actualizada correctamente');
+                } else {
+                    // Guardar nueva evolución
+                    const newEvolutionId = await saveEvolution(currentPatient.id, evolutionData);
+                    
+                    // Agregar a array local
+                    currentEvolutions.push({
+                        id: newEvolutionId,
+                        patientId: currentPatient.id,
+                        ...evolutionData
+                    });
+                    
+                    alert('Evolución guardada correctamente');
+                }
+                
+                // Actualizar UI
+                displayEvolutionsList(currentEvolutions);
+                hideNewEvolutionForm();
+                
+                // Actualizar gráficos
+                updateCharts(currentEvolutions);
+                
+                // Actualizar tabla comparativa
+                updateComparativeTable(currentEvolutions);
+                
+            } catch (error) {
+                console.error("Error al guardar evolución:", error);
+                alert("Error al guardar la evolución");
+            }
+        }
+
+        // Editar evolución
+        function editEvolution(evolutionId) {
+            const evolution = currentEvolutions.find(e => e.id === evolutionId);
+            
+            if (!evolution) {
+                console.error("Evolución no encontrada:", evolutionId);
+                return;
+            }
+            
+            // Llenar formulario con datos existentes
+            document.getElementById('evolutionId').value = evolution.id;
+            document.getElementById('evolutionDate').value = evolution.date;
+            document.getElementById('evolutionSessionNumber').value = evolution.sessionNumber;
+            document.getElementById('evolutionSubjective').value = evolution.subjective;
+            document.getElementById('evolutionObjective').value = evolution.objective;
+            document.getElementById('evolutionAnalysis').value = evolution.analysis;
+            document.getElementById('evolutionPlan').value = evolution.plan;
+            document.getElementById('evolutionTechniques').value = evolution.techniques;
+            document.getElementById('evolutionResponse').value = evolution.response;
+            document.getElementById('evolutionNotes').value = evolution.notes || '';
+            
+            // Métricas
+            document.getElementById('evolutionPain').value = evolution.metrics?.pain !== undefined ? 
+                evolution.metrics.pain : '';
+            document.getElementById('evolutionPSFS').value = evolution.metrics?.psfs !== undefined ? 
+                evolution.metrics.psfs : '';
+            document.getElementById('evolutionSANE').value = evolution.metrics?.sane !== undefined ? 
+                evolution.metrics.sane : '';
+            document.getElementById('evolutionROM').value = evolution.metrics?.rom || '';
+            document.getElementById('evolutionStrength').value = evolution.metrics?.strength || '';
+            
+            // Mostrar formulario
+            document.getElementById('evolutionDetailContainer').classList.add('d-none');
+            document.getElementById('newEvolutionForm').classList.remove('d-none');
+            document.getElementById('evolutionDetailTitle').textContent = 'Editar Evolución';
+        }
+
+        // Eliminar evolución
+        async function deleteEvolutionHandler(evolutionId) {
+            if (!confirm('¿Está seguro de eliminar esta evolución? Esta acción no se puede deshacer.')) {
+                return;
+            }
+            
+            try {
+                await deleteEvolution(evolutionId);
+                
+                // Eliminar de array local
+                currentEvolutions = currentEvolutions.filter(e => e.id !== evolutionId);
+                
+                // Actualizar UI
+                displayEvolutionsList(currentEvolutions);
+                
+                // Mostrar mensaje vacío en detalles
+                document.getElementById('evolutionDetailContainer').innerHTML = `
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                        <p>Seleccione una evolución de la lista o cree una nueva para ver detalles.</p>
+                    </div>
+                `;
+                
+                // Actualizar gráficos
+                updateCharts(currentEvolutions);
+                
+                // Actualizar tabla comparativa
+                updateComparativeTable(currentEvolutions);
+                
+                alert('Evolución eliminada correctamente');
+                
+            } catch (error) {
+                console.error("Error al eliminar evolución:", error);
+                alert("Error al eliminar la evolución");
+            }
+        }
+
+        // Actualizar gráficos
+        function updateCharts(evolutions) {
+            // Destruir gráficos existentes
+            if (charts.painChart) {
+                charts.painChart.destroy();
+            }
+            
+            if (charts.functionalChart) {
+                charts.functionalChart.destroy();
+            }
+            
+            if (evolutions.length === 0) {
+                return; // No hay datos para mostrar
+            }
+            
+            // Ordenar evoluciones por fecha (más antigua primero)
+            const sortedEvolutions = [...evolutions].sort((a, b) => 
+                new Date(a.date) - new Date(b.date)
+            );
+            
+            // Preparar datos para los gráficos
+            const labels = sortedEvolutions.map(e => {
+                const date = new Date(e.date);
+                return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+            });
+            
+            const painData = sortedEvolutions.map(e => e.metrics?.pain);
+            const psfsData = sortedEvolutions.map(e => e.metrics?.psfs);
+            const saneData = sortedEvolutions.map(e => e.metrics?.sane);
+            
+            // Gráfico de dolor
+            const painCtx = document.getElementById('painChart').getContext('2d');
+            charts.painChart = new Chart(painCtx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Dolor (0-10)',
+                        data: painData,
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            reverse: true, // Invertir escala para que 0 = sin dolor esté arriba
+                            title: {
+                                display: true,
+                                text: 'Intensidad del Dolor (0-10)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Evolución del Dolor',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico funcional
+            const functionalCtx = document.getElementById('functionalChart').getContext('2d');
+            charts.functionalChart = new Chart(functionalCtx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'PSFS (0-10)',
+                            data: psfsData,
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'SANE (0-100)',
+                            data: saneData,
+                            borderColor: '#007bff',
+                            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'PSFS (0-10)'
+                            }
+                        },
+                        y1: {
+                            beginAtZero: true,
+                            max: 100,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'SANE (0-100)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Evolución Funcional',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Actualizar tabla comparativa
+        async function updateComparativeTable(evolutions) {
+            const tableBody = document.getElementById('comparativeTable');
+            
+            if (!currentPatient || evolutions.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">
+                            No hay datos suficientes para mostrar la comparativa
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            try {
+                // Obtener evaluación inicial del paciente (en una app real, se obtendría de Firestore)
+                // Aquí simulamos datos de la evaluación inicial
+                const initialEvaluation = {
+                    pain: 7, // Dolor inicial en escala 0-10
+                    psfs: 3, // PSFS inicial en escala 0-10
+                    sane: 40 // SANE inicial en escala 0-100
+                };
+                
+                // Obtener última evolución
+                const lastEvolution = [...evolutions].sort((a, b) => 
+                    new Date(b.date) - new Date(a.date)
+                )[0];
+                
+                // MCIDs (Cambio Mínimo Clínicamente Importante)
+                const mcids = {
+                    pain: -2, // Reducción de 2 puntos en dolor
+                    psfs: 2,  // Aumento de 2 puntos en PSFS
+                    sane: 15  // Aumento de 15 puntos en SANE
+                };
+                
+                // Generar filas de la tabla
+                tableBody.innerHTML = '';
+                
+                // Fila para dolor
+                const painChange = (lastEvolution.metrics?.pain !== undefined && initialEvaluation.pain !== undefined) ? 
+                    lastEvolution.metrics.pain - initialEvaluation.pain : 'N/A';
+                
+                const painRow = document.createElement('tr');
+                const isPainMcidAchieved = typeof painChange === 'number' && painChange <= mcids.pain;
+                
+                if (isPainMcidAchieved) {
+                    painRow.classList.add('mcid-achieved');
+                }
+                
+                painRow.innerHTML = `
+                    <td>Dolor (0-10)</td>
+                    <td>${initialEvaluation.pain !== undefined ? initialEvaluation.pain : 'N/A'}</td>
+                    <td>${lastEvolution.metrics?.pain !== undefined ? lastEvolution.metrics.pain : 'N/A'}</td>
+                    <td class="${typeof painChange === 'number' ? (painChange < 0 ? 'positive-change' : (painChange > 0 ? 'negative-change' : '')) : ''}">
+                        ${typeof painChange === 'number' ? painChange.toFixed(1) : painChange}
+                    </td>
+                    <td>${Math.abs(mcids.pain)}</td>
+                    <td>
+                        ${isPainMcidAchieved ? 
+                            '<span class="badge bg-success">Alcanzado</span>' : 
+                            '<span class="badge bg-secondary">No alcanzado</span>'}
+                    </td>
+                `;
+                
+                tableBody.appendChild(painRow);
+                
+                // Fila para PSFS
+                const psfsChange = (lastEvolution.metrics?.psfs !== undefined && initialEvaluation.psfs !== undefined) ? 
+                    lastEvolution.metrics.psfs - initialEvaluation.psfs : 'N/A';
+                
+                const psfsRow = document.createElement('tr');
+                const isPsfsMcidAchieved = typeof psfsChange === 'number' && psfsChange >= mcids.psfs;
+                
+                if (isPsfsMcidAchieved) {
+                    psfsRow.classList.add('mcid-achieved');
+                }
+                
+                psfsRow.innerHTML = `
+                    <td>PSFS (0-10)</td>
+                    <td>${initialEvaluation.psfs !== undefined ? initialEvaluation.psfs : 'N/A'}</td>
+                    <td>${lastEvolution.metrics?.psfs !== undefined ? lastEvolution.metrics.psfs : 'N/A'}</td>
+                    <td class="${typeof psfsChange === 'number' ? (psfsChange > 0 ? 'positive-change' : (psfsChange < 0 ? 'negative-change' : '')) : ''}">
+                        ${typeof psfsChange === 'number' ? psfsChange.toFixed(1) : psfsChange}
+                    </td>
+                    <td>${mcids.psfs}</td>
+                    <td>
+                        ${isPsfsMcidAchieved ? 
+                            '<span class="badge bg-success">Alcanzado</span>' : 
+                            '<span class="badge bg-secondary">No alcanzado</span>'}
+                    </td>
+                `;
+                
+                tableBody.appendChild(psfsRow);
+                
+                // Fila para SANE
+                const saneChange = (lastEvolution.metrics?.sane !== undefined && initialEvaluation.sane !== undefined) ? 
+                    lastEvolution.metrics.sane - initialEvaluation.sane : 'N/A';
+                
+                const saneRow = document.createElement('tr');
+                const isSaneMcidAchieved = typeof saneChange === 'number' && saneChange >= mcids.sane;
+                
+                if (isSaneMcidAchieved) {
+                    saneRow.classList.add('mcid-achieved');
+                }
+                
+                saneRow.innerHTML = `
+                    <td>SANE (0-100)</td>
+                    <td>${initialEvaluation.sane !== undefined ? initialEvaluation.sane : 'N/A'}</td>
+                    <td>${lastEvolution.metrics?.sane !== undefined ? lastEvolution.metrics.sane : 'N/A'}</td>
+                    <td class="${typeof saneChange === 'number' ? (saneChange > 0 ? 'positive-change' : (saneChange < 0 ? 'negative-change' : '')) : ''}">
+                        ${typeof saneChange === 'number' ? saneChange.toFixed(1) : saneChange}
+                    </td>
+                    <td>${mcids.sane}</td>
+                    <td>
+                        ${isSaneMcidAchieved ? 
+                            '<span class="badge bg-success">Alcanzado</span>' : 
+                            '<span class="badge bg-secondary">No alcanzado</span>'}
+                    </td>
+                `;
+                
+                tableBody.appendChild(saneRow);
+                
+            } catch (error) {
+                console.error("Error al actualizar tabla comparativa:", error);
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-danger">
+                            Error al cargar datos comparativos
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Exportar a PDF
+        function exportToPDF() {
+            if (!currentPatient || currentEvolutions.length === 0) {
+                alert('No hay datos suficientes para exportar');
+                return;
+            }
+            
+            try {
+                // Capture charts
+                const painCanvas = document.getElementById('painChart');
+                const functionalCanvas = document.getElementById('functionalChart');
+                
+                // Create PDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+                
+                // Add title
+                pdf.setFontSize(16);
+                pdf.text(`Evolución del Paciente: ${currentPatient.firstName} ${currentPatient.lastName}`, 20, 20);
+                
+                // Add date
+                pdf.setFontSize(10);
+                pdf.text(`Generado el: ${new Date().toLocaleDateString()}`, 20, 30);
+                
+                // Add pain chart
+                pdf.addImage(painCanvas.toDataURL('image/jpeg'), 'JPEG', 20, 40, 170, 80);
+                
+                // Add functional chart
+                pdf.addImage(functionalCanvas.toDataURL('image/jpeg'), 'JPEG', 20, 130, 170, 80);
+                
+                // Save PDF
+                pdf.save(`evolucion_${currentPatient.lastName}_${currentPatient.firstName}.pdf`);
+                
+            } catch (error) {
+                console.error("Error al exportar PDF:", error);
+                alert("Error al exportar a PDF");
+            }
+        }
+
+        // Imprimir progreso
+        function printProgress() {
+            if (!currentPatient || currentEvolutions.length === 0) {
+                alert('No hay datos suficientes para imprimir');
+                return;
+            }
+            
+            try {
+                const printWindow = window.open('', '_blank');
+                
+                printWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Evolución del Paciente</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            h1 { text-align: center; margin-bottom: 10px; }
+                            .date { text-align: right; margin-bottom: 20px; }
+                            .chart-container { margin-bottom: 20px; text-align: center; }
+                            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                            table, th, td { border: 1px solid #ddd; padding: 8px; }
+                            th { background-color: #f2f2f2; }
+                            .positive { color: green; }
+                            .negative { color: red; }
+                            .center { text-align: center; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Evolución del Paciente</h1>
+                        <div class="date">
+                            <strong>Paciente:</strong> ${currentPatient.firstName} ${currentPatient.lastName}<br>
+                            <strong>Fecha:</strong> ${new Date().toLocaleDateString()}
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h2>Evolución del Dolor</h2>
+                            <img src="${document.getElementById('painChart').toDataURL('image/jpeg')}" style="max-width: 100%;">
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h2>Evolución Funcional</h2>
+                            <img src="${document.getElementById('functionalChart').toDataURL('image/jpeg')}" style="max-width: 100%;">
+                        </div>
+                        
+                        <h2>Tabla Comparativa</h2>
+                        ${document.querySelector('.table-responsive').innerHTML}
+                        
+                        <script>
+                            window.onload = function() {
+                                window.print();
+                                window.setTimeout(function() {
+                                    window.close();
+                                }, 500);
+                            };
+                        </script>
+                    </body>
+                    </html>
+                `);
+                
+                printWindow.document.close();
+                
+            } catch (error) {
+                console.error("Error al imprimir:", error);
+                alert("Error al imprimir");
+            }
+        }
+    </script>
 </body>
 </html>
