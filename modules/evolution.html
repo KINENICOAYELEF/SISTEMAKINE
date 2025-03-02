@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evoluciones - Sistema Kinesiológico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/evolution.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar del dashboard (se incluirá desde dashboard.js) -->
+            <div id="sidebar-container"></div>
+            
+            <!-- Contenido principal -->
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1><i class="fas fa-chart-line"></i> Evoluciones</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0" id="patientInfoBanner">
+                        <!-- Información del paciente seleccionado se mostrará aquí -->
+                    </div>
+                </div>
+
+                <div class="alert alert-info" id="noPatientSelected">
+                    <i class="fas fa-info-circle"></i> Seleccione un paciente para registrar o ver evoluciones.
+                </div>
+
+                <div id="evolutionContainer" class="d-none">
+                    <div class="row mb-4">
+                        <!-- Panel izquierdo: Lista de evoluciones -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Evoluciones Registradas</h5>
+                                    <button class="btn btn-sm btn-primary" id="newEvolutionBtn">
+                                        <i class="fas fa-plus"></i> Nueva
+                                    </button>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="list-group list-group-flush" id="evolutionsList">
+                                        <!-- Aquí se listarán las evoluciones -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Panel derecho: Detalles de la evolución seleccionada o nueva evolución -->
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0" id="evolutionDetailTitle">Detalles de Evolución</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="evolutionDetailContainer">
+                                        <!-- Aquí se mostrarán los detalles de la evolución seleccionada -->
+                                        <div class="text-center text-muted py-5">
+                                            <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                                            <p>Seleccione una evolución de la lista o cree una nueva para ver detalles.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="newEvolutionForm" class="d-none">
+                                        <!-- Formulario para nueva evolución -->
+                                        <form id="evolutionForm">
+                                            <input type="hidden" id="evolutionId">
+                                            
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="evolutionDate" class="form-label">Fecha</label>
+                                                    <input type="date" class="form-control" id="evolutionDate" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="evolutionSessionNumber" class="form-label">Nº de Sesión</label>
+                                                    <input type="number" class="form-control" id="evolutionSessionNumber" min="1" required>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Estructura SOAP</label>
+                                                <div class="soap-container">
+                                                    <div class="soap-section">
+                                                        <div class="soap-header">
+                                                            <span class="soap-letter">S</span>
+                                                            <span class="soap-title">Subjetivo</span>
+                                                        </div>
+                                                        <textarea class="form-control" id="evolutionSubjective" rows="3" placeholder="Percepciones y experiencia del paciente (dolor, sensaciones, limitaciones percibidas, etc.)" required></textarea>
+                                                    </div>
+                                                    
+                                                    <div class="soap-section">
+                                                        <div class="soap-header">
+                                                            <span class="soap-letter">O</span>
+                                                            <span class="soap-title">Objetivo</span>
+                                                        </div>
+                                                        <textarea class="form-control" id="evolutionObjective" rows="3" placeholder="Hallazgos observables y mediciones cuantitativas" required></textarea>
+                                                    </div>
+                                                    
+                                                    <div class="soap-section">
+                                                        <div class="soap-header">
+                                                            <span class="soap-letter">A</span>
+                                                            <span class="soap-title">Análisis</span>
+                                                        </div>
+                                                        <textarea class="form-control" id="evolutionAnalysis" rows="3" placeholder="Interpretación de los hallazgos y progreso del paciente" required></textarea>
+                                                    </div>
+                                                    
+                                                    <div class="soap-section">
+                                                        <div class="soap-header">
+                                                            <span class="soap-letter">P</span>
+                                                            <span class="soap-title">Plan</span>
+                                                        </div>
+                                                        <textarea class="form-control" id="evolutionPlan" rows="3" placeholder="Plan para próximas sesiones, modificaciones al tratamiento" required></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Técnicas Aplicadas</label>
+                                                <textarea class="form-control" id="evolutionTechniques" rows="2" placeholder="Describa las técnicas aplicadas durante esta sesión" required></textarea>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Respuesta al Tratamiento</label>
+                                                <select class="form-select" id="evolutionResponse" required>
+                                                    <option value="">Seleccione respuesta</option>
+                                                    <option value="Excelente">Excelente</option>
+                                                    <option value="Buena">Buena</option>
+                                                    <option value="Regular">Regular</option>
+                                                    <option value="Mala">Mala</option>
+                                                    <option value="Sin cambios">Sin cambios</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="card mb-3">
+                                                <div class="card-header bg-light">
+                                                    <h6 class="mb-0">Métricas Cuantitativas</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-4">
+                                                            <label for="evolutionPSFS" class="form-label">PSFS (0-10)</label>
+                                                            <div class="input-group">
+                                                                <input type="number" class="form-control" id="evolutionPSFS" min="0" max="10" step="0.1">
+                                                                <span class="input-group-text"><i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Patient-Specific Functional Scale"></i></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="evolutionGROC" class="form-label">GROC (-7 a +7)</label>
+                                                            <div class="input-group">
+                                                                <input type="number" class="form-control" id="evolutionGROC" min="-7" max="7" step="1">
+                                                                <span class="input-group-text"><i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Global Rating of Change"></i></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="evolutionSANE" class="form-label">SANE (0-100)</label>
+                                                            <div class="input-group">
+                                                                <input type="number" class="form-control" id="evolutionSANE" min="0" max="100" step="1">
+                                                                <span class="input-group-text"><i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Single Assessment Numeric Evaluation"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-4">
+                                                            <label for="evolutionPain" class="form-label">Dolor (0-10)</label>
+                                                            <input type="number" class="form-control" id="evolutionPain" min="0" max="10" step="1">
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <label for="evolutionROM" class="form-label">Rangos de Movimiento</label>
+                                                            <input type="text" class="form-control" id="evolutionROM" placeholder="Ej: Flexión 90°, Extensión 15°">
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="evolutionStrength" class="form-label">Fuerza Muscular</label>
+                                                            <input type="text" class="form-control" id="evolutionStrength" placeholder="Ej: Cuádriceps 4/5, Glúteos 3+/5">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="evolutionFunctionalTests" class="form-label">Tests Funcionales</label>
+                                                            <input type="text" class="form-control" id="evolutionFunctionalTests" placeholder="Ej: Single Leg Squat, Step Down Test">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="card mb-3">
+                                                <div class="card-header bg-light">
+                                                    <h6 class="mb-0">Seguimiento de Objetivos</h6>
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    <div class="table-responsive">
+                                                        <table class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Objetivo</th>
+                                                                    <th>Progreso</th>
+                                                                    <th>Estado</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="objectivesProgressTable">
+                                                                <!-- Aquí se listarán los objetivos del plan -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="evolutionNotes" class="form-label">Notas Adicionales</label>
+                                                <textarea class="form-control" id="evolutionNotes" rows="2"></textarea>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-secondary me-2" id="cancelEvolutionBtn">Cancelar</button>
+                                                <button type="submit" class="btn btn-primary">Guardar Evolución</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Panel de visualización de progreso -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Visualización de Progreso</h5>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-secondary" id="exportProgressBtn">
+                                            <i class="fas fa-file-pdf"></i> Exportar PDF
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary ms-2" id="printProgressBtn">
+                                            <i class="fas fa-print"></i> Imprimir
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="progress-chart-container">
+                                                <canvas id="painChart"></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="progress-chart-container">
+                                                <canvas id="functionalChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-header bg-light">
+                                                    <h6 class="mb-0">Comparativa con Evaluación Inicial</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Métrica</th>
+                                                                    <th>Inicial</th>
+                                                                    <th>Actual</th>
+                                                                    <th>Cambio</th>
+                                                                    <th>MCID</th>
+                                                                    <th>Estado</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="comparativeTable">
+                                                                <!-- Aquí se mostrará la comparativa -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts comunes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Firebase Scripts -->
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/evolution.js"></script>
+</body>
+</html>
