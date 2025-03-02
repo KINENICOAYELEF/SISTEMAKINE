@@ -1,463 +1,118 @@
-/* Estilos específicos para el dashboard */
-
-/* Wrapper */
-#wrapper {
-    display: flex;
-}
-
-/* Content Wrapper */
-#content-wrapper {
-    background-color: #f8f9fc;
-    width: 100%;
-    overflow-x: hidden;
-}
+/* Estilos para el dashboard */
 
 /* Sidebar */
 .sidebar {
-    width: 14rem;
-    min-height: 100vh;
-    transition: all 0.3s;
-}
-
-.sidebar .sidebar-brand {
-    height: 4.375rem;
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 800;
-    padding: 1.5rem 1rem;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.05rem;
-    z-index: 1;
-}
-
-.sidebar .sidebar-brand .sidebar-brand-icon i {
-    font-size: 2rem;
-}
-
-.sidebar .sidebar-brand .sidebar-brand-text {
-    display: inline;
-}
-
-.sidebar hr.sidebar-divider {
-    margin: 0 1rem 1rem;
-}
-
-.sidebar .sidebar-heading {
-    text-align: left;
-    padding: 0 1rem;
-    font-weight: 800;
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.13rem;
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.sidebar .nav-item {
-    position: relative;
-}
-
-.sidebar .nav-item .nav-link {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 0.75rem 1rem;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.sidebar .nav-item .nav-link i {
-    margin-right: 0.25rem;
-    font-size: 0.85rem;
-}
-
-.sidebar .nav-item .nav-link span {
-    font-size: 0.85rem;
-    display: inline;
-}
-
-.sidebar .nav-item .nav-link:active, 
-.sidebar .nav-item .nav-link:focus, 
-.sidebar .nav-item .nav-link:hover {
-    color: #fff;
-}
-
-.sidebar .nav-item.active .nav-link {
-    font-weight: 700;
-    color: #fff;
-}
-
-/* Sidebar Toggle */
-#sidebarToggle {
-    width: 2.5rem;
-    height: 2.5rem;
-    text-align: center;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-#sidebarToggle::after {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f104";
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.sidebar.toggled {
-    width: 0 !important;
-    overflow: hidden;
-}
-
-/* Top Navigation */
-.topbar {
-    height: 4.375rem;
-}
-
-.topbar .navbar-search {
-    width: 25rem;
-}
-
-.topbar .navbar-search input {
-    font-size: 0.85rem;
-}
-
-.topbar .topbar-divider {
-    width: 0;
-    border-right: 1px solid #e3e6f0;
-    height: calc(4.375rem - 2rem);
-    margin: auto 1rem;
-}
-
-.topbar .nav-item .nav-link {
-    height: 4.375rem;
-    display: flex;
-    align-items: center;
-    padding: 0 0.75rem;
-}
-
-.topbar .nav-item .nav-link .img-profile {
-    height: 2rem;
-    width: 2rem;
-}
-
-/* Gradientes */
-.bg-gradient-primary {
-    background-color: #4e73df;
-    background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
-    background-size: cover;
-}
-
-/* Estilos de tarjetas */
-.border-left-primary {
-    border-left: 0.25rem solid #4e73df !important;
-}
-
-.border-left-success {
-    border-left: 0.25rem solid #1cc88a !important;
-}
-
-.border-left-info {
-    border-left: 0.25rem solid #36b9cc !important;
-}
-
-.border-left-warning {
-    border-left: 0.25rem solid #f6c23e !important;
-}
-
-.border-left-danger {
-    border-left: 0.25rem solid #e74a3b !important;
-}
-
-/* Estilos de botones */
-.btn-icon-split {
-    padding: 0;
-    overflow: hidden;
-    display: inline-flex;
-    align-items: stretch;
-    justify-content: center;
-}
-
-.btn-icon-split .icon {
-    background: rgba(0, 0, 0, 0.15);
-    display: inline-block;
-    padding: 0.375rem 0.75rem;
-}
-
-.btn-icon-split .text {
-    display: inline-block;
-    padding: 0.375rem 0.75rem;
-}
-
-/* Scroll to top button */
-.scroll-to-top {
     position: fixed;
-    right: 1rem;
-    bottom: 1rem;
-    display: none;
-    width: 2.75rem;
-    height: 2.75rem;
-    text-align: center;
-    color: #fff;
-    background: rgba(90, 92, 105, 0.5);
-    line-height: 46px;
-    transition: all 0.3s ease-in-out;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 0;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
-.scroll-to-top:hover {
-    background: #5a5c69;
-}
-
-.scroll-to-top i {
-    font-weight: 800;
-}
-
-/* Estilos de módulos */
-.module-container {
-    padding: 20px;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-}
-
-/* Responsive - Sidebar */
-@media (min-width: 768px) {
-    .sidebar {
-        width: 14rem !important;
-    }
-    
-    .sidebar .nav-item .nav-link {
-        display: block;
-        width: 100%;
-        text-align: left;
-        padding: 1rem;
-    }
-    
-    .sidebar .nav-item .nav-link i {
-        font-size: 0.85rem;
-        margin-right: 0.25rem;
-    }
-    
-    .sidebar .nav-item .nav-link span {
-        font-size: 0.85rem;
-        display: inline;
-    }
-}
-
-/* Responsive - Content */
-@media (min-width: 768px) {
-    #content-wrapper {
-        margin-left: 14rem;
-        transition: all 0.3s;
-    }
-    
-    #content-wrapper.sidebar-toggled {
-        margin-left: 0;
-    }
-}
-
-@media (max-width: 767.98px) {
-    .sidebar {
-        width: 0;
-    }
-    
-    .sidebar.toggled {
-        width: 14rem !important;
-    }
-    
-    #content-wrapper {
-        margin-left: 0;
-    }
-}
-
-/* Footer */
-.sticky-footer {
-    padding: 2rem 0;
-    flex-shrink: 0;
-}
-
-/* Current Patient Display */
-#current-patient-info {
-    max-width: 300px;
-}
-
-/* Modales */
-.modal-header {
-    background-color: #4e73df;
-    color: white;
-}
-
-/* Estilos para módulos específicos */
-/* Estas clases se aplicarán a los diferentes módulos cuando sean cargados */
-
-/* Formulario de paciente */
-.patient-form-section {
-    margin-bottom: 2rem;
-    border: 1px solid #e3e6f0;
-    border-radius: 0.35rem;
-    padding: 1rem;
-    background-color: white;
-}
-
-.patient-form-section .section-header {
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #e3e6f0;
-    font-weight: bold;
-    color: #4e73df;
-}
-
-/* Dashboard de análisis */
-.chart-container {
+.sidebar-sticky {
     position: relative;
-    height: 400px;
-    margin-bottom: 2rem;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-/* Estilos de tablas en módulos */
-.table-module {
-    border-radius: 0.35rem;
-    overflow: hidden;
-}
-
-.table-module th {
-    background-color: #f8f9fc;
-    border-bottom: 2px solid #e3e6f0;
-    font-weight: bold;
-    color: #4e73df;
-}
-
-/* Mapa corporal */
-.body-map-container {
-    max-width: 100%;
-    overflow: auto;
-    height: 600px;
-    background-color: #f8f9fc;
-    border: 1px solid #e3e6f0;
-    border-radius: 0.35rem;
-}
-
-/* Toolbars para editores */
-.toolbar {
-    padding: 0.5rem;
-    background-color: #f8f9fc;
-    border: 1px solid #e3e6f0;
-    border-radius: 0.35rem 0.35rem 0 0;
-    margin-bottom: 0;
-}
-
-.toolbar button {
-    margin-right: 0.25rem;
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+    padding: 0.5rem 1rem;
+    margin: 0.2rem 0;
     border-radius: 0.25rem;
 }
 
-/* Pestañas dentro de módulos */
-.module-tabs .nav-link {
-    border: none;
-    color: #3a3b45;
-    background-color: transparent;
-    border-bottom: 2px solid transparent;
-    padding: 0.5rem 1rem;
-    font-weight: 600;
-    transition: all 0.3s;
+.sidebar .nav-link:hover {
+    background-color: rgba(0, 123, 255, 0.1);
 }
 
-.module-tabs .nav-link:hover {
-    border-bottom-color: #4e73df;
-    color: #4e73df;
-}
-
-.module-tabs .nav-link.active {
-    border-bottom: 2px solid #4e73df;
-    color: #4e73df;
-    background-color: transparent;
-}
-
-.tab-pane {
-    padding: 1rem 0;
-}
-
-/* Patient Selector */
-.patient-selector {
-    margin-bottom: 1.5rem;
-}
-
-/* Timeline */
-.timeline {
-    position: relative;
-    padding: 0;
-    list-style: none;
-}
-
-.timeline:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 2px;
-    margin-left: -1px;
-    background-color: #e3e6f0;
-}
-
-.timeline > li {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.timeline > li:after, .timeline > li:before {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-.timeline > li > .timeline-panel {
-    float: left;
-    position: relative;
-    width: 46%;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #e3e6f0;
-    border-radius: 0.35rem;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-}
-
-.timeline > li > .timeline-badge {
+.sidebar .nav-link.active {
     color: #fff;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    font-size: 1.4em;
-    text-align: center;
-    position: absolute;
-    top: 16px;
-    left: 50%;
-    margin-left: -25px;
-    background-color: #4e73df;
+    background-color: #007bff;
+}
+
+.sidebar .nav-link i {
+    margin-right: 0.5rem;
+    color: #999;
+}
+
+.sidebar .nav-link.active i {
+    color: #fff;
+}
+
+.sidebar-footer {
+    padding: 1rem;
+}
+
+.sidebar .nav-header {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6c757d;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+}
+
+/* Ajuste para el contenido principal */
+.main-content {
+    margin-left: 16.66%; /* col-md-2 width */
+}
+
+/* Tarjetas de métricas */
+.metric-icon {
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
 }
 
-.timeline > li.timeline-inverted > .timeline-panel {
-    float: right;
+.bg-primary {
+    background-color: #007bff;
 }
 
-.timeline-badge.primary {
-    background-color: #4e73df !important;
+.bg-success {
+    background-color: #28a745;
 }
 
-.timeline-badge.success {
-    background-color: #1cc88a !important;
+/* Botones de acciones rápidas */
+.btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem 0;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
 }
 
-.timeline-badge.warning {
-    background-color: #f6c23e !important;
+.btn-block:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
-.timeline-badge.danger {
-    background-color: #e74a3b !important;
+.btn-block i {
+    display: block;
+    margin: 0 auto 0.5rem;
 }
 
-.timeline-badge.info {
-    background-color: #36b9cc !important;
+/* Ajustes responsive */
+@media (max-width: 767.98px) {
+    .sidebar {
+        position: static;
+        height: auto;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
 }
