@@ -1,0 +1,182 @@
+/* Variables globales */
+:root {
+    --primary-color: #4e73df;
+    --secondary-color: #1cc88a;
+    --tertiary-color: #36b9cc;
+    --danger-color: #e74a3b;
+    --warning-color: #f6c23e;
+    --light-color: #f8f9fc;
+    --dark-color: #5a5c69;
+    --success-color: #1cc88a;
+    --info-color: #36b9cc;
+
+    --font-family: 'Nunito', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --transition-speed: 0.3s;
+    --border-radius: 0.35rem;
+}
+
+/* Estilos generales */
+body {
+    font-family: var(--font-family);
+    background-color: #f8f9fc;
+    color: #5a5c69;
+}
+
+.card {
+    border-radius: var(--border-radius);
+    border: none;
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid #e3e6f0;
+    padding: 1rem 1.25rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-success:hover {
+    background-color: #17a673;
+    border-color: #169b6b;
+}
+
+/* Animaciones y transiciones */
+.transition {
+    transition: all var(--transition-speed) ease;
+}
+
+/* Utilidades */
+.shadow-custom {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.rounded-custom {
+    border-radius: var(--border-radius);
+}
+
+/* Botones */
+.btn {
+    border-radius: var(--border-radius);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+}
+
+/* Enlaces */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: #2e59d9;
+    text-decoration: underline;
+}
+
+/* Formularios */
+.form-control {
+    border-radius: var(--border-radius);
+    border: 1px solid #d1d3e2;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+.form-control:focus {
+    border-color: #bac8f3;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #3a3b45;
+}
+
+/* Íconos */
+.icon-circle {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Tablas */
+.table th {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #3a3b45;
+    background-color: #f8f9fc;
+    border-bottom: 2px solid #e3e6f0;
+}
+
+.table td {
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+
+/* Alertas */
+.alert {
+    border-radius: var(--border-radius);
+    border: 1px solid transparent;
+}
+
+/* Badges */
+.badge {
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10rem;
+}
+
+/* Tooltips */
+.tooltip {
+    font-family: var(--font-family);
+    font-size: 0.75rem;
+}
+
+/* Progress bars */
+.progress {
+    height: 0.5rem;
+    border-radius: var(--border-radius);
+}
+
+/* Loader/Spinner */
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner-container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    text-align: center;
+}
+
+.spinner-border {
+    color: var(--primary-color);
+}
