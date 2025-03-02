@@ -1,96 +1,162 @@
 // Funcionalidad para el formulario de pacientes
-import { db, storage } from './firebase-config.js';
-import { 
-    collection, 
-    doc, 
-    setDoc, 
-    getDoc, 
-    serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Inicializando formulario de pacientes...');
 
-// Variables globales
-let currentUser = null;
-let isEditMode = false;
-let patientId = null;
-let originalPatientData = null;
-
-// Inicialización
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("Formulario de pacientes inicializado");
-    
-    // Obtener usuario actual
-    const userJSON = localStorage.getItem('currentUser');
-    if (userJSON) {
-        currentUser = JSON.parse(userJSON);
-        console.log("Usuario actual:", currentUser);
-    } else {
-        console.log("No hay usuario en sesión");
-    }
-    
-    // Configurar event listeners
-    setupEventListeners();
-    
-    // Activar primera pestaña
-    activateFirstTab();
+    // Configurar botones principales
+    setupMainButtons();
     
     // Configurar cálculos automáticos
     setupCalculations();
     
-    // Verificar si estamos en modo edición (URL contiene patientId)
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('patientId')) {
-        patientId = urlParams.get('patientId');
-        loadPatientData(patientId);
-        isEditMode = true;
-    }
+    // Configurar validaciones
+    setupValidations();
 });
 
-// Configurar event listeners
-function setupEventListeners() {
-    const savePatientBtn = document.getElementById('save-patient-btn');
-    if (savePatientBtn) {
-        console.log("Configurando evento de guardar paciente");
-        savePatientBtn.addEventListener('click', savePatient);
-    } else {
-        console.error("Botón de guardar paciente no encontrado");
-    }
-    
-    const resetFormBtn = document.getElementById('reset-form-btn');
-    if (resetFormBtn) {
-        console.log("Configurando evento de limpiar formulario");
-        resetFormBtn.addEventListener('click', clearForm);
-    }
-    
-    // Configurar navegación entre pestañas
-    const tabButtons = document.querySelectorAll('[data-bs-toggle="tab"]');
-    tabButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            const target = document.querySelector(this.getAttribute('data-bs-target'));
-            if (target) {
-                // Desactivar todas las pestañas
-                document.querySelectorAll('.tab-pane').forEach(tab => {
-                    tab.classList.remove('show', 'active');
-                });
-                document.querySelectorAll('.nav-link').forEach(tab => {
-                    tab.classList.remove('active');
-                });
-                
-                // Activar la pestaña seleccionada
-                target.classList.add('show', 'active');
-                this.classList.add('active');
-            }
+// Configurar botones principales (guardar y limpiar formulario)
+function setupMainButtons() {
+    // Botón de guardar paciente
+    const saveButton = document.getElementById('save-patient-btn');
+    if (saveButton) {
+        console.log('Botón de guardar configurado');
+        saveButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            savePatientData();
         });
-    });
+    } else {
+        console.warn('No se encontró el botón de guardar paciente');
+    }
+    
+    // Botón de limpiar formulario
+    const resetButton = document.getElementById('reset-form-btn');
+    if (resetButton) {
+        console.log('Botón de limpiar configurado');
+        resetButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            resetForm();
+        });
+    }
 }
 
-// Activar primera pestaña
-function activateFirstTab() {
-    const firstTab = document.querySelector('#patient-form-tabs .nav-link');
-    if (firstTab) {
-        firstTab.click();
+// Guardar datos del paciente
+function savePatientData() {
+    console.log('Intentando guardar datos del paciente...');
+    
+    // Validar el formulario
+    if (!validateForm()) {
+        console.log('Validación fallida');
+        return;
     }
+    
+    // Mostrar mensaje de espera
+    Swal.fire({
+        title: 'Guardando...',
+        text: 'Procesando los datos del paciente',
+        icon: 'info',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    
+    // Simular proceso de guardado (reemplaza esto con tu lógica real de Firebase)
+    setTimeout(() => {
+        // Simular éxito
+        Swal.fire({
+            title: '¡Guardado!',
+            text: 'Los datos del paciente han sido guardados correctamente',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+        
+        // Opcional: resetear el formulario después de guardar
+        // resetForm();
+    }, 1500);
+}
+
+// Validar formulario
+function validateForm() {
+    let isValid = true;
+    
+    // Validar campos obligatorios
+    const requiredFields = [
+        'therapist-name',
+        'evaluation-date',
+        'patient-name',
+        'patient-rut',
+        'patient-birthdate',
+        'patient-gender',
+        'consultation-reason'
+    ];
+    
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field && (field.value === '' || field.value === null)) {
+            // Marcar campo como inválido
+            field.classList.add('is-invalid');
+            isValid = false;
+            
+            // Si no existe ya un mensaje de error, añadirlo
+            if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('invalid-feedback')) {
+                const feedback = document.createElement('div');
+                feedback.classList.add('invalid-feedback');
+                feedback.textContent = 'Este campo es obligatorio';
+                field.parentNode.insertBefore(feedback, field.nextSibling);
+            }
+        } else if (field) {
+            field.classList.remove('is-invalid');
+        }
+    });
+    
+    if (!isValid) {
+        Swal.fire({
+            title: 'Formulario incompleto',
+            text: 'Por favor complete todos los campos obligatorios',
+            icon: 'warning',
+            confirmButtonText: 'Entendido'
+        });
+    }
+    
+    return isValid;
+}
+
+// Limpiar formulario
+function resetForm() {
+    console.log('Limpiando formulario...');
+    
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: "Se perderán todos los datos no guardados",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, limpiar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Limpiar todos los campos
+            document.querySelectorAll('input:not([readonly]), select, textarea').forEach(field => {
+                if (field.type === 'checkbox' || field.type === 'radio') {
+                    field.checked = false;
+                } else {
+                    field.value = '';
+                }
+                field.classList.remove('is-invalid');
+            });
+            
+            // Eliminar mensajes de error
+            document.querySelectorAll('.invalid-feedback').forEach(feedback => {
+                feedback.remove();
+            });
+            
+            Swal.fire(
+                '¡Limpiado!',
+                'El formulario ha sido restablecido.',
+                'success'
+            );
+        }
+    });
 }
 
 // Configurar cálculos automáticos
@@ -100,9 +166,10 @@ function setupCalculations() {
     const ageInput = document.getElementById('patient-age');
     
     if (birthdateInput && ageInput) {
-        birthdateInput.addEventListener('change', () => {
-            if (birthdateInput.value) {
-                const birthdate = new Date(birthdateInput.value);
+        console.log('Configurando cálculo automático de edad');
+        birthdateInput.addEventListener('change', function() {
+            if (this.value) {
+                const birthdate = new Date(this.value);
                 const today = new Date();
                 let age = today.getFullYear() - birthdate.getFullYear();
                 const m = today.getMonth() - birthdate.getMonth();
@@ -123,14 +190,16 @@ function setupCalculations() {
     const imcStatusInput = document.getElementById('anthro-imc-status');
     
     if (weightInput && heightInput && imcInput && imcStatusInput) {
-        const calculateIMC = () => {
+        console.log('Configurando cálculo automático de IMC');
+        
+        const calculateIMC = function() {
             if (weightInput.value && heightInput.value) {
                 const weight = parseFloat(weightInput.value);
                 const height = parseFloat(heightInput.value) / 100; // convertir a metros
                 const imc = weight / (height * height);
                 imcInput.value = imc.toFixed(2);
                 
-                // Determinar clasificación
+                // Clasificación IMC
                 let status = '';
                 if (imc < 18.5) status = 'Bajo peso';
                 else if (imc < 25) status = 'Normal';
@@ -151,87 +220,56 @@ function setupCalculations() {
     }
 }
 
-// Guardar paciente
-async function savePatient(e) {
-    console.log("Iniciando guardado de paciente...");
-    if (e) e.preventDefault();
-    
-    try {
-        // Mostrar mensaje provisional
-        Swal.fire({
-            icon: 'info',
-            title: 'Guardando paciente',
-            text: 'Los datos del paciente están siendo procesados...',
-            showConfirmButton: false,
-            allowOutsideClick: false
+// Configurar validaciones
+function setupValidations() {
+    // Validación RUT
+    const rutInput = document.getElementById('patient-rut');
+    if (rutInput) {
+        console.log('Configurando validación de RUT');
+        rutInput.addEventListener('blur', function() {
+            // Aquí puedes agregar la validación de formato RUT chileno
+            // Por simplicidad, solo verificamos que tenga el formato XX.XXX.XXX-X o sin puntos
+            const rutValue = this.value.trim();
+            const rutPattern = /^(\d{1,2}\.?\d{3}\.?\d{3}[-][0-9kK]{1})$/;
+            
+            if (rutValue && !rutPattern.test(rutValue)) {
+                this.classList.add('is-invalid');
+                // Añadir mensaje de error si no existe
+                if (!this.nextElementSibling || !this.nextElementSibling.classList.contains('invalid-feedback')) {
+                    const feedback = document.createElement('div');
+                    feedback.classList.add('invalid-feedback');
+                    feedback.textContent = 'Formato de RUT inválido (Ej: 12.345.678-9)';
+                    this.parentNode.insertBefore(feedback, this.nextSibling);
+                }
+            } else {
+                this.classList.remove('is-invalid');
+            }
         });
-        
-        // Simular proceso de guardado
-        setTimeout(() => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Paciente guardado',
-                text: 'Los datos del paciente se han guardado correctamente',
-                timer: 2000,
-                showConfirmButton: false
-            });
-        }, 1500);
-        
-    } catch (error) {
-        console.error("Error al guardar paciente:", error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo guardar el paciente. Intente nuevamente.'
+    }
+    
+    // Validación Email
+    const emailInput = document.getElementById('patient-email');
+    if (emailInput) {
+        console.log('Configurando validación de Email');
+        emailInput.addEventListener('blur', function() {
+            const emailValue = this.value.trim();
+            if (emailValue) {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(emailValue)) {
+                    this.classList.add('is-invalid');
+                    // Añadir mensaje de error si no existe
+                    if (!this.nextElementSibling || !this.nextElementSibling.classList.contains('invalid-feedback')) {
+                        const feedback = document.createElement('div');
+                        feedback.classList.add('invalid-feedback');
+                        feedback.textContent = 'Formato de correo electrónico inválido';
+                        this.parentNode.insertBefore(feedback, this.nextSibling);
+                    }
+                } else {
+                    this.classList.remove('is-invalid');
+                }
+            } else {
+                this.classList.remove('is-invalid');
+            }
         });
     }
 }
-
-// Limpiar formulario
-function clearForm() {
-    Swal.fire({
-        title: '¿Está seguro?',
-        text: "Se borrarán todos los datos ingresados",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, limpiar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const form = document.getElementById('patient-form');
-            if (form) {
-                form.reset();
-            } else {
-                // Limpiar manualmente
-                const inputs = document.querySelectorAll('input:not([readonly]), select, textarea');
-                inputs.forEach(input => {
-                    if (input.type === 'checkbox' || input.type === 'radio') {
-                        input.checked = false;
-                    } else {
-                        input.value = '';
-                    }
-                });
-            }
-            
-            Swal.fire(
-                '¡Limpiado!',
-                'El formulario ha sido limpiado.',
-                'success'
-            );
-        }
-    });
-}
-
-// Función auxiliar para cargar datos de paciente (para modo edición)
-async function loadPatientData(patientId) {
-    console.log("Cargando datos del paciente:", patientId);
-    // Esta función se completará más adelante cuando implementes la edición
-}
-
-// Exportar funciones públicas
-export {
-    savePatient,
-    clearForm
-};
