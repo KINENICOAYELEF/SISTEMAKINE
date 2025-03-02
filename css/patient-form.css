@@ -1,0 +1,126 @@
+/* Estilos específicos para el formulario de pacientes */
+
+/* Encabezado del formulario */
+.d-sm-flex.align-items-center.justify-content-between.mb-4 {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e3e6f0;
+    margin-bottom: 1.5rem !important;
+}
+
+/* Tarjetas y contenedores */
+.card {
+    margin-bottom: 1.5rem;
+    border: none;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e3e6f0;
+    padding: 0.75rem 1.25rem;
+}
+
+.patient-form-section {
+    background-color: #fff;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.35rem;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(58, 59, 69, 0.1);
+}
+
+.section-header {
+    color: #5a5c69;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+/* Navegación por pestañas */
+.module-tabs .nav-link {
+    border: none;
+    padding: 0.5rem 1rem;
+    color: #6e707e;
+    font-weight: 500;
+    border-radius: 0;
+}
+
+.module-tabs .nav-link.active {
+    color: #4e73df;
+    background-color: transparent;
+    border-bottom: 2px solid #4e73df;
+}
+
+.module-tabs .nav-link:hover {
+    color: #4e73df;
+    background-color: transparent;
+}
+
+.tab-content {
+    padding: 1.25rem 0;
+}
+
+/* Botones de acción */
+.btn-icon-split {
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-icon-split .icon {
+    background: rgba(0, 0, 0, 0.15);
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+}
+
+.btn-icon-split .text {
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+}
+
+/* Ajustes para campos de formulario */
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+    border-radius: 0.35rem;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #bac8f3;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+/* Mapa corporal */
+.body-map-container {
+    min-height: 400px;
+    border: 1px solid #e3e6f0;
+    border-radius: 0.35rem;
+}
+
+.color-option {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid #ddd;
+}
+
+/* Spinner de carga */
+#loading-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+}
