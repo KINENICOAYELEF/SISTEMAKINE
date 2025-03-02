@@ -1,0 +1,247 @@
+/* Estilos para el módulo de Plan de Tratamiento */
+
+/* Estilos para las tarjetas de objetivos SMART */
+.smart-objective-card {
+    border-left: 4px solid #007bff;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.smart-objective-card:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
+}
+
+.smart-objective-card .priority-badge {
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+}
+
+.smart-objective-card .priority-high {
+    background-color: #dc3545;
+}
+
+.smart-objective-card .priority-medium {
+    background-color: #fd7e14;
+}
+
+.smart-objective-card .priority-low {
+    background-color: #28a745;
+}
+
+.smart-objective-card .smart-details {
+    display: none;
+    padding: 0.75rem 0;
+}
+
+.smart-objective-card.expanded .smart-details {
+    display: block;
+}
+
+.smart-category {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+}
+
+/* Estilos para las tarjetas de ejercicios */
+.exercise-card {
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.exercise-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.exercise-card .card-header {
+    border-radius: 0.5rem 0.5rem 0 0;
+    padding: 0.75rem 1rem;
+}
+
+.exercise-strength {
+    border-left: 4px solid #dc3545;
+}
+
+.exercise-flexibility {
+    border-left: 4px solid #17a2b8;
+}
+
+.exercise-proprioception {
+    border-left: 4px solid #6f42c1;
+}
+
+.exercise-functional {
+    border-left: 4px solid #28a745;
+}
+
+.exercise-dosage {
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.exercise-dosage span {
+    margin-right: 1rem;
+    font-size: 0.875rem;
+}
+
+.exercise-progression {
+    font-style: italic;
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.exercise-contraindications {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* Estilos para el calendario de sesiones */
+.calendar-container {
+    min-height: 300px;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+}
+
+.calendar-day {
+    height: 2.5rem;
+    width: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.25rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.calendar-day:hover {
+    background-color: #e9ecef;
+}
+
+.calendar-day.has-session {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Estilos para la línea de tiempo */
+.timeline-container {
+    min-height: 400px;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    overflow-x: auto;
+    position: relative;
+}
+
+.timeline-track {
+    height: 4px;
+    background-color: #dee2e6;
+    position: relative;
+    margin: 50px 0;
+}
+
+.timeline-event {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+}
+
+.timeline-event-dot {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+}
+
+.timeline-event-label {
+    position: absolute;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.timeline-controls button {
+    border-radius: 0.25rem;
+}
+
+/* Estilos para las recomendaciones */
+.recommendation-card {
+    border-left: 4px solid #17a2b8;
+    margin-bottom: 1rem;
+}
+
+.recommendation-card .evidence-badge {
+    font-size: 0.75rem;
+}
+
+.recommendation-card .evidence-high {
+    background-color: #28a745;
+}
+
+.recommendation-card .evidence-moderate {
+    background-color: #fd7e14;
+}
+
+.recommendation-card .evidence-low {
+    background-color: #dc3545;
+}
+
+.recommendation-card .evidence-expert {
+    background-color: #6c757d;
+}
+
+.recommendation-reference {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #6c757d;
+    margin-top: 0.5rem;
+}
+
+/* Estilos para el resumen del plan */
+#treatmentPlanSummary {
+    padding: 1rem;
+}
+
+.summary-section {
+    margin-bottom: 2rem;
+}
+
+.summary-heading {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.summary-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+    .timeline-container {
+        min-height: 300px;
+    }
+    
+    .exercise-card .card-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .exercise-card .card-header .actions {
+        margin-top: 0.5rem;
+    }
+}
