@@ -3,420 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Kinesiológico - Dashboard</title>
+    <title>Dashboard - Sistema Kinesiológico</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
+    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
-<body id="page-top">
-
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-heartbeat"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">Kinesys <sup>v1</sup></div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="dashboard.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Panel Principal</span>
-                </a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Pacientes
-            </div>
-
-            <!-- Nav Item - Formulario -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-module="patient-form">
-                    <i class="fas fa-fw fa-user-plus"></i>
-                    <span>Formulario de Ingreso</span>
-                </a>
-            </li>
-
-            <!-- Nav Item - Listado -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-module="records">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Listado de Pacientes</span>
-                </a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Evaluación
-            </div>
-
-            <!-- Nav Item - Diagnóstico -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-module="diagnosis">
-                    <i class="fas fa-fw fa-stethoscope"></i>
-                    <span>Diagnóstico Kinesiológico</span>
-                </a>
-            </li>
-
-            <!-- Nav Item - Tratamiento -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-module="treatment">
-                    <i class="fas fa-fw fa-clipboard-list"></i>
-                    <span>Plan de Tratamiento</span>
-                </a>
-            </li>
-
-            <!-- Nav Item - Evoluciones -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-module="evolution">
-                    <i class="fas fa-fw fa-chart-line"></i>
-                    <span>Evoluciones</span>
-                </a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Análisis
-            </div>
-
-            <!-- Nav Item - Dashboard Analytics -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-module="analysis">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Dashboard y Análisis</span>
-                </a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Current Patient Info -->
-                    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100">
-                        <div id="current-patient-info" class="d-none">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Paciente activo:</span>
-                                </div>
-                                <div class="form-control bg-light" id="active-patient-name">Ninguno seleccionado</div>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" id="clear-patient-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar (menú lateral) -->
+            <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="sidebar-header mb-3">
+                        <h5 class="text-center">Sistema Kinesiológico</h5>
+                        <hr>
                     </div>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="dashboard.html">
+                                <i class="fas fa-home"></i> Panel Principal
                             </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Buscar paciente..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
                         </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="user-name">Nombre de Usuario</span>
-                                <img class="img-profile rounded-circle" src="assets/img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Perfil
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Configuración
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" onclick="logOut()">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Cerrar sesión
-                                </a>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </nav>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Content Row -->
-                    <div class="row" id="main-content">
-                        <!-- El contenido dinámico se cargará aquí -->
                         
-                        <!-- Welcome Dashboard (default view) -->
-                        <div class="col-12" id="welcome-dashboard">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Bienvenido al Sistema de Fichas Clínicas Kinesiológicas</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-                                            <div class="card border-left-primary shadow h-100 py-2">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                                Pacientes Totales</div>
-                                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-patients">Cargando...</div>
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <i class="fas fa-users fa-2x text-gray-300"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-                                            <div class="card border-left-success shadow h-100 py-2">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                                Pacientes Activos</div>
-                                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="active-patients">Cargando...</div>
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <i class="fas fa-user-check fa-2x text-gray-300"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                        <li class="nav-header mt-3">PACIENTES</li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="modules/patient-form.html">
+                                <i class="fas fa-user-plus"></i> Formulario de Ingreso
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="modules/records.html">
+                                <i class="fas fa-users"></i> Listado de Pacientes
+                            </a>
+                        </li>
+                        
+                        <li class="nav-header mt-3">EVALUACIÓN</li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="modules/diagnosis.html">
+                                <i class="fas fa-stethoscope"></i> Diagnóstico Kinesiológico
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="modules/treatment.html">
+                                <i class="fas fa-clipboard-list"></i> Plan de Tratamiento
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="modules/evolution.html">
+                                <i class="fas fa-chart-line"></i> Evoluciones
+                            </a>
+                        </li>
+                        
+                        <li class="nav-header mt-3">ANÁLISIS</li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="modules/dashboard-analysis.html">
+                                <i class="fas fa-chart-bar"></i> Dashboard y Análisis
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <hr>
+                    <div class="sidebar-footer">
+                        <button id="logoutBtn" class="btn btn-outline-danger btn-sm w-100">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido principal -->
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Barra superior -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="fas fa-tachometer-alt"></i> Panel Principal</h1>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="userName">Nombre de Usuario</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Perfil</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Configuración</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="menuLogoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Bienvenida al sistema -->
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Bienvenido al Sistema de Fichas Clínicas Kinesiológicas</h4>
+                    <p>Este sistema te permite gestionar de forma integral las fichas clínicas de tus pacientes, desde la evaluación inicial hasta el seguimiento de su evolución.</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <!-- Tarjetas de métricas -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="metric-icon bg-primary">
+                                        <i class="fas fa-users"></i>
                                     </div>
-                                    
-                                    <div class="row">
-                                        <div class="col-lg-6 mb-4">
-                                            <div class="card shadow mb-4">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">Acciones Rápidas</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3">
-                                                            <a href="#" class="btn btn-primary btn-icon-split btn-lg w-100" data-module="patient-form">
-                                                                <span class="icon text-white-50">
-                                                                    <i class="fas fa-user-plus"></i>
-                                                                </span>
-                                                                <span class="text">Nuevo Paciente</span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <a href="#" class="btn btn-info btn-icon-split btn-lg w-100" data-module="records">
-                                                                <span class="icon text-white-50">
-                                                                    <i class="fas fa-users"></i>
-                                                                </span>
-                                                                <span class="text">Ver Pacientes</span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <a href="#" class="btn btn-success btn-icon-split btn-lg w-100" data-module="diagnosis">
-                                                                <span class="icon text-white-50">
-                                                                    <i class="fas fa-stethoscope"></i>
-                                                                </span>
-                                                                <span class="text">Diagnóstico</span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <a href="#" class="btn btn-warning btn-icon-split btn-lg w-100" data-module="evolution">
-                                                                <span class="icon text-white-50">
-                                                                    <i class="fas fa-chart-line"></i>
-                                                                </span>
-                                                                <span class="text">Evoluciones</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-lg-6 mb-4">
-                                            <div class="card shadow mb-4">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">Pacientes Recientes</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered" width="100%" cellspacing="0">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Nombre</th>
-                                                                    <th>Diagnóstico</th>
-                                                                    <th>Última visita</th>
-                                                                    <th>Acciones</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="recent-patients-list">
-                                                                <tr>
-                                                                    <td colspan="4" class="text-center">Cargando pacientes recientes...</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="ms-3">
+                                        <h5 class="card-title">PACIENTES TOTALES</h5>
+                                        <h2 class="card-text" id="pacientesTotales">Cargando...</h2>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Kinesys &copy; Sistema de Fichas Clínicas 2025</span>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="metric-icon bg-success">
+                                        <i class="fas fa-user-check"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h5 class="card-title">PACIENTES ACTIVOS</h5>
+                                        <h2 class="card-text" id="pacientesActivos">Cargando...</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Loading Spinner -->
-    <div class="spinner-overlay d-none" id="loading-spinner">
-        <div class="spinner-container">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Cargando...</span>
+                
+                <!-- Acciones Rápidas -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-bolt"></i> Acciones Rápidas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <a href="modules/patient-form.html" class="btn btn-primary btn-block btn-nuevo-paciente">
+                                    <i class="fas fa-user-plus fa-2x mb-2"></i><br>
+                                    Nuevo Paciente
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <a href="modules/records.html" class="btn btn-info btn-block text-white btn-ver-pacientes">
+                                    <i class="fas fa-users fa-2x mb-2"></i><br>
+                                    Ver Pacientes
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <a href="modules/diagnosis.html" class="btn btn-success btn-block btn-diagnostico">
+                                    <i class="fas fa-stethoscope fa-2x mb-2"></i><br>
+                                    Diagnóstico
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <a href="modules/evolution.html" class="btn btn-warning btn-block text-white btn-evoluciones">
+                                    <i class="fas fa-chart-line fa-2x mb-2"></i><br>
+                                    Evoluciones
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pacientes Recientes -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-history"></i> Pacientes Recientes</h5>
+                        <a href="modules/records.html" class="btn btn-sm btn-outline-primary">Ver Todos</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Diagnóstico</th>
+                                        <th>Última visita</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentPatientsTable">
+                                    <tr>
+                                        <td colspan="4" class="text-center">Cargando pacientes recientes...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <footer class="footer mt-auto py-3">
+                    <div class="container">
+                        <span class="text-muted">Kinesys © Sistema de Fichas Clínicas 2025</span>
+                    </div>
+                </footer>
             </div>
-            <p class="mt-2">Cargando, por favor espere...</p>
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     
     <!-- Firebase -->
     <script type="module" src="js/firebase-config.js"></script>
-    <script type="module" src="js/auth.js"></script>
-    <script type="module" src="js/dashboard.js"></script>
+    
+    <!-- Script del Dashboard -->
+    <script type="module">
+        import { auth, db } from "./js/firebase-config.js";
+        import { 
+            collection, 
+            getDocs, 
+            query, 
+            where, 
+            orderBy, 
+            limit 
+        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-<!-- Justo antes de cerrar el body -->
-<script type="module" src="./js/main.js"></script>
+        // Verificar autenticación
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuario autenticado
+                console.log("Usuario autenticado:", user.email);
+                document.getElementById('userName').textContent = user.email;
+                
+                // Cargar datos
+                loadDashboardData();
+            } else {
+                // No hay usuario autenticado, redirigir al login
+                window.location.href = 'index.html';
+            }
+        });
 
-    <!-- Botones de acción rápida -->
-<div class="acciones-rapidas">
-    <button class="btn btn-primary btn-nuevo-paciente">
-        <i class="fas fa-user-plus"></i> Nuevo Paciente
-    </button>
-    
-    <button class="btn btn-info btn-ver-pacientes">
-        <i class="fas fa-users"></i> Ver Pacientes
-    </button>
-    
-    <button class="btn btn-success btn-diagnostico">
-        <i class="fas fa-stethoscope"></i> Diagnóstico
-    </button>
-    
-    <button class="btn btn-warning btn-evoluciones">
-        <i class="fas fa-chart-line"></i> Evoluciones
-    </button>
-</div>
+        // Funciones de logout
+        const logoutActions = async () => {
+            try {
+                await signOut(auth);
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error("Error al cerrar sesión:", error);
+                alert("Error al cerrar sesión");
+            }
+        };
 
-    <!-- Firebase -->
-<script type="module" src="js/firebase-config.js"></script>
-<!-- Scripts de la aplicación -->
-<script type="module" src="js/app.js"></script>
-    
-</body>    
+        document.getElementById('logoutBtn').addEventListener('click', logoutActions);
+        document.getElementById('menuLogoutBtn').addEventListener('click', logoutActions);
+
+        // Cargar datos del dashboard
+        async function loadDashboardData() {
+            try {
+                // Cargar contadores
+                await loadCounters();
+                
+                // Cargar pacientes recientes
+                await loadRecentPatients();
+            } catch (error) {
+                console.error("Error al cargar datos del dashboard:", error);
+            }
+        }
+
+        // Cargar contadores
+        async function loadCounters() {
+            try {
+                // Obtener conteo de pacientes
+                const patientsRef = collection(db, "patients");
+                const patientsSnapshot = await getDocs(patientsRef);
+                
+                // Total de pacientes
+                const totalPatients = patientsSnapshot.size;
+                document.getElementById('pacientesTotales').textContent = totalPatients;
+                
+                // Pacientes activos (asumiendo que tienen un campo status = 'active')
+                const activePatients = patientsSnapshot.docs.filter(doc => 
+                    doc.data().status === 'active' || !doc.data().status
+                ).length;
+                document.getElementById('pacientesActivos').textContent = activePatients;
+                
+            } catch (error) {
+                console.error("Error al cargar contadores:", error);
+                // En caso de error, mostrar valores por defecto
+                document.getElementById('pacientesTotales').textContent = '0';
+                document.getElementById('pacientesActivos').textContent = '0';
+            }
+        }
+
+        // Cargar pacientes recientes
+        async function loadRecentPatients() {
+            try {
+                const patientsRef = collection(db, "patients");
+                const recentPatientsQuery = query(
+                    patientsRef, 
+                    orderBy("createdAt", "desc"), 
+                    limit(5)
+                );
+                
+                const snapshot = await getDocs(recentPatientsQuery);
+                const tableBody = document.getElementById('recentPatientsTable');
+                
+                if (snapshot.empty) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="text-center">No hay pacientes registrados</td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                tableBody.innerHTML = '';
+                
+                snapshot.forEach(doc => {
+                    const patient = doc.data();
+                    const patientId = doc.id;
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${patient.firstName || ''} ${patient.lastName || ''}</td>
+                        <td>${patient.diagnosis || 'Sin diagnóstico'}</td>
+                        <td>${formatDate(patient.updatedAt || patient.createdAt)}</td>
+                        <td>
+                            <a href="modules/patient-form.html?id=${patientId}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="modules/diagnosis.html?id=${patientId}" class="btn btn-sm btn-outline-success">
+                                <i class="fas fa-stethoscope"></i>
+                            </a>
+                            <a href="modules/evolution.html?id=${patientId}" class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-chart-line"></i>
+                            </a>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+                
+            } catch (error) {
+                console.error("Error al cargar pacientes recientes:", error);
+                document.getElementById('recentPatientsTable').innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center">Error al cargar pacientes</td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Formatear fecha
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+    </script>
 </body>
 </html>
