@@ -1,40 +1,375 @@
-<form id="loginForm">
-    <div class="mb-3">
-        <label for="email" class="form-label">Correo electrónico</label>
-        <input type="email" class="form-control" id="email" required>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Fichas Clínicas Kinesiológicas</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            background-color: #4e73df;
+            background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header h2 {
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .login-header p {
+            color: #6c757d;
+        }
+        
+        .form-label {
+            font-weight: 500;
+        }
+        
+        .alert {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="login-container">
+                    <div class="login-header">
+                        <h2>Sistema de Fichas Clínicas</h2>
+                        <p>Ingresa tus credenciales para acceder</p>
+                    </div>
+                    
+                    <!-- Alertas -->
+                    <div class="alert alert-danger" id="errorAlert" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span id="errorMessage"></span>
+                    </div>
+                    
+                    <div class="alert alert-success" id="successAlert" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span id="successMessage"></span>
+                    </div>
+                    
+                    <!-- Formulario de Login -->
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo electrónico</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="password" placeholder="Ingresa tu contraseña" required>
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Recordar mis datos</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            Iniciar Sesión
+                        </button>
+                    </form>
+                    
+                    <!-- Enlace para mostrar formulario de registro -->
+                    <div class="mt-3" id="registerLinkContainer">
+                        <p class="text-center">¿No tienes una cuenta? <a href="#" id="showRegisterForm">Regístrate</a></p>
+                    </div>
+                    
+                    <!-- Formulario de Registro (oculto por defecto) -->
+                    <form id="registerForm" style="display: none;">
+                        <div class="mb-3">
+                            <label for="registerName" class="form-label">Nombre completo</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" id="registerName" placeholder="Ingresa tu nombre completo" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerEmail" class="form-label">Correo electrónico</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="registerEmail" placeholder="Ingresa tu correo" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerPassword" class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="registerPassword" placeholder="Ingresa tu contraseña" required>
+                                <button class="btn btn-outline-secondary" type="button" id="toggleRegisterPassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="form-text">La contraseña debe tener al menos 6 caracteres.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirma tu contraseña" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            Registrarse
+                        </button>
+                    </form>
+                    
+                    <!-- Enlace para volver al login (oculto por defecto) -->
+                    <div class="mt-3" id="loginLinkContainer" style="display: none;">
+                        <p class="text-center">¿Ya tienes una cuenta? <a href="#" id="showLoginForm">Iniciar Sesión</a></p>
+                    </div>
+                    
+                    <!-- Indicador de carga -->
+                    <div class="loading-spinner" id="loadingSpinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-2">Procesando, por favor espera...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" id="password" required>
-    </div>
-    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
-</form>
 
-<div class="mt-3">
-    <p class="text-center">¿No tienes una cuenta? <a href="#" id="showRegisterForm">Regístrate</a></p>
-</div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-<!-- Formulario de Registro (oculto por defecto) -->
-<form id="registerForm" style="display: none;">
-    <div class="mb-3">
-        <label for="registerName" class="form-label">Nombre completo</label>
-        <input type="text" class="form-control" id="registerName" required>
-    </div>
-    <div class="mb-3">
-        <label for="registerEmail" class="form-label">Correo electrónico</label>
-        <input type="email" class="form-control" id="registerEmail" required>
-    </div>
-    <div class="mb-3">
-        <label for="registerPassword" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" id="registerPassword" required>
-    </div>
-    <div class="mb-3">
-        <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
-        <input type="password" class="form-control" id="confirmPassword" required>
-    </div>
-    <button type="submit" class="btn btn-success w-100">Registrarse</button>
-</form>
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBYaNbZWHUS-Pvm49kmMtHw9LqqxUDySYA",
+            authDomain: "base-de-datos-poli.firebaseapp.com",
+            projectId: "base-de-datos-poli",
+            storageBucket: "base-de-datos-poli.firebasestorage.app",
+            messagingSenderId: "954754202697",
+            appId: "1:954754202697:web:e06171f6b0ade314259398"
+        };
 
-<div class="mt-3" id="backToLoginContainer" style="display: none;">
-    <p class="text-center">¿Ya tienes una cuenta? <a href="#" id="showLoginForm">Iniciar Sesión</a></p>
-</div>
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        // Verificar si hay un usuario autenticado
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Si hay un usuario autenticado, redirigir al dashboard
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        // Alternar entre formularios
+        document.getElementById('showRegisterForm').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerLinkContainer').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('loginLinkContainer').style.display = 'block';
+        });
+
+        document.getElementById('showLoginForm').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginLinkContainer').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerLinkContainer').style.display = 'block';
+        });
+
+        // Mostrar/ocultar contraseña
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        document.getElementById('toggleRegisterPassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('registerPassword');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Funciones para mostrar alertas
+        function showError(message) {
+            const errorAlert = document.getElementById('errorAlert');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            errorMessage.textContent = message;
+            errorAlert.style.display = 'block';
+            
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                errorAlert.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successAlert = document.getElementById('successAlert');
+            const successMessage = document.getElementById('successMessage');
+            
+            successMessage.textContent = message;
+            successAlert.style.display = 'block';
+            
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                successAlert.style.display = 'none';
+            }, 5000);
+        }
+
+        function showLoading(show) {
+            const spinner = document.getElementById('loadingSpinner');
+            spinner.style.display = show ? 'block' : 'none';
+        }
+
+        // Iniciar sesión
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            showLoading(true);
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                showSuccess('Inicio de sesión exitoso');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } catch (error) {
+                let errorMessage = 'Error al iniciar sesión';
+                
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage = 'El correo electrónico no es válido';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage = 'Esta cuenta ha sido deshabilitada';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'No existe una cuenta con este correo';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'Contraseña incorrecta';
+                        break;
+                    default:
+                        errorMessage = `Error: ${error.message}`;
+                }
+                
+                showError(errorMessage);
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Registrar usuario
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Validar que las contraseñas coincidan
+            if (password !== confirmPassword) {
+                showError('Las contraseñas no coinciden');
+                return;
+            }
+            
+            // Validar longitud de contraseña
+            if (password.length < 6) {
+                showError('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                showSuccess('Cuenta creada exitosamente');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } catch (error) {
+                let errorMessage = 'Error al crear la cuenta';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'Ya existe una cuenta con este correo';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'El correo electrónico no es válido';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'La contraseña es demasiado débil';
+                        break;
+                    default:
+                        errorMessage = `Error: ${error.message}`;
+                }
+                
+                showError(errorMessage);
+            } finally {
+                showLoading(false);
+            }
+        });
+    </script>
+</body>
+</html>
