@@ -1,0 +1,292 @@
+<!-- Listado de Pacientes -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Listado de Pacientes</h1>
+    <div>
+        <button id="add-patient-btn" class="btn btn-primary btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="fas fa-user-plus"></i>
+            </span>
+            <span class="text">Nuevo Paciente</span>
+        </button>
+    </div>
+</div>
+
+<!-- Filtros de Búsqueda -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Filtros de Búsqueda</h6>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="search-patient" placeholder="Buscar por nombre, RUT...">
+                    <button class="btn btn-primary" type="button" id="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="filter-diagnosis">
+                    <option value="">Todos los diagnósticos</option>
+                    <!-- Se llenará dinámicamente -->
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="filter-status">
+                    <option value="">Todos los estados</option>
+                    <option value="active">Activos</option>
+                    <option value="discharged">Alta</option>
+                    <option value="abandoned">Abandonó</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-secondary w-100" id="reset-filters-btn">
+                    <i class="fas fa-undo"></i> Limpiar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de Pacientes -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Pacientes</h6>
+        <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="exportDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-download fa-sm fa-fw text-gray-400"></i> Exportar
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="exportDropdown">
+                <div class="dropdown-header">Formatos de Exportación:</div>
+                <a class="dropdown-item" href="#" id="export-csv">
+                    <i class="fas fa-file-csv fa-sm fa-fw mr-2 text-gray-400"></i> CSV
+                </a>
+                <a class="dropdown-item" href="#" id="export-pdf">
+                    <i class="fas fa-file-pdf fa-sm fa-fw mr-2 text-gray-400"></i> PDF
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="patients-table" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>RUT</th>
+                        <th>Edad</th>
+                        <th>Diagnóstico</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Última Visita</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="patients-list">
+                    <!-- Se llenará dinámicamente -->
+                    <tr>
+                        <td colspan="8" class="text-center">Cargando pacientes...</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    Mostrando <span id="showing-records">0</span> de <span id="total-records">0</span> pacientes
+                                </div>
+                                <div>
+                                    <nav aria-label="Paginación">
+                                        <ul class="pagination justify-content-end mb-0">
+                                            <li class="page-item disabled">
+                                                <a class="page-link" href="#" id="prev-page">Anterior</a>
+                                            </li>
+                                            <li class="page-item active">
+                                                <a class="page-link" href="#">1</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" id="next-page">Siguiente</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Detalles -->
+<div class="modal fade" id="patientDetailsModal" tabindex="-1" aria-labelledby="patientDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="patientDetailsModalLabel">Detalles del Paciente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="nav nav-tabs card-header-tabs module-tabs" id="patient-details-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="true">Información</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false">Historial</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="documents-tab" data-bs-toggle="tab" data-bs-target="#documents" type="button" role="tab" aria-controls="documents" aria-selected="false">Documentos</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab" aria-controls="notes" aria-selected="false">Notas</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-primary" id="edit-patient-btn">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button type="button" class="btn btn-success" id="select-patient-btn">
+                                <i class="fas fa-user-check"></i> Seleccionar
+                            </button>
+                            <button type="button" class="btn btn-danger" id="discharge-patient-btn">
+                                <i class="fas fa-user-minus"></i> Dar de Alta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content mt-3" id="patient-details-content">
+                    <!-- Pestaña de Información -->
+                    <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Nombre:</label>
+                                    <p id="detail-name"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">RUT:</label>
+                                    <p id="detail-rut"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Fecha de Nacimiento:</label>
+                                    <p id="detail-birthdate"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Edad:</label>
+                                    <p id="detail-age"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Género:</label>
+                                    <p id="detail-gender"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Teléfono:</label>
+                                    <p id="detail-phone"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Email:</label>
+                                    <p id="detail-email"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Dirección:</label>
+                                    <p id="detail-address"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Diagnóstico:</label>
+                                    <p id="detail-diagnosis"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Estado:</label>
+                                    <p id="detail-status"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña de Historial -->
+                    <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                        <div class="timeline" id="patient-timeline">
+                            <!-- Se llenará dinámicamente -->
+                            <p class="text-center">Cargando historial...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña de Documentos -->
+                    <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="patient-documents">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Se llenará dinámicamente -->
+                                    <tr>
+                                        <td colspan="5" class="text-center">No hay documentos disponibles</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña de Notas -->
+                    <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+                        <div class="mb-3">
+                            <label for="patient-notes" class="form-label">Notas adicionales</label>
+                            <textarea class="form-control" id="patient-notes" rows="5"></textarea>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button id="save-notes-btn" class="btn btn-primary">Guardar Notas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <a id="view-evolution-btn" href="#" class="btn btn-info">
+                    <i class="fas fa-chart-line"></i> Ver Evoluciones
+                </a>
+                <a id="view-treatment-btn" href="#" class="btn btn-warning">
+                    <i class="fas fa-clipboard-list"></i> Ver Plan de Tratamiento
+                </a>
+                <a id="export-record-btn" href="#" class="btn btn-success">
+                    <i class="fas fa-file-export"></i> Exportar Ficha
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación de Eliminación -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteConfirmModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar al paciente <strong id="delete-patient-name"></strong>?</p>
+                <p class="text-danger"><i class="fas fa-exclamation-triangle"></i> Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-btn">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
