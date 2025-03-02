@@ -1,10 +1,10 @@
-// Configuración de Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+// Usando una versión estable de Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
-// Tu configuración de Firebase
+// Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBYaNbZWHUS-Pvm49kmMtHw9LqqxUDySYA",
   authDomain: "base-de-datos-poli.firebaseapp.com",
@@ -16,8 +16,8 @@ const firebaseConfig = {
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
-const auth = getAuth(app);
 
-export { app, db, storage, auth };
+export { app, auth, db, storage };
