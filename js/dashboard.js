@@ -432,3 +432,119 @@ export {
     showSpinner,
     hideSpinner
 };
+// Función para cargar el sidebar
+export async function loadSidebar() {
+    const sidebarContainer = document.getElementById('sidebar-container');
+    if (!sidebarContainer) return;
+    
+    // Obtener la página actual
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    sidebarContainer.innerHTML = `
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link ${currentPage === 'dashboard.html' ? 'active' : ''}" href="../dashboard.html">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ${currentPage === 'patient-form.html' ? 'active' : ''}" href="patient-form.html">
+                            <i class="fas fa-user-plus"></i> Formulario de Ingreso
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ${currentPage === 'records.html' ? 'active' : ''}" href="records.html">
+                            <i class="fas fa-users"></i> Pacientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ${currentPage === 'diagnosis.html' ? 'active' : ''}" href="diagnosis.html">
+                            <i class="fas fa-stethoscope"></i> Diagnóstico
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ${currentPage === 'treatment.html' ? 'active' : ''}" href="treatment.html">
+                            <i class="fas fa-clipboard-list"></i> Plan de Tratamiento
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ${currentPage === 'evolution.html' ? 'active' : ''}" href="evolution.html">
+                            <i class="fas fa-chart-line"></i> Evoluciones
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ${currentPage === 'dashboard-analysis.html' ? 'active' : ''}" href="dashboard-analysis.html">
+                            <i class="fas fa-chart-bar"></i> Dashboard y Análisis
+                        </a>
+                    </li>
+                </ul>
+                
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Paciente Actual</span>
+                </h6>
+                <div id="current-patient-info" class="px-3 py-2">
+                    <div class="text-muted small" id="no-patient-selected">
+                        <i class="fas fa-info-circle"></i> Ningún paciente seleccionado
+                    </div>
+                    <div class="d-none" id="patient-selected">
+                        <div id="patient-name" class="font-weight-bold"></div>
+                        <div id="patient-details" class="small text-muted"></div>
+                        <button class="btn btn-sm btn-outline-secondary mt-2" id="change-patient-btn">
+                            <i class="fas fa-exchange-alt"></i> Cambiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Verificar si hay un paciente seleccionado
+    const currentPatient = getCurrentPatient();
+    if (currentPatient) {
+        document.getElementById('no-patient-selected').classList.add('d-none');
+        document.getElementById('patient-selected').classList.remove('d-none');
+        document.getElementById('patient-name').textContent = `${currentPatient.firstName} ${currentPatient.lastName}`;
+        document.getElementById('patient-details').textContent = `RUT: ${currentPatient.rut || 'N/A'}`;
+        
+        // Evento para cambiar paciente
+        document.getElementById('change-patient-btn').addEventListener('click', () => {
+            window.location.href = 'records.html'; // Redirigir a la página de pacientes
+        });
+    }
+}
+
+// Función para obtener el paciente actual
+export function getCurrentPatient() {
+    const patientString = localStorage.getItem('currentPatient');
+    return patientString ? JSON.parse(patientString) : null;
+}
+
+// Función para establecer el paciente actual
+export function setCurrentPatient(patient) {
+    localStorage.setItem('currentPatient', JSON.stringify(patient));
+}
+
+// Función para mostrar banner de información del paciente
+export function displayPatientBanner(patient, container) {
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="d-flex align-items-center">
+            <div class="patient-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="ms-2">
+                <div class="patient-name">${patient.firstName} ${patient.lastName}</div>
+                <div class="patient-info">
+                    <span class="badge bg-secondary">${patient.gender || 'N/A'}</span>
+                    <span class="badge bg-light text-dark">${patient.age || 'N/A'} años</span>
+                    <span class="badge bg-light text-dark">RUT: ${patient.rut || 'N/A'}</span>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Otras funciones comunes para el dashboard pueden agregarse aquí
