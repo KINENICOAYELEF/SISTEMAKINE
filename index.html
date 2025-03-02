@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Fichas Clínicas Kinesiológicas</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <!-- Encabezado -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Sistema de Fichas Clínicas Kinesiológicas</h1>
+            <button id="theme-switcher" class="btn theme-toggle">
+                <i class="fas fa-moon"></i> Modo Oscuro
+            </button>
+        </div>
+
+        <!-- Contenedor de alertas -->
+        <div id="alertContainer" class="mb-3"></div>
+        <!-- Navegación por pestañas -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-tab-pane" type="button" role="tab">
+                    <i class="fas fa-file-medical"></i> Formulario de Ingreso
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="diagnosis-tab" data-bs-toggle="tab" data-bs-target="#diagnosis-tab-pane" type="button" role="tab">
+                    <i class="fas fa-stethoscope"></i> Diagnóstico Kinesiológico
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="treatment-tab" data-bs-toggle="tab" data-bs-target="#treatment-tab-pane" type="button" role="tab">
+                    <i class="fas fa-notes-medical"></i> Plan de Tratamiento
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="records-tab" data-bs-toggle="tab" data-bs-target="#records-tab-pane" type="button" role="tab">
+                    <i class="fas fa-users"></i> Registros
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="evolutions-tab" data-bs-toggle="tab" data-bs-target="#evolutions-tab-pane" type="button" role="tab">
+                    <i class="fas fa-chart-line"></i> Evoluciones
+                </button>
+            </li>
+        </ul>
+
+        <!-- Contenido de las pestañas -->
+        <div class="tab-content" id="myTabContent">
+          <!-- Pestaña de Formulario de Ingreso -->
+            <div class="tab-pane fade show active" id="form-tab-pane" role="tabpanel">
+                <div class="form-container">
+                    <form id="patientForm">
+                        <!-- Información personal y de contacto -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-user"></i> Información personal y de contacto</h4>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="evaluator" class="form-label">Kinesiólogo / Interno / Estudiante evaluador *</label>
+                                    <input type="text" class="form-control" id="evaluator" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Correo del evaluador *</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Nombre completo del paciente</label>
+                                    <input type="text" class="form-control" id="name">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="rut" class="form-label">RUT (sin puntos, con guión)</label>
+                                    <input type="text" class="form-control" id="rut">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="contactNumber" class="form-label">Número de contacto</label>
+                                    <input type="tel" class="form-control" id="contactNumber">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="patientEmail" class="form-label">Email del paciente</label>
+                                    <input type="email" class="form-control" id="patientEmail">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="nationality" class="form-label">Nacionalidad</label>
+                                    <input type="text" class="form-control" id="nationality">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="age" class="form-label">Edad</label>
+                                    <input type="number" class="form-control" id="age">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="birthdate" class="form-label">Fecha de nacimiento</label>
+                                    <input type="date" class="form-control" id="birthdate">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="civilStatus" class="form-label">Estado civil</label>
+                                    <select class="form-select" id="civilStatus">
+                                        <option value="">Seleccionar</option>
+                                        <option value="Soltero/a">Soltero/a</option>
+                                        <option value="Casado/a">Casado/a</option>
+                                        <option value="Divorciado/a">Divorciado/a</option>
+                                        <option value="Viudo/a">Viudo/a</option>
+                                        <option value="Conviviente">Conviviente</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="education" class="form-label">Nivel educacional</label>
+                                    <select class="form-select" id="education">
+                                        <option value="">Seleccionar</option>
+                                        <option value="Básica incompleta">Básica incompleta</option>
+                                        <option value="Básica completa">Básica completa</option>
+                                        <option value="Media incompleta">Media incompleta</option>
+                                        <option value="Media completa">Media completa</option>
+                                        <option value="Técnica incompleta">Técnica incompleta</option>
+                                        <option value="Técnica completa">Técnica completa</option>
+                                        <option value="Universitaria incompleta">Universitaria incompleta</option>
+                                        <option value="Universitaria completa">Universitaria completa</option>
+                                        <option value="Postgrado">Postgrado</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="address" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" id="address">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="emergencyContact" class="form-label">Número de contacto de emergencia y parentesco</label>
+                                    <input type="text" class="form-control" id="emergencyContact">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="occupation" class="form-label">Ocupación (movimientos involucrados; tiempo activo y tiempos sedentarios)</label>
+                                    <textarea class="form-control" id="occupation" rows="3"></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="laterality" class="form-label">Lateralidad o dominancia</label>
+                                    <select class="form-select" id="laterality">
+                                        <option value="">Seleccionar</option>
+                                        <option value="Diestro">Diestro</option>
+                                        <option value="Zurdo">Zurdo</option>
+                                        <option value="Ambidiestro">Ambidiestro</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Motivo de consulta y diagnóstico -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-clipboard-list"></i> Motivo de consulta y diagnóstico</h4>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="consultReason" class="form-label">Motivo de consulta</label>
+                                    <textarea class="form-control" id="consultReason" rows="3"></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="diagnosis" class="form-label">Diagnóstico principal (en caso de que exista)</label>
+                                    <textarea class="form-control" id="diagnosis" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label for="expectations" class="form-label">Expectativas y metas del usuario a corto, mediano o largo plazo</label>
+                                    <textarea class="form-control" id="expectations" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Anamnesis -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-history"></i> Anamnesis</h4>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="proximateAnamnesis" class="form-label">Anamnesis próxima</label>
+                                    <small class="form-text text-muted d-block mb-2">
+                                        1. Historia de como sucedió (qué? Cuándo?, Dónde?, Cómo?, etc)<br>
+                                        2. A (Antigüedad) - L (localización) - I (intensidad) - C (Carácter) - I (Irradiación) - A (atenuantes y agravantes)<br>
+                                        3. Cambios diurnos y vespertinos de la sintomatología.
+                                    </small>
+                                    <textarea class="form-control" id="proximateAnamnesis" rows="5"></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="remoteAnamnesis" class="form-label">Anamnesis remota</label>
+                                    <small class="form-text text-muted d-block mb-2">
+                                        1. Antecedentes médicos<br>
+                                        2. Antecedentes ortopédicos (lesiones, fracturas, lesiones ligamentosas)<br>
+                                        3. Antecedentes de enfermedades crónicas (HTA/DBM/DLP/OBESIDAD/EPOC/OTROS)<br>
+                                        4. Antecedentes de enfermedades familiares (madre, padre, hermanos, hijos)<br>
+                                        5. Medicamentos<br>
+                                        6. Intervenciones Qx<br>
+                                        7. Hospitalizaciones ultimo año<br>
+                                        8. Alergias<br>
+                                        9. Inmunizaciones<br>
+                                        10. Historial de caídas
+                                    </small>
+                                    <textarea class="form-control" id="remoteAnamnesis" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Hábitos y entorno -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-home"></i> Hábitos y entorno</h4>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="habitsHobbies" class="form-label">Hábitos y hobbies</label>
+                                    <small class="form-text text-muted d-block mb-2">
+                                        1. Tabaco (cantidad, años de fumador, etc)<br>
+                                        2. Alcohol (bebedor frecuentemente o social)<br>
+                                        3. Drogas<br>
+                                        4. Hobbies o deportes (que realiza, ha realizado o quiere realizar)<br>
+                                        5. Hábitos nutricionales<br>
+                                        6. Sueño y calidad del sueño<br>
+                                        7. Estado mental<br>
+                                        8. Dificultad para la realización de una o más tareas de la vida diaria
+                                    </small>
+                                    <textarea class="form-control" id="habitsHobbies" rows="5"></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="homeSupport" class="form-label">Hogar y red de apoyo</label>
+                                    <small class="form-text text-muted d-block mb-2">
+                                        1. Descripción del hogar<br>
+                                        2. Red de apoyo<br>
+                                        3. Factores sociales relevantes<br>
+                                        4. Participación social / restricción de participación
+                                    </small>
+                                    <textarea class="form-control" id="homeSupport" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cuestionarios -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-list-alt"></i> Cuestionarios</h4>
+                            
+                            <!-- PSFS -->
+                            <h5 class="mt-3">PSFS (Patient-Specific Functional Scale)</h5>
+                            <p class="text-muted">Contestar PSFS para enfocar actividades significativas para la persona.</p>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="psfs1Activity" class="form-label">PSFS 1 (nombrar 1 actividad que se dificulte o sea relevante para el usuario)</label>
+                                    <input type="text" class="form-control" id="psfs1Activity">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Valoración (0-10)</label>
+                                    <div class="rating-container">
+                                        <span class="rating-label">No lo puede realizar</span>
+                                        <input type="range" class="form-range" min="0" max="10" step="1" id="psfs1Rating" value="5">
+                                        <div class="d-flex justify-content-between">
+                                            <span>0</span>
+                                            <span id="psfs1Value">5</span>
+                                            <span>10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="psfs2Activity" class="form-label">PSFS 2 (nombrar 1 actividad que se dificulte o sea relevante para el usuario)</label>
+                                    <input type="text" class="form-control" id="psfs2Activity">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Valoración (0-10)</label>
+                                    <div class="rating-container">
+                                        <span class="rating-label">No lo puede realizar</span>
+                                        <input type="range" class="form-range" min="0" max="10" step="1" id="psfs2Rating" value="5">
+                                        <div class="d-flex justify-content-between">
+                                            <span>0</span>
+                                            <span id="psfs2Value">5</span>
+                                            <span>10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="psfs3Activity" class="form-label">PSFS 3 (nombrar 1 actividad que se dificulte o sea relevante para el usuario)</label>
+                                    <input type="text" class="form-control" id="psfs3Activity">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Valoración (0-10)</label>
+                                    <div class="rating-container">
+                                        <span class="rating-label">No lo puede realizar</span>
+                                        <input type="range" class="form-range" min="0" max="10" step="1" id="psfs3Rating" value="5">
+                                        <div class="d-flex justify-content-between">
+                                            <span>0</span>
+                                            <span id="psfs3Value">5</span>
+                                            <span>10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- GROC -->
+                            <h5 class="mt-4">GROC (Global Rating of Change)</h5>
+                            <p class="text-muted">Escala de cambio global percibido por el paciente.</p>
+                            
+                            <div class="row mb-4">
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">¿Cómo calificaría el cambio en su condición desde el inicio del tratamiento?</label>
+                                    <div class="rating-container">
+                                        <input type="range" class="form-range" min="-7" max="7" step="1" id="grocRating" value="0">
+                                        <div class="d-flex justify-content-between">
+                                            <span>-7 (Muchísimo peor)</span>
+                                            <span id="grocValue">0</span>
+                                            <span>+7 (Muchísimo mejor)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SANE -->
+                            <h5 class="mt-4">SANE (Single Assessment Numeric Evaluation)</h5>
+                            <p class="text-muted">Evaluación numérica única de la función actual.</p>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="saneRegion" class="form-label">Región corporal a evaluar</label>
+                                    <input type="text" class="form-control" id="saneRegion" placeholder="Ej: Rodilla, Hombro, Espalda baja...">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">En una escala de 0 a 100, ¿cómo calificaría su región afectada hoy?</label>
+                                    <div class="rating-container">
+                                        <input type="range" class="form-range" min="0" max="100" step="1" id="saneRating" value="50">
+                                        <div class="d-flex justify-content-between">
+                                            <span>0 (Completamente disfuncional)</span>
+                                            <span id="saneValue">50</span>
+                                            <span>100 (Normal)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label for="extraQuestionnaire" class="form-label">Cuestionario u outcome measures extra</label>
+                                    <textarea class="form-control" id="extraQuestionnaire" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Evaluación física -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-heartbeat"></i> Evaluación física</h4>
+                            
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="vitalSigns" class="form-label">Signos vitales</label>
+                                    <small class="form-text text-muted d-block mb-2">
+                                        1. Saturación<br>
+                                        2. Pulso<br>
+                                        3. Presión arterial<br>
+                                        4. Frecuencia respiratoria
+                                    </small>
+                                    <textarea class="form-control" id="vitalSigns" rows="4"></textarea>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="anthropometry" class="form-label">Antropometría</label>
+                                    <small class="form-text text-muted d-block mb-2">
+                                        Peso, Talla, Circunferencias (cuello, brazos, cintura, cadera, muslo, pantorrilla)
+                                    </small>
+                                    <textarea class="form-control" id="anthropometry" rows="4"></textarea>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="physicalExam" class="form-label">Examen físico</label>
+                                    <small class="form-text text-muted d-block mb-2">
+                                        Observación, Inspección, Palpación, Rangos de movimiento, Fuerza, Evaluación neurológica, Flexibilidad, Tests ortopédicos, Equilibrio, Tests de rendimiento
+                                    </small>
+                                    <textarea class="form-control" id="physicalExam" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sistema de Banderas -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-flag"></i> Sistema de Banderas</h4>
+                            <p class="text-muted">Identifique factores de riesgo o alerta que puedan influir en el tratamiento.</p>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <h5>Banderas Rojas (Factores de riesgo físico)</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="redFlag1">
+                                        <label class="form-check-label" for="redFlag1">Dolor severo nocturno o en reposo</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="redFlag2">
+                                        <label class="form-check-label" for="redFlag2">Dolor constante, progresivo, no mecánico</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="redFlag3">
+                                        <label class="form-check-label" for="redFlag3">Debilidad generalizada</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="redFlag4">
+                                        <label class="form-check-label" for="redFlag4">Pérdida de peso inexplicable</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="redFlag5">
+                                        <label class="form-check-label" for="redFlag5">Historia de cáncer</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="redFlag6">
+                                        <label class="form-check-label" for="redFlag6">Síntomas neurológicos (entumecimiento, hormigueo)</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="redFlag7">
+                                        <label class="form-check-label" for="redFlag7">Cambios en control de esfínteres</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <h5>Banderas Amarillas (Factores psicosociales)</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="yellowFlag1">
+                                        <label class="form-check-label" for="yellowFlag1">Creencias de que el dolor es dañino o incapacitante</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="yellowFlag2">
+                                        <label class="form-check-label" for="yellowFlag2">Miedo y evitación de actividades o movimientos</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="yellowFlag3">
+                                        <label class="form-check-label" for="yellowFlag3">Expectativas bajas de recuperación</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="yellowFlag4">
+                                        <label class="form-check-label" for="yellowFlag4">Catastrofización</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="yellowFlag5">
+                                        <label class="form-check-label" for="yellowFlag5">Depresión, ansiedad, estrés</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="yellowFlag6">
+                                        <label class="form-check-label" for="yellowFlag6">Aislamiento social</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6 mb-3">
+                                    <h5>Banderas Azules (Factores laborales)</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="blueFlag1">
+                                        <label class="form-check-label" for="blueFlag1">Trabajo físicamente demandante</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="blueFlag2">
+                                        <label class="form-check-label" for="blueFlag2">Baja satisfacción laboral</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="blueFlag3">
+                                        <label class="form-check-label" for="blueFlag3">Falta de apoyo en el trabajo</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="blueFlag4">
+                                        <label class="form-check-label" for="blueFlag4">Conflictos laborales</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="blueFlag5">
+                                        <label class="form-check-label" for="blueFlag5">Trabajo con alta demanda y bajo control</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <h5>Banderas Negras (Factores contextuales)</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="blackFlag1">
+                                        <label class="form-check-label" for="blackFlag1">Problemas con compensaciones o seguros</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="blackFlag2">
+                                        <label class="form-check-label" for="blackFlag2">Historial de reclamos previos</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="blackFlag3">
+                                        <label class="form-check-label" for="blackFlag3">Problemas con legislación relacionada</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="blackFlag4">
+                                        <label class="form-check-label" for="blackFlag4">Asesoramiento legal en curso</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="blackFlag5">
+                                        <label class="form-check-label" for="blackFlag5">Conflictos con sistemas de salud o proveedores</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <label for="flagsComments" class="form-label">Comentarios adicionales sobre banderas</label>
+                                    <textarea class="form-control" id="flagsComments" rows="3" placeholder="Agregue detalles o contexto sobre las banderas identificadas"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pestaña de Diagnóstico Kinesiológico -->
+<div class="tab-pane fade" id="diagnosis-tab-pane" role="tabpanel">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Asistente de Razonamiento Clínico</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="patientSelectDiagnosis" class="form-label">Seleccionar Paciente</label>
+                            <select class="form-select" id="patientSelectDiagnosis">
+                                <option value="">Seleccione un paciente</option>
+                                <!-- Se cargará dinámicamente desde JavaScript -->
+                            </select>
+                        </div>
+                        
+                        <div id="diagnosisAssistantContainer" class="mt-4">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> Seleccione un paciente para comenzar el proceso de diagnóstico kinesiológico.
+                            </div>
+                            
+                            <!-- Contenido del asistente (se mostrará después de seleccionar un paciente) -->
+                            <div id="diagnosisSteps" class="d-none">
+                                <!-- Paso 1: Identificación del problema principal -->
+                                <div class="diagnosis-step" id="diagnosisStep1">
+                                    <h5><i class="fas fa-clipboard-check"></i> Paso 1: Identificación del problema principal</h5>
+                                    <div class="mb-3">
+                                        <label for="mainProblem" class="form-label">Problema principal</label>
+                                        <textarea class="form-control" id="mainProblem" rows="3" placeholder="Describa el problema principal del paciente"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="painLocation" class="form-label">Localización del dolor/disfunción</label>
+                                        <select class="form-select" id="painLocation">
+                                            <option value="">Seleccione la región</option>
+                                            <option value="Cervical">Columna Cervical</option>
+                                            <option value="Dorsal">Columna Dorsal</option>
+                                            <option value="Lumbar">Columna Lumbar</option>
+                                            <option value="Hombro">Hombro</option>
+                                            <option value="Codo">Codo</option>
+                                            <option value="Muñeca/Mano">Muñeca/Mano</option>
+                                            <option value="Cadera">Cadera</option>
+                                            <option value="Rodilla">Rodilla</option>
+                                            <option value="Tobillo/Pie">Tobillo/Pie</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="painDuration" class="form-label">Duración de los síntomas</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="painDuration" min="1">
+                                            <select class="form-select" id="painDurationUnit">
+                                                <option value="dias">Días</option>
+                                                <option value="semanas">Semanas</option>
+                                                <option value="meses">Meses</option>
+                                                <option value="años">Años</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary next-step" data-next="diagnosisStep2">Siguiente</button>
+                                </div>
+                                
+                                <!-- Paso 2: Generación de hipótesis -->
+                                <div class="diagnosis-step d-none" id="diagnosisStep2">
+                                    <h5><i class="fas fa-lightbulb"></i> Paso 2: Generación de hipótesis</h5>
+                                    <div class="mb-3">
+                                        <label class="form-label">Posibles hipótesis diagnósticas</label>
+                                        <div id="hypothesisContainer">
+                                            <div class="hypothesis-item mb-2">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="Hipótesis diagnóstica">
+                                                    <select class="form-select" style="max-width: 150px;">
+                                                        <option value="alta">Probabilidad Alta</option>
+                                                        <option value="media" selected>Probabilidad Media</option>
+                                                        <option value="baja">Probabilidad Baja</option>
+                                                    </select>
+                                                    <button class="btn btn-outline-danger remove-hypothesis" type="button">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-outline-secondary mt-2" id="addHypothesisBtn">
+                                            <i class="fas fa-plus"></i> Agregar hipótesis
+                                        </button>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="clinicalReasoning" class="form-label">Razonamiento clínico</label>
+                                        <textarea class="form-control" id="clinicalReasoning" rows="4" placeholder="Explique su razonamiento clínico para las hipótesis planteadas"></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button class="btn btn-secondary prev-step" data-prev="diagnosisStep1">Anterior</button>
+                                        <button class="btn btn-primary next-step" data-next="diagnosisStep3">Siguiente</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Paso 3: Pruebas clínicas relevantes -->
+                                <div class="diagnosis-step d-none" id="diagnosisStep3">
+                                    <h5><i class="fas fa-vial"></i> Paso 3: Pruebas clínicas relevantes</h5>
+                                    <div class="mb-3">
+                                        <label class="form-label">Pruebas clínicas a realizar</label>
+                                        <div id="clinicalTestsContainer">
+                                            <div class="test-item mb-2">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="Nombre de la prueba">
+                                                    <select class="form-select" style="max-width: 150px;">
+                                                        <option value="positivo">Positivo</option>
+                                                        <option value="negativo">Negativo</option>
+                                                        <option value="pendiente" selected>Pendiente</option>
+                                                    </select>
+                                                    <button class="btn btn-outline-danger remove-test" type="button">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-outline-secondary mt-2" id="addTestBtn">
+                                            <i class="fas fa-plus"></i> Agregar prueba
+                                        </button>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="testResults" class="form-label">Interpretación de resultados</label>
+                                        <textarea class="form-control" id="testResults" rows="4" placeholder="Interprete los resultados de las pruebas realizadas"></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button class="btn btn-secondary prev-step" data-prev="diagnosisStep2">Anterior</button>
+                                        <button class="btn btn-primary next-step" data-next="diagnosisStep4">Siguiente</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Paso 4: Refinamiento de hipótesis -->
+                                <div class="diagnosis-step d-none" id="diagnosisStep4">
+                                    <h5><i class="fas fa-filter"></i> Paso 4: Refinamiento de hipótesis</h5>
+                                    <div class="mb-3">
+                                        <label for="refinedHypothesis" class="form-label">Hipótesis refinada</label>
+                                        <textarea class="form-control" id="refinedHypothesis" rows="4" placeholder="Describa su hipótesis refinada basada en los hallazgos clínicos"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="differentialDiagnosis" class="form-label">Diagnóstico diferencial</label>
+                                        <textarea class="form-control" id="differentialDiagnosis" rows="4" placeholder="Describa los diagnósticos diferenciales a considerar"></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button class="btn btn-secondary prev-step" data-prev="diagnosisStep3">Anterior</button>
+                                        <button class="btn btn-primary next-step" data-next="diagnosisStep5">Siguiente</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Paso 5: Diagnóstico final -->
+                                <div class="diagnosis-step d-none" id="diagnosisStep5">
+                                    <h5><i class="fas fa-check-circle"></i> Paso 5: Diagnóstico final</h5>
+                                    <div class="mb-3">
+                                        <label for="finalDiagnosis" class="form-label">Diagnóstico kinesiológico final</label>
+                                        <textarea class="form-control" id="finalDiagnosis" rows="4" placeholder="Establezca el diagnóstico kinesiológico final"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="prognosticFactors" class="form-label">Factores pronósticos</label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Factores favorables</h6>
+                                                <textarea class="form-control" id="favorableFactors" rows="3" placeholder="Factores que favorecen un buen pronóstico"></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>Factores desfavorables</h6>
+                                                <textarea class="form-control" id="unfavorableFactors" rows="3" placeholder="Factores que pueden complicar la recuperación"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cifClassification" class="form-label">Clasificación CIF</label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Estructura y función</h6>
+                                                <textarea class="form-control" id="cifStructureFunction" rows="3" placeholder="Deficiencias en estructura y función corporal"></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>Actividad y participación</h6>
+                                                <textarea class="form-control" id="cifActivityParticipation" rows="3" placeholder="Limitaciones en actividad y restricciones en participación"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button class="btn btn-secondary prev-step" data-prev="diagnosisStep4">Anterior</button>
+                                        <button class="btn btn-success" id="saveDiagnosisBtn">
+                                            <i class="fas fa-save"></i> Guardar Diagnóstico
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Pestaña de Plan de Tratamiento -->
+<div class="tab-pane fade" id="treatment-tab-pane" role="tabpanel">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Plan de Tratamiento</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="patientSelectTreatment" class="form-label">Seleccionar Paciente</label>
+                            <select class="form-select" id="patientSelectTreatment">
+                                <option value="">Seleccione un paciente</option>
+                                <!-- Se cargará dinámicamente desde JavaScript -->
+                            </select>
+                        </div>
+                        
+                        <div id="treatmentPlanContainer" class="mt-4">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> Seleccione un paciente para crear o ver su plan de tratamiento.
+                            </div>
+                            
+                            <!-- Contenido del plan de tratamiento (se mostrará después de seleccionar un paciente) -->
+                            <div id="treatmentContent" class="d-none">
+                                <!-- Objetivos SMART -->
+                                <div class="mb-4">
+                                    <h5><i class="fas fa-bullseye"></i> Objetivos SMART</h5>
+                                    <div class="mb-3">
+                                        <label class="form-label">Objetivos del tratamiento</label>
+                                        <div id="smartGoalsContainer">
+                                            <div class="goal-item mb-2">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="Objetivo SMART">
+                                                    <select class="form-select" style="max-width: 150px;">
+                                                        <option value="corto">Corto plazo</option>
+                                                        <option value="medio" selected>Medio plazo</option>
+                                                        <option value="largo">Largo plazo</option>
+                                                    </select>
+                                                    <button class="btn btn-outline-danger remove-goal" type="button">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-outline-secondary mt-2" id="addGoalBtn">
+                                            <i class="fas fa-plus"></i> Agregar objetivo
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Planificación de sesiones -->
+                                <div class="mb-4">
+                                    <h5><i class="fas fa-calendar-alt"></i> Planificación de sesiones</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="sessionFrequency" class="form-label">Frecuencia de sesiones</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" id="sessionFrequency" min="1" value="2">
+                                                <select class="form-select" id="frequencyUnit">
+                                                    <option value="semana" selected>por semana</option>
+                                                    <option value="mes">por mes</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="estimatedDuration" class="form-label">Duración estimada del tratamiento</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" id="estimatedDuration" min="1" value="6">
+                                                <select class="form-select" id="durationUnit">
+                                                    <option value="semanas">semanas</option>
+                                                    <option value="meses" selected>meses</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Fases del tratamiento -->
+                                <div class="mb-4">
+                                    <h5><i class="fas fa-layer-group"></i> Fases del tratamiento</h5>
+                                    <div id="treatmentPhasesContainer">
+                                        <!-- Fase 1 -->
+                                        <div class="card mb-3 treatment-phase">
+                                            <div class="card-header bg-light">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 class="mb-0">Fase 1: Inicial</h6>
+                                                    <div>
+                                                        <button class="btn btn-sm btn-outline-danger remove-phase" type="button">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nombre de la fase</label>
+                                                    <input type="text" class="form-control phase-name" value="Fase Inicial">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Duración</label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control phase-duration" min="1" value="2">
+                                                        <select class="form-select phase-duration-unit">
+                                                            <option value="semanas" selected>semanas</option>
+                                                            <option value="meses">meses</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Objetivos de la fase</label>
+                                                    <textarea class="form-control phase-objectives" rows="2" placeholder="Objetivos específicos de esta fase"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Intervenciones</label>
+                                                    <textarea class="form-control phase-interventions" rows="3" placeholder="Técnicas y ejercicios a realizar"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-secondary" id="addPhaseBtn">
+                                        <i class="fas fa-plus"></i> Agregar fase
+                                    </button>
+                                </div>
+                                
+                                <!-- Recomendaciones -->
+                                <div class="mb-4">
+                                    <h5><i class="fas fa-clipboard-list"></i> Recomendaciones</h5>
+                                    <div class="mb-3">
+                                        <label for="homeExercises" class="form-label">Ejercicios domiciliarios</label>
+                                        <textarea class="form-control" id="homeExercises" rows="3" placeholder="Describa los ejercicios que el paciente debe realizar en casa"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lifestyle" class="form-label">Modificaciones de estilo de vida</label>
+                                        <textarea class="form-control" id="lifestyle" rows="3" placeholder="Recomendaciones sobre actividad física, ergonomía, etc."></textarea>
+                                    </div>
+                                </div>
+                                
+                                <!-- Botón de guardar -->
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success" id="saveTreatmentBtn">
+                                        <i class="fas fa-save"></i> Guardar Plan de Tratamiento
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Pestaña de Dashboard y Análisis -->
+<div class="tab-pane fade" id="dashboard-tab-pane" role="tabpanel">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Dashboard y Análisis</h5>
+                        <div>
+                            <select class="form-select form-select-sm" id="dashboardPatientSelect">
+                                <option value="all">Todos los pacientes</option>
+                                <!-- Se cargará dinámicamente desde JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Resumen de estadísticas -->
+                        <div class="row mb-4">
+                            <div class="col-md-3 mb-3">
+                                <div class="card bg-primary text-white">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Total Pacientes</h6>
+                                        <h2 class="card-text" id="totalPatientsCount">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Evoluciones Registradas</h6>
+                                        <h2 class="card-text" id="totalEvolutionsCount">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Pacientes Activos</h6>
+                                        <h2 class="card-text" id="activePatientsCount">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card bg-warning text-white">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Evoluciones este mes</h6>
+                                        <h2 class="card-text" id="monthlyEvolutionsCount">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Gráficos -->
+                        <div class="row mb-4">
+                            <!-- Gráfico de evolución PSFS -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Evolución PSFS</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="psfsChart" height="250"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Gráfico de distribución por región corporal -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Distribución por Región Corporal</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="bodyRegionChart" height="250"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <!-- Gráfico de evolución GROC -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Evolución GROC</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="grocChart" height="250"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Gráfico de evolución SANE -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Evolución SANE</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="saneChart" height="250"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tabla de evoluciones recientes -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Evoluciones Recientes</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Paciente</th>
+                                                        <th>Fecha</th>
+                                                        <th>Evaluador</th>
+                                                        <th>Progreso</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="recentEvolutionsTableBody">
+                                                    <!-- Se cargará dinámicamente desde JavaScript -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Navegación por pestañas -->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-tab-pane" type="button" role="tab">
+            <i class="fas fa-file-medical"></i> Formulario de Ingreso
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="diagnosis-tab" data-bs-toggle="tab" data-bs-target="#diagnosis-tab-pane" type="button" role="tab">
+            <i class="fas fa-stethoscope"></i> Diagnóstico Kinesiológico
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="treatment-tab" data-bs-toggle="tab" data-bs-target="#treatment-tab-pane" type="button" role="tab">
+            <i class="fas fa-notes-medical"></i> Plan de Tratamiento
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard-tab-pane" type="button" role="tab">
+            <i class="fas fa-chart-bar"></i> Dashboard
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="records-tab" data-bs-toggle="tab" data-bs-target="#records-tab-pane" type="button" role="tab">
+            <i class="fas fa-users"></i> Registros
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="evolutions-tab" data-bs-toggle="tab" data-bs-target="#evolutions-tab-pane" type="button" role="tab">
+            <i class="fas fa-chart-line"></i> Evoluciones
+        </button>
+    </li>
+</ul>
