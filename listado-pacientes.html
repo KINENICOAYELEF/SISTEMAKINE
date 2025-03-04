@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISTEMAKINE - Listado de Pacientes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="app-only">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <i class="fas fa-heartbeat"></i> SISTEMAKINE
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-item">
+        <a href="dashboard.html" class="sidebar-link">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="nuevo-paciente.html" class="sidebar-link">
+          <i class="fas fa-user-plus"></i>
+          <span>Nuevo Paciente</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="listado-pacientes.html" class="sidebar-link active">
+          <i class="fas fa-users"></i>
+          <span>Listado Pacientes</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="#" id="logout-btn" class="sidebar-link">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Cerrar Sesión</span>
+        </a>
+      </div>
+    </nav>
+  </aside>
+  
+  <!-- Main Content -->
+  <main class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Listado de Pacientes</h1>
+      <a href="nuevo-paciente.html" class="btn btn-primary">
+        <i class="fas fa-user-plus"></i> Nuevo Paciente
+      </a>
+    </div>
+    
+    <!-- Search & Filter Bar -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-col form-col-md-6">
+            <div class="form-group mb-0">
+              <label for="search-input" class="form-label">Buscar paciente</label>
+              <div class="d-flex">
+                <input type="text" id="search-input" class="form-control" placeholder="Nombre, RUT, teléfono...">
+                <button id="search-btn" class="btn btn-primary ml-2" style="margin-left: 10px;">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-col form-col-md-3">
+            <div class="form-group mb-0">
+              <label for="filter-status" class="form-label">Estado</label>
+              <select id="filter-status" class="form-select">
+                <option value="all">Todos</option>
+                <option value="active">Activos</option>
+                <option value="inactive">Inactivos</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-col form-col-md-3">
+            <div class="form-group mb-0">
+              <label for="sort-by" class="form-label">Ordenar por</label>
+              <select id="sort-by" class="form-select">
+                <option value="newest">Más recientes</option>
+                <option value="oldest">Más antiguos</option>
+                <option value="name">Nombre (A-Z)</option>
+                <option value="name-desc">Nombre (Z-A)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Patients List -->
+    <div id="patients-container">
+      <div class="text-center py-4">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+        <p>Cargando pacientes...</p>
+      </div>
+    </div>
+    
+    <!-- Pagination -->
+    <div class="d-flex justify-content-between align-items-center mt-4" id="pagination-container" style="display: none !important;">
+      <div>
+        <span id="pagination-info">Mostrando 1-10 de 10 pacientes</span>
+      </div>
+      <div>
+        <button id="prev-page" class="btn btn-sm btn-secondary" disabled>
+          <i class="fas fa-chevron-left"></i> Anterior
+        </button>
+        <button id="next-page" class="btn btn-sm btn-secondary" disabled>
+          Siguiente <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  
+  <!-- Custom Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/pacientes.js"></script>
+  <script>
+    // Verificar autenticación
+    verificarAutenticacion().then(user => {
+      if (!user) {
+        window.location.href = 'index.html';
+      } else {
+        // Cargar listado de pacientes
+        cargarPacientes();
+      }
+    });
+    
+    // Manejar cierre de sesión
+    document.getElementById('logout-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      cerrarSesion().then(() => {
+        window.location.href = 'index.html';
+      });
+    });
+    
+    // Variables para paginación
+    let lastVisiblePatient = null;
+    let firstVisiblePatient = null;
+    let currentPage = 1;
+    let patientsPerPage = 10;
+    let totalPatients = 0;
+    
+    // Variables para filtros
+    let searchTerm = '';
+    let statusFilter = 'all';
+    let sortOption = 'newest';
+    
+    // Escuchar cambios en filtros
+    document.getElementById('search-btn').addEventListener('click', function() {
+      searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+      currentPage = 1;
+      cargarPacientes();
+    });
+    
+    document.getElementById('search-input').addEventListener('keyup', function(e) {
+      if (e.key === 'Enter') {
+        searchTerm = e.target.value.trim().toLowerCase();
+        currentPage = 1;
+        cargarPacientes();
+      }
+    });
+    
+    document.getElementById('filter-status').addEventListener('change', function() {
+      statusFilter = this.value;
+      currentPage = 1;
+      cargarPacientes();
+    });
+    
+    document.getElementById('sort-by').addEventListener('change', function() {
+      sortOption = this.value;
+      currentPage = 1;
+      cargarPacientes();
+    });
+    
+    // Navegación entre páginas
+    document.getElementById('prev-page').addEventListener('click', function() {
+      if (currentPage > 1) {
+        currentPage--;
+        cargarPacientesPaginaAnterior();
+      }
+    });
+    
+    document.getElementById('next-page').addEventListener('click', function() {
+      currentPage++;
+      cargarPacientesPaginaSiguiente();
+    });
+    
+    // Función para cargar pacientes
+    function cargarPacientes() {
+      const patientsContainer = document.getElementById('patients-container');
+      patientsContainer.innerHTML = `
+        <div class="text-center py-4">
+          <i class="fas fa-spinner fa-spin fa-2x"></i>
+          <p>Cargando pacientes...</p>
+        </div>
+      `;
+      
+      // Construir consulta base
+      let query = db.collection('pacientes');
+      
+      // Aplicar ordenamiento
+      switch (sortOption) {
+        case 'newest':
+          query = query.orderBy('createdAt', 'desc');
+          break;
+        case 'oldest':
+          query = query.orderBy('createdAt', 'asc');
+          break;
+        case 'name':
+          query = query.orderBy('nombreCompleto', 'asc');
+          break;
+        case 'name-desc':
+          query = query.orderBy('nombreCompleto', 'desc');
+          break;
+      }
+      
+      // Aplicar filtro de estado
+      if (statusFilter === 'active') {
+        const unMesAtras = new Date();
+        unMesAtras.setMonth(unMesAtras.getMonth() - 1);
+        query = query.where('ultimaVisita', '>=', unMesAtras);
+      } else if (statusFilter === 'inactive') {
+        const unMesAtras = new Date();
+        unMesAtras.setMonth(unMesAtras.getMonth() - 1);
+        query = query.where('ultimaVisita', '<', unMesAtras);
+      }
+      
+      // Limitar resultados
+      query = query.limit(patientsPerPage);
+      
+      // Ejecutar consulta
+      query.get().then(snapshot => {
+        if (snapshot.empty) {
+          patientsContainer.innerHTML = `
+            <div class="text-center py-4">
+              <p>No se encontraron pacientes</p>
+              <a href="nuevo-paciente.html" class="btn btn-primary">Agregar paciente</a>
+            </div>
+          `;
+          updatePaginationInfo(0, 0, 0);
+          return;
+        }
+        
+        // Actualizar variables de paginación
+        firstVisiblePatient = snapshot.docs[0];
+        lastVisiblePatient = snapshot.docs[snapshot.docs.length - 1];
+        
+        // Contar total de pacientes (sin filtros de paginación)
+        db.collection('pacientes').get().then(fullSnapshot => {
+          totalPatients = fullSnapshot.size;
+          updatePaginationInfo(currentPage, snapshot.size, totalPatients);
+        });
+        
+        // Generar HTML de pacientes
+        let patientsHTML = '';
+        
+        snapshot.forEach(doc => {
+          const patient = doc.data();
+          const patientId = doc.id;
+          
+          // Si hay término de búsqueda, filtrar en el cliente
+          if (searchTerm && !(
+            (patient.nombreCompleto && patient.nombreCompleto.toLowerCase().includes(searchTerm)) ||
+            (patient.documentoIdentidad && patient.documentoIdentidad.toLowerCase().includes(searchTerm)) ||
+            (patient.telefonoPersonal && patient.telefonoPersonal.toLowerCase().includes(searchTerm))
+          )) {
+            return;
+          }
+          
+          const createdAt = patient.createdAt ? new Date(patient.createdAt.toDate()).toLocaleDateString() : 'Desconocido';
+          const lastVisit = patient.ultimaVisita ? new Date(patient.ultimaVisita.toDate()).toLocaleDateString() : 'Nunca';
+          
+          const initialLetter = (patient.nombreCompleto && patient.nombreCompleto[0]) ? 
+            patient.nombreCompleto[0].toUpperCase() : '?';
+          
+          patientsHTML += `
+            <div class="patient-card">
+              <div class="patient-avatar">
+                ${initialLetter}
+              </div>
+              <div class="patient-info">
+                <div class="patient-name">${patient.nombreCompleto || 'Sin nombre'}</div>
+                <div class="patient-details">
+                  <span><i class="fas fa-id-card"></i> ${patient.documentoIdentidad || 'Sin RUT'}</span>
+                  <span style="margin-left: 15px;"><i class="fas fa-phone"></i> ${patient.telefonoPersonal || 'Sin teléfono'}</span>
+                </div>
+                <div class="text-muted mt-1">
+                  <small>Registrado: ${createdAt} | Última visita: ${lastVisit}</small>
+                </div>
+              </div>
+              <div class="patient-actions">
+                <a href="ver-paciente.html?id=${patientId}" class="btn btn-sm btn-secondary action-btn" title="Ver paciente">
+                  <i class="fas fa-eye"></i>
+                </a>
+                <a href="evoluciones.html?id=${patientId}" class="btn btn-sm btn-primary action-btn" title="Evoluciones">
+                  <i class="fas fa-notes-medical"></i>
+                </a>
+                <button class="btn btn-sm btn-danger action-btn" title="Eliminar" onclick="confirmarEliminarPaciente('${patientId}')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        
+        if (patientsHTML === '') {
+          patientsContainer.innerHTML = `
+            <div class="text-center py-4">
+              <p>No se encontraron pacientes con los filtros aplicados</p>
+              <button class="btn btn-secondary" onclick="resetFilters()">Limpiar filtros</button>
+            </div>
+          `;
+          updatePaginationInfo(0, 0, 0);
+        } else {
+          patientsContainer.innerHTML = patientsHTML;
+        }
+      }).catch(error => {
+        console.error('Error al cargar pacientes:', error);
+        patientsContainer.innerHTML = `
+          <div class="text-center py-4">
+            <p>Error al cargar pacientes: ${error.message}</p>
+            <button class="btn btn-secondary" onclick="cargarPacientes()">Reintentar</button>
+          </div>
+        `;
+      });
+    }
+    
+    // Función para cargar la página siguiente
+    function cargarPacientesPaginaSiguiente() {
+      if (!lastVisiblePatient) return;
+      
+      const patientsContainer = document.getElementById('patients-container');
+      patientsContainer.innerHTML = `
+        <div class="text-center py-4">
+          <i class="fas fa-spinner fa-spin fa-2x"></i>
+          <p>Cargando pacientes...</p>
+        </div>
+      `;
+      
+      // Construir consulta base
+      let query = db.collection('pacientes');
+      
+      // Aplicar ordenamiento
+      switch (sortOption) {
+        case 'newest':
+          query = query.orderBy('createdAt', 'desc');
+          break;
+        case 'oldest':
+          query = query.orderBy('createdAt', 'asc');
+          break;
+        case 'name':
+          query = query.orderBy('nombreCompleto', 'asc');
+          break;
+        case 'name-desc':
+          query = query.orderBy('nombreCompleto', 'desc');
+          break;
+      }
+      
+      // Aplicar filtro de estado
+      if (statusFilter === 'active') {
+        const unMesAtras = new Date();
+        unMesAtras.setMonth(unMesAtras.getMonth() - 1);
+        query = query.where('ultimaVisita', '>=', unMesAtras);
+      } else if (statusFilter === 'inactive') {
+        const unMesAtras = new Date();
+        unMesAtras.setMonth(unMesAtras.getMonth() - 1);
+        query = query.where('ultimaVisita', '<', unMesAtras);
+      }
+      
+      // Iniciar después del último documento visible
+      query = query.startAfter(lastVisiblePatient).limit(patientsPerPage);
+      
+      // Ejecutar consulta
+      query.get().then(snapshot => {
+        if (snapshot.empty) {
+          currentPage--;
+          patientsContainer.innerHTML = `
+            <div class="text-center py-4">
+              <p>No hay más pacientes</p>
+              <button class="btn btn-secondary" onclick="resetPagination()">Volver al inicio</button>
+            </div>
+          `;
+          return;
+        }
+        
+        // Actualizar variables de paginación
+        firstVisiblePatient = snapshot.docs[0];
+        lastVisiblePatient = snapshot.docs[snapshot.docs.length - 1];
+        
+        // Actualizar información de paginación
+        const start = (currentPage - 1) * patientsPerPage + 1;
+        const end = start + snapshot.size - 1;
+        updatePaginationInfo(currentPage, snapshot.size, totalPatients);
+        
+        // Generar HTML de pacientes
+        let patientsHTML = '';
+        
+        snapshot.forEach(doc => {
+          const patient = doc.data();
+          const patientId = doc.id;
+          
+          // Si hay término de búsqueda, filtrar en el cliente
+          if (searchTerm && !(
+            (patient.nombreCompleto && patient.nombreCompleto.toLowerCase().includes(searchTerm)) ||
+            (patient.documentoIdentidad && patient.documentoIdentidad.toLowerCase().includes(searchTerm)) ||
+            (patient.telefonoPersonal && patient.telefonoPersonal.toLowerCase().includes(searchTerm))
+          )) {
+            return;
+          }
+          
+          const createdAt = patient.createdAt ? new Date(patient.createdAt.toDate()).toLocaleDateString() : 'Desconocido';
+          const lastVisit = patient.ultimaVisita ? new Date(patient.ultimaVisita.toDate()).toLocaleDateString() : 'Nunca';
+          
+          const initialLetter = (patient.nombreCompleto && patient.nombreCompleto[0]) ? 
+            patient.nombreCompleto[0].toUpperCase() : '?';
+          
+          patientsHTML += `
+            <div class="patient-card">
+              <div class="patient-avatar">
+                ${initialLetter}
+              </div>
+              <div class="patient-info">
+                <div class="patient-name">${patient.nombreCompleto || 'Sin nombre'}</div>
+                <div class="patient-details">
+                  <span><i class="fas fa-id-card"></i> ${patient.documentoIdentidad || 'Sin RUT'}</span>
+                  <span style="margin-left: 15px;"><i class="fas fa-phone"></i> ${patient.telefonoPersonal || 'Sin teléfono'}</span>
+                </div>
+                <div class="text-muted mt-1">
+                  <small>Registrado: ${createdAt} | Última visita: ${lastVisit}</small>
+                </div>
+              </div>
+              <div class="patient-actions">
+                <a href="ver-paciente.html?id=${patientId}" class="btn btn-sm btn-secondary action-btn" title="Ver paciente">
+                  <i class="fas fa-eye"></i>
+                </a>
+                <a href="evoluciones.html?id=${patientId}" class="btn btn-sm btn-primary action-btn" title="Evoluciones">
+                  <i class="fas fa-notes-medical"></i>
+                </a>
+                <button class="btn btn-sm btn-danger action-btn" title="Eliminar" onclick="confirmarEliminarPaciente('${patientId}')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        
+        if (patientsHTML === '') {
+          currentPage--;
+          patientsContainer.innerHTML = `
+            <div class="text-center py-4">
+              <p>No se encontraron pacientes con los filtros aplicados</p>
+              <button class="btn btn-secondary" onclick="resetFilters()">Limpiar filtros</button>
+            </div>
+          `;
+          updatePaginationInfo(0, 0, 0);
+        } else {
+          patientsContainer.innerHTML = patientsHTML;
+        }
+      }).catch(error => {
+        console.error('Error al cargar pacientes:', error);
+        currentPage--;
+        patientsContainer.innerHTML = `
+          <div class="text-center py-4">
+            <p>Error al cargar pacientes: ${error.message}</p>
+            <button class="btn btn-secondary" onclick="cargarPacientesPaginaSiguiente()">Reintentar</button>
+          </div>
+        `;
+      });
+    }
+    
+    // Función para cargar la página anterior
+    function cargarPacientesPaginaAnterior() {
+      if (!firstVisiblePatient || currentPage <= 1) return;
+      
+      const patientsContainer = document.getElementById('patients-container');
+      patientsContainer.innerHTML = `
+        <div class="text-center py-4">
+          <i class="fas fa-spinner fa-spin fa-2x"></i>
+          <p>Cargando pacientes...</p>
+        </div>
+      `;
+      
+      // Construir consulta base
+      let query = db.collection('pacientes');
+      
+      // Aplicar ordenamiento
+      switch (sortOption) {
+        case 'newest':
+          query = query.orderBy('createdAt', 'desc');
+          break;
+        case 'oldest':
+          query = query.orderBy('createdAt', 'asc');
+          break;
+        case 'name':
+          query = query.orderBy('nombreCompleto', 'asc');
+          break;
+        case 'name-desc':
+          query = query.orderBy('nombreCompleto', 'desc');
+          break;
+      }
+      
+      // Aplicar filtro de estado
+      if (statusFilter === 'active') {
+        const unMesAtras = new Date();
+        unMesAtras.setMonth(unMesAtras.getMonth() - 1);
+        query = query.where('ultimaVisita', '>=', unMesAtras);
+      } else if (statusFilter === 'inactive') {
+        const unMesAtras = new Date();
+        unMesAtras.setMonth(unMesAtras.getMonth() - 1);
+        query = query.where('ultimaVisita', '<', unMesAtras);
+      }
+      
+      // Consultar documentos en orden inverso para simular la paginación hacia atrás
+      query = query.endBefore(firstVisiblePatient).limitToLast(patientsPerPage);
+      
+      // Ejecutar consulta
+      query.get().then(snapshot => {
+        if (snapshot.empty) {
+          currentPage = 1;
+          cargarPacientes();
+          return;
+        }
+        
+        // Actualizar variables de paginación
+        firstVisiblePatient = snapshot.docs[0];
+        lastVisiblePatient = snapshot.docs[snapshot.docs.length - 1];
+        
+        // Actualizar información de paginación
+        const start = (currentPage - 1) * patientsPerPage + 1;
+        const end = start + snapshot.size - 1;
+        updatePaginationInfo(currentPage, snapshot.size, totalPatients);
+        
+        // Generar HTML de pacientes
+        let patientsHTML = '';
+        
+        snapshot.forEach(doc => {
+          const patient = doc.data();
+          const patientId = doc.id;
+          
+          // Si hay término de búsqueda, filtrar en el cliente
+          if (searchTerm && !(
+            (patient.nombreCompleto && patient.nombreCompleto.toLowerCase().includes(searchTerm)) ||
+            (patient.documentoIdentidad && patient.documentoIdentidad.toLowerCase().includes(searchTerm)) ||
+            (patient.telefonoPersonal && patient.telefonoPersonal.toLowerCase().includes(searchTerm))
+          )) {
+            return;
+          }
+          
+          const createdAt = patient.createdAt ? new Date(patient.createdAt.toDate()).toLocaleDateString() : 'Desconocido';
+          const lastVisit = patient.ultimaVisita ? new Date(patient.ultimaVisita.toDate()).toLocaleDateString() : 'Nunca';
+          
+          const initialLetter = (patient.nombreCompleto && patient.nombreCompleto[0]) ? 
+            patient.nombreCompleto[0].toUpperCase() : '?';
+          
+          patientsHTML += `
+            <div class="patient-card">
+              <div class="patient-avatar">
+                ${initialLetter}
+              </div>
+              <div class="patient-info">
+                <div class="patient-name">${patient.nombreCompleto || 'Sin nombre'}</div>
+                <div class="patient-details">
+                  <span><i class="fas fa-id-card"></i> ${patient.documentoIdentidad || 'Sin RUT'}</span>
+                  <span style="margin-left: 15px;"><i class="fas fa-phone"></i> ${patient.telefonoPersonal || 'Sin teléfono'}</span>
+                </div>
+                <div class="text-muted mt-1">
+                  <small>Registrado: ${createdAt} | Última visita: ${lastVisit}</small>
+                </div>
+              </div>
+              <div class="patient-actions">
+                <a href="ver-paciente.html?id=${patientId}" class="btn btn-sm btn-secondary action-btn" title="Ver paciente">
+                  <i class="fas fa-eye"></i>
+                </a>
+                <a href="evoluciones.html?id=${patientId}" class="btn btn-sm btn-primary action-btn" title="Evoluciones">
+                  <i class="fas fa-notes-medical"></i>
+                </a>
+                <button class="btn btn-sm btn-danger action-btn" title="Eliminar" onclick="confirmarEliminarPaciente('${patientId}')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        
+        if (patientsHTML === '') {
+          currentPage++;
+          patientsContainer.innerHTML = `
+            <div class="text-center py-4">
+              <p>No se encontraron pacientes con los filtros aplicados</p>
+              <button class="btn btn-secondary" onclick="resetFilters()">Limpiar filtros</button>
+            </div>
+          `;
+          updatePaginationInfo(0, 0, 0);
+        } else {
+          patientsContainer.innerHTML = patientsHTML;
+        }
+      }).catch(error => {
+        console.error('Error al cargar pacientes:', error);
+        currentPage++;
+        patientsContainer.innerHTML = `
+          <div class="text-center py-4">
+            <p>Error al cargar pacientes: ${error.message}</p>
+            <button class="btn btn-secondary" onclick="cargarPacientesPaginaAnterior()">Reintentar</button>
+          </div>
+        `;
+      });
+    }
+    
+    // Función para actualizar información de paginación
+    function updatePaginationInfo(page, pageSize, total) {
+      const paginationContainer = document.getElementById('pagination-container');
+      const paginationInfo = document.getElementById('pagination-info');
+      const prevBtn = document.getElementById('prev-page');
+      const nextBtn = document.getElementById('next-page');
+      
+      if (total === 0) {
+        paginationContainer.style.display = 'none';
+        return;
+      }
+      
+      paginationContainer.style.display = 'flex';
+      
+      const start = (page - 1) * patientsPerPage + 1;
+      const end = Math.min(start + pageSize - 1, total);
+      
+      paginationInfo.textContent = `Mostrando ${start}-${end} de ${total} pacientes`;
+      
+      prevBtn.disabled = page <= 1;
+      nextBtn.disabled = end >= total;
+    }
+    
+    // Función para resetear filtros
+    function resetFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('filter-status').value = 'all';
+      document.getElementById('sort-by').value = 'newest';
+      
+      searchTerm = '';
+      statusFilter = 'all';
+      sortOption = 'newest';
+      currentPage = 1;
+      
+      cargarPacientes();
+    }
+    
+    // Función para resetear paginación
+    function resetPagination() {
+      currentPage = 1;
+      cargarPacientes();
+    }
+    
+    // Función para confirmar la eliminación de un paciente
+    function confirmarEliminarPaciente(patientId) {
+      if (confirm('¿Estás seguro de que deseas eliminar este paciente? Esta acción no se puede deshacer.')) {
+        eliminarPaciente(patientId);
+      }
+    }
+    
+    // Función para eliminar un paciente
+    function eliminarPaciente(patientId) {
+      db.collection('pacientes').doc(patientId).delete()
+        .then(() => {
+          // Eliminar evoluciones asociadas
+          db.collection('evoluciones')
+            .where('pacienteId', '==', patientId)
+            .get()
+            .then(snapshot => {
+              const batch = db.batch();
+              
+              snapshot.forEach(doc => {
+                batch.delete(doc.ref);
+              });
+              
+              return batch.commit();
+            })
+            .then(() => {
+              alert('Paciente eliminado correctamente');
+              cargarPacientes();
+            });
+        })
+        .catch(error => {
+          console.error('Error al eliminar paciente:', error);
+          alert('Error al eliminar paciente: ' + error.message);
+        });
+    }
+  </script>
+</body>
+</html>
