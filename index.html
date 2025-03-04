@@ -95,11 +95,26 @@
   <script src="js/auth.js"></script>
   <script>
     // Verificar si hay un usuario autenticado
-    verificarAutenticacion().then(user => {
-      if (user) {
-        window.location.href = 'dashboard.html';
-      }
-    });
+let redirectAttempt = sessionStorage.getItem('redirectAttempt') || 0;
+verificarAutenticacion().then(user => {
+  if (user) {
+    window.location.href = 'dashboard.html';
+  } else {
+    // Incrementar el contador de intentos
+    redirectAttempt++;
+    sessionStorage.setItem('redirectAttempt', redirectAttempt);
+    
+    // Si hay demasiados intentos, detener el ciclo
+    if (redirectAttempt > 3) {
+      console.error("Demasiados intentos de redirección. Deteniendo el ciclo.");
+      sessionStorage.removeItem('redirectAttempt');
+    }
+  }
+}).catch(error => {
+  console.error("Error en la autenticación:", error);
+  // Resetear contador en caso de error
+  sessionStorage.removeItem('redirectAttempt');
+});
     
     // Mostrar formulario de registro
     document.getElementById('show-register').addEventListener('click', function(e) {
