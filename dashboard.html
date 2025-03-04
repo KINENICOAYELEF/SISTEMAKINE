@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISTEMAKINE - Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="app-only">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <i class="fas fa-heartbeat"></i> SISTEMAKINE
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-item">
+        <a href="dashboard.html" class="sidebar-link active">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="nuevo-paciente.html" class="sidebar-link">
+          <i class="fas fa-user-plus"></i>
+          <span>Nuevo Paciente</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="listado-pacientes.html" class="sidebar-link">
+          <i class="fas fa-users"></i>
+          <span>Listado Pacientes</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="#" id="logout-btn" class="sidebar-link">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Cerrar Sesión</span>
+        </a>
+      </div>
+    </nav>
+  </aside>
+  
+  <!-- Main Content -->
+  <main class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Dashboard</h1>
+      <div class="user-info">
+        <span>Bienvenido, </span>
+        <strong class="user-name">Usuario</strong>
+      </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="form-row">
+      <div class="form-col form-col-md-4">
+        <div class="stats-card">
+          <div class="stats-card-icon bg-primary">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stats-card-value" id="total-patients">-</div>
+          <div class="stats-card-title">Total Pacientes</div>
+        </div>
+      </div>
+      
+      <div class="form-col form-col-md-4">
+        <div class="stats-card">
+          <div class="stats-card-icon bg-success">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="stats-card-value" id="active-patients">-</div>
+          <div class="stats-card-title">Pacientes Activos</div>
+        </div>
+      </div>
+      
+      <div class="form-col form-col-md-4">
+        <div class="stats-card">
+          <div class="stats-card-icon bg-secondary">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="stats-card-value" id="total-evolutions">-</div>
+          <div class="stats-card-title">Evoluciones</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recent Patients -->
+    <div class="card mt-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h3>Pacientes Recientes</h3>
+        <a href="listado-pacientes.html" class="btn btn-primary btn-sm">Ver todos</a>
+      </div>
+      <div class="card-body">
+        <div id="recent-patients">
+          <div class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando pacientes...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recent Evolutions -->
+    <div class="card mt-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h3>Evoluciones Recientes</h3>
+        <a href="evoluciones.html" class="btn btn-primary btn-sm">Ver todas</a>
+      </div>
+      <div class="card-body">
+        <div id="recent-evolutions">
+          <div class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando evoluciones...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  
+  <!-- Custom Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Verificar autenticación
+    verificarAutenticacion().then(user => {
+      if (!user) {
+        window.location.href = 'index.html';
+      } else {
+        // Cargar datos del dashboard
+        cargarDatosDashboard();
+      }
+    });
+    
+    // Manejar cierre de sesión
+    document.getElementById('logout-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      cerrarSesion().then(() => {
+        window.location.href = 'index.html';
+      });
+    });
+    
+    // Función para cargar datos del dashboard
+    function cargarDatosDashboard() {
+      // Contar total de pacientes
+      db.collection('pacientes').get().then(snapshot => {
+        document.getElementById('total-patients').textContent = snapshot.size;
+        
+        // Mostrar pacientes recientes
+        let recentPatientsHTML = '';
+        
+        if (snapshot.empty) {
+          recentPatientsHTML = `
+            <div class="text-center py-3">
+              <p>No hay pacientes registrados</p>
+              <a href="nuevo-paciente.html" class="btn btn-primary btn-sm">Agregar paciente</a>
+            </div>
+          `;
+        } else {
+          // Obtener últimos 5 pacientes
+          const recentPatients = snapshot.docs
+            .sort((a, b) => b.data().createdAt?.toDate() - a.data().createdAt?.toDate())
+            .slice(0, 5);
+          
+          recentPatientsHTML = '<div class="table-responsive"><table class="table">';
+          recentPatientsHTML += `
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>RUT</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+          `;
+          
+          recentPatients.forEach(doc => {
+            const patient = doc.data();
+            const date = patient.createdAt ? new Date(patient.createdAt.toDate()).toLocaleDateString() : 'N/A';
+            
+            recentPatientsHTML += `
+              <tr>
+                <td>${patient.nombreCompleto || 'Sin nombre'}</td>
+                <td>${patient.documentoIdentidad || 'Sin RUT'}</td>
+                <td>${date}</td>
+                <td>
+                  <a href="ver-paciente.html?id=${doc.id}" class="btn btn-sm btn-secondary">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                </td>
+              </tr>
+            `;
+          });
+          
+          recentPatientsHTML += '</tbody></table></div>';
+        }
+        
+        document.getElementById('recent-patients').innerHTML = recentPatientsHTML;
+      }).catch(error => {
+        console.error('Error al cargar pacientes:', error);
+        document.getElementById('total-patients').textContent = '0';
+        document.getElementById('recent-patients').innerHTML = `
+          <div class="text-center py-3">
+            <p>Error al cargar pacientes</p>
+          </div>
+        `;
+      });
+      
+      // Contar pacientes activos (último mes)
+      const unMesAtras = new Date();
+      unMesAtras.setMonth(unMesAtras.getMonth() - 1);
+      
+      db.collection('pacientes')
+        .where('ultimaVisita', '>=', unMesAtras)
+        .get()
+        .then(snapshot => {
+          document.getElementById('active-patients').textContent = snapshot.size;
+        }).catch(error => {
+          console.error('Error al cargar pacientes activos:', error);
+          document.getElementById('active-patients').textContent = '0';
+        });
+      
+      // Contar evoluciones
+      db.collection('evoluciones').get().then(snapshot => {
+        document.getElementById('total-evolutions').textContent = snapshot.size;
+        
+        // Mostrar evoluciones recientes
+        let recentEvolutionsHTML = '';
+        
+        if (snapshot.empty) {
+          recentEvolutionsHTML = `
+            <div class="text-center py-3">
+              <p>No hay evoluciones registradas</p>
+              <a href="evoluciones.html" class="btn btn-primary btn-sm">Agregar evolución</a>
+            </div>
+          `;
+        } else {
+          // Obtener últimas 5 evoluciones
+          const recentEvolutions = snapshot.docs
+            .sort((a, b) => b.data().fecha?.toDate() - a.data().fecha?.toDate())
+            .slice(0, 5);
+          
+          recentEvolutionsHTML = '<div class="table-responsive"><table class="table">';
+          recentEvolutionsHTML += `
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+          `;
+          
+          // Obtener IDs de pacientes de las evoluciones
+          const patientIds = recentEvolutions.map(doc => doc.data().pacienteId);
+          
+          // Obtener datos de pacientes
+          db.collection('pacientes')
+            .where(firebase.firestore.FieldPath.documentId(), 'in', patientIds.length > 0 ? patientIds : ['dummyId'])
+            .get()
+            .then(patientsSnapshot => {
+              const patientsMap = {};
+              patientsSnapshot.forEach(doc => {
+                patientsMap[doc.id] = doc.data();
+              });
+              
+              recentEvolutions.forEach(doc => {
+                const evolution = doc.data();
+                const date = evolution.fecha ? new Date(evolution.fecha.toDate()).toLocaleDateString() : 'N/A';
+                const patient = patientsMap[evolution.pacienteId] || { nombreCompleto: 'Paciente no encontrado' };
+                
+                recentEvolutionsHTML += `
+                  <tr>
+                    <td>${patient.nombreCompleto || 'Sin nombre'}</td>
+                    <td>${date}</td>
+                    <td>
+                      <a href="evoluciones.html?id=${evolution.pacienteId}" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                    </td>
+                  </tr>
+                `;
+              });
+              
+              recentEvolutionsHTML += '</tbody></table></div>';
+              document.getElementById('recent-evolutions').innerHTML = recentEvolutionsHTML;
+            })
+            .catch(error => {
+              console.error('Error al cargar datos de pacientes:', error);
+              document.getElementById('recent-evolutions').innerHTML = `
+                <div class="text-center py-3">
+                  <p>Error al cargar evoluciones</p>
+                </div>
+              `;
+            });
+        }
+      }).catch(error => {
+        console.error('Error al cargar evoluciones:', error);
+        document.getElementById('total-evolutions').textContent = '0';
+        document.getElementById('recent-evolutions').innerHTML = `
+          <div class="text-center py-3">
+            <p>Error al cargar evoluciones</p>
+          </div>
+        `;
+      });
+    }
+  </script>
+</body>
+</html>
