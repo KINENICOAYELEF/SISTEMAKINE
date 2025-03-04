@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISTEMAKINE - Inicio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="login-container login-only">
+    <div class="login-card">
+      <div class="login-logo">
+        <div style="font-size: 50px; color: #8300e0;">
+          <i class="fas fa-heartbeat"></i>
+        </div>
+      </div>
+      <h2 class="login-title">SISTEMAKINE</h2>
+      
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input type="email" id="email" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="password" class="form-label">Contraseña</label>
+          <input type="password" id="password" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
+        </div>
+        
+        <div id="login-error" class="text-danger text-center mb-3" style="display: none;"></div>
+      </form>
+      
+      <div class="text-center mt-3">
+        <a href="#" id="show-register">¿No tienes cuenta? Regístrate</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="login-container" id="register-container" style="display: none;">
+    <div class="login-card">
+      <div class="login-logo">
+        <div style="font-size: 50px; color: #8300e0;">
+          <i class="fas fa-heartbeat"></i>
+        </div>
+      </div>
+      <h2 class="login-title">Registro</h2>
+      
+      <form id="register-form">
+        <div class="form-group">
+          <label for="register-name" class="form-label">Nombre completo</label>
+          <input type="text" id="register-name" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="register-email" class="form-label">Correo electrónico</label>
+          <input type="email" id="register-email" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="register-password" class="form-label">Contraseña</label>
+          <input type="password" id="register-password" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="register-password-confirm" class="form-label">Confirmar contraseña</label>
+          <input type="password" id="register-password-confirm" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+        </div>
+        
+        <div id="register-error" class="text-danger text-center mb-3" style="display: none;"></div>
+      </form>
+      
+      <div class="text-center mt-3">
+        <a href="#" id="show-login">¿Ya tienes cuenta? Inicia sesión</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  
+  <!-- Custom Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Verificar si hay un usuario autenticado
+    verificarAutenticacion().then(user => {
+      if (user) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+    
+    // Mostrar formulario de registro
+    document.getElementById('show-register').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('login-form').parentElement.parentElement.style.display = 'none';
+      document.getElementById('register-container').style.display = 'flex';
+    });
+    
+    // Mostrar formulario de login
+    document.getElementById('show-login').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('register-container').style.display = 'none';
+      document.getElementById('login-form').parentElement.parentElement.style.display = 'flex';
+    });
+    
+    // Manejar el envío del formulario de login
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorElement = document.getElementById('login-error');
+      
+      // Mostrar cargando
+      document.querySelector('#login-form button').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Iniciando sesión...';
+      document.querySelector('#login-form button').disabled = true;
+      
+      // Iniciar sesión
+      iniciarSesion(email, password)
+        .then(() => {
+          // Redirigir al dashboard
+          window.location.href = 'dashboard.html';
+        })
+        .catch(error => {
+          // Mostrar error
+          errorElement.textContent = traducirErrorFirebase(error.code);
+          errorElement.style.display = 'block';
+          
+          // Restaurar botón
+          document.querySelector('#login-form button').innerHTML = 'Iniciar sesión';
+          document.querySelector('#login-form button').disabled = false;
+        });
+    });
+    
+    // Manejar el envío del formulario de registro
+    document.getElementById('register-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('register-name').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const passwordConfirm = document.getElementById('register-password-confirm').value;
+      const errorElement = document.getElementById('register-error');
+      
+      // Verificar que las contraseñas coincidan
+      if (password !== passwordConfirm) {
+        errorElement.textContent = 'Las contraseñas no coinciden';
+        errorElement.style.display = 'block';
+        return;
+      }
+      
+      // Mostrar cargando
+      document.querySelector('#register-form button').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
+      document.querySelector('#register-form button').disabled = true;
+      
+      // Registrar usuario
+      registrarUsuario(email, password, name)
+        .then(() => {
+          // Redirigir al dashboard
+          window.location.href = 'dashboard.html';
+        })
+        .catch(error => {
+          // Mostrar error
+          errorElement.textContent = traducirErrorFirebase(error.code);
+          errorElement.style.display = 'block';
+          
+          // Restaurar botón
+          document.querySelector('#register-form button').innerHTML = 'Registrarse';
+          document.querySelector('#register-form button').disabled = false;
+        });
+    });
+    
+    // Función para traducir errores de Firebase
+    function traducirErrorFirebase(errorCode) {
+      switch (errorCode) {
+        case 'auth/email-already-in-use':
+          return 'El correo electrónico ya está en uso por otra cuenta.';
+        case 'auth/invalid-email':
+          return 'El correo electrónico no es válido.';
+        case 'auth/user-disabled':
+          return 'Esta cuenta ha sido deshabilitada.';
+        case 'auth/user-not-found':
+          return 'No existe un usuario con este correo electrónico.';
+        case 'auth/wrong-password':
+          return 'Contraseña incorrecta.';
+        case 'auth/weak-password':
+          return 'La contraseña debe tener al menos 6 caracteres.';
+        default:
+          return 'Ha ocurrido un error. Por favor, inténtalo de nuevo.';
+      }
+    }
+  </script>
+</body>
+</html>
