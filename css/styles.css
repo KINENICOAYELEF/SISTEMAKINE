@@ -904,3 +904,151 @@ a:hover {
     display: block;
   }
 }
+/* Media queries adicionales para hacer el sistema completamente responsive */
+
+/* Asegura que todos los elementos importantes sean responsive */
+@media (max-width: 768px) {
+  /* Ajustes para la navegación superior */
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.5rem;
+  }
+  
+  .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  .nav-item {
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Oculta el menú por defecto en móviles */
+  .navbar-nav {
+    display: none;
+  }
+  
+  .navbar-nav.show {
+    display: flex;
+  }
+  
+  /* Botón de menú hamburguesa */
+  .menu-toggle {
+    display: block;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+  }
+  
+  /* Tablas responsive */
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Cards en pantallas pequeñas */
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Ajustes para el Dashboard */
+  .dashboard-row {
+    flex-direction: column;
+  }
+  
+  /* Ajustes para tarjetas de pacientes */
+  .patient-card {
+    flex-direction: column;
+  }
+  
+  .patient-avatar {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .patient-actions {
+    margin-top: 1rem;
+    justify-content: center;
+  }
+  
+  /* Ajustes para pestañas de formulario */
+  .form-tabs {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  
+  .form-tab {
+    padding: 0.5rem;
+    flex: 0 0 auto;
+  }
+
+  /* Botones en móvil */
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Espaciado en móvil */
+  .p-4 {
+    padding: 1rem;
+  }
+}
+
+/* Ajustes para teléfonos muy pequeños */
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+  
+  .stats-card-value {
+    font-size: 1.5rem;
+  }
+  
+  .login-card {
+    padding: 1rem;
+  }
+  
+  /* Hacer letras más pequeñas */
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Estilos para el menú hamburguesa */
+.menu-toggle {
+  display: none;
+  z-index: 1100;
+}
+
+/* Añadir la clase 'show' para que funcione el menú móvil */
+.navbar-nav.show {
+  display: flex;
+}
