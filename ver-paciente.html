@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISTEMAKINE - Ver Paciente</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="app-only">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <i class="fas fa-heartbeat"></i> SISTEMAKINE
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-item">
+        <a href="dashboard.html" class="sidebar-link">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="nuevo-paciente.html" class="sidebar-link">
+          <i class="fas fa-user-plus"></i>
+          <span>Nuevo Paciente</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="listado-pacientes.html" class="sidebar-link">
+          <i class="fas fa-users"></i>
+          <span>Listado Pacientes</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="#" id="logout-btn" class="sidebar-link">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Cerrar Sesión</span>
+        </a>
+      </div>
+    </nav>
+  </aside>
+  
+  <!-- Main Content -->
+  <main class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 id="patient-name">Cargando información del paciente...</h1>
+      <div>
+        <a href="evoluciones.html" id="evoluciones-link" class="btn btn-primary">
+          <i class="fas fa-notes-medical"></i> Evoluciones
+        </a>
+        <a href="#" id="edit-patient-btn" class="btn btn-secondary">
+          <i class="fas fa-edit"></i> Editar
+        </a>
+        <a href="listado-pacientes.html" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i> Volver
+        </a>
+      </div>
+    </div>
+    
+    <!-- Patient Details -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <ul class="tab-nav">
+          <li><a class="tab-link active" data-tab="datos-personales">Datos Personales</a></li>
+          <li><a class="tab-link" data-tab="motivo-consulta">Motivo de Consulta</a></li>
+          <li><a class="tab-link" data-tab="historia-medica">Historia Médica</a></li>
+          <li><a class="tab-link" data-tab="habitos">Hábitos y Estilo de Vida</a></li>
+          <li><a class="tab-link" data-tab="evaluacion-fisica">Evaluación Física</a></li>
+          <li><a class="tab-link" data-tab="escalas">Escalas y Cuestionarios</a></li>
+          <li><a class="tab-link" data-tab="banderas">Banderas de Alerta</a></li>
+          <li><a class="tab-link" data-tab="documentos">Documentación</a></li>
+          <li><a class="tab-link" data-tab="plan">Plan de Tratamiento</a></li>
+        </ul>
+      </div>
+      <div class="card-body">
+        <div class="tab-content active" id="datos-personales">
+          <h3>Datos Personales</h3>
+          <div id="loading-datos-personales" class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando datos personales...</p>
+          </div>
+          <div id="content-datos-personales" style="display: none;">
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Nombre completo</label>
+                  <p id="nombreCompleto" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Documento de identidad</label>
+                  <p id="documentoIdentidad" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Fecha de nacimiento</label>
+                  <p id="fechaNacimiento" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Edad</label>
+                  <p id="edad" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Género</label>
+                  <p id="genero" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Estado civil</label>
+                  <p id="estadoCivil" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Nacionalidad</label>
+                  <p id="nacionalidad" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <h4>Información de Contacto</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Dirección completa</label>
+                  <p id="direccion" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Teléfono personal</label>
+                  <p id="telefonoPersonal" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Teléfono trabajo</label>
+                  <p id="telefonoTrabajo" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Correo electrónico</label>
+                  <p id="correoElectronico" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <h4>Datos Sociolaborales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Nivel educacional</label>
+                  <p id="nivelEducacional" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Ocupación actual</label>
+                  <p id="ocupacionActual" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Tipo de trabajo</label>
+                  <p id="tipoTrabajo" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Horario laboral</label>
+                  <p id="horarioLaboral" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Nivel de actividad física</label>
+                  <p id="nivelActividadFisica" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <h4>Información de Emergencia</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Contacto de emergencia</label>
+                  <p id="contactoEmergencia" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Parentesco</label>
+                  <p id="parentesco" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Teléfonos de contacto</label>
+                  <p id="telefonosContacto" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Sistema de salud/seguro médico</label>
+                  <p id="sistemaSalud" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="motivo-consulta">
+          <h3>Motivo de Consulta y Antecedentes</h3>
+          <div id="loading-motivo-consulta" class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando información...</p>
+          </div>
+          <div id="content-motivo-consulta" style="display: none;">
+            <h4>Derivación</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Profesional que deriva</label>
+                  <p id="profesionalDeriva" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Especialidad</label>
+                  <p id="especialidad" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Fecha de derivación</label>
+                  <p id="fechaDerivacion" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Diagnóstico médico inicial</label>
+                  <p id="diagnosticoInicial" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Motivo de consulta específico</label>
+                  <p id="motivoConsulta" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Historia de la Condición Actual</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Inicio de los síntomas</label>
+                  <p id="inicioSintomas" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Mecanismo de lesión/aparición</label>
+                  <p id="mecanismoLesion" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Evolución temporal de los síntomas</label>
+                  <p id="evolucionSintomas" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Tratamientos previos</label>
+                  <p id="tratamientosPrevios" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Características del Dolor (ALICIA)</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Antecedentes</label>
+                  <p id="alicia_antecedentes" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Localización</label>
+                  <p id="alicia_localizacion" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Intensidad (EVA 0-10)</label>
+                  <p id="alicia_intensidad" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Características</label>
+                  <p id="alicia_caracteristicas" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Irradiación</label>
+                  <p id="alicia_irradiacion" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Atenuantes</label>
+                  <p id="alicia_atenuantes" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Agravantes</label>
+                  <p id="alicia_agravantes" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Expectativas del Paciente</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Objetivos a corto plazo</label>
+                  <p id="objetivosCorto" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Objetivos a mediano plazo</label>
+                  <p id="objetivosMediano" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Objetivos a largo plazo</label>
+                  <p id="objetivosLargo" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Expectativas de recuperación</label>
+                  <p id="expectativasRecuperacion" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Nivel de compromiso con el tratamiento</label>
+                  <p id="nivelCompromiso" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="historia-medica">
+          <h3>Historia Médica Detallada</h3>
+          <div id="loading-historia-medica" class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando información...</p>
+          </div>
+          <div id="content-historia-medica" style="display: none;">
+            <h4>Antecedentes Personales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Enfermedades crónicas</label>
+                  <p id="enfermedadesCronicas" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Enfermedades agudas previas</label>
+                  <p id="enfermedadesAgudas" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Hospitalizaciones</label>
+                  <p id="hospitalizaciones" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Cirugías previas</label>
+                  <p id="cirugiasPrevias" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Antecedentes ortopédicos/musculoesqueléticos previos</label>
+                  <p id="antecedentesOrtopedicos" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Traumatismos previos</label>
+                  <p id="traumatismosPrevios" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Antecedentes Familiares</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Enfermedades hereditarias</label>
+                  <p id="enfermedadesHereditarias" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Condiciones genéticas relevantes</label>
+                  <p id="condicionesGeneticas" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Medicación Actual</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Medicamentos actuales</label>
+                  <p id="medicamentosActuales" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Alergias e Hipersensibilidades</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Medicamentos</label>
+                  <p id="alergiasMedicamentos" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Alimentos</label>
+                  <p id="alergiasAlimentos" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Ambientales</label>
+                  <p id="alergiasAmbientales" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="habitos">
+          <h3>Evaluación de Hábitos y Estilo de Vida</h3>
+          <div id="loading-habitos" class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando información...</p>
+          </div>
+          <div id="content-habitos" style="display: none;">
+            <h4>Hábitos Nutricionales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Tipo de dieta</label>
+                  <p id="tipoDieta" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Consumo de agua</label>
+                  <p id="consumoAgua" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Hábitos Tóxicos</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Consumo de tabaco</label>
+                  <p id="consumoTabaco" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Consumo de alcohol</label>
+                  <p id="consumoAlcohol" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Consumo de drogas</label>
+                  <p id="consumoDrogas" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Actividad Física y Deportiva</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Práctica de deportes</label>
+                  <p id="practicaDeportes" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Frecuencia</label>
+                  <p id="frecuenciaDeporte" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Patrón de Sueño</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Horas de sueño</label>
+                  <p id="horasSueno" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Calidad del sueño</label>
+                  <p id="calidadSueno" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Problemas de sueño</label>
+                  <p id="problemasSueno" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="evaluacion-fisica">
+          <h3>Evaluación Física Completa</h3>
+          <div id="loading-evaluacion-fisica" class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando información...</p>
+          </div>
+          <div id="content-evaluacion-fisica" style="display: none;">
+            <h4>Signos Vitales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Frecuencia cardíaca</label>
+                  <p id="frecuenciaCardiaca" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Frecuencia respiratoria</label>
+                  <p id="frecuenciaRespiratoria" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Presión arterial</label>
+                  <p id="presionArterial" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Saturación de oxígeno</label>
+                  <p id="saturacionOxigeno" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Antropometría</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Peso</label>
+                  <p id="peso" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Talla</label>
+                  <p id="talla" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">IMC</label>
+                  <p id="imc" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Evaluación Postural</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Alineación corporal</label>
+                  <p id="alineacionCorporal" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Alteraciones posturales</label>
+                  <p id="alteracionesPosturales" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Evaluación Física</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Inspección</label>
+                  <p id="inspeccion" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Palpación</label>
+                  <p id="palpacion" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Rango de movimiento articular</label>
+                  <p id="rangoMovimiento" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Fuerza muscular</label>
+                  <p id="fuerzaMuscular" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="escalas">
+          <h3>Escalas y Cuestionarios Estandarizados</h3>
+          <div id="loading-escalas" class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando información...</p>
+          </div>
+          <div id="content-escalas" style="display: none;">
+            <h4>Escalas de Dolor</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">EVA (Escala Visual Analógica)</label>
+                  <p id="escalaEVA" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Escala Numérica</label>
+                  <p id="escalaNumerica" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Escalas Funcionales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">PSFS (Patient-Specific Functional Scale)</label>
+                  <p id="escalaPSFS" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">GROC (Global Rating of Change)</label>
+                  <p id="escalaGROC" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Cuestionarios Específicos</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Cuestionarios aplicados</label>
+                  <p id="cuestionariosEspecificos" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="banderas">
+          <h3>Sistema de Banderas de Alerta</h3>
+          <div id="loading-banderas" class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando información...</p>
+          </div>
+          <div id="content-banderas" style="display: none;">
+            <h4>Banderas Rojas (Riesgo Físico)</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <p id="banderasRojas" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Banderas Amarillas (Factores Psicosociales)</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <p id="banderasAmarillas" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Banderas Azules (Factores Laborales)</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <p id="banderasAzules" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            
+            <hr>
+            <h4>Banderas Negras (Factores Contextuales)</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <p id="banderasNegras" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="documentos">
+          <h3>Documentación Complementaria</h3>
+          <div id="loading-documentos" class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando información...</p>
+          </div>
+          <div id="content-documentos" style="display: none;">
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Exámenes complementarios</label>
+                  <div id="examenesComplementarios">-</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Informes médicos previos</label>
+                  <div id="informesMedicos">-</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Imágenes diagnósticas</label>
+                  <div id="imagenesDiagnosticas">-</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="plan">
+          <h3>Plan de Tratamiento Inicial</h3>
+          <div id="loading-plan" class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando información...</p>
+          </div>
+          <div id="content-plan" style="display: none;">
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Objetivos terapéuticos</label>
+                  <p id="objetivosTerapeuticos" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label class="form-label">Intervenciones propuestas</label>
+                  <p id="intervencionesProuestas" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Frecuencia de tratamiento</label>
+                  <p id="frecuenciaTratamiento" class="form-control-static">-</p>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Pronóstico inicial</label>
+                  <p id="pronosticoInicial" class="form-control-static">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  
+  <!-- Custom Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Obtener ID del paciente de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const patientId = urlParams.get('id');
+    
+    // Si no hay ID de paciente, redirigir al listado
+    if (!patientId) {
+      window.location.href = 'listado-pacientes.html';
+    }
+    
+    // Verificar autenticación
+    verificarAutenticacion().then(user => {
+      if (!user) {
+        window.location.href = 'index.html';
+      } else {
+        // Cargar datos del paciente
+        cargarDatosPaciente(patientId);
+      }
+    });
+    
+    // Manejar cierre de sesión
+    document.getElementById('logout-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      cerrarSesion().then(() => {
+        window.location.href = 'index.html';
+      });
+    });
+    
+    // Actualizar enlaces
+    document.getElementById('evoluciones-link').href = `evoluciones.html?id=${patientId}`;
+    document.getElementById('edit-patient-btn').href = `nuevo-paciente.html?id=${patientId}`;
+    
+    // Función para cargar datos del paciente
+    function cargarDatosPaciente(patientId) {
+      db.collection('pacientes').doc(patientId).get()
+        .then(doc => {
+          if (!doc.exists) {
+            alert('El paciente no existe');
+            window.location.href = 'listado-pacientes.html';
+            return;
+          }
+          
+          const patient = doc.data();
+          
+          // Actualizar título
+          document.getElementById('patient-name').textContent = patient.nombreCompleto || 'Paciente sin nombre';
+          
+          // Cargar datos en cada pestaña
+          cargarDatosPersonales(patient);
+          cargarMotivoConsulta(patient);
+          cargarHistoriaMedica(patient);
+          cargarHabitos(patient);
+          cargarEvaluacionFisica(patient);
+          cargarEscalas(patient);
+          cargarBanderas(patient);
+          cargarDocumentos(patient);
+          cargarPlan(patient);
+        })
+        .catch(error => {
+          console.error('Error al cargar paciente:', error);
+          alert('Error al cargar datos del paciente');
+        });
+    }
+    
+    // Funciones para cargar datos en cada pestaña
+    function cargarDatosPersonales(patient) {
+      // Datos personales
+      document.getElementById('nombreCompleto').textContent = patient.nombreCompleto || '-';
+      document.getElementById('documentoIdentidad').textContent = patient.documentoIdentidad || '-';
+      document.getElementById('fechaNacimiento').textContent = patient.fechaNacimiento ? new Date(patient.fechaNacimiento.toDate()).toLocaleDateString() : '-';
+      document.getElementById('edad').textContent = patient.edad || '-';
+      document.getElementById('genero').textContent = patient.genero || '-';
+      document.getElementById('estadoCivil').textContent = patient.estadoCivil || '-';
+      document.getElementById('nacionalidad').textContent = patient.nacionalidad || '-';
+      
+      // Información de contacto
+      document.getElementById('direccion').textContent = patient.direccion || '-';
+      document.getElementById('telefonoPersonal').textContent = patient.telefonoPersonal || '-';
+      document.getElementById('telefonoTrabajo').textContent = patient.telefonoTrabajo || '-';
+      document.getElementById('correoElectronico').textContent = patient.correoElectronico || '-';
+      
+      // Datos sociolaborales
+      document.getElementById('nivelEducacional').textContent = patient.nivelEducacional || '-';
+      document.getElementById('ocupacionActual').textContent = patient.ocupacionActual || '-';
+      document.getElementById('tipoTrabajo').textContent = patient.tipoTrabajo || '-';
+      document.getElementById('horarioLaboral').textContent = patient.horarioLaboral || '-';
+      document.getElementById('nivelActividadFisica').textContent = patient.nivelActividadFisica || '-';
+      
+      // Información de emergencia
+      document.getElementById('contactoEmergencia').textContent = patient.contactoEmergencia || '-';
+      document.getElementById('parentesco').textContent = patient.parentesco || '-';
+      document.getElementById('telefonosContacto').textContent = patient.telefonosContacto || '-';
+      document.getElementById('sistemaSalud').textContent = patient.sistemaSalud || '-';
+      
+      // Mostrar contenido
+      document.getElementById('loading-datos-personales').style.display = 'none';
+      document.getElementById('content-datos-personales').style.display = 'block';
+    }
+    
+    function cargarMotivoConsulta(patient) {
+      // Derivación
+      document.getElementById('profesionalDeriva').textContent = patient.profesionalDeriva || '-';
+      document.getElementById('especialidad').textContent = patient.especialidad || '-';
+      document.getElementById('fechaDerivacion').textContent = patient.fechaDerivacion ? new Date(patient.fechaDerivacion.toDate()).toLocaleDateString() : '-';
+      document.getElementById('diagnosticoInicial').textContent = patient.diagnosticoInicial || '-';
+      document.getElementById('motivoConsulta').textContent = patient.motivoConsulta || '-';
+      
+      // Historia de la condición actual
+      document.getElementById('inicioSintomas').textContent = patient.inicioSintomas ? new Date(patient.inicioSintomas.toDate()).toLocaleDateString() : '-';
+      document.getElementById('mecanismoLesion').textContent = patient.mecanismoLesion || '-';
+      document.getElementById('evolucionSintomas').textContent = patient.evolucionSintomas || '-';
+      document.getElementById('tratamientosPrevios').textContent = patient.tratamientosPrevios || '-';
+      
+      // ALICIA
+      document.getElementById('alicia_antecedentes').textContent = patient.alicia_antecedentes || '-';
+      document.getElementById('alicia_localizacion').textContent = patient.alicia_localizacion || '-';
+      document.getElementById('alicia_intensidad').textContent = patient.alicia_intensidad || '-';
+      document.getElementById('alicia_caracteristicas').textContent = patient.alicia_caracteristicas || '-';
+      document.getElementById('alicia_irradiacion').textContent = patient.alicia_irradiacion || '-';
+      document.getElementById('alicia_atenuantes').textContent = patient.alicia_atenuantes || '-';
+      document.getElementById('alicia_agravantes').textContent = patient.alicia_agravantes || '-';
+      
+      // Expectativas del paciente
+      document.getElementById('objetivosCorto').textContent = patient.objetivosCorto || '-';
+      document.getElementById('objetivosMediano').textContent = patient.objetivosMediano || '-';
+      document.getElementById('objetivosLargo').textContent = patient.objetivosLargo || '-';
+      document.getElementById('expectativasRecuperacion').textContent = patient.expectativasRecuperacion || '-';
+      document.getElementById('nivelCompromiso').textContent = patient.nivelCompromiso || '-';
+      
+      // Mostrar contenido
+      document.getElementById('loading-motivo-consulta').style.display = 'none';
+      document.getElementById('content-motivo-consulta').style.display = 'block';
+    }
+    
+    function cargarHistoriaMedica(patient) {
+      // Antecedentes personales
+      document.getElementById('enfermedadesCronicas').textContent = patient.enfermedadesCronicas || '-';
+      document.getElementById('enfermedadesAgudas').textContent = patient.enfermedadesAgudas || '-';
+      document.getElementById('hospitalizaciones').textContent = patient.hospitalizaciones || '-';
+      document.getElementById('cirugiasPrevias').textContent = patient.cirugiasPrevias || '-';
+      document.getElementById('antecedentesOrtopedicos').textContent = patient.antecedentesOrtopedicos || '-';
+      document.getElementById('traumatismosPrevios').textContent = patient.traumatismosPrevios || '-';
+      
+      // Antecedentes familiares
+      document.getElementById('enfermedadesHereditarias').textContent = patient.enfermedadesHereditarias || '-';
+      document.getElementById('condicionesGeneticas').textContent = patient.condicionesGeneticas || '-';
+      
+      // Medicación actual
+      document.getElementById('medicamentosActuales').textContent = patient.medicamentosActuales || '-';
+      
+      // Alergias
+      document.getElementById('alergiasMedicamentos').textContent = patient.alergiasMedicamentos || '-';
+      document.getElementById('alergiasAlimentos').textContent = patient.alergiasAlimentos || '-';
+      document.getElementById('alergiasAmbientales').textContent = patient.alergiasAmbientales || '-';
+      
+      // Mostrar contenido
+      document.getElementById('loading-historia-medica').style.display = 'none';
+      document.getElementById('content-historia-medica').style.display = 'block';
+    }
+    
+    function cargarHabitos(patient) {
+      // Hábitos nutricionales
+      document.getElementById('tipoDieta').textContent = patient.tipoDieta || '-';
+      document.getElementById('consumoAgua').textContent = patient.consumoAgua || '-';
+      
+      // Hábitos tóxicos
+      document.getElementById('consumoTabaco').textContent = patient.consumoTabaco || '-';
+      document.getElementById('consumoAlcohol').textContent = patient.consumoAlcohol || '-';
+      document.getElementById('consumoDrogas').textContent = patient.consumoDrogas || '-';
+      
+      // Actividad física
+      document.getElementById('practicaDeportes').textContent = patient.practicaDeportes || '-';
+      document.getElementById('frecuenciaDeporte').textContent = patient.frecuenciaDeporte || '-';
+      
+      // Patrón de sueño
+      document.getElementById('horasSueno').textContent = patient.horasSueno || '-';
+      document.getElementById('calidadSueno').textContent = patient.calidadSueno || '-';
+      document.getElementById('problemasSueno').textContent = patient.problemasSueno || '-';
+      
+      // Mostrar contenido
+      document.getElementById('loading-habitos').style.display = 'none';
+      document.getElementById('content-habitos').style.display = 'block';
+    }
+    
+    function cargarEvaluacionFisica(patient) {
+      // Signos vitales
+      document.getElementById('frecuenciaCardiaca').textContent = patient.frecuenciaCardiaca ? `${patient.frecuenciaCardiaca} lpm` : '-';
+      document.getElementById('frecuenciaRespiratoria').textContent = patient.frecuenciaRespiratoria ? `${patient.frecuenciaRespiratoria} rpm` : '-';
+      document.getElementById('presionArterial').textContent = patient.presionArterial || '-';
+      document.getElementById('saturacionOxigeno').textContent = patient.saturacionOxigeno ? `${patient.saturacionOxigeno} %` : '-';
+      
+      // Antropometría
+      document.getElementById('peso').textContent = patient.peso ? `${patient.peso} kg` : '-';
+      document.getElementById('talla').textContent = patient.talla ? `${patient.talla} cm` : '-';
+      document.getElementById('imc').textContent = patient.imc ? `${patient.imc} kg/m²` : '-';
+      
+      // Evaluación postural
+      document.getElementById('alineacionCorporal').textContent = patient.alineacionCorporal || '-';
+      document.getElementById('alteracionesPosturales').textContent = patient.alteracionesPosturales || '-';
+      
+      // Evaluación física
+      document.getElementById('inspeccion').textContent = patient.inspeccion || '-';
+      document.getElementById('palpacion').textContent = patient.palpacion || '-';
+      document.getElementById('rangoMovimiento').textContent = patient.rangoMovimiento || '-';
+      document.getElementById('fuerzaMuscular').textContent = patient.fuerzaMuscular || '-';
+      
+      // Mostrar contenido
+      document.getElementById('loading-evaluacion-fisica').style.display = 'none';
+      document.getElementById('content-evaluacion-fisica').style.display = 'block';
+    }
+    
+    function cargarEscalas(patient) {
+      // Escalas de dolor
+      document.getElementById('escalaEVA').textContent = patient.escalaEVA || '-';
+      document.getElementById('escalaNumerica').textContent = patient.escalaNumerica || '-';
+      
+      // Escalas funcionales
+      document.getElementById('escalaPSFS').textContent = patient.escalaPSFS || '-';
+      document.getElementById('escalaGROC').textContent = patient.escalaGROC || '-';
+      
+      // Cuestionarios específicos
+      document.getElementById('cuestionariosEspecificos').textContent = patient.cuestionariosEspecificos || '-';
+      
+      // Mostrar contenido
+      document.getElementById('loading-escalas').style.display = 'none';
+      document.getElementById('content-escalas').style.display = 'block';
+    }
+    
+    function cargarBanderas(patient) {
+      // Banderas
+      document.getElementById('banderasRojas').textContent = patient.banderasRojas || 'No se han detectado banderas rojas';
+      document.getElementById('banderasAmarillas').textContent = patient.banderasAmarillas || 'No se han detectado banderas amarillas';
+      document.getElementById('banderasAzules').textContent = patient.banderasAzules || 'No se han detectado banderas azules';
+      document.getElementById('banderasNegras').textContent = patient.banderasNegras || 'No se han detectado banderas negras';
+      
+      // Mostrar contenido
+      document.getElementById('loading-banderas').style.display = 'none';
+      document.getElementById('content-banderas').style.display = 'block';
+    }
+    
+    function cargarDocumentos(patient) {
+      // Exámenes complementarios
+      if (patient.examenesComplementarios && patient.examenesComplementarios.length > 0) {
+        let examenesHTML = '<ul class="list-group">';
+        patient.examenesComplementarios.forEach(examen => {
+          examenesHTML += `<li class="list-group-item"><a href="${examen.url}" target="_blank">${examen.nombre}</a></li>`;
+        });
+        examenesHTML += '</ul>';
+        document.getElementById('examenesComplementarios').innerHTML = examenesHTML;
+      } else {
+        document.getElementById('examenesComplementarios').textContent = 'No hay exámenes complementarios registrados';
+      }
+      
+      // Informes médicos
+      if (patient.informesMedicos && patient.informesMedicos.length > 0) {
+        let informesHTML = '<ul class="list-group">';
+        patient.informesMedicos.forEach(informe => {
+          informesHTML += `<li class="list-group-item"><a href="${informe.url}" target="_blank">${informe.nombre}</a></li>`;
+        });
+        informesHTML += '</ul>';
+        document.getElementById('informesMedicos').innerHTML = informesHTML;
+      } else {
+        document.getElementById('informesMedicos').textContent = 'No hay informes médicos registrados';
+      }
+      
+      // Imágenes diagnósticas
+      if (patient.imagenesDiagnosticas && patient.imagenesDiagnosticas.length > 0) {
+        let imagenesHTML = '<ul class="list-group">';
+        patient.imagenesDiagnosticas.forEach(imagen => {
+          imagenesHTML += `<li class="list-group-item"><a href="${imagen.url}" target="_blank">${imagen.nombre}</a></li>`;
+        });
+        imagenesHTML += '</ul>';
+        document.getElementById('imagenesDiagnosticas').innerHTML = imagenesHTML;
+      } else {
+        document.getElementById('imagenesDiagnosticas').textContent = 'No hay imágenes diagnósticas registradas';
+      }
+      
+      // Mostrar contenido
+      document.getElementById('loading-documentos').style.display = 'none';
+      document.getElementById('content-documentos').style.display = 'block';
+    }
+    
+    function cargarPlan(patient) {
+      // Plan de tratamiento
+      document.getElementById('objetivosTerapeuticos').textContent = patient.objetivosTerapeuticos || '-';
+      document.getElementById('intervencionesProuestas').textContent = patient.intervencionesProuestas || '-';
+      document.getElementById('frecuenciaTratamiento').textContent = patient.frecuenciaTratamiento || '-';
+      document.getElementById('pronosticoInicial').textContent = patient.pronosticoInicial || '-';
+      
+      // Mostrar contenido
+      document.getElementById('loading-plan').style.display = 'none';
+      document.getElementById('content-plan').style.display = 'block';
+    }
+    
+    // Gestión de pestañas
+    document.querySelectorAll('.tab-link').forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Desactivar todas las pestañas
+        document.querySelectorAll('.tab-link').forEach(t => {
+          t.classList.remove('active');
+        });
+        
+        // Ocultar todos los contenidos
+        document.querySelectorAll('.tab-content').forEach(c => {
+          c.classList.remove('active');
+        });
+        
+        // Activar la pestaña actual
+        this.classList.add('active');
+        
+        // Mostrar el contenido correspondiente
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
