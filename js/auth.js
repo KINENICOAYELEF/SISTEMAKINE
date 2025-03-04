@@ -35,16 +35,25 @@ function verificarAutenticacion() {
     const unsubscribe = auth.onAuthStateChanged(user => {
       unsubscribe();
       if (user) {
+        // Usuario autenticado
         resolve(user);
       } else {
-        // Si no está en la página de inicio, redirigir al login
-        if (window.location.pathname !== '/index.html' && 
-            window.location.pathname !== '/' && 
-            window.location.pathname !== '/sistemakine/' && 
-            window.location.pathname !== '/sistemakine/index.html') {
+        // Usuario no autenticado
+        // Verificar si estamos en una página de login
+        const currentPath = window.location.pathname;
+        const isLoginPage = 
+          currentPath.endsWith('index.html') || 
+          currentPath.endsWith('/sistemakine/') || 
+          currentPath.endsWith('/sistemakine') || 
+          currentPath === '/' || 
+          currentPath === '';
+        
+        // Solo redirigir si NO estamos en una página de login
+        if (!isLoginPage) {
           window.location.href = 'index.html';
           reject(new Error('Usuario no autenticado'));
         } else {
+          // Estamos en la página de login, resolver con null
           resolve(null);
         }
       }
