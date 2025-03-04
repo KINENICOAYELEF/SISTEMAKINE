@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISTEMAKINE - Nuevo Paciente</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="app-only">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <i class="fas fa-heartbeat"></i> SISTEMAKINE
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-item">
+        <a href="dashboard.html" class="sidebar-link">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="nuevo-paciente.html" class="sidebar-link active">
+          <i class="fas fa-user-plus"></i>
+          <span>Nuevo Paciente</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="listado-pacientes.html" class="sidebar-link">
+          <i class="fas fa-users"></i>
+          <span>Listado Pacientes</span>
+        </a>
+      </div>
+      <div class="sidebar-item">
+        <a href="#" id="logout-btn" class="sidebar-link">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Cerrar Sesión</span>
+        </a>
+      </div>
+    </nav>
+  </aside>
+  
+  <!-- Main Content -->
+  <main class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 id="page-title">Nuevo Paciente</h1>
+      <a href="listado-pacientes.html" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver
+      </a>
+    </div>
+    
+    <!-- Form Tabs -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <ul class="tab-nav">
+          <li><a class="tab-link active" data-tab="datos-personales">1. Datos Personales</a></li>
+          <li><a class="tab-link" data-tab="motivo-consulta">2. Motivo de Consulta</a></li>
+          <li><a class="tab-link" data-tab="historia-medica">3. Historia Médica</a></li>
+          <li><a class="tab-link" data-tab="habitos">4. Hábitos</a></li>
+          <li><a class="tab-link" data-tab="evaluacion-fisica">5. Evaluación Física</a></li>
+          <li><a class="tab-link" data-tab="escalas">6. Escalas</a></li>
+          <li><a class="tab-link" data-tab="banderas">7. Banderas</a></li>
+          <li><a class="tab-link" data-tab="documentos">8. Documentos</a></li>
+          <li><a class="tab-link" data-tab="plan">9. Plan de Tratamiento</a></li>
+        </ul>
+      </div>
+      <div class="card-body">
+        <!-- Loading indicator -->
+        <div id="loading-form" class="text-center py-4" style="display: none;">
+          <i class="fas fa-spinner fa-spin fa-2x"></i>
+          <p>Cargando datos del paciente...</p>
+        </div>
+        
+        <!-- Patient Form -->
+        <form id="patient-form">
+          <!-- Hidden fields for editing -->
+          <input type="hidden" id="patient-id" name="id">
+          
+          <!-- 1. Datos Personales -->
+          <div class="tab-content active" id="datos-personales">
+            <h3>1. Identificación del Paciente</h3>
+            
+            <h4>1.1 Datos Personales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="nombreCompleto" class="form-label">Nombre completo</label>
+                  <input type="text" id="nombreCompleto" name="nombreCompleto" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="documentoIdentidad" class="form-label">Documento de identidad (RUT/Pasaporte)</label>
+                  <input type="text" id="documentoIdentidad" name="documentoIdentidad" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                  <input type="date" id="fechaNacimiento" name="fechaNacimiento" class="form-control">
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="genero" class="form-label">Género</label>
+                  <select id="genero" name="genero" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="No binario">No binario</option>
+                    <option value="Prefiero no especificar">Prefiero no especificar</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="estadoCivil" class="form-label">Estado civil</label>
+                  <select id="estadoCivil" name="estadoCivil" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Soltero/a">Soltero/a</option>
+                    <option value="Casado/a">Casado/a</option>
+                    <option value="Divorciado/a">Divorciado/a</option>
+                    <option value="Viudo/a">Viudo/a</option>
+                    <option value="Unión libre">Unión libre</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="nacionalidad" class="form-label">Nacionalidad</label>
+                  <input type="text" id="nacionalidad" name="nacionalidad" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <h4>1.2 Información de Contacto</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="direccion" class="form-label">Dirección completa</label>
+                  <input type="text" id="direccion" name="direccion" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="telefonoPersonal" class="form-label">Teléfono personal</label>
+                  <input type="tel" id="telefonoPersonal" name="telefonoPersonal" class="form-control">
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="telefonoTrabajo" class="form-label">Teléfono trabajo</label>
+                  <input type="tel" id="telefonoTrabajo" name="telefonoTrabajo" class="form-control">
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="correoElectronico" class="form-label">Correo electrónico</label>
+                  <input type="email" id="correoElectronico" name="correoElectronico" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <h4>1.3 Datos Sociolaborales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="nivelEducacional" class="form-label">Nivel educacional</label>
+                  <select id="nivelEducacional" name="nivelEducacional" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Básica">Básica</option>
+                    <option value="Media">Media</option>
+                    <option value="Técnica">Técnica</option>
+                    <option value="Universitaria">Universitaria</option>
+                    <option value="Postgrado">Postgrado</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="ocupacionActual" class="form-label">Ocupación actual</label>
+                  <input type="text" id="ocupacionActual" name="ocupacionActual" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="tipoTrabajo" class="form-label">Tipo de trabajo</label>
+                  <select id="tipoTrabajo" name="tipoTrabajo" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Físico">Físico</option>
+                    <option value="Sedentario">Sedentario</option>
+                    <option value="Mixto">Mixto</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="horarioLaboral" class="form-label">Horario laboral</label>
+                  <input type="text" id="horarioLaboral" name="horarioLaboral" class="form-control">
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="nivelActividadFisica" class="form-label">Nivel de actividad física</label>
+                  <select id="nivelActividadFisica" name="nivelActividadFisica" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Sedentario">Sedentario</option>
+                    <option value="Ligero">Ligero</option>
+                    <option value="Moderado">Moderado</option>
+                    <option value="Intenso">Intenso</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <h4>1.4 Información de Emergencia</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="contactoEmergencia" class="form-label">Contacto de emergencia</label>
+                  <input type="text" id="contactoEmergencia" name="contactoEmergencia" class="form-control">
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="parentesco" class="form-label">Parentesco</label>
+                  <input type="text" id="parentesco" name="parentesco" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="telefonosContacto" class="form-label">Teléfonos de contacto</label>
+                  <input type="text" id="telefonosContacto" name="telefonosContacto" class="form-control">
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="sistemaSalud" class="form-label">Sistema de salud/seguro médico</label>
+                  <input type="text" id="sistemaSalud" name="sistemaSalud" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row mt-4">
+              <div class="form-col form-col-md-12 text-right">
+                <button type="button" class="btn btn-primary next-tab" data-next="motivo-consulta">Siguiente <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 2. Motivo de Consulta -->
+          <div class="tab-content" id="motivo-consulta">
+            <h3>2. Motivo de Consulta y Antecedentes</h3>
+            
+            <h4>2.1 Derivación</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="profesionalDeriva" class="form-label">Profesional que deriva</label>
+                  <input type="text" id="profesionalDeriva" name="profesionalDeriva" class="form-control">
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="especialidad" class="form-label">Especialidad</label>
+                  <select id="especialidad" name="especialidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Medicina General">Medicina General</option>
+                    <option value="Traumatología">Traumatología</option>
+                    <option value="Neurología">Neurología</option>
+                    <option value="Reumatología">Reumatología</option>
+                    <option value="Medicina Deportiva">Medicina Deportiva</option>
+                    <option value="Geriatría">Geriatría</option>
+                    <option value="Fisiatría">Fisiatría</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="diagnosticoInicial" class="form-label">Diagnóstico médico inicial</label>
+                  <input type="text" id="diagnosticoInicial" name="diagnosticoInicial" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="motivoConsulta" class="form-label">Motivo de consulta específico</label>
+                  <textarea id="motivoConsulta" name="motivoConsulta" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>2.2 Historia de la Condición Actual</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="inicioSintomas" class="form-label">Inicio de los síntomas</label>
+                  <input type="date" id="inicioSintomas" name="inicioSintomas" class="form-control">
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="mecanismoLesion" class="form-label">Mecanismo de lesión/aparición</label>
+                  <select id="mecanismoLesion" name="mecanismoLesion" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Traumático">Traumático</option>
+                    <option value="Gradual">Gradual</option>
+                    <option value="Postural">Postural</option>
+                    <option value="Post-quirúrgico">Post-quirúrgico</option>
+                    <option value="Desconocido">Desconocido</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="evolucionSintomas" class="form-label">Evolución temporal de los síntomas</label>
+                  <textarea id="evolucionSintomas" name="evolucionSintomas" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="tratamientosPrevios" class="form-label">Tratamientos previos</label>
+                  <textarea id="tratamientosPrevios" name="tratamientosPrevios" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>Acrónimo ALICIA</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="alicia_antecedentes" class="form-label">Antecedentes</label>
+                  <textarea id="alicia_antecedentes" name="alicia_antecedentes" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="alicia_localizacion" class="form-label">Localización</label>
+                  <textarea id="alicia_localizacion" name="alicia_localizacion" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="alicia_intensidad" class="form-label">Intensidad (EVA 0-10)</label>
+                  <input type="range" id="alicia_intensidad" name="alicia_intensidad" class="form-range" min="0" max="10" step="1" value="5" oninput="document.getElementById('alicia_intensidad_value').textContent = this.value;">
+                  <div class="d-flex justify-content-between">
+                    <span>0</span>
+                    <span id="alicia_intensidad_value">5</span>
+                    <span>10</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="alicia_caracteristicas" class="form-label">Características</label>
+                  <select id="alicia_caracteristicas" name="alicia_caracteristicas" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Punzante">Punzante</option>
+                    <option value="Quemante">Quemante</option>
+                    <option value="Opresivo">Opresivo</option>
+                    <option value="Pulsátil">Pulsátil</option>
+                    <option value="Eléctrico">Eléctrico</option>
+                    <option value="Sordo">Sordo</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="alicia_irradiacion" class="form-label">Irradiación</label>
+                  <input type="text" id="alicia_irradiacion" name="alicia_irradiacion" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="alicia_atenuantes" class="form-label">Atenuantes</label>
+                  <textarea id="alicia_atenuantes" name="alicia_atenuantes" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="alicia_agravantes" class="form-label">Agravantes</label>
+                  <textarea id="alicia_agravantes" name="alicia_agravantes" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>2.3 Expectativas del Paciente</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="objetivosCorto" class="form-label">Objetivos a corto plazo</label>
+                  <textarea id="objetivosCorto" name="objetivosCorto" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="objetivosMediano" class="form-label">Objetivos a mediano plazo</label>
+                  <textarea id="objetivosMediano" name="objetivosMediano" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="objetivosLargo" class="form-label">Objetivos a largo plazo</label>
+                  <textarea id="objetivosLargo" name="objetivosLargo" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="expectativasRecuperacion" class="form-label">Expectativas de recuperación</label>
+                  <select id="expectativasRecuperacion" name="expectativasRecuperacion" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Recuperación completa">Recuperación completa</option>
+                    <option value="Mejora significativa">Mejora significativa</option>
+                    <option value="Mejora parcial">Mejora parcial</option>
+                    <option value="Control de síntomas">Control de síntomas</option>
+                    <option value="Sin expectativas claras">Sin expectativas claras</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="nivelCompromiso" class="form-label">Nivel de compromiso con el tratamiento</label>
+                  <select id="nivelCompromiso" name="nivelCompromiso" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Alto">Alto</option>
+                    <option value="Medio">Medio</option>
+                    <option value="Bajo">Bajo</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row mt-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-secondary prev-tab" data-prev="datos-personales"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button type="button" class="btn btn-primary next-tab" data-next="historia-medica">Siguiente <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 3. Historia Médica -->
+          <div class="tab-content" id="historia-medica">
+            <h3>3. Historia Médica Detallada</h3>
+            
+            <h4>3.1 Antecedentes Personales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="enfermedadesCronicas" class="form-label">Enfermedades crónicas</label>
+                  <textarea id="enfermedadesCronicas" name="enfermedadesCronicas" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="enfermedadesAgudas" class="form-label">Enfermedades agudas previas</label>
+                  <textarea id="enfermedadesAgudas" name="enfermedadesAgudas" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="hospitalizaciones" class="form-label">Hospitalizaciones</label>
+                  <textarea id="hospitalizaciones" name="hospitalizaciones" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="cirugiasPrevias" class="form-label">Cirugías previas</label>
+                  <textarea id="cirugiasPrevias" name="cirugiasPrevias" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="antecedentesOrtopedicos" class="form-label">Antecedentes ortopédicos/musculoesqueléticos previos</label>
+                  <textarea id="antecedentesOrtopedicos" name="antecedentesOrtopedicos" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="traumatismosPrevios" class="form-label">Traumatismos previos</label>
+                  <textarea id="traumatismosPrevios" name="traumatismosPrevios" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>3.2 Antecedentes Familiares</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="enfermedadesHereditarias" class="form-label">Enfermedades hereditarias</label>
+                  <textarea id="enfermedadesHereditarias" name="enfermedadesHereditarias" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="condicionesGeneticas" class="form-label">Condiciones genéticas relevantes</label>
+                  <textarea id="condicionesGeneticas" name="condicionesGeneticas" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>3.3 Medicación Actual</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="medicamentosActuales" class="form-label">Medicamentos actuales</label>
+                  <textarea id="medicamentosActuales" name="medicamentosActuales" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>3.4 Alergias e Hipersensibilidades</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="alergiasMedicamentos" class="form-label">Medicamentos</label>
+                  <textarea id="alergiasMedicamentos" name="alergiasMedicamentos" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="alergiasAlimentos" class="form-label">Alimentos</label>
+                  <textarea id="alergiasAlimentos" name="alergiasAlimentos" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="alergiasAmbientales" class="form-label">Ambientales</label>
+                  <textarea id="alergiasAmbientales" name="alergiasAmbientales" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row mt-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-secondary prev-tab" data-prev="motivo-consulta"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button type="button" class="btn btn-primary next-tab" data-next="habitos">Siguiente <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 4. Hábitos -->
+          <div class="tab-content" id="habitos">
+            <h3>4. Evaluación de Hábitos y Estilo de Vida</h3>
+            
+            <h4>4.1 Hábitos Nutricionales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="tipoDieta" class="form-label">Tipo de dieta</label>
+                  <input type="text" id="tipoDieta" name="tipoDieta" class="form-control">
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="consumoAgua" class="form-label">Consumo de agua</label>
+                  <input type="text" id="consumoAgua" name="consumoAgua" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <h4>4.2 Hábitos Tóxicos</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="consumoTabaco" class="form-label">Consumo de tabaco</label>
+                  <textarea id="consumoTabaco" name="consumoTabaco" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="consumoAlcohol" class="form-label">Consumo de alcohol</label>
+                  <textarea id="consumoAlcohol" name="consumoAlcohol" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="consumoDrogas" class="form-label">Consumo de drogas</label>
+                  <textarea id="consumoDrogas" name="consumoDrogas" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>4.3 Actividad Física y Deportiva</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="practicaDeportes" class="form-label">Práctica de deportes</label>
+                  <textarea id="practicaDeportes" name="practicaDeportes" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="frecuenciaDeporte" class="form-label">Frecuencia</label>
+                  <select id="frecuenciaDeporte" name="frecuenciaDeporte" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Diaria">Diaria</option>
+                    <option value="4-6 veces/semana">4-6 veces/semana</option>
+                    <option value="2-3 veces/semana">2-3 veces/semana</option>
+                    <option value="1 vez/semana">1 vez/semana</option>
+                    <option value="Ocasional">Ocasional</option>
+                    <option value="Nunca">Nunca</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <h4>4.4 Patrón de Sueño</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="horasSueno" class="form-label">Horas de sueño</label>
+                  <input type="number" id="horasSueno" name="horasSueno" class="form-control" min="0" max="24">
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="calidadSueno" class="form-label">Calidad del sueño</label>
+                  <select id="calidadSueno" name="calidadSueno" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Buena">Buena</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Mala">Mala</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="problemasSueno" class="form-label">Problemas de sueño</label>
+                  <textarea id="problemasSueno" name="problemasSueno" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row mt-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-secondary prev-tab" data-prev="historia-medica"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button type="button" class="btn btn-primary next-tab" data-next="evaluacion-fisica">Siguiente <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 5. Evaluación Física -->
+          <div class="tab-content" id="evaluacion-fisica">
+            <h3>5. Evaluación Física Completa</h3>
+            
+            <h4>5.1 Signos Vitales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label for="frecuenciaCardiaca" class="form-label">Frecuencia cardíaca (lpm)</label>
+                  <input type="number" id="frecuenciaCardiaca" name="frecuenciaCardiaca" class="form-control" min="0" max="250">
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label for="frecuenciaRespiratoria" class="form-label">Frecuencia respiratoria (rpm)</label>
+                  <input type="number" id="frecuenciaRespiratoria" name="frecuenciaRespiratoria" class="form-control" min="0" max="100">
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label for="presionArterial" class="form-label">Presión arterial (mmHg)</label>
+                  <input type="text" id="presionArterial" name="presionArterial" class="form-control" placeholder="Ej: 120/80">
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label for="saturacionOxigeno" class="form-label">Saturación de oxígeno (%)</label>
+                  <input type="number" id="saturacionOxigeno" name="saturacionOxigeno" class="form-control" min="0" max="100">
+                </div>
+              </div>
+            </div>
+            
+            <h4>5.2 Antropometría</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="peso" class="form-label">Peso (kg)</label>
+                  <input type="number" id="peso" name="peso" class="form-control" min="0" max="500" step="0.1">
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="talla" class="form-label">Talla (cm)</label>
+                  <input type="number" id="talla" name="talla" class="form-control" min="0" max="300">
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label for="imc" class="form-label">IMC (kg/m²)</label>
+                  <input type="number" id="imc" name="imc" class="form-control" min="0" max="100" step="0.01" readonly>
+                </div>
+              </div>
+            </div>
+            
+            <h4>5.3 Evaluación Postural</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="alineacionCorporal" class="form-label">Alineación corporal</label>
+                  <textarea id="alineacionCorporal" name="alineacionCorporal" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="alteracionesPosturales" class="form-label">Alteraciones posturales</label>
+                  <textarea id="alteracionesPosturales" name="alteracionesPosturales" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>5.4 Evaluación Física</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="inspeccion" class="form-label">Inspección</label>
+                  <textarea id="inspeccion" name="inspeccion" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="palpacion" class="form-label">Palpación</label>
+                  <textarea id="palpacion" name="palpacion" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="rangoMovimiento" class="form-label">Rango de movimiento articular</label>
+                  <textarea id="rangoMovimiento" name="rangoMovimiento" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="fuerzaMuscular" class="form-label">Fuerza muscular</label>
+                  <textarea id="fuerzaMuscular" name="fuerzaMuscular" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row mt-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-secondary prev-tab" data-prev="habitos"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button type="button" class="btn btn-primary next-tab" data-next="escalas">Siguiente <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 6. Escalas -->
+          <div class="tab-content" id="escalas">
+            <h3>6. Escalas y Cuestionarios Estandarizados</h3>
+            
+            <h4>6.1 Escalas de Dolor</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="escalaEVA" class="form-label">EVA (Escala Visual Analógica)</label>
+                  <input type="range" id="escalaEVA" name="escalaEVA" class="form-range" min="0" max="10" step="1" value="0" oninput="document.getElementById('escalaEVA_value').textContent = this.value;">
+                  <div class="d-flex justify-content-between">
+                    <span>0 (Sin dolor)</span>
+                    <span id="escalaEVA_value">0</span>
+                    <span>10 (Máximo dolor)</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="escalaNumerica" class="form-label">Escala Numérica</label>
+                  <select id="escalaNumerica" name="escalaNumerica" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="0">0 - Sin dolor</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10 - Máximo dolor</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <h4>6.2 Escalas Funcionales</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="escalaPSFS" class="form-label">PSFS (Patient-Specific Functional Scale)</label>
+                  <textarea id="escalaPSFS" name="escalaPSFS" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="escalaGROC" class="form-label">GROC (Global Rating of Change)</label>
+                  <textarea id="escalaGROC" name="escalaGROC" class="form-control" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>6.3 Cuestionarios Específicos</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="cuestionariosEspecificos" class="form-label">Cuestionarios aplicados</label>
+                  <textarea id="cuestionariosEspecificos" name="cuestionariosEspecificos" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row mt-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-secondary prev-tab" data-prev="evaluacion-fisica"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button type="button" class="btn btn-primary next-tab" data-next="banderas">Siguiente <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 7. Banderas -->
+          <div class="tab-content" id="banderas">
+            <h3>7. Sistema de Banderas de Alerta</h3>
+            
+            <h4>7.1 Banderas Rojas (Riesgo Físico)</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <textarea id="banderasRojas" name="banderasRojas" class="form-control" rows="3" placeholder="Describir si existen banderas rojas: dolor severo, síntomas neurológicos, antecedentes de cáncer, etc."></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>7.2 Banderas Amarillas (Factores Psicosociales)</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <textarea id="banderasAmarillas" name="banderasAmarillas" class="form-control" rows="3" placeholder="Describir si existen banderas amarillas: miedo-evitación, catastrofización, creencias erróneas sobre el dolor, etc."></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>7.3 Banderas Azules (Factores Laborales)</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <textarea id="banderasAzules" name="banderasAzules" class="form-control" rows="3" placeholder="Describir si existen banderas azules: trabajo físicamente demandante, baja satisfacción laboral, conflictos laborales, etc."></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <h4>7.4 Banderas Negras (Factores Contextuales)</h4>
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <textarea id="banderasNegras" name="banderasNegras" class="form-control" rows="3" placeholder="Describir si existen banderas negras: compensaciones, litigios, problemas de acceso a servicios de salud, etc."></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row mt-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-secondary prev-tab" data-prev="escalas"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button type="button" class="btn btn-primary next-tab" data-next="documentos">Siguiente <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 8. Documentos -->
+          <div class="tab-content" id="documentos">
+            <h3>8. Documentación Complementaria</h3>
+            <p>Esta sección será habilitada posteriormente cuando el paciente haya sido guardado.</p>
+            
+            <div class="form-row mt-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-secondary prev-tab" data-prev="banderas"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button type="button" class="btn btn-primary next-tab" data-next="plan">Siguiente <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 9. Plan de Tratamiento -->
+          <div class="tab-content" id="plan">
+            <h3>9. Plan de Tratamiento Inicial</h3>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="objetivosTerapeuticos" class="form-label">Objetivos terapéuticos</label>
+                  <textarea id="objetivosTerapeuticos" name="objetivosTerapeuticos" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="intervencionesProuestas" class="form-label">Intervenciones propuestas</label>
+                  <textarea id="intervencionesProuestas" name="intervencionesProuestas" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="frecuenciaTratamiento" class="form-label">Frecuencia de tratamiento</label>
+                  <input type="text" id="frecuenciaTratamiento" name="frecuenciaTratamiento" class="form-control">
+                </div>
+              </div>
+              <div class="form-col form-col-md-6">
+                <div class="form-group">
+                  <label for="pronosticoInicial" class="form-label">Pronóstico inicial</label>
+                  <input type="text" id="pronosticoInicial" name="pronosticoInicial" class="form-control">
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row mt-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-secondary prev-tab" data-prev="documentos"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button type="button" id="save-patient-btn" class="btn btn-success"><i class="fas fa-save"></i> Guardar Paciente</button>
+              </div>
+            </div>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  
+  <!-- Custom Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/pacientes.js"></script>
+  <script>
+    // Obtener ID del paciente de la URL (para edición)
+    const urlParams = new URLSearchParams(window.location.search);
+    const patientId = urlParams.get('id');
+    let isEditMode = !!patientId;
+    
+    // Inicializar página
+    document.addEventListener('DOMContentLoaded', function() {
+      // Verificar autenticación
+      verificarAutenticacion().then(user => {
+        if (!user) {
+          window.location.href = 'index.html';
+        } else if (isEditMode) {
+          // Cargar datos del paciente para edición
+          cargarPacienteParaEditar(patientId);
+        }
+      });
+      
+      // Event listeners para navegación de pestañas
+      document.querySelectorAll('.tab-link').forEach(tab => {
+        tab.addEventListener('click', function() {
+          const tabId = this.getAttribute('data-tab');
+          activarTab(tabId);
+        });
+      });
+      
+      // Event listeners para botones de navegación
+      document.querySelectorAll('.next-tab').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const nextTabId = this.getAttribute('data-next');
+          activarTab(nextTabId);
+        });
+      });
+      
+      document.querySelectorAll('.prev-tab').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const prevTabId = this.getAttribute('data-prev');
+          activarTab(prevTabId);
+        });
+      });
+      
+      // Event listener para calcular IMC
+      document.getElementById('peso').addEventListener('input', calcularIMC);
+      document.getElementById('talla').addEventListener('input', calcularIMC);
+      
+      // Event listener para guardar paciente
+      document.getElementById('save-patient-btn').addEventListener('click', guardarPacienteForm);
+      
+      // Event listener para cerrar sesión
+      document.getElementById('logout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        cerrarSesion().then(() => {
+          window.location.href = 'index.html';
+        });
+      });
+    });
+    
+    // Función para activar una pestaña
+    function activarTab(tabId) {
+      // Ocultar todas las pestañas
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Desactivar todos los enlaces de pestañas
+      document.querySelectorAll('.tab-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      // Activar la pestaña seleccionada
+      document.getElementById(tabId).classList.add('active');
+      
+      // Activar el enlace seleccionado
+      document.querySelector(`.tab-link[data-tab="${tabId}"]`).classList.add('active');
+      
+      // Scroll al inicio
+      window.scrollTo(0, 0);
+    }
+    
+    // Función para calcular IMC
+    function calcularIMC() {
+      const peso = parseFloat(document.getElementById('peso').value);
+      const talla = parseFloat(document.getElementById('talla').value);
+      
+      if (peso && talla) {
+        const tallaMt = talla / 100; // Convertir cm a m
+        const imc = peso / (tallaMt * tallaMt);
+        document.getElementById('imc').value = imc.toFixed(2);
+      } else {
+        document.getElementById('imc').value = '';
+      }
+    }
+    
+    // Función para cargar datos del paciente para edición
+    function cargarPacienteParaEditar(patientId) {
+      // Mostrar mensaje de carga
+      document.getElementById('loading-form').style.display = 'block';
+      document.getElementById('patient-form').style.display = 'none';
+      
+      // Actualizar título
+      document.getElementById('page-title').textContent = 'Editar Paciente';
+      
+      // Cargar datos del paciente
+      cargarPaciente(patientId)
+        .then(patient => {
+          // Llenar formulario con datos del paciente
+          document.getElementById('patient-id').value = patientId;
+          
+          // Llenar el formulario con los datos del paciente
+          llenarFormularioPaciente(patient, 'patient-form');
+          
+          // Mostrar formulario
+          document.getElementById('loading-form').style.display = 'none';
+          document.getElementById('patient-form').style.display = 'block';
+        })
+        .catch(error => {
+          console.error('Error al cargar paciente:', error);
+          alert('Error al cargar datos del paciente. Por favor, intenta de nuevo.');
+          window.location.href = 'listado-pacientes.html';
+        });
+    }
+    
+    // Función para guardar paciente
+    function guardarPacienteForm() {
+      // Validar campos obligatorios
+      const nombreCompleto = document.getElementById('nombreCompleto').value.trim();
+      
+      if (!nombreCompleto) {
+        alert('Por favor, ingresa el nombre del paciente');
+        activarTab('datos-personales');
+        document.getElementById('nombreCompleto').focus();
+        return;
+      }
+      
+      // Recopilar datos del formulario
+      const formData = recopilarDatosFormulario('patient-form');
+      
+      // Preparar datos para guardar
+      const patientData = prepararDatosPaciente(formData);
+      
+      // Mostrar mensaje de carga
+      document.getElementById('save-patient-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+      document.getElementById('save-patient-btn').disabled = true;
+      
+      // Guardar o actualizar
+      if (isEditMode) {
+        actualizarPaciente(patientId, patientData)
+          .then(() => {
+            alert('Paciente actualizado correctamente');
+            window.location.href = `ver-paciente.html?id=${patientId}`;
+          })
+          .catch(error => {
+            console.error('Error al actualizar paciente:', error);
+            alert('Error al actualizar paciente. Por favor, intenta de nuevo.');
+            document.getElementById('save-patient-btn').innerHTML = '<i class="fas fa-save"></i> Guardar Paciente';
+            document.getElementById('save-patient-btn').disabled = false;
+          });
+      } else {
+        guardarPaciente(patientData)
+          .then(newPatientId => {
+            alert('Paciente guardado correctamente');
+            window.location.href = `ver-paciente.html?id=${newPatientId}`;
+          })
+          .catch(error => {
+            console.error('Error al guardar paciente:', error);
+            alert('Error al guardar paciente. Por favor, intenta de nuevo.');
+            document.getElementById('save-patient-btn').innerHTML = '<i class="fas fa-save"></i> Guardar Paciente';
+            document.getElementById('save-patient-btn').disabled = false;
+          });
+      }
+    }
+  </script>
+</body>
+</html>
