@@ -218,14 +218,104 @@ function calcularBPI() {
   interferenciaInterpretacionEl.textContent = interferenciaInterpretacion;
   interferenciaInterpretacionEl.className = 'resultado-interpretacion ' + interferenciaColor;
   
-  // Actualizar el badge con el estado
-  const bpiBadge = document.getElementById('bpi-badge');
+  // Actualizar interpretación clínica
+  const interpretacionClinicaEl = document.getElementById('bpi-interpretacion-clinica');
+  const interpretacionContainer = document.querySelector('#bpi-resultado .interpretacion-clinica-container');
+  const recomendacionesEl = document.getElementById('bpi-recomendaciones');
+  const recomendacionesContainer = document.querySelector('#bpi-resultado .recomendaciones-container');
   
-  // Verificar si se han completado todos los campos
+  // Verificar si se han completado suficientes campos para una interpretación válida
   const intensidadCompletada = dolorActual || dolorPromedio || dolorPeor || dolorMenor;
   const interferenciaCompletada = interferencia_actividad || interferencia_animo || interferencia_caminar || 
                                 interferencia_trabajo || interferencia_relaciones || interferencia_sueno || 
                                 interferencia_vida;
+  
+  if (intensidadCompletada && interferenciaCompletada) {
+    let nivelGravedad = '';
+    let claseBorde = '';
+    
+    // Determinar el nivel de gravedad general
+    if (intensidadRedondeada >= 7 || interferenciaRedondeada >= 7) {
+      nivelGravedad = 'severo';
+      claseBorde = 'nivel-severo';
+    } else if (intensidadRedondeada >= 4 || interferenciaRedondeada >= 4) {
+      nivelGravedad = 'moderado';
+      claseBorde = 'nivel-moderado';
+    } else {
+      nivelGravedad = 'leve';
+      claseBorde = 'nivel-leve';
+    }
+    
+    // Actualizar interpretación clínica
+    interpretacionClinicaEl.innerHTML = `
+      <p>El paciente presenta un dolor de intensidad <strong>${intensidadInterpretacion.toLowerCase()}</strong> 
+      (${intensidadRedondeada.toFixed(1)}/10) con una interferencia <strong>${interferenciaInterpretacion.toLowerCase()}</strong> 
+      (${interferenciaRedondeada.toFixed(1)}/10) en sus actividades diarias.</p>
+      <p>Este patrón sugiere un impacto <strong>${nivelGravedad}</strong> del dolor en la calidad de vida 
+      del paciente, afectando principalmente ${getAreasAfectadas([
+        { area: 'actividad general', valor: interferencia_actividad },
+        { area: 'estado de ánimo', valor: interferencia_animo },
+        { area: 'capacidad para caminar', valor: interferencia_caminar },
+        { area: 'trabajo habitual', valor: interferencia_trabajo },
+        { area: 'relaciones sociales', valor: interferencia_relaciones },
+        { area: 'sueño', valor: interferencia_sueno },
+        { area: 'disfrute de la vida', valor: interferencia_vida }
+      ])}.
+      </p>
+    `;
+    
+    // Añadir recomendaciones basadas en la gravedad
+    if (nivelGravedad === 'severo') {
+      recomendacionesEl.innerHTML = `
+        <p>Considerar un enfoque multidisciplinar que incluya:</p>
+        <ul>
+          <li>Evaluación por especialista en dolor para posible ajuste farmacológico</li>
+          <li>Combinar terapia manual con modalidades analgésicas</li>
+          <li>Educación en neurociencia del dolor y estrategias de afrontamiento</li>
+          <li>Programa de ejercicios graduados con progresión cuidadosa</li>
+          <li>Valorar impacto psicológico y posible derivación a psicología</li>
+          <li>Seguimiento frecuente para ajustar intervenciones según respuesta</li>
+        </ul>
+      `;
+    } else if (nivelGravedad === 'moderado') {
+      recomendacionesEl.innerHTML = `
+        <p>Se recomienda:</p>
+        <ul>
+          <li>Combinar terapia manual y ejercicio terapéutico</li>
+          <li>Educación sobre manejo del dolor y pacing de actividades</li>
+          <li>Implementar estrategias de autorregulación (respiración, relajación)</li>
+          <li>Programa de ejercicios para mejorar la funcionalidad</li>
+          <li>Revisar impacto en actividades diarias y plantear modificaciones</li>
+          <li>Seguimiento para evaluar evolución</li>
+        </ul>
+      `;
+    } else {
+      recomendacionesEl.innerHTML = `
+        <p>Se sugiere:</p>
+        <ul>
+          <li>Terapia manual enfocada en zonas específicas de dolor</li>
+          <li>Programa de ejercicios para mantener y mejorar funcionalidad</li>
+          <li>Educación sobre factores moduladores del dolor</li>
+          <li>Estrategias de autocuidado y manejo de síntomas</li>
+          <li>Fomentar retorno gradual a actividades normales</li>
+        </ul>
+      `;
+    }
+    
+    // Aplicar clases de estilo
+    interpretacionContainer.className = `interpretacion-clinica-container ${claseBorde}`;
+    recomendacionesContainer.className = `recomendaciones-container ${claseBorde}`;
+    
+  } else {
+    // Mensaje si no hay datos suficientes
+    interpretacionClinicaEl.textContent = "Complete ambas secciones del cuestionario para obtener una interpretación clínica detallada.";
+    recomendacionesEl.textContent = "Complete el cuestionario para recibir recomendaciones terapéuticas personalizadas.";
+    interpretacionContainer.className = 'interpretacion-clinica-container';
+    recomendacionesContainer.className = 'recomendaciones-container';
+  }
+  
+  // Actualizar el badge con el estado
+  const bpiBadge = document.getElementById('bpi-badge');
   
   if (intensidadCompletada && interferenciaCompletada) {
     if (intensidadRedondeada >= 7 || interferenciaRedondeada >= 7) {
@@ -244,6 +334,25 @@ function calcularBPI() {
   } else {
     bpiBadge.textContent = 'No completado';
     bpiBadge.className = 'resultado-badge';
+  }
+}
+
+// Función auxiliar para identificar las áreas más afectadas
+function getAreasAfectadas(areas) {
+  // Filtrar áreas con valor ≥ 5 (afectación moderada-alta)
+  const areasAfectadas = areas.filter(area => area.valor >= 5)
+                              .sort((a, b) => b.valor - a.valor) // Ordenar por valor descendente
+                              .map(area => area.area);
+  
+  if (areasAfectadas.length === 0) {
+    return "ningún área en particular";
+  } else if (areasAfectadas.length === 1) {
+    return `principalmente ${areasAfectadas[0]}`;
+  } else if (areasAfectadas.length === 2) {
+    return `principalmente ${areasAfectadas[0]} y ${areasAfectadas[1]}`;
+  } else {
+    const ultimaArea = areasAfectadas.pop();
+    return `principalmente ${areasAfectadas.join(', ')} y ${ultimaArea}`;
   }
 }
 
@@ -312,6 +421,107 @@ function calcularDN4() {
     interpretacionEl.className = 'resultado-interpretacion';
   }
   
+  // Actualizar interpretación clínica y recomendaciones
+  const interpretacionClinicaEl = document.getElementById('dn4-interpretacion-clinica');
+  const interpretacionContainer = document.querySelector('#dn4-resultado .interpretacion-clinica-container');
+  const recomendacionesEl = document.getElementById('dn4-recomendaciones');
+  const recomendacionesContainer = document.querySelector('#dn4-resultado .recomendaciones-container');
+  
+  if (estaCompleto) {
+    let claseBorde = '';
+    let esNeuropatico = puntuacionTotal >= 4;
+    
+    // Determinar el tipo de borde según resultado
+    if (esNeuropatico) {
+      claseBorde = 'nivel-alerta';
+    } else {
+      claseBorde = 'nivel-leve';
+    }
+    
+    // Obtener síntomas positivos
+    const sintomasPositivos = [];
+    if (quemazon === 1) sintomasPositivos.push("sensación de quemazón");
+    if (frio === 1) sintomasPositivos.push("sensación de frío doloroso");
+    if (descargas === 1) sintomasPositivos.push("descargas eléctricas");
+    if (hormigueo === 1) sintomasPositivos.push("hormigueo");
+    if (alfileres === 1) sintomasPositivos.push("sensación de alfileres y agujas");
+    if (entumecimiento === 1) sintomasPositivos.push("entumecimiento");
+    if (picazon === 1) sintomasPositivos.push("picazón");
+    if (hipoestesia === 1) sintomasPositivos.push("hipoestesia al tacto");
+    if (hipoestesiaPinchazo === 1) sintomasPositivos.push("hipoestesia al pinchazo");
+    if (cepillado === 1) sintomasPositivos.push("dolor al cepillado");
+    
+    // Formato adecuado para el texto de síntomas
+    let textoSintomas = "";
+    if (sintomasPositivos.length === 0) {
+      textoSintomas = "no presenta síntomas característicos de dolor neuropático";
+    } else if (sintomasPositivos.length === 1) {
+      textoSintomas = `presenta ${sintomasPositivos[0]}`;
+    } else if (sintomasPositivos.length === 2) {
+      textoSintomas = `presenta ${sintomasPositivos[0]} y ${sintomasPositivos[1]}`;
+    } else {
+      const ultimoSintoma = sintomasPositivos.pop();
+      textoSintomas = `presenta ${sintomasPositivos.join(', ')} y ${ultimoSintoma}`;
+    }
+    
+    // Actualizar interpretación clínica
+    if (esNeuropatico) {
+      interpretacionClinicaEl.innerHTML = `
+        <p>Con una puntuación de <strong>${puntuacionTotal}/10</strong>, el DN4 <strong>sugiere la presencia de un componente neuropático</strong> 
+        en el dolor del paciente.</p>
+        <p>El paciente ${textoSintomas}, que son características frecuentes del dolor neuropático.</p>
+        <p>Este resultado indica que el dolor probablemente tenga un componente de sensibilización central o periférica, 
+        lo que puede influir en la elección del tratamiento y en el pronóstico.</p>
+      `;
+    } else {
+      interpretacionClinicaEl.innerHTML = `
+        <p>Con una puntuación de <strong>${puntuacionTotal}/10</strong>, el DN4 <strong>no sugiere la presencia de un componente neuropático</strong> 
+        en el dolor del paciente.</p>
+        <p>El paciente ${textoSintomas}.</p>
+        <p>Este resultado indica que el dolor probablemente sea predominantemente nociceptivo o de otro origen no neuropático.</p>
+      `;
+    }
+    
+    // Actualizar recomendaciones terapéuticas
+    if (esNeuropatico) {
+      recomendacionesEl.innerHTML = `
+        <p>Para el manejo del dolor con componente neuropático, se recomienda:</p>
+        <ul>
+          <li>Considerar el uso de fármacos específicos para dolor neuropático (gabapentinoides, antidepresivos tricíclicos, IRSN) en coordinación con el médico tratante</li>
+          <li>Técnicas de neuromodulación: TENS, estimulación eléctrica</li>
+          <li>Educación en neurociencia del dolor enfocada en sensibilización central/periférica</li>
+          <li>Terapia manual suave, no provocadora de dolor</li>
+          <li>Ejercicio terapéutico graduado con énfasis en la exposición gradual</li>
+          <li>Técnicas de desensibilización para áreas hipersensibles</li>
+          <li>Valorar posible derivación a unidad especializada en dolor</li>
+        </ul>
+      `;
+    } else {
+      recomendacionesEl.innerHTML = `
+        <p>Para el manejo del dolor predominantemente nociceptivo, se recomienda:</p>
+        <ul>
+          <li>Terapia manual dirigida a estructuras específicas</li>
+          <li>Ejercicio terapéutico para mejorar fuerza, flexibilidad y función</li>
+          <li>Educación sobre manejo del dolor y autocuidado</li>
+          <li>Modalidades físicas según corresponda (termoterapia, crioterapia)</li>
+          <li>Técnicas de control motor y reeducación postural</li>
+          <li>Valorar factores biomecánicos y ergonómicos</li>
+        </ul>
+      `;
+    }
+    
+    // Aplicar clases de estilo
+    interpretacionContainer.className = `interpretacion-clinica-container ${claseBorde}`;
+    recomendacionesContainer.className = `recomendaciones-container ${claseBorde}`;
+    
+  } else {
+    // Mensaje si no hay datos suficientes
+    interpretacionClinicaEl.textContent = "Complete todas las preguntas del cuestionario para obtener una interpretación clínica detallada.";
+    recomendacionesEl.textContent = "Complete el cuestionario para recibir recomendaciones terapéuticas personalizadas.";
+    interpretacionContainer.className = 'interpretacion-clinica-container';
+    recomendacionesContainer.className = 'recomendaciones-container';
+  }
+  
   // Actualizar el badge con el estado
   const dn4Badge = document.getElementById('dn4-badge');
   
@@ -331,22 +541,4 @@ function calcularDN4() {
     dn4Badge.className = 'resultado-badge';
   }
 }
-
-// Función auxiliar para obtener el valor de un grupo de radio buttons
-function obtenerValorRadio(nombre) {
-  const radioButtons = document.getElementsByName(nombre);
-  for (const radioButton of radioButtons) {
-    if (radioButton.checked) {
-      return parseInt(radioButton.value);
-    }
-  }
-  return -1; // Retorna -1 si ninguno está seleccionado
-}
-
-// Inicializar la funcionalidad al cargar la página
-document.addEventListener('DOMContentLoaded', function() {
-  // Inicializar los valores actuales
-  if (document.getElementById('sane_puntuacion')) {
-    calcularSANE();
-  }
 });
