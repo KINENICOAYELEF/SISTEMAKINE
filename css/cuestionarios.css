@@ -1,0 +1,207 @@
+/* Estilos para los cuestionarios clínicos */
+
+/* Contenedor principal de cuestionarios */
+.cuestionarios-acordeon {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+/* Cabecera de cada cuestionario */
+.cuestionario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cuestionario-header:hover {
+  background-color: #e9ecef;
+}
+
+.cuestionario-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+}
+
+.cuestionario-header h4 i {
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+
+.cuestionario-header.active h4 i {
+  transform: rotate(45deg);
+}
+
+/* Contenido de cada cuestionario */
+.cuestionario-content {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  background-color: #fff;
+}
+
+/* Badge de resultado */
+.resultado-badge {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 20px;
+  background-color: #e9ecef;
+  color: var(--color-text-dark);
+}
+
+.resultado-badge.completado {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.resultado-badge.incompleto {
+  background-color: var(--color-warning);
+  color: var(--color-text-dark);
+}
+
+/* Contenedor de resultado */
+.resultado-container {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background-color: #f8f9fa;
+  border-left: 5px solid #ced4da;
+}
+
+.resultado-container.nivel-bajo {
+  border-left-color: var(--color-danger);
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.resultado-container.nivel-medio {
+  border-left-color: var(--color-warning);
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.resultado-container.nivel-alto {
+  border-left-color: var(--color-success);
+  background-color: rgba(40, 167, 69, 0.1);
+}
+
+.resultado-container.nivel-neutro {
+  border-left-color: var(--color-info);
+  background-color: rgba(23, 162, 184, 0.1);
+}
+
+.resultado-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.resultado-valor {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.resultado-interpretacion {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* Escala GROC */
+.groc-scale-container {
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.groc-scale {
+  display: flex;
+  width: max-content;
+  margin: 1rem 0;
+}
+
+.groc-scale input[type="radio"] {
+  display: none;
+}
+
+.groc-scale label {
+  display: block;
+  width: 60px;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  margin: 0 -1px 0 0;
+  transition: background-color 0.2s ease;
+}
+
+.groc-scale label:first-of-type {
+  border-radius: 4px 0 0 4px;
+}
+
+.groc-scale label:last-of-type {
+  border-radius: 0 4px 4px 0;
+}
+
+.groc-scale input[type="radio"]:checked + label {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* Estilos para valores negativos */
+.groc-scale input[value="-7"]:checked + label,
+.groc-scale input[value="-6"]:checked + label,
+.groc-scale input[value="-5"]:checked + label {
+  background-color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.groc-scale input[value="-4"]:checked + label,
+.groc-scale input[value="-3"]:checked + label,
+.groc-scale input[value="-2"]:checked + label {
+  background-color: #e67e22;
+  border-color: #e67e22;
+}
+
+.groc-scale input[value="-1"]:checked + label,
+.groc-scale input[value="0"]:checked + label,
+.groc-scale input[value="1"]:checked + label,
+.groc-scale input[value="2"]:checked + label {
+  background-color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+/* Estilos para valores positivos */
+.groc-scale input[value="3"]:checked + label,
+.groc-scale input[value="4"]:checked + label {
+  background-color: #2ecc71;
+  border-color: #2ecc71;
+}
+
+.groc-scale input[value="5"]:checked + label,
+.groc-scale input[value="6"]:checked + label,
+.groc-scale input[value="7"]:checked + label {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .groc-scale label {
+    width: 50px;
+    font-size: 0.7rem;
+    padding: 8px 0;
+  }
+  
+  .resultado-valor {
+    font-size: 1.2rem;
+  }
+}
