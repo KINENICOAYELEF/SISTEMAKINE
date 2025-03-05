@@ -534,15 +534,24 @@
     </div>
   </div>
   <div class="form-col form-col-md-4">
-    <div class="form-group">
-      <label for="sinss_severidad_impacto" class="form-label">Impacto en las AVD</label>
-      <select id="sinss_severidad_impacto" name="sinss_severidad_impacto" class="form-select" multiple>
-        <option value="Mínimo">Mínimo</option>
-        <option value="Moderado">Moderado</option>
-        <option value="Máximo">Máximo</option>
-      </select>
+  <div class="form-group">
+    <label for="sinss_severidad_impacto" class="form-label">Impacto en las AVD</label>
+    <div class="checkbox-group">
+      <div class="form-check">
+        <input type="checkbox" id="sinss_severidad_impacto_minimo" name="sinss_severidad_impacto[]" value="Mínimo" class="form-check-input">
+        <label class="form-check-label" for="sinss_severidad_impacto_minimo">Mínimo</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" id="sinss_severidad_impacto_moderado" name="sinss_severidad_impacto[]" value="Moderado" class="form-check-input">
+        <label class="form-check-label" for="sinss_severidad_impacto_moderado">Moderado</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" id="sinss_severidad_impacto_maximo" name="sinss_severidad_impacto[]" value="Máximo" class="form-check-input">
+        <label class="form-check-label" for="sinss_severidad_impacto_maximo">Máximo</label>
+      </div>
     </div>
   </div>
+</div>
   <div class="form-col form-col-md-4">
     <div class="form-group">
       <label for="sinss_severidad_medicacion" class="form-label">Medicación</label>
@@ -658,19 +667,56 @@
   </div>
 </div>
 
-<div class="form-row mb-4">
-  <div class="form-col form-col-md-12">
-    <div class="form-group">
-      <label for="sinss_naturaleza_dolor" class="form-label">Tipo de dolor</label>
-      <select id="sinss_naturaleza_dolor" name="sinss_naturaleza_dolor" class="form-select" multiple>
-        <option value="Punzante">Punzante</option>
-        <option value="Quemante">Quemante</option>
-        <option value="Sordo">Sordo</option>
-        <option value="Lancinante">Lancinante</option>
-        <option value="Eléctrico">Eléctrico</option>
-        <option value="Pulsátil">Pulsátil</option>
-        <option value="Opresivo">Opresivo</option>
-      </select>
+<div class="form-col form-col-md-12">
+  <div class="form-group">
+    <label for="sinss_naturaleza_dolor" class="form-label">Tipo de dolor</label>
+    <div class="checkbox-group">
+      <div class="form-row">
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="sinss_naturaleza_dolor_punzante" name="sinss_naturaleza_dolor[]" value="Punzante" class="form-check-input">
+            <label class="form-check-label" for="sinss_naturaleza_dolor_punzante">Punzante</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="sinss_naturaleza_dolor_quemante" name="sinss_naturaleza_dolor[]" value="Quemante" class="form-check-input">
+            <label class="form-check-label" for="sinss_naturaleza_dolor_quemante">Quemante</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="sinss_naturaleza_dolor_sordo" name="sinss_naturaleza_dolor[]" value="Sordo" class="form-check-input">
+            <label class="form-check-label" for="sinss_naturaleza_dolor_sordo">Sordo</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="sinss_naturaleza_dolor_lancinante" name="sinss_naturaleza_dolor[]" value="Lancinante" class="form-check-input">
+            <label class="form-check-label" for="sinss_naturaleza_dolor_lancinante">Lancinante</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="sinss_naturaleza_dolor_electrico" name="sinss_naturaleza_dolor[]" value="Eléctrico" class="form-check-input">
+            <label class="form-check-label" for="sinss_naturaleza_dolor_electrico">Eléctrico</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="sinss_naturaleza_dolor_pulsatil" name="sinss_naturaleza_dolor[]" value="Pulsátil" class="form-check-input">
+            <label class="form-check-label" for="sinss_naturaleza_dolor_pulsatil">Pulsátil</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="sinss_naturaleza_dolor_opresivo" name="sinss_naturaleza_dolor[]" value="Opresivo" class="form-check-input">
+            <label class="form-check-label" for="sinss_naturaleza_dolor_opresivo">Opresivo</label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
