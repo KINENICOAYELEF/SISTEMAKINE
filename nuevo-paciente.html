@@ -399,10 +399,11 @@
             <div class="form-row">
               <div class="form-col form-col-md-6">
                 <div class="form-group">
-                  <label for="alicia_antecedentes" class="form-label">Antecedentes</label>
-                  <textarea id="alicia_antecedentes" name="alicia_antecedentes" class="form-control" rows="2"></textarea>
+                  <label for="alicia_antiguedad" class="form-label">Antigüedad</label>
+                  <textarea id="alicia_antiguedad" name="alicia_antiguedad" class="form-control" rows="2"></textarea>
                 </div>
               </div>
+              
               <div class="form-col form-col-md-6">
                 <div class="form-group">
                   <label for="alicia_localizacion" class="form-label">Localización</label>
@@ -414,7 +415,7 @@
             <div class="form-row">
               <div class="form-col form-col-md-4">
                 <div class="form-group">
-                  <label for="alicia_intensidad" class="form-label">Intensidad (EVA 0-10)</label>
+                  <label for="alicia_intensidad" class="form-label">Intensidad (ENA 0-10)</label>
                   <input type="range" id="alicia_intensidad" name="alicia_intensidad" class="form-range" min="0" max="10" step="1" value="5" oninput="document.getElementById('alicia_intensidad_value').textContent = this.value;">
                   <div class="d-flex justify-content-between">
                     <span>0</span>
@@ -426,22 +427,13 @@
               <div class="form-col form-col-md-4">
                 <div class="form-group">
                   <label for="alicia_caracteristicas" class="form-label">Características</label>
-                  <select id="alicia_caracteristicas" name="alicia_caracteristicas" class="form-select">
-                    <option value="">Seleccionar</option>
-                    <option value="Punzante">Punzante</option>
-                    <option value="Quemante">Quemante</option>
-                    <option value="Opresivo">Opresivo</option>
-                    <option value="Pulsátil">Pulsátil</option>
-                    <option value="Eléctrico">Eléctrico</option>
-                    <option value="Sordo">Sordo</option>
-                    <option value="Otro">Otro</option>
-                  </select>
+                  <textarea id="alicia_caracteristicas" name="alicia_caracteristicas" class="form-control" rows="2"></textarea>
                 </div>
               </div>
               <div class="form-col form-col-md-4">
                 <div class="form-group">
                   <label for="alicia_irradiacion" class="form-label">Irradiación</label>
-                  <input type="text" id="alicia_irradiacion" name="alicia_irradiacion" class="form-control">
+                  <textarea id="alicia_irradiacion" name="alicia_irradiacion" class="form-control" rows="2"></textarea>
                 </div>
               </div>
             </div>
