@@ -205,3 +205,80 @@
     font-size: 1.2rem;
   }
 }
+
+/* Estilos para la interpretación clínica y recomendaciones */
+.interpretacion-clinica-container,
+.recomendaciones-container {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  border-left: 5px solid #dee2e6;
+}
+
+.interpretacion-clinica-container h5,
+.recomendaciones-container h5 {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #495057;
+}
+
+.interpretacion-clinica,
+.recomendaciones {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  padding: 5px 0;
+}
+
+/* Colores para los niveles de interpretación */
+.nivel-leve {
+  border-left-color: #28a745;
+}
+
+.nivel-moderado {
+  border-left-color: #ffc107;
+}
+
+.nivel-severo {
+  border-left-color: #dc3545;
+}
+
+.nivel-alerta {
+  border-left-color: #dc3545;
+  background-color: #fff3cd;
+}
+
+/* Estilos para badges y elementos de resultado */
+.resultado-badge {
+  font-size: 0.9rem;
+  padding: 5px 10px;
+}
+
+.badge-verde {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-amarillo {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-rojo {
+  background-color: #dc3545;
+  color: white;
+}
+
+.resultado-valor {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.resultado-interpretacion {
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 5px;
+}
