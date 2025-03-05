@@ -40,10 +40,17 @@ class MapaCorporal {
       posterior: []
     };
     
-    // Configuración ajustable
-    this.markerRadius = 10; // Para PC
-    this.mobileMarkerRadius = 8; // Para móviles, un poco más pequeño
+    // Configuración base para tamaños (en porcentaje de la altura del canvas)
+    this.baseRadiusPercent = 2.5; // 2.5% de la altura del canvas para PC
+    this.mobileBaseRadiusPercent = 2.0; // 2.0% para móviles
+    
+    // Estos valores se calcularán dinámicamente
+    this.markerRadius = 10; 
+    this.mobileMarkerRadius = 8;
     this.paintSpacing = 5; // Espacio entre marcas al pintar en móvil
+    
+    // Tamaño base del canvas (para cálculos de escala)
+    this.baseCanvasHeight = 600;
     
     // Inicializar
     this.init();
@@ -97,6 +104,7 @@ class MapaCorporal {
     
     const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
     const img = view === 'anterior' ? this.imgAnterior : this.imgPosterior;
+    const container = view === 'anterior' ? this.containerAnterior : this.containerPosterior;
     
     if (!canvas || !img) {
       console.error(`Canvas o imagen no encontrados para ${view}`);
@@ -114,10 +122,40 @@ class MapaCorporal {
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     
+    // Calcular radios basados en el tamaño del canvas
+    this.recalculateMarkerSizes();
+    
     console.log(`Canvas ${view} dimensiones: ${canvas.width}x${canvas.height}`);
     
     // Configurar eventos para todas las herramientas
     this.setupEvents(canvas, view);
+    
+    // Agregar listener para redimensionar
+    window.addEventListener('resize', () => {
+      this.recalculateMarkerSizes();
+      // Redibujar las marcas con el nuevo tamaño
+      this.redrawMarks('anterior');
+      this.redrawMarks('posterior');
+    });
+  }
+  
+  // Nueva función para calcular tamaños de marcadores basados en canvas actual
+  recalculateMarkerSizes() {
+    // Obtener el tamaño visual actual del canvas
+    const rect = this.canvasAnterior.getBoundingClientRect();
+    const visualHeight = rect.height;
+    
+    // Calcular el radio basado en el porcentaje de la altura visual
+    const scaleRatio = visualHeight / this.baseCanvasHeight;
+    
+    // Calcular radios proporcionales al tamaño visual
+    this.markerRadius = Math.max(5, Math.round((visualHeight * this.baseRadiusPercent) / 100));
+    this.mobileMarkerRadius = Math.max(4, Math.round((visualHeight * this.mobileBaseRadiusPercent) / 100));
+    
+    // Ajustar espaciado de pintura para móvil
+    this.paintSpacing = Math.max(3, Math.round(this.markerRadius / 2));
+    
+    console.log(`Tamaños recalculados - Radio PC: ${this.markerRadius}, Radio móvil: ${this.mobileMarkerRadius}`);
   }
   
   setupEvents(canvas, view) {
@@ -357,20 +395,23 @@ class MapaCorporal {
     // Añadir número de intensidad si es dolor
     if (this.sintomaActual.tipo === 'dolor') {
       ctx.fillStyle = '#ffffff';
-      ctx.font = `${radius}px Arial`;
+      const fontSize = Math.max(radius * 0.8, 8); // Asegurar que sea legible
+      ctx.font = `bold ${fontSize}px Arial`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(this.sintomaActual.intensidad.toString(), x, y);
     }
     
-    // Guardar la marca
+    // Guardar la marca con el tamaño actual del radio
     this.marcas[view].push({
       tool: 'marker',
       x: x,
       y: y,
       tipo: this.sintomaActual.tipo,
       intensidad: this.sintomaActual.intensidad,
-      color: this.sintomaActual.color
+      color: this.sintomaActual.color,
+      // Guardar radio como porcentaje relativo para dibujar correctamente al redimensionar
+      radiusPercent: this.isMobile ? this.mobileBaseRadiusPercent : this.baseRadiusPercent
     });
     
     // Actualizar leyenda
@@ -666,7 +707,23 @@ class MapaCorporal {
       
       // Cargar marcas
       if (mapData.marcas) {
+        // Para migración de datos antiguos, asegurar que todas las marcas tengan radiusPercent
+        for (const view of ['anterior', 'posterior']) {
+          if (mapData.marcas[view]) {
+            mapData.marcas[view] = mapData.marcas[view].map(marca => {
+              if (marca.tool === 'marker' && !marca.radiusPercent) {
+                // Agregar radiusPercent basado en dispositivo para marcas antiguas
+                marca.radiusPercent = this.baseRadiusPercent;
+              }
+              return marca;
+            });
+          }
+        }
+        
         this.marcas = mapData.marcas;
+        
+        // Asegurar que los tamaños de marcadores estén actualizados
+        this.recalculateMarkerSizes();
         
         // Redibujar
         this.redrawMarks('anterior');
@@ -683,6 +740,48 @@ class MapaCorporal {
     } catch (error) {
       console.error('Error al cargar datos del mapa:', error);
     }
+  }
+  
+  // Método para inicializar después de la carga completa
+  init() {
+    console.log("Inicializando mapa corporal...");
+    console.log("Detectado como: " + (this.isMobile ? "dispositivo móvil" : "computadora"));
+    
+    // Configurar canvas con dimensiones fijas
+    this.setupCanvas('anterior');
+    this.setupCanvas('posterior');
+    
+    // Forzar un recálculo inicial de tamaños
+    this.recalculateMarkerSizes();
+    
+    // Event listeners para herramientas
+    document.getElementById('tool-marker').addEventListener('click', () => this.setTool('marker'));
+    document.getElementById('tool-arrow').addEventListener('click', () => this.setTool('arrow'));
+    document.getElementById('tool-eraser').addEventListener('click', () => this.setTool('eraser'));
+    document.getElementById('tool-clear').addEventListener('click', () => this.clearCanvas());
+    
+    // Event listener para tipo de síntoma
+    document.getElementById('sintoma-tipo').addEventListener('change', (e) => {
+      this.sintomaActual.tipo = e.target.value;
+      document.getElementById('dolor-intensidad-container').style.display = 
+        e.target.value === 'dolor' ? 'block' : 'none';
+    });
+    
+    // Event listener para intensidad de dolor
+    document.getElementById('dolor-intensidad').addEventListener('input', (e) => {
+      this.sintomaActual.intensidad = parseInt(e.target.value);
+      document.getElementById('dolor-intensidad-value').textContent = e.target.value;
+    });
+    
+    // Event listener para color
+    document.getElementById('sintoma-color').addEventListener('input', (e) => {
+      this.sintomaActual.color = e.target.value;
+    });
+    
+    // Event listener para guardar
+    document.getElementById('save-map-btn').addEventListener('click', () => {
+      this.saveMapData();
+    });
   }
 }
 
