@@ -18,24 +18,25 @@
 .mapa-canvas-container {
   position: relative;
   width: 100%;
-  height: 600px;
-  overflow: auto;
+  height: auto;
   display: flex;
   justify-content: center;
-  border: 1px dashed #ccc;
-  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  background-color: #fff;
 }
 
 .body-map-img {
-  height: 590px;
   max-width: 100%;
-  object-fit: contain;
+  height: auto;
+  display: block;
 }
 
 .mapa-canvas {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 10;
   cursor: crosshair;
 }
@@ -45,6 +46,7 @@
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 10px;
+  margin-top: 15px;
 }
 
 .leyenda-item {
@@ -67,17 +69,52 @@
   color: white;
 }
 
+/* Estilizar el selector de tipo de síntoma */
+#sintoma-tipo {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Estilizar el control deslizante */
+#dolor-intensidad {
+  width: 100%;
+}
+
+/* Estilizar el selector de color */
+#sintoma-color {
+  width: 100%;
+  height: 30px;
+  padding: 0;
+  border: 1px solid #ddd;
+}
+
+/* Estilo para los botones de modo */
+.btn-group .btn {
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Botón de guardar */
+#save-map-btn {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+
+#save-map-btn:hover {
+  background-color: #45a049;
+  border-color: #45a049;
+}
+
 /* Estilos para dispositivos móviles */
 @media (max-width: 768px) {
-  .mapa-canvas-container {
-    height: 450px;
-  }
-  
-  .body-map-img {
-    height: 440px;
-  }
-  
   .mapa-tools {
     margin-bottom: 15px;
+  }
+  
+  .btn-group .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
   }
 }
