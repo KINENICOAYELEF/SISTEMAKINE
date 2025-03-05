@@ -945,6 +945,232 @@
               </div>
             </div>
           </div>
+
+
+          <!-- 3. Cuestionarios -->
+<div class="tab-content" id="cuestionarios">
+  <h3>3. Cuestionarios Clínicos</h3>
+  <p class="mb-3">Seleccione los cuestionarios apropiados para la condición del paciente. Los resultados se interpretan automáticamente con códigos de color.</p>
+  
+  <!-- Acordeón de cuestionarios -->
+  <div class="cuestionarios-acordeon">
+    <!-- PSFS (Patient-Specific Functional Scale) -->
+    <div class="cuestionario-item">
+      <div class="cuestionario-header" onclick="toggleCuestionario('psfs-content')">
+        <h4><i class="fas fa-plus-circle"></i> PSFS (Patient-Specific Functional Scale)</h4>
+        <div class="resultado-badge" id="psfs-badge">No completado</div>
+      </div>
+      <div class="cuestionario-content" id="psfs-content" style="display: none;">
+        <p class="mb-3">Identificar hasta 3 actividades importantes que el paciente no puede realizar o tiene dificultad debido a su problema. Calificar la capacidad para realizar cada actividad en una escala de 0-10.</p>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-8">
+            <div class="form-group">
+              <label for="psfs_actividad1" class="form-label">Actividad 1</label>
+              <input type="text" id="psfs_actividad1" name="psfs_actividad1" class="form-control" placeholder="Ej: Subir escaleras, Levantar objetos pesados, etc.">
+            </div>
+          </div>
+          <div class="form-col form-col-md-4">
+            <div class="form-group">
+              <label for="psfs_puntuacion1" class="form-label">Puntuación (0-10)</label>
+              <select id="psfs_puntuacion1" name="psfs_puntuacion1" class="form-select" onchange="calcularPSFS()">
+                <option value="">Seleccionar</option>
+                <option value="0">0 - Incapaz de realizar la actividad</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10 - Capaz de realizar la actividad al mismo nivel que antes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-8">
+            <div class="form-group">
+              <label for="psfs_actividad2" class="form-label">Actividad 2</label>
+              <input type="text" id="psfs_actividad2" name="psfs_actividad2" class="form-control" placeholder="Ej: Sentarse por periodos prolongados, Dormir, etc.">
+            </div>
+          </div>
+          <div class="form-col form-col-md-4">
+            <div class="form-group">
+              <label for="psfs_puntuacion2" class="form-label">Puntuación (0-10)</label>
+              <select id="psfs_puntuacion2" name="psfs_puntuacion2" class="form-select" onchange="calcularPSFS()">
+                <option value="">Seleccionar</option>
+                <option value="0">0 - Incapaz de realizar la actividad</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10 - Capaz de realizar la actividad al mismo nivel que antes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-8">
+            <div class="form-group">
+              <label for="psfs_actividad3" class="form-label">Actividad 3</label>
+              <input type="text" id="psfs_actividad3" name="psfs_actividad3" class="form-control" placeholder="Ej: Girar el cuello, Practicar deporte, etc.">
+            </div>
+          </div>
+          <div class="form-col form-col-md-4">
+            <div class="form-group">
+              <label for="psfs_puntuacion3" class="form-label">Puntuación (0-10)</label>
+              <select id="psfs_puntuacion3" name="psfs_puntuacion3" class="form-select" onchange="calcularPSFS()">
+                <option value="">Seleccionar</option>
+                <option value="0">0 - Incapaz de realizar la actividad</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10 - Capaz de realizar la actividad al mismo nivel que antes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-col form-col-md-12">
+            <div class="resultado-container" id="psfs-resultado">
+              <div class="resultado-label">Puntuación PSFS:</div>
+              <div class="resultado-valor" id="psfs-valor">-</div>
+              <div class="resultado-interpretacion" id="psfs-interpretacion">Complete al menos una actividad para obtener un resultado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- GROC (Global Rating of Change) -->
+    <div class="cuestionario-item">
+      <div class="cuestionario-header" onclick="toggleCuestionario('groc-content')">
+        <h4><i class="fas fa-plus-circle"></i> GROC (Global Rating of Change)</h4>
+        <div class="resultado-badge" id="groc-badge">No completado</div>
+      </div>
+      <div class="cuestionario-content" id="groc-content" style="display: none;">
+        <p class="mb-3">Esta escala evalúa la percepción del paciente sobre el cambio en su condición desde que comenzó el tratamiento.</p>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-12">
+            <div class="form-group">
+              <label class="form-label">¿Cómo se siente ahora en comparación con cuando comenzó el tratamiento?</label>
+              <div class="groc-scale-container">
+                <div class="groc-scale">
+                  <input type="radio" id="groc_-7" name="groc" value="-7" onchange="calcularGROC()">
+                  <label for="groc_-7">-7<br>Extremadamente peor</label>
+                  
+                  <input type="radio" id="groc_-6" name="groc" value="-6" onchange="calcularGROC()">
+                  <label for="groc_-6">-6</label>
+                  
+                  <input type="radio" id="groc_-5" name="groc" value="-5" onchange="calcularGROC()">
+                  <label for="groc_-5">-5<br>Mucho peor</label>
+                  
+                  <input type="radio" id="groc_-4" name="groc" value="-4" onchange="calcularGROC()">
+                  <label for="groc_-4">-4</label>
+                  
+                  <input type="radio" id="groc_-3" name="groc" value="-3" onchange="calcularGROC()">
+                  <label for="groc_-3">-3<br>Moderadamente peor</label>
+                  
+                  <input type="radio" id="groc_-2" name="groc" value="-2" onchange="calcularGROC()">
+                  <label for="groc_-2">-2</label>
+                  
+                  <input type="radio" id="groc_-1" name="groc" value="-1" onchange="calcularGROC()">
+                  <label for="groc_-1">-1<br>Un poco peor</label>
+                  
+                  <input type="radio" id="groc_0" name="groc" value="0" onchange="calcularGROC()">
+                  <label for="groc_0">0<br>Sin cambios</label>
+                  
+                  <input type="radio" id="groc_1" name="groc" value="1" onchange="calcularGROC()">
+                  <label for="groc_1">+1<br>Un poco mejor</label>
+                  
+                  <input type="radio" id="groc_2" name="groc" value="2" onchange="calcularGROC()">
+                  <label for="groc_2">+2</label>
+                  
+                  <input type="radio" id="groc_3" name="groc" value="3" onchange="calcularGROC()">
+                  <label for="groc_3">+3<br>Moderadamente mejor</label>
+                  
+                  <input type="radio" id="groc_4" name="groc" value="4" onchange="calcularGROC()">
+                  <label for="groc_4">+4</label>
+                  
+                  <input type="radio" id="groc_5" name="groc" value="5" onchange="calcularGROC()">
+                  <label for="groc_5">+5<br>Mucho mejor</label>
+                  
+                  <input type="radio" id="groc_6" name="groc" value="6" onchange="calcularGROC()">
+                  <label for="groc_6">+6</label>
+                  
+                  <input type="radio" id="groc_7" name="groc" value="7" onchange="calcularGROC()">
+                  <label for="groc_7">+7<br>Completamente recuperado</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-col form-col-md-12">
+            <div class="resultado-container" id="groc-resultado">
+              <div class="resultado-label">Resultado GROC:</div>
+              <div class="resultado-valor" id="groc-valor">-</div>
+              <div class="resultado-interpretacion" id="groc-interpretacion">Seleccione una opción para obtener un resultado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- SANE (Single Assessment Numeric Evaluation) -->
+    <div class="cuestionario-item">
+      <div class="cuestionario-header" onclick="toggleCuestionario('sane-content')">
+        <h4><i class="fas fa-plus-circle"></i> SANE (Single Assessment Numeric Evaluation)</h4>
+        <div class="resultado-badge" id="sane-badge">No completado</div>
+      </div>
+      <div class="cuestionario-content" id="sane-content" style="display: none;">
+        <p class="mb-3">Una evaluación numérica única donde el paciente califica su función general en una escala de 0-100.</p>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-12">
+            <div class="form-group">
+              <label for="sane_puntuacion" class="form-label">En una escala de 0 a 100, ¿cómo calificaría su [área afectada] hoy?</label>
+              <p class="text-muted small mb-2">(0 = completamente incapacitado, 100 = normal)</p>
+              <input type="range" id="sane_puntuacion" name="sane_puntuacion" class="form-range w-100" min="0" max="100" step="1" value="50" oninput="calcularSANE()">
+              <div class="d-flex justify-content-between mt-1">
+                <span>0</span>
+                <span id="sane_puntuacion_value">50</span>
+                <span>100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-col form-col-md-12">
+            <div class="resultado-container" id="sane-resultado">
+              <div class="resultado-label">Puntuación SANE:</div>
+              <div class="resultado-valor" id="sane-valor">50%</div>
+              <div class="resultado-interpretacion" id="sane-interpretacion">Función moderada</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
           
           <!-- 3. Historia Médica -->
           <div class="tab-content" id="historia-medica">
