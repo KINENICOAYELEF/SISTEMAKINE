@@ -350,159 +350,159 @@
               </div>
             </div>
             
-            <h4 class="mt-4">2.2 Historia de la Condición Actual</h4>
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="mecanismoLesion" class="form-label">Mecanismo de lesión/aparición</label>
-                  <select id="mecanismoLesion" name="mecanismoLesion" class="form-select">
-                    <option value="">Seleccionar</option>
-                    <option value="Traumático">Traumático</option>
-                    <option value="Gradual">Gradual</option>
-                    <option value="Postural">Postural</option>
-                    <option value="Post-quirúrgico">Post-quirúrgico</option>
-                    <option value="Desconocido">Desconocido</option>
-                    <option value="Otro">Otro</option>
-                  </select>
-                  <textarea id="mecanismoLesionDetalles" name="mecanismoLesionDetalles" class="form-control mt-2" rows="2" placeholder="Detalles del mecanismo de lesión..."></textarea>
-                </div>
-              </div>
-            
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="anamnesisProxima" class="form-label">Anamnesis próxima</label>
-                  <textarea id="anamnesisProxima" name="anamnesisProxima" class="form-control" rows="3"></textarea>
-                </div>
-              </div>
-            </div>
+            <!-- Código para la sección completa de Historia de la Condición Actual con mejoras -->
 
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="cambiosDiurnosVespertinos" class="form-label">Cambios diurnos y vespertinos</label>
-                  <textarea id="cambiosDiurnosVespertinos" name="cambiosDiurnosVespertinos" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-            </div>  
-            
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="tratamientosPrevios" class="form-label">Tratamientos previos</label>
-                  <textarea id="tratamientosPrevios" name="tratamientosPrevios" class="form-control" rows="3"></textarea>
-                </div>
-              </div>
-            </div>
-            
-            <h4 class="mt-4">Acrónimo ALICIA</h4>
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="alicia_antiguedad" class="form-label">Antigüedad</label>
-                  <textarea id="alicia_antiguedad" name="alicia_antiguedad" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="alicia_localizacion" class="form-label">Localización</label>
-                  <textarea id="alicia_localizacion" name="alicia_localizacion" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="alicia_intensidad" class="form-label">Intensidad (ENA 0-10)</label>
-                  <input type="range" id="alicia_intensidad" name="alicia_intensidad" class="form-range" min="0" max="10" step="1" value="5" oninput="document.getElementById('alicia_intensidad_value').textContent = this.value;">
-                  <div class="d-flex justify-content-between">
-                    <span>0</span>
-                    <span id="alicia_intensidad_value">5</span>
-                    <span>10</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="alicia_caracteristicas" class="form-label">Características</label>
-                  <textarea id="alicia_caracteristicas" name="alicia_caracteristicas" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="alicia_irradiacion" class="form-label">Irradiación</label>
-                  <textarea id="alicia_irradiacion" name="alicia_irradiacion" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="alicia_atenuantes" class="form-label">Atenuantes</label>
-                  <textarea id="alicia_atenuantes" name="alicia_atenuantes" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="alicia_agravantes" class="form-label">Agravantes</label>
-                  <textarea id="alicia_agravantes" name="alicia_agravantes" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-            </div>
-            
-            <h4 class="mt-4">2.3 Expectativas del Paciente</h4>
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="objetivosCorto" class="form-label">Objetivos a corto plazo</label>
-                  <textarea id="objetivosCorto" name="objetivosCorto" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="objetivosMediano" class="form-label">Objetivos a mediano plazo</label>
-                  <textarea id="objetivosMediano" name="objetivosMediano" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="objetivosLargo" class="form-label">Objetivos a largo plazo</label>
-                  <textarea id="objetivosLargo" name="objetivosLargo" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="expectativasRecuperacion" class="form-label">Expectativas de recuperación</label>
-                  <select id="expectativasRecuperacion" name="expectativasRecuperacion" class="form-select">
-                    <option value="">Seleccionar</option>
-                    <option value="Recuperación completa">Recuperación completa</option>
-                    <option value="Mejora significativa">Mejora significativa</option>
-                    <option value="Mejora parcial">Mejora parcial</option>
-                    <option value="Control de síntomas">Control de síntomas</option>
-                    <option value="Sin expectativas claras">Sin expectativas claras</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="nivelCompromiso" class="form-label">Nivel de compromiso con el tratamiento</label>
-                  <select id="nivelCompromiso" name="nivelCompromiso" class="form-select">
-                    <option value="">Seleccionar</option>
-                    <option value="Alto">Alto</option>
-                    <option value="Medio">Medio</option>
-                    <option value="Bajo">Bajo</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+<h4 class="mt-4">2.2 Historia de la Condición Actual</h4>
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label for="mecanismoLesion" class="form-label">Mecanismo de lesión/aparición</label>
+      <select id="mecanismoLesion" name="mecanismoLesion" class="form-select">
+        <option value="">Seleccionar</option>
+        <option value="Traumático">Traumático</option>
+        <option value="Gradual">Gradual</option>
+        <option value="Postural">Postural</option>
+        <option value="Post-quirúrgico">Post-quirúrgico</option>
+        <option value="Desconocido">Desconocido</option>
+        <option value="Otro">Otro</option>
+      </select>
+      <textarea id="mecanismoLesionDetalles" name="mecanismoLesionDetalles" class="form-control mt-3" rows="3" placeholder="Detalles del mecanismo de lesión..."></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label for="anamnesisProxima" class="form-label">Anamnesis próxima</label>
+      <textarea id="anamnesisProxima" name="anamnesisProxima" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label for="cambiosDiurnosVespertinos" class="form-label">Cambios diurnos y vespertinos</label>
+      <textarea id="cambiosDiurnosVespertinos" name="cambiosDiurnosVespertinos" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label for="tratamientosPrevios" class="form-label">Tratamientos previos</label>
+      <textarea id="tratamientosPrevios" name="tratamientosPrevios" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+</div>
+
+<h4 class="mt-4">Acrónimo ALICIA</h4>
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="alicia_antiguedad" class="form-label">Antigüedad</label>
+      <textarea id="alicia_antiguedad" name="alicia_antiguedad" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="alicia_localizacion" class="form-label">Localización</label>
+      <textarea id="alicia_localizacion" name="alicia_localizacion" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="alicia_intensidad" class="form-label">Intensidad (ENA 0-10)</label>
+      <input type="range" id="alicia_intensidad" name="alicia_intensidad" class="form-range" min="0" max="10" step="1" value="5" oninput="document.getElementById('alicia_intensidad_value').textContent = this.value;">
+      <div class="d-flex justify-content-between">
+        <span>0</span>
+        <span id="alicia_intensidad_value">5</span>
+        <span>10</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="alicia_caracteristicas" class="form-label">Características</label>
+      <textarea id="alicia_caracteristicas" name="alicia_caracteristicas" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="alicia_irradiacion" class="form-label">Irradiación</label>
+      <textarea id="alicia_irradiacion" name="alicia_irradiacion" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="alicia_atenuantes" class="form-label">Atenuantes</label>
+      <textarea id="alicia_atenuantes" name="alicia_atenuantes" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="alicia_agravantes" class="form-label">Agravantes</label>
+      <textarea id="alicia_agravantes" name="alicia_agravantes" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+</div>
+
+<h4 class="mt-4">2.3 Expectativas del Paciente</h4>
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="objetivosCorto" class="form-label">Objetivos a corto plazo</label>
+      <textarea id="objetivosCorto" name="objetivosCorto" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="objetivosMediano" class="form-label">Objetivos a mediano plazo</label>
+      <textarea id="objetivosMediano" name="objetivosMediano" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="objetivosLargo" class="form-label">Objetivos a largo plazo</label>
+      <textarea id="objetivosLargo" name="objetivosLargo" class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="expectativasRecuperacion" class="form-label">Expectativas de recuperación</label>
+      <select id="expectativasRecuperacion" name="expectativasRecuperacion" class="form-select">
+        <option value="">Seleccionar</option>
+        <option value="Recuperación completa">Recuperación completa</option>
+        <option value="Mejora significativa">Mejora significativa</option>
+        <option value="Mejora parcial">Mejora parcial</option>
+        <option value="Control de síntomas">Control de síntomas</option>
+        <option value="Sin expectativas claras">Sin expectativas claras</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="nivelCompromiso" class="form-label">Nivel de compromiso con el tratamiento</label>
+      <select id="nivelCompromiso" name="nivelCompromiso" class="form-select">
+        <option value="">Seleccionar</option>
+        <option value="Alto">Alto</option>
+        <option value="Medio">Medio</option>
+        <option value="Bajo">Bajo</option>
+      </select>
+    </div>
+  </div>
+</div>
             
             <div class="form-row mt-4">
               <div class="form-col form-col-md-12">
