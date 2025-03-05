@@ -30,10 +30,10 @@ function calcularPSFS() {
   const badge = document.getElementById('psfs-badge');
   if (valores.length > 0) {
     badge.textContent = "Completado";
-    badge.classList.add("completado");
+    badge.classList.add("badge-verde");
   } else {
     badge.textContent = "No completado";
-    badge.classList.remove("completado");
+    badge.classList.remove("badge-verde");
   }
   
   // Calcular promedio si hay valores
@@ -49,17 +49,17 @@ function calcularPSFS() {
     
     // Interpretación según el valor
     if (promedio < 3) {
-      resultado.className = "resultado-container nivel-bajo";
       interpretacionEl.textContent = "Limitación severa de la función";
+      interpretacionEl.className = "resultado-interpretacion rojo";
     } else if (promedio < 6) {
-      resultado.className = "resultado-container nivel-medio";
       interpretacionEl.textContent = "Limitación moderada de la función";
+      interpretacionEl.className = "resultado-interpretacion amarillo";
     } else if (promedio < 8) {
-      resultado.className = "resultado-container nivel-medio";
       interpretacionEl.textContent = "Limitación leve de la función";
+      interpretacionEl.className = "resultado-interpretacion verde-claro";
     } else {
-      resultado.className = "resultado-container nivel-alto";
       interpretacionEl.textContent = "Función normal o casi normal";
+      interpretacionEl.className = "resultado-interpretacion verde";
     }
   }
 }
@@ -74,9 +74,8 @@ function calcularGROC() {
     // Actualizar badge
     const badge = document.getElementById('groc-badge');
     badge.textContent = "Completado";
-    badge.classList.add("completado");
+    badge.classList.add("badge-verde");
     
-    const resultado = document.getElementById('groc-resultado');
     const valorEl = document.getElementById('groc-valor');
     const interpretacionEl = document.getElementById('groc-interpretacion');
     
@@ -84,23 +83,23 @@ function calcularGROC() {
     
     // Interpretación según el valor
     if (valorGROC <= -5) {
-      resultado.className = "resultado-container nivel-bajo";
       interpretacionEl.textContent = "Cambio negativo importante (mucho peor)";
+      interpretacionEl.className = "resultado-interpretacion rojo";
     } else if (valorGROC < 0) {
-      resultado.className = "resultado-container nivel-medio";
       interpretacionEl.textContent = "Cambio negativo (peor)";
+      interpretacionEl.className = "resultado-interpretacion amarillo";
     } else if (valorGROC === 0) {
-      resultado.className = "resultado-container nivel-neutro";
       interpretacionEl.textContent = "Sin cambios";
+      interpretacionEl.className = "resultado-interpretacion";
     } else if (valorGROC <= 3) {
-      resultado.className = "resultado-container nivel-medio";
       interpretacionEl.textContent = "Cambio positivo mínimo (un poco mejor)";
+      interpretacionEl.className = "resultado-interpretacion verde-claro";
     } else if (valorGROC <= 5) {
-      resultado.className = "resultado-container nivel-alto";
       interpretacionEl.textContent = "Cambio positivo moderado (mejor)";
+      interpretacionEl.className = "resultado-interpretacion verde";
     } else {
-      resultado.className = "resultado-container nivel-alto";
       interpretacionEl.textContent = "Cambio positivo importante (mucho mejor)";
+      interpretacionEl.className = "resultado-interpretacion verde";
     }
   }
 }
@@ -115,9 +114,8 @@ function calcularSANE() {
   // Actualizar badge
   const badge = document.getElementById('sane-badge');
   badge.textContent = "Completado";
-  badge.classList.add("completado");
+  badge.classList.add("badge-verde");
   
-  const resultado = document.getElementById('sane-resultado');
   const valorEl = document.getElementById('sane-valor');
   const interpretacionEl = document.getElementById('sane-interpretacion');
   
@@ -125,30 +123,22 @@ function calcularSANE() {
   
   // Interpretación según el valor
   if (puntuacion < 30) {
-    resultado.className = "resultado-container nivel-bajo";
     interpretacionEl.textContent = "Función muy reducida";
+    interpretacionEl.className = "resultado-interpretacion rojo";
   } else if (puntuacion < 50) {
-    resultado.className = "resultado-container nivel-bajo";
     interpretacionEl.textContent = "Función deficiente";
+    interpretacionEl.className = "resultado-interpretacion amarillo";
   } else if (puntuacion < 70) {
-    resultado.className = "resultado-container nivel-medio";
     interpretacionEl.textContent = "Función moderada";
+    interpretacionEl.className = "resultado-interpretacion amarillo";
   } else if (puntuacion < 90) {
-    resultado.className = "resultado-container nivel-alto";
     interpretacionEl.textContent = "Buena función";
+    interpretacionEl.className = "resultado-interpretacion verde-claro";
   } else {
-    resultado.className = "resultado-container nivel-alto";
     interpretacionEl.textContent = "Función normal o casi normal";
+    interpretacionEl.className = "resultado-interpretacion verde";
   }
 }
-
-// Inicializar la funcionalidad del SANE al cargar la página
-document.addEventListener('DOMContentLoaded', function() {
-  // Inicializar los valores actuales
-  if (document.getElementById('sane_puntuacion')) {
-    calcularSANE();
-  }
-
 
 // Función para calcular resultados del Inventario Breve de Dolor (BPI)
 function calcularBPI() {
@@ -173,8 +163,8 @@ function calcularBPI() {
   
   // Calcular promedio de interferencia
   const totalInterferencias = interferencia_actividad + interferencia_animo + interferencia_caminar + 
-                             interferencia_trabajo + interferencia_relaciones + interferencia_sueno + 
-                             interferencia_vida;
+                            interferencia_trabajo + interferencia_relaciones + interferencia_sueno + 
+                            interferencia_vida;
   const numInterferencias = 7; // Total de items de interferencia
   const interferenciaProm = totalInterferencias / numInterferencias;
   const interferenciaRedondeada = Math.round(interferenciaProm * 10) / 10; // Redondear a 1 decimal
@@ -234,8 +224,8 @@ function calcularBPI() {
   // Verificar si se han completado todos los campos
   const intensidadCompletada = dolorActual || dolorPromedio || dolorPeor || dolorMenor;
   const interferenciaCompletada = interferencia_actividad || interferencia_animo || interferencia_caminar || 
-                                 interferencia_trabajo || interferencia_relaciones || interferencia_sueno || 
-                                 interferencia_vida;
+                                interferencia_trabajo || interferencia_relaciones || interferencia_sueno || 
+                                interferencia_vida;
   
   if (intensidadCompletada && interferenciaCompletada) {
     if (intensidadRedondeada >= 7 || interferenciaRedondeada >= 7) {
@@ -274,12 +264,23 @@ function calcularDN4() {
   const cepillado = obtenerValorRadio('dn4_cepillado');
   
   // Calcular puntuación total (de 0 a 10)
-  const puntuacionTotal = quemazon + frio + descargas + hormigueo + alfileres + 
-                        entumecimiento + picazon + hipoestesia + hipoestesiaPinchazo + cepillado;
+  let puntuacionTotal = 0;
+  
+  // Solo sumamos si el valor es 0 o 1 (no -1, que significa no contestado)
+  if (quemazon !== -1) puntuacionTotal += quemazon;
+  if (frio !== -1) puntuacionTotal += frio;
+  if (descargas !== -1) puntuacionTotal += descargas;
+  if (hormigueo !== -1) puntuacionTotal += hormigueo;
+  if (alfileres !== -1) puntuacionTotal += alfileres;
+  if (entumecimiento !== -1) puntuacionTotal += entumecimiento;
+  if (picazon !== -1) puntuacionTotal += picazon;
+  if (hipoestesia !== -1) puntuacionTotal += hipoestesia;
+  if (hipoestesiaPinchazo !== -1) puntuacionTotal += hipoestesiaPinchazo;
+  if (cepillado !== -1) puntuacionTotal += cepillado;
   
   // Verificar si el cuestionario está completo
   const itemsCompletados = [quemazon, frio, descargas, hormigueo, alfileres, 
-                           entumecimiento, picazon, hipoestesia, hipoestesiaPinchazo, cepillado]
+                          entumecimiento, picazon, hipoestesia, hipoestesiaPinchazo, cepillado]
                           .filter(val => val !== -1).length;
   
   const estaCompleto = itemsCompletados === 10; // Son 10 ítems en total
@@ -341,4 +342,11 @@ function obtenerValorRadio(nombre) {
   }
   return -1; // Retorna -1 si ninguno está seleccionado
 }
-});  
+
+// Inicializar la funcionalidad al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar los valores actuales
+  if (document.getElementById('sane_puntuacion')) {
+    calcularSANE();
+  }
+});
