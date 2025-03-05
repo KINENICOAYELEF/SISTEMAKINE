@@ -505,6 +505,281 @@
     </div>
   </div>
 </div>
+
+            <h4 class="mt-4">2.4 Evaluación SINSS</h4>
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-12">
+    <p><strong>Introducción:</strong> El modelo SINSS (Severidad, Irritabilidad, Naturaleza, Etapa, Estabilidad) ayuda a comprender los síntomas del paciente, a guiar el examen físico y a determinar el tratamiento adecuado en fisioterapia.</p>
+  </div>
+</div>
+
+<!-- Severidad -->
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <h5>Severidad - Intensidad del dolor e impacto en la vida diaria</h5>
+    <p><small>Evalúa la intensidad del dolor y cómo afecta las actividades de la vida diaria (AVD) del paciente</small></p>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="sinss_severidad_escala" class="form-label">Escala de dolor (EVA/NRS)</label>
+      <input type="range" id="sinss_severidad_escala" name="sinss_severidad_escala" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('sinss_severidad_escala_value').textContent = this.value;">
+      <div class="d-flex justify-content-between mt-2">
+        <span>0</span>
+        <span id="sinss_severidad_escala_value">0</span>
+        <span>10</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="sinss_severidad_impacto" class="form-label">Impacto en las AVD</label>
+      <select id="sinss_severidad_impacto" name="sinss_severidad_impacto" class="form-select" multiple>
+        <option value="Mínimo">Mínimo</option>
+        <option value="Moderado">Moderado</option>
+        <option value="Máximo">Máximo</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="sinss_severidad_medicacion" class="form-label">Medicación</label>
+      <textarea id="sinss_severidad_medicacion" name="sinss_severidad_medicacion" class="form-control" rows="2"></textarea>
+    </div>
+  </div>
+</div>
+
+<div id="severidad_adicional_container">
+  <!-- Aquí se agregarán campos adicionales de severidad -->
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="agregar_severidad_btn">
+      <i class="fas fa-plus"></i> Agregar campo adicional de severidad
+    </button>
+  </div>
+</div>
+
+<!-- Irritabilidad -->
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <h5>Irritabilidad - Facilidad con la que se agravan los síntomas</h5>
+    <p><small>Evalúa con qué facilidad se agravan los síntomas del paciente, la gravedad de los mismos y el tiempo que tardan en disminuir</small></p>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label for="sinss_irritabilidad_actividad" class="form-label">Actividad necesaria para provocar síntomas</label>
+      <textarea id="sinss_irritabilidad_actividad" name="sinss_irritabilidad_actividad" class="form-control" rows="2"></textarea>
+    </div>
+  </div>
+</div>
+
+<div id="irritabilidad_actividades_container">
+  <!-- Aquí se agregarán campos adicionales de actividades -->
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="agregar_actividad_btn">
+      <i class="fas fa-plus"></i> Agregar otra actividad
+    </button>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="sinss_irritabilidad_gravedad" class="form-label">Gravedad de los síntomas</label>
+      <select id="sinss_irritabilidad_gravedad" name="sinss_irritabilidad_gravedad" class="form-select">
+        <option value="">Seleccionar</option>
+        <option value="Leve">Leve</option>
+        <option value="Moderada">Moderada</option>
+        <option value="Grave">Grave</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="sinss_irritabilidad_tiempo" class="form-label">Tiempo de recuperación</label>
+      <select id="sinss_irritabilidad_tiempo" name="sinss_irritabilidad_tiempo" class="form-select">
+        <option value="">Seleccionar</option>
+        <option value="< 30 min">< 30 min</option>
+        <option value="30 - 60 min">30 - 60 min</option>
+        <option value="> 60 min">> 60 min</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div id="irritabilidad_adicional_container">
+  <!-- Aquí se agregarán campos adicionales de irritabilidad -->
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="agregar_irritabilidad_btn">
+      <i class="fas fa-plus"></i> Agregar campo adicional de irritabilidad
+    </button>
+  </div>
+</div>
+
+<!-- Naturaleza -->
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <h5>Naturaleza - Diagnóstico, tipo de dolor y factores biopsicosociales</h5>
+    <p><small>Considera el diagnóstico del paciente, el tipo de síntomas que experimenta y los factores biopsicosociales que pueden estar influyendo en su condición</small></p>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label for="sinss_naturaleza_diagnostico" class="form-label">Diagnóstico</label>
+      <textarea id="sinss_naturaleza_diagnostico" name="sinss_naturaleza_diagnostico" class="form-control" rows="2"></textarea>
+    </div>
+  </div>
+</div>
+
+<div id="naturaleza_diagnostico_container">
+  <!-- Aquí se agregarán campos adicionales de diagnóstico -->
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="agregar_diagnostico_btn">
+      <i class="fas fa-plus"></i> Agregar otro diagnóstico
+    </button>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label for="sinss_naturaleza_dolor" class="form-label">Tipo de dolor</label>
+      <select id="sinss_naturaleza_dolor" name="sinss_naturaleza_dolor" class="form-select" multiple>
+        <option value="Punzante">Punzante</option>
+        <option value="Quemante">Quemante</option>
+        <option value="Sordo">Sordo</option>
+        <option value="Lancinante">Lancinante</option>
+        <option value="Eléctrico">Eléctrico</option>
+        <option value="Pulsátil">Pulsátil</option>
+        <option value="Opresivo">Opresivo</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div id="naturaleza_dolor_container">
+  <!-- Aquí se agregarán campos adicionales de tipo de dolor -->
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="agregar_dolor_btn">
+      <i class="fas fa-plus"></i> Agregar otra característica de dolor
+    </button>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label for="sinss_naturaleza_factores" class="form-label">Factores biopsicosociales</label>
+      <textarea id="sinss_naturaleza_factores" name="sinss_naturaleza_factores" class="form-control" rows="2"></textarea>
+    </div>
+  </div>
+</div>
+
+<div id="naturaleza_factores_container">
+  <!-- Aquí se agregarán campos adicionales de factores biopsicosociales -->
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="agregar_factores_btn">
+      <i class="fas fa-plus"></i> Agregar otros factores
+    </button>
+  </div>
+</div>
+
+<!-- Etapa -->
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <h5>Etapa - Fase de la lesión o condición</h5>
+    <p><small>Determina la fase actual de la lesión o condición del paciente</small></p>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="sinss_etapa" class="form-label">Etapa</label>
+      <select id="sinss_etapa" name="sinss_etapa" class="form-select">
+        <option value="">Seleccionar</option>
+        <option value="Aguda">Aguda</option>
+        <option value="Subaguda">Subaguda</option>
+        <option value="Crónica">Crónica</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Estabilidad -->
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <h5>Estabilidad - Progresión de los síntomas en el tiempo</h5>
+    <p><small>Describe cómo han evolucionado los síntomas del paciente a lo largo del tiempo</small></p>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="sinss_estabilidad" class="form-label">Estabilidad</label>
+      <select id="sinss_estabilidad" name="sinss_estabilidad" class="form-select">
+        <option value="">Seleccionar</option>
+        <option value="Empeorando">Empeorando</option>
+        <option value="Mejorando">Mejorando</option>
+        <option value="Sin cambios">Sin cambios</option>
+        <option value="Fluctuante">Fluctuante</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="sinss_estabilidad_descripcion" class="form-label">Descripción de la evolución</label>
+      <textarea id="sinss_estabilidad_descripcion" name="sinss_estabilidad_descripcion" class="form-control" rows="2"></textarea>
+    </div>
+  </div>
+</div>
+
+<div id="estabilidad_adicional_container">
+  <!-- Aquí se agregarán campos adicionales de estabilidad -->
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="agregar_estabilidad_btn">
+      <i class="fas fa-plus"></i> Agregar campo adicional de estabilidad
+    </button>
+  </div>
+</div>
+
+<!-- Comentarios adicionales -->
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <h5>Comentarios adicionales</h5>
+    <div class="form-group">
+      <textarea id="sinss_comentarios" name="sinss_comentarios" class="form-control" rows="3" placeholder="Espacio para registrar cualquier observación adicional sobre la evaluación SINSS del paciente"></textarea>
+    </div>
+  </div>
+</div>
             
             <div class="form-row mt-4">
               <div class="form-col form-col-md-12">
