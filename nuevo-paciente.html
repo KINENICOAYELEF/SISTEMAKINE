@@ -1178,6 +1178,359 @@
       </div>
     </div>
       </div> <!-- Cierre de cuestionarios-acordeon -->
+      <!-- BPI (Inventario Breve de Dolor) -->
+      <div class="cuestionario-item">
+        <div class="cuestionario-header" onclick="toggleCuestionario('bpi-content')">
+          <h4><i class="fas fa-plus-circle"></i> Inventario Breve de Dolor (BPI)</h4>
+          <div class="resultado-badge" id="bpi-badge">No completado</div>
+        </div>
+        <div class="cuestionario-content" id="bpi-content" style="display: none;">
+          <p class="mb-3">Este cuestionario evalúa la intensidad del dolor y su interferencia en las actividades diarias.</p>
+          
+          <h5>Parte 1: Intensidad del dolor</h5>
+          <p class="text-muted small mb-2">Califique su dolor en una escala de 0 a 10 (0 = sin dolor, 10 = el peor dolor imaginable)</p>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_dolor_actual" class="form-label">Dolor ahora mismo</label>
+                <input type="range" id="bpi_dolor_actual" name="bpi_dolor_actual" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_dolor_actual_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_dolor_actual_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_dolor_promedio" class="form-label">Dolor promedio en las últimas 24 horas</label>
+                <input type="range" id="bpi_dolor_promedio" name="bpi_dolor_promedio" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_dolor_promedio_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_dolor_promedio_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_dolor_peor" class="form-label">Peor dolor en las últimas 24 horas</label>
+                <input type="range" id="bpi_dolor_peor" name="bpi_dolor_peor" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_dolor_peor_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_dolor_peor_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_dolor_menor" class="form-label">Menor dolor en las últimas 24 horas</label>
+                <input type="range" id="bpi_dolor_menor" name="bpi_dolor_menor" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_dolor_menor_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_dolor_menor_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <h5 class="mt-4">Parte 2: Interferencia del dolor</h5>
+          <p class="text-muted small mb-2">Califique cómo el dolor ha interferido en las siguientes actividades en una escala de 0 a 10 (0 = no interfiere, 10 = interfiere completamente)</p>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_actividad" class="form-label">Actividad general</label>
+                <input type="range" id="bpi_interferencia_actividad" name="bpi_interferencia_actividad" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_actividad_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_actividad_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_animo" class="form-label">Estado de ánimo</label>
+                <input type="range" id="bpi_interferencia_animo" name="bpi_interferencia_animo" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_animo_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_animo_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_caminar" class="form-label">Capacidad para caminar</label>
+                <input type="range" id="bpi_interferencia_caminar" name="bpi_interferencia_caminar" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_caminar_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_caminar_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_trabajo" class="form-label">Trabajo habitual</label>
+                <input type="range" id="bpi_interferencia_trabajo" name="bpi_interferencia_trabajo" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_trabajo_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_trabajo_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_relaciones" class="form-label">Relaciones con otras personas</label>
+                <input type="range" id="bpi_interferencia_relaciones" name="bpi_interferencia_relaciones" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_relaciones_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_relaciones_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_sueno" class="form-label">Sueño</label>
+                <input type="range" id="bpi_interferencia_sueno" name="bpi_interferencia_sueno" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_sueno_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_sueno_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_vida" class="form-label">Capacidad de disfrutar de la vida</label>
+                <input type="range" id="bpi_interferencia_vida" name="bpi_interferencia_vida" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_vida_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_vida_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-12">
+              <div class="resultado-container" id="bpi-resultado">
+                <div class="resultado-label">Resultados BPI:</div>
+                <div class="form-row">
+                  <div class="form-col form-col-md-6">
+                    <div class="resultado-sublabel">Intensidad del dolor:</div>
+                    <div class="resultado-valor" id="bpi-intensidad-valor">0/10</div>
+                    <div class="resultado-interpretacion" id="bpi-intensidad-interpretacion">Sin dolor</div>
+                  </div>
+                  <div class="form-col form-col-md-6">
+                    <div class="resultado-sublabel">Interferencia del dolor:</div>
+                    <div class="resultado-valor" id="bpi-interferencia-valor">0/10</div>
+                    <div class="resultado-interpretacion" id="bpi-interferencia-interpretacion">Sin interferencia</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- DN4 (Cuestionario de Dolor Neuropático) -->
+      <div class="cuestionario-item">
+        <div class="cuestionario-header" onclick="toggleCuestionario('dn4-content')">
+          <h4><i class="fas fa-plus-circle"></i> Cuestionario de Dolor Neuropático (DN4)</h4>
+          <div class="resultado-badge" id="dn4-badge">No completado</div>
+        </div>
+        <div class="cuestionario-content" id="dn4-content" style="display: none;">
+          <p class="mb-3">Este cuestionario ayuda a identificar el dolor neuropático. Responda Sí o No a las siguientes preguntas basadas en las características del dolor del paciente.</p>
+          
+          <h5>Parte 1: Entrevista al paciente</h5>
+          <p class="text-muted small mb-2">¿El dolor tiene una o más de las siguientes características?</p>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">1. ¿Quemazón?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_quemazon" id="dn4_quemazon_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_quemazon_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_quemazon" id="dn4_quemazon_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_quemazon_no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">2. ¿Sensación de frío doloroso?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_frio" id="dn4_frio_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_frio_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_frio" id="dn4_frio_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_frio_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">3. ¿Descargas eléctricas?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_descargas" id="dn4_descargas_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_descargas_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_descargas" id="dn4_descargas_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_descargas_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <h5 class="mt-4">¿Se asocia el dolor con uno o más de los siguientes síntomas en la misma zona?</h5>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">4. ¿Hormigueo?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hormigueo" id="dn4_hormigueo_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hormigueo_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hormigueo" id="dn4_hormigueo_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hormigueo_no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">5. ¿Alfileres y agujas?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_alfileres" id="dn4_alfileres_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_alfileres_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_alfileres" id="dn4_alfileres_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_alfileres_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">6. ¿Entumecimiento?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_entumecimiento" id="dn4_entumecimiento_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_entumecimiento_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_entumecimiento" id="dn4_entumecimiento_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_entumecimiento_no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">7. ¿Picazón?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_picazon" id="dn4_picazon_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_picazon_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_picazon" id="dn4_picazon_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_picazon_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <h5 class="mt-4">Parte 2: Examen del paciente</h5>
+          <p class="text-muted small mb-2">¿El dolor está localizado en una zona donde el examen físico puede mostrar una o más de las siguientes características?</p>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">8. ¿Hipoestesia al tacto?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hipoestesia" id="dn4_hipoestesia_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hipoestesia_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hipoestesia" id="dn4_hipoestesia_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hipoestesia_no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">9. ¿Hipoestesia al pinchazo?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hipoestesia_pinchazo" id="dn4_hipoestesia_pinchazo_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hipoestesia_pinchazo_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hipoestesia_pinchazo" id="dn4_hipoestesia_pinchazo_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hipoestesia_pinchazo_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">10. ¿Se provoca o incrementa el dolor por cepillado?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_cepillado" id="dn4_cepillado_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_cepillado_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_cepillado" id="dn4_cepillado_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_cepillado_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-12">
+              <div class="resultado-container" id="dn4-resultado">
+                <div class="resultado-label">Puntuación DN4:</div>
+                <div class="resultado-valor" id="dn4-valor">0/10</div>
+                <div class="resultado-interpretacion" id="dn4-interpretacion">Complete el cuestionario para obtener un resultado</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
     </div> <!-- Cierre de tab-content cuestionarios --> 
           
           <!-- 4. Historia Médica -->
