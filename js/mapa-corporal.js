@@ -1,5 +1,5 @@
 // Mapa Corporal Interactivo
-// Versión mejorada con irradiación y tamaño de marcas ajustado
+// Versión mejorada con nuevas funcionalidades
 
 class MapaCorporal {
   constructor() {
@@ -21,6 +21,11 @@ class MapaCorporal {
     this.isDrawing = false;
     this.startX = 0;
     this.startY = 0;
+    this.lastX = 0;
+    this.lastY = 0;
+    
+    // Flag para saber si estamos en dispositivo móvil
+    this.isMobile = this.detectMobile();
     
     // Configuración del síntoma actual
     this.sintomaActual = {
@@ -36,18 +41,22 @@ class MapaCorporal {
     };
     
     // Configuración ajustable
-    this.markerRadius = 6; // Reducido de 10 a 6 para que sea más pequeño
+    this.markerRadius = 10; // Para PC
+    this.mobileMarkerRadius = 8; // Para móviles, un poco más pequeño
+    this.paintSpacing = 5; // Espacio entre marcas al pintar en móvil
     
     // Inicializar
     this.init();
   }
   
+  // Detectar si es dispositivo móvil
+  detectMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+  
   init() {
     console.log("Inicializando mapa corporal...");
-    
-    // Forzar un tamaño fijo para las imágenes 
-    this.imgAnterior.style.width = '300px';
-    this.imgPosterior.style.width = '300px';
+    console.log("Detectado como: " + (this.isMobile ? "dispositivo móvil" : "computadora"));
     
     // Configurar canvas con dimensiones fijas
     this.setupCanvas('anterior');
@@ -94,7 +103,7 @@ class MapaCorporal {
       return;
     }
     
-    // SOLUCIÓN: Forzar dimensiones específicas en el canvas
+    // Forzar dimensiones específicas en el canvas
     canvas.width = 300;
     canvas.height = 600;
     
@@ -112,7 +121,7 @@ class MapaCorporal {
   }
   
   setupEvents(canvas, view) {
-    // ------ EVENTOS DE MOUSE ------
+    // ------ EVENTOS DE MOUSE (PC) ------
     
     // Mousedown - inicia el dibujo
     canvas.onmousedown = (e) => {
@@ -130,6 +139,10 @@ class MapaCorporal {
       const canvasX = x * scaleX;
       const canvasY = y * scaleY;
       
+      // Guardar la última posición para el modo de pintura
+      this.lastX = canvasX;
+      this.lastY = canvasY;
+      
       if (this.currentTool === 'marker') {
         // Para marcador, dibujamos inmediatamente
         this.drawMarker(view, canvasX, canvasY);
@@ -137,7 +150,7 @@ class MapaCorporal {
         // Para borrador, borramos inmediatamente
         this.erase(view, canvasX, canvasY);
       } else if (this.currentTool === 'arrow') {
-        // Para flecha, guardamos el punto inicial y activamos el modo de dibujo
+        // Para flecha/irradiación, guardamos el punto inicial y activamos el modo de dibujo
         this.isDrawing = true;
         this.startX = canvasX;
         this.startY = canvasY;
@@ -146,34 +159,34 @@ class MapaCorporal {
     
     // Mousemove - continúa el dibujo si estamos en modo dibujo
     canvas.onmousemove = (e) => {
-      if (!this.isDrawing || this.currentView !== view) return;
+      if (!this.isDrawing && this.currentTool !== 'marker') return;
+      if (this.currentView !== view) return;
       
-      // Solo procesamos el movimiento para la herramienta de flecha
-      if (this.currentTool === 'arrow') {
-        e.preventDefault();
-        
-        // Obtener coordenadas actuales
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Ajustar coordenadas
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const canvasX = x * scaleX;
-        const canvasY = y * scaleY;
-        
-        // Redibujar para mostrar el preview de la flecha
+      e.preventDefault();
+      
+      // Obtener coordenadas actuales
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Ajustar coordenadas
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const canvasX = x * scaleX;
+      const canvasY = y * scaleY;
+      
+      if (this.currentTool === 'arrow' && this.isDrawing) {
+        // Redibujar para mostrar el preview de la irradiación
         this.redrawMarks(view);
-        this.drawArrow(view, this.startX, this.startY, canvasX, canvasY, true); // true = preview
+        this.drawIrradiation(view, this.startX, this.startY, canvasX, canvasY, true); // true = preview
       }
     };
     
     // Mouseup - finaliza el dibujo
     canvas.onmouseup = (e) => {
-      if (!this.isDrawing || this.currentView !== view) return;
+      if (!this.isDrawing && this.currentTool !== 'marker') return;
+      if (this.currentView !== view) return;
       
-      // Solo procesamos para la herramienta de flecha
       if (this.currentTool === 'arrow') {
         e.preventDefault();
         
@@ -194,11 +207,11 @@ class MapaCorporal {
         const distance = Math.sqrt(dx*dx + dy*dy);
         
         if (distance > 10) { // Solo dibujamos si la distancia es suficiente
-          this.drawArrow(view, this.startX, this.startY, canvasX, canvasY, false); // false = no es preview
+          this.drawIrradiation(view, this.startX, this.startY, canvasX, canvasY, false); // false = no es preview
         }
-        
-        this.isDrawing = false;
       }
+      
+      this.isDrawing = false;
     };
     
     // Mouseleave - cancela el dibujo si salimos del canvas
@@ -209,7 +222,7 @@ class MapaCorporal {
       }
     };
     
-    // ------ EVENTOS TÁCTILES ------
+    // ------ EVENTOS TÁCTILES (MÓVIL) ------
     
     // Touchstart - inicia el dibujo
     canvas.ontouchstart = (e) => {
@@ -227,9 +240,15 @@ class MapaCorporal {
       const canvasX = x * scaleX;
       const canvasY = y * scaleY;
       
+      // Guardar la última posición para el modo de pintura
+      this.lastX = canvasX;
+      this.lastY = canvasY;
+      
       if (this.currentTool === 'marker') {
+        this.isDrawing = true;
         this.drawMarker(view, canvasX, canvasY);
       } else if (this.currentTool === 'eraser') {
+        this.isDrawing = true;
         this.erase(view, canvasX, canvasY);
       } else if (this.currentTool === 'arrow') {
         this.isDrawing = true;
@@ -238,27 +257,54 @@ class MapaCorporal {
       }
     };
     
-    // Touchmove - continúa el dibujo
+    // Touchmove - continúa el dibujo (permite pintar en móviles)
     canvas.ontouchmove = (e) => {
       if (!this.isDrawing || this.currentView !== view) return;
       
-      if (this.currentTool === 'arrow') {
-        e.preventDefault();
+      e.preventDefault();
+      
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      
+      // Ajustar coordenadas
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const canvasX = x * scaleX;
+      const canvasY = y * scaleY;
+      
+      if (this.currentTool === 'marker') {
+        // Calcular la distancia desde el último punto
+        const dx = canvasX - this.lastX;
+        const dy = canvasY - this.lastY;
+        const distance = Math.sqrt(dx*dx + dy*dy);
         
-        const touch = e.touches[0];
-        const rect = canvas.getBoundingClientRect();
-        const x = touch.clientX - rect.left;
-        const y = touch.clientY - rect.top;
+        // Dibujar múltiples puntos entre la última posición y la actual para crear efecto de pincel
+        if (distance >= this.paintSpacing) {
+          const steps = Math.max(1, Math.floor(distance / this.paintSpacing));
+          for (let i = 1; i <= steps; i++) {
+            const ratio = i / steps;
+            const pointX = this.lastX + dx * ratio;
+            const pointY = this.lastY + dy * ratio;
+            this.drawMarker(view, pointX, pointY);
+          }
+          
+          // Actualizar la última posición
+          this.lastX = canvasX;
+          this.lastY = canvasY;
+        }
+      } else if (this.currentTool === 'eraser') {
+        // Borrar de forma continua
+        this.erase(view, canvasX, canvasY);
         
-        // Ajustar coordenadas
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const canvasX = x * scaleX;
-        const canvasY = y * scaleY;
-        
-        // Redibujar para mostrar el preview de la flecha
+        // Actualizar la última posición
+        this.lastX = canvasX;
+        this.lastY = canvasY;
+      } else if (this.currentTool === 'arrow') {
+        // Redibujar para mostrar el preview de la irradiación
         this.redrawMarks(view);
-        this.drawArrow(view, this.startX, this.startY, canvasX, canvasY, true);
+        this.drawIrradiation(view, this.startX, this.startY, canvasX, canvasY, true);
       }
     };
     
@@ -286,31 +332,32 @@ class MapaCorporal {
         const distance = Math.sqrt(dx*dx + dy*dy);
         
         if (distance > 10) {
-          this.drawArrow(view, this.startX, this.startY, canvasX, canvasY, false);
+          this.drawIrradiation(view, this.startX, this.startY, canvasX, canvasY, false);
         }
-        
-        this.isDrawing = false;
       }
+      
+      this.isDrawing = false;
     };
   }
   
   drawMarker(view, x, y) {
-    console.log(`Dibujando marca en ${view} en (${x}, ${y})`);
-    
     // Obtener contexto
     const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
     const ctx = canvas.getContext('2d');
     
-    // Dibujar círculo
+    // Seleccionar el radio adecuado según el dispositivo
+    const radius = this.isMobile ? this.mobileMarkerRadius : this.markerRadius;
+    
+    // Dibujar círculo perfecto
     ctx.beginPath();
-    ctx.arc(x, y, this.markerRadius, 0, Math.PI * 2);
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fillStyle = this.sintomaActual.color;
     ctx.fill();
     
     // Añadir número de intensidad si es dolor
     if (this.sintomaActual.tipo === 'dolor') {
       ctx.fillStyle = '#ffffff';
-      ctx.font = `${this.markerRadius}px Arial`;
+      ctx.font = `${radius}px Arial`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(this.sintomaActual.intensidad.toString(), x, y);
@@ -330,7 +377,8 @@ class MapaCorporal {
     this.actualizarLeyenda();
   }
   
-  drawArrow(view, fromX, fromY, toX, toY, isPreview = false) {
+  // Nueva función para dibujar irradiación (reemplaza drawArrow)
+  drawIrradiation(view, fromX, fromY, toX, toY, isPreview = false) {
     // Obtener contexto
     const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
     const ctx = canvas.getContext('2d');
@@ -338,39 +386,39 @@ class MapaCorporal {
     // Calcular ángulo y distancia
     const dx = toX - fromX;
     const dy = toY - fromY;
+    const distance = Math.sqrt(dx*dx + dy*dy);
     const angle = Math.atan2(dy, dx);
     
-    // Dibujar línea principal
+    // Dibujar línea principal (punteada para mejorar visibilidad)
     ctx.beginPath();
+    ctx.setLineDash([5, 3]); // Línea punteada
     ctx.moveTo(fromX, fromY);
     ctx.lineTo(toX, toY);
     ctx.strokeStyle = this.sintomaActual.color;
     ctx.lineWidth = 2;
     ctx.stroke();
+    ctx.setLineDash([]); // Restaurar línea sólida
     
-    // Dibujar punta de flecha
-    const headLength = 10; // Longitud de la punta de la flecha
+    // Dibujar símbolo de irradiación (asterisco)
+    const symbolSize = 12;
     
+    // Dibujar asterisco en el punto final
     ctx.beginPath();
-    ctx.moveTo(toX, toY);
-    ctx.lineTo(
-      toX - headLength * Math.cos(angle - Math.PI / 6),
-      toY - headLength * Math.sin(angle - Math.PI / 6)
-    );
-    ctx.lineTo(
-      toX - headLength * Math.cos(angle + Math.PI / 6),
-      toY - headLength * Math.sin(angle + Math.PI / 6)
-    );
-    ctx.closePath();
-    ctx.fillStyle = this.sintomaActual.color;
-    ctx.fill();
+    for (let i = 0; i < 4; i++) {
+      const a = (Math.PI / 4) * i;
+      ctx.moveTo(toX - symbolSize * Math.cos(a), toY - symbolSize * Math.sin(a));
+      ctx.lineTo(toX + symbolSize * Math.cos(a), toY + symbolSize * Math.sin(a));
+    }
+    ctx.strokeStyle = this.sintomaActual.color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
     
-    // Si no es preview, guardar la flecha
+    // Si no es preview, guardar la irradiación
     if (!isPreview) {
-      console.log(`Guardando flecha en ${view} de (${fromX}, ${fromY}) a (${toX}, ${toY})`);
+      console.log(`Guardando irradiación en ${view} de (${fromX}, ${fromY}) a (${toX}, ${toY})`);
       
       this.marcas[view].push({
-        tool: 'arrow',
+        tool: 'arrow', // Mantener 'arrow' para compatibilidad con datos anteriores
         startX: fromX,
         startY: fromY,
         endX: toX,
@@ -391,10 +439,10 @@ class MapaCorporal {
     const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
     const ctx = canvas.getContext('2d');
     
-    // Radio de borrado
-    const eraseRadius = 15;
+    // Radio de borrado (un poco más grande en móvil para facilitar)
+    const eraseRadius = this.isMobile ? 20 : 15;
     
-    // Borrar área
+    // Borrar área de forma visual para retroalimentación inmediata
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
     ctx.arc(x, y, eraseRadius, 0, Math.PI * 2);
@@ -407,7 +455,7 @@ class MapaCorporal {
         const distance = Math.sqrt(Math.pow(marca.x - x, 2) + Math.pow(marca.y - y, 2));
         return distance > eraseRadius;
       } else if (marca.tool === 'arrow') {
-        // Para flechas, verificamos si el borrador toca alguno de los extremos
+        // Para irradiaciones, verificamos si el borrador toca alguno de los extremos
         const distStart = Math.sqrt(Math.pow(marca.startX - x, 2) + Math.pow(marca.startY - y, 2));
         const distEnd = Math.sqrt(Math.pow(marca.endX - x, 2) + Math.pow(marca.endY - y, 2));
         
@@ -422,8 +470,9 @@ class MapaCorporal {
       return true;
     });
     
-    // Actualizar leyenda
+    // Actualizar leyenda y redibujamos para mostrar el estado actual
     this.actualizarLeyenda();
+    this.redrawMarks(view);
   }
   
   clearCanvas() {
@@ -466,16 +515,19 @@ class MapaCorporal {
         this.sintomaActual.intensidad = marca.intensidad;
         this.sintomaActual.color = marca.color;
         
-        // Dibujar marca
+        // Seleccionar el radio adecuado según el dispositivo
+        const radius = this.isMobile ? this.mobileMarkerRadius : this.markerRadius;
+        
+        // Dibujar marca como círculo perfecto
         ctx.beginPath();
-        ctx.arc(marca.x, marca.y, this.markerRadius, 0, Math.PI * 2);
+        ctx.arc(marca.x, marca.y, radius, 0, Math.PI * 2);
         ctx.fillStyle = marca.color;
         ctx.fill();
         
         // Añadir número de intensidad si es dolor
         if (marca.tipo === 'dolor') {
           ctx.fillStyle = '#ffffff';
-          ctx.font = `${this.markerRadius}px Arial`;
+          ctx.font = `${radius}px Arial`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(marca.intensidad.toString(), marca.x, marca.y);
@@ -486,41 +538,34 @@ class MapaCorporal {
         this.sintomaActual.intensidad = currentIntensidad;
         this.sintomaActual.color = currentColor;
       } else if (marca.tool === 'arrow') {
-        // Dibujar flecha
+        // Dibujar irradiación
         const fromX = marca.startX;
         const fromY = marca.startY;
         const toX = marca.endX;
         const toY = marca.endY;
         
-        // Calcular ángulo
-        const dx = toX - fromX;
-        const dy = toY - fromY;
-        const angle = Math.atan2(dy, dx);
-        
-        // Dibujar línea principal
+        // Línea punteada
         ctx.beginPath();
+        ctx.setLineDash([5, 3]);
         ctx.moveTo(fromX, fromY);
         ctx.lineTo(toX, toY);
         ctx.strokeStyle = marca.color;
         ctx.lineWidth = 2;
         ctx.stroke();
+        ctx.setLineDash([]);
         
-        // Dibujar punta de flecha
-        const headLength = 10;
+        // Símbolo de irradiación (asterisco)
+        const symbolSize = 12;
         
         ctx.beginPath();
-        ctx.moveTo(toX, toY);
-        ctx.lineTo(
-          toX - headLength * Math.cos(angle - Math.PI / 6),
-          toY - headLength * Math.sin(angle - Math.PI / 6)
-        );
-        ctx.lineTo(
-          toX - headLength * Math.cos(angle + Math.PI / 6),
-          toY - headLength * Math.sin(angle + Math.PI / 6)
-        );
-        ctx.closePath();
-        ctx.fillStyle = marca.color;
-        ctx.fill();
+        for (let i = 0; i < 4; i++) {
+          const a = (Math.PI / 4) * i;
+          ctx.moveTo(toX - symbolSize * Math.cos(a), toY - symbolSize * Math.sin(a));
+          ctx.lineTo(toX + symbolSize * Math.cos(a), toY + symbolSize * Math.sin(a));
+        }
+        ctx.strokeStyle = marca.color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
       }
     });
   }
