@@ -43,13 +43,30 @@ class MapaCorporal {
   }
   
   init() {
+    // Verificar si las imágenes existen
+    this.verificarImagenes();
+    
     // Inicializar canvas cuando las imágenes están cargadas
-    this.imgAnterior.onload = () => this.setupCanvas('anterior');
-    this.imgPosterior.onload = () => this.setupCanvas('posterior');
+    this.imgAnterior.onload = () => {
+      console.log('Imagen anterior cargada correctamente');
+      this.setupCanvas('anterior');
+    };
+    
+    this.imgPosterior.onload = () => {
+      console.log('Imagen posterior cargada correctamente');
+      this.setupCanvas('posterior');
+    };
     
     // Si las imágenes ya están cargadas
-    if (this.imgAnterior.complete) this.setupCanvas('anterior');
-    if (this.imgPosterior.complete) this.setupCanvas('posterior');
+    if (this.imgAnterior.complete) {
+      console.log('Imagen anterior ya estaba cargada');
+      this.setupCanvas('anterior');
+    }
+    
+    if (this.imgPosterior.complete) {
+      console.log('Imagen posterior ya estaba cargada');
+      this.setupCanvas('posterior');
+    }
     
     // Event listeners para herramientas
     document.getElementById('tool-marker').addEventListener('click', () => this.setTool('marker'));
@@ -76,19 +93,46 @@ class MapaCorporal {
       this.sintomaActual.color = e.target.value;
     });
     
-    // Event listeners para pestañas
-    document.getElementById('anterior-tab').addEventListener('click', () => {
-      this.currentView = 'anterior';
-    });
-    
-    document.getElementById('posterior-tab').addEventListener('click', () => {
-      this.currentView = 'posterior';
-    });
-    
     // Event listener para guardar
     document.getElementById('save-map-btn').addEventListener('click', () => {
       this.saveMapData();
     });
+    
+    // Agregar listeners a ambos canvas
+    this.addCanvasListeners('anterior');
+    this.addCanvasListeners('posterior');
+    
+    // Redimensionar el canvas si la ventana cambia de tamaño
+    window.addEventListener('resize', () => {
+      this.resizeCanvas('anterior');
+      this.resizeCanvas('posterior');
+    });
+  }
+  
+  verificarImagenes() {
+    // Verificar si las imágenes existen y mostrar mensaje de error si no
+    this.imgAnterior.onerror = () => {
+      console.error('Error al cargar la imagen anterior. Verifique la ruta: img/body-map-front.jpg');
+      this.mostrarErrorImagen(this.imgAnterior);
+    };
+    
+    this.imgPosterior.onerror = () => {
+      console.error('Error al cargar la imagen posterior. Verifique la ruta: img/body-map-back.jpg');
+      this.mostrarErrorImagen(this.imgPosterior);
+    };
+  }
+  
+  mostrarErrorImagen(imgElement) {
+    // Reemplazar la imagen con un mensaje de error
+    const container = imgElement.parentElement;
+    const errorMsg = document.createElement('div');
+    errorMsg.className = 'alert alert-danger text-center';
+    errorMsg.innerHTML = `
+      <strong>Error al cargar la imagen</strong><br>
+      Verifique que las imágenes estén en la carpeta correcta:<br>
+      <code>img/body-map-front.jpg</code> y <code>img/body-map-back.jpg</code>
+    `;
+    container.appendChild(errorMsg);
   }
   
   setupCanvas(view) {
@@ -107,37 +151,88 @@ class MapaCorporal {
       this.ctxPosterior = ctx;
     }
     
-    // Event listeners para dibujo
-    canvas.addEventListener('mousedown', (e) => this.startDrawing(e, view));
-    canvas.addEventListener('touchstart', (e) => this.startDrawing(e, view));
-    
-    canvas.addEventListener('mousemove', (e) => this.draw(e, view));
-    canvas.addEventListener('touchmove', (e) => this.draw(e, view));
-    
-    canvas.addEventListener('mouseup', () => this.stopDrawing(view));
-    canvas.addEventListener('touchend', () => this.stopDrawing(view));
-    
-    canvas.addEventListener('mouseout', () => this.stopDrawing(view));
-    
-    // Redimensionar el canvas si la ventana cambia de tamaño
-    window.addEventListener('resize', () => {
-      this.resizeCanvas(view);
-    });
+    // Asegurar que el canvas se posiciona correctamente
+    this.posicionarCanvas(view);
     
     // Realizar el redimensionamiento inicial
     this.resizeCanvas(view);
+  }
+  
+  addCanvasListeners(view) {
+    const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
+    
+    // Event listeners para dibujo
+    canvas.addEventListener('mousedown', (e) => {
+      this.currentView = view;
+      this.startDrawing(e, view);
+    });
+    
+    canvas.addEventListener('touchstart', (e) => {
+      this.currentView = view;
+      this.startDrawing(e, view);
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+      if (this.currentView === view) {
+        this.draw(e, view);
+      }
+    });
+    
+    canvas.addEventListener('touchmove', (e) => {
+      if (this.currentView === view) {
+        this.draw(e, view);
+      }
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+      if (this.currentView === view) {
+        this.stopDrawing(view);
+      }
+    });
+    
+    canvas.addEventListener('touchend', () => {
+      if (this.currentView === view) {
+        this.stopDrawing(view);
+      }
+    });
+    
+    canvas.addEventListener('mouseout', () => {
+      if (this.currentView === view) {
+        this.stopDrawing(view);
+      }
+    });
+  }
+  
+  posicionarCanvas(view) {
+    const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
+    const img = view === 'anterior' ? this.imgAnterior : this.imgPosterior;
+    
+    // Asegurar que el canvas se posiciona exactamente sobre la imagen
+    if (img.complete) {
+      canvas.style.position = 'absolute';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+    }
   }
   
   resizeCanvas(view) {
     const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
     const img = view === 'anterior' ? this.imgAnterior : this.imgPosterior;
     
-    // Redimensionar canvas para que coincida con el tamaño actual de la imagen
-    canvas.width = img.clientWidth;
-    canvas.height = img.clientHeight;
-    
-    // Redibujar las marcas guardadas
-    this.redrawMarks(view);
+    // Solo redimensionar si la imagen está cargada
+    if (img.complete) {
+      // Redimensionar canvas para que coincida con el tamaño actual de la imagen
+      canvas.width = img.clientWidth;
+      canvas.height = img.clientHeight;
+      
+      // Redibujar las marcas guardadas
+      this.redrawMarks(view);
+    } else {
+      // Si la imagen no está cargada, intentar de nuevo después
+      setTimeout(() => this.resizeCanvas(view), 100);
+    }
   }
   
   startDrawing(e, view) {
@@ -467,14 +562,20 @@ class MapaCorporal {
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
-  const mapaCorporal = new MapaCorporal();
-  
-  // Hacer accesible a nivel global para uso desde otras partes del código
-  window.mapaCorporal = mapaCorporal;
-  
-  // Si hay datos previos en el campo oculto, cargarlos
-  const datosGuardados = document.getElementById('mapa-datos').value;
-  if (datosGuardados) {
-    mapaCorporal.loadMapData(datosGuardados);
-  }
+  setTimeout(() => {
+    try {
+      const mapaCorporal = new MapaCorporal();
+      
+      // Hacer accesible a nivel global para uso desde otras partes del código
+      window.mapaCorporal = mapaCorporal;
+      
+      // Si hay datos previos en el campo oculto, cargarlos
+      const datosGuardados = document.getElementById('mapa-datos').value;
+      if (datosGuardados) {
+        mapaCorporal.loadMapData(datosGuardados);
+      }
+    } catch (error) {
+      console.error('Error al inicializar el mapa corporal:', error);
+    }
+  }, 500); // Pequeño retraso para asegurar que todos los elementos estén cargados
 });
