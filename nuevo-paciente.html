@@ -903,33 +903,21 @@
   
   <div class="form-col form-col-md-9">
     <div class="mapa-container">
-      <!-- Pestañas para cambiar entre vista anterior y posterior -->
-      <ul class="nav nav-tabs mb-3" id="mapa-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" id="anterior-tab" data-toggle="tab" href="#anterior" role="tab">Vista Anterior</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="posterior-tab" data-toggle="tab" href="#posterior" role="tab">Vista Posterior</a>
-        </li>
-      </ul>
+      <!-- Títulos de las vistas -->
+      <h5 class="text-center mb-3">Vista Anterior</h5>
       
-      <!-- Contenido de las pestañas -->
-      <div class="tab-content" id="mapa-tab-content">
-        <!-- Vista Anterior -->
-        <div class="tab-pane fade show active" id="anterior" role="tabpanel">
-          <div class="mapa-canvas-container">
-            <img src="img/body-map-front.jpg" id="body-map-front" class="body-map-img" alt="Vista anterior del cuerpo humano">
-            <canvas id="canvas-anterior" class="mapa-canvas"></canvas>
-          </div>
-        </div>
-        
-        <!-- Vista Posterior -->
-        <div class="tab-pane fade" id="posterior" role="tabpanel">
-          <div class="mapa-canvas-container">
-            <img src="img/body-map-back.jpg" id="body-map-back" class="body-map-img" alt="Vista posterior del cuerpo humano">
-            <canvas id="canvas-posterior" class="mapa-canvas"></canvas>
-          </div>
-        </div>
+      <!-- Vista Anterior -->
+      <div class="mapa-canvas-container mb-4">
+        <img src="img/body-map-front.jpg" id="body-map-front" class="body-map-img" alt="Vista anterior del cuerpo humano">
+        <canvas id="canvas-anterior" class="mapa-canvas"></canvas>
+      </div>
+      
+      <h5 class="text-center mb-3">Vista Posterior</h5>
+      
+      <!-- Vista Posterior -->
+      <div class="mapa-canvas-container">
+        <img src="img/body-map-back.jpg" id="body-map-back" class="body-map-img" alt="Vista posterior del cuerpo humano">
+        <canvas id="canvas-posterior" class="mapa-canvas"></canvas>
       </div>
     </div>
   </div>
