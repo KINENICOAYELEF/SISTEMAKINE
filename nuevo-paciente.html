@@ -1472,6 +1472,177 @@
           });
       }
     }
+    // Funcionalidad para agregar campos adicionales SINSS
+document.addEventListener('DOMContentLoaded', function() {
+  // Severidad
+  document.getElementById('agregar_severidad_btn').addEventListener('click', function() {
+    const container = document.getElementById('severidad_adicional_container');
+    const fieldId = 'sinss_severidad_adicional_' + Date.now();
+    
+    const html = `
+      <div class="form-row mb-3" id="${fieldId}_container">
+        <div class="form-col form-col-md-10">
+          <div class="form-group">
+            <textarea id="${fieldId}" name="${fieldId}" class="form-control" rows="2" placeholder="Información adicional sobre la severidad..."></textarea>
+          </div>
+        </div>
+        <div class="form-col form-col-md-2">
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCampo('${fieldId}_container')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+  });
+  
+  // Irritabilidad - Actividades
+  document.getElementById('agregar_actividad_btn').addEventListener('click', function() {
+    const container = document.getElementById('irritabilidad_actividades_container');
+    const fieldId = 'sinss_irritabilidad_actividad_' + Date.now();
+    
+    const html = `
+      <div class="form-row mb-3" id="${fieldId}_container">
+        <div class="form-col form-col-md-10">
+          <div class="form-group">
+            <textarea id="${fieldId}" name="${fieldId}" class="form-control" rows="2" placeholder="Otra actividad que provoca dolor..."></textarea>
+          </div>
+        </div>
+        <div class="form-col form-col-md-2">
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCampo('${fieldId}_container')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+  });
+  
+  // Irritabilidad - Adicional
+  document.getElementById('agregar_irritabilidad_btn').addEventListener('click', function() {
+    const container = document.getElementById('irritabilidad_adicional_container');
+    const fieldId = 'sinss_irritabilidad_adicional_' + Date.now();
+    
+    const html = `
+      <div class="form-row mb-3" id="${fieldId}_container">
+        <div class="form-col form-col-md-10">
+          <div class="form-group">
+            <textarea id="${fieldId}" name="${fieldId}" class="form-control" rows="2" placeholder="Información adicional sobre la irritabilidad..."></textarea>
+          </div>
+        </div>
+        <div class="form-col form-col-md-2">
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCampo('${fieldId}_container')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+  });
+  
+  // Naturaleza - Diagnóstico
+  document.getElementById('agregar_diagnostico_btn').addEventListener('click', function() {
+    const container = document.getElementById('naturaleza_diagnostico_container');
+    const fieldId = 'sinss_naturaleza_diagnostico_' + Date.now();
+    
+    const html = `
+      <div class="form-row mb-3" id="${fieldId}_container">
+        <div class="form-col form-col-md-10">
+          <div class="form-group">
+            <textarea id="${fieldId}" name="${fieldId}" class="form-control" rows="2" placeholder="Otro diagnóstico..."></textarea>
+          </div>
+        </div>
+        <div class="form-col form-col-md-2">
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCampo('${fieldId}_container')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+  });
+  
+  // Naturaleza - Dolor
+  document.getElementById('agregar_dolor_btn').addEventListener('click', function() {
+    const container = document.getElementById('naturaleza_dolor_container');
+    const fieldId = 'sinss_naturaleza_dolor_' + Date.now();
+    
+    const html = `
+      <div class="form-row mb-3" id="${fieldId}_container">
+        <div class="form-col form-col-md-10">
+          <div class="form-group">
+            <textarea id="${fieldId}" name="${fieldId}" class="form-control" rows="2" placeholder="Otra característica del dolor..."></textarea>
+          </div>
+        </div>
+        <div class="form-col form-col-md-2">
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCampo('${fieldId}_container')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+  });
+  
+  // Naturaleza - Factores
+  document.getElementById('agregar_factores_btn').addEventListener('click', function() {
+    const container = document.getElementById('naturaleza_factores_container');
+    const fieldId = 'sinss_naturaleza_factores_' + Date.now();
+    
+    const html = `
+      <div class="form-row mb-3" id="${fieldId}_container">
+        <div class="form-col form-col-md-10">
+          <div class="form-group">
+            <textarea id="${fieldId}" name="${fieldId}" class="form-control" rows="2" placeholder="Otros factores biopsicosociales..."></textarea>
+          </div>
+        </div>
+        <div class="form-col form-col-md-2">
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCampo('${fieldId}_container')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+  });
+  
+  // Estabilidad
+  document.getElementById('agregar_estabilidad_btn').addEventListener('click', function() {
+    const container = document.getElementById('estabilidad_adicional_container');
+    const fieldId = 'sinss_estabilidad_adicional_' + Date.now();
+    
+    const html = `
+      <div class="form-row mb-3" id="${fieldId}_container">
+        <div class="form-col form-col-md-10">
+          <div class="form-group">
+            <textarea id="${fieldId}" name="${fieldId}" class="form-control" rows="2" placeholder="Información adicional sobre la estabilidad..."></textarea>
+          </div>
+        </div>
+        <div class="form-col form-col-md-2">
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCampo('${fieldId}_container')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+  });
+});
+
+// Función para eliminar campos adicionales
+function eliminarCampo(containerId) {
+  const container = document.getElementById(containerId);
+  if (container) {
+    container.remove();
+  }
+}
   </script>
   <script src="js/responsive.js"></script>
 </body>
