@@ -856,8 +856,8 @@
       <!-- Intensidad del dolor (solo visible cuando se selecciona dolor) -->
       <div id="dolor-intensidad-container" class="form-group mb-3">
         <label for="dolor-intensidad" class="form-label">Intensidad del dolor (0-10)</label>
-        <input type="range" id="dolor-intensidad" class="form-range w-100" min="0" max="10" step="1" value="5">
-        <div class="d-flex justify-content-between">
+        <input type="range" id="dolor-intensidad" class="form-range w-100" min="0" max="10" step="1" value="5" oninput="document.getElementById('dolor-intensidad-value').textContent = this.value;">
+        <div class="d-flex justify-content-between mt-1">
           <span>0</span>
           <span id="dolor-intensidad-value">5</span>
           <span>10</span>
@@ -867,7 +867,7 @@
       <!-- Selector de color -->
       <div class="form-group mb-3">
         <label for="sintoma-color" class="form-label">Color</label>
-        <input type="color" id="sintoma-color" class="form-control form-control-color" value="#ff0000">
+        <input type="color" id="sintoma-color" class="form-control" value="#ff0000">
       </div>
       
       <!-- Selector de herramienta -->
@@ -891,10 +891,11 @@
       </div>
       
       <!-- Leyenda de síntomas -->
-      <div id="mapa-leyenda" class="mt-3">
+      <div id="mapa-leyenda">
         <h6>Leyenda</h6>
         <div id="leyenda-items">
           <!-- La leyenda se generará dinámicamente con JavaScript -->
+          <p class="text-muted">No hay síntomas marcados</p>
         </div>
       </div>
     </div>
@@ -903,29 +904,29 @@
   <div class="form-col form-col-md-9">
     <div class="mapa-container">
       <!-- Pestañas para cambiar entre vista anterior y posterior -->
-      <ul class="nav nav-tabs mb-2" id="mapa-tabs" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="anterior-tab" data-bs-toggle="tab" data-bs-target="#anterior" type="button" role="tab" aria-controls="anterior" aria-selected="true">Vista Anterior</button>
+      <ul class="nav nav-tabs mb-3" id="mapa-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" id="anterior-tab" data-toggle="tab" href="#anterior" role="tab">Vista Anterior</a>
         </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="posterior-tab" data-bs-toggle="tab" data-bs-target="#posterior" type="button" role="tab" aria-controls="posterior" aria-selected="false">Vista Posterior</button>
+        <li class="nav-item">
+          <a class="nav-link" id="posterior-tab" data-toggle="tab" href="#posterior" role="tab">Vista Posterior</a>
         </li>
       </ul>
       
       <!-- Contenido de las pestañas -->
       <div class="tab-content" id="mapa-tab-content">
         <!-- Vista Anterior -->
-        <div class="tab-pane fade show active" id="anterior" role="tabpanel" aria-labelledby="anterior-tab">
+        <div class="tab-pane fade show active" id="anterior" role="tabpanel">
           <div class="mapa-canvas-container">
-            <img src="img/body-map-front.svg" id="body-map-front" class="body-map-img" alt="Vista anterior del cuerpo humano">
+            <img src="img/body-map-front.jpg" id="body-map-front" class="body-map-img" alt="Vista anterior del cuerpo humano">
             <canvas id="canvas-anterior" class="mapa-canvas"></canvas>
           </div>
         </div>
         
         <!-- Vista Posterior -->
-        <div class="tab-pane fade" id="posterior" role="tabpanel" aria-labelledby="posterior-tab">
+        <div class="tab-pane fade" id="posterior" role="tabpanel">
           <div class="mapa-canvas-container">
-            <img src="img/body-map-back.svg" id="body-map-back" class="body-map-img" alt="Vista posterior del cuerpo humano">
+            <img src="img/body-map-back.jpg" id="body-map-back" class="body-map-img" alt="Vista posterior del cuerpo humano">
             <canvas id="canvas-posterior" class="mapa-canvas"></canvas>
           </div>
         </div>
