@@ -18,11 +18,11 @@
 .mapa-canvas-container {
   position: relative;
   width: 100%;
-  height: auto;
   display: flex;
   justify-content: center;
   border: 1px solid #ccc;
   background-color: #fff;
+  padding: 10px 0;
 }
 
 .body-map-img {
