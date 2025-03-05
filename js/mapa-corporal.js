@@ -1,5 +1,5 @@
 // Mapa Corporal Interactivo
-// Versión mejorada con nuevas funcionalidades
+// Versión mejorada con tamaño consistente y responsive
 
 class MapaCorporal {
   constructor() {
@@ -40,17 +40,15 @@ class MapaCorporal {
       posterior: []
     };
     
-    // Configuración base para tamaños (en porcentaje de la altura del canvas)
-    this.baseRadiusPercent = 2.5; // 2.5% de la altura del canvas para PC
-    this.mobileBaseRadiusPercent = 2.0; // 2.0% para móviles
+    // Dimensiones internas del canvas (espacio de coordenadas)
+    this.canvasWidth = 300;
+    this.canvasHeight = 600;
     
-    // Estos valores se calcularán dinámicamente
-    this.markerRadius = 10; 
-    this.mobileMarkerRadius = 8;
-    this.paintSpacing = 5; // Espacio entre marcas al pintar en móvil
-    
-    // Tamaño base del canvas (para cálculos de escala)
-    this.baseCanvasHeight = 600;
+    // Tamaños fijos para los marcadores (en el espacio de coordenadas del canvas)
+    this.desktopMarkerSize = 15;      // Tamaño en desktop
+    this.mobileMarkerSize = 12;       // Tamaño en mobile
+    this.paintSpacing = 8;            // Espaciado entre puntos al pintar
+    this.symbolSize = 10;             // Tamaño de símbolos de irradiación
     
     // Inicializar
     this.init();
@@ -65,7 +63,7 @@ class MapaCorporal {
     console.log("Inicializando mapa corporal...");
     console.log("Detectado como: " + (this.isMobile ? "dispositivo móvil" : "computadora"));
     
-    // Configurar canvas con dimensiones fijas
+    // Configurar canvas
     this.setupCanvas('anterior');
     this.setupCanvas('posterior');
     
@@ -97,6 +95,12 @@ class MapaCorporal {
     document.getElementById('save-map-btn').addEventListener('click', () => {
       this.saveMapData();
     });
+    
+    // Agregar listener para cambio de tamaño de ventana
+    window.addEventListener('resize', () => {
+      this.redrawMarks('anterior');
+      this.redrawMarks('posterior');
+    });
   }
   
   setupCanvas(view) {
@@ -104,16 +108,15 @@ class MapaCorporal {
     
     const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
     const img = view === 'anterior' ? this.imgAnterior : this.imgPosterior;
-    const container = view === 'anterior' ? this.containerAnterior : this.containerPosterior;
     
     if (!canvas || !img) {
       console.error(`Canvas o imagen no encontrados para ${view}`);
       return;
     }
     
-    // Forzar dimensiones específicas en el canvas
-    canvas.width = 300;
-    canvas.height = 600;
+    // Configurar dimensiones fijas del canvas
+    canvas.width = this.canvasWidth;
+    canvas.height = this.canvasHeight;
     
     // Asegurar que el canvas ocupe todo el contenedor
     canvas.style.position = 'absolute';
@@ -122,40 +125,32 @@ class MapaCorporal {
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     
-    // Calcular radios basados en el tamaño del canvas
-    this.recalculateMarkerSizes();
-    
     console.log(`Canvas ${view} dimensiones: ${canvas.width}x${canvas.height}`);
     
     // Configurar eventos para todas las herramientas
     this.setupEvents(canvas, view);
-    
-    // Agregar listener para redimensionar
-    window.addEventListener('resize', () => {
-      this.recalculateMarkerSizes();
-      // Redibujar las marcas con el nuevo tamaño
-      this.redrawMarks('anterior');
-      this.redrawMarks('posterior');
-    });
   }
   
-  // Nueva función para calcular tamaños de marcadores basados en canvas actual
-  recalculateMarkerSizes() {
-    // Obtener el tamaño visual actual del canvas
-    const rect = this.canvasAnterior.getBoundingClientRect();
-    const visualHeight = rect.height;
+  getScalingFactor(canvas) {
+    // Obtener el tamaño real del canvas en el DOM
+    const rect = canvas.getBoundingClientRect();
     
-    // Calcular el radio basado en el porcentaje de la altura visual
-    const scaleRatio = visualHeight / this.baseCanvasHeight;
+    // Calcular factores de escala
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
     
-    // Calcular radios proporcionales al tamaño visual
-    this.markerRadius = Math.max(5, Math.round((visualHeight * this.baseRadiusPercent) / 100));
-    this.mobileMarkerRadius = Math.max(4, Math.round((visualHeight * this.mobileBaseRadiusPercent) / 100));
+    return { scaleX, scaleY };
+  }
+  
+  convertToCanvasCoords(canvas, clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const { scaleX, scaleY } = this.getScalingFactor(canvas);
     
-    // Ajustar espaciado de pintura para móvil
-    this.paintSpacing = Math.max(3, Math.round(this.markerRadius / 2));
+    // Convertir coordenadas del cliente a coordenadas del canvas
+    const canvasX = (clientX - rect.left) * scaleX;
+    const canvasY = (clientY - rect.top) * scaleY;
     
-    console.log(`Tamaños recalculados - Radio PC: ${this.markerRadius}, Radio móvil: ${this.mobileMarkerRadius}`);
+    return { x: canvasX, y: canvasY };
   }
   
   setupEvents(canvas, view) {
@@ -166,16 +161,8 @@ class MapaCorporal {
       e.preventDefault();
       this.currentView = view;
       
-      // Obtener coordenadas ajustadas al canvas
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      // Ajustar coordenadas según el tamaño real del canvas vs. tamaño mostrado
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const canvasX = x * scaleX;
-      const canvasY = y * scaleY;
+      // Convertir coordenadas
+      const { x: canvasX, y: canvasY } = this.convertToCanvasCoords(canvas, e.clientX, e.clientY);
       
       // Guardar la última posición para el modo de pintura
       this.lastX = canvasX;
@@ -188,7 +175,7 @@ class MapaCorporal {
         // Para borrador, borramos inmediatamente
         this.erase(view, canvasX, canvasY);
       } else if (this.currentTool === 'arrow') {
-        // Para flecha/irradiación, guardamos el punto inicial y activamos el modo de dibujo
+        // Para irradiación, guardamos el punto inicial y activamos el modo de dibujo
         this.isDrawing = true;
         this.startX = canvasX;
         this.startY = canvasY;
@@ -202,16 +189,8 @@ class MapaCorporal {
       
       e.preventDefault();
       
-      // Obtener coordenadas actuales
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      // Ajustar coordenadas
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const canvasX = x * scaleX;
-      const canvasY = y * scaleY;
+      // Convertir coordenadas
+      const { x: canvasX, y: canvasY } = this.convertToCanvasCoords(canvas, e.clientX, e.clientY);
       
       if (this.currentTool === 'arrow' && this.isDrawing) {
         // Redibujar para mostrar el preview de la irradiación
@@ -228,16 +207,8 @@ class MapaCorporal {
       if (this.currentTool === 'arrow') {
         e.preventDefault();
         
-        // Obtener coordenadas finales
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Ajustar coordenadas
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const canvasX = x * scaleX;
-        const canvasY = y * scaleY;
+        // Convertir coordenadas
+        const { x: canvasX, y: canvasY } = this.convertToCanvasCoords(canvas, e.clientX, e.clientY);
         
         // Verificar que no sea un clic muy cercano
         const dx = canvasX - this.startX;
@@ -268,15 +239,8 @@ class MapaCorporal {
       this.currentView = view;
       
       const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      const x = touch.clientX - rect.left;
-      const y = touch.clientY - rect.top;
-      
-      // Ajustar coordenadas
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const canvasX = x * scaleX;
-      const canvasY = y * scaleY;
+      // Convertir coordenadas
+      const { x: canvasX, y: canvasY } = this.convertToCanvasCoords(canvas, touch.clientX, touch.clientY);
       
       // Guardar la última posición para el modo de pintura
       this.lastX = canvasX;
@@ -302,15 +266,8 @@ class MapaCorporal {
       e.preventDefault();
       
       const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      const x = touch.clientX - rect.left;
-      const y = touch.clientY - rect.top;
-      
-      // Ajustar coordenadas
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const canvasX = x * scaleX;
-      const canvasY = y * scaleY;
+      // Convertir coordenadas
+      const { x: canvasX, y: canvasY } = this.convertToCanvasCoords(canvas, touch.clientX, touch.clientY);
       
       if (this.currentTool === 'marker') {
         // Calcular la distancia desde el último punto
@@ -354,15 +311,8 @@ class MapaCorporal {
         e.preventDefault();
         
         const touch = e.changedTouches[0];
-        const rect = canvas.getBoundingClientRect();
-        const x = touch.clientX - rect.left;
-        const y = touch.clientY - rect.top;
-        
-        // Ajustar coordenadas
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const canvasX = x * scaleX;
-        const canvasY = y * scaleY;
+        // Convertir coordenadas
+        const { x: canvasX, y: canvasY } = this.convertToCanvasCoords(canvas, touch.clientX, touch.clientY);
         
         // Verificar que no sea un toque muy cercano
         const dx = canvasX - this.startX;
@@ -384,7 +334,7 @@ class MapaCorporal {
     const ctx = canvas.getContext('2d');
     
     // Seleccionar el radio adecuado según el dispositivo
-    const radius = this.isMobile ? this.mobileMarkerRadius : this.markerRadius;
+    const radius = this.isMobile ? this.mobileMarkerSize : this.desktopMarkerSize;
     
     // Dibujar círculo perfecto
     ctx.beginPath();
@@ -395,14 +345,14 @@ class MapaCorporal {
     // Añadir número de intensidad si es dolor
     if (this.sintomaActual.tipo === 'dolor') {
       ctx.fillStyle = '#ffffff';
-      const fontSize = Math.max(radius * 0.8, 8); // Asegurar que sea legible
+      const fontSize = Math.max(radius * 0.8, 8);
       ctx.font = `bold ${fontSize}px Arial`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(this.sintomaActual.intensidad.toString(), x, y);
     }
     
-    // Guardar la marca con el tamaño actual del radio
+    // Guardar la marca (con el tamaño exacto usado)
     this.marcas[view].push({
       tool: 'marker',
       x: x,
@@ -410,15 +360,14 @@ class MapaCorporal {
       tipo: this.sintomaActual.tipo,
       intensidad: this.sintomaActual.intensidad,
       color: this.sintomaActual.color,
-      // Guardar radio como porcentaje relativo para dibujar correctamente al redimensionar
-      radiusPercent: this.isMobile ? this.mobileBaseRadiusPercent : this.baseRadiusPercent
+      radius: radius
     });
     
     // Actualizar leyenda
     this.actualizarLeyenda();
   }
   
-  // Nueva función para dibujar irradiación (reemplaza drawArrow)
+  // Función para dibujar irradiación
   drawIrradiation(view, fromX, fromY, toX, toY, isPreview = false) {
     // Obtener contexto
     const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
@@ -441,7 +390,7 @@ class MapaCorporal {
     ctx.setLineDash([]); // Restaurar línea sólida
     
     // Dibujar símbolo de irradiación (asterisco)
-    const symbolSize = 12;
+    const symbolSize = this.symbolSize;
     
     // Dibujar asterisco en el punto final
     ctx.beginPath();
@@ -465,7 +414,8 @@ class MapaCorporal {
         endX: toX,
         endY: toY,
         tipo: this.sintomaActual.tipo,
-        color: this.sintomaActual.color
+        color: this.sintomaActual.color,
+        symbolSize: symbolSize
       });
       
       // Actualizar leyenda
@@ -481,9 +431,9 @@ class MapaCorporal {
     const ctx = canvas.getContext('2d');
     
     // Radio de borrado (un poco más grande en móvil para facilitar)
-    const eraseRadius = this.isMobile ? 20 : 15;
+    const eraseRadius = this.isMobile ? 25 : 20;
     
-    // Borrar área de forma visual para retroalimentación inmediata
+    // Mostrar visualmente el área de borrado (solo retroalimentación)
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
     ctx.arc(x, y, eraseRadius, 0, Math.PI * 2);
@@ -546,21 +496,12 @@ class MapaCorporal {
     // Redibujar todas las marcas
     this.marcas[view].forEach(marca => {
       if (marca.tool === 'marker') {
-        // Guardar configuración actual
-        const currentTipo = this.sintomaActual.tipo;
-        const currentIntensidad = this.sintomaActual.intensidad;
-        const currentColor = this.sintomaActual.color;
-        
-        // Aplicar configuración de la marca
-        this.sintomaActual.tipo = marca.tipo;
-        this.sintomaActual.intensidad = marca.intensidad;
-        this.sintomaActual.color = marca.color;
-        
-        // Seleccionar el radio adecuado según el dispositivo
-        const radius = this.isMobile ? this.mobileMarkerRadius : this.markerRadius;
-        
         // Dibujar marca como círculo perfecto
         ctx.beginPath();
+        
+        // Usar el radio almacenado si existe, o el predeterminado del dispositivo
+        const radius = marca.radius || (this.isMobile ? this.mobileMarkerSize : this.desktopMarkerSize);
+        
         ctx.arc(marca.x, marca.y, radius, 0, Math.PI * 2);
         ctx.fillStyle = marca.color;
         ctx.fill();
@@ -568,16 +509,12 @@ class MapaCorporal {
         // Añadir número de intensidad si es dolor
         if (marca.tipo === 'dolor') {
           ctx.fillStyle = '#ffffff';
-          ctx.font = `${radius}px Arial`;
+          const fontSize = Math.max(radius * 0.8, 8);
+          ctx.font = `bold ${fontSize}px Arial`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(marca.intensidad.toString(), marca.x, marca.y);
         }
-        
-        // Restaurar configuración
-        this.sintomaActual.tipo = currentTipo;
-        this.sintomaActual.intensidad = currentIntensidad;
-        this.sintomaActual.color = currentColor;
       } else if (marca.tool === 'arrow') {
         // Dibujar irradiación
         const fromX = marca.startX;
@@ -596,7 +533,7 @@ class MapaCorporal {
         ctx.setLineDash([]);
         
         // Símbolo de irradiación (asterisco)
-        const symbolSize = 12;
+        const symbolSize = marca.symbolSize || this.symbolSize;
         
         ctx.beginPath();
         for (let i = 0; i < 4; i++) {
@@ -617,13 +554,16 @@ class MapaCorporal {
     
     // Procesar marcas de ambas vistas
     [...this.marcas.anterior, ...this.marcas.posterior].forEach(marca => {
-      const key = `${marca.tipo}-${marca.color}`;
-      if (!uniqueSymptoms.has(key)) {
-        uniqueSymptoms.set(key, {
-          tipo: marca.tipo,
-          color: marca.color,
-          intensidad: marca.tipo === 'dolor' ? marca.intensidad : null
-        });
+      // Solo consideramos las marcas de tipo 'marker'
+      if (marca.tool === 'marker') {
+        const key = `${marca.tipo}-${marca.color}`;
+        if (!uniqueSymptoms.has(key)) {
+          uniqueSymptoms.set(key, {
+            tipo: marca.tipo,
+            color: marca.color,
+            intensidad: marca.tipo === 'dolor' ? marca.intensidad : null
+          });
+        }
       }
     });
     
@@ -656,6 +596,27 @@ class MapaCorporal {
       item.appendChild(text);
       leyendaContainer.appendChild(item);
     });
+    
+    // Agregar irradiación a la leyenda si existe al menos una
+    const tieneIrradiacion = [...this.marcas.anterior, ...this.marcas.posterior].some(marca => marca.tool === 'arrow');
+    
+    if (tieneIrradiacion) {
+      const item = document.createElement('div');
+      item.className = 'leyenda-item';
+      
+      const symbolContainer = document.createElement('div');
+      symbolContainer.className = 'color-box';
+      symbolContainer.style.backgroundColor = 'transparent';
+      symbolContainer.style.border = 'none';
+      symbolContainer.innerHTML = '&#10022;'; // Símbolo de asterisco
+      
+      const text = document.createElement('span');
+      text.textContent = 'Irradiación';
+      
+      item.appendChild(symbolContainer);
+      item.appendChild(text);
+      leyendaContainer.appendChild(item);
+    }
   }
   
   getNombreSintoma(tipo) {
@@ -707,14 +668,20 @@ class MapaCorporal {
       
       // Cargar marcas
       if (mapData.marcas) {
-        // Para migración de datos antiguos, asegurar que todas las marcas tengan radiusPercent
+        // Migrar datos antiguos si es necesario
         for (const view of ['anterior', 'posterior']) {
           if (mapData.marcas[view]) {
             mapData.marcas[view] = mapData.marcas[view].map(marca => {
-              if (marca.tool === 'marker' && !marca.radiusPercent) {
-                // Agregar radiusPercent basado en dispositivo para marcas antiguas
-                marca.radiusPercent = this.baseRadiusPercent;
+              // Agregar radio fijo para marcas antiguas que no lo tengan
+              if (marca.tool === 'marker' && !marca.radius) {
+                marca.radius = this.isMobile ? this.mobileMarkerSize : this.desktopMarkerSize;
               }
+              
+              // Agregar tamaño de símbolo para irradiaciones antiguas
+              if (marca.tool === 'arrow' && !marca.symbolSize) {
+                marca.symbolSize = this.symbolSize;
+              }
+              
               return marca;
             });
           }
@@ -722,10 +689,7 @@ class MapaCorporal {
         
         this.marcas = mapData.marcas;
         
-        // Asegurar que los tamaños de marcadores estén actualizados
-        this.recalculateMarkerSizes();
-        
-        // Redibujar
+        // Dibujar las marcas
         this.redrawMarks('anterior');
         this.redrawMarks('posterior');
         
@@ -740,48 +704,6 @@ class MapaCorporal {
     } catch (error) {
       console.error('Error al cargar datos del mapa:', error);
     }
-  }
-  
-  // Método para inicializar después de la carga completa
-  init() {
-    console.log("Inicializando mapa corporal...");
-    console.log("Detectado como: " + (this.isMobile ? "dispositivo móvil" : "computadora"));
-    
-    // Configurar canvas con dimensiones fijas
-    this.setupCanvas('anterior');
-    this.setupCanvas('posterior');
-    
-    // Forzar un recálculo inicial de tamaños
-    this.recalculateMarkerSizes();
-    
-    // Event listeners para herramientas
-    document.getElementById('tool-marker').addEventListener('click', () => this.setTool('marker'));
-    document.getElementById('tool-arrow').addEventListener('click', () => this.setTool('arrow'));
-    document.getElementById('tool-eraser').addEventListener('click', () => this.setTool('eraser'));
-    document.getElementById('tool-clear').addEventListener('click', () => this.clearCanvas());
-    
-    // Event listener para tipo de síntoma
-    document.getElementById('sintoma-tipo').addEventListener('change', (e) => {
-      this.sintomaActual.tipo = e.target.value;
-      document.getElementById('dolor-intensidad-container').style.display = 
-        e.target.value === 'dolor' ? 'block' : 'none';
-    });
-    
-    // Event listener para intensidad de dolor
-    document.getElementById('dolor-intensidad').addEventListener('input', (e) => {
-      this.sintomaActual.intensidad = parseInt(e.target.value);
-      document.getElementById('dolor-intensidad-value').textContent = e.target.value;
-    });
-    
-    // Event listener para color
-    document.getElementById('sintoma-color').addEventListener('input', (e) => {
-      this.sintomaActual.color = e.target.value;
-    });
-    
-    // Event listener para guardar
-    document.getElementById('save-map-btn').addEventListener('click', () => {
-      this.saveMapData();
-    });
   }
 }
 
