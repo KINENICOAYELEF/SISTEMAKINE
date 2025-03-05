@@ -1,11 +1,8 @@
-// Mapa Corporal Interactivo Universal
-// Versión simplificada y directa para funcionar en todas las plataformas
+// Mapa Corporal Interactivo
+// Versión con dimensiones fijas para solucionar problemas de visualización
 
 class MapaCorporal {
   constructor() {
-    // Forzar compatibilidad con todos los navegadores
-    this.forceCompatibilityMode = true;
-    
     // Referencias a los canvas
     this.canvasAnterior = document.getElementById('canvas-anterior');
     this.canvasPosterior = document.getElementById('canvas-posterior');
@@ -14,12 +11,16 @@ class MapaCorporal {
     this.imgAnterior = document.getElementById('body-map-front');
     this.imgPosterior = document.getElementById('body-map-back');
     
+    // Contenedores de canvas
+    this.containerAnterior = document.getElementById('container-anterior');
+    this.containerPosterior = document.getElementById('container-posterior');
+    
     // Estado actual
-    this.currentView = 'anterior'; // 'anterior' o 'posterior'
-    this.currentTool = 'marker';   // 'marker', 'arrow', 'eraser'
+    this.currentView = 'anterior';
+    this.currentTool = 'marker';
     this.isDrawing = false;
-    this.startX = 0;
-    this.startY = 0;
+    this.lastX = 0;
+    this.lastY = 0;
     
     // Configuración del síntoma actual
     this.sintomaActual = {
@@ -39,19 +40,15 @@ class MapaCorporal {
   }
   
   init() {
-    console.log('Inicializando mapa corporal universal...');
+    console.log("Inicializando mapa corporal...");
     
-    // Esperar a que las imágenes estén listas
-    if (this.imgAnterior.complete && this.imgPosterior.complete) {
-      this.setupCanvases();
-    } else {
-      this.imgAnterior.onload = () => {
-        if (this.imgPosterior.complete) this.setupCanvases();
-      };
-      this.imgPosterior.onload = () => {
-        if (this.imgAnterior.complete) this.setupCanvases();
-      };
-    }
+    // Forzar un tamaño fijo para las imágenes (IMPORTANTE)
+    this.imgAnterior.style.width = '300px';
+    this.imgPosterior.style.width = '300px';
+    
+    // Configurar canvas con dimensiones fijas
+    this.setupCanvas('anterior');
+    this.setupCanvas('posterior');
     
     // Event listeners para herramientas
     document.getElementById('tool-marker').addEventListener('click', () => this.setTool('marker'));
@@ -62,7 +59,6 @@ class MapaCorporal {
     // Event listener para tipo de síntoma
     document.getElementById('sintoma-tipo').addEventListener('change', (e) => {
       this.sintomaActual.tipo = e.target.value;
-      // Mostrar/ocultar control de intensidad solo para dolor
       document.getElementById('dolor-intensidad-container').style.display = 
         e.target.value === 'dolor' ? 'block' : 'none';
     });
@@ -82,156 +78,58 @@ class MapaCorporal {
     document.getElementById('save-map-btn').addEventListener('click', () => {
       this.saveMapData();
     });
-    
-    // Monitorizando clicks para depuración
-    document.addEventListener('click', (e) => {
-      console.log('Click detectado en:', e.target);
-    });
-    
-    // Reconfigurar al cambiar el tamaño de la ventana
-    window.addEventListener('resize', () => {
-      this.setupCanvases();
-    });
-  }
-  
-  setupCanvases() {
-    console.log('Configurando canvases...');
-    
-    // Configurar canvas anterior
-    this.setupCanvas('anterior');
-    
-    // Configurar canvas posterior
-    this.setupCanvas('posterior');
-    
-    // Redibujar marcas
-    setTimeout(() => {
-      this.redrawMarks('anterior');
-      this.redrawMarks('posterior');
-    }, 100);
   }
   
   setupCanvas(view) {
+    console.log(`Configurando canvas para ${view}...`);
+    
     const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
     const img = view === 'anterior' ? this.imgAnterior : this.imgPosterior;
+    const container = view === 'anterior' ? this.containerAnterior : this.containerPosterior;
     
     if (!canvas || !img) {
       console.error(`Canvas o imagen no encontrados para ${view}`);
       return;
     }
     
-    console.log(`Configurando canvas para ${view}...`);
+    // SOLUCIÓN: Forzar dimensiones específicas en el canvas
+    canvas.width = 300;
+    canvas.height = 600;
     
-    // Asegurar que el canvas tenga el tamaño correcto
-    canvas.width = img.clientWidth;
-    canvas.height = img.clientHeight;
-    
-    // Posicionar el canvas exactamente sobre la imagen
+    // Asegurar que el canvas ocupe todo el contenedor
     canvas.style.position = 'absolute';
     canvas.style.top = '0';
     canvas.style.left = '0';
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     
-    // Eliminar y volver a configurar los event listeners
-    this.removeAllEventListeners(canvas);
+    console.log(`Canvas ${view} dimensiones: ${canvas.width}x${canvas.height}`);
     
-    if (this.forceCompatibilityMode) {
-      // Modo de compatibilidad: usar onclick/onmousedown en lugar de listeners
-      this.setupCompatibilityEventHandlers(canvas, view);
-    } else {
-      // Configurar event listeners estándar
-      this.setupEventListeners(canvas, view);
-    }
-    
-    console.log(`Canvas de ${view} configurado: ${canvas.width}x${canvas.height}`);
+    // Configurar eventos - Método directo
+    this.setupClickEvents(canvas, view);
   }
   
-  removeAllEventListeners(element) {
-    // Creamos un clon del elemento sin los event listeners
-    const clone = element.cloneNode(true);
-    element.parentNode.replaceChild(clone, element);
-    
-    // Actualizamos la referencia
-    if (element === this.canvasAnterior) {
-      this.canvasAnterior = document.getElementById('canvas-anterior');
-    } else if (element === this.canvasPosterior) {
-      this.canvasPosterior = document.getElementById('canvas-posterior');
-    }
-    
-    return clone;
-  }
-  
-  setupCompatibilityEventHandlers(canvas, view) {
-    console.log(`Configurando manejadores de eventos de compatibilidad para ${view}`);
-    
-    // Asignar directamente usando on* (más compatible)
+  setupClickEvents(canvas, view) {
+    // Evento de clic simple para marcar
     canvas.onclick = (e) => {
-      console.log(`Click en canvas ${view}`);
-      this.currentView = view;
-      
       // Obtener coordenadas relativas al canvas
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
+      console.log(`Clic en ${view} en (${x}, ${y})`);
+      
+      // Ajustar coordenadas según el tamaño real del canvas vs. tamaño mostrado
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const canvasX = x * scaleX;
+      const canvasY = y * scaleY;
+      
       // Dibujar según la herramienta seleccionada
       if (this.currentTool === 'marker') {
-        this.drawMarkerImmediate(view, x, y);
+        this.drawMarker(view, canvasX, canvasY);
       } else if (this.currentTool === 'eraser') {
-        this.eraseImmediate(view, x, y);
-      }
-    };
-    
-    // Para la herramienta de flecha, necesitamos mousedown/mousemove/mouseup
-    canvas.onmousedown = (e) => {
-      if (this.currentTool === 'arrow') {
-        this.isDrawing = true;
-        this.currentView = view;
-        
-        const rect = canvas.getBoundingClientRect();
-        this.startX = e.clientX - rect.left;
-        this.startY = e.clientY - rect.top;
-        
-        console.log(`Arrow start en ${view}: (${this.startX}, ${this.startY})`);
-      }
-    };
-    
-    canvas.onmousemove = (e) => {
-      if (this.isDrawing && this.currentTool === 'arrow' && this.currentView === view) {
-        // Obtener coordenadas actuales
-        const rect = canvas.getBoundingClientRect();
-        const currentX = e.clientX - rect.left;
-        const currentY = e.clientY - rect.top;
-        
-        // Redibujar para mostrar la flecha en tiempo real
-        this.redrawMarks(view);
-        
-        // Dibujar la flecha temporal
-        const ctx = this.getContext(view);
-        this.drawArrow(ctx, this.startX, this.startY, currentX, currentY);
-      }
-    };
-    
-    canvas.onmouseup = (e) => {
-      if (this.isDrawing && this.currentTool === 'arrow' && this.currentView === view) {
-        // Finalizar el dibujo de la flecha
-        const rect = canvas.getBoundingClientRect();
-        const endX = e.clientX - rect.left;
-        const endY = e.clientY - rect.top;
-        
-        // Guardar la flecha
-        this.drawArrowImmediate(view, this.startX, this.startY, endX, endY);
-        
-        this.isDrawing = false;
-        console.log(`Arrow end en ${view}: (${endX}, ${endY})`);
-      }
-    };
-    
-    canvas.onmouseleave = (e) => {
-      if (this.isDrawing && this.currentView === view) {
-        // Cancelar el dibujo
-        this.isDrawing = false;
-        this.redrawMarks(view);
+        this.erase(view, canvasX, canvasY);
       }
     };
     
@@ -239,297 +137,37 @@ class MapaCorporal {
     canvas.ontouchstart = (e) => {
       e.preventDefault();
       
-      this.currentView = view;
       const touch = e.touches[0];
       const rect = canvas.getBoundingClientRect();
       const x = touch.clientX - rect.left;
       const y = touch.clientY - rect.top;
       
+      console.log(`Touch en ${view} en (${x}, ${y})`);
+      
+      // Ajustar coordenadas
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const canvasX = x * scaleX;
+      const canvasY = y * scaleY;
+      
+      // Dibujar según la herramienta seleccionada
       if (this.currentTool === 'marker') {
-        this.drawMarkerImmediate(view, x, y);
+        this.drawMarker(view, canvasX, canvasY);
       } else if (this.currentTool === 'eraser') {
-        this.eraseImmediate(view, x, y);
-      } else if (this.currentTool === 'arrow') {
-        this.isDrawing = true;
-        this.startX = x;
-        this.startY = y;
-      }
-    };
-    
-    canvas.ontouchmove = (e) => {
-      e.preventDefault();
-      
-      if (this.isDrawing && this.currentTool === 'arrow' && this.currentView === view) {
-        const touch = e.touches[0];
-        const rect = canvas.getBoundingClientRect();
-        const currentX = touch.clientX - rect.left;
-        const currentY = touch.clientY - rect.top;
-        
-        // Redibujar para mostrar la flecha en tiempo real
-        this.redrawMarks(view);
-        
-        // Dibujar la flecha temporal
-        const ctx = this.getContext(view);
-        this.drawArrow(ctx, this.startX, this.startY, currentX, currentY);
-      }
-    };
-    
-    canvas.ontouchend = (e) => {
-      e.preventDefault();
-      
-      if (this.isDrawing && this.currentTool === 'arrow' && this.currentView === view) {
-        // Usamos las últimas coordenadas conocidas
-        const touch = e.changedTouches[0];
-        const rect = canvas.getBoundingClientRect();
-        const endX = touch.clientX - rect.left;
-        const endY = touch.clientY - rect.top;
-        
-        // Guardar la flecha
-        this.drawArrowImmediate(view, this.startX, this.startY, endX, endY);
-        
-        this.isDrawing = false;
+        this.erase(view, canvasX, canvasY);
       }
     };
   }
   
-  setupEventListeners(canvas, view) {
-    // Eventos de mouse
-    canvas.addEventListener('mousedown', (e) => {
-      console.log(`Mouse down en ${view}`);
-      this.currentView = view;
-      this.isDrawing = true;
-      
-      const rect = canvas.getBoundingClientRect();
-      this.startX = e.clientX - rect.left;
-      this.startY = e.clientY - rect.top;
-      
-      if (this.currentTool === 'marker') {
-        this.drawMarkerImmediate(view, this.startX, this.startY);
-      } else if (this.currentTool === 'eraser') {
-        this.eraseImmediate(view, this.startX, this.startY);
-      }
-    });
-    
-    canvas.addEventListener('mousemove', (e) => {
-      if (this.isDrawing && this.currentView === view) {
-        const rect = canvas.getBoundingClientRect();
-        const currentX = e.clientX - rect.left;
-        const currentY = e.clientY - rect.top;
-        
-        if (this.currentTool === 'marker') {
-          this.drawMarkerImmediate(view, currentX, currentY);
-        } else if (this.currentTool === 'eraser') {
-          this.eraseImmediate(view, currentX, currentY);
-        } else if (this.currentTool === 'arrow') {
-          // Para flechas, solo mostramos una vista previa
-          this.redrawMarks(view);
-          const ctx = this.getContext(view);
-          this.drawArrow(ctx, this.startX, this.startY, currentX, currentY);
-        }
-      }
-    });
-    
-    canvas.addEventListener('mouseup', (e) => {
-      if (this.isDrawing && this.currentView === view) {
-        const rect = canvas.getBoundingClientRect();
-        const currentX = e.clientX - rect.left;
-        const currentY = e.clientY - rect.top;
-        
-        if (this.currentTool === 'arrow') {
-          this.drawArrowImmediate(view, this.startX, this.startY, currentX, currentY);
-        }
-        
-        this.isDrawing = false;
-        this.actualizarLeyenda();
-      }
-    });
-    
-    canvas.addEventListener('mouseleave', (e) => {
-      if (this.isDrawing && this.currentView === view) {
-        this.isDrawing = false;
-        this.redrawMarks(view);
-      }
-    });
-    
-    // Eventos táctiles
-    canvas.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      console.log(`Touch start en ${view}`);
-      
-      this.currentView = view;
-      this.isDrawing = true;
-      
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      this.startX = touch.clientX - rect.left;
-      this.startY = touch.clientY - rect.top;
-      
-      if (this.currentTool === 'marker') {
-        this.drawMarkerImmediate(view, this.startX, this.startY);
-      } else if (this.currentTool === 'eraser') {
-        this.eraseImmediate(view, this.startX, this.startY);
-      }
-    });
-    
-    canvas.addEventListener('touchmove', (e) => {
-      e.preventDefault();
-      
-      if (this.isDrawing && this.currentView === view) {
-        const touch = e.touches[0];
-        const rect = canvas.getBoundingClientRect();
-        const currentX = touch.clientX - rect.left;
-        const currentY = touch.clientY - rect.top;
-        
-        if (this.currentTool === 'marker') {
-          this.drawMarkerImmediate(view, currentX, currentY);
-        } else if (this.currentTool === 'eraser') {
-          this.eraseImmediate(view, currentX, currentY);
-        } else if (this.currentTool === 'arrow') {
-          // Para flechas, solo mostramos una vista previa
-          this.redrawMarks(view);
-          const ctx = this.getContext(view);
-          this.drawArrow(ctx, this.startX, this.startY, currentX, currentY);
-        }
-      }
-    });
-    
-    canvas.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      
-      if (this.isDrawing && this.currentView === view) {
-        const touch = e.changedTouches[0];
-        const rect = canvas.getBoundingClientRect();
-        const currentX = touch.clientX - rect.left;
-        const currentY = touch.clientY - rect.top;
-        
-        if (this.currentTool === 'arrow') {
-          this.drawArrowImmediate(view, this.startX, this.startY, currentX, currentY);
-        }
-        
-        this.isDrawing = false;
-        this.actualizarLeyenda();
-      }
-    });
-  }
-  
-  getContext(view) {
-    if (view === 'anterior') {
-      if (!this.ctxAnterior) {
-        this.ctxAnterior = this.canvasAnterior.getContext('2d');
-      }
-      return this.ctxAnterior;
-    } else {
-      if (!this.ctxPosterior) {
-        this.ctxPosterior = this.canvasPosterior.getContext('2d');
-      }
-      return this.ctxPosterior;
-    }
-  }
-  
-  // Métodos de dibujo inmediato
-  drawMarkerImmediate(view, x, y) {
+  drawMarker(view, x, y) {
     console.log(`Dibujando marca en ${view} en (${x}, ${y})`);
     
-    // Dibujar en el canvas
-    const ctx = this.getContext(view);
-    this.drawMarker(ctx, x, y);
+    // Obtener contexto
+    const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
+    const ctx = canvas.getContext('2d');
     
-    // Guardar la marca
-    this.marcas[view].push({
-      tool: 'marker',
-      startX: x,
-      startY: y,
-      endX: x,
-      endY: y,
-      tipo: this.sintomaActual.tipo,
-      intensidad: this.sintomaActual.intensidad,
-      color: this.sintomaActual.color
-    });
-    
-    // Actualizar leyenda
-    this.actualizarLeyenda();
-  }
-  
-  drawArrowImmediate(view, startX, startY, endX, endY) {
-    console.log(`Dibujando flecha en ${view} de (${startX}, ${startY}) a (${endX}, ${endY})`);
-    
-    // Verificar que no sea un clic accidental
-    const dx = endX - startX;
-    const dy = endY - startY;
-    const distancia = Math.sqrt(dx*dx + dy*dy);
-    
-    if (distancia < 5) {
-      console.log('Ignorando flecha muy pequeña');
-      return;
-    }
-    
-    // Dibujar en el canvas
-    const ctx = this.getContext(view);
-    this.drawArrow(ctx, startX, startY, endX, endY);
-    
-    // Guardar la flecha
-    this.marcas[view].push({
-      tool: 'arrow',
-      startX: startX,
-      startY: startY,
-      endX: endX,
-      endY: endY,
-      tipo: this.sintomaActual.tipo,
-      intensidad: this.sintomaActual.intensidad,
-      color: this.sintomaActual.color
-    });
-    
-    // Actualizar leyenda
-    this.actualizarLeyenda();
-  }
-  
-  eraseImmediate(view, x, y) {
-    console.log(`Borrando en ${view} en (${x}, ${y})`);
-    
-    // Dibujar en el canvas
-    const ctx = this.getContext(view);
-    
-    // Aplicar borrador
-    const eraseRadius = 20;
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(x, y, eraseRadius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalCompositeOperation = 'source-over';
-    
-    // Eliminar marcas en esta área
-    this.marcas[view] = this.marcas[view].filter(marca => {
-      if (marca.tool === 'marker') {
-        const distancia = Math.sqrt(
-          Math.pow(marca.endX - x, 2) + Math.pow(marca.endY - y, 2)
-        );
-        return distancia > eraseRadius;
-      } else if (marca.tool === 'arrow') {
-        // Para flechas, verificamos ambos extremos y el centro
-        const distanciaInicio = Math.sqrt(
-          Math.pow(marca.startX - x, 2) + Math.pow(marca.startY - y, 2)
-        );
-        const distanciaFin = Math.sqrt(
-          Math.pow(marca.endX - x, 2) + Math.pow(marca.endY - y, 2)
-        );
-        const distanciaCentro = Math.sqrt(
-          Math.pow((marca.startX + marca.endX)/2 - x, 2) + 
-          Math.pow((marca.startY + marca.endY)/2 - y, 2)
-        );
-        return distanciaInicio > eraseRadius && 
-               distanciaFin > eraseRadius && 
-               distanciaCentro > eraseRadius;
-      }
-      return true;
-    });
-    
-    // Actualizar leyenda
-    this.actualizarLeyenda();
-  }
-  
-  drawMarker(ctx, x, y) {
+    // Dibujar círculo
     const radius = 10;
-    
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fillStyle = this.sintomaActual.color;
@@ -543,103 +181,94 @@ class MapaCorporal {
       ctx.textBaseline = 'middle';
       ctx.fillText(this.sintomaActual.intensidad.toString(), x, y);
     }
+    
+    // Guardar la marca
+    this.marcas[view].push({
+      tool: 'marker',
+      x: x,
+      y: y,
+      tipo: this.sintomaActual.tipo,
+      intensidad: this.sintomaActual.intensidad,
+      color: this.sintomaActual.color
+    });
+    
+    // Actualizar leyenda
+    this.actualizarLeyenda();
   }
   
-  drawArrow(ctx, fromX, fromY, toX, toY) {
-    const headLength = 15;
-    const dx = toX - fromX;
-    const dy = toY - fromY;
-    const angle = Math.atan2(dy, dx);
+  erase(view, x, y) {
+    console.log(`Borrando en ${view} en (${x}, ${y})`);
     
-    // Línea principal
-    ctx.beginPath();
-    ctx.moveTo(fromX, fromY);
-    ctx.lineTo(toX, toY);
-    ctx.strokeStyle = this.sintomaActual.color;
-    ctx.lineWidth = 3;
-    ctx.stroke();
+    // Obtener contexto
+    const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
+    const ctx = canvas.getContext('2d');
     
-    // Punta de flecha
+    // Radio de borrado
+    const eraseRadius = 20;
+    
+    // Borrar área
+    ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
-    ctx.moveTo(toX, toY);
-    ctx.lineTo(
-      toX - headLength * Math.cos(angle - Math.PI / 6),
-      toY - headLength * Math.sin(angle - Math.PI / 6)
-    );
-    ctx.lineTo(
-      toX - headLength * Math.cos(angle + Math.PI / 6),
-      toY - headLength * Math.sin(angle + Math.PI / 6)
-    );
-    ctx.closePath();
-    ctx.fillStyle = this.sintomaActual.color;
+    ctx.arc(x, y, eraseRadius, 0, Math.PI * 2);
     ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+    
+    // Filtrar marcas que quedan fuera del radio de borrado
+    this.marcas[view] = this.marcas[view].filter(marca => {
+      const distance = Math.sqrt(Math.pow(marca.x - x, 2) + Math.pow(marca.y - y, 2));
+      return distance > eraseRadius;
+    });
+    
+    // Actualizar leyenda
+    this.actualizarLeyenda();
   }
   
   clearCanvas() {
     if (confirm('¿Estás seguro de querer borrar todas las marcas del mapa actual?')) {
       const view = this.currentView;
       
-      // Limpiar canvas
+      // Obtener contexto
       const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
-      const ctx = this.getContext(view);
+      const ctx = canvas.getContext('2d');
+      
+      // Borrar todo el canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Limpiar marcas de esta vista
+      // Limpiar marcas
       this.marcas[view] = [];
       
       // Actualizar leyenda
       this.actualizarLeyenda();
-      
-      console.log(`Canvas ${view} limpiado`);
     }
   }
   
   redrawMarks(view) {
-    console.log(`Redibujando marcas en ${view}...`);
-    
+    // Obtener contexto
     const canvas = view === 'anterior' ? this.canvasAnterior : this.canvasPosterior;
-    const ctx = this.getContext(view);
+    const ctx = canvas.getContext('2d');
     
-    if (!ctx) {
-      console.error(`Contexto no disponible para ${view}`);
-      return;
-    }
-    
-    // Limpiar canvas
+    // Borrar todo el canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // Redibujar todas las marcas
     this.marcas[view].forEach(marca => {
+      // Marcadores
       if (marca.tool === 'marker') {
-        // Guardar configuración actual
-        const currentTipo = this.sintomaActual.tipo;
-        const currentIntensidad = this.sintomaActual.intensidad;
-        const currentColor = this.sintomaActual.color;
+        // Dibujar círculo
+        const radius = 10;
+        ctx.beginPath();
+        ctx.arc(marca.x, marca.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = marca.color;
+        ctx.fill();
         
-        // Aplicar configuración de la marca
-        this.sintomaActual.tipo = marca.tipo;
-        this.sintomaActual.intensidad = marca.intensidad;
-        this.sintomaActual.color = marca.color;
-        
-        // Dibujar marca
-        this.drawMarker(ctx, marca.endX, marca.endY);
-        
-        // Restaurar configuración
-        this.sintomaActual.tipo = currentTipo;
-        this.sintomaActual.intensidad = currentIntensidad;
-        this.sintomaActual.color = currentColor;
-      } else if (marca.tool === 'arrow') {
-        // Guardar configuración actual
-        const currentColor = this.sintomaActual.color;
-        
-        // Aplicar configuración de la marca
-        this.sintomaActual.color = marca.color;
-        
-        // Dibujar flecha
-        this.drawArrow(ctx, marca.startX, marca.startY, marca.endX, marca.endY);
-        
-        // Restaurar configuración
-        this.sintomaActual.color = currentColor;
+        // Añadir número de intensidad si es dolor
+        if (marca.tipo === 'dolor') {
+          ctx.fillStyle = '#ffffff';
+          ctx.font = '10px Arial';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(marca.intensidad.toString(), marca.x, marca.y);
+        }
       }
     });
   }
@@ -714,11 +343,6 @@ class MapaCorporal {
     document.getElementById('tool-eraser').classList.remove('active');
     
     document.getElementById(`tool-${tool}`).classList.add('active');
-    
-    // Cambiar cursor
-    const cursorStyle = tool === 'eraser' ? 'cell' : 'crosshair';
-    this.canvasAnterior.style.cursor = cursorStyle;
-    this.canvasPosterior.style.cursor = cursorStyle;
   }
   
   saveMapData() {
@@ -733,7 +357,7 @@ class MapaCorporal {
     
     // Notificar al usuario
     alert('Las marcas del mapa corporal han sido guardadas.');
-    console.log('Datos del mapa guardados:', mapData);
+    console.log('Datos del mapa guardados');
   }
   
   // Cargar datos previamente guardados
@@ -742,7 +366,6 @@ class MapaCorporal {
     
     try {
       const mapData = JSON.parse(data);
-      console.log('Cargando datos del mapa:', mapData);
       
       // Cargar marcas
       if (mapData.marcas) {
@@ -768,21 +391,15 @@ class MapaCorporal {
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOM cargado. Iniciando mapa corporal...');
-  
-  // Dar tiempo para que todo esté completamente cargado
+  // Retrasar la inicialización para asegurar que todo está cargado
   setTimeout(() => {
-    try {
-      window.mapaCorporal = new MapaCorporal();
-      
-      // Si hay datos previos en el campo oculto, cargarlos
-      const datosGuardados = document.getElementById('mapa-datos').value;
-      if (datosGuardados) {
-        window.mapaCorporal.loadMapData(datosGuardados);
-      }
-    } catch (error) {
-      console.error('Error al inicializar el mapa corporal:', error);
-      alert('Hubo un problema al inicializar el mapa corporal. Por favor, recarga la página.');
+    console.log('Inicializando mapa corporal con dimensiones fijas...');
+    window.mapaCorporal = new MapaCorporal();
+    
+    // Si hay datos previos en el campo oculto, cargarlos
+    const datosGuardados = document.getElementById('mapa-datos').value;
+    if (datosGuardados) {
+      window.mapaCorporal.loadMapData(datosGuardados);
     }
   }, 500);
 });
