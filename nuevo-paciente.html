@@ -418,11 +418,13 @@
   <div class="form-col form-col-md-4">
     <div class="form-group">
       <label for="alicia_intensidad" class="form-label">Intensidad (ENA 0-10)</label>
-      <input type="range" id="alicia_intensidad" name="alicia_intensidad" class="form-range" min="0" max="10" step="1" value="5" oninput="document.getElementById('alicia_intensidad_value').textContent = this.value;">
-      <div class="d-flex justify-content-between">
-        <span>0</span>
-        <span id="alicia_intensidad_value">5</span>
-        <span>10</span>
+      <div class="w-100">
+        <input type="range" id="alicia_intensidad" name="alicia_intensidad" class="form-range w-100" min="0" max="10" step="1" value="5" oninput="document.getElementById('alicia_intensidad_value').textContent = this.value;">
+        <div class="d-flex justify-content-between mt-2">
+          <span>0</span>
+          <span id="alicia_intensidad_value">5</span>
+          <span>10</span>
+        </div>
       </div>
     </div>
   </div>
