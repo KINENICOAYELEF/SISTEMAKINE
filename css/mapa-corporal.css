@@ -1,0 +1,83 @@
+/* Estilos para el mapa corporal interactivo */
+
+.mapa-container {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.mapa-tools {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.mapa-canvas-container {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  border: 1px dashed #ccc;
+  background-color: #f9f9f9;
+}
+
+.body-map-img {
+  height: 590px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.mapa-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  cursor: crosshair;
+}
+
+#mapa-leyenda {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.color-box {
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  border: 1px solid #aaa;
+}
+
+/* Estilos para los botones de herramientas activas */
+.btn-group .btn.active {
+  background-color: #8300e0;
+  border-color: #8300e0;
+  color: white;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+  .mapa-canvas-container {
+    height: 450px;
+  }
+  
+  .body-map-img {
+    height: 440px;
+  }
+  
+  .mapa-tools {
+    margin-bottom: 15px;
+  }
+}
