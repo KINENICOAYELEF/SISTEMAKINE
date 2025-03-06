@@ -399,41 +399,21 @@ function calcularDN4() {
   const testCompleto = camposRespondidos >= 10;
   
   if (testCompleto) {
-  badgeElement.textContent = "Completado";
-  badgeElement.classList.remove('no-completado');
-  badgeElement.classList.add('badge-verde', 'completado');
-  
-  // Añadir un elemento separado para mostrar la puntuación
-  const valorElement = document.getElementById('dn4-valor');
-  if (valorElement) {
-    valorElement.textContent = puntaje + "/10";
+    badgeElement.textContent = "Completado";
+    badgeElement.classList.remove('no-completado');
+    badgeElement.classList.add('badge-verde', 'completado');
     
-    // Agregar una clase de color según el puntaje
-    if (puntaje >= 4) {
-      valorElement.classList.add('valor-alto');
-    } else {
-      valorElement.classList.add('valor-bajo');
+    // Añadir un elemento separado para mostrar la puntuación
+    if (valorElement) {
+      valorElement.textContent = puntaje + "/10";
+      valorElement.style.color = puntaje >= 4 ? "#dc3545" : "#28a745";
+      valorElement.style.fontWeight = "bold";
     }
-  }
-  
-  
-  // Añadir un elemento separado para mostrar la puntuación
-  const valorElement = document.getElementById('dn4-valor');
-  if (valorElement) {
-    valorElement.textContent = puntaje + "/10";
-    
-    // Agregar una clase de color según el puntaje
-    if (puntaje >= 4) {
-      valorElement.classList.add('valor-alto');
-    } else {
-      valorElement.classList.add('valor-bajo');
-    }
-  }
     
     // Interpretación según el puntaje
     if (puntaje >= 4) {
-    interpretacionElement.textContent = "Probable dolor neuropático";
-    interpretacionElement.className = "resultado-interpretacion rojo";
+      interpretacionElement.textContent = "Probable dolor neuropático";
+      interpretacionElement.className = "resultado-interpretacion rojo";
       
       interpretacionClinicaElement.innerHTML = `
         <p>Con un puntaje de ${puntaje}/10, el paciente presenta características altamente sugestivas de dolor neuropático. El DN4 tiene una sensibilidad del 83% y una especificidad del 90% cuando el puntaje es ≥ 4/10.</p>
@@ -451,8 +431,8 @@ function calcularDN4() {
         </ul>
       `;
     } else {
-    interpretacionElement.textContent = "Dolor no neuropático";
-    interpretacionElement.className = "resultado-interpretacion verde";
+      interpretacionElement.textContent = "Dolor no neuropático";
+      interpretacionElement.className = "resultado-interpretacion verde";
       
       interpretacionClinicaElement.innerHTML = `
         <p>Con un puntaje de ${puntaje}/10, el paciente no presenta un patrón típico de dolor neuropático. El dolor probablemente sea de origen nociceptivo o nociplástico.</p>
@@ -468,10 +448,11 @@ function calcularDN4() {
           <li>Realizar reevaluación periódica para identificar cambios en el patrón de dolor (nivel de evidencia 2A)</li>
         </ul>
       `;
+    }
   } else {
-  badgeElement.textContent = "No completado";
-  badgeElement.classList.remove('completado', 'badge-verde');
-  badgeElement.classList.add('no-completado');
+    badgeElement.textContent = "No completado";
+    badgeElement.classList.remove('completado', 'badge-verde');
+    badgeElement.classList.add('no-completado');
     interpretacionElement.textContent = "Complete el cuestionario para obtener un resultado";
     interpretacionElement.className = "resultado-interpretacion";
     
