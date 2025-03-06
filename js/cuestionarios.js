@@ -176,6 +176,7 @@ function calcularBPI() {
   // Interpretación de la intensidad del dolor
   let intensidadInterpretacion = '';
   let intensidadColor = '';
+  let nivelGravedad = '';
   
   if (intensidadRedondeada < 1) {
     intensidadInterpretacion = 'Sin dolor';
@@ -218,11 +219,9 @@ function calcularBPI() {
   interferenciaInterpretacionEl.textContent = interferenciaInterpretacion;
   interferenciaInterpretacionEl.className = 'resultado-interpretacion ' + interferenciaColor;
   
-  // Actualizar interpretación clínica
-  const interpretacionClinicaEl = document.getElementById('bpi-interpretacion-clinica');
-  const interpretacionContainer = document.querySelector('#bpi-resultado .interpretacion-clinica-container');
-  const recomendacionesEl = document.getElementById('bpi-recomendaciones');
-  const recomendacionesContainer = document.querySelector('#bpi-resultado .recomendaciones-container');
+  // Actualizar el badge y el color del contenedor
+  const bpiBadge = document.getElementById('bpi-badge');
+  const resultadoContainer = document.getElementById('bpi-resultado');
   
   // Verificar si se han completado suficientes campos para una interpretación válida
   const intensidadCompletada = dolorActual || dolorPromedio || dolorPeor || dolorMenor;
@@ -230,110 +229,100 @@ function calcularBPI() {
                                 interferencia_trabajo || interferencia_relaciones || interferencia_sueno || 
                                 interferencia_vida;
   
+  // Determinar nivel y estilos según gravedad
   if (intensidadCompletada && interferenciaCompletada) {
-    let nivelGravedad = '';
-    let claseBorde = '';
-    
-    // Determinar el nivel de gravedad general
     if (intensidadRedondeada >= 7 || interferenciaRedondeada >= 7) {
       nivelGravedad = 'severo';
-      claseBorde = 'nivel-severo';
+      bpiBadge.textContent = 'Severo';
+      bpiBadge.className = 'resultado-badge badge-rojo';
+      resultadoContainer.className = 'resultado-container nivel-severo';
     } else if (intensidadRedondeada >= 4 || interferenciaRedondeada >= 4) {
       nivelGravedad = 'moderado';
-      claseBorde = 'nivel-moderado';
+      bpiBadge.textContent = 'Moderado';
+      bpiBadge.className = 'resultado-badge badge-amarillo';
+      resultadoContainer.className = 'resultado-container nivel-moderado';
     } else {
       nivelGravedad = 'leve';
-      claseBorde = 'nivel-leve';
+      bpiBadge.textContent = 'Leve';
+      bpiBadge.className = 'resultado-badge badge-verde';
+      resultadoContainer.className = 'resultado-container nivel-leve';
     }
     
     // Actualizar interpretación clínica
-    interpretacionClinicaEl.innerHTML = `
-      <p>El paciente presenta un dolor de intensidad <strong>${intensidadInterpretacion.toLowerCase()}</strong> 
-      (${intensidadRedondeada.toFixed(1)}/10) con una interferencia <strong>${interferenciaInterpretacion.toLowerCase()}</strong> 
-      (${interferenciaRedondeada.toFixed(1)}/10) en sus actividades diarias.</p>
-      <p>Este patrón sugiere un impacto <strong>${nivelGravedad}</strong> del dolor en la calidad de vida 
-      del paciente, afectando principalmente ${getAreasAfectadas([
-        { area: 'actividad general', valor: interferencia_actividad },
-        { area: 'estado de ánimo', valor: interferencia_animo },
-        { area: 'capacidad para caminar', valor: interferencia_caminar },
-        { area: 'trabajo habitual', valor: interferencia_trabajo },
-        { area: 'relaciones sociales', valor: interferencia_relaciones },
-        { area: 'sueño', valor: interferencia_sueno },
-        { area: 'disfrute de la vida', valor: interferencia_vida }
-      ])}.
-      </p>
-    `;
-    
-    // Añadir recomendaciones basadas en la gravedad
-    if (nivelGravedad === 'severo') {
-      recomendacionesEl.innerHTML = `
-        <p>Considerar un enfoque multidisciplinar que incluya:</p>
-        <ul>
-          <li>Evaluación por especialista en dolor para posible ajuste farmacológico</li>
-          <li>Combinar terapia manual con modalidades analgésicas</li>
-          <li>Educación en neurociencia del dolor y estrategias de afrontamiento</li>
-          <li>Programa de ejercicios graduados con progresión cuidadosa</li>
-          <li>Valorar impacto psicológico y posible derivación a psicología</li>
-          <li>Seguimiento frecuente para ajustar intervenciones según respuesta</li>
-        </ul>
-      `;
-    } else if (nivelGravedad === 'moderado') {
-      recomendacionesEl.innerHTML = `
-        <p>Se recomienda:</p>
-        <ul>
-          <li>Combinar terapia manual y ejercicio terapéutico</li>
-          <li>Educación sobre manejo del dolor y pacing de actividades</li>
-          <li>Implementar estrategias de autorregulación (respiración, relajación)</li>
-          <li>Programa de ejercicios para mejorar la funcionalidad</li>
-          <li>Revisar impacto en actividades diarias y plantear modificaciones</li>
-          <li>Seguimiento para evaluar evolución</li>
-        </ul>
-      `;
-    } else {
-      recomendacionesEl.innerHTML = `
-        <p>Se sugiere:</p>
-        <ul>
-          <li>Terapia manual enfocada en zonas específicas de dolor</li>
-          <li>Programa de ejercicios para mantener y mejorar funcionalidad</li>
-          <li>Educación sobre factores moduladores del dolor</li>
-          <li>Estrategias de autocuidado y manejo de síntomas</li>
-          <li>Fomentar retorno gradual a actividades normales</li>
-        </ul>
+    const interpretacionClinicaEl = document.getElementById('bpi-interpretacion-clinica');
+    if (interpretacionClinicaEl) {
+      interpretacionClinicaEl.innerHTML = `
+        <p>El paciente presenta un dolor de intensidad <strong>${intensidadInterpretacion.toLowerCase()}</strong> 
+        (${intensidadRedondeada.toFixed(1)}/10) con una interferencia <strong>${interferenciaInterpretacion.toLowerCase()}</strong> 
+        (${interferenciaRedondeada.toFixed(1)}/10) en sus actividades diarias.</p>
+        <p>Este patrón sugiere un impacto <strong>${nivelGravedad}</strong> del dolor en la calidad de vida 
+        del paciente, afectando principalmente ${getAreasAfectadas([
+          { area: 'actividad general', valor: interferencia_actividad },
+          { area: 'estado de ánimo', valor: interferencia_animo },
+          { area: 'capacidad para caminar', valor: interferencia_caminar },
+          { area: 'trabajo habitual', valor: interferencia_trabajo },
+          { area: 'relaciones sociales', valor: interferencia_relaciones },
+          { area: 'sueño', valor: interferencia_sueno },
+          { area: 'disfrute de la vida', valor: interferencia_vida }
+        ])}.</p>
       `;
     }
     
-    // Aplicar clases de estilo
-    interpretacionContainer.className = `interpretacion-clinica-container ${claseBorde}`;
-    recomendacionesContainer.className = `recomendaciones-container ${claseBorde}`;
-    
-  } else {
-    // Mensaje si no hay datos suficientes
-    interpretacionClinicaEl.textContent = "Complete ambas secciones del cuestionario para obtener una interpretación clínica detallada.";
-    recomendacionesEl.textContent = "Complete el cuestionario para recibir recomendaciones terapéuticas personalizadas.";
-    interpretacionContainer.className = 'interpretacion-clinica-container';
-    recomendacionesContainer.className = 'recomendaciones-container';
-  }
-  
-  // Actualizar el badge con el estado
-  const bpiBadge = document.getElementById('bpi-badge');
-  
-  if (intensidadCompletada && interferenciaCompletada) {
-    if (intensidadRedondeada >= 7 || interferenciaRedondeada >= 7) {
-      bpiBadge.textContent = 'Severo';
-      bpiBadge.className = 'resultado-badge badge-rojo';
-    } else if (intensidadRedondeada >= 4 || interferenciaRedondeada >= 4) {
-      bpiBadge.textContent = 'Moderado';
-      bpiBadge.className = 'resultado-badge badge-amarillo';
-    } else {
-      bpiBadge.textContent = 'Leve';
-      bpiBadge.className = 'resultado-badge badge-verde';
+    // Actualizar recomendaciones terapéuticas
+    const recomendacionesEl = document.getElementById('bpi-recomendaciones');
+    if (recomendacionesEl) {
+      if (nivelGravedad === 'severo') {
+        recomendacionesEl.innerHTML = `
+          <p>Considerar un enfoque multidisciplinar que incluya:</p>
+          <ul>
+            <li>Evaluación por especialista en dolor para posible ajuste farmacológico</li>
+            <li>Combinar terapia manual con modalidades analgésicas</li>
+            <li>Educación en neurociencia del dolor y estrategias de afrontamiento</li>
+            <li>Programa de ejercicios graduados con progresión cuidadosa</li>
+            <li>Valorar impacto psicológico y posible derivación a psicología</li>
+            <li>Seguimiento frecuente para ajustar intervenciones según respuesta</li>
+          </ul>
+        `;
+      } else if (nivelGravedad === 'moderado') {
+        recomendacionesEl.innerHTML = `
+          <p>Se recomienda:</p>
+          <ul>
+            <li>Combinar terapia manual y ejercicio terapéutico</li>
+            <li>Educación sobre manejo del dolor y pacing de actividades</li>
+            <li>Implementar estrategias de autorregulación (respiración, relajación)</li>
+            <li>Programa de ejercicios para mejorar la funcionalidad</li>
+            <li>Revisar impacto en actividades diarias y plantear modificaciones</li>
+            <li>Seguimiento para evaluar evolución</li>
+          </ul>
+        `;
+      } else {
+        recomendacionesEl.innerHTML = `
+          <p>Se sugiere:</p>
+          <ul>
+            <li>Terapia manual enfocada en zonas específicas de dolor</li>
+            <li>Programa de ejercicios para mantener y mejorar funcionalidad</li>
+            <li>Educación sobre factores moduladores del dolor</li>
+            <li>Estrategias de autocuidado y manejo de síntomas</li>
+            <li>Fomentar retorno gradual a actividades normales</li>
+          </ul>
+        `;
+      }
     }
-  } else if (intensidadCompletada || interferenciaCompletada) {
-    bpiBadge.textContent = 'Incompleto';
-    bpiBadge.className = 'resultado-badge badge-gris';
   } else {
     bpiBadge.textContent = 'No completado';
     bpiBadge.className = 'resultado-badge';
+    resultadoContainer.className = 'resultado-container';
+    
+    // Mensajes para datos incompletos
+    if (document.getElementById('bpi-interpretacion-clinica')) {
+      document.getElementById('bpi-interpretacion-clinica').textContent = 
+        "Complete ambas secciones del cuestionario para obtener una interpretación clínica detallada.";
+    }
+    
+    if (document.getElementById('bpi-recomendaciones')) {
+      document.getElementById('bpi-recomendaciones').textContent = 
+        "Complete el cuestionario para recibir recomendaciones terapéuticas personalizadas.";
+    }
   }
 }
 
@@ -400,16 +389,29 @@ function calcularDN4() {
   // Interpretación y color según puntuación
   let interpretacion = '';
   let color = '';
+  let esNeuropatico = puntuacionTotal >= 4;
+  
+  // Actualizar el badge y el contenedor
+  const dn4Badge = document.getElementById('dn4-badge');
+  const resultadoContainer = document.getElementById('dn4-resultado');
   
   if (!estaCompleto) {
     interpretacion = 'Complete todos los campos para obtener un resultado preciso';
-    color = '';
-  } else if (puntuacionTotal >= 4) {
+    dn4Badge.textContent = 'No completado';
+    dn4Badge.className = 'resultado-badge';
+    resultadoContainer.className = 'resultado-container';
+  } else if (esNeuropatico) {
     interpretacion = 'Sugiere dolor neuropático (≥4 puntos)';
     color = 'rojo';
+    dn4Badge.textContent = 'Positivo';
+    dn4Badge.className = 'resultado-badge badge-rojo';
+    resultadoContainer.className = 'resultado-container nivel-alerta';
   } else {
     interpretacion = 'No sugiere dolor neuropático (<4 puntos)';
     color = 'verde';
+    dn4Badge.textContent = 'Negativo';
+    dn4Badge.className = 'resultado-badge badge-verde';
+    resultadoContainer.className = 'resultado-container nivel-leve';
   }
   
   // Aplicar interpretación y color
@@ -423,21 +425,9 @@ function calcularDN4() {
   
   // Actualizar interpretación clínica y recomendaciones
   const interpretacionClinicaEl = document.getElementById('dn4-interpretacion-clinica');
-  const interpretacionContainer = document.querySelector('#dn4-resultado .interpretacion-clinica-container');
   const recomendacionesEl = document.getElementById('dn4-recomendaciones');
-  const recomendacionesContainer = document.querySelector('#dn4-resultado .recomendaciones-container');
   
-  if (estaCompleto) {
-    let claseBorde = '';
-    let esNeuropatico = puntuacionTotal >= 4;
-    
-    // Determinar el tipo de borde según resultado
-    if (esNeuropatico) {
-      claseBorde = 'nivel-alerta';
-    } else {
-      claseBorde = 'nivel-leve';
-    }
-    
+  if (estaCompleto && interpretacionClinicaEl && recomendacionesEl) {
     // Obtener síntomas positivos
     const sintomasPositivos = [];
     if (quemazon === 1) sintomasPositivos.push("sensación de quemazón");
@@ -509,36 +499,9 @@ function calcularDN4() {
         </ul>
       `;
     }
-    
-    // Aplicar clases de estilo
-    interpretacionContainer.className = `interpretacion-clinica-container ${claseBorde}`;
-    recomendacionesContainer.className = `recomendaciones-container ${claseBorde}`;
-    
-  } else {
-    // Mensaje si no hay datos suficientes
+  } else if (interpretacionClinicaEl && recomendacionesEl) {
+    // Mensajes para cuestionario incompleto
     interpretacionClinicaEl.textContent = "Complete todas las preguntas del cuestionario para obtener una interpretación clínica detallada.";
     recomendacionesEl.textContent = "Complete el cuestionario para recibir recomendaciones terapéuticas personalizadas.";
-    interpretacionContainer.className = 'interpretacion-clinica-container';
-    recomendacionesContainer.className = 'recomendaciones-container';
-  }
-  
-  // Actualizar el badge con el estado
-  const dn4Badge = document.getElementById('dn4-badge');
-  
-  if (estaCompleto) {
-    if (puntuacionTotal >= 4) {
-      dn4Badge.textContent = 'Positivo';
-      dn4Badge.className = 'resultado-badge badge-rojo';
-    } else {
-      dn4Badge.textContent = 'Negativo';
-      dn4Badge.className = 'resultado-badge badge-verde';
-    }
-  } else if (itemsCompletados > 0) {
-    dn4Badge.textContent = 'Incompleto';
-    dn4Badge.className = 'resultado-badge badge-gris';
-  } else {
-    dn4Badge.textContent = 'No completado';
-    dn4Badge.className = 'resultado-badge';
   }
 }
-});
