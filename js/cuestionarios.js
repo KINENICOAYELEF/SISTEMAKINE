@@ -665,6 +665,9 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Inicializar BPI
   calcularBPI();
+
+  // Inicializar PCS
+  calcularPCS();
   
   // Inicializar DN4
   calcularDN4();
