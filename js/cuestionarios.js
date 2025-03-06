@@ -229,24 +229,51 @@ function calcularBPI() {
                                 interferencia_trabajo || interferencia_relaciones || interferencia_sueno || 
                                 interferencia_vida;
   
-  // Determinar nivel y estilos según gravedad
-  if (intensidadCompletada && interferenciaCompletada) {
-    if (intensidadRedondeada >= 7 || interferenciaRedondeada >= 7) {
-      nivelGravedad = 'severo';
-      bpiBadge.textContent = 'Severo';
-      bpiBadge.className = 'resultado-badge badge-rojo';
-      resultadoContainer.className = 'resultado-container nivel-severo';
-    } else if (intensidadRedondeada >= 4 || interferenciaRedondeada >= 4) {
-      nivelGravedad = 'moderado';
-      bpiBadge.textContent = 'Moderado';
-      bpiBadge.className = 'resultado-badge badge-amarillo';
-      resultadoContainer.className = 'resultado-container nivel-moderado';
-    } else {
-      nivelGravedad = 'leve';
-      bpiBadge.textContent = 'Leve';
-      bpiBadge.className = 'resultado-badge badge-verde';
-      resultadoContainer.className = 'resultado-container nivel-leve';
+  x// Determinar nivel y estilos según gravedad
+if (intensidadCompletada && interferenciaCompletada) {
+  // Marcar como completado
+  bpiBadge.textContent = 'Completado';
+  bpiBadge.className = 'resultado-badge badge-verde completado';
+  
+  // Determinar nivel de gravedad para los resultados
+  if (intensidadRedondeada >= 7 || interferenciaRedondeada >= 7) {
+    nivelGravedad = 'severo';
+    // Añadir indicador de nivel como texto o clase adicional
+    resultadoContainer.className = 'resultado-container nivel-severo';
+    // Agregar badge de nivel de severidad en otro elemento si es necesario
+    const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
+    nivelElement.id = 'bpi-nivel';
+    nivelElement.textContent = 'Severo';
+    nivelElement.className = 'resultado-nivel badge-rojo';
+    // Insertar el nivel si no existe
+    if (!document.getElementById('bpi-nivel')) {
+      bpiBadge.parentNode.appendChild(nivelElement);
     }
+  } else if (intensidadRedondeada >= 4 || interferenciaRedondeada >= 4) {
+    nivelGravedad = 'moderado';
+    resultadoContainer.className = 'resultado-container nivel-moderado';
+    // Agregar badge de nivel de severidad en otro elemento si es necesario
+    const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
+    nivelElement.id = 'bpi-nivel';
+    nivelElement.textContent = 'Moderado';
+    nivelElement.className = 'resultado-nivel badge-amarillo';
+    // Insertar el nivel si no existe
+    if (!document.getElementById('bpi-nivel')) {
+      bpiBadge.parentNode.appendChild(nivelElement);
+    }
+  } else {
+    nivelGravedad = 'leve';
+    resultadoContainer.className = 'resultado-container nivel-leve';
+    // Agregar badge de nivel de severidad en otro elemento si es necesario
+    const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
+    nivelElement.id = 'bpi-nivel';
+    nivelElement.textContent = 'Leve';
+    nivelElement.className = 'resultado-nivel badge-verde';
+    // Insertar el nivel si no existe
+    if (!document.getElementById('bpi-nivel')) {
+      bpiBadge.parentNode.appendChild(nivelElement);
+    }
+  }
     
     // Actualizar interpretación clínica
     const interpretacionClinicaEl = document.getElementById('bpi-interpretacion-clinica');
@@ -308,21 +335,26 @@ function calcularBPI() {
         `;
       }
     }
-  } else {
-    bpiBadge.textContent = 'No completado';
-    bpiBadge.className = 'resultado-badge';
-    resultadoContainer.className = 'resultado-container';
-    
-    // Mensajes para datos incompletos
-    if (document.getElementById('bpi-interpretacion-clinica')) {
-      document.getElementById('bpi-interpretacion-clinica').textContent = 
-        "Complete ambas secciones del cuestionario para obtener una interpretación clínica detallada.";
-    }
-    
-    if (document.getElementById('bpi-recomendaciones')) {
-      document.getElementById('bpi-recomendaciones').textContent = 
-        "Complete el cuestionario para recibir recomendaciones terapéuticas personalizadas.";
-    }
+ } else {
+  bpiBadge.textContent = 'No completado';
+  bpiBadge.className = 'resultado-badge no-completado';
+  resultadoContainer.className = 'resultado-container';
+  
+  // Eliminar el nivel si existe
+  const nivelElement = document.getElementById('bpi-nivel');
+  if (nivelElement) {
+    nivelElement.remove();
+  }
+  
+  // Mensajes para datos incompletos
+  if (document.getElementById('bpi-interpretacion-clinica')) {
+    document.getElementById('bpi-interpretacion-clinica').textContent = 
+      "Complete ambas secciones del cuestionario para obtener una interpretación clínica detallada.";
+  }
+  
+  if (document.getElementById('bpi-recomendaciones')) {
+    document.getElementById('bpi-recomendaciones').textContent = 
+      "Complete el cuestionario para recibir recomendaciones terapéuticas personalizadas.";
   }
 }
 
