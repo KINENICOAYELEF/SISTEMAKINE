@@ -474,6 +474,184 @@ function calcularDN4() {
   }
 }
 
+// Función para calcular la Escala de Catastrofización ante el Dolor (PCS)
+function calcularPCS() {
+  // Obtener valores de cada ítem
+  let valoresItems = [];
+  let completo = true;
+  
+  // Verificar si están completados todos los ítems
+  for (let i = 1; i <= 13; i++) {
+    const itemValue = document.querySelector(`input[name="pcs_item${i}"]:checked`)?.value;
+    if (itemValue !== undefined) {
+      valoresItems.push(parseInt(itemValue));
+    } else {
+      valoresItems.push(0);
+      completo = false;
+    }
+  }
+  
+  // Calcular puntuación total
+  const puntuacionTotal = valoresItems.reduce((sum, val) => sum + val, 0);
+  
+  // Calcular subescalas
+  // Rumiación: ítems 8, 9, 10, 11 (índices 7, 8, 9, 10)
+  const rumiacion = valoresItems[7] + valoresItems[8] + valoresItems[9] + valoresItems[10];
+  
+  // Magnificación: ítems 6, 7, 13 (índices 5, 6, 12)
+  const magnificacion = valoresItems[5] + valoresItems[6] + valoresItems[12];
+  
+  // Desesperanza: ítems 1, 2, 3, 4, 5, 12 (índices 0, 1, 2, 3, 4, 11)
+  const desesperanza = valoresItems[0] + valoresItems[1] + valoresItems[2] + valoresItems[3] + valoresItems[4] + valoresItems[11];
+  
+  // Actualizar badge
+  const badge = document.getElementById('pcs-badge');
+  if (completo) {
+    badge.textContent = "Completado";
+    badge.classList.add("badge-verde");
+    badge.classList.add("completado");
+  } else {
+    badge.textContent = "No completado";
+    badge.classList.remove("badge-verde");
+    badge.classList.remove("completado");
+  }
+  
+  // Actualizar valores en la interfaz
+  document.getElementById('pcs-valor-total').textContent = `${puntuacionTotal}/52`;
+  document.getElementById('pcs-valor-rumiacion').textContent = `${rumiacion}/16`;
+  document.getElementById('pcs-valor-magnificacion').textContent = `${magnificacion}/12`;
+  document.getElementById('pcs-valor-desesperanza').textContent = `${desesperanza}/24`;
+  
+  // Actualizar interpretación
+  const interpretacionTotal = document.getElementById('pcs-interpretacion-total');
+  const resultadoContainer = document.getElementById('pcs-resultado');
+  const interpretacionClinica = document.getElementById('pcs-interpretacion-clinica');
+  const recomendaciones = document.getElementById('pcs-recomendaciones');
+  
+  if (completo) {
+    // Interpretación del valor total
+    let nivelCatastrofizacion = "";
+    if (puntuacionTotal < 13) {
+      nivelCatastrofizacion = "Bajo";
+      interpretacionTotal.textContent = "Nivel bajo de catastrofización";
+      interpretacionTotal.className = "resultado-interpretacion verde";
+      resultadoContainer.className = "resultado-container nivel-leve";
+    } else if (puntuacionTotal < 25) {
+      nivelCatastrofizacion = "Moderado";
+      interpretacionTotal.textContent = "Nivel moderado de catastrofización";
+      interpretacionTotal.className = "resultado-interpretacion amarillo";
+      resultadoContainer.className = "resultado-container nivel-moderado";
+    } else {
+      nivelCatastrofizacion = "Alto";
+      interpretacionTotal.textContent = "Nivel alto de catastrofización";
+      interpretacionTotal.className = "resultado-interpretacion rojo";
+      resultadoContainer.className = "resultado-container nivel-severo";
+    }
+    
+    // Interpretación clínica detallada
+    interpretacionClinica.innerHTML = `
+      <p>El paciente presenta un nivel <strong>${nivelCatastrofizacion.toLowerCase()}</strong> de catastrofización ante el dolor (${puntuacionTotal}/52), lo que indica ${getDescripcionCatastrofizacion(nivelCatastrofizacion)}.</p>
+      <p>Análisis de subescalas:</p>
+      <ul>
+        <li><strong>Rumiación</strong> (${rumiacion}/16): ${getDescripcionRumiacion(rumiacion)}</li>
+        <li><strong>Magnificación</strong> (${magnificacion}/12): ${getDescripcionMagnificacion(magnificacion)}</li>
+        <li><strong>Desesperanza</strong> (${desesperanza}/24): ${getDescripcionDesesperanza(desesperanza)}</li>
+      </ul>
+      <p>La catastrofización ante el dolor es un factor psicológico que puede influir negativamente en la experiencia del dolor, la respuesta al tratamiento y la recuperación funcional.</p>
+    `;
+    
+    // Recomendaciones terapéuticas según el nivel
+    if (nivelCatastrofizacion === "Bajo") {
+      recomendaciones.innerHTML = `
+        <p>Con un nivel bajo de catastrofización, se recomienda:</p>
+        <ul>
+          <li>Mantener la educación sobre el dolor y reforzar conceptos que desmitifiquen creencias erróneas (nivel de evidencia 1A)</li>
+          <li>Enfoque principal en terapia física activa y ejercicio terapéutico (nivel de evidencia 1A)</li>
+          <li>Proporcionar retroalimentación positiva sobre los avances y capacidades (nivel de evidencia 1B)</li>
+          <li>Fomentar estrategias de afrontamiento activas (nivel de evidencia 1B)</li>
+          <li>Monitorizar periódicamente para detectar posibles cambios en la catastrofización (nivel de evidencia 2A)</li>
+        </ul>
+      `;
+    } else if (nivelCatastrofizacion === "Moderado") {
+      recomendaciones.innerHTML = `
+        <p>Con un nivel moderado de catastrofización, se recomienda:</p>
+        <ul>
+          <li>Implementar educación en neurociencia del dolor para modificar creencias maladaptativas (nivel de evidencia 1A)</li>
+          <li>Técnicas de reestructuración cognitiva para identificar y desafiar pensamientos catastróficos (nivel de evidencia 1A)</li>
+          <li>Entrenamiento en atención plena (mindfulness) para reducir la rumiación (nivel de evidencia 1B)</li>
+          <li>Ejercicio terapéutico graduado con énfasis en la autoeficacia (nivel de evidencia 1A)</li>
+          <li>Estrategias de exposición gradual a actividades evitadas (nivel de evidencia 1B)</li>
+          <li>Considerar abordaje interdisciplinar si no hay mejoría (nivel de evidencia 1A)</li>
+        </ul>
+      `;
+    } else {
+      recomendaciones.innerHTML = `
+        <p>Con un nivel alto de catastrofización, se recomienda:</p>
+        <ul>
+          <li>Abordaje interdisciplinar que incluya psicología clínica (nivel de evidencia 1A)</li>
+          <li>Educación intensiva en neurociencia del dolor (nivel de evidencia 1A)</li>
+          <li>Terapia cognitivo-conductual estructurada para el manejo del dolor (nivel de evidencia 1A)</li>
+          <li>Técnicas específicas para reducir la rumiación y la desesperanza (nivel de evidencia 1B)</li>
+          <li>Ejercicio terapéutico con exposición gradual muy controlada (nivel de evidencia 1A)</li>
+          <li>Entrenamiento en habilidades específicas de regulación emocional (nivel de evidencia 1B)</li>
+          <li>Establecer objetivos funcionales a corto plazo muy concretos y alcanzables (nivel de evidencia 1A)</li>
+          <li>Seguimiento cercano y reevaluación frecuente (nivel de evidencia 1B)</li>
+        </ul>
+      `;
+    }
+  } else {
+    interpretacionTotal.textContent = "Complete el cuestionario";
+    interpretacionTotal.className = "resultado-interpretacion";
+    resultadoContainer.className = "resultado-container";
+    interpretacionClinica.textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    recomendaciones.textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+  }
+}
+
+// Funciones auxiliares para las descripciones según los puntajes
+function getDescripcionCatastrofizacion(nivel) {
+  switch(nivel) {
+    case "Bajo":
+      return "una tendencia mínima a tener pensamientos negativos exagerados en relación con la experiencia del dolor";
+    case "Moderado":
+      return "cierta tendencia a amplificar las amenazas del dolor, con pensamientos y sentimientos negativos recurrentes";
+    case "Alto":
+      return "una fuerte tendencia a amplificar las amenazas del dolor, con pensamientos y sentimientos negativos muy marcados, lo que puede interferir significativamente con la recuperación";
+    default:
+      return "";
+  }
+}
+
+function getDescripcionRumiacion(puntaje) {
+  if (puntaje <= 5) {
+    return "Baja tendencia a centrarse excesivamente en pensamientos dolorosos";
+  } else if (puntaje <= 10) {
+    return "Moderada tendencia a centrarse repetitivamente en pensamientos relacionados con el dolor";
+  } else {
+    return "Alta tendencia a la rumiación, con dificultad para apartar los pensamientos sobre el dolor";
+  }
+}
+
+function getDescripcionMagnificacion(puntaje) {
+  if (puntaje <= 3) {
+    return "Baja tendencia a exagerar las amenazas del dolor";
+  } else if (puntaje <= 7) {
+    return "Moderada tendencia a exagerar las amenazas y preocuparse por consecuencias negativas";
+  } else {
+    return "Alta tendencia a magnificar la gravedad del dolor y sus posibles consecuencias";
+  }
+}
+
+function getDescripcionDesesperanza(puntaje) {
+  if (puntaje <= 8) {
+    return "Baja sensación de no poder hacer frente al dolor";
+  } else if (puntaje <= 16) {
+    return "Moderado sentimiento de impotencia y dificultad para manejar el dolor";
+  } else {
+    return "Alta sensación de impotencia y desesperanza ante la situación dolorosa";
+  }
+}
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
