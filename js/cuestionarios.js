@@ -652,6 +652,220 @@ function getDescripcionDesesperanza(puntaje) {
   }
 }
 
+// Función para calcular el Inventario de Sensibilización Central (CSI)
+function calcularCSI() {
+  // Obtener valores de la Parte A
+  let valoresItems = [];
+  let completo = true;
+  let itemsCompletados = 0;
+  
+  // Verificar si están completados todos los ítems de la Parte A
+  for (let i = 1; i <= 25; i++) {
+    const itemValue = document.querySelector(`input[name="csi_item${i}"]:checked`)?.value;
+    if (itemValue !== undefined) {
+      valoresItems.push(parseInt(itemValue));
+      itemsCompletados++;
+    } else {
+      valoresItems.push(0);
+    }
+  }
+  
+  // Calcular puntuación de la Parte A
+  const puntuacionA = valoresItems.reduce((sum, val) => sum + val, 0);
+  
+  // Considerar el cuestionario completo si se han respondido al menos 23 de 25 preguntas
+  completo = itemsCompletados >= 23;
+  
+  // Obtener diagnósticos de la Parte B
+  const diagnosticos = [
+    document.getElementById('csi_fibromialgia').checked,
+    document.getElementById('csi_sindrome_fatiga').checked,
+    document.getElementById('csi_tmd').checked,
+    document.getElementById('csi_migranas').checked,
+    document.getElementById('csi_sii').checked,
+    document.getElementById('csi_reflujo').checked,
+    document.getElementById('csi_vejiga').checked,
+    document.getElementById('csi_quimico').checked,
+    document.getElementById('csi_lesion_cuello').checked,
+    document.getElementById('csi_ansiedad').checked
+  ];
+  
+  const numeroDiagnosticos = diagnosticos.filter(Boolean).length;
+  
+  // Actualizar badge
+  const badge = document.getElementById('csi-badge');
+  if (completo) {
+    badge.textContent = "Completado";
+    badge.classList.add("badge-verde");
+    badge.classList.add("completado");
+  } else {
+    badge.textContent = "No completado";
+    badge.classList.remove("badge-verde");
+    badge.classList.remove("completado");
+  }
+  
+  // Actualizar valores en la interfaz
+  document.getElementById('csi-valor-a').textContent = `${puntuacionA}/100`;
+  document.getElementById('csi-valor-b').textContent = `${numeroDiagnosticos}/10`;
+  
+  // Actualizar interpretación
+  const interpretacionA = document.getElementById('csi-interpretacion-a');
+  const interpretacionB = document.getElementById('csi-interpretacion-b');
+  const resultadoContainer = document.getElementById('csi-resultado');
+  const interpretacionClinica = document.getElementById('csi-interpretacion-clinica');
+  const recomendaciones = document.getElementById('csi-recomendaciones');
+  
+  if (completo) {
+    // Interpretación del valor de la Parte A
+    let nivelSC = "";
+    
+    if (puntuacionA < 30) {
+      nivelSC = "Subclínico";
+      interpretacionA.textContent = "Sensibilización central subclínica";
+      interpretacionA.className = "resultado-interpretacion verde";
+      resultadoContainer.className = "resultado-container nivel-leve";
+    } else if (puntuacionA < 40) {
+      nivelSC = "Leve";
+      interpretacionA.textContent = "Sensibilización central leve";
+      interpretacionA.className = "resultado-interpretacion verde-claro";
+      resultadoContainer.className = "resultado-container nivel-leve";
+    } else if (puntuacionA < 50) {
+      nivelSC = "Moderado";
+      interpretacionA.textContent = "Sensibilización central moderada";
+      interpretacionA.className = "resultado-interpretacion amarillo";
+      resultadoContainer.className = "resultado-container nivel-moderado";
+    } else if (puntuacionA < 60) {
+      nivelSC = "Severo";
+      interpretacionA.textContent = "Sensibilización central severa";
+      interpretacionA.className = "resultado-interpretacion rojo";
+      resultadoContainer.className = "resultado-container nivel-severo";
+    } else {
+      nivelSC = "Extremo";
+      interpretacionA.textContent = "Sensibilización central extrema";
+      interpretacionA.className = "resultado-interpretacion rojo";
+      resultadoContainer.className = "resultado-container nivel-severo";
+    }
+    
+    // Interpretación de la Parte B
+    if (numeroDiagnosticos === 0) {
+      interpretacionB.textContent = "Sin diagnósticos relacionados";
+    } else if (numeroDiagnosticos === 1) {
+      interpretacionB.textContent = "1 diagnóstico relacionado";
+    } else {
+      interpretacionB.textContent = `${numeroDiagnosticos} diagnósticos relacionados`;
+    }
+    
+    // Interpretación clínica detallada
+    const diagnosticosTexto = obtenerDiagnosticosTexto(diagnosticos);
+    
+    interpretacionClinica.innerHTML = `
+      <p>El paciente presenta un nivel <strong>${nivelSC.toLowerCase()}</strong> de sensibilización central (${puntuacionA}/100), lo que sugiere ${getDescripcionSC(nivelSC)}.</p>
+      ${numeroDiagnosticos > 0 ? `
+      <p>Además, refiere ${numeroDiagnosticos} ${numeroDiagnosticos === 1 ? 'diagnóstico previo relacionado' : 'diagnósticos previos relacionados'} con síndromes de sensibilización central: ${diagnosticosTexto}.</p>
+      <p>La presencia de estos diagnósticos ${numeroDiagnosticos > 2 ? 'múltiples ' : ''}aumenta la probabilidad de que los mecanismos de sensibilización central estén contribuyendo a la presentación clínica actual.</p>
+      ` : '<p>No se reportan diagnósticos previos relacionados con síndromes de sensibilización central, lo que sugiere que la contribución de este mecanismo podría ser más reciente o estar en desarrollo.</p>'}
+      
+      <p>La sensibilización central implica una amplificación de la señalización neural dentro del sistema nervioso central que provoca hipersensibilidad al dolor, alteraciones sensoriales y procesamiento sensorial alterado.</p>
+    `;
+    
+    // Recomendaciones terapéuticas según el nivel
+    if (nivelSC === "Subclínico" || nivelSC === "Leve") {
+      recomendaciones.innerHTML = `
+        <p>Con un nivel ${nivelSC.toLowerCase()} de sensibilización central, se recomienda:</p>
+        <ul>
+          <li>Educación en neurociencia del dolor para entender los mecanismos de sensibilización (nivel de evidencia 1A)</li>
+          <li>Ejercicio terapéutico de intensidad moderada, priorizando actividades no provocadoras de dolor (nivel de evidencia 1A)</li>
+          <li>Técnicas de desensibilización gradual para normalizar el procesamiento sensorial (nivel de evidencia 1B)</li>
+          <li>Terapia manual no agresiva con enfoque en reducir la hiperalgesia (nivel de evidencia 1B)</li>
+          <li>Estrategias de autorregulación como respiración diafragmática y relajación muscular progresiva (nivel de evidencia 1B)</li>
+          <li>Monitorización regular de los síntomas para detectar cambios (nivel de evidencia 2A)</li>
+        </ul>
+      `;
+    } else if (nivelSC === "Moderado") {
+      recomendaciones.innerHTML = `
+        <p>Con un nivel moderado de sensibilización central, se recomienda:</p>
+        <ul>
+          <li>Programa estructurado de educación en neurociencia del dolor (nivel de evidencia 1A)</li>
+          <li>Ejercicio terapéutico progresivo con exposición gradual, priorizando actividades aeróbicas de baja intensidad (nivel de evidencia 1A)</li>
+          <li>Técnicas de extinción del miedo al movimiento (nivel de evidencia 1B)</li>
+          <li>Desensibilización sistemática para hipersensibilidad sensorial (nivel de evidencia 1B)</li>
+          <li>Entrenamiento en mindfulness para reducir hipervigilancia (nivel de evidencia 1B)</li>
+          <li>Abordaje de factores contextuales (sueño, estrés, patrones de actividad) que pueden perpetuar la sensibilización (nivel de evidencia 1A)</li>
+          <li>Considerar derivación a especialista en dolor si no hay mejoría en 4-6 semanas (nivel de evidencia 2A)</li>
+        </ul>
+      `;
+    } else { // Severo o Extremo
+      recomendaciones.innerHTML = `
+        <p>Con un nivel ${nivelSC.toLowerCase()} de sensibilización central, se recomienda:</p>
+        <ul>
+          <li>Abordaje interdisciplinar con participación de especialista en dolor (nivel de evidencia 1A)</li>
+          <li>Programa intensivo de educación en neurociencia del dolor (nivel de evidencia 1A)</li>
+          <li>Exposición gradual muy cuidadosa a estímulos que provocan dolor, monitorizando respuestas (nivel de evidencia 1A)</li>
+          <li>Terapia de aceptación y compromiso para reducir el impacto de la hipersensibilidad (nivel de evidencia 1A)</li>
+          <li>Programa de actividad física individualizado con progresión muy gradual (nivel de evidencia 1A)</li>
+          <li>Técnicas específicas para regular el sistema nervioso autónomo (nivel de evidencia 1B)</li>
+          <li>Estrategias de gestión del sueño (nivel de evidencia 1A)</li>
+          <li>Intervenciones para reducir el estrés y la ansiedad (nivel de evidencia 1A)</li>
+          <li>Plan de tratamiento a largo plazo con objetivos funcionales realistas (nivel de evidencia 1A)</li>
+          <li>Considerar derivación para evaluación de tratamiento farmacológico dirigido a mecanismos de sensibilización central (nivel de evidencia 1A)</li>
+        </ul>
+      `;
+    }
+  } else {
+    interpretacionA.textContent = "Complete el cuestionario";
+    interpretacionA.className = "resultado-interpretacion";
+    interpretacionB.textContent = "Complete el cuestionario";
+    resultadoContainer.className = "resultado-container";
+    interpretacionClinica.textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    recomendaciones.textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+  }
+}
+
+// Función para obtener la descripción según el nivel de sensibilización central
+function getDescripcionSC(nivel) {
+  switch(nivel) {
+    case "Subclínico":
+      return "una presencia mínima de síntomas asociados con la sensibilización del sistema nervioso central";
+    case "Leve":
+      return "una presencia leve de síntomas relacionados con la sensibilización central, que podrían estar comenzando a afectar la vida diaria";
+    case "Moderado":
+      return "una clara evidencia de sensibilización central que probablemente esté contribuyendo significativamente a la condición del paciente y afectando su funcionalidad";
+    case "Severo":
+      return "un alto grado de sensibilización central que probablemente sea un factor determinante en la condición del paciente, con impacto sustancial en múltiples áreas de la vida";
+    case "Extremo":
+      return "un grado extremo de sensibilización central con manifestaciones generalizadas y profundo impacto en la calidad de vida y funcionalidad";
+    default:
+      return "";
+  }
+}
+
+// Función para obtener el texto de diagnósticos seleccionados
+function obtenerDiagnosticosTexto(diagnosticos) {
+  const nombresdiagnosticos = [
+    "fibromialgia",
+    "síndrome de fatiga crónica",
+    "trastorno temporomandibular",
+    "migrañas o cefaleas tensionales",
+    "síndrome de intestino irritable",
+    "reflujo o dolor torácico no cardíaco",
+    "vejiga irritable o cistitis intersticial",
+    "sensibilidad a químicos/medicamentos",
+    "lesión de cuello (incluyendo latigazo)",
+    "ansiedad o ataques de pánico"
+  ];
+  
+  const seleccionados = diagnosticos.map((seleccionado, index) => {
+    if (seleccionado) return nombresdiagnosticos[index];
+    return null;
+  }).filter(Boolean);
+  
+  if (seleccionados.length === 0) return "ninguno";
+  if (seleccionados.length === 1) return seleccionados[0];
+  
+  const ultimoDiagnostico = seleccionados.pop();
+  return `${seleccionados.join(', ')} y ${ultimoDiagnostico}`;
+}
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
@@ -668,6 +882,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Inicializar PCS
   calcularPCS();
+
+   // Inicializar CSI
+  calcularCSI();
   
   // Inicializar DN4
   calcularDN4();
