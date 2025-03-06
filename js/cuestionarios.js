@@ -452,3 +452,20 @@ function calcularDN4() {
     recomendacionesElement.textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
   }
 }
+
+
+// Inicializar los cuestionarios al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar otros cuestionarios (si ya existen en tu código)
+  
+  // Inicializar DN4
+  calcularDN4();
+  
+  // Asegurarse de que los event listeners de toggle estén configurados
+  document.querySelectorAll('.cuestionario-header').forEach(header => {
+    header.addEventListener('click', function() {
+      const contentId = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+      toggleCuestionario(contentId);
+    });
+  });
+});
