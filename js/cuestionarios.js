@@ -415,11 +415,25 @@ function calcularDN4() {
       valorElement.classList.add('valor-bajo');
     }
   }
+  
+  
+  // Añadir un elemento separado para mostrar la puntuación
+  const valorElement = document.getElementById('dn4-valor');
+  if (valorElement) {
+    valorElement.textContent = puntaje + "/10";
+    
+    // Agregar una clase de color según el puntaje
+    if (puntaje >= 4) {
+      valorElement.classList.add('valor-alto');
+    } else {
+      valorElement.classList.add('valor-bajo');
+    }
+  }
     
     // Interpretación según el puntaje
     if (puntaje >= 4) {
-      interpretacionElement.textContent = "Probable dolor neuropático";
-      interpretacionElement.className = "resultado-interpretacion rojo";
+    interpretacionElement.textContent = "Probable dolor neuropático";
+    interpretacionElement.className = "resultado-interpretacion rojo";
       
       interpretacionClinicaElement.innerHTML = `
         <p>Con un puntaje de ${puntaje}/10, el paciente presenta características altamente sugestivas de dolor neuropático. El DN4 tiene una sensibilidad del 83% y una especificidad del 90% cuando el puntaje es ≥ 4/10.</p>
@@ -437,8 +451,8 @@ function calcularDN4() {
         </ul>
       `;
     } else {
-      interpretacionElement.textContent = "Dolor no neuropático";
-      interpretacionElement.className = "resultado-interpretacion verde";
+    interpretacionElement.textContent = "Dolor no neuropático";
+    interpretacionElement.className = "resultado-interpretacion verde";
       
       interpretacionClinicaElement.innerHTML = `
         <p>Con un puntaje de ${puntaje}/10, el paciente no presenta un patrón típico de dolor neuropático. El dolor probablemente sea de origen nociceptivo o nociplástico.</p>
