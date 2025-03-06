@@ -1539,6 +1539,319 @@
     </div>
   </div>
 </div>
+
+    <!-- CSI (Inventario de Sensibilización Central) -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('csi-content')">
+    <h4><i class="fas fa-plus-circle"></i> Inventario de Sensibilización Central (CSI)</h4>
+    <div class="resultado-badge" id="csi-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="csi-content" style="display: none;">
+    <p class="mb-3">Este cuestionario evalúa la presencia de síntomas relacionados con la sensibilización central. Por favor, indique con qué frecuencia ha experimentado cada uno de los siguientes síntomas en los últimos 3 meses.</p>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th>Síntoma</th>
+          <th>Nunca</th>
+          <th>Raramente</th>
+          <th>A veces</th>
+          <th>A menudo</th>
+          <th>Siempre</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. Siento dolor en todo mi cuerpo</td>
+          <td class="text-center"><input type="radio" name="csi_item1" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item1" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item1" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item1" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item1" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>2. Tengo ataques de dolor súbito o como si fueran calambres</td>
+          <td class="text-center"><input type="radio" name="csi_item2" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item2" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item2" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item2" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item2" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>3. Tengo dolor en las articulaciones</td>
+          <td class="text-center"><input type="radio" name="csi_item3" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item3" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item3" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item3" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item3" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>4. Siento las piernas débiles</td>
+          <td class="text-center"><input type="radio" name="csi_item4" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item4" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item4" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item4" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item4" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>5. Tengo poca energía o me siento fatigado/a</td>
+          <td class="text-center"><input type="radio" name="csi_item5" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item5" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item5" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item5" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item5" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>6. Tengo dolores musculares</td>
+          <td class="text-center"><input type="radio" name="csi_item6" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item6" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item6" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item6" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item6" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>7. Tengo dolores de cabeza o migrañas</td>
+          <td class="text-center"><input type="radio" name="csi_item7" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item7" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item7" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item7" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item7" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>8. Tengo dolor o molestias en el cuello</td>
+          <td class="text-center"><input type="radio" name="csi_item8" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item8" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item8" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item8" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item8" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>9. Tengo dolor o molestias en la mandíbula</td>
+          <td class="text-center"><input type="radio" name="csi_item9" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item9" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item9" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item9" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item9" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>10. Tengo sensibilidad en la vejiga o ardor al orinar</td>
+          <td class="text-center"><input type="radio" name="csi_item10" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item10" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item10" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item10" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item10" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>11. Necesito orinar frecuentemente</td>
+          <td class="text-center"><input type="radio" name="csi_item11" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item11" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item11" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item11" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item11" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>12. Tengo dolor entre las piernas (vagina/pelvis/recto)</td>
+          <td class="text-center"><input type="radio" name="csi_item12" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item12" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item12" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item12" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item12" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>13. Tengo molestias cuando voy al baño</td>
+          <td class="text-center"><input type="radio" name="csi_item13" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item13" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item13" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item13" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item13" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>14. Tengo malestar abdominal y problemas digestivos</td>
+          <td class="text-center"><input type="radio" name="csi_item14" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item14" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item14" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item14" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item14" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>15. Tengo síndrome de colon irritable</td>
+          <td class="text-center"><input type="radio" name="csi_item15" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item15" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item15" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item15" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item15" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>16. Siento entumecimiento u hormigueo en partes de mi cuerpo</td>
+          <td class="text-center"><input type="radio" name="csi_item16" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item16" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item16" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item16" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item16" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>17. Tengo dolor en la región del pecho</td>
+          <td class="text-center"><input type="radio" name="csi_item17" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item17" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item17" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item17" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item17" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>18. Soy sensible a las luces brillantes</td>
+          <td class="text-center"><input type="radio" name="csi_item18" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item18" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item18" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item18" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item18" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>19. Soy sensible a los ruidos</td>
+          <td class="text-center"><input type="radio" name="csi_item19" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item19" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item19" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item19" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item19" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>20. Siento algunas cosas (como ciertos olores, químicos, medicamentos) que empeoran mi dolor</td>
+          <td class="text-center"><input type="radio" name="csi_item20" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item20" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item20" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item20" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item20" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>21. Me siento estresado/a cuando tengo que hacer muchas cosas en poco tiempo</td>
+          <td class="text-center"><input type="radio" name="csi_item21" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item21" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item21" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item21" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item21" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>22. Tengo problemas para concentrarme</td>
+          <td class="text-center"><input type="radio" name="csi_item22" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item22" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item22" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item22" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item22" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>23. Duermo mal</td>
+          <td class="text-center"><input type="radio" name="csi_item23" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item23" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item23" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item23" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item23" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>24. Me siento cansado/a cuando me despierto</td>
+          <td class="text-center"><input type="radio" name="csi_item24" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item24" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item24" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item24" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item24" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>25. Tengo ansiedad</td>
+          <td class="text-center"><input type="radio" name="csi_item25" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item25" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item25" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item25" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item25" value="4" onchange="calcularCSI()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="form-row">
+      <div class="form-col form-col-md-12">
+        <h5 class="mb-3">Parte B: Diagnósticos relacionados con Sensibilización Central</h5>
+        <p>Marque las condiciones que le han sido diagnosticadas por un médico:</p>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_fibromialgia" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_fibromialgia">Fibromialgia</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_sindrome_fatiga" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_sindrome_fatiga">Síndrome de fatiga crónica</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_tmd" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_tmd">Trastorno temporomandibular (TMD)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_migranas" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_migranas">Migrañas o cefaleas tensionales</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_sii" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_sii">Síndrome de intestino irritable (SII)</label>
+            </div>
+          </div>
+          <div class="form-col form-col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_reflujo" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_reflujo">Reflujo o dolor torácico no cardíaco</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_vejiga" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_vejiga">Vejiga irritable o cistitis intersticial</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_quimico" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_quimico">Sensibilidad a químicos/medicamentos</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_lesion_cuello" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_lesion_cuello">Lesión de cuello (incluyendo latigazo)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_ansiedad" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_ansiedad">Ansiedad o ataques de pánico</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-col form-col-md-12">
+        <div class="resultado-container" id="csi-resultado">
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="resultado-label">Puntuación Parte A:</div>
+              <div class="resultado-valor" id="csi-valor-a">-/100</div>
+              <div class="resultado-interpretacion" id="csi-interpretacion-a">Complete el cuestionario</div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="resultado-label">Diagnósticos Parte B:</div>
+              <div class="resultado-valor" id="csi-valor-b">-/10</div>
+              <div class="resultado-interpretacion" id="csi-interpretacion-b">Condiciones relacionadas con SC</div>
+            </div>
+          </div>
+          
+          <div class="interpretacion-clinica-container mt-3">
+            <h5>Interpretación Clínica:</h5>
+            <div class="interpretacion-clinica" id="csi-interpretacion-clinica">
+              Complete el cuestionario para obtener la interpretación clínica.
+            </div>
+          </div>
+          
+          <div class="recomendaciones-container mt-3">
+            <h5>Recomendaciones Terapéuticas:</h5>
+            <div class="recomendaciones" id="csi-recomendaciones">
+              Complete el cuestionario para obtener recomendaciones terapéuticas.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
       
       <!-- DN4 (Cuestionario de Dolor Neuropático) -->
       <div class="cuestionario-item">
