@@ -399,14 +399,27 @@ function calcularDN4() {
   const testCompleto = camposRespondidos >= 10;
   
   if (testCompleto) {
-    badgeElement.textContent = puntaje + "/10";
-    badgeElement.classList.remove('no-completado');
-    badgeElement.classList.add('completado');
+  badgeElement.textContent = "Completado";
+  badgeElement.classList.remove('no-completado');
+  badgeElement.classList.add('badge-verde', 'completado');
+  
+  // Añadir un elemento separado para mostrar la puntuación
+  const valorElement = document.getElementById('dn4-valor');
+  if (valorElement) {
+    valorElement.textContent = puntaje + "/10";
+    
+    // Agregar una clase de color según el puntaje
+    if (puntaje >= 4) {
+      valorElement.classList.add('valor-alto');
+    } else {
+      valorElement.classList.add('valor-bajo');
+    }
+  }
     
     // Interpretación según el puntaje
     if (puntaje >= 4) {
       interpretacionElement.textContent = "Probable dolor neuropático";
-      interpretacionElement.className = "resultado-interpretacion alto";
+      interpretacionElement.className = "resultado-interpretacion rojo";
       
       interpretacionClinicaElement.innerHTML = `
         <p>Con un puntaje de ${puntaje}/10, el paciente presenta características altamente sugestivas de dolor neuropático. El DN4 tiene una sensibilidad del 83% y una especificidad del 90% cuando el puntaje es ≥ 4/10.</p>
@@ -415,17 +428,17 @@ function calcularDN4() {
       
       recomendacionesElement.innerHTML = `
         <ul>
-          <li>Considerar tratamientos específicos para dolor neuropático (anticonvulsivantes, antidepresivos, etc.)</li>
-          <li>Realizar una evaluación neurológica completa</li>
-          <li>Implementar modalidades físicas como TENS, termoterapia controlada</li>
-          <li>Educación en neurofisiología del dolor</li>
-          <li>Técnicas de desensibilización gradual para áreas hipersensibles</li>
-          <li>Derivación a especialista en manejo del dolor para evaluación farmacológica</li>
+          <li>Implementar electroestimulación nerviosa transcutánea (TENS) con frecuencia alta (>80 Hz) para dolor neuropático (nivel de evidencia 1B)</li>
+          <li>Aplicar educación en neurociencia del dolor para mejorar la comprensión de los mecanismos del dolor neuropático (nivel de evidencia 1A)</li>
+          <li>Utilizar técnicas de desensibilización gradual progresiva en zonas hipersensibles (nivel de evidencia 1B)</li>
+          <li>Incorporar ejercicio terapéutico de baja a moderada intensidad para mejorar la función y reducir el dolor (nivel de evidencia 1A)</li>
+          <li>Aplicar terapia manual no agresiva como técnicas de movilización neural (nivel de evidencia 2A)</li>
+          <li>Considerar el uso de terapia por espejo o imaginería motora graduada para dolor neuropático complejo (nivel de evidencia 1B)</li>
         </ul>
       `;
     } else {
       interpretacionElement.textContent = "Dolor no neuropático";
-      interpretacionElement.className = "resultado-interpretacion bajo";
+      interpretacionElement.className = "resultado-interpretacion verde";
       
       interpretacionClinicaElement.innerHTML = `
         <p>Con un puntaje de ${puntaje}/10, el paciente no presenta un patrón típico de dolor neuropático. El dolor probablemente sea de origen nociceptivo o nociplástico.</p>
@@ -433,18 +446,19 @@ function calcularDN4() {
       
       recomendacionesElement.innerHTML = `
         <ul>
-          <li>Enfocar el tratamiento en el manejo del dolor nociceptivo/nociplástico</li>
-          <li>Terapia manual</li>
-          <li>Ejercicio terapéutico</li>
-          <li>Educación sobre manejo del dolor</li>
-          <li>Reevaluación periódica si los síntomas cambian</li>
+          <li>Aplicar terapia manual específica según el origen del dolor nociceptivo (nivel de evidencia 1A)</li>
+          <li>Prescribir ejercicio terapéutico específico y progresivo para mejorar función y fuerza (nivel de evidencia 1A)</li>
+          <li>Implementar estimulación eléctrica (TENS) en modalidad convencional (nivel de evidencia 1B)</li>
+          <li>Aplicar termoterapia superficial según la fase del proceso (nivel de evidencia 1B)</li>
+          <li>Educación en autocuidado y manejo activo del dolor (nivel de evidencia 1A)</li>
+          <li>Realizar reevaluación periódica para identificar cambios en el patrón de dolor (nivel de evidencia 2A)</li>
         </ul>
       `;
     }
   } else {
-    badgeElement.textContent = "No completado";
-    badgeElement.classList.remove('completado');
-    badgeElement.classList.add('no-completado');
+  badgeElement.textContent = "No completado";
+  badgeElement.classList.remove('completado', 'badge-verde');
+  badgeElement.classList.add('no-completado');
     interpretacionElement.textContent = "Complete el cuestionario para obtener un resultado";
     interpretacionElement.className = "resultado-interpretacion";
     
