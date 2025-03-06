@@ -2418,42 +2418,53 @@ function eliminarCampo(containerId) {
   <script src="js/responsive.js"></script>
   <script src="js/mapa-corporal.js"></script>
   <script src="js/cuestionarios.js"></script>
-
   <script>
-  // Función para manejar el toggling de cuestionarios
-  function toggleCuestionario(contentId) {
-    const content = document.getElementById(contentId);
-    if (!content) return;
-    
-    const header = content.previousElementSibling;
-    
-    if (content.style.display === "none" || !content.style.display) {
-      content.style.display = "block";
-      header.classList.add("active");
-    } else {
-      content.style.display = "none";
-      header.classList.remove("active");
-    }
+// Reemplazar la función toggleCuestionario para garantizar que funcione
+function toggleCuestionario(contentId) {
+  console.log('Toggling cuestionario:', contentId);
+  const content = document.getElementById(contentId);
+  if (!content) {
+    console.error('Content not found:', contentId);
+    return;
   }
   
-  // Asegurarnos de que la función está disponible globalmente
-  window.toggleCuestionario = toggleCuestionario;
+  const header = content.previousElementSibling;
   
-  // Inicializar todos los cuestionarios al cargar la página
-  document.addEventListener('DOMContentLoaded', function() {
-    // Asegurarnos de que el toggle funciona para todos los headers
-    document.querySelectorAll('.cuestionario-header').forEach(header => {
-      header.onclick = function() {
-        const onClick = header.getAttribute('onclick');
-        if (onClick && onClick.includes("toggleCuestionario")) {
-          const match = onClick.match(/toggleCuestionario\(['"]([^'"]+)['"]\)/);
-          if (match && match[1]) {
-            toggleCuestionario(match[1]);
-          }
+  if (content.style.display === "none" || !content.style.display) {
+    content.style.display = "block";
+    if (header) header.classList.add("active");
+  } else {
+    content.style.display = "none";
+    if (header) header.classList.remove("active");
+  }
+}
+
+// Asegurar que la función está disponible globalmente
+window.toggleCuestionario = toggleCuestionario;
+
+// Inicializar manualmente los acordeones
+document.addEventListener('DOMContentLoaded', function() {
+  // Agregar listeners directamente a los headers
+  document.querySelectorAll('.cuestionario-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      // Extraer el ID del contenido desde el atributo onclick
+      const onclickAttr = this.getAttribute('onclick');
+      if (onclickAttr && onclickAttr.includes('toggleCuestionario')) {
+        // Obtener el ID entre paréntesis y comillas
+        const matches = onclickAttr.match(/toggleCuestionario\(['"](.*?)['"]\)/);
+        if (matches && matches[1]) {
+          const contentId = matches[1];
+          // Llamar a la función manualmente
+          toggleCuestionario(contentId);
         }
-      };
+      }
     });
   });
+
+  // Marcar como inicializado
+  console.log('Cuestionarios inicializados correctamente');
+});
+</script>
 </script>
 </body>
 </html>
