@@ -2179,111 +2179,523 @@
         </div>
       </div> <!-- Cierre de tab-content cuestionarios -->
           
-          <!-- 4. Historia Médica -->
-          <div class="tab-content" id="historia-medica">
-            <h3>4. Historia Médica Detallada</h3>
-            
-            <h4>4.1 Antecedentes Personales</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="enfermedadesCronicas" class="form-label">Enfermedades crónicas</label>
-                  <textarea id="enfermedadesCronicas" name="enfermedadesCronicas" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="enfermedadesAgudas" class="form-label">Enfermedades agudas previas</label>
-                  <textarea id="enfermedadesAgudas" name="enfermedadesAgudas" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-row">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="hospitalizaciones" class="form-label">Hospitalizaciones</label>
-                  <textarea id="hospitalizaciones" name="hospitalizaciones" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="cirugiasPrevias" class="form-label">Cirugías previas</label>
-                  <textarea id="cirugiasPrevias" name="cirugiasPrevias" class="form-control" rows="2"></textarea>
-                </div>
+         <!-- 4. Historia Médica -->
+<div class="tab-content" id="historia-medica">
+  <h3>4. Historia Médica Detallada</h3>
+  
+  <h4>4.1 Antecedentes Personales</h4>
+  
+  <!-- Enfermedades crónicas -->
+  <div class="form-row mb-4">
+    <div class="form-col form-col-md-12">
+      <div class="form-group">
+        <label class="form-label">Enfermedades crónicas</label>
+        <div class="checkbox-group">
+          <div class="form-row">
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="enfCronica_hipertension" name="enfCronica[]" value="Hipertensión" class="form-check-input">
+                <label class="form-check-label" for="enfCronica_hipertension">Hipertensión</label>
               </div>
             </div>
-            
-            <div class="form-row">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="antecedentesOrtopedicos" class="form-label">Antecedentes ortopédicos/musculoesqueléticos previos</label>
-                  <textarea id="antecedentesOrtopedicos" name="antecedentesOrtopedicos" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="traumatismosPrevios" class="form-label">Traumatismos previos</label>
-                  <textarea id="traumatismosPrevios" name="traumatismosPrevios" class="form-control" rows="2"></textarea>
-                </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="enfCronica_diabetes" name="enfCronica[]" value="Diabetes" class="form-check-input">
+                <label class="form-check-label" for="enfCronica_diabetes">Diabetes</label>
               </div>
             </div>
-            
-            <h4>4.2 Antecedentes Familiares</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="enfermedadesHereditarias" class="form-label">Enfermedades hereditarias</label>
-                  <textarea id="enfermedadesHereditarias" name="enfermedadesHereditarias" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="condicionesGeneticas" class="form-label">Condiciones genéticas relevantes</label>
-                  <textarea id="condicionesGeneticas" name="condicionesGeneticas" class="form-control" rows="2"></textarea>
-                </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="enfCronica_asma" name="enfCronica[]" value="Asma" class="form-check-input">
+                <label class="form-check-label" for="enfCronica_asma">Asma</label>
               </div>
             </div>
-            
-            <h4>4.3 Medicación Actual</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="medicamentosActuales" class="form-label">Medicamentos actuales</label>
-                  <textarea id="medicamentosActuales" name="medicamentosActuales" class="form-control" rows="3"></textarea>
-                </div>
-              </div>
-            </div>
-            
-            <h4>4.4 Alergias e Hipersensibilidades</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="alergiasMedicamentos" class="form-label">Medicamentos</label>
-                  <textarea id="alergiasMedicamentos" name="alergiasMedicamentos" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="alergiasAlimentos" class="form-label">Alimentos</label>
-                  <textarea id="alergiasAlimentos" name="alergiasAlimentos" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="alergiasAmbientales" class="form-label">Ambientales</label>
-                  <textarea id="alergiasAmbientales" name="alergiasAmbientales" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-row mt-4">
-              <div class="form-col form-col-md-12">
-                <button type="button" class="btn btn-secondary prev-tab" data-prev="cuestionarios"><i class="fas fa-arrow-left"></i> Anterior</button>
-                <button type="button" class="btn btn-primary next-tab" data-next="habitos">Siguiente <i class="fas fa-arrow-right"></i></button>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="enfCronica_epoc" name="enfCronica[]" value="EPOC" class="form-check-input">
+                <label class="form-check-label" for="enfCronica_epoc">EPOC</label>
               </div>
             </div>
           </div>
+          <div class="form-row">
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="enfCronica_artritis" name="enfCronica[]" value="Artritis" class="form-check-input">
+                <label class="form-check-label" for="enfCronica_artritis">Artritis</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="enfCronica_osteoporosis" name="enfCronica[]" value="Osteoporosis" class="form-check-input">
+                <label class="form-check-label" for="enfCronica_osteoporosis">Osteoporosis</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="enfCronica_cancer" name="enfCronica[]" value="Cáncer" class="form-check-input">
+                <label class="form-check-label" for="enfCronica_cancer">Cáncer</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="enfCronica_cardiaca" name="enfCronica[]" value="Enfermedad cardíaca" class="form-check-input">
+                <label class="form-check-label" for="enfCronica_cardiaca">Enfermedad cardíaca</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row mt-2">
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="enfCronica_otro" name="enfCronica[]" value="Otro" class="form-check-input" onclick="toggleOtroEnfCronica()">
+                <label class="form-check-label" for="enfCronica_otro">Otro</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-9">
+              <div id="enfCronica_otro_container" style="display:none;">
+                <textarea id="enfCronica_otro_texto" name="enfCronica_otro_texto" class="form-control" rows="2" placeholder="Especifique otras enfermedades crónicas..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Hospitalizaciones -->
+  <div class="form-row mb-4">
+    <div class="form-col form-col-md-12">
+      <div class="form-group">
+        <label for="hospitalizaciones" class="form-label">Hospitalizaciones</label>
+        <textarea id="hospitalizaciones" name="hospitalizaciones" class="form-control" rows="2" placeholder="Indique fechas, motivos y duración de hospitalizaciones previas..."></textarea>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Cirugías previas -->
+  <div class="form-row mb-4">
+    <div class="form-col form-col-md-12">
+      <div class="form-group">
+        <label for="cirugiasPrevias" class="form-label">Cirugías previas</label>
+        <textarea id="cirugiasPrevias" name="cirugiasPrevias" class="form-control" rows="2" placeholder="Indique tipo de cirugía, fecha y resultados..."></textarea>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Antecedentes ortopédicos/musculoesqueléticos previos -->
+  <div class="form-row mb-4">
+    <div class="form-col form-col-md-12">
+      <div class="form-group" id="antecedentesOrtopedicosContainer">
+        <label class="form-label">Antecedentes ortopédicos/musculoesqueléticos previos</label>
+        <div class="form-check mb-2">
+          <input type="checkbox" id="tieneAntecedentesOrtopedicos" name="tieneAntecedentesOrtopedicos" class="form-check-input" onchange="mostrarAntecedentesOrtopedicos()">
+          <label class="form-check-label" for="tieneAntecedentesOrtopedicos">¿Tiene antecedentes ortopédicos/musculoesqueléticos previos?</label>
+        </div>
+        
+        <div id="antecedentesOrtopedicosDetalle" style="display:none;">
+          <div class="card mb-2 p-3" style="border-left: 5px solid #dc3545;">
+            <div class="recomendacion-clinica">
+              <strong><i class="fas fa-exclamation-triangle text-danger"></i> Recomendación clínica:</strong> Considere realizar una evaluación específica de las áreas con lesiones previas. Verifique posibles compensaciones y alteraciones biomecánicas resultantes.
+            </div>
+          </div>
+          
+          <div class="card p-3 mb-3">
+            <h5 class="mb-2">Columna vertebral</h5>
+            <div class="form-row">
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_cervical" name="lesionesOrtopedicas[]" value="Lesión cervical" class="form-check-input">
+                  <label class="form-check-label" for="lesion_cervical">Lesión cervical</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_dorsal" name="lesionesOrtopedicas[]" value="Lesión dorsal" class="form-check-input">
+                  <label class="form-check-label" for="lesion_dorsal">Lesión dorsal</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_lumbar" name="lesionesOrtopedicas[]" value="Lesión lumbar" class="form-check-input">
+                  <label class="form-check-label" for="lesion_lumbar">Lesión lumbar</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="hernia_discal" name="lesionesOrtopedicas[]" value="Hernia discal" class="form-check-input">
+                  <label class="form-check-label" for="hernia_discal">Hernia discal</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card p-3 mb-3">
+            <h5 class="mb-2">Extremidades superiores</h5>
+            <div class="form-row">
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_hombro" name="lesionesOrtopedicas[]" value="Lesión de hombro" class="form-check-input">
+                  <label class="form-check-label" for="lesion_hombro">Lesión de hombro</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_codo" name="lesionesOrtopedicas[]" value="Lesión de codo" class="form-check-input">
+                  <label class="form-check-label" for="lesion_codo">Lesión de codo</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_muneca" name="lesionesOrtopedicas[]" value="Lesión de muñeca" class="form-check-input">
+                  <label class="form-check-label" for="lesion_muneca">Lesión de muñeca</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_mano" name="lesionesOrtopedicas[]" value="Lesión de mano" class="form-check-input">
+                  <label class="form-check-label" for="lesion_mano">Lesión de mano</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card p-3 mb-3">
+            <h5 class="mb-2">Extremidades inferiores</h5>
+            <div class="form-row">
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_cadera" name="lesionesOrtopedicas[]" value="Lesión de cadera" class="form-check-input">
+                  <label class="form-check-label" for="lesion_cadera">Lesión de cadera</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_rodilla" name="lesionesOrtopedicas[]" value="Lesión de rodilla" class="form-check-input">
+                  <label class="form-check-label" for="lesion_rodilla">Lesión de rodilla</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_tobillo" name="lesionesOrtopedicas[]" value="Lesión de tobillo" class="form-check-input">
+                  <label class="form-check-label" for="lesion_tobillo">Lesión de tobillo</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_pie" name="lesionesOrtopedicas[]" value="Lesión de pie" class="form-check-input">
+                  <label class="form-check-label" for="lesion_pie">Lesión de pie</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card p-3 mb-3">
+            <h5 class="mb-2">Fracturas y otras lesiones</h5>
+            <div class="form-row">
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="fractura" name="lesionesOrtopedicas[]" value="Fractura" class="form-check-input">
+                  <label class="form-check-label" for="fractura">Fractura</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="luxacion" name="lesionesOrtopedicas[]" value="Luxación" class="form-check-input">
+                  <label class="form-check-label" for="luxacion">Luxación</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_tendinosa" name="lesionesOrtopedicas[]" value="Lesión tendinosa" class="form-check-input">
+                  <label class="form-check-label" for="lesion_tendinosa">Lesión tendinosa</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-check">
+                  <input type="checkbox" id="lesion_ligamentosa" name="lesionesOrtopedicas[]" value="Lesión ligamentosa" class="form-check-input">
+                  <label class="form-check-label" for="lesion_ligamentosa">Lesión ligamentosa</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group mt-3">
+            <label for="antecedentesOrtopedicosDetalles" class="form-label">Detalles adicionales</label>
+            <textarea id="antecedentesOrtopedicosDetalles" name="antecedentesOrtopedicosDetalles" class="form-control" rows="3" placeholder="Describa detalles adicionales sobre lesiones, fecha de ocurrencia, tratamientos recibidos, evolución, etc."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Uso de órtesis o ayudas técnicas -->
+  <div class="form-row mb-4">
+    <div class="form-col form-col-md-12">
+      <div class="form-group" id="ortesisContainer">
+        <label class="form-label">Uso de órtesis o ayudas técnicas</label>
+        <div class="form-check mb-2">
+          <input type="checkbox" id="usaOrtesisAyudas" name="usaOrtesisAyudas" class="form-check-input" onchange="mostrarOrtesisAyudas()">
+          <label class="form-check-label" for="usaOrtesisAyudas">¿Utiliza alguna órtesis o ayuda técnica?</label>
+        </div>
+        
+        <div id="ortesisAyudasDetalle" style="display:none;">
+          <div class="card mb-2 p-3" style="border-left: 5px solid #ffc107;">
+            <div class="recomendacion-clinica">
+              <strong><i class="fas fa-info-circle text-warning"></i> Recomendación clínica:</strong> Verifique el estado y funcionalidad de la órtesis/ayuda técnica. Evalúe si es adecuada para la condición actual del paciente y si requiere ajustes.
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="ortesis_baston" name="ortesis[]" value="Bastón" class="form-check-input">
+                <label class="form-check-label" for="ortesis_baston">Bastón</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="ortesis_andador" name="ortesis[]" value="Andador" class="form-check-input">
+                <label class="form-check-label" for="ortesis_andador">Andador</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="ortesis_silla" name="ortesis[]" value="Silla de ruedas" class="form-check-input">
+                <label class="form-check-label" for="ortesis_silla">Silla de ruedas</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="ortesis_miembro_superior" name="ortesis[]" value="Órtesis de miembro superior" class="form-check-input">
+                <label class="form-check-label" for="ortesis_miembro_superior">Órtesis de miembro superior</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row mt-2">
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="ortesis_miembro_inferior" name="ortesis[]" value="Órtesis de miembro inferior" class="form-check-input">
+                <label class="form-check-label" for="ortesis_miembro_inferior">Órtesis de miembro inferior</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="ortesis_otro" name="ortesis[]" value="Otro" class="form-check-input" onclick="toggleOtroOrtesis()">
+                <label class="form-check-label" for="ortesis_otro">Otro</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div id="ortesis_otro_container" style="display:none;">
+                <input type="text" id="ortesis_otro_texto" name="ortesis_otro_texto" class="form-control" placeholder="Especifique la órtesis o ayuda técnica...">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group mt-3">
+            <label for="ortesisAyudasDetalles" class="form-label">Detalles adicionales</label>
+            <textarea id="ortesisAyudasDetalles" name="ortesisAyudasDetalles" class="form-control" rows="2" placeholder="Describa detalles sobre frecuencia de uso, tiempo de uso, estado de la ayuda técnica, etc."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Inmunizaciones -->
+  <div class="form-row mb-4">
+    <div class="form-col form-col-md-12">
+      <div class="form-group">
+        <label class="form-label">Inmunizaciones (Vacunas)</label>
+        <div class="card p-3 mb-3">
+          <div class="card-body">
+            <p class="text-muted mb-3">Seleccione las vacunas que el paciente ha recibido:</p>
+            
+            <div class="form-row">
+              <div class="form-col form-col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" id="vacuna_influenza" name="vacunas[]" value="Influenza" class="form-check-input">
+                  <label class="form-check-label" for="vacuna_influenza">Influenza (anual)</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" id="vacuna_covid" name="vacunas[]" value="COVID-19" class="form-check-input">
+                  <label class="form-check-label" for="vacuna_covid">COVID-19</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" id="vacuna_tetanos" name="vacunas[]" value="Tétanos" class="form-check-input">
+                  <label class="form-check-label" for="vacuna_tetanos">Tétanos</label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row mt-2">
+              <div class="form-col form-col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" id="vacuna_neumococo" name="vacunas[]" value="Neumococo" class="form-check-input">
+                  <label class="form-check-label" for="vacuna_neumococo">Neumococo</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" id="vacuna_hepatitisb" name="vacunas[]" value="Hepatitis B" class="form-check-input">
+                  <label class="form-check-label" for="vacuna_hepatitisb">Hepatitis B</label>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" id="vacuna_herpes" name="vacunas[]" value="Herpes Zóster" class="form-check-input">
+                  <label class="form-check-label" for="vacuna_herpes">Herpes Zóster</label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="alert alert-danger mt-3" id="vacunas_alerta" style="display:none;">
+              <i class="fas fa-exclamation-triangle"></i> <strong>Atención:</strong> El paciente podría no tener sus vacunas al día. Considere recomendar una consulta con su médico para actualizar su esquema de vacunación.
+            </div>
+            
+            <div class="form-group mt-3">
+              <label for="inmunizacionesDetalles" class="form-label">Detalles adicionales sobre inmunizaciones</label>
+              <textarea id="inmunizacionesDetalles" name="inmunizacionesDetalles" class="form-control" rows="2" placeholder="Incluya información sobre fechas de vacunación, refuerzos, reacciones, etc."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Historial de caídas -->
+  <div class="form-row mb-4">
+    <div class="form-col form-col-md-12">
+      <div class="form-group" id="caidasContainer">
+        <label class="form-label">Historial de caídas</label>
+        <div class="form-row mb-2">
+          <div class="form-col form-col-md-6">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="historialCaidas" id="historialCaidas_si" value="Sí" onchange="mostrarDetalleCaidas(true)">
+              <label class="form-check-label" for="historialCaidas_si">Sí, ha sufrido caídas en los últimos 12 meses</label>
+            </div>
+          </div>
+          <div class="form-col form-col-md-6">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="historialCaidas" id="historialCaidas_no" value="No" onchange="mostrarDetalleCaidas(false)">
+              <label class="form-check-label" for="historialCaidas_no">No ha sufrido caídas en los últimos 12 meses</label>
+            </div>
+          </div>
+        </div>
+        
+        <div id="caidasDetalle" style="display:none;">
+          <div class="card mb-2 p-3" style="border-left: 5px solid #dc3545;">
+            <div class="recomendacion-clinica">
+              <strong><i class="fas fa-exclamation-triangle text-danger"></i> Recomendación clínica:</strong> Paciente con antecedentes de caídas. Considere realizar evaluación de riesgo de caídas (Escala de Tinetti, TUG, etc.) y programar intervenciones de prevención.
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-4">
+              <div class="form-group">
+                <label for="numeroCaidas" class="form-label">Número de caídas en los últimos 12 meses</label>
+                <select id="numeroCaidas" name="numeroCaidas" class="form-select">
+                  <option value="">Seleccionar</option>
+                  <option value="1">1 caída</option>
+                  <option value="2">2 caídas</option>
+                  <option value="3">3 caídas</option>
+                  <option value="4">4 caídas</option>
+                  <option value="5+">5 o más caídas</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="form-group">
+                <label for="consecuenciasCaidas" class="form-label">Consecuencias más graves</label>
+                <select id="consecuenciasCaidas" name="consecuenciasCaidas" class="form-select">
+                  <option value="">Seleccionar</option>
+                  <option value="Sin lesiones">Sin lesiones</option>
+                  <option value="Lesiones leves">Lesiones leves (contusiones, abrasiones)</option>
+                  <option value="Lesiones moderadas">Lesiones moderadas (esguinces, heridas)</option>
+                  <option value="Lesiones graves">Lesiones graves (fracturas, TCE)</option>
+                  <option value="Hospitalización">Hospitalización</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="form-group">
+                <label for="miedoCaidas" class="form-label">¿Presenta miedo a caerse?</label>
+                <select id="miedoCaidas" name="miedoCaidas" class="form-select">
+                  <option value="">Seleccionar</option>
+                  <option value="No">No</option>
+                  <option value="Leve">Leve</option>
+                  <option value="Moderado">Moderado</option>
+                  <option value="Severo">Severo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group mt-2">
+            <label for="caidasDetalles" class="form-label">Detalles de las caídas</label>
+            <textarea id="caidasDetalles" name="caidasDetalles" class="form-control" rows="3" placeholder="Describa las circunstancias, causas, lugares y consecuencias de las caídas. Indique si ha recibido tratamiento por ellas..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <h4>4.2 Antecedentes Familiares</h4>
+  <div class="form-row">
+    <div class="form-col form-col-md-6">
+      <div class="form-group">
+        <label for="enfermedadesHereditarias" class="form-label">Enfermedades hereditarias</label>
+        <textarea id="enfermedadesHereditarias" name="enfermedadesHereditarias" class="form-control" rows="2"></textarea>
+      </div>
+    </div>
+    <div class="form-col form-col-md-6">
+      <div class="form-group">
+        <label for="condicionesGeneticas" class="form-label">Condiciones genéticas relevantes</label>
+        <textarea id="condicionesGeneticas" name="condicionesGeneticas" class="form-control" rows="2"></textarea>
+      </div>
+    </div>
+  </div>
+  
+  <h4>4.3 Medicación Actual</h4>
+  <div class="form-row">
+    <div class="form-col form-col-md-12">
+      <div class="form-group">
+        <label for="medicamentosActuales" class="form-label">Medicamentos actuales</label>
+        <textarea id="medicamentosActuales" name="medicamentosActuales" class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+  
+  <h4>4.4 Alergias e Hipersensibilidades</h4>
+  <div class="form-row">
+    <div class="form-col form-col-md-4">
+      <div class="form-group">
+        <label for="alergiasMedicamentos" class="form-label">Medicamentos</label>
+        <textarea id="alergiasMedicamentos" name="alergiasMedicamentos" class="form-control" rows="2"></textarea>
+      </div>
+    </div>
+    <div class="form-col form-col-md-4">
+      <div class="form-group">
+        <label for="alergiasAlimentos" class="form-label">Alimentos</label>
+        <textarea id="alergiasAlimentos" name="alergiasAlimentos" class="form-control" rows="2"></textarea>
+      </div>
+    </div>
+    <div class="form-col form-col-md-4">
+      <div class="form-group">
+        <label for="alergiasAmbientales" class="form-label">Ambientales</label>
+        <textarea id="alergiasAmbientales" name="alergiasAmbientales" class="form-control" rows="2"></textarea>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form-row mt-4">
+    <div class="form-col form-col-md-12">
+      <button type="button" class="btn btn-secondary prev-tab" data-prev="cuestionarios"><i class="fas fa-arrow-left"></i> Anterior</button>
+      <button type="button" class="btn btn-primary next-tab" data-next="habitos">Siguiente <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+</div>
           
           <!-- 5. Hábitos -->
           <div class="tab-content" id="habitos">
