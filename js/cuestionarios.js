@@ -243,41 +243,16 @@ function calcularBPI() {
     // Determinar nivel de gravedad para los resultados
     if (intensidadRedondeada >= 7 || interferenciaRedondeada >= 7) {
       nivelGravedad = 'severo';
-      // Añadir indicador de nivel como texto o clase adicional
       resultadoContainer.className = 'resultado-container nivel-severo';
-      // Agregar badge de nivel de severidad en otro elemento si es necesario
-      const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
-      nivelElement.id = 'bpi-nivel';
-      nivelElement.textContent = 'Severo';
-      nivelElement.className = 'resultado-nivel badge-rojo';
-      // Insertar el nivel si no existe
-      if (!document.getElementById('bpi-nivel')) {
-        bpiBadge.parentNode.appendChild(nivelElement);
-      }
+      // Se elimina la creación del badge de nivel
     } else if (intensidadRedondeada >= 4 || interferenciaRedondeada >= 4) {
       nivelGravedad = 'moderado';
       resultadoContainer.className = 'resultado-container nivel-moderado';
-      // Agregar badge de nivel de severidad en otro elemento si es necesario
-      const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
-      nivelElement.id = 'bpi-nivel';
-      nivelElement.textContent = 'Moderado';
-      nivelElement.className = 'resultado-nivel badge-amarillo';
-      // Insertar el nivel si no existe
-      if (!document.getElementById('bpi-nivel')) {
-        bpiBadge.parentNode.appendChild(nivelElement);
-      }
+      // Se elimina la creación del badge de nivel
     } else {
       nivelGravedad = 'leve';
       resultadoContainer.className = 'resultado-container nivel-leve';
-      // Agregar badge de nivel de severidad en otro elemento si es necesario
-      const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
-      nivelElement.id = 'bpi-nivel';
-      nivelElement.textContent = 'Leve';
-      nivelElement.className = 'resultado-nivel badge-verde';
-      // Insertar el nivel si no existe
-      if (!document.getElementById('bpi-nivel')) {
-        bpiBadge.parentNode.appendChild(nivelElement);
-      }
+      // Se elimina la creación del badge de nivel
     }
     
     // Actualizar interpretación clínica
