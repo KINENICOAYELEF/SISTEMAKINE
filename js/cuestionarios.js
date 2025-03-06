@@ -1029,6 +1029,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
    // Inicializar CSI
   calcularCSI();
+
+   // Inicializar TSK-11
+  calcularTSK();
   
   // Inicializar DN4
   calcularDN4();
