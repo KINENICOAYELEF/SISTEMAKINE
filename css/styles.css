@@ -1052,3 +1052,33 @@ a:hover {
 .navbar-nav.show {
   display: flex;
 }
+
+
+/* Estilos para los destacados en historia médica */
+.highlight-red {
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 5px;
+  padding: 10px;
+  border-left: 5px solid #dc3545;
+}
+
+.highlight-yellow {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-radius: 5px;
+  padding: 10px;
+  border-left: 5px solid #ffc107;
+}
+
+.recomendacion-clinica {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.checkbox-group {
+  margin-bottom: 10px;
+}
+
+.checkbox-group .form-check {
+  margin-bottom: 5px;
+}
