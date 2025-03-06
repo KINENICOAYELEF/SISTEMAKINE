@@ -468,7 +468,6 @@ function calcularDN4() {
           <li>Realizar reevaluación periódica para identificar cambios en el patrón de dolor (nivel de evidencia 2A)</li>
         </ul>
       `;
-    }
   } else {
   badgeElement.textContent = "No completado";
   badgeElement.classList.remove('completado', 'badge-verde');
