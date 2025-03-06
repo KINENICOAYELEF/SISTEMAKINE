@@ -1171,13 +1171,6 @@
       </div>
     </div>
 
-        <div class="form-row mt-4">
-      <div class="form-col form-col-md-12">
-        <button type="button" class="btn btn-secondary prev-tab" data-prev="motivo-consulta"><i class="fas fa-arrow-left"></i> Anterior</button>
-        <button type="button" class="btn btn-primary next-tab" data-next="historia-medica">Siguiente <i class="fas fa-arrow-right"></i></button>
-      </div>
-    </div>
-
     <!-- BPI (Inventario Breve de Dolor) -->
       <div class="cuestionario-item">
         <div class="cuestionario-header" onclick="toggleCuestionario('bpi-content')">
@@ -1572,7 +1565,14 @@
           </div>
 
           </div> <!-- Cierre de cuestionarios-acordeon -->
-    </div> <!-- Cierre de tab-content cuestionarios --> 
+
+        <div class="form-row mt-4">
+          <div class="form-col form-col-md-12">
+            <button type="button" class="btn btn-secondary prev-tab" data-prev="motivo-consulta"><i class="fas fa-arrow-left"></i> Anterior</button>
+            <button type="button" class="btn btn-primary next-tab" data-next="historia-medica">Siguiente <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div> <!-- Cierre de tab-content cuestionarios --> 
           
           <!-- 4. Historia Médica -->
           <div class="tab-content" id="historia-medica">
