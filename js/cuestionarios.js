@@ -866,6 +866,150 @@ function obtenerDiagnosticosTexto(diagnosticos) {
   return `${seleccionados.join(', ')} y ${ultimoDiagnostico}`;
 }
 
+// Función para calcular la Escala de Tampa de Kinesiofobia (TSK-11)
+function calcularTSK() {
+  // Obtener valores de cada ítem
+  let valoresItems = [];
+  let completo = true;
+  
+  // Verificar si todos los ítems están completados
+  for (let i = 1; i <= 11; i++) {
+    const itemValue = document.querySelector(`input[name="tsk_item${i}"]:checked`)?.value;
+    if (itemValue !== undefined) {
+      valoresItems.push(parseInt(itemValue));
+    } else {
+      valoresItems.push(0);
+      completo = false;
+    }
+  }
+  
+  // Calcular puntuación total
+  const puntuacionTotal = valoresItems.reduce((sum, val) => sum + val, 0);
+  
+  // Actualizar badge
+  const badge = document.getElementById('tsk-badge');
+  if (completo) {
+    badge.textContent = "Completado";
+    badge.classList.add("badge-verde");
+    badge.classList.add("completado");
+  } else {
+    badge.textContent = "No completado";
+    badge.classList.remove("badge-verde");
+    badge.classList.remove("completado");
+  }
+  
+  // Actualizar valor en la interfaz
+  document.getElementById('tsk-valor').textContent = `${puntuacionTotal}/44`;
+  
+  // Actualizar interpretación
+  const interpretacionEl = document.getElementById('tsk-interpretacion');
+  const resultadoContainer = document.getElementById('tsk-resultado');
+  const interpretacionClinica = document.getElementById('tsk-interpretacion-clinica');
+  const recomendaciones = document.getElementById('tsk-recomendaciones');
+  
+  if (completo) {
+    // Interpretar según el puntaje
+    let nivelKinesiofobia;
+    if (puntuacionTotal < 17) {
+      nivelKinesiofobia = "Mínima";
+      interpretacionEl.textContent = "Nivel mínimo de kinesiofobia";
+      interpretacionEl.className = "resultado-interpretacion verde";
+      resultadoContainer.className = "resultado-container nivel-leve";
+    } else if (puntuacionTotal <= 27) {
+      nivelKinesiofobia = "Moderada";
+      interpretacionEl.textContent = "Nivel moderado de kinesiofobia";
+      interpretacionEl.className = "resultado-interpretacion amarillo";
+      resultadoContainer.className = "resultado-container nivel-moderado";
+    } else {
+      nivelKinesiofobia = "Severa";
+      interpretacionEl.textContent = "Nivel severo de kinesiofobia";
+      interpretacionEl.className = "resultado-interpretacion rojo";
+      resultadoContainer.className = "resultado-container nivel-severo";
+    }
+    
+    // Interpretación clínica detallada
+    interpretacionClinica.innerHTML = `
+      <p>El paciente presenta un nivel de kinesiofobia <strong>${nivelKinesiofobia.toLowerCase()}</strong> (${puntuacionTotal}/44), lo que indica ${getDescripcionKinesiofobia(nivelKinesiofobia)}.</p>
+      <p>La kinesiofobia, o miedo al movimiento, puede influir negativamente en la recuperación funcional al limitar la participación en actividades físicas y ejercicios terapéuticos.</p>
+      <p>Este resultado sugiere que el paciente ${getPensamientosKinesiofobia(nivelKinesiofobia)}</p>
+    `;
+    
+    // Recomendaciones terapéuticas según el nivel
+    if (nivelKinesiofobia === "Mínima") {
+      recomendaciones.innerHTML = `
+        <p>Con un nivel mínimo de kinesiofobia, se recomienda:</p>
+        <ul>
+          <li>Reforzar positivamente la confianza actual en el movimiento (nivel de evidencia 1A)</li>
+          <li>Educación preventiva básica sobre conceptos erróneos del dolor (nivel de evidencia 1A)</li>
+          <li>Prescripción de ejercicio terapéutico regular, enfatizando la progresión gradual (nivel de evidencia 1A)</li>
+          <li>Fomentar la autogestión y participación activa en actividades funcionales (nivel de evidencia 1A)</li>
+          <li>Monitorizar periódicamente para detectar cambios en las creencias sobre el movimiento (nivel de evidencia 2B)</li>
+        </ul>
+      `;
+    } else if (nivelKinesiofobia === "Moderada") {
+      recomendaciones.innerHTML = `
+        <p>Con un nivel moderado de kinesiofobia, se recomienda:</p>
+        <ul>
+          <li>Implementar educación en neurociencia del dolor para abordar creencias erróneas (nivel de evidencia 1A)</li>
+          <li>Ejercicio terapéutico con exposición gradual a movimientos temidos (nivel de evidencia 1A)</li>
+          <li>Estrategias cognitivo-conductuales para modificar creencias sobre el daño y el dolor (nivel de evidencia 1A)</li>
+          <li>Establecer objetivos funcionales basados en actividades significativas para el paciente (nivel de evidencia 1B)</li>
+          <li>Implementar técnicas de imaginería motora para movimientos que generan aprensión (nivel de evidencia 1B)</li>
+          <li>Proporcionar retroalimentación positiva durante la realización de ejercicios (nivel de evidencia 1B)</li>
+        </ul>
+      `;
+    } else {
+      recomendaciones.innerHTML = `
+        <p>Con un nivel severo de kinesiofobia, se recomienda:</p>
+        <ul>
+          <li>Programa estructurado de educación en neurociencia del dolor (nivel de evidencia 1A)</li>
+          <li>Intervención cognitivo-conductual específica para abordar el miedo-evitación (nivel de evidencia 1A)</li>
+          <li>Exposición gradual muy progresiva a actividades y movimientos temidos (nivel de evidencia 1A)</li>
+          <li>Técnicas de desensibilización sistemática (nivel de evidencia 1B)</li>
+          <li>Establecer objetivos funcionales muy pequeños y alcanzables para construir confianza (nivel de evidencia 1A)</li>
+          <li>Considerar abordaje multidisciplinar si no hay mejora (nivel de evidencia 1A)</li>
+          <li>Uso de diario de exposición a movimientos para registro de expectativas vs. resultados reales (nivel de evidencia 1B)</li>
+          <li>Técnicas de atención plena (mindfulness) para reducir la ansiedad anticipatoria (nivel de evidencia 1B)</li>
+        </ul>
+      `;
+    }
+  } else {
+    interpretacionEl.textContent = "Complete el cuestionario para obtener un resultado";
+    interpretacionEl.className = "resultado-interpretacion";
+    resultadoContainer.className = "resultado-container";
+    interpretacionClinica.textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    recomendaciones.textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+  }
+}
+
+// Función para obtener descripción según nivel de kinesiofobia
+function getDescripcionKinesiofobia(nivel) {
+  switch(nivel) {
+    case "Mínima":
+      return "un bajo temor al movimiento y buena confianza en la capacidad de su cuerpo para tolerar la actividad física";
+    case "Moderada":
+      return "cierto grado de temor al movimiento que podría estar limitando su participación en algunas actividades físicas";
+    case "Severa":
+      return "un alto grado de temor al movimiento que probablemente está limitando significativamente su recuperación funcional y participación en actividades físicas";
+    default:
+      return "";
+  }
+}
+
+// Función para describir pensamientos según nivel de kinesiofobia
+function getPensamientosKinesiofobia(nivel) {
+  switch(nivel) {
+    case "Mínima":
+      return "generalmente no asocia el movimiento con daño o peligro, lo que favorece una buena adherencia al ejercicio terapéutico";
+    case "Moderada":
+      return "presenta algunas creencias de que ciertos movimientos podrían ser perjudiciales, lo que podría estar interfiriendo con su recuperación óptima";
+    case "Severa":
+      return "tiene fuertes creencias de que el movimiento y la actividad física pueden causar daño o reinjuria, lo que está obstaculizando significativamente su progreso";
+    default:
+      return "";
+  }
+}
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
