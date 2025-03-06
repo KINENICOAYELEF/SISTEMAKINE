@@ -3,14 +3,19 @@
 // Función para alternar la visibilidad de los cuestionarios
 function toggleCuestionario(contentId) {
   const content = document.getElementById(contentId);
+  if (!content) {
+    console.error('Elemento no encontrado:', contentId);
+    return;
+  }
+  
   const header = content.previousElementSibling;
   
   if (content.style.display === "none" || !content.style.display) {
     content.style.display = "block";
-    header.classList.add("active");
+    if (header) header.classList.add("active");
   } else {
     content.style.display = "none";
-    header.classList.remove("active");
+    if (header) header.classList.remove("active");
   }
 }
 
@@ -229,51 +234,51 @@ function calcularBPI() {
                                 interferencia_trabajo || interferencia_relaciones || interferencia_sueno || 
                                 interferencia_vida;
   
-  x// Determinar nivel y estilos según gravedad
-if (intensidadCompletada && interferenciaCompletada) {
-  // Marcar como completado
-  bpiBadge.textContent = 'Completado';
-  bpiBadge.className = 'resultado-badge badge-verde completado';
-  
-  // Determinar nivel de gravedad para los resultados
-  if (intensidadRedondeada >= 7 || interferenciaRedondeada >= 7) {
-    nivelGravedad = 'severo';
-    // Añadir indicador de nivel como texto o clase adicional
-    resultadoContainer.className = 'resultado-container nivel-severo';
-    // Agregar badge de nivel de severidad en otro elemento si es necesario
-    const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
-    nivelElement.id = 'bpi-nivel';
-    nivelElement.textContent = 'Severo';
-    nivelElement.className = 'resultado-nivel badge-rojo';
-    // Insertar el nivel si no existe
-    if (!document.getElementById('bpi-nivel')) {
-      bpiBadge.parentNode.appendChild(nivelElement);
+  // Determinar nivel y estilos según gravedad
+  if (intensidadCompletada && interferenciaCompletada) {
+    // Marcar como completado
+    bpiBadge.textContent = 'Completado';
+    bpiBadge.className = 'resultado-badge badge-verde completado';
+    
+    // Determinar nivel de gravedad para los resultados
+    if (intensidadRedondeada >= 7 || interferenciaRedondeada >= 7) {
+      nivelGravedad = 'severo';
+      // Añadir indicador de nivel como texto o clase adicional
+      resultadoContainer.className = 'resultado-container nivel-severo';
+      // Agregar badge de nivel de severidad en otro elemento si es necesario
+      const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
+      nivelElement.id = 'bpi-nivel';
+      nivelElement.textContent = 'Severo';
+      nivelElement.className = 'resultado-nivel badge-rojo';
+      // Insertar el nivel si no existe
+      if (!document.getElementById('bpi-nivel')) {
+        bpiBadge.parentNode.appendChild(nivelElement);
+      }
+    } else if (intensidadRedondeada >= 4 || interferenciaRedondeada >= 4) {
+      nivelGravedad = 'moderado';
+      resultadoContainer.className = 'resultado-container nivel-moderado';
+      // Agregar badge de nivel de severidad en otro elemento si es necesario
+      const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
+      nivelElement.id = 'bpi-nivel';
+      nivelElement.textContent = 'Moderado';
+      nivelElement.className = 'resultado-nivel badge-amarillo';
+      // Insertar el nivel si no existe
+      if (!document.getElementById('bpi-nivel')) {
+        bpiBadge.parentNode.appendChild(nivelElement);
+      }
+    } else {
+      nivelGravedad = 'leve';
+      resultadoContainer.className = 'resultado-container nivel-leve';
+      // Agregar badge de nivel de severidad en otro elemento si es necesario
+      const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
+      nivelElement.id = 'bpi-nivel';
+      nivelElement.textContent = 'Leve';
+      nivelElement.className = 'resultado-nivel badge-verde';
+      // Insertar el nivel si no existe
+      if (!document.getElementById('bpi-nivel')) {
+        bpiBadge.parentNode.appendChild(nivelElement);
+      }
     }
-  } else if (intensidadRedondeada >= 4 || interferenciaRedondeada >= 4) {
-    nivelGravedad = 'moderado';
-    resultadoContainer.className = 'resultado-container nivel-moderado';
-    // Agregar badge de nivel de severidad en otro elemento si es necesario
-    const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
-    nivelElement.id = 'bpi-nivel';
-    nivelElement.textContent = 'Moderado';
-    nivelElement.className = 'resultado-nivel badge-amarillo';
-    // Insertar el nivel si no existe
-    if (!document.getElementById('bpi-nivel')) {
-      bpiBadge.parentNode.appendChild(nivelElement);
-    }
-  } else {
-    nivelGravedad = 'leve';
-    resultadoContainer.className = 'resultado-container nivel-leve';
-    // Agregar badge de nivel de severidad en otro elemento si es necesario
-    const nivelElement = document.getElementById('bpi-nivel') || document.createElement('span');
-    nivelElement.id = 'bpi-nivel';
-    nivelElement.textContent = 'Leve';
-    nivelElement.className = 'resultado-nivel badge-verde';
-    // Insertar el nivel si no existe
-    if (!document.getElementById('bpi-nivel')) {
-      bpiBadge.parentNode.appendChild(nivelElement);
-    }
-  }
     
     // Actualizar interpretación clínica
     const interpretacionClinicaEl = document.getElementById('bpi-interpretacion-clinica');
@@ -335,26 +340,27 @@ if (intensidadCompletada && interferenciaCompletada) {
         `;
       }
     }
- } else {
-  bpiBadge.textContent = 'No completado';
-  bpiBadge.className = 'resultado-badge no-completado';
-  resultadoContainer.className = 'resultado-container';
-  
-  // Eliminar el nivel si existe
-  const nivelElement = document.getElementById('bpi-nivel');
-  if (nivelElement) {
-    nivelElement.remove();
-  }
-  
-  // Mensajes para datos incompletos
-  if (document.getElementById('bpi-interpretacion-clinica')) {
-    document.getElementById('bpi-interpretacion-clinica').textContent = 
-      "Complete ambas secciones del cuestionario para obtener una interpretación clínica detallada.";
-  }
-  
-  if (document.getElementById('bpi-recomendaciones')) {
-    document.getElementById('bpi-recomendaciones').textContent = 
-      "Complete el cuestionario para recibir recomendaciones terapéuticas personalizadas.";
+  } else {
+    bpiBadge.textContent = 'No completado';
+    bpiBadge.className = 'resultado-badge no-completado';
+    resultadoContainer.className = 'resultado-container';
+    
+    // Eliminar el nivel si existe
+    const nivelElement = document.getElementById('bpi-nivel');
+    if (nivelElement) {
+      nivelElement.remove();
+    }
+    
+    // Mensajes para datos incompletos
+    if (document.getElementById('bpi-interpretacion-clinica')) {
+      document.getElementById('bpi-interpretacion-clinica').textContent = 
+        "Complete ambas secciones del cuestionario para obtener una interpretación clínica detallada.";
+    }
+    
+    if (document.getElementById('bpi-recomendaciones')) {
+      document.getElementById('bpi-recomendaciones').textContent = 
+        "Complete el cuestionario para recibir recomendaciones terapéuticas personalizadas.";
+    }
   }
 }
 
@@ -493,18 +499,32 @@ function calcularDN4() {
   }
 }
 
-
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
-  // Inicializar otros cuestionarios (si ya existen en tu código)
+  // Inicializar PSFS
+  calcularPSFS();
+  
+  // Inicializar GROC
+  calcularGROC();
+  
+  // Inicializar SANE
+  calcularSANE();
+  
+  // Inicializar BPI
+  calcularBPI();
   
   // Inicializar DN4
   calcularDN4();
   
-  // Asegurarse de que los event listeners de toggle estén configurados
+  // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
-    header.addEventListener('click', function() {
-      const contentId = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+    // Eliminar cualquier evento existente
+    const clonedHeader = header.cloneNode(true);
+    header.parentNode.replaceChild(clonedHeader, header);
+    
+    // Añadir el evento de clic con la función toggleCuestionario
+    clonedHeader.addEventListener('click', function() {
+      const contentId = this.nextElementSibling.id;
       toggleCuestionario(contentId);
     });
   });
