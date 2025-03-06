@@ -3496,5 +3496,103 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('Cuestionarios inicializados correctamente');
 });
 </script>
+  // Funciones para Historia Médica
+function toggleOtroEnfCronica() {
+  const checkbox = document.getElementById('enfCronica_otro');
+  const container = document.getElementById('enfCronica_otro_container');
+  
+  if (checkbox.checked) {
+    container.style.display = 'block';
+  } else {
+    container.style.display = 'none';
+    document.getElementById('enfCronica_otro_texto').value = '';
+  }
+}
+
+function mostrarAntecedentesOrtopedicos() {
+  const checkbox = document.getElementById('tieneAntecedentesOrtopedicos');
+  const detalleContainer = document.getElementById('antecedentesOrtopedicosDetalle');
+  
+  if (checkbox.checked) {
+    detalleContainer.style.display = 'block';
+    document.getElementById('antecedentesOrtopedicosContainer').classList.add('highlight-red');
+  } else {
+    detalleContainer.style.display = 'none';
+    document.getElementById('antecedentesOrtopedicosContainer').classList.remove('highlight-red');
+  }
+}
+
+function toggleOtroOrtesis() {
+  const checkbox = document.getElementById('ortesis_otro');
+  const container = document.getElementById('ortesis_otro_container');
+  
+  if (checkbox.checked) {
+    container.style.display = 'block';
+  } else {
+    container.style.display = 'none';
+    document.getElementById('ortesis_otro_texto').value = '';
+  }
+}
+
+function mostrarOrtesisAyudas() {
+  const checkbox = document.getElementById('usaOrtesisAyudas');
+  const detalleContainer = document.getElementById('ortesisAyudasDetalle');
+  
+  if (checkbox.checked) {
+    detalleContainer.style.display = 'block';
+    document.getElementById('ortesisContainer').classList.add('highlight-yellow');
+  } else {
+    detalleContainer.style.display = 'none';
+    document.getElementById('ortesisContainer').classList.remove('highlight-yellow');
+  }
+}
+
+function mostrarDetalleCaidas(tiene) {
+  const detalleContainer = document.getElementById('caidasDetalle');
+  
+  if (tiene) {
+    detalleContainer.style.display = 'block';
+    document.getElementById('caidasContainer').classList.add('highlight-red');
+  } else {
+    detalleContainer.style.display = 'none';
+    document.getElementById('caidasContainer').classList.remove('highlight-red');
+  }
+}
+
+// Verificar vacunas
+document.addEventListener('DOMContentLoaded', function() {
+  const vacunasCheckboxes = document.querySelectorAll('input[name="vacunas[]"]');
+  
+  vacunasCheckboxes.forEach(function(checkbox) {
+    checkbox.addEventListener('change', verificarVacunas);
+  });
+  
+  // Inicializar otros event listeners para la sección de historia médica
+  if (document.getElementById('enfCronica_otro')) {
+    document.getElementById('enfCronica_otro').addEventListener('change', toggleOtroEnfCronica);
+  }
+  
+  if (document.getElementById('ortesis_otro')) {
+    document.getElementById('ortesis_otro').addEventListener('change', toggleOtroOrtesis);
+  }
+});
+
+function verificarVacunas() {
+  const vacunasCheckboxes = document.querySelectorAll('input[name="vacunas[]"]');
+  const alertaVacunas = document.getElementById('vacunas_alerta');
+  
+  let algunaSeleccionada = false;
+  vacunasCheckboxes.forEach(function(checkbox) {
+    if (checkbox.checked) {
+      algunaSeleccionada = true;
+    }
+  });
+  
+  if (!algunaSeleccionada) {
+    alertaVacunas.style.display = 'block';
+  } else {
+    alertaVacunas.style.display = 'none';
+  }
+}
 </body>
 </html>
