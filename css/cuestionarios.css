@@ -282,3 +282,134 @@
   display: inline-block;
   margin-top: 5px;
 }
+
+/* Mejorar los contenedores de resultados */
+.resultado-container {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 15px;
+  border-left: 5px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Colores para niveles de gravedad en los contenedores */
+.resultado-container.nivel-leve {
+  background-color: #fff9e6;
+  border-left-color: #ffc107;
+}
+
+.resultado-container.nivel-moderado {
+  background-color: #fff3cd;
+  border-left-color: #fd7e14;
+}
+
+.resultado-container.nivel-severo,
+.resultado-container.nivel-alerta {
+  background-color: #f8d7da;
+  border-left-color: #dc3545;
+}
+
+/* Mejorar las etiquetas de resultado */
+.resultado-label {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #343a40;
+}
+
+.resultado-valor {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #343a40;
+  margin: 10px 0;
+}
+
+/* Mejorar la interpretación y recomendaciones */
+.interpretacion-clinica-container,
+.recomendaciones-container {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  border-left: 5px solid #dee2e6;
+}
+
+.interpretacion-clinica-container h5,
+.recomendaciones-container h5 {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: a0px;
+  color: #495057;
+}
+
+.interpretacion-clinica,
+.recomendaciones {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #495057;
+}
+
+.interpretacion-clinica p,
+.recomendaciones p {
+  margin-bottom: 0.8rem;
+}
+
+.interpretacion-clinica ul,
+.recomendaciones ul {
+  padding-left: 20px;
+}
+
+.interpretacion-clinica li,
+.recomendaciones li {
+  margin-bottom: 0.5rem;
+}
+
+/* Colores para los niveles de interpretación */
+.verde {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.verde-claro {
+  background-color: #e3f4e4;
+  color: #1a7431;
+}
+
+.amarillo {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.rojo {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Badges mejorados */
+.resultado-badge {
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.badge-verde {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-amarillo {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-rojo {
+  background-color: #dc3545;
+  color: white;
+}
+
+.badge-gris {
+  background-color: #6c757d;
+  color: white;
+}
