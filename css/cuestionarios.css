@@ -445,3 +445,25 @@
   padding: 5px 10px;
   border-radius: 4px;
 }
+
+/* Estilo para el nivel de severidad */
+.resultado-nivel {
+  margin-left: 10px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Arreglar alineación en contenedor de header */
+.cuestionario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cuestionario-header > div {
+  display: flex;
+  align-items: center;
+}
