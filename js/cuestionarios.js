@@ -345,163 +345,110 @@ function getAreasAfectadas(areas) {
   }
 }
 
-// Función para calcular resultados del Cuestionario de Dolor Neuropático (DN4)
+// Función para calcular el puntaje del DN4
 function calcularDN4() {
-  // Preguntas de la parte 1 (entrevista al paciente)
-  const quemazon = obtenerValorRadio('dn4_quemazon');
-  const frio = obtenerValorRadio('dn4_frio');
-  const descargas = obtenerValorRadio('dn4_descargas');
-  const hormigueo = obtenerValorRadio('dn4_hormigueo');
-  const alfileres = obtenerValorRadio('dn4_alfileres');
-  const entumecimiento = obtenerValorRadio('dn4_entumecimiento');
-  const picazon = obtenerValorRadio('dn4_picazon');
+  // Obtener todos los valores de las respuestas
+  const quemazon = document.querySelector('input[name="dn4_quemazon"]:checked')?.value || "0";
+  const frio = document.querySelector('input[name="dn4_frio"]:checked')?.value || "0";
+  const descargas = document.querySelector('input[name="dn4_descargas"]:checked')?.value || "0";
+  const hormigueo = document.querySelector('input[name="dn4_hormigueo"]:checked')?.value || "0";
+  const alfileres = document.querySelector('input[name="dn4_alfileres"]:checked')?.value || "0";
+  const entumecimiento = document.querySelector('input[name="dn4_entumecimiento"]:checked')?.value || "0";
+  const picazon = document.querySelector('input[name="dn4_picazon"]:checked')?.value || "0";
+  const hipoestesia = document.querySelector('input[name="dn4_hipoestesia"]:checked')?.value || "0";
+  const hipoestesiaPinchazo = document.querySelector('input[name="dn4_hipoestesia_pinchazo"]:checked')?.value || "0";
+  const cepillado = document.querySelector('input[name="dn4_cepillado"]:checked')?.value || "0";
   
-  // Preguntas de la parte 2 (examen del paciente)
-  const hipoestesia = obtenerValorRadio('dn4_hipoestesia');
-  const hipoestesiaPinchazo = obtenerValorRadio('dn4_hipoestesia_pinchazo');
-  const cepillado = obtenerValorRadio('dn4_cepillado');
+  // Calcular puntaje total (suma de todos los valores)
+  const puntaje = 
+    parseInt(quemazon) + 
+    parseInt(frio) + 
+    parseInt(descargas) + 
+    parseInt(hormigueo) + 
+    parseInt(alfileres) + 
+    parseInt(entumecimiento) + 
+    parseInt(picazon) + 
+    parseInt(hipoestesia) + 
+    parseInt(hipoestesiaPinchazo) + 
+    parseInt(cepillado);
   
-  // Calcular puntuación total (de 0 a 10)
-  let puntuacionTotal = 0;
+  // Actualizar el valor y la interpretación
+  const valorElement = document.getElementById('dn4-valor');
+  const interpretacionElement = document.getElementById('dn4-interpretacion');
+  const interpretacionClinicaElement = document.getElementById('dn4-interpretacion-clinica');
+  const recomendacionesElement = document.getElementById('dn4-recomendaciones');
+  const badgeElement = document.getElementById('dn4-badge');
   
-  // Solo sumamos si el valor es 0 o 1 (no -1, que significa no contestado)
-  if (quemazon !== -1) puntuacionTotal += quemazon;
-  if (frio !== -1) puntuacionTotal += frio;
-  if (descargas !== -1) puntuacionTotal += descargas;
-  if (hormigueo !== -1) puntuacionTotal += hormigueo;
-  if (alfileres !== -1) puntuacionTotal += alfileres;
-  if (entumecimiento !== -1) puntuacionTotal += entumecimiento;
-  if (picazon !== -1) puntuacionTotal += picazon;
-  if (hipoestesia !== -1) puntuacionTotal += hipoestesia;
-  if (hipoestesiaPinchazo !== -1) puntuacionTotal += hipoestesiaPinchazo;
-  if (cepillado !== -1) puntuacionTotal += cepillado;
+  // Establecer el valor
+  valorElement.textContent = puntaje + "/10";
   
-  // Verificar si el cuestionario está completo
-  const itemsCompletados = [quemazon, frio, descargas, hormigueo, alfileres, 
-                          entumecimiento, picazon, hipoestesia, hipoestesiaPinchazo, cepillado]
-                          .filter(val => val !== -1).length;
+  // Determinar si hay suficientes preguntas respondidas para considerar el test completo
+  const camposRespondidos = [
+    quemazon !== "0" || document.querySelector('input[name="dn4_quemazon"]:checked'),
+    frio !== "0" || document.querySelector('input[name="dn4_frio"]:checked'),
+    descargas !== "0" || document.querySelector('input[name="dn4_descargas"]:checked'),
+    hormigueo !== "0" || document.querySelector('input[name="dn4_hormigueo"]:checked'),
+    alfileres !== "0" || document.querySelector('input[name="dn4_alfileres"]:checked'),
+    entumecimiento !== "0" || document.querySelector('input[name="dn4_entumecimiento"]:checked'),
+    picazon !== "0" || document.querySelector('input[name="dn4_picazon"]:checked'),
+    hipoestesia !== "0" || document.querySelector('input[name="dn4_hipoestesia"]:checked'),
+    hipoestesiaPinchazo !== "0" || document.querySelector('input[name="dn4_hipoestesia_pinchazo"]:checked'),
+    cepillado !== "0" || document.querySelector('input[name="dn4_cepillado"]:checked')
+  ].filter(Boolean).length;
   
-  const estaCompleto = itemsCompletados === 10; // Son 10 ítems en total
+  const testCompleto = camposRespondidos >= 10;
   
-  // Mostrar puntuación
-  document.getElementById('dn4-valor').textContent = puntuacionTotal + '/10';
-  
-  // Interpretación y color según puntuación
-  let interpretacion = '';
-  let color = '';
-  let esNeuropatico = puntuacionTotal >= 4;
-  
-  // Actualizar el badge y el contenedor
-  const dn4Badge = document.getElementById('dn4-badge');
-  const resultadoContainer = document.getElementById('dn4-resultado');
-  
-  if (!estaCompleto) {
-    interpretacion = 'Complete todos los campos para obtener un resultado preciso';
-    dn4Badge.textContent = 'No completado';
-    dn4Badge.className = 'resultado-badge';
-    resultadoContainer.className = 'resultado-container';
-  } else if (esNeuropatico) {
-    interpretacion = 'Sugiere dolor neuropático (≥4 puntos)';
-    color = 'rojo';
-    dn4Badge.textContent = 'Positivo';
-    dn4Badge.className = 'resultado-badge badge-rojo';
-    resultadoContainer.className = 'resultado-container nivel-alerta';
-  } else {
-    interpretacion = 'No sugiere dolor neuropático (<4 puntos)';
-    color = 'verde';
-    dn4Badge.textContent = 'Negativo';
-    dn4Badge.className = 'resultado-badge badge-verde';
-    resultadoContainer.className = 'resultado-container nivel-leve';
-  }
-  
-  // Aplicar interpretación y color
-  const interpretacionEl = document.getElementById('dn4-interpretacion');
-  interpretacionEl.textContent = interpretacion;
-  if (color) {
-    interpretacionEl.className = 'resultado-interpretacion ' + color;
-  } else {
-    interpretacionEl.className = 'resultado-interpretacion';
-  }
-  
-  // Actualizar interpretación clínica y recomendaciones
-  const interpretacionClinicaEl = document.getElementById('dn4-interpretacion-clinica');
-  const recomendacionesEl = document.getElementById('dn4-recomendaciones');
-  
-  if (estaCompleto && interpretacionClinicaEl && recomendacionesEl) {
-    // Obtener síntomas positivos
-    const sintomasPositivos = [];
-    if (quemazon === 1) sintomasPositivos.push("sensación de quemazón");
-    if (frio === 1) sintomasPositivos.push("sensación de frío doloroso");
-    if (descargas === 1) sintomasPositivos.push("descargas eléctricas");
-    if (hormigueo === 1) sintomasPositivos.push("hormigueo");
-    if (alfileres === 1) sintomasPositivos.push("sensación de alfileres y agujas");
-    if (entumecimiento === 1) sintomasPositivos.push("entumecimiento");
-    if (picazon === 1) sintomasPositivos.push("picazón");
-    if (hipoestesia === 1) sintomasPositivos.push("hipoestesia al tacto");
-    if (hipoestesiaPinchazo === 1) sintomasPositivos.push("hipoestesia al pinchazo");
-    if (cepillado === 1) sintomasPositivos.push("dolor al cepillado");
+  if (testCompleto) {
+    badgeElement.textContent = puntaje + "/10";
+    badgeElement.classList.remove('no-completado');
+    badgeElement.classList.add('completado');
     
-    // Formato adecuado para el texto de síntomas
-    let textoSintomas = "";
-    if (sintomasPositivos.length === 0) {
-      textoSintomas = "no presenta síntomas característicos de dolor neuropático";
-    } else if (sintomasPositivos.length === 1) {
-      textoSintomas = `presenta ${sintomasPositivos[0]}`;
-    } else if (sintomasPositivos.length === 2) {
-      textoSintomas = `presenta ${sintomasPositivos[0]} y ${sintomasPositivos[1]}`;
-    } else {
-      const ultimoSintoma = sintomasPositivos.pop();
-      textoSintomas = `presenta ${sintomasPositivos.join(', ')} y ${ultimoSintoma}`;
-    }
-    
-    // Actualizar interpretación clínica
-    if (esNeuropatico) {
-      interpretacionClinicaEl.innerHTML = `
-        <p>Con una puntuación de <strong>${puntuacionTotal}/10</strong>, el DN4 <strong>sugiere la presencia de un componente neuropático</strong> 
-        en el dolor del paciente.</p>
-        <p>El paciente ${textoSintomas}, que son características frecuentes del dolor neuropático.</p>
-        <p>Este resultado indica que el dolor probablemente tenga un componente de sensibilización central o periférica, 
-        lo que puede influir en la elección del tratamiento y en el pronóstico.</p>
+    // Interpretación según el puntaje
+    if (puntaje >= 4) {
+      interpretacionElement.textContent = "Probable dolor neuropático";
+      interpretacionElement.className = "resultado-interpretacion alto";
+      
+      interpretacionClinicaElement.innerHTML = `
+        <p>Con un puntaje de ${puntaje}/10, el paciente presenta características altamente sugestivas de dolor neuropático. El DN4 tiene una sensibilidad del 83% y una especificidad del 90% cuando el puntaje es ≥ 4/10.</p>
+        <p>Las características presentes sugieren alteraciones en el procesamiento somatosensorial que pueden deberse a una lesión o enfermedad del sistema nervioso somatosensorial.</p>
       `;
-    } else {
-      interpretacionClinicaEl.innerHTML = `
-        <p>Con una puntuación de <strong>${puntuacionTotal}/10</strong>, el DN4 <strong>no sugiere la presencia de un componente neuropático</strong> 
-        en el dolor del paciente.</p>
-        <p>El paciente ${textoSintomas}.</p>
-        <p>Este resultado indica que el dolor probablemente sea predominantemente nociceptivo o de otro origen no neuropático.</p>
-      `;
-    }
-    
-    // Actualizar recomendaciones terapéuticas
-    if (esNeuropatico) {
-      recomendacionesEl.innerHTML = `
-        <p>Para el manejo del dolor con componente neuropático, se recomienda:</p>
+      
+      recomendacionesElement.innerHTML = `
         <ul>
-          <li>Considerar el uso de fármacos específicos para dolor neuropático (gabapentinoides, antidepresivos tricíclicos, IRSN) en coordinación con el médico tratante</li>
-          <li>Técnicas de neuromodulación: TENS, estimulación eléctrica</li>
-          <li>Educación en neurociencia del dolor enfocada en sensibilización central/periférica</li>
-          <li>Terapia manual suave, no provocadora de dolor</li>
-          <li>Ejercicio terapéutico graduado con énfasis en la exposición gradual</li>
-          <li>Técnicas de desensibilización para áreas hipersensibles</li>
-          <li>Valorar posible derivación a unidad especializada en dolor</li>
+          <li>Considerar tratamientos específicos para dolor neuropático (anticonvulsivantes, antidepresivos, etc.)</li>
+          <li>Realizar una evaluación neurológica completa</li>
+          <li>Implementar modalidades físicas como TENS, termoterapia controlada</li>
+          <li>Educación en neurofisiología del dolor</li>
+          <li>Técnicas de desensibilización gradual para áreas hipersensibles</li>
+          <li>Derivación a especialista en manejo del dolor para evaluación farmacológica</li>
         </ul>
       `;
     } else {
-      recomendacionesEl.innerHTML = `
-        <p>Para el manejo del dolor predominantemente nociceptivo, se recomienda:</p>
+      interpretacionElement.textContent = "Dolor no neuropático";
+      interpretacionElement.className = "resultado-interpretacion bajo";
+      
+      interpretacionClinicaElement.innerHTML = `
+        <p>Con un puntaje de ${puntaje}/10, el paciente no presenta un patrón típico de dolor neuropático. El dolor probablemente sea de origen nociceptivo o nociplástico.</p>
+      `;
+      
+      recomendacionesElement.innerHTML = `
         <ul>
-          <li>Terapia manual dirigida a estructuras específicas</li>
-          <li>Ejercicio terapéutico para mejorar fuerza, flexibilidad y función</li>
-          <li>Educación sobre manejo del dolor y autocuidado</li>
-          <li>Modalidades físicas según corresponda (termoterapia, crioterapia)</li>
-          <li>Técnicas de control motor y reeducación postural</li>
-          <li>Valorar factores biomecánicos y ergonómicos</li>
+          <li>Enfocar el tratamiento en el manejo del dolor nociceptivo/nociplástico</li>
+          <li>Terapia manual</li>
+          <li>Ejercicio terapéutico</li>
+          <li>Educación sobre manejo del dolor</li>
+          <li>Reevaluación periódica si los síntomas cambian</li>
         </ul>
       `;
     }
-  } else if (interpretacionClinicaEl && recomendacionesEl) {
-    // Mensajes para cuestionario incompleto
-    interpretacionClinicaEl.textContent = "Complete todas las preguntas del cuestionario para obtener una interpretación clínica detallada.";
-    recomendacionesEl.textContent = "Complete el cuestionario para recibir recomendaciones terapéuticas personalizadas.";
+  } else {
+    badgeElement.textContent = "No completado";
+    badgeElement.classList.remove('completado');
+    badgeElement.classList.add('no-completado');
+    interpretacionElement.textContent = "Complete el cuestionario para obtener un resultado";
+    interpretacionElement.className = "resultado-interpretacion";
+    
+    interpretacionClinicaElement.textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    recomendacionesElement.textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
   }
 }
