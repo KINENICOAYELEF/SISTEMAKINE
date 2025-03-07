@@ -5639,14 +5639,1303 @@
   </div>
 </div>
             
-            <div class="form-row">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="fuerzaMuscular" class="form-label">Fuerza muscular</label>
-                  <textarea id="fuerzaMuscular" name="fuerzaMuscular" class="form-control" rows="3"></textarea>
+            <h4>6.4 Evaluación de Fuerza Muscular</h4>
+<div class="cuestionarios-acordeon">
+  <!-- Fuerza Analítica -->
+  <div class="cuestionario-item">
+    <div class="cuestionario-header" onclick="toggleCuestionario('fuerza-analitica-content')">
+      <h4><i class="fas fa-plus-circle"></i> Evaluación de Fuerza Muscular Analítica</h4>
+      <div class="resultado-badge" id="fuerza-analitica-badge">No completado</div>
+    </div>
+    <div class="cuestionario-content" id="fuerza-analitica-content" style="display: none;">
+      <p class="mb-3">Evalúe la fuerza muscular utilizando la escala de Daniels (0-5) o la escala de Oxford modificada.</p>
+      
+      <!-- Selector de región anatómica para evaluación de fuerza -->
+      <div class="form-row mb-4">
+        <div class="form-col form-col-md-12">
+          <h5>Región Anatómica a Evaluar</h5>
+          <div class="form-group">
+            <label for="fuerza_region" class="form-label">Seleccione la región</label>
+            <select id="fuerza_region" name="fuerza_region" class="form-select" onchange="mostrarTablaFuerza()">
+              <option value="">Seleccionar</option>
+              <option value="cuello">Cuello</option>
+              <option value="hombro">Hombro</option>
+              <option value="codo">Codo y Antebrazo</option>
+              <option value="muneca_mano">Muñeca y Mano</option>
+              <option value="tronco">Tronco</option>
+              <option value="cadera">Cadera</option>
+              <option value="rodilla">Rodilla</option>
+              <option value="tobillo_pie">Tobillo y Pie</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Escalas de medición -->
+      <div class="form-row mb-4">
+        <div class="form-col form-col-md-12">
+          <div class="card">
+            <div class="card-header bg-info text-white">
+              <h5 class="mb-0">Escalas de Medición de Fuerza Muscular</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6>Escala de Daniels (0-5)</h6>
+                  <ul class="list-group">
+                    <li class="list-group-item list-group-item-danger">0: Ausencia de contracción</li>
+                    <li class="list-group-item list-group-item-danger">1: Contracción visible o palpable sin movimiento</li>
+                    <li class="list-group-item list-group-item-warning">2: Movimiento completo eliminando gravedad</li>
+                    <li class="list-group-item list-group-item-warning">3: Movimiento completo contra gravedad</li>
+                    <li class="list-group-item list-group-item-success">4: Movimiento completo contra gravedad y resistencia moderada</li>
+                    <li class="list-group-item list-group-item-success">5: Fuerza normal contra resistencia completa</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h6>Escala Oxford Modificada (0-10)</h6>
+                  <ul class="list-group">
+                    <li class="list-group-item list-group-item-danger">0: Sin contracción</li>
+                    <li class="list-group-item list-group-item-danger">1: Contracción muscular visible sin movimiento</li>
+                    <li class="list-group-item list-group-item-danger">2: Movimiento eliminando gravedad</li>
+                    <li class="list-group-item list-group-item-warning">3: Movimiento contra gravedad (25% fuerza)</li>
+                    <li class="list-group-item list-group-item-warning">4: Movimiento contra gravedad (50% fuerza)</li>
+                    <li class="list-group-item list-group-item-warning">5: Movimiento contra gravedad (75% fuerza)</li>
+                    <li class="list-group-item list-group-item-success">6: Movimiento contra gravedad y resistencia mínima</li>
+                    <li class="list-group-item list-group-item-success">7: Movimiento contra gravedad y resistencia leve</li>
+                    <li class="list-group-item list-group-item-success">8: Movimiento contra gravedad y resistencia moderada</li>
+                    <li class="list-group-item list-group-item-success">9: Movimiento contra gravedad y resistencia considerable</li>
+                    <li class="list-group-item list-group-item-success">10: Movimiento contra gravedad y resistencia máxima (normal)</li>
+                  </ul>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tablas de fuerza para cada región (inicialmente ocultas) -->
+      <div id="tablas_fuerza_container">
+        <!-- Tabla Fuerza Cuello -->
+        <div id="tabla_fuerza_cuello" class="tabla-fuerza" style="display: none;">
+          <h5 class="mt-4 mb-3">Evaluación de Fuerza: Cuello</h5>
+          
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th rowspan="2">Movimiento</th>
+                  <th rowspan="2">Escala</th>
+                  <th colspan="2">Derecha</th>
+                  <th colspan="2">Izquierda</th>
+                  <th rowspan="2">Dolor</th>
+                  <th rowspan="2">Observaciones</th>
+                </tr>
+                <tr>
+                  <th>Valor</th>
+                  <th>Estado</th>
+                  <th>Valor</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Flexión</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cuello_flexion')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="cuello_flexion_der" name="cuello_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cuello_flexion_der_estado"></td>
+                  <td>
+                    <input type="number" id="cuello_flexion_izq" name="cuello_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cuello_flexion_izq_estado"></td>
+                  <td>
+                    <select id="cuello_flexion_dolor" name="cuello_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="cuello_flexion_obs" name="cuello_flexion_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Extensión</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cuello_extension')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="cuello_extension_der" name="cuello_extension_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cuello_extension_der_estado"></td>
+                  <td>
+                    <input type="number" id="cuello_extension_izq" name="cuello_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cuello_extension_izq_estado"></td>
+                  <td>
+                    <select id="cuello_extension_dolor" name="cuello_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="cuello_extension_obs" name="cuello_extension_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Inclinación lateral</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cuello_inclinacion')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="cuello_inclinacion_der" name="cuello_inclinacion_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cuello_inclinacion_der_estado"></td>
+                  <td>
+                    <input type="number" id="cuello_inclinacion_izq" name="cuello_inclinacion_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cuello_inclinacion_izq_estado"></td>
+                  <td>
+                    <select id="cuello_inclinacion_dolor" name="cuello_inclinacion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="cuello_inclinacion_obs" name="cuello_inclinacion_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Rotación</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cuello_rotacion')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="cuello_rotacion_der" name="cuello_rotacion_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cuello_rotacion_der_estado"></td>
+                  <td>
+                    <input type="number" id="cuello_rotacion_izq" name="cuello_rotacion_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cuello_rotacion_izq_estado"></td>
+                  <td>
+                    <select id="cuello_rotacion_dolor" name="cuello_rotacion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="cuello_rotacion_obs" name="cuello_rotacion_obs" class="form-control">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tabla Fuerza Hombro -->
+        <div id="tabla_fuerza_hombro" class="tabla-fuerza" style="display: none;">
+          <h5 class="mt-4 mb-3">Evaluación de Fuerza: Hombro</h5>
+          
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th rowspan="2">Movimiento</th>
+                  <th rowspan="2">Escala</th>
+                  <th colspan="2">Derecha</th>
+                  <th colspan="2">Izquierda</th>
+                  <th rowspan="2">Dolor</th>
+                  <th rowspan="2">Observaciones</th>
+                </tr>
+                <tr>
+                  <th>Valor</th>
+                  <th>Estado</th>
+                  <th>Valor</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Flexión</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_flexion')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="hombro_flexion_der" name="hombro_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_flexion_der_estado"></td>
+                  <td>
+                    <input type="number" id="hombro_flexion_izq" name="hombro_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_flexion_izq_estado"></td>
+                  <td>
+                    <select id="hombro_flexion_dolor" name="hombro_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="hombro_flexion_obs" name="hombro_flexion_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Extensión</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_extension')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="hombro_extension_der" name="hombro_extension_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_extension_der_estado"></td>
+                  <td>
+                    <input type="number" id="hombro_extension_izq" name="hombro_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_extension_izq_estado"></td>
+                  <td>
+                    <select id="hombro_extension_dolor" name="hombro_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="hombro_extension_obs" name="hombro_extension_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Abducción</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_abduccion')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="hombro_abduccion_der" name="hombro_abduccion_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_abduccion_der_estado"></td>
+                  <td>
+                    <input type="number" id="hombro_abduccion_izq" name="hombro_abduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_abduccion_izq_estado"></td>
+                  <td>
+                    <select id="hombro_abduccion_dolor" name="hombro_abduccion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="hombro_abduccion_obs" name="hombro_abduccion_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Aducción</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_aduccion')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="hombro_aduccion_der" name="hombro_aduccion_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_aduccion_der_estado"></td>
+                  <td>
+                    <input type="number" id="hombro_aduccion_izq" name="hombro_aduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_aduccion_izq_estado"></td>
+                  <td>
+                    <select id="hombro_aduccion_dolor" name="hombro_aduccion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="hombro_aduccion_obs" name="hombro_aduccion_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Rotación interna</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_rotint')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="hombro_rotint_der" name="hombro_rotint_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_rotint_der_estado"></td>
+                  <td>
+                    <input type="number" id="hombro_rotint_izq" name="hombro_rotint_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_rotint_izq_estado"></td>
+                  <td>
+                    <select id="hombro_rotint_dolor" name="hombro_rotint_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="hombro_rotint_obs" name="hombro_rotint_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Rotación externa</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_rotext')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="hombro_rotext_der" name="hombro_rotext_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_rotext_der_estado"></td>
+                  <td>
+                    <input type="number" id="hombro_rotext_izq" name="hombro_rotext_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="hombro_rotext_izq_estado"></td>
+                  <td>
+                    <select id="hombro_rotext_dolor" name="hombro_rotext_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="hombro_rotext_obs" name="hombro_rotext_obs" class="form-control">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tabla Fuerza Cadera -->
+        <div id="tabla_fuerza_cadera" class="tabla-fuerza" style="display: none;">
+          <h5 class="mt-4 mb-3">Evaluación de Fuerza: Cadera</h5>
+          
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th rowspan="2">Movimiento</th>
+                  <th rowspan="2">Escala</th>
+                  <th colspan="2">Derecha</th>
+                  <th colspan="2">Izquierda</th>
+                  <th rowspan="2">Dolor</th>
+                  <th rowspan="2">Observaciones</th>
+                </tr>
+                <tr>
+                  <th>Valor</th>
+                  <th>Estado</th>
+                  <th>Valor</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Flexión</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_flexion')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="cadera_flexion_der" name="cadera_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_flexion_der_estado"></td>
+                  <td>
+                    <input type="number" id="cadera_flexion_izq" name="cadera_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_flexion_izq_estado"></td>
+                  <td>
+                    <select id="cadera_flexion_dolor" name="cadera_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="cadera_flexion_obs" name="cadera_flexion_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Extensión</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_extension')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="cadera_extension_der" name="cadera_extension_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_extension_der_estado"></td>
+                  <td>
+                    <input type="number" id="cadera_extension_izq" name="cadera_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_extension_izq_estado"></td>
+                  <td>
+                    <select id="cadera_extension_dolor" name="cadera_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="cadera_extension_obs" name="cadera_extension_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Abducción</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_abduccion')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="cadera_abduccion_der" name="cadera_abduccion_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_abduccion_der_estado"></td>
+                  <td>
+                    <input type="number" id="cadera_abduccion_izq" name="cadera_abduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_abduccion_izq_estado"></td>
+                  <td>
+                    <select id="cadera_abduccion_dolor" name="cadera_abduccion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="cadera_abduccion_obs" name="cadera_abduccion_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Aducción</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_aduccion')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="cadera_aduccion_der" name="cadera_aduccion_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_aduccion_der_estado"></td>
+                  <td>
+                    <input type="number" id="cadera_aduccion_izq" name="cadera_aduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_aduccion_izq_estado"></td>
+                  <td>
+                    <select id="cadera_aduccion_dolor" name="cadera_aduccion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="cadera_aduccion_obs" name="cadera_aduccion_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Rotación interna</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_rotint')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="cadera_rotint_der" name="cadera_rotint_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_rotint_der_estado"></td>
+                  <td>
+                    <input type="number" id="cadera_rotint_izq" name="cadera_rotint_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_rotint_izq_estado"></td>
+                  <td>
+                    <select id="cadera_rotint_dolor" name="cadera_rotint_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="cadera_rotint_obs" name="cadera_rotint_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Rotación externa</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_rotext')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="cadera_rotext_der" name="cadera_rotext_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_rotext_der_estado"></td>
+                  <td>
+                    <input type="number" id="cadera_rotext_izq" name="cadera_rotext_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="cadera_rotext_izq_estado"></td>
+                  <td>
+                    <select id="cadera_rotext_dolor" name="cadera_rotext_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="cadera_rotext_obs" name="cadera_rotext_obs" class="form-control">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tabla Fuerza Rodilla -->
+        <div id="tabla_fuerza_rodilla" class="tabla-fuerza" style="display: none;">
+          <h5 class="mt-4 mb-3">Evaluación de Fuerza: Rodilla</h5>
+          
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th rowspan="2">Movimiento</th>
+                  <th rowspan="2">Escala</th>
+                  <th colspan="2">Derecha</th>
+                  <th colspan="2">Izquierda</th>
+                  <th rowspan="2">Dolor</th>
+                  <th rowspan="2">Observaciones</th>
+                </tr>
+                <tr>
+                  <th>Valor</th>
+                  <th>Estado</th>
+                  <th>Valor</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Flexión</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'rodilla_flexion')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="rodilla_flexion_der" name="rodilla_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="rodilla_flexion_der_estado"></td>
+                  <td>
+                    <input type="number" id="rodilla_flexion_izq" name="rodilla_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="rodilla_flexion_izq_estado"></td>
+                  <td>
+                    <select id="rodilla_flexion_dolor" name="rodilla_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="rodilla_flexion_obs" name="rodilla_flexion_obs" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Extensión</td>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, 'rodilla_extension')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="oxford">Oxford (0-10)</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="rodilla_extension_der" name="rodilla_extension_der" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="rodilla_extension_der_estado"></td>
+                  <td>
+                    <input type="number" id="rodilla_extension_izq" name="rodilla_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="rodilla_extension_izq_estado"></td>
+                  <td>
+                    <select id="rodilla_extension_dolor" name="rodilla_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="rodilla_extension_obs" name="rodilla_extension_obs" class="form-control">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        </div>
+      
+      <!-- Interpretación de hallazgos en fuerza analítica -->
+      <div class="card mt-4 mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Interpretación y Recomendaciones</h5>
+        </div>
+        <div class="card-body">
+          <div id="interpretacion_fuerza_analitica" class="mb-3">
+            <h6>Interpretación Clínica:</h6>
+            <div id="interpretacion-fuerza-texto">
+              Complete la evaluación de fuerza muscular para obtener recomendaciones clínicas.
+            </div>
+          </div>
+          
+          <div id="recomendaciones_fuerza_analitica" class="mb-3">
+            <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+            <div id="recomendaciones-fuerza-texto">
+              Complete la evaluación para obtener recomendaciones específicas.
+            </div>
+          </div>
+          
+          <div class="alert alert-info">
+            <h6><i class="fas fa-info-circle"></i> Consideraciones clínicas:</h6>
+            <ul>
+              <li>Una diferencia <strong>mayor al 15%</strong> entre extremidades puede indicar desequilibrios musculares significativos.</li>
+              <li>La presencia de <strong>dolor durante el test</strong> puede alterar los resultados por inhibición muscular refleja.</li>
+              <li>Valores de 3/5 (contra gravedad) son generalmente <strong>funcionales para AVD básicas</strong>, pero insuficientes para actividades deportivas.</li>
+              <li>El patrón de debilidad puede orientar el <strong>diagnóstico diferencial</strong> (miopatía vs. neuropatía vs. lesión articular).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Evaluación con Dinamometría -->
+  <div class="cuestionario-item">
+    <div class="cuestionario-header" onclick="toggleCuestionario('dinamometria-content')">
+      <h4><i class="fas fa-plus-circle"></i> Evaluación con Dinamometría</h4>
+      <div class="resultado-badge" id="dinamometria-badge">No completado</div>
+    </div>
+    <div class="cuestionario-content" id="dinamometria-content" style="display: none;">
+      <p class="mb-3">Registre los resultados de la evaluación objetiva con dinamómetro. Compare los resultados con valores normativos y entre lados.</p>
+      
+      <!-- Dinamometría de Prensión Manual -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Dinamometría de Prensión Manual (Handgrip)</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="dinamometria_mano_der" class="form-label">Mano derecha (kg)</label>
+                <input type="number" id="dinamometria_mano_der" name="dinamometria_mano_der" class="form-control" min="0" max="150" step="0.1" onchange="evaluarDinamometria('mano')">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="dinamometria_mano_izq" class="form-label">Mano izquierda (kg)</label>
+                <input type="number" id="dinamometria_mano_izq" name="dinamometria_mano_izq" class="form-control" min="0" max="150" step="0.1" onchange="evaluarDinamometria('mano')">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="dinamometria_mano_dif" class="form-label">Diferencia (%)</label>
+                <input type="text" id="dinamometria_mano_dif" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="dinamometria_mano_estado" class="form-label">Estado</label>
+                <div id="dinamometria_mano_estado" class="alert alert-secondary">Pendiente</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="dinamometria_mano_obs" class="form-label">Observaciones</label>
+                <textarea id="dinamometria_mano_obs" name="dinamometria_mano_obs" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Dinamometría de Pinza -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Dinamometría de Pinza</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="dinamometria_pinza_der" class="form-label">Mano derecha (kg)</label>
+                <input type="number" id="dinamometria_pinza_der" name="dinamometria_pinza_der" class="form-control" min="0" max="50" step="0.1" onchange="evaluarDinamometria('pinza')">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="dinamometria_pinza_izq" class="form-label">Mano izquierda (kg)</label>
+                <input type="number" id="dinamometria_pinza_izq" name="dinamometria_pinza_izq" class="form-control" min="0" max="50" step="0.1" onchange="evaluarDinamometria('pinza')">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="dinamometria_pinza_dif" class="form-label">Diferencia (%)</label>
+                <input type="text" id="dinamometria_pinza_dif" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="dinamometria_pinza_estado" class="form-label">Estado</label>
+                <div id="dinamometria_pinza_estado" class="alert alert-secondary">Pendiente</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="dinamometria_pinza_obs" class="form-label">Observaciones</label>
+                <textarea id="dinamometria_pinza_obs" name="dinamometria_pinza_obs" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Otras Dinamometrías -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Otras Dinamometrías</h5>
+        </div>
+        <div class="card-body">
+          <div id="otras_dinamometrias_container">
+            <!-- Las dinamometrías adicionales se agregarán aquí -->
+          </div>
+          
+          <div class="form-row mt-3">
+            <div class="form-col form-col-md-12">
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarDinamometria()">
+                <i class="fas fa-plus"></i> Agregar Otra Dinamometría
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Interpretación de hallazgos en dinamometría -->
+      <div class="card mt-4 mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Interpretación y Recomendaciones</h5>
+        </div>
+        <div class="card-body">
+          <div id="interpretacion_dinamometria" class="mb-3">
+            <h6>Interpretación Clínica:</h6>
+            <div id="interpretacion-dinamometria-texto">
+              Complete la evaluación con dinamometría para obtener recomendaciones clínicas.
+            </div>
+          </div>
+          
+          <div id="recomendaciones_dinamometria" class="mb-3">
+            <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+            <div id="recomendaciones-dinamometria-texto">
+              Complete la evaluación para obtener recomendaciones específicas.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calculadora de RM y Prescripción -->
+  <div class="cuestionario-item">
+    <div class="cuestionario-header" onclick="toggleCuestionario('rm-calculator-content')">
+      <h4><i class="fas fa-plus-circle"></i> Calculadora de Repetición Máxima (RM)</h4>
+      <div class="resultado-badge" id="rm-calculator-badge">No completado</div>
+    </div>
+    <div class="cuestionario-content" id="rm-calculator-content" style="display: none;">
+      <p class="mb-3">Estime la fuerza máxima (1RM) utilizando diferentes fórmulas y obtenga recomendaciones para prescripción de ejercicio terapéutico.</p>
+      
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Calculadora de 1RM</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="rm_ejercicio" class="form-label">Ejercicio</label>
+                <select id="rm_ejercicio" name="rm_ejercicio" class="form-select">
+                  <option value="">Seleccionar</option>
+                  <option value="Press banca">Press banca</option>
+                  <option value="Sentadilla">Sentadilla</option>
+                  <option value="Peso muerto">Peso muerto</option>
+                  <option value="Press hombro">Press hombro</option>
+                  <option value="Curl bíceps">Curl bíceps</option>
+                  <option value="Extensión tríceps">Extensión tríceps</option>
+                  <option value="Leg press">Leg press</option>
+                  <option value="Extensión rodilla">Extensión rodilla</option>
+                  <option value="Flexión rodilla">Flexión rodilla</option>
+                  <option value="Otro">Otro</option>
+                </select>
+                <input type="text" id="rm_ejercicio_otro" name="rm_ejercicio_otro" class="form-control mt-2" placeholder="Especifique otro ejercicio" style="display: none;">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="rm_peso" class="form-label">Peso levantado (kg)</label>
+                <input type="number" id="rm_peso" name="rm_peso" class="form-control" min="0" max="500" step="0.5">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="rm_repeticiones" class="form-label">Repeticiones realizadas</label>
+                <input type="number" id="rm_repeticiones" name="rm_repeticiones" class="form-control" min="1" max="30">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="rm_formula" class="form-label">Fórmula a utilizar</label>
+                <select id="rm_formula" name="rm_formula" class="form-select">
+                  <option value="brzycki">Brzycki</option>
+                  <option value="epley">Epley</option>
+                  <option value="lander">Lander</option>
+                  <option value="lombardi">Lombardi</option>
+                  <option value="oconner">O'Conner</option>
+                  <option value="wathen">Wathen</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <button type="button" class="btn btn-primary" onclick="calcular1RM()">
+                <i class="fas fa-calculator"></i> Calcular 1RM
+              </button>
+            </div>
+          </div>
+          
+          <div id="resultado_1rm_container" style="display: none;">
+            <div class="form-row">
+              <div class="form-col form-col-md-12">
+                <div class="card">
+                  <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Resultados de 1RM</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <h6>1RM estimado:</h6>
+                        <h4 id="valor_1rm">0 kg</h4>
+                      </div>
+                      <div class="col-md-8">
+                        <h6>Tabla de cargas de entrenamiento:</h6>
+                        <table class="table table-sm table-bordered">
+                          <thead>
+                            <tr>
+                              <th>% 1RM</th>
+                              <th>Peso (kg)</th>
+                              <th>Rep. recomendadas</th>
+                              <th>Aplicación</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tabla_cargas">
+                            <!-- Se llenará dinámicamente -->
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Historial de RMs -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Historial de Evaluaciones</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Ejercicio</th>
+                  <th>Fecha</th>
+                  <th>Peso (kg)</th>
+                  <th>Repeticiones</th>
+                  <th>1RM (kg)</th>
+                  <th>Fórmula</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="historial_rm">
+                <!-- Se llenará dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="form-row mt-3">
+            <div class="form-col form-col-md-12">
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="guardarRM()">
+                <i class="fas fa-save"></i> Guardar Evaluación Actual
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Recomendaciones para prescripción -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Recomendaciones para Prescripción</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card mb-3">
+                <div class="card-header">Hipertrofia</div>
+                <div class="card-body">
+                  <ul>
+                    <li><strong>Intensidad:</strong> 67-85% 1RM</li>
+                    <li><strong>Repeticiones:</strong> 6-12</li>
+                    <li><strong>Series:</strong> 3-6</li>
+                    <li><strong>Descanso:</strong> 60-90 segundos</li>
+                    <li><strong>Frecuencia:</strong> 2-3 veces/semana</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card mb-3">
+                <div class="card-header">Fuerza máxima</div>
+                <div class="card-body">
+                  <ul>
+                    <li><strong>Intensidad:</strong> 85-100% 1RM</li>
+                    <li><strong>Repeticiones:</strong> 1-6</li>
+                    <li><strong>Series:</strong> 2-6</li>
+                    <li><strong>Descanso:</strong> 2-5 minutos</li>
+                    <li><strong>Frecuencia:</strong> 2-3 veces/semana</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card mb-3">
+                <div class="card-header">Resistencia muscular</div>
+                <div class="card-body">
+                  <ul>
+                    <li><strong>Intensidad:</strong> 50-67% 1RM</li>
+                    <li><strong>Repeticiones:</strong> 12-20</li>
+                    <li><strong>Series:</strong> 2-3</li>
+                    <li><strong>Descanso:</strong> 30-60 segundos</li>
+                    <li><strong>Frecuencia:</strong> 2-3 veces/semana</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card mb-3">
+                <div class="card-header">Potencia</div>
+                <div class="card-body">
+                  <ul>
+                    <li><strong>Intensidad:</strong> 30-60% 1RM</li>
+                    <li><strong>Repeticiones:</strong> 3-6</li>
+                    <li><strong>Series:</strong> 3-6</li>
+                    <li><strong>Descanso:</strong> 2-3 minutos</li>
+                    <li><strong>Frecuencia:</strong> 2-3 veces/semana</li>
+                    <li><strong>Característica:</strong> Máxima velocidad de ejecución</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="alert alert-info mt-3">
+            <h6><i class="fas fa-info-circle"></i> Consideraciones clínicas:</h6>
+            <ul>
+              <li>Las fórmulas estimativas varían en precisión según el tipo de ejercicio, población y nivel de entrenamiento.</li>
+              <li>Estas estimaciones son menos precisas cuando las repeticiones superan las 10.</li>
+              <li>Para pacientes con lesiones o patologías, ajuste los porcentajes hacia el rango inferior.</li>
+              <li>Para ejercicios con componente clínico, incorpore aspectos de control motor y progrese primero en calidad antes que en carga.</li>
+              <li>Considere la fatiga central al diseñar programas para pacientes con condiciones como dolor crónico.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Evaluación de Fuerza Funcional -->
+  <div class="cuestionario-item">
+    <div class="cuestionario-header" onclick="toggleCuestionario('fuerza-funcional-content')">
+      <h4><i class="fas fa-plus-circle"></i> Evaluación de Fuerza Funcional</h4>
+      <div class="resultado-badge" id="fuerza-funcional-badge">No completado</div>
+    </div>
+    <div class="cuestionario-content" id="fuerza-funcional-content" style="display: none;">
+      <p class="mb-3">Evalúe la fuerza en contextos funcionales relacionados con actividades de la vida diaria, laborales o deportivas.</p>
+      
+      <!-- Tests Funcionales Estándar -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Tests Funcionales Estándar</h5>
+        </div>
+        <div class="card-body">
+          <!-- 30-second Sit-to-Stand Test -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>30-second Sit-to-Stand Test</h6>
+              <p class="text-muted small">Mide la fuerza funcional de miembros inferiores contando cuántas veces el paciente puede levantarse y sentarse de una silla en 30 segundos.</p>
+            </div>
+          </div>
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="sit_to_stand_repeticiones" class="form-label">Repeticiones</label>
+                <input type="number" id="sit_to_stand_repeticiones" name="sit_to_stand_repeticiones" class="form-control" min="0" max="50" onchange="evaluarTestFuncional('sit_to_stand')">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="sit_to_stand_edad" class="form-label">Edad del paciente</label>
+                <input type="number" id="sit_to_stand_edad" name="sit_to_stand_edad" class="form-control" min="18" max="100" onchange="evaluarTestFuncional('sit_to_stand')">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="sit_to_stand_genero" class="form-label">Género</label>
+                <select id="sit_to_stand_genero" name="sit_to_stand_genero" class="form-select" onchange="evaluarTestFuncional('sit_to_stand')">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="sit_to_stand_resultado" class="form-label">Resultado</label>
+                <div id="sit_to_stand_resultado" class="alert alert-secondary">Pendiente</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Push-up Test -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>Push-up Test</h6>
+              <p class="text-muted small">Evalúa la fuerza-resistencia de miembros superiores contando el número máximo de flexiones de brazos.</p>
+            </div>
+          </div>
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="push_up_repeticiones" class="form-label">Repeticiones</label>
+                <input type="number" id="push_up_repeticiones" name="push_up_repeticiones" class="form-control" min="0" max="100" onchange="evaluarTestFuncional('push_up')">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="push_up_edad" class="form-label">Edad del paciente</label>
+                <input type="number" id="push_up_edad" name="push_up_edad" class="form-control" min="18" max="100" onchange="evaluarTestFuncional('push_up')">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="push_up_genero" class="form-label">Género</label>
+                <select id="push_up_genero" name="push_up_genero" class="form-select" onchange="evaluarTestFuncional('push_up')">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="push_up_resultado" class="form-label">Resultado</label>
+                <div id="push_up_resultado" class="alert alert-secondary">Pendiente</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Otros Tests Funcionales -->
+          <div id="otros_tests_funcionales_container">
+            <!-- Los tests funcionales adicionales se agregarán aquí -->
+          </div>
+          
+          <div class="form-row mt-3">
+            <div class="form-col form-col-md-12">
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarTestFuncional()">
+                <i class="fas fa-plus"></i> Agregar Otro Test Funcional
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Tareas Específicas del Paciente -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Tareas Específicas del Paciente</h5>
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-3">Evalúe la capacidad del paciente para realizar tareas específicas relevantes para su contexto personal, laboral o deportivo.</p>
+          
+          <div id="tareas_especificas_container">
+            <!-- Las tareas específicas se agregarán aquí -->
+            <div class="form-row mb-3">
+              <div class="form-col form-col-md-12">
+                <p class="text-muted">Utilice el botón "Agregar Tarea Específica" para añadir tareas funcionales relevantes para este paciente.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mt-3">
+            <div class="form-col form-col-md-12">
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarTareaEspecifica()">
+                <i class="fas fa-plus"></i> Agregar Tarea Específica
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Interpretación de fuerza funcional -->
+      <div class="card mt-4 mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Interpretación y Recomendaciones</h5>
+        </div>
+        <div class="card-body">
+          <div id="interpretacion_fuerza_funcional" class="mb-3">
+            <h6>Interpretación Clínica:</h6>
+            <div id="interpretacion-fuerza-funcional-texto">
+              Complete la evaluación de fuerza funcional para obtener recomendaciones clínicas.
+            </div>
+          </div>
+          
+          <div id="recomendaciones_fuerza_funcional" class="mb-3">
+            <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+            <div id="recomendaciones-fuerza-funcional-texto">
+              Complete la evaluación para obtener recomendaciones específicas.
+            </div>
+          </div>
+          
+          <div class="alert alert-info">
+            <h6><i class="fas fa-info-circle"></i> Consideraciones clínicas:</h6>
+            <ul>
+              <li>La <strong>fuerza funcional</strong> tiene mayor validez ecológica que la fuerza analítica, especialmente para predecir el desempeño en actividades cotidianas.</li>
+              <li>La <strong>calidad del movimiento</strong> durante las pruebas funcionales es tan importante como la cantidad/resultado numérico.</li>
+              <li>Un buen rendimiento en tests funcionales suele correlacionar con <strong>menor riesgo de lesiones</strong> y mejor pronóstico de rehabilitación.</li>
+              <li>Las <strong>tareas específicas</strong> deben evaluarse en condiciones similares a las reales (contexto, fatiga, variables cognitivas) para aumentar su validez.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
             
             <div class="form-row mt-4">
               <div class="form-col form-col-md-12">
