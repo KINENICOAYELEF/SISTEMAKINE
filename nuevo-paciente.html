@@ -9665,5 +9665,28 @@ function evaluarFactoresPsicosociales() {
 <script src="js/patrones-movimiento.js"></script>
 <script src="js/fuerza-muscular.js"></script>
 <script src="js/evaluacion-neurologica.js"></script>
+<script 
+// SOLUCIÓN ESPECÍFICA PARA LOS CUESTIONARIOS DE SECCIONES 3 Y 6
+document.addEventListener('DOMContentLoaded', function() {
+  // Agregar evento a todos los encabezados de cuestionarios
+  document.querySelectorAll('.cuestionario-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      const content = this.nextElementSibling;
+      if (content) {
+        // Toggle la visibilidad
+        if (content.style.display === "block") {
+          content.style.display = "none";
+          this.classList.remove("active");
+        } else {
+          content.style.display = "block";
+          this.classList.add("active");
+        }
+      }
+    });
+  });
+  
+  console.log('Eventos de cuestionarios inicializados correctamente');
+});
+</script>
 </body>
 </html>
