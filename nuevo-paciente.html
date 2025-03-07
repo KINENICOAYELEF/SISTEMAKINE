@@ -3939,21 +3939,572 @@
   </ul>
 </div>
             
-            <h4>6.4 Evaluación Física</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="inspeccion" class="form-label">Inspección</label>
-                  <textarea id="inspeccion" name="inspeccion" class="form-control" rows="2"></textarea>
-                </div>
+            <h4>6.4 Evaluación de Inspección y Palpación</h4>
+<div class="cuestionarios-acordeon">
+  <div class="cuestionario-item">
+    <div class="cuestionario-header" onclick="toggleInspeccionPalpacion('inspeccion-palpacion-content')">
+      <h4><i class="fas fa-plus-circle"></i> Inspección y Palpación Detallada</h4>
+      <div class="resultado-badge" id="inspeccion-palpacion-badge">No completado</div>
+    </div>
+    <div class="cuestionario-content" id="inspeccion-palpacion-content" style="display: none;">
+      <!-- Selector de región anatómica -->
+      <div class="form-row mb-4">
+        <div class="form-col form-col-md-12">
+          <h5>Región Anatómica Evaluada</h5>
+          <div class="form-group">
+            <label for="region_anatomica" class="form-label">Seleccione la región principal</label>
+            <select id="region_anatomica" name="region_anatomica" class="form-select" onchange="actualizarSubregiones()">
+              <option value="">Seleccionar</option>
+              <option value="Columna Vertebral">Columna Vertebral</option>
+              <option value="Extremidad Superior">Extremidad Superior</option>
+              <option value="Extremidad Inferior">Extremidad Inferior</option>
+              <option value="Cabeza y Cuello">Cabeza y Cuello</option>
+              <option value="Tórax y Abdomen">Tórax y Abdomen</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Subregiones - Se actualizarán dinámicamente según la región seleccionada -->
+      <div class="form-row mb-4" id="subregion_container" style="display: none;">
+        <div class="form-col form-col-md-6">
+          <div class="form-group">
+            <label for="subregion_anatomica" class="form-label">Seleccione la subregión</label>
+            <select id="subregion_anatomica" name="subregion_anatomica" class="form-select" onchange="actualizarEstructurasEspecificas()">
+              <!-- Se llenará dinámicamente -->
+            </select>
+          </div>
+        </div>
+        <div class="form-col form-col-md-6">
+          <div class="form-group">
+            <label for="lateralidad" class="form-label">Lateralidad</label>
+            <select id="lateralidad" name="lateralidad" class="form-select">
+              <option value="">No aplica</option>
+              <option value="Derecha">Derecha</option>
+              <option value="Izquierda">Izquierda</option>
+              <option value="Bilateral">Bilateral</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Estructuras específicas - Se actualizarán dinámicamente según la subregión -->
+      <div class="form-row mb-4" id="estructuras_container" style="display: none;">
+        <div class="form-col form-col-md-12">
+          <div class="form-group">
+            <label for="estructuras_especificas" class="form-label">Estructuras específicas a evaluar</label>
+            <select id="estructuras_especificas" name="estructuras_especificas" class="form-select">
+              <!-- Se llenará dinámicamente -->
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Notas sobre la región -->
+      <div class="form-row mb-4">
+        <div class="form-col form-col-md-12">
+          <div class="form-group">
+            <label for="notas_region" class="form-label">Notas sobre la región evaluada</label>
+            <textarea id="notas_region" name="notas_region" class="form-control" rows="2" placeholder="Describa detalles específicos de la región que está evaluando..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN DE INSPECCIÓN -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Inspección</h5>
+        </div>
+        <div class="card-body">
+          <!-- Evaluación de cambios tróficos -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>Cambios Tróficos</h6>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="insp_atrofia" name="cambios_troficos[]" value="Atrofia" class="form-check-input" onchange="actualizarInspeccion()">
+                <label class="form-check-label" for="insp_atrofia">Atrofia</label>
               </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="palpacion" class="form-label">Palpación</label>
-                  <textarea id="palpacion" name="palpacion" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-check">
+                <input type="checkbox" id="insp_hipertrofia" name="cambios_troficos[]" value="Hipertrofia" class="form-check-input" onchange="actualizarInspeccion()">
+                <label class="form-check-label" for="insp_hipertrofia">Hipertrofia</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div id="cambios_troficos_detalles_container" style="display: none;">
+                <input type="text" id="cambios_troficos_detalles" name="cambios_troficos_detalles" class="form-control" placeholder="Especifique detalles sobre los cambios tróficos...">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Evaluación de piel y tejidos blandos -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>Piel y Tejidos Blandos</h6>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="insp_color_piel" class="form-label">Coloración</label>
+                <select id="insp_color_piel" name="insp_color_piel" class="form-select" onchange="actualizarInspeccion()">
+                  <option value="">Seleccionar</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Eritema">Eritema</option>
+                  <option value="Palidez">Palidez</option>
+                  <option value="Cianosis">Cianosis</option>
+                  <option value="Hiperpigmentación">Hiperpigmentación</option>
+                  <option value="Hipopigmentación">Hipopigmentación</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="insp_cicatrices" class="form-label">Cicatrices</label>
+                <select id="insp_cicatrices" name="insp_cicatrices" class="form-select" onchange="toggleCicatricesDetalles()">
+                  <option value="">Seleccionar</option>
+                  <option value="No">No</option>
+                  <option value="Sí, no adheridas">Sí, no adheridas</option>
+                  <option value="Sí, adheridas">Sí, adheridas</option>
+                  <option value="Sí, hipertróficas">Sí, hipertróficas</option>
+                  <option value="Sí, queloides">Sí, queloides</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="insp_edema" class="form-label">Edema</label>
+                <select id="insp_edema" name="insp_edema" class="form-select" onchange="toggleEdemaDetalles()">
+                  <option value="">Seleccionar</option>
+                  <option value="No">No</option>
+                  <option value="Leve (+)">Leve (+)</option>
+                  <option value="Moderado (++)">Moderado (++)</option>
+                  <option value="Severo (+++)">Severo (+++)</option>
+                  <option value="Severo con fóvea (+++)">Severo con fóvea (+++)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="insp_hematomas" class="form-label">Hematomas</label>
+                <select id="insp_hematomas" name="insp_hematomas" class="form-select" onchange="toggleHematomasDetalles()">
+                  <option value="">Seleccionar</option>
+                  <option value="No">No</option>
+                  <option value="Reciente">Reciente</option>
+                  <option value="En resolución">En resolución</option>
+                  <option value="Antiguo">Antiguo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Detalles de cicatrices, edema y hematomas (se muestran condicionalmente) -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-4" id="cicatrices_detalles_container" style="display: none;">
+              <div class="form-group">
+                <label for="cicatrices_detalles" class="form-label">Detalles de cicatrices</label>
+                <textarea id="cicatrices_detalles" name="cicatrices_detalles" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+            <div class="form-col form-col-md-4" id="edema_detalles_container" style="display: none;">
+              <div class="form-group">
+                <label for="edema_detalles" class="form-label">Detalles de edema</label>
+                <textarea id="edema_detalles" name="edema_detalles" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+            <div class="form-col form-col-md-4" id="hematomas_detalles_container" style="display: none;">
+              <div class="form-group">
+                <label for="hematomas_detalles" class="form-label">Detalles de hematomas</label>
+                <textarea id="hematomas_detalles" name="hematomas_detalles" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Deformidades y Alteraciones Posturales -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>Deformidades y Alteraciones Posturales</h6>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="form-check">
+                <input type="checkbox" id="insp_deformidad" name="insp_deformidades[]" value="Deformidad estructural" class="form-check-input" onchange="toggleDeformidadDetalles()">
+                <label class="form-check-label" for="insp_deformidad">Deformidad estructural</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="form-check">
+                <input type="checkbox" id="insp_alteracion_postural" name="insp_deformidades[]" value="Alteración postural" class="form-check-input" onchange="toggleDeformidadDetalles()">
+                <label class="form-check-label" for="insp_alteracion_postural">Alteración postural</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="form-check">
+                <input type="checkbox" id="insp_desviacion_eje" name="insp_deformidades[]" value="Desviación del eje" class="form-check-input" onchange="toggleDeformidadDetalles()">
+                <label class="form-check-label" for="insp_desviacion_eje">Desviación del eje</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3" id="deformidad_detalles_container" style="display: none;">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="deformidad_detalles" class="form-label">Descripción de deformidades o alteraciones</label>
+                <textarea id="deformidad_detalles" name="deformidad_detalles" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Observaciones adicionales de inspección -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="observaciones_inspeccion" class="form-label">Observaciones adicionales de inspección</label>
+                <textarea id="observaciones_inspeccion" name="observaciones_inspeccion" class="form-control" rows="2" placeholder="Describa otros hallazgos relevantes de la inspección..."></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Alerta de hallazgos relevantes (se muestra condicionalmente) -->
+          <div id="alerta_inspeccion" class="alert" style="display: none;"></div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN DE PALPACIÓN -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Palpación</h5>
+        </div>
+        <div class="card-body">
+          <!-- Temperatura local -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>Temperatura Local</h6>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="form-check">
+                <input type="radio" id="palp_temp_normal" name="palp_temperatura" value="Normal" class="form-check-input" onchange="actualizarPalpacion()">
+                <label class="form-check-label" for="palp_temp_normal">Normal</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="form-check">
+                <input type="radio" id="palp_temp_aumentada" name="palp_temperatura" value="Aumentada" class="form-check-input" onchange="actualizarPalpacion()">
+                <label class="form-check-label" for="palp_temp_aumentada">Aumentada</label>
+              </div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="form-check">
+                <input type="radio" id="palp_temp_disminuida" name="palp_temperatura" value="Disminuida" class="form-check-input" onchange="actualizarPalpacion()">
+                <label class="form-check-label" for="palp_temp_disminuida">Disminuida</label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Evaluación muscular -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>Evaluación Muscular</h6>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="palp_tono_muscular" class="form-label">Tono muscular</label>
+                <select id="palp_tono_muscular" name="palp_tono_muscular" class="form-select" onchange="actualizarPalpacion()">
+                  <option value="">Seleccionar</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Hipertonía leve">Hipertonía leve</option>
+                  <option value="Hipertonía moderada">Hipertonía moderada</option>
+                  <option value="Hipertonía severa">Hipertonía severa</option>
+                  <option value="Hipotonía leve">Hipotonía leve</option>
+                  <option value="Hipotonía moderada">Hipotonía moderada</option>
+                  <option value="Hipotonía severa">Hipotonía severa</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-9">
+              <div class="form-row">
+                <div class="form-col form-col-md-3">
+                  <div class="form-check">
+                    <input type="checkbox" id="palp_bandas_tensas" name="hallazgos_musculares[]" value="Bandas tensas" class="form-check-input" onchange="actualizarPalpacion()">
+                    <label class="form-check-label" for="palp_bandas_tensas">Bandas tensas</label>
+                  </div>
+                </div>
+                <div class="form-col form-col-md-3">
+                  <div class="form-check">
+                    <input type="checkbox" id="palp_puntos_gatillo" name="hallazgos_musculares[]" value="Puntos gatillo" class="form-check-input" onchange="actualizarPalpacion()">
+                    <label class="form-check-label" for="palp_puntos_gatillo">Puntos gatillo</label>
+                  </div>
+                </div>
+                <div class="form-col form-col-md-3">
+                  <div class="form-check">
+                    <input type="checkbox" id="palp_contracturas" name="hallazgos_musculares[]" value="Contracturas" class="form-check-input" onchange="actualizarPalpacion()">
+                    <label class="form-check-label" for="palp_contracturas">Contracturas</label>
+                  </div>
+                </div>
+                <div class="form-col form-col-md-3">
+                  <div class="form-check">
+                    <input type="checkbox" id="palp_espasmos" name="hallazgos_musculares[]" value="Espasmos" class="form-check-input" onchange="actualizarPalpacion()">
+                    <label class="form-check-label" for="palp_espasmos">Espasmos</label>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+          
+          <!-- Detalles de hallazgos musculares -->
+          <div class="form-row mb-3" id="hallazgos_musculares_container" style="display: none;">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="hallazgos_musculares_detalles" class="form-label">Detalles de hallazgos musculares</label>
+                <textarea id="hallazgos_musculares_detalles" name="hallazgos_musculares_detalles" class="form-control" rows="2" placeholder="Especifique localización, características e intensidad de los hallazgos musculares..."></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Evaluación articular -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>Evaluación Articular</h6>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="palp_movilidad_articular" class="form-label">Movilidad articular pasiva</label>
+                <select id="palp_movilidad_articular" name="palp_movilidad_articular" class="form-select" onchange="actualizarPalpacion()">
+                  <option value="">Seleccionar</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Hipomóvil leve">Hipomóvil leve</option>
+                  <option value="Hipomóvil moderada">Hipomóvil moderada</option>
+                  <option value="Hipomóvil severa">Hipomóvil severa</option>
+                  <option value="Hipermóvil leve">Hipermóvil leve</option>
+                  <option value="Hipermóvil moderada">Hipermóvil moderada</option>
+                  <option value="Hipermóvil severa">Hipermóvil severa</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-9">
+              <div class="form-row">
+                <div class="form-col form-col-md-3">
+                  <div class="form-check">
+                    <input type="checkbox" id="palp_crepitacion" name="hallazgos_articulares[]" value="Crepitación" class="form-check-input" onchange="actualizarPalpacion()">
+                    <label class="form-check-label" for="palp_crepitacion">Crepitación</label>
+                  </div>
+                </div>
+                <div class="form-col form-col-md-3">
+                  <div class="form-check">
+                    <input type="checkbox" id="palp_derrame" name="hallazgos_articulares[]" value="Derrame articular" class="form-check-input" onchange="actualizarPalpacion()">
+                    <label class="form-check-label" for="palp_derrame">Derrame articular</label>
+                  </div>
+                </div>
+                <div class="form-col form-col-md-3">
+                  <div class="form-check">
+                    <input type="checkbox" id="palp_inestabilidad" name="hallazgos_articulares[]" value="Inestabilidad" class="form-check-input" onchange="actualizarPalpacion()">
+                    <label class="form-check-label" for="palp_inestabilidad">Inestabilidad</label>
+                  </div>
+                </div>
+                <div class="form-col form-col-md-3">
+                  <div class="form-check">
+                    <input type="checkbox" id="palp_bloqueo" name="hallazgos_articulares[]" value="Bloqueo" class="form-check-input" onchange="actualizarPalpacion()">
+                    <label class="form-check-label" for="palp_bloqueo">Bloqueo</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Detalles de hallazgos articulares -->
+          <div class="form-row mb-3" id="hallazgos_articulares_container" style="display: none;">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="hallazgos_articulares_detalles" class="form-label">Detalles de hallazgos articulares</label>
+                <textarea id="hallazgos_articulares_detalles" name="hallazgos_articulares_detalles" class="form-control" rows="2" placeholder="Especifique características de los hallazgos articulares..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Evaluación de tejidos blandos -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>Evaluación de Tejidos Blandos</h6>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="palp_tendones" class="form-label">Tendones</label>
+                <select id="palp_tendones" name="palp_tendones" class="form-select" onchange="actualizarPalpacion()">
+                  <option value="">Seleccionar</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Engrosado">Engrosado</option>
+                  <option value="Doloroso">Doloroso</option>
+                  <option value="Crepitante">Crepitante</option>
+                  <option value="Engrosado y doloroso">Engrosado y doloroso</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="palp_ligamentos" class="form-label">Ligamentos</label>
+                <select id="palp_ligamentos" name="palp_ligamentos" class="form-select" onchange="actualizarPalpacion()">
+                  <option value="">Seleccionar</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Laxo">Laxo</option>
+                  <option value="Doloroso">Doloroso</option>
+                  <option value="Engrosado">Engrosado</option>
+                  <option value="Laxo y doloroso">Laxo y doloroso</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="palp_bursas" class="form-label">Bursas</label>
+                <select id="palp_bursas" name="palp_bursas" class="form-select" onchange="actualizarPalpacion()">
+                  <option value="">Seleccionar</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Inflamada">Inflamada</option>
+                  <option value="Dolorosa">Dolorosa</option>
+                  <option value="Inflamada y dolorosa">Inflamada y dolorosa</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="palp_fascias" class="form-label">Fascias</label>
+                <select id="palp_fascias" name="palp_fascias" class="form-select" onchange="actualizarPalpacion()">
+                  <option value="">Seleccionar</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Tensa">Tensa</option>
+                  <option value="Adherida">Adherida</option>
+                  <option value="Dolorosa">Dolorosa</option>
+                  <option value="Tensa y dolorosa">Tensa y dolorosa</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Detalles de hallazgos en tejidos blandos -->
+          <div class="form-row mb-3" id="tejidos_blandos_detalles_container" style="display: none;">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="tejidos_blandos_detalles" class="form-label">Detalles de hallazgos en tejidos blandos</label>
+                <textarea id="tejidos_blandos_detalles" name="tejidos_blandos_detalles" class="form-control" rows="2" placeholder="Especifique localización y características de los hallazgos en tejidos blandos..."></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Dolor a la palpación -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>Dolor a la Palpación</h6>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="palp_dolor_intensidad" class="form-label">Intensidad (EVA 0-10)</label>
+                <input type="range" id="palp_dolor_intensidad" name="palp_dolor_intensidad" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('palp_dolor_intensidad_value').textContent = this.value; actualizarPalpacion();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="palp_dolor_intensidad_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-9">
+              <div class="form-row">
+                <div class="form-col form-col-md-4">
+                  <div class="form-group">
+                    <label for="palp_dolor_tipo" class="form-label">Tipo de dolor</label>
+                    <select id="palp_dolor_tipo" name="palp_dolor_tipo" class="form-select" onchange="actualizarPalpacion()">
+                      <option value="">Seleccionar</option>
+                      <option value="Superficial">Superficial</option>
+                      <option value="Profundo">Profundo</option>
+                      <option value="Punzante">Punzante</option>
+                      <option value="Quemante">Quemante</option>
+                      <option value="Sordo">Sordo</option>
+                      <option value="Lancinante">Lancinante</option>
+                      <option value="Irradiado">Irradiado</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-col form-col-md-4">
+                  <div class="form-group">
+                    <label for="palp_dolor_localizacion" class="form-label">Localización</label>
+                    <select id="palp_dolor_localizacion" name="palp_dolor_localizacion" class="form-select" onchange="actualizarPalpacion()">
+                      <option value="">Seleccionar</option>
+                      <option value="Localizado">Localizado</option>
+                      <option value="Difuso">Difuso</option>
+                      <option value="Referido">Referido</option>
+                      <option value="Irradiado">Irradiado</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-col form-col-md-4">
+                  <div class="form-check mt-4">
+                    <input type="checkbox" id="palp_dolor_reproduccion" name="palp_dolor_reproduccion" value="Sí" class="form-check-input" onchange="actualizarPalpacion()">
+                    <label class="form-check-label" for="palp_dolor_reproduccion">Reproduce el dolor del paciente</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Detalles de dolor a la palpación -->
+          <div class="form-row mb-3" id="dolor_palpacion_detalles_container" style="display: none;">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="dolor_palpacion_detalles" class="form-label">Detalles de dolor a la palpación</label>
+                <textarea id="dolor_palpacion_detalles" name="dolor_palpacion_detalles" class="form-control" rows="2" placeholder="Especifique características adicionales del dolor a la palpación..."></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Observaciones adicionales de palpación -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="observaciones_palpacion" class="form-label">Observaciones adicionales de palpación</label>
+                <textarea id="observaciones_palpacion" name="observaciones_palpacion" class="form-control" rows="2" placeholder="Describa otros hallazgos relevantes de la palpación..."></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Alerta de hallazgos relevantes (se muestra condicionalmente) -->
+          <div id="alerta_palpacion" class="alert" style="display: none;"></div>
+        </div>
+      </div>
+      
+      <!-- INTERPRETACIÓN CLÍNICA Y RECOMENDACIONES -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Interpretación Clínica y Recomendaciones</h5>
+        </div>
+        <div class="card-body">
+          <div id="interpretacion_clinica" class="mb-3">
+            <div class="interpretacion-clinica-container">
+              <h6>Interpretación Clínica:</h6>
+              <div class="interpretacion-clinica" id="interpretacion-texto">
+                Complete la evaluación de inspección y palpación para obtener la interpretación clínica.
+              </div>
+            </div>
+          </div>
+          
+          <div id="recomendaciones_clinicas" class="mb-3">
+            <div class="recomendaciones-container">
+              <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+              <div class="recomendaciones" id="recomendaciones-texto">
+                Complete la evaluación de inspección y palpación para obtener recomendaciones para el plan de tratamiento.
+              </div>
+            </div>
+          </div>
+          
+          <div id="consideraciones_adicionales" class="mb-3">
+            <div class="consideraciones-container">
+              <h6>Consideraciones Adicionales:</h6>
+              <div class="consideraciones" id="consideraciones-texto">
+                Complete la evaluación de inspección y palpación para obtener consideraciones adicionales.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
             
             <div class="form-row">
               <div class="form-col form-col-md-12">
