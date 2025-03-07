@@ -3635,5 +3635,160 @@ document.addEventListener('DOMContentLoaded', function() {
 </html>
     
 </script>
+<script>
+// SOLUCIÓN PARA CUESTIONARIOS
+document.addEventListener('DOMContentLoaded', function() {
+  // Agregar evento a todos los encabezados de cuestionarios
+  document.querySelectorAll('.cuestionario-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      const content = this.nextElementSibling;
+      if (content) {
+        // Toggle la visibilidad
+        if (content.style.display === "block") {
+          content.style.display = "none";
+          this.classList.remove("active");
+        } else {
+          content.style.display = "block";
+          this.classList.add("active");
+        }
+      }
+    });
+  });
+  
+  console.log('Eventos de cuestionarios inicializados correctamente');
+});
+
+// SOLUCIÓN PARA HISTORIA MÉDICA
+document.addEventListener('DOMContentLoaded', function() {
+  // Enfermedades crónicas - Otro
+  const enfCronicaOtro = document.getElementById('enfCronica_otro');
+  if (enfCronicaOtro) {
+    enfCronicaOtro.addEventListener('change', function() {
+      const container = document.getElementById('enfCronica_otro_container');
+      if (container) {
+        container.style.display = this.checked ? 'block' : 'none';
+        if (!this.checked) {
+          const textArea = document.getElementById('enfCronica_otro_texto');
+          if (textArea) textArea.value = '';
+        }
+      }
+    });
+  }
+
+  // Antecedentes ortopédicos
+  const tieneAntecedentesOrtopedicos = document.getElementById('tieneAntecedentesOrtopedicos');
+  if (tieneAntecedentesOrtopedicos) {
+    tieneAntecedentesOrtopedicos.addEventListener('change', function() {
+      const detalleContainer = document.getElementById('antecedentesOrtopedicosDetalle');
+      const mainContainer = document.getElementById('antecedentesOrtopedicosContainer');
+      if (detalleContainer && mainContainer) {
+        detalleContainer.style.display = this.checked ? 'block' : 'none';
+        if (this.checked) {
+          mainContainer.style.borderLeft = '5px solid #dc3545';
+          mainContainer.style.padding = '10px';
+          mainContainer.style.backgroundColor = '#fff9f9';
+        } else {
+          mainContainer.style.borderLeft = '';
+          mainContainer.style.padding = '';
+          mainContainer.style.backgroundColor = '';
+        }
+      }
+    });
+  }
+
+  // Órtesis - Otro
+  const ortesisOtro = document.getElementById('ortesis_otro');
+  if (ortesisOtro) {
+    ortesisOtro.addEventListener('change', function() {
+      const container = document.getElementById('ortesis_otro_container');
+      if (container) {
+        container.style.display = this.checked ? 'block' : 'none';
+        if (!this.checked) {
+          const textInput = document.getElementById('ortesis_otro_texto');
+          if (textInput) textInput.value = '';
+        }
+      }
+    });
+  }
+
+  // Órtesis y ayudas técnicas
+  const usaOrtesisAyudas = document.getElementById('usaOrtesisAyudas');
+  if (usaOrtesisAyudas) {
+    usaOrtesisAyudas.addEventListener('change', function() {
+      const detalleContainer = document.getElementById('ortesisAyudasDetalle');
+      const mainContainer = document.getElementById('ortesisContainer');
+      if (detalleContainer && mainContainer) {
+        detalleContainer.style.display = this.checked ? 'block' : 'none';
+        if (this.checked) {
+          mainContainer.style.borderLeft = '5px solid #ffc107';
+          mainContainer.style.padding = '10px';
+          mainContainer.style.backgroundColor = '#fffdf5';
+        } else {
+          mainContainer.style.borderLeft = '';
+          mainContainer.style.padding = '';
+          mainContainer.style.backgroundColor = '';
+        }
+      }
+    });
+  }
+
+  // Historial de caídas
+  const historialCaidasSi = document.getElementById('historialCaidas_si');
+  const historialCaidasNo = document.getElementById('historialCaidas_no');
+  
+  if (historialCaidasSi) {
+    historialCaidasSi.addEventListener('change', function() {
+      const detalleContainer = document.getElementById('caidasDetalle');
+      const mainContainer = document.getElementById('caidasContainer');
+      if (detalleContainer && mainContainer && this.checked) {
+        detalleContainer.style.display = 'block';
+        mainContainer.style.borderLeft = '5px solid #dc3545';
+        mainContainer.style.padding = '10px';
+        mainContainer.style.backgroundColor = '#fff9f9';
+      }
+    });
+  }
+  
+  if (historialCaidasNo) {
+    historialCaidasNo.addEventListener('change', function() {
+      const detalleContainer = document.getElementById('caidasDetalle');
+      const mainContainer = document.getElementById('caidasContainer');
+      if (detalleContainer && mainContainer && this.checked) {
+        detalleContainer.style.display = 'none';
+        mainContainer.style.borderLeft = '';
+        mainContainer.style.padding = '';
+        mainContainer.style.backgroundColor = '';
+      }
+    });
+  }
+
+  // Vacunas
+  function verificarVacunas() {
+    const vacunasCheckboxes = document.querySelectorAll('input[name="vacunas[]"]');
+    const alertaVacunas = document.getElementById('vacunas_alerta');
+    
+    if (vacunasCheckboxes.length > 0 && alertaVacunas) {
+      let algunaSeleccionada = false;
+      vacunasCheckboxes.forEach(function(checkbox) {
+        if (checkbox.checked) {
+          algunaSeleccionada = true;
+        }
+      });
+      
+      alertaVacunas.style.display = algunaSeleccionada ? 'none' : 'block';
+    }
+  }
+  
+  // Asociar evento a todas las vacunas
+  document.querySelectorAll('input[name="vacunas[]"]').forEach(function(checkbox) {
+    checkbox.addEventListener('change', verificarVacunas);
+  });
+  
+  // Verificar inicialmente el estado de las vacunas
+  verificarVacunas();
+
+  console.log('Event listeners para Historia Médica inicializados correctamente');
+});
+</script>
 </body>
 </html>
