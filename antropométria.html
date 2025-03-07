@@ -1,0 +1,200 @@
+<h4>6.2 Antropometría</h4>
+<div class="form-row">
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="peso" class="form-label">Peso (kg)</label>
+      <input type="number" id="peso" name="peso" class="form-control" min="0" max="500" step="0.1">
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="talla" class="form-label">Talla (cm)</label>
+      <input type="number" id="talla" name="talla" class="form-control" min="0" max="300">
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="imc" class="form-label">IMC (kg/m²)</label>
+      <input type="number" id="imc" name="imc" class="form-control" min="0" max="100" step="0.01" readonly>
+      <div id="estado_imc" class="mt-1"></div>
+    </div>
+  </div>
+</div>
+
+<h4 class="mt-4">Perímetros Corporales</h4>
+<div class="table-responsive">
+  <table class="table table-bordered perimetros-table">
+    <thead>
+      <tr>
+        <th>Región</th>
+        <th>Derecha (cm)</th>
+        <th>Izquierda (cm)</th>
+        <th>Diferencia</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Cabeza y cuello -->
+      <tr class="table-secondary">
+        <td colspan="5"><strong>Cabeza y Cuello</strong></td>
+      </tr>
+      <tr>
+        <td>Perímetro craneal</td>
+        <td colspan="2"><input type="number" id="perimetro_craneal" name="perimetro_craneal" class="form-control perimetro-input" step="0.1" min="0"></td>
+        <td>-</td>
+        <td id="estado_craneal"></td>
+      </tr>
+      <tr>
+        <td>Perímetro de cuello</td>
+        <td colspan="2"><input type="number" id="perimetro_cuello" name="perimetro_cuello" class="form-control perimetro-input" step="0.1" min="0"></td>
+        <td>-</td>
+        <td id="estado_cuello"></td>
+      </tr>
+      
+      <!-- Tronco -->
+      <tr class="table-secondary">
+        <td colspan="5"><strong>Tronco</strong></td>
+      </tr>
+      <tr>
+        <td>Perímetro torácico</td>
+        <td colspan="2"><input type="number" id="perimetro_toracico" name="perimetro_toracico" class="form-control perimetro-input" step="0.1" min="0"></td>
+        <td>-</td>
+        <td id="estado_toracico"></td>
+      </tr>
+      <tr>
+        <td>Perímetro cintura</td>
+        <td colspan="2"><input type="number" id="perimetro_cintura" name="perimetro_cintura" class="form-control perimetro-input" step="0.1" min="0"></td>
+        <td>-</td>
+        <td id="estado_cintura"></td>
+      </tr>
+      <tr>
+        <td>Perímetro cadera</td>
+        <td colspan="2"><input type="number" id="perimetro_cadera" name="perimetro_cadera" class="form-control perimetro-input" step="0.1" min="0"></td>
+        <td>-</td>
+        <td id="estado_cadera"></td>
+      </tr>
+      <tr>
+        <td>Perímetro abdominal</td>
+        <td colspan="2"><input type="number" id="perimetro_abdominal" name="perimetro_abdominal" class="form-control perimetro-input" step="0.1" min="0"></td>
+        <td>-</td>
+        <td id="estado_abdominal"></td>
+      </tr>
+      
+      <!-- Miembros superiores -->
+      <tr class="table-secondary">
+        <td colspan="5"><strong>Miembros Superiores</strong></td>
+      </tr>
+      <tr>
+        <td>Brazo relajado</td>
+        <td><input type="number" id="perimetro_brazo_der" name="perimetro_brazo_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_brazo_izq"></td>
+        <td><input type="number" id="perimetro_brazo_izq" name="perimetro_brazo_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_brazo_der"></td>
+        <td id="diff_brazo">-</td>
+        <td id="estado_brazo"></td>
+      </tr>
+      <tr>
+        <td>Brazo contraído</td>
+        <td><input type="number" id="perimetro_brazo_cont_der" name="perimetro_brazo_cont_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_brazo_cont_izq"></td>
+        <td><input type="number" id="perimetro_brazo_cont_izq" name="perimetro_brazo_cont_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_brazo_cont_der"></td>
+        <td id="diff_brazo_cont">-</td>
+        <td id="estado_brazo_cont"></td>
+      </tr>
+      <tr>
+        <td>Antebrazo</td>
+        <td><input type="number" id="perimetro_antebrazo_der" name="perimetro_antebrazo_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_antebrazo_izq"></td>
+        <td><input type="number" id="perimetro_antebrazo_izq" name="perimetro_antebrazo_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_antebrazo_der"></td>
+        <td id="diff_antebrazo">-</td>
+        <td id="estado_antebrazo"></td>
+      </tr>
+      <tr>
+        <td>Muñeca</td>
+        <td><input type="number" id="perimetro_muneca_der" name="perimetro_muneca_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_muneca_izq"></td>
+        <td><input type="number" id="perimetro_muneca_izq" name="perimetro_muneca_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_muneca_der"></td>
+        <td id="diff_muneca">-</td>
+        <td id="estado_muneca"></td>
+      </tr>
+      
+      <!-- Miembros inferiores -->
+      <tr class="table-secondary">
+        <td colspan="5"><strong>Miembros Inferiores</strong></td>
+      </tr>
+      <tr>
+        <td>Muslo proximal</td>
+        <td><input type="number" id="perimetro_muslo_prox_der" name="perimetro_muslo_prox_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_muslo_prox_izq"></td>
+        <td><input type="number" id="perimetro_muslo_prox_izq" name="perimetro_muslo_prox_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_muslo_prox_der"></td>
+        <td id="diff_muslo_prox">-</td>
+        <td id="estado_muslo_prox"></td>
+      </tr>
+      <tr>
+        <td>Muslo medio</td>
+        <td><input type="number" id="perimetro_muslo_med_der" name="perimetro_muslo_med_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_muslo_med_izq"></td>
+        <td><input type="number" id="perimetro_muslo_med_izq" name="perimetro_muslo_med_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_muslo_med_der"></td>
+        <td id="diff_muslo_med">-</td>
+        <td id="estado_muslo_med"></td>
+      </tr>
+      <tr>
+        <td>Rodilla</td>
+        <td><input type="number" id="perimetro_rodilla_der" name="perimetro_rodilla_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_rodilla_izq"></td>
+        <td><input type="number" id="perimetro_rodilla_izq" name="perimetro_rodilla_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_rodilla_der"></td>
+        <td id="diff_rodilla">-</td>
+        <td id="estado_rodilla"></td>
+      </tr>
+      <tr>
+        <td>Pantorrilla</td>
+        <td><input type="number" id="perimetro_pantorrilla_der" name="perimetro_pantorrilla_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_pantorrilla_izq"></td>
+        <td><input type="number" id="perimetro_pantorrilla_izq" name="perimetro_pantorrilla_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_pantorrilla_der"></td>
+        <td id="diff_pantorrilla">-</td>
+        <td id="estado_pantorrilla"></td>
+      </tr>
+      <tr>
+        <td>Tobillo</td>
+        <td><input type="number" id="perimetro_tobillo_der" name="perimetro_tobillo_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_tobillo_izq"></td>
+        <td><input type="number" id="perimetro_tobillo_izq" name="perimetro_tobillo_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_tobillo_der"></td>
+        <td id="diff_tobillo">-</td>
+        <td id="estado_tobillo"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="form-row">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label for="otros_perimetros" class="form-label">Otros perímetros</label>
+      <textarea id="otros_perimetros" name="otros_perimetros" class="form-control" rows="2" placeholder="Registre aquí cualquier otra medida de perímetro corporal relevante..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- Índices antropométricos -->
+<h4 class="mt-4">Índices Antropométricos</h4>
+<div class="form-row">
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="indice_cintura_cadera" class="form-label">Índice cintura/cadera</label>
+      <input type="text" id="indice_cintura_cadera" name="indice_cintura_cadera" class="form-control" readonly>
+      <div id="estado_icc" class="mt-2"></div>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="indice_cintura_altura" class="form-label">Índice cintura/altura</label>
+      <input type="text" id="indice_cintura_altura" name="indice_cintura_altura" class="form-control" readonly>
+      <div id="estado_ica" class="mt-2"></div>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="indice_masa_muscular" class="form-label">Estimación de masa muscular</label>
+      <input type="text" id="indice_masa_muscular" name="indice_masa_muscular" class="form-control" readonly>
+      <div id="estado_imm" class="mt-2"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Recomendaciones clínicas basadas en antropometría -->
+<div class="alert alert-info mt-3" id="recomendaciones_antropometria">
+  <h5><i class="fas fa-info-circle"></i> Recomendaciones clínicas</h5>
+  <div id="texto_recomendaciones_antropometria">
+    Complete los datos antropométricos para obtener recomendaciones clínicas automáticas.
+  </div>
+</div>
