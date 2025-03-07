@@ -8,6 +8,41 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/mapa-corporal.css">
   <link rel="stylesheet" href="css/cuestionarios.css">
+  <style>
+  /* Estilos para cuestionarios */
+  .cuestionario-header.active i.fa-plus-circle:before {
+    content: "\f056"; /* Cambia el ícono a menos cuando está expandido */
+  }
+  
+  .cuestionario-header {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+  
+  .cuestionario-header:hover {
+    background-color: #f8f9fa;
+  }
+  
+  /* Estilos para destacar secciones en Historia Médica */
+  .highlight-red {
+    border-left: 5px solid #dc3545 !important;
+    padding: 10px !important;
+    background-color: #fff9f9 !important;
+  }
+  
+  .highlight-yellow {
+    border-left: 5px solid #ffc107 !important;
+    padding: 10px !important;
+    background-color: #fffdf5 !important;
+  }
+  
+  .recomendacion-clinica {
+    color: #333;
+    font-size: 0.9rem;
+  }
+</style>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="app-only">
