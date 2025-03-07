@@ -2738,93 +2738,680 @@
             <h3>5. Evaluación de Hábitos y Estilo de Vida</h3>
             
             <h4>5.1 Hábitos Nutricionales</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="tipoDieta" class="form-label">Tipo de dieta</label>
-                  <input type="text" id="tipoDieta" name="tipoDieta" class="form-control">
-                </div>
-              </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="consumoAgua" class="form-label">Consumo de agua</label>
-                  <input type="text" id="consumoAgua" name="consumoAgua" class="form-control">
-                </div>
-              </div>
-            </div>
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="tipoDieta" class="form-label">Tipo de dieta</label>
+      <select id="tipoDieta" name="tipoDieta" class="form-select" onchange="evaluarDieta()">
+        <option value="">Seleccionar</option>
+        <option value="Omnívora">Omnívora</option>
+        <option value="Vegetariana">Vegetariana</option>
+        <option value="Vegana">Vegana</option>
+        <option value="Mediterránea">Mediterránea</option>
+        <option value="Cetogénica">Cetogénica</option>
+        <option value="Baja en carbohidratos">Baja en carbohidratos</option>
+        <option value="Sin gluten">Sin gluten</option>
+        <option value="Sin lácteos">Sin lácteos</option>
+        <option value="Otra">Otra</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="consumoAgua" class="form-label">Consumo de agua (vasos al día)</label>
+      <input type="number" id="consumoAgua" name="consumoAgua" class="form-control" min="0" max="20" onchange="evaluarHidratacion()">
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label for="suplementos" class="form-label">Suplementos nutricionales</label>
+      <textarea id="suplementos" name="suplementos" class="form-control" rows="2" placeholder="Describa los suplementos que consume, dosis y frecuencia..."></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="mb-0">Perfil Inflamatorio Dietético</h5>
+  </div>
+  <div class="card-body">
+    <p class="text-muted">Seleccione los alimentos que consume con frecuencia (3 o más veces por semana):</p>
+    
+    <div class="row mb-3">
+      <div class="col-12">
+        <h6>Alimentos Anti-inflamatorios</h6>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="antiinf_pescado" name="perfil_inflamatorio[]" value="pescado" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="antiinf_pescado">Pescados grasos (salmón, sardinas)</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="antiinf_frutos_secos" name="perfil_inflamatorio[]" value="frutos_secos" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="antiinf_frutos_secos">Frutos secos y semillas</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="antiinf_aceite_oliva" name="perfil_inflamatorio[]" value="aceite_oliva" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="antiinf_aceite_oliva">Aceite de oliva extra virgen</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="antiinf_frutas_bayas" name="perfil_inflamatorio[]" value="frutas_bayas" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="antiinf_frutas_bayas">Frutas del bosque</label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="antiinf_verduras" name="perfil_inflamatorio[]" value="verduras_hojas" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="antiinf_verduras">Verduras de hoja verde</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="antiinf_curcuma" name="perfil_inflamatorio[]" value="curcuma" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="antiinf_curcuma">Cúrcuma/Jengibre</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="antiinf_te_verde" name="perfil_inflamatorio[]" value="te_verde" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="antiinf_te_verde">Té verde</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="antiinf_legumbres" name="perfil_inflamatorio[]" value="legumbres" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="antiinf_legumbres">Legumbres</label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mb-4">
+      <div class="col-12">
+        <h6>Alimentos Pro-inflamatorios</h6>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="proinf_azucar" name="perfil_inflamatorio[]" value="azucar" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="proinf_azucar">Azúcares refinados</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="proinf_carnes_proc" name="perfil_inflamatorio[]" value="carnes_proc" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="proinf_carnes_proc">Carnes procesadas</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="proinf_frituras" name="perfil_inflamatorio[]" value="frituras" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="proinf_frituras">Frituras y aceites hidrogenados</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="proinf_harinas" name="perfil_inflamatorio[]" value="harinas" class="form-check-input" onchange="calcularPerfilInflamatorio()">
+          <label class="form-check-label" for="proinf_harinas">Harinas refinadas</label>
+        </div>
+      </div>
+    </div>
+    
+    <div id="perfil_inflamatorio_resultado" class="alert alert-info" style="display:none;">
+      <p><strong>Perfil Inflamatorio:</strong> <span id="resultado_perfil_texto">Pendiente de evaluar</span></p>
+      <div id="recomendacion_nutricional"></div>
+    </div>
+  </div>
+</div>
             
             <h4>5.2 Hábitos Tóxicos</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="consumoTabaco" class="form-label">Consumo de tabaco</label>
-                  <textarea id="consumoTabaco" name="consumoTabaco" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="consumoAlcohol" class="form-label">Consumo de alcohol</label>
-                  <textarea id="consumoAlcohol" name="consumoAlcohol" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="consumoDrogas" class="form-label">Consumo de drogas</label>
-                  <textarea id="consumoDrogas" name="consumoDrogas" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-            </div>
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label class="form-label">Consumo de tabaco</label>
+      <div class="form-check mb-2">
+        <input type="radio" id="tabaco_si" name="consumo_tabaco" value="Sí" class="form-check-input" onchange="mostrarDetallesTabaco(true)">
+        <label class="form-check-label" for="tabaco_si">Sí</label>
+      </div>
+      <div class="form-check mb-2">
+        <input type="radio" id="tabaco_no" name="consumo_tabaco" value="No" class="form-check-input" onchange="mostrarDetallesTabaco(false)">
+        <label class="form-check-label" for="tabaco_no">No</label>
+      </div>
+      <div id="detalles_tabaco" style="display:none;">
+        <div class="form-group mt-2">
+          <label for="cantidad_tabaco" class="form-label">Cigarrillos/día</label>
+          <input type="number" id="cantidad_tabaco" name="cantidad_tabaco" class="form-control" min="0" onchange="evaluarRiesgoTabaco()">
+        </div>
+        <div class="form-group mt-2">
+          <label for="anos_fumando" class="form-label">Años fumando</label>
+          <input type="number" id="anos_fumando" name="anos_fumando" class="form-control" min="0" onchange="evaluarRiesgoTabaco()">
+        </div>
+        <div id="riesgo_tabaco_alerta" class="alert mt-2" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label class="form-label">Consumo de alcohol</label>
+      <div class="form-check mb-2">
+        <input type="radio" id="alcohol_si" name="consumo_alcohol" value="Sí" class="form-check-input" onchange="mostrarDetallesAlcohol(true)">
+        <label class="form-check-label" for="alcohol_si">Sí</label>
+      </div>
+      <div class="form-check mb-2">
+        <input type="radio" id="alcohol_no" name="consumo_alcohol" value="No" class="form-check-input" onchange="mostrarDetallesAlcohol(false)">
+        <label class="form-check-label" for="alcohol_no">No</label>
+      </div>
+      <div id="detalles_alcohol" style="display:none;">
+        <div class="form-group mt-2">
+          <label for="unidades_alcohol" class="form-label">Unidades/semana</label>
+          <select id="unidades_alcohol" name="unidades_alcohol" class="form-select" onchange="evaluarRiesgoAlcohol()">
+            <option value="">Seleccionar</option>
+            <option value="1-3">1-3 unidades</option>
+            <option value="4-7">4-7 unidades</option>
+            <option value="8-14">8-14 unidades</option>
+            <option value="15-21">15-21 unidades</option>
+            <option value="21+">Más de 21 unidades</option>
+          </select>
+          <small class="form-text text-muted">1 unidad = 1 copa de vino, 1 cerveza o 1 medida de licor</small>
+        </div>
+        <div id="riesgo_alcohol_alerta" class="alert mt-2" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label class="form-label">Consumo de drogas</label>
+      <div class="form-check mb-2">
+        <input type="radio" id="drogas_si" name="consumo_drogas" value="Sí" class="form-check-input" onchange="mostrarDetallesDrogas(true)">
+        <label class="form-check-label" for="drogas_si">Sí</label>
+      </div>
+      <div class="form-check mb-2">
+        <input type="radio" id="drogas_no" name="consumo_drogas" value="No" class="form-check-input" onchange="mostrarDetallesDrogas(false)">
+        <label class="form-check-label" for="drogas_no">No</label>
+      </div>
+      <div id="detalles_drogas" style="display:none;">
+        <div class="form-group mt-2">
+          <label for="tipo_drogas" class="form-label">Tipo</label>
+          <input type="text" id="tipo_drogas" name="tipo_drogas" class="form-control">
+        </div>
+        <div class="form-group mt-2">
+          <label for="frecuencia_drogas" class="form-label">Frecuencia</label>
+          <select id="frecuencia_drogas" name="frecuencia_drogas" class="form-select" onchange="evaluarRiesgoDrogas()">
+            <option value="">Seleccionar</option>
+            <option value="Ocasional">Ocasional</option>
+            <option value="Semanal">Semanal</option>
+            <option value="Diario">Diario</option>
+          </select>
+        </div>
+        <div id="riesgo_drogas_alerta" class="alert mt-2" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</div>
             
             <h4>5.3 Actividad Física y Deportiva</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="practicaDeportes" class="form-label">Práctica de deportes</label>
-                  <textarea id="practicaDeportes" name="practicaDeportes" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="frecuenciaDeporte" class="form-label">Frecuencia</label>
-                  <select id="frecuenciaDeporte" name="frecuenciaDeporte" class="form-select">
-                    <option value="">Seleccionar</option>
-                    <option value="Diaria">Diaria</option>
-                    <option value="4-6 veces/semana">4-6 veces/semana</option>
-                    <option value="2-3 veces/semana">2-3 veces/semana</option>
-                    <option value="1 vez/semana">1 vez/semana</option>
-                    <option value="Ocasional">Ocasional</option>
-                    <option value="Nunca">Nunca</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="practicaDeportes" class="form-label">Práctica de deportes/actividades</label>
+      <textarea id="practicaDeportes" name="practicaDeportes" class="form-control" rows="2"></textarea>
+    </div>
+  </div>
+  <div class="form-col form-col-md-3">
+    <div class="form-group">
+      <label for="frecuenciaDeporte" class="form-label">Frecuencia semanal</label>
+      <select id="frecuenciaDeporte" name="frecuenciaDeporte" class="form-select" onchange="evaluarCargaDeporte()">
+        <option value="">Seleccionar</option>
+        <option value="Diaria">Diaria</option>
+        <option value="4-6 veces/semana">4-6 veces/semana</option>
+        <option value="2-3 veces/semana">2-3 veces/semana</option>
+        <option value="1 vez/semana">1 vez/semana</option>
+        <option value="Ocasional">Ocasional</option>
+        <option value="Nunca">Nunca</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-3">
+    <div class="form-group">
+      <label for="intensidadDeporte" class="form-label">Intensidad</label>
+      <select id="intensidadDeporte" name="intensidadDeporte" class="form-select" onchange="evaluarCargaDeporte()">
+        <option value="">Seleccionar</option>
+        <option value="Leve">Leve</option>
+        <option value="Moderada">Moderada</option>
+        <option value="Intensa">Intensa</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-3">
+    <div class="form-group">
+      <label for="duracionDeporte" class="form-label">Duración promedio</label>
+      <div class="input-group">
+        <input type="number" id="duracionDeporte" name="duracionDeporte" class="form-control" min="0" onchange="evaluarCargaDeporte()">
+        <div class="input-group-append">
+          <span class="input-group-text">minutos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-col form-col-md-9">
+    <div class="form-group">
+      <label class="form-label">Tipo de entrenamiento</label>
+      <div class="form-row">
+        <div class="form-col form-col-md-4">
+          <div class="form-check">
+            <input type="checkbox" id="tipo_cardio" name="tipo_entrenamiento[]" value="Cardiovascular" class="form-check-input" onchange="evaluarCargaDeporte()">
+            <label class="form-check-label" for="tipo_cardio">Cardiovascular</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-4">
+          <div class="form-check">
+            <input type="checkbox" id="tipo_fuerza" name="tipo_entrenamiento[]" value="Fuerza" class="form-check-input" onchange="evaluarCargaDeporte()">
+            <label class="form-check-label" for="tipo_fuerza">Fuerza</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-4">
+          <div class="form-check">
+            <input type="checkbox" id="tipo_flexibilidad" name="tipo_entrenamiento[]" value="Flexibilidad" class="form-check-input" onchange="evaluarCargaDeporte()">
+            <label class="form-check-label" for="tipo_flexibilidad">Flexibilidad</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row mt-2">
+        <div class="form-col form-col-md-4">
+          <div class="form-check">
+            <input type="checkbox" id="tipo_hiit" name="tipo_entrenamiento[]" value="HIIT" class="form-check-input" onchange="evaluarCargaDeporte()">
+            <label class="form-check-label" for="tipo_hiit">HIIT</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-4">
+          <div class="form-check">
+            <input type="checkbox" id="tipo_deportivo" name="tipo_entrenamiento[]" value="Deportivo específico" class="form-check-input" onchange="evaluarCargaDeporte()">
+            <label class="form-check-label" for="tipo_deportivo">Deportivo específico</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-4">
+          <div class="form-check">
+            <input type="checkbox" id="tipo_otro" name="tipo_entrenamiento[]" value="Otro" class="form-check-input">
+            <label class="form-check-label" for="tipo_otro">Otro</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label class="form-label">Superficie de entrenamiento habitual</label>
+      <div class="form-row">
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="superficie_cesped" name="superficie_entrenamiento[]" value="Césped" class="form-check-input">
+            <label class="form-check-label" for="superficie_cesped">Césped</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="superficie_asfalto" name="superficie_entrenamiento[]" value="Asfalto" class="form-check-input">
+            <label class="form-check-label" for="superficie_asfalto">Asfalto</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="superficie_tierra" name="superficie_entrenamiento[]" value="Tierra" class="form-check-input">
+            <label class="form-check-label" for="superficie_tierra">Tierra</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="superficie_sintetica" name="superficie_entrenamiento[]" value="Pista sintética" class="form-check-input">
+            <label class="form-check-label" for="superficie_sintetica">Pista sintética</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row mt-2">
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="superficie_parquet" name="superficie_entrenamiento[]" value="Parquet" class="form-check-input">
+            <label class="form-check-label" for="superficie_parquet">Parquet</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="superficie_cemento" name="superficie_entrenamiento[]" value="Cemento" class="form-check-input">
+            <label class="form-check-label" for="superficie_cemento">Cemento</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="superficie_arena" name="superficie_entrenamiento[]" value="Arena" class="form-check-input">
+            <label class="form-check-label" for="superficie_arena">Arena</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="superficie_otra" name="superficie_entrenamiento[]" value="Otra" class="form-check-input">
+            <label class="form-check-label" for="superficie_otra">Otra</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="cambiosCarga" class="form-label">Cambios recientes en la carga de entrenamiento</label>
+      <select id="cambiosCarga" name="cambiosCarga" class="form-select" onchange="evaluarCargaDeporte()">
+        <option value="">Seleccionar</option>
+        <option value="Disminución significativa">Disminución significativa</option>
+        <option value="Ligera disminución">Ligera disminución</option>
+        <option value="Sin cambios">Sin cambios</option>
+        <option value="Ligero aumento">Ligero aumento</option>
+        <option value="Aumento significativo">Aumento significativo</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="objetivosDeportivos" class="form-label">Objetivos deportivos</label>
+      <textarea id="objetivosDeportivos" name="objetivosDeportivos" class="form-control" rows="2" placeholder="Indique sus metas deportivas específicas..."></textarea>
+    </div>
+  </div>
+</div>
+
+<div id="evaluacion_carga_alerta" class="alert mb-3" style="display:none;"></div>
             
             <h4>5.4 Patrón de Sueño</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="horasSueno" class="form-label">Horas de sueño</label>
-                  <input type="number" id="horasSueno" name="horasSueno" class="form-control" min="0" max="24">
-                </div>
-              </div>
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="calidadSueno" class="form-label">Calidad del sueño</label>
-                  <select id="calidadSueno" name="calidadSueno" class="form-select">
-                    <option value="">Seleccionar</option>
-                    <option value="Buena">Buena</option>
-                    <option value="Regular">Regular</option>
-                    <option value="Mala">Mala</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="problemasSueno" class="form-label">Problemas de sueño</label>
-                  <textarea id="problemasSueno" name="problemasSueno" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-            </div>
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-3">
+    <div class="form-group">
+      <label for="horasSueno" class="form-label">Horas de sueño habituales</label>
+      <input type="number" id="horasSueno" name="horasSueno" class="form-control" min="0" max="24" onchange="evaluarSueno()">
+    </div>
+  </div>
+  <div class="form-col form-col-md-3">
+    <div class="form-group">
+      <label for="calidadSueno" class="form-label">Calidad del sueño</label>
+      <select id="calidadSueno" name="calidadSueno" class="form-select" onchange="evaluarSueno()">
+        <option value="">Seleccionar</option>
+        <option value="Buena">Buena</option>
+        <option value="Regular">Regular</option>
+        <option value="Mala">Mala</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-3">
+    <div class="form-group">
+      <label for="influenciaDolor" class="form-label">¿El dolor afecta su sueño?</label>
+      <select id="influenciaDolor" name="influenciaDolor" class="form-select" onchange="evaluarSueno()">
+        <option value="">Seleccionar</option>
+        <option value="No">No</option>
+        <option value="Ocasionalmente">Ocasionalmente</option>
+        <option value="Frecuentemente">Frecuentemente</option>
+        <option value="Siempre">Siempre</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-3">
+    <div class="form-group">
+      <label for="latenciaSueno" class="form-label">Tiempo para conciliar el sueño</label>
+      <select id="latenciaSueno" name="latenciaSueno" class="form-select" onchange="evaluarSueno()">
+        <option value="">Seleccionar</option>
+        <option value="<15 min">Menos de 15 minutos</option>
+        <option value="15-30 min">15-30 minutos</option>
+        <option value="30-60 min">30-60 minutos</option>
+        <option value=">60 min">Más de 60 minutos</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-12">
+    <div class="form-group">
+      <label class="form-label">Problemas de sueño habituales</label>
+      <div class="form-row">
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="problema_conciliar" name="problemas_sueno[]" value="Dificultad para conciliar el sueño" class="form-check-input" onchange="evaluarSueno()">
+            <label class="form-check-label" for="problema_conciliar">Dificultad para conciliar el sueño</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="problema_despertar" name="problemas_sueno[]" value="Despertares nocturnos" class="form-check-input" onchange="evaluarSueno()">
+            <label class="form-check-label" for="problema_despertar">Despertares nocturnos</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="problema_ronquidos" name="problemas_sueno[]" value="Ronquidos" class="form-check-input" onchange="evaluarSueno()">
+            <label class="form-check-label" for="problema_ronquidos">Ronquidos</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="problema_apnea" name="problemas_sueno[]" value="Pausas respiratorias" class="form-check-input" onchange="evaluarSueno()">
+            <label class="form-check-label" for="problema_apnea">Pausas respiratorias</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row mt-2">
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="problema_temprano" name="problemas_sueno[]" value="Despertar muy temprano" class="form-check-input" onchange="evaluarSueno()">
+            <label class="form-check-label" for="problema_temprano">Despertar muy temprano</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="problema_inquieto" name="problemas_sueno[]" value="Síndrome de piernas inquietas" class="form-check-input" onchange="evaluarSueno()">
+            <label class="form-check-label" for="problema_inquieto">Síndrome de piernas inquietas</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="problema_pesadillas" name="problemas_sueno[]" value="Pesadillas" class="form-check-input" onchange="evaluarSueno()">
+            <label class="form-check-label" for="problema_pesadillas">Pesadillas</label>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-check">
+            <input type="checkbox" id="problema_cansancio" name="problemas_sueno[]" value="Cansancio al despertar" class="form-check-input" onchange="evaluarSueno()">
+            <label class="form-check-label" for="problema_cansancio">Cansancio al despertar</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="evaluacion_sueno_alerta" class="alert mb-4" style="display:none;"></div>
+
+            <h4>5.5 Entorno Social</h4>
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="descripcionHogar" class="form-label">Descripción del hogar</label>
+      <textarea id="descripcionHogar" name="descripcionHogar" class="form-control" rows="2" placeholder="Tipo de vivienda, accesibilidad, número de personas que viven en el hogar..."></textarea>
+    </div>
+  </div>
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="barrerasArquitectonicas" class="form-label">Barreras arquitectónicas</label>
+      <textarea id="barrerasArquitectonicas" name="barrerasArquitectonicas" class="form-control" rows="2" placeholder="Escaleras, espacios reducidos, superficies resbaladizas, etc."></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="redApoyo" class="form-label">Red de apoyo social y familiar</label>
+      <textarea id="redApoyo" name="redApoyo" class="form-control" rows="2" placeholder="Personas que pueden ayudar, frecuencia de contacto..."></textarea>
+    </div>
+  </div>
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="participacionSocial" class="form-label">Participación social / restricción de participación</label>
+      <textarea id="participacionSocial" name="participacionSocial" class="form-control" rows="2" placeholder="Actividades sociales habituales, restricciones a causa de la condición actual..."></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="nivelEstres" class="form-label">Nivel de estrés percibido</label>
+      <select id="nivelEstres" name="nivelEstres" class="form-select" onchange="evaluarFactoresPsicosociales()">
+        <option value="">Seleccionar</option>
+        <option value="Bajo">Bajo</option>
+        <option value="Moderado">Moderado</option>
+        <option value="Alto">Alto</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-8">
+    <div class="form-group">
+      <label for="detallesEstres" class="form-label">Detalles de situaciones de estrés</label>
+      <textarea id="detallesEstres" name="detallesEstres" class="form-control" rows="2" placeholder="Describir situaciones de estrés relacionadas con trabajo, familia, deportes, etc."></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="estrategiasAfrontamiento" class="form-label">Estrategias de afrontamiento</label>
+      <textarea id="estrategiasAfrontamiento" name="estrategiasAfrontamiento" class="form-control" rows="2" placeholder="Formas de manejar el estrés y situaciones difíciles..."></textarea>
+    </div>
+  </div>
+  <div class="form-col form-col-md-6">
+    <div class="form-group">
+      <label for="impactoRelaciones" class="form-label">Impacto de la condición en las relaciones sociales</label>
+      <textarea id="impactoRelaciones" name="impactoRelaciones" class="form-control" rows="2" placeholder="Cambios en las relaciones debidos a la condición actual..."></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="mb-0">Detección de Factores Psicosociales</h5>
+  </div>
+  <div class="card-body">
+    <p class="text-muted mb-3">Seleccione los factores presentes en el paciente:</p>
+    
+    <div class="row mb-3">
+      <div class="col-12">
+        <h6>Factores de Riesgo</h6>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="riesgo_apoyo" name="factores_psicosociales[]" value="Falta de apoyo social" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="riesgo_apoyo">Falta de apoyo social</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="riesgo_conflictos" name="factores_psicosociales[]" value="Conflictos familiares" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="riesgo_conflictos">Conflictos familiares</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="riesgo_aislamiento" name="factores_psicosociales[]" value="Aislamiento social" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="riesgo_aislamiento">Aislamiento social</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="riesgo_sobrecarga" name="factores_psicosociales[]" value="Sobrecarga de responsabilidades" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="riesgo_sobrecarga">Sobrecarga de responsabilidades</label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="riesgo_financieros" name="factores_psicosociales[]" value="Problemas financieros" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="riesgo_financieros">Problemas financieros</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="riesgo_laboral" name="factores_psicosociales[]" value="Insatisfacción laboral" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="riesgo_laboral">Insatisfacción laboral</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="riesgo_ansiedad" name="factores_psicosociales[]" value="Ansiedad/depresión" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="riesgo_ansiedad">Ansiedad/depresión</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="riesgo_pesimismo" name="factores_psicosociales[]" value="Pesimismo sobre recuperación" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="riesgo_pesimismo">Pesimismo sobre recuperación</label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mb-4">
+      <div class="col-12">
+        <h6>Factores Protectores/Facilitadores</h6>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="facilitador_apoyo" name="factores_psicosociales[]" value="Fuerte red de apoyo" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="facilitador_apoyo">Fuerte red de apoyo</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="facilitador_afrontamiento" name="factores_psicosociales[]" value="Estrategias de afrontamiento activas" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="facilitador_afrontamiento">Estrategias de afrontamiento activas</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="facilitador_ajuste" name="factores_psicosociales[]" value="Buen ajuste emocional" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="facilitador_ajuste">Buen ajuste emocional</label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-check">
+          <input type="checkbox" id="facilitador_motivacion" name="factores_psicosociales[]" value="Alta motivación al cambio" class="form-check-input" onchange="evaluarFactoresPsicosociales()">
+          <label class="form-check-label" for="facilitador_motivacion">Alta motivación al cambio</label>
+        </div>
+      </div>
+    </div>
+    
+    <div id="factores_psicosociales_resultado" class="alert" style="display:none;">
+      <p><strong>Evaluación de Factores Psicosociales:</strong> <span id="resultado_psicosocial_texto">Pendiente de evaluar</span></p>
+      <div id="recomendacion_psicosocial"></div>
+    </div>
+  </div>
+</div>
             
             <div class="form-row mt-4">
               <div class="form-col form-col-md-12">
@@ -3825,5 +4412,433 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('Event listeners para Historia Médica inicializados correctamente');
 });
 </script>
+<script>
+  // Funciones para evaluación nutricional y perfil inflamatorio
+function calcularPerfilInflamatorio() {
+  const antiInflamatorios = [
+    'pescado', 'frutos_secos', 'aceite_oliva', 'frutas_bayas',
+    'verduras_hojas', 'curcuma', 'te_verde', 'legumbres'
+  ];
+  
+  const proInflamatorios = [
+    'azucar', 'carnes_proc', 'frituras', 'harinas'
+  ];
+  
+  let contadorAnti = 0;
+  let contadorPro = 0;
+  
+  // Contar alimentos anti-inflamatorios seleccionados
+  antiInflamatorios.forEach(item => {
+    if (document.getElementById('antiinf_' + item).checked) {
+      contadorAnti++;
+    }
+  });
+  
+  // Contar alimentos pro-inflamatorios seleccionados
+  proInflamatorios.forEach(item => {
+    if (document.getElementById('proinf_' + item).checked) {
+      contadorPro++;
+    }
+  });
+  
+  // Calcular balance
+  const resultado = document.getElementById('perfil_inflamatorio_resultado');
+  const textoResultado = document.getElementById('resultado_perfil_texto');
+  const recomendacion = document.getElementById('recomendacion_nutricional');
+  
+  // Solo mostrar resultado si hay selecciones
+  if (contadorAnti === 0 && contadorPro === 0) {
+    resultado.style.display = 'none';
+    return;
+  }
+  
+  resultado.style.display = 'block';
+  
+  // Determinar perfil y mostrar recomendaciones
+  if (contadorAnti > contadorPro * 1.5) {
+    resultado.className = 'alert alert-success';
+    textoResultado.textContent = 'Predominantemente Anti-inflamatorio';
+    recomendacion.innerHTML = '<strong>Recomendación clínica:</strong> Excelente perfil dietético para facilitar la recuperación tisular y modular el dolor. Mantener este patrón durante el proceso terapéutico.';
+  } else if (contadorAnti > contadorPro) {
+    resultado.className = 'alert alert-info';
+    textoResultado.textContent = 'Moderadamente Anti-inflamatorio';
+    recomendacion.innerHTML = '<strong>Recomendación clínica:</strong> Buen perfil dietético que puede apoyar la recuperación. Considere aumentar el consumo de alimentos anti-inflamatorios para optimizar el proceso terapéutico.';
+  } else if (contadorPro > contadorAnti * 1.5) {
+    resultado.className = 'alert alert-danger';
+    textoResultado.textContent = 'Predominantemente Pro-inflamatorio';
+    recomendacion.innerHTML = '<strong>Recomendación clínica:</strong> Perfil dietético que puede interferir con la recuperación tisular y potenciar el dolor. Se recomienda fuertemente modificar los hábitos alimentarios reduciendo alimentos pro-inflamatorios e incrementando los anti-inflamatorios.';
+  } else if (contadorPro > contadorAnti) {
+    resultado.className = 'alert alert-warning';
+    textoResultado.textContent = 'Moderadamente Pro-inflamatorio';
+    recomendacion.innerHTML = '<strong>Recomendación clínica:</strong> El perfil dietético podría estar limitando parcialmente la recuperación. Se recomienda reducir el consumo de alimentos pro-inflamatorios y aumentar los anti-inflamatorios para facilitar el proceso terapéutico.';
+  } else {
+    resultado.className = 'alert alert-secondary';
+    textoResultado.textContent = 'Neutro';
+    recomendacion.innerHTML = '<strong>Recomendación clínica:</strong> Balance equilibrado. Para optimizar la recuperación, se sugiere incrementar el consumo de alimentos anti-inflamatorios como pescados grasos, frutos secos, aceite de oliva y frutas del bosque.';
+  }
+}
+
+function evaluarHidratacion() {
+  const consumoAgua = document.getElementById('consumoAgua').value;
+  
+  if (consumoAgua && consumoAgua < 4) {
+    alert('¡Atención! Un consumo insuficiente de agua puede afectar negativamente la recuperación tisular y la función neuromuscular. Se recomienda incrementar la ingesta diaria de agua a 8-10 vasos (2-2.5 litros).');
+  }
+}
+
+// Funciones para hábitos tóxicos
+function mostrarDetallesTabaco(mostrar) {
+  document.getElementById('detalles_tabaco').style.display = mostrar ? 'block' : 'none';
+  if (!mostrar) {
+    document.getElementById('riesgo_tabaco_alerta').style.display = 'none';
+  }
+}
+
+function evaluarRiesgoTabaco() {
+  const cantidadTabaco = parseInt(document.getElementById('cantidad_tabaco').value) || 0;
+  const anosFumando = parseInt(document.getElementById('anos_fumando').value) || 0;
+  
+  const alerta = document.getElementById('riesgo_tabaco_alerta');
+  
+  if (cantidadTabaco === 0 || anosFumando === 0) {
+    alerta.style.display = 'none';
+    return;
+  }
+  
+  let paquetesAno = (cantidadTabaco / 20) * anosFumando;
+  alerta.style.display = 'block';
+  
+  if (paquetesAno > 20) {
+    alerta.className = 'alert alert-danger mt-2';
+    alerta.innerHTML = '<strong>Alto riesgo:</strong> ' + paquetesAno.toFixed(1) + ' paquetes/año. Impacto significativo en la oxigenación tisular y cicatrización. Recomendar fuertemente abandono del hábito tabáquico para mejorar resultados terapéuticos.';
+  } else if (paquetesAno > 10) {
+    alerta.className = 'alert alert-warning mt-2';
+    alerta.innerHTML = '<strong>Riesgo moderado:</strong> ' + paquetesAno.toFixed(1) + ' paquetes/año. Potencial compromiso de la recuperación tisular y función cardiovascular. Considerar reducción del consumo durante la rehabilitación.';
+  } else {
+    alerta.className = 'alert alert-info mt-2';
+    alerta.innerHTML = '<strong>Riesgo bajo a moderado:</strong> ' + paquetesAno.toFixed(1) + ' paquetes/año. Puede afectar la recuperación. Recomendar reducción o cese del consumo para optimizar resultados.';
+  }
+}
+
+function mostrarDetallesAlcohol(mostrar) {
+  document.getElementById('detalles_alcohol').style.display = mostrar ? 'block' : 'none';
+  if (!mostrar) {
+    document.getElementById('riesgo_alcohol_alerta').style.display = 'none';
+  }
+}
+
+function evaluarRiesgoAlcohol() {
+  const unidadesAlcohol = document.getElementById('unidades_alcohol').value;
+  const alerta = document.getElementById('riesgo_alcohol_alerta');
+  
+  if (!unidadesAlcohol) {
+    alerta.style.display = 'none';
+    return;
+  }
+  
+  alerta.style.display = 'block';
+  
+  if (unidadesAlcohol === '21+') {
+    alerta.className = 'alert alert-danger mt-2';
+    alerta.innerHTML = '<strong>Alto riesgo:</strong> Consumo excesivo que puede comprometer significativamente la recuperación tisular, función hepática y aumentar inflamación sistémica. Considerar derivación para manejo de consumo de alcohol.';
+  } else if (unidadesAlcohol === '15-21' || unidadesAlcohol === '8-14') {
+    alerta.className = 'alert alert-warning mt-2';
+    alerta.innerHTML = '<strong>Riesgo moderado:</strong> Este nivel de consumo puede interferir con el proceso terapéutico y la cicatrización. Recomendar reducción durante el tratamiento.';
+  } else {
+    alerta.className = 'alert alert-info mt-2';
+    alerta.innerHTML = '<strong>Riesgo bajo:</strong> Consumo que probablemente no interfiera significativamente con la rehabilitación si se mantiene controlado.';
+  }
+}
+
+function mostrarDetallesDrogas(mostrar) {
+  document.getElementById('detalles_drogas').style.display = mostrar ? 'block' : 'none';
+  if (!mostrar) {
+    document.getElementById('riesgo_drogas_alerta').style.display = 'none';
+  }
+}
+
+function evaluarRiesgoDrogas() {
+  const frecuenciaDrogas = document.getElementById('frecuencia_drogas').value;
+  const alerta = document.getElementById('riesgo_drogas_alerta');
+  
+  if (!frecuenciaDrogas) {
+    alerta.style.display = 'none';
+    return;
+  }
+  
+  alerta.style.display = 'block';
+  
+  if (frecuenciaDrogas === 'Diario') {
+    alerta.className = 'alert alert-danger mt-2';
+    alerta.innerHTML = '<strong>Alto riesgo:</strong> El consumo diario puede comprometer significativamente los resultados terapéuticos. Considerar derivación a especialista en adicciones como parte del manejo integral.';
+  } else if (frecuenciaDrogas === 'Semanal') {
+    alerta.className = 'alert alert-warning mt-2';
+    alerta.innerHTML = '<strong>Riesgo moderado:</strong> Puede interferir con adherencia al tratamiento y recuperación. Recomendar suspensión durante el proceso terapéutico.';
+  } else {
+    alerta.className = 'alert alert-info mt-2';
+    alerta.innerHTML = '<strong>Bajo riesgo:</strong> Consumo ocasional que podría tener menor impacto en la rehabilitación, pero se recomienda abstinencia durante el tratamiento para optimizar resultados.';
+  }
+}
+
+// Funciones para actividad física
+function evaluarCargaDeporte() {
+  const frecuencia = document.getElementById('frecuenciaDeporte').value;
+  const intensidad = document.getElementById('intensidadDeporte').value;
+  const duracion = document.getElementById('duracionDeporte').value;
+  const cambios = document.getElementById('cambiosCarga').value;
+  
+  // Verificar si hay datos suficientes para evaluar
+  if (!frecuencia || !intensidad || !duracion || !cambios) {
+    document.getElementById('evaluacion_carga_alerta').style.display = 'none';
+    return;
+  }
+  
+  // Obtener entrenamientos seleccionados
+  const tiposEntrenamiento = [];
+  document.querySelectorAll('input[name="tipo_entrenamiento[]"]:checked').forEach(checkbox => {
+    tiposEntrenamiento.push(checkbox.value);
+  });
+  
+  // Evaluar carga y cambios recientes
+  const alerta = document.getElementById('evaluacion_carga_alerta');
+  alerta.style.display = 'block';
+  
+  // Evaluar si hay riesgo de sobrecarga o subcarga
+  let riesgoSobrecarga = false;
+  let riesgoSubcarga = false;
+  
+  // Sobrecarga: alta frecuencia + alta intensidad + aumento reciente
+  if ((frecuencia === 'Diaria' || frecuencia === '4-6 veces/semana') && 
+      intensidad === 'Intensa' && 
+      (cambios === 'Aumento significativo' || cambios === 'Ligero aumento')) {
+    riesgoSobrecarga = true;
+  }
+  
+  // Subcarga: baja frecuencia + disminución reciente
+  if ((frecuencia === 'Ocasional' || frecuencia === '1 vez/semana') && 
+      (cambios === 'Disminución significativa' || cambios === 'Ligera disminución')) {
+    riesgoSubcarga = true;
+  }
+  
+  // Mostrar recomendaciones según análisis
+  if (riesgoSobrecarga) {
+    alerta.className = 'alert alert-danger mb-3';
+    alerta.innerHTML = '<strong>Alerta de sobrecarga:</strong> El perfil de entrenamiento actual muestra signos de sobrecarga, lo que puede aumentar el riesgo de lesiones por sobreuso. Se recomienda:' +
+      '<ul>' +
+      '<li>Revisar progresión de cargas y considerar reducción temporal de intensidad/volumen</li>' +
+      '<li>Implementar periodos adecuados de recuperación entre sesiones</li>' +
+      '<li>Monitorizar signos de sobrecarga (fatiga persistente, disminución del rendimiento, dolor articular/muscular)</li>' +
+      '</ul>';
+  } else if (riesgoSubcarga) {
+    alerta.className = 'alert alert-warning mb-3';
+    alerta.innerHTML = '<strong>Consideración de subcarga:</strong> El nivel actual de actividad física podría ser insuficiente para mantener una adecuada capacidad funcional. Se recomienda:' +
+      '<ul>' +
+      '<li>Diseñar plan progresivo de incremento de actividad física</li>' +
+      '<li>Establecer objetivos realistas y alcanzables a corto plazo</li>' +
+      '<li>Educar sobre la importancia de la actividad física regular para la salud general y la recuperación</li>' +
+      '</ul>';
+  } else {
+    alerta.className = 'alert alert-success mb-3';
+    alerta.innerHTML = '<strong>Perfil de carga adecuado:</strong> El balance actual de frecuencia, intensidad y volumen parece apropiado. Recomendaciones:' +
+      '<ul>' +
+      '<li>Mantener consistencia en la rutina actual</li>' +
+      '<li>Incorporar ejercicios específicos relacionados con la rehabilitación</li>' +
+      '<li>Asegurar técnica correcta y progresión gradual</li>' +
+      '</ul>';
+  }
+  
+  // Añadir recomendaciones específicas según tipo de entrenamiento
+  if (tiposEntrenamiento.includes('HIIT') && riesgoSobrecarga) {
+    alerta.innerHTML += '<p><strong>Nota sobre HIIT:</strong> El entrenamiento de alta intensidad puede exacerbar la inflamación. Considerar temporalmente reemplazar por entrenamiento de menor intensidad durante la fase aguda de rehabilitación.</p>';
+  }
+  
+  if (!tiposEntrenamiento.includes('Flexibilidad') && !tiposEntrenamiento.includes('Fuerza')) {
+    alerta.innerHTML += '<p><strong>Recomendación adicional:</strong> Incorporar entrenamiento de fuerza y flexibilidad para complementar su rutina actual y apoyar la rehabilitación.</p>';
+  }
+}
+
+// Funciones para sueño
+function evaluarSueno() {
+  const horasSueno = parseInt(document.getElementById('horasSueno').value) || 0;
+  const calidadSueno = document.getElementById('calidadSueno').value;
+  const influenciaDolor = document.getElementById('influenciaDolor').value;
+  const latenciaSueno = document.getElementById('latenciaSueno').value;
+  
+  // Verificar problemas de sueño seleccionados
+  const problemasSueno = [];
+  document.querySelectorAll('input[name="problemas_sueno[]"]:checked').forEach(checkbox => {
+    problemasSueno.push(checkbox.value);
+  });
+  
+  // Verificar si hay datos suficientes para evaluar
+  if (horasSueno === 0 && !calidadSueno && !influenciaDolor && !latenciaSueno && problemasSueno.length === 0) {
+    document.getElementById('evaluacion_sueno_alerta').style.display = 'none';
+    return;
+  }
+  
+  const alerta = document.getElementById('evaluacion_sueno_alerta');
+  alerta.style.display = 'block';
+  
+  // Evaluar si hay alteraciones significativas del sueño
+  let riesgoAlto = false;
+  let riesgoModerado = false;
+  let influenciaDeDolor = false;
+  
+  // Factores de alto riesgo
+  if ((horasSueno < 5 || horasSueno > 10) || 
+      calidadSueno === 'Mala' || 
+      influenciaDolor === 'Siempre' || 
+      latenciaSueno === '>60 min' ||
+      problemasSueno.includes('Pausas respiratorias')) {
+    riesgoAlto = true;
+  }
+  
+  // Factores de riesgo moderado
+  else if ((horasSueno < 6 || horasSueno > 9) || 
+           calidadSueno === 'Regular' || 
+           influenciaDolor === 'Frecuentemente' || 
+           latenciaSueno === '30-60 min' ||
+           problemasSueno.length >= 2) {
+    riesgoModerado = true;
+  }
+  
+  // Verificar influencia del dolor
+  if (influenciaDolor === 'Frecuentemente' || influenciaDolor === 'Siempre') {
+    influenciaDeDolor = true;
+  }
+  
+  // Mostrar recomendaciones según análisis
+  if (riesgoAlto) {
+    alerta.className = 'alert alert-danger mb-4';
+    alerta.innerHTML = '<strong>Alteración significativa del sueño:</strong> El patrón de sueño actual puede estar afectando negativamente la recuperación, modulación del dolor y función cognitiva. Recomendaciones:' +
+      '<ul>' +
+      '<li>Considerar derivación a especialista en medicina del sueño</li>' +
+      '<li>Priorizar intervenciones para mejorar el sueño como parte del plan terapéutico</li>' +
+      '<li>Educar sobre higiene del sueño (horarios regulares, ambiente adecuado, rutinas de relajación)</li>' +
+      '</ul>';
+      
+    if (problemasSueno.includes('Pausas respiratorias') || problemasSueno.includes('Ronquidos')) {
+      alerta.innerHTML += '<p><strong>Alerta:</strong> Los síntomas sugieren posible apnea del sueño. Es importante la derivación para evaluación especializada.</p>';
+    }
+  } else if (riesgoModerado) {
+    alerta.className = 'alert alert-warning mb-4';
+    alerta.innerHTML = '<strong>Alteración moderada del sueño:</strong> Existen factores que podrían estar limitando la calidad del sueño y afectando la recuperación. Recomendaciones:' +
+      '<ul>' +
+      '<li>Implementar medidas de higiene del sueño</li>' +
+      '<li>Establecer horarios regulares de sueño</li>' +
+      '<li>Considerar técnicas de relajación previas al descanso</li>' +
+      '</ul>';
+  } else {
+    alerta.className = 'alert alert-success mb-4';
+    alerta.innerHTML = '<strong>Patrón de sueño adecuado:</strong> El descanso actual parece ser apropiado para apoyar la recuperación. Mantener buenos hábitos de sueño durante el proceso terapéutico.';
+  }
+  
+  // Añadir recomendaciones específicas si el dolor influye en el sueño
+  if (influenciaDeDolor) {
+    alerta.innerHTML += '<p><strong>Relación dolor-sueño:</strong> El dolor está afectando la calidad del sueño, lo que puede generar un ciclo de retroalimentación negativa. Se recomienda abordar específicamente el manejo del dolor pre-sueño (técnicas de relajación, posicionamiento adecuado, revisión de medicación analgésica).</p>';
+  }
+}
+
+// Funciones para factores psicosociales
+function evaluarFactoresPsicosociales() {
+  // Factores de riesgo
+  const factoresRiesgo = [
+    'Falta de apoyo social', 'Conflictos familiares', 
+    'Aislamiento social', 'Sobrecarga de responsabilidades',
+    'Problemas financieros', 'Insatisfacción laboral',
+    'Ansiedad/depresión', 'Pesimismo sobre recuperación'
+  ];
+  
+  // Factores protectores
+  const factoresProtectores = [
+    'Fuerte red de apoyo', 'Estrategias de afrontamiento activas',
+    'Buen ajuste emocional', 'Alta motivación al cambio'
+  ];
+  
+  let riesgosSeleccionados = 0;
+  let protectoresSeleccionados = 0;
+  
+  // Contar factores de riesgo seleccionados
+  factoresRiesgo.forEach(factor => {
+    const id = 'riesgo_' + factor.toLowerCase().replace(/[\s\/]/g, '_');
+    const elemento = document.getElementById(id);
+    if (elemento && elemento.checked) {
+      riesgosSeleccionados++;
+    }
+  });
+  
+  // Contar factores protectores seleccionados
+  factoresProtectores.forEach(factor => {
+    const id = 'facilitador_' + factor.toLowerCase().replace(/[\s\/]/g, '_');
+    const elemento = document.getElementById(id);
+    if (elemento && elemento.checked) {
+      protectoresSeleccionados++;
+    }
+  });
+  
+  // Nivel de estrés
+  const nivelEstres = document.getElementById('nivelEstres').value;
+  
+  // Verificar si hay datos suficientes para evaluar
+  if (!nivelEstres && riesgosSeleccionados === 0 && protectoresSeleccionados === 0) {
+    document.getElementById('factores_psicosociales_resultado').style.display = 'none';
+    return;
+  }
+  
+  const resultado = document.getElementById('factores_psicosociales_resultado');
+  const textoResultado = document.getElementById('resultado_psicosocial_texto');
+  const recomendacion = document.getElementById('recomendacion_psicosocial');
+  
+  resultado.style.display = 'block';
+  
+  // Evaluar balance de factores
+  let valorEstres = 0;
+  if (nivelEstres === 'Alto') valorEstres = 2;
+  else if (nivelEstres === 'Moderado') valorEstres = 1;
+  
+  const balancePsicosocial = (riesgosSeleccionados + valorEstres) - protectoresSeleccionados;
+  
+  // Determinar perfil y mostrar recomendaciones
+  if (balancePsicosocial >= 3) {
+    resultado.className = 'alert alert-danger';
+    textoResultado.textContent = 'Alto Riesgo Psicosocial';
+    recomendacion.innerHTML = '<strong>Recomendación clínica:</strong> Los factores psicosociales representan una barrera significativa para la recuperación. Se recomienda:' +
+      '<ul>' +
+      '<li>Considerar abordaje biopsicosocial como parte central del tratamiento</li>' +
+      '<li>Evaluar posible derivación a salud mental</li>' +
+      '<li>Establecer objetivos terapéuticos realistas considerando estas barreras</li>' +
+      '<li>Implementar estrategias de afrontamiento y manejo del estrés</li>' +
+      '</ul>';
+  } else if (balancePsicosocial > 0) {
+    resultado.className = 'alert alert-warning';
+    textoResultado.textContent = 'Riesgo Psicosocial Moderado';
+    recomendacion.innerHTML = '<strong>Recomendación clínica:</strong> Existen factores psicosociales que podrían limitar parcialmente la recuperación. Se recomienda:' +
+      '<ul>' +
+      '<li>Incluir estrategias de manejo del estrés en el plan terapéutico</li>' +
+      '<li>Fortalecer factores protectores existentes</li>' +
+      '<li>Educar sobre la influencia de factores psicosociales en la recuperación</li>' +
+      '</ul>';
+  } else if (balancePsicosocial >= -2) {
+    resultado.className = 'alert alert-info';
+    textoResultado.textContent = 'Balance Psicosocial Neutro';
+    recomendacion.innerHTML = '<strong>Recomendación clínica:</strong> Existe un equilibrio entre factores de riesgo y protectores. Se recomienda:' +
+      '<ul>' +
+      '<li>Monitorizar posibles cambios en factores psicosociales durante el tratamiento</li>' +
+      '<li>Reforzar factores protectores existentes</li>' +
+      '<li>Implementar educación sobre autogestión del dolor y la rehabilitación</li>' +
+      '</ul>';
+  } else {
+    resultado.className = 'alert alert-success';
+    textoResultado.textContent = 'Perfil Psicosocial Favorable';
+    recomendacion.innerHTML = '<strong>Recomendación clínica:</strong> Predominan factores protectores que pueden facilitar la recuperación. Se recomienda:' +
+      '<ul>' +
+      '<li>Aprovechar estos factores como aliados en el proceso terapéutico</li>' +
+      '<li>Fortalecer la autoeficacia y participación activa del paciente</li>' +
+      '<li>Considerar estrategias terapéuticas más desafiantes si la condición lo permite</li>' +
+      '</ul>';
+  }
+}
+</script>
+
 </body>
 </html>
