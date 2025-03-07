@@ -5254,6 +5254,390 @@
     </div>
   </div>
 </div>
+
+  <!-- Patrones de Movimiento Funcionales -->
+<div class="card mb-4">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Evaluación de Patrones de Movimiento Funcionales</h5>
+  </div>
+  <div class="card-body">
+    <div class="alert alert-info mb-3">
+      <i class="fas fa-info-circle"></i> <strong>Nota:</strong> La evaluación de patrones de movimiento funcionales proporciona información valiosa sobre la calidad del movimiento, control motor y posibles compensaciones, lo que complementa la evaluación analítica de rangos articulares.
+    </div>
+
+    <!-- FMS (Functional Movement Screen) Simplificado -->
+    <div class="mb-4">
+      <h5>Escala de Movimiento Funcional (FMS Simplificado)</h5>
+      <p class="text-muted small mb-3">Puntúe cada patrón de movimiento en una escala de 0-3, donde: 0=Dolor durante la prueba, 1=Incapaz de realizar el patrón, 2=Completa con compensaciones, 3=Patrón óptimo</p>
+      
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Patrón</th>
+              <th>Puntaje</th>
+              <th>Asimetría</th>
+              <th>Compensaciones Observadas</th>
+              <th>Acciones Correctivas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sentadilla Profunda</td>
+              <td>
+                <select id="fms_sentadilla" name="fms_sentadilla" class="form-select" onchange="evaluarPatronMovimiento('fms_sentadilla')">
+                  <option value="">Seleccionar</option>
+                  <option value="0">0 - Dolor</option>
+                  <option value="1">1 - Incapaz</option>
+                  <option value="2">2 - Con compensaciones</option>
+                  <option value="3">3 - Óptimo</option>
+                </select>
+              </td>
+              <td>
+                <select id="fms_sentadilla_asimetria" name="fms_sentadilla_asimetria" class="form-select">
+                  <option value="No">No</option>
+                  <option value="Derecha">Derecha</option>
+                  <option value="Izquierda">Izquierda</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="fms_sentadilla_comp" name="fms_sentadilla_comp" class="form-control" placeholder="Ej: Pronación, valgo rodilla, etc.">
+              </td>
+              <td>
+                <input type="text" id="fms_sentadilla_accion" name="fms_sentadilla_accion" class="form-control" placeholder="Acciones correctivas">
+              </td>
+            </tr>
+            <tr>
+              <td>Paso de Valla</td>
+              <td>
+                <select id="fms_valla" name="fms_valla" class="form-select" onchange="evaluarPatronMovimiento('fms_valla')">
+                  <option value="">Seleccionar</option>
+                  <option value="0">0 - Dolor</option>
+                  <option value="1">1 - Incapaz</option>
+                  <option value="2">2 - Con compensaciones</option>
+                  <option value="3">3 - Óptimo</option>
+                </select>
+              </td>
+              <td>
+                <select id="fms_valla_asimetria" name="fms_valla_asimetria" class="form-select">
+                  <option value="No">No</option>
+                  <option value="Derecha">Derecha</option>
+                  <option value="Izquierda">Izquierda</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="fms_valla_comp" name="fms_valla_comp" class="form-control" placeholder="Compensaciones observadas">
+              </td>
+              <td>
+                <input type="text" id="fms_valla_accion" name="fms_valla_accion" class="form-control" placeholder="Acciones correctivas">
+              </td>
+            </tr>
+            <tr>
+              <td>Estocada en Línea</td>
+              <td>
+                <select id="fms_estocada" name="fms_estocada" class="form-select" onchange="evaluarPatronMovimiento('fms_estocada')">
+                  <option value="">Seleccionar</option>
+                  <option value="0">0 - Dolor</option>
+                  <option value="1">1 - Incapaz</option>
+                  <option value="2">2 - Con compensaciones</option>
+                  <option value="3">3 - Óptimo</option>
+                </select>
+              </td>
+              <td>
+                <select id="fms_estocada_asimetria" name="fms_estocada_asimetria" class="form-select">
+                  <option value="No">No</option>
+                  <option value="Derecha">Derecha</option>
+                  <option value="Izquierda">Izquierda</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="fms_estocada_comp" name="fms_estocada_comp" class="form-control" placeholder="Compensaciones observadas">
+              </td>
+              <td>
+                <input type="text" id="fms_estocada_accion" name="fms_estocada_accion" class="form-control" placeholder="Acciones correctivas">
+              </td>
+            </tr>
+            <tr>
+              <td>Movilidad de Hombro</td>
+              <td>
+                <select id="fms_hombro" name="fms_hombro" class="form-select" onchange="evaluarPatronMovimiento('fms_hombro')">
+                  <option value="">Seleccionar</option>
+                  <option value="0">0 - Dolor</option>
+                  <option value="1">1 - Incapaz</option>
+                  <option value="2">2 - Con compensaciones</option>
+                  <option value="3">3 - Óptimo</option>
+                </select>
+              </td>
+              <td>
+                <select id="fms_hombro_asimetria" name="fms_hombro_asimetria" class="form-select">
+                  <option value="No">No</option>
+                  <option value="Derecha">Derecha</option>
+                  <option value="Izquierda">Izquierda</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="fms_hombro_comp" name="fms_hombro_comp" class="form-control" placeholder="Compensaciones observadas">
+              </td>
+              <td>
+                <input type="text" id="fms_hombro_accion" name="fms_hombro_accion" class="form-control" placeholder="Acciones correctivas">
+              </td>
+            </tr>
+            <tr>
+              <td>Elevación Activa de Pierna Recta</td>
+              <td>
+                <select id="fms_eapr" name="fms_eapr" class="form-select" onchange="evaluarPatronMovimiento('fms_eapr')">
+                  <option value="">Seleccionar</option>
+                  <option value="0">0 - Dolor</option>
+                  <option value="1">1 - Incapaz</option>
+                  <option value="2">2 - Con compensaciones</option>
+                  <option value="3">3 - Óptimo</option>
+                </select>
+              </td>
+              <td>
+                <select id="fms_eapr_asimetria" name="fms_eapr_asimetria" class="form-select">
+                  <option value="No">No</option>
+                  <option value="Derecha">Derecha</option>
+                  <option value="Izquierda">Izquierda</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="fms_eapr_comp" name="fms_eapr_comp" class="form-control" placeholder="Compensaciones observadas">
+              </td>
+              <td>
+                <input type="text" id="fms_eapr_accion" name="fms_eapr_accion" class="form-control" placeholder="Acciones correctivas">
+              </td>
+            </tr>
+            <tr>
+              <td>Estabilidad del Tronco en Flexión</td>
+              <td>
+                <select id="fms_tronco" name="fms_tronco" class="form-select" onchange="evaluarPatronMovimiento('fms_tronco')">
+                  <option value="">Seleccionar</option>
+                  <option value="0">0 - Dolor</option>
+                  <option value="1">1 - Incapaz</option>
+                  <option value="2">2 - Con compensaciones</option>
+                  <option value="3">3 - Óptimo</option>
+                </select>
+              </td>
+              <td>
+                <select id="fms_tronco_asimetria" name="fms_tronco_asimetria" class="form-select">
+                  <option value="No">No</option>
+                  <option value="Derecha">Derecha</option>
+                  <option value="Izquierda">Izquierda</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="fms_tronco_comp" name="fms_tronco_comp" class="form-control" placeholder="Compensaciones observadas">
+              </td>
+              <td>
+                <input type="text" id="fms_tronco_accion" name="fms_tronco_accion" class="form-control" placeholder="Acciones correctivas">
+              </td>
+            </tr>
+            <tr>
+              <td>Estabilidad Rotatoria</td>
+              <td>
+                <select id="fms_rotacion" name="fms_rotacion" class="form-select" onchange="evaluarPatronMovimiento('fms_rotacion')">
+                  <option value="">Seleccionar</option>
+                  <option value="0">0 - Dolor</option>
+                  <option value="1">1 - Incapaz</option>
+                  <option value="2">2 - Con compensaciones</option>
+                  <option value="3">3 - Óptimo</option>
+                </select>
+              </td>
+              <td>
+                <select id="fms_rotacion_asimetria" name="fms_rotacion_asimetria" class="form-select">
+                  <option value="No">No</option>
+                  <option value="Derecha">Derecha</option>
+                  <option value="Izquierda">Izquierda</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="fms_rotacion_comp" name="fms_rotacion_comp" class="form-control" placeholder="Compensaciones observadas">
+              </td>
+              <td>
+                <input type="text" id="fms_rotacion_accion" name="fms_rotacion_accion" class="form-control" placeholder="Acciones correctivas">
+              </td>
+            </tr>
+            <tr class="table-info">
+              <td><strong>Puntuación Total</strong></td>
+              <td id="fms_total">0/21</td>
+              <td colspan="3">
+                <select id="fms_interpretacion" name="fms_interpretacion" class="form-select" disabled>
+                  <option value="">Pendiente de evaluación</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Evaluación Específica de Patrones de Movimiento Funcionales -->
+    <div class="mb-4">
+      <h5>Patrones de Movimiento Específicos</h5>
+      <p class="text-muted small mb-3">Evalúe patrones de movimiento específicos relevantes para las actividades diarias, laborales o deportivas del paciente</p>
+      
+      <div id="patrones_especificos_container">
+        <!-- Los patrones específicos se agregarán aquí -->
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-12">
+            <p class="text-muted">Utilice el botón "Agregar Patrón" para añadir patrones de movimiento específicos relevantes para este paciente.</p>
+          </div>
+        </div>
+
+        <!-- Patrones comunes predeterminados -->
+        <div class="form-row mb-3" id="patron_sentadilla_container">
+          <div class="form-col form-col-md-3">
+            <div class="form-group">
+              <label for="patron_sentadilla_nombre" class="form-label">Sentadilla</label>
+            </div>
+          </div>
+          <div class="form-col form-col-md-2">
+            <div class="form-group">
+              <select id="patron_sentadilla_estado" name="patron_sentadilla_estado" class="form-select" onchange="colorearPatronEspecifico('patron_sentadilla')">
+                <option value="">Estado</option>
+                <option value="Óptimo">Óptimo</option>
+                <option value="Funcional">Funcional</option>
+                <option value="Disfuncional">Disfuncional</option>
+                <option value="Doloroso">Doloroso</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-col form-col-md-3">
+            <div class="form-group">
+              <input type="text" id="patron_sentadilla_comp" name="patron_sentadilla_comp" class="form-control" placeholder="Compensaciones">
+            </div>
+          </div>
+          <div class="form-col form-col-md-4">
+            <div class="form-group">
+              <input type="text" id="patron_sentadilla_obs" name="patron_sentadilla_obs" class="form-control" placeholder="Observaciones">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row mb-3" id="patron_marcha_container">
+          <div class="form-col form-col-md-3">
+            <div class="form-group">
+              <label for="patron_marcha_nombre" class="form-label">Marcha</label>
+            </div>
+          </div>
+          <div class="form-col form-col-md-2">
+            <div class="form-group">
+              <select id="patron_marcha_estado" name="patron_marcha_estado" class="form-select" onchange="colorearPatronEspecifico('patron_marcha')">
+                <option value="">Estado</option>
+                <option value="Óptimo">Óptimo</option>
+                <option value="Funcional">Funcional</option>
+                <option value="Disfuncional">Disfuncional</option>
+                <option value="Doloroso">Doloroso</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-col form-col-md-3">
+            <div class="form-group">
+              <input type="text" id="patron_marcha_comp" name="patron_marcha_comp" class="form-control" placeholder="Compensaciones">
+            </div>
+          </div>
+          <div class="form-col form-col-md-4">
+            <div class="form-group">
+              <input type="text" id="patron_marcha_obs" name="patron_marcha_obs" class="form-control" placeholder="Observaciones">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row mb-3" id="patron_escaleras_container">
+          <div class="form-col form-col-md-3">
+            <div class="form-group">
+              <label for="patron_escaleras_nombre" class="form-label">Subir/Bajar Escaleras</label>
+            </div>
+          </div>
+          <div class="form-col form-col-md-2">
+            <div class="form-group">
+              <select id="patron_escaleras_estado" name="patron_escaleras_estado" class="form-select" onchange="colorearPatronEspecifico('patron_escaleras')">
+                <option value="">Estado</option>
+                <option value="Óptimo">Óptimo</option>
+                <option value="Funcional">Funcional</option>
+                <option value="Disfuncional">Disfuncional</option>
+                <option value="Doloroso">Doloroso</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-col form-col-md-3">
+            <div class="form-group">
+              <input type="text" id="patron_escaleras_comp" name="patron_escaleras_comp" class="form-control" placeholder="Compensaciones">
+            </div>
+          </div>
+          <div class="form-col form-col-md-4">
+            <div class="form-group">
+              <input type="text" id="patron_escaleras_obs" name="patron_escaleras_obs" class="form-control" placeholder="Observaciones">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row mt-3">
+        <div class="form-col form-col-md-12">
+          <button type="button" class="btn btn-outline-primary btn-sm" id="agregar_patron_btn" onclick="agregarPatronEspecifico()">
+            <i class="fas fa-plus"></i> Agregar Patrón de Movimiento
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Análisis de Movimientos Deportivos o Laborales Específicos -->
+    <div class="mb-4">
+      <h5>Movimientos Específicos Laborales/Deportivos</h5>
+      <p class="text-muted small mb-3">Evalúe gestos técnicos relevantes para la actividad laboral o deportiva del paciente</p>
+      
+      <div id="movimientos_especificos_container">
+        <!-- Los movimientos específicos se agregarán aquí -->
+      </div>
+      
+      <div class="form-row mt-3">
+        <div class="form-col form-col-md-12">
+          <button type="button" class="btn btn-outline-primary btn-sm" id="agregar_movimiento_especifico_btn" onclick="agregarMovimientoEspecifico()">
+            <i class="fas fa-plus"></i> Agregar Movimiento Específico
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interpretación de Patrones de Movimiento -->
+    <div class="card mb-4">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Interpretación y Recomendaciones</h5>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion_patrones" class="mb-3">
+          <div class="interpretacion-clinica-container">
+            <h6>Interpretación de Patrones de Movimiento:</h6>
+            <div class="interpretacion-clinica" id="interpretacion-patrones-texto">
+              Complete la evaluación de patrones de movimiento para obtener la interpretación clínica.
+            </div>
+          </div>
+        </div>
+        
+        <div id="recomendaciones_patrones" class="mb-3">
+          <div class="recomendaciones-container">
+            <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+            <div class="recomendaciones" id="recomendaciones-patrones-texto">
+              Complete la evaluación de patrones de movimiento para obtener recomendaciones para el plan de tratamiento.
+            </div>
+          </div>
+        </div>
+        
+        <div class="alert alert-info mt-4">
+          <h6><i class="fas fa-info-circle"></i> Consideraciones basadas en evidencia:</h6>
+          <ul>
+            <li>La <strong>calidad del movimiento</strong> es frecuentemente más relevante que la cantidad (rango) para predecir lesiones y funcionalidad.</li>
+            <li>Los patrones de movimiento son <strong>específicos por tarea</strong> y deben evaluarse en el contexto de las actividades relevantes para el paciente.</li>
+            <li>Las <strong>asimetrías y compensaciones</strong> persistentes pueden predisponer a lesiones recurrentes.</li>
+            <li>El <strong>control motor</strong> debe evaluarse en diferentes contextos (estático, dinámico, bajo fatiga, etc.).</li>
+            <li>La <strong>reeducación de patrones</strong> de movimiento disfuncionales es más efectiva cuando se combina con estrategias cognitivas y feedback.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
             
             <div class="form-row">
               <div class="form-col form-col-md-12">
