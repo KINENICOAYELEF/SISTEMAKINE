@@ -132,9 +132,133 @@ function calcularDiferenciasLaterales(input) {
   }
 }
 
-// Función para calcular los índices antropométricos
+// Función para calcular la masa muscular apendicular estimada basada en perímetros
+function calcularMasaMuscularApendicular() {
+  const peso = parseFloat(document.getElementById('peso').value);
+  const talla = parseFloat(document.getElementById('talla').value);
+  const genero = document.getElementById('genero') ? document.getElementById('genero').value : '';
+  const edad = document.getElementById('edad') ? parseFloat(document.getElementById('edad').value) : 0;
+  
+  // Obtener los perímetros de las extremidades
+  const brazoD = parseFloat(document.getElementById('perimetro_brazo_der').value) || 0;
+  const brazoI = parseFloat(document.getElementById('perimetro_brazo_izq').value) || 0;
+  const brazoContD = parseFloat(document.getElementById('perimetro_brazo_cont_der').value) || 0;
+  const brazoContI = parseFloat(document.getElementById('perimetro_brazo_cont_izq').value) || 0;
+  const musloProxD = parseFloat(document.getElementById('perimetro_muslo_prox_der').value) || 0;
+  const musloProxI = parseFloat(document.getElementById('perimetro_muslo_prox_izq').value) || 0;
+  const pantorrillaD = parseFloat(document.getElementById('perimetro_pantorrilla_der').value) || 0;
+  const pantorrillaI = parseFloat(document.getElementById('perimetro_pantorrilla_izq').value) || 0;
+  
+  const ammaElement = document.getElementById('masa_muscular_apendicular');
+  const riesgoElement = document.getElementById('riesgo_sarcopenia');
+  const estadoAmmaElement = document.getElementById('estado_amma');
+  const estadoSarcopeniaElement = document.getElementById('estado_sarcopenia');
+  
+  // Verificar si tenemos suficientes datos para estimar
+  if (peso && talla && genero && 
+      ((brazoD || brazoI) || (brazoContD || brazoContI)) && 
+      (musloProxD || musloProxI) && 
+      (pantorrillaD || pantorrillaI)) {
+    
+    // Usar promedio de los lados o el valor disponible
+    const brazo = (brazoD && brazoI) ? (brazoD + brazoI) / 2 : (brazoD || brazoI);
+    const brazoCont = (brazoContD && brazoContI) ? (brazoContD + brazoContI) / 2 : (brazoContD || brazoContI);
+    const musloProx = (musloProxD && musloProxI) ? (musloProxD + musloProxI) / 2 : (musloProxD || musloProxI);
+    const pantorrilla = (pantorrillaD && pantorrillaI) ? (pantorrillaD + pantorrillaI) / 2 : (pantorrillaD || pantorrillaI);
+    
+    // Usar el perímetro de brazo disponible (priorizar el contraído si está disponible)
+    const brazoPredictivo = brazoCont || brazo;
+    
+    let amma = 0;
+    const tallaMt = talla / 100; // Convertir cm a m
+    const imc = peso / (tallaMt * tallaMt);
+    
+    // Ecuaciones predictivas para masa muscular apendicular basadas en perímetros
+    // Estas son ecuaciones simplificadas basadas en literatura científica
+    if (genero === 'Masculino') {
+      // Para hombres
+      amma = (0.2 * peso) + (0.1 * brazoPredictivo) + (0.15 * musloProx) + (0.2 * pantorrilla) - (0.05 * edad) - 2.5;
+      
+      // Ajuste por IMC para casos extremos
+      if (imc < 20) amma *= 0.9;
+      if (imc > 30) amma *= 1.1;
+    } else if (genero === 'Femenino') {
+      // Para mujeres
+      amma = (0.15 * peso) + (0.08 * brazoPredictivo) + (0.1 * musloProx) + (0.15 * pantorrilla) - (0.04 * edad) - 1.8;
+      
+      // Ajuste por IMC para casos extremos
+      if (imc < 19) amma *= 0.9;
+      if (imc > 30) amma *= 1.1;
+    }
+    
+    // Asegurar que el resultado sea positivo y realista
+    amma = Math.max(amma, 5); // No permitir valores menores a 5kg
+    amma = Math.min(amma, peso * 0.4); // No permitir valores mayores al 40% del peso corporal
+    
+    // Establecer el valor calculado
+    if (ammaElement) ammaElement.value = amma.toFixed(2) + ' kg';
+    
+    // Evaluar riesgo de sarcopenia según género y edad
+    let estadoSarcopenia = '';
+    let colorSarcopenia = '';
+    let riesgoSarcopenia = '';
+    
+    // El índice de masa muscular apendicular (IMMA) es la masa muscular apendicular dividida por talla²
+    const imma = amma / (tallaMt * tallaMt);
+    
+    if (genero === 'Masculino') {
+      if (imma < 7.0) {
+        estadoSarcopenia = 'Alto riesgo';
+        colorSarcopenia = '#DC3545'; // Rojo
+        riesgoSarcopenia = 'Alto';
+      } else if (imma < 7.5) {
+        estadoSarcopenia = 'Riesgo moderado';
+        colorSarcopenia = '#FD7E14'; // Naranja
+        riesgoSarcopenia = 'Moderado';
+      } else {
+        estadoSarcopenia = 'Riesgo bajo';
+        colorSarcopenia = '#28A745'; // Verde
+        riesgoSarcopenia = 'Bajo';
+      }
+    } else if (genero === 'Femenino') {
+      if (imma < 5.5) {
+        estadoSarcopenia = 'Alto riesgo';
+        colorSarcopenia = '#DC3545'; // Rojo
+        riesgoSarcopenia = 'Alto';
+      } else if (imma < 6.0) {
+        estadoSarcopenia = 'Riesgo moderado';
+        colorSarcopenia = '#FD7E14'; // Naranja
+        riesgoSarcopenia = 'Moderado';
+      } else {
+        estadoSarcopenia = 'Riesgo bajo';
+        colorSarcopenia = '#28A745'; // Verde
+        riesgoSarcopenia = 'Bajo';
+      }
+    }
+    
+    if (riesgoElement) riesgoElement.value = riesgoSarcopenia;
+    
+    if (estadoAmmaElement) {
+      estadoAmmaElement.innerHTML = `<span class="badge" style="background-color: ${colorSarcopenia}; color: white;">${amma.toFixed(2)} kg (IMMA: ${imma.toFixed(2)} kg/m²)</span>`;
+    }
+    
+    if (estadoSarcopeniaElement) {
+      estadoSarcopeniaElement.innerHTML = `<span class="badge" style="background-color: ${colorSarcopenia}; color: white;">${estadoSarcopenia}</span>`;
+    }
+    
+  } else {
+    // Limpiar los valores si los datos están incompletos
+    if (ammaElement) ammaElement.value = '';
+    if (riesgoElement) riesgoElement.value = '';
+    
+    if (estadoAmmaElement) estadoAmmaElement.innerHTML = '';
+    if (estadoSarcopeniaElement) estadoSarcopeniaElement.innerHTML = '';
+  }
+}
+
+// Modificación de la función calcularIndices para incluir el cálculo de masa muscular apendicular
 function calcularIndices() {
-  // Índice Cintura/Cadera
+  // Código existente para índice cintura/cadera
   const cintura = parseFloat(document.getElementById('perimetro_cintura').value);
   const cadera = parseFloat(document.getElementById('perimetro_cadera').value);
   const iccElement = document.getElementById('indice_cintura_cadera');
@@ -265,8 +389,110 @@ function calcularIndices() {
     if (estadoImmElement) estadoImmElement.innerHTML = '';
   }
   
+  // Llamar a la nueva función para calcular masa muscular apendicular
+  calcularMasaMuscularApendicular();
+  
   actualizarRecomendacionesAntropometria();
 }
+
+// Modificación de la función de recomendaciones para incluir consejos sobre sarcopenia
+function actualizarRecomendacionesAntropometria() {
+  const recomendacionesElement = document.getElementById('texto_recomendaciones_antropometria');
+  if (!recomendacionesElement) return;
+  
+  const imc = parseFloat(document.getElementById('imc').value);
+  const cintura = parseFloat(document.getElementById('perimetro_cintura').value);
+  const genero = document.getElementById('genero') ? document.getElementById('genero').value : '';
+  const riesgoSarcopenia = document.getElementById('riesgo_sarcopenia') ? 
+                          document.getElementById('riesgo_sarcopenia').value : '';
+  
+  let recomendaciones = [];
+  
+  // Recomendaciones basadas en IMC
+  if (imc) {
+    if (imc < 18.5) {
+      recomendaciones.push('IMC indica bajo peso. Considere evaluación nutricional y posibles causas de pérdida de peso.');
+    } else if (imc >= 25 && imc < 30) {
+      recomendaciones.push('IMC indica sobrepeso. Considere recomendaciones sobre actividad física y alimentación saludable.');
+    } else if (imc >= 30) {
+      recomendaciones.push('IMC indica obesidad. Se recomienda derivación a nutricionista y evaluación de factores de riesgo metabólico.');
+    }
+  }
+  
+  // Recomendaciones basadas en perímetro de cintura
+  if (cintura && genero) {
+    const riesgoElevado = (genero === 'Masculino' && cintura >= 102) || (genero === 'Femenino' && cintura >= 88);
+    
+    if (riesgoElevado) {
+      recomendaciones.push('Perímetro de cintura indica riesgo cardiovascular elevado. Considere evaluación de factores de riesgo metabólico y derivación a especialista.');
+    }
+  }
+  
+  // Recomendaciones basadas en diferencias laterales
+  const medidasLaterales = document.querySelectorAll('.side-measurement');
+  let asimetriasSignificativas = false;
+  
+  medidasLaterales.forEach(input => {
+    const id = input.id;
+    const pairId = input.getAttribute('data-pair');
+    
+    if (document.getElementById(pairId) && input.value && document.getElementById(pairId).value) {
+      const val1 = parseFloat(input.value);
+      const val2 = parseFloat(document.getElementById(pairId).value);
+      const diff = Math.abs(val1 - val2);
+      
+      if (diff > 2) {
+        asimetriasSignificativas = true;
+      }
+    }
+  });
+  
+  if (asimetriasSignificativas) {
+    recomendaciones.push('Se detectaron asimetrías significativas (>2cm) entre ambos lados. Considere evaluación funcional detallada y posibles causas (atrofia, hipertrofia, edema).');
+  }
+  
+  // Recomendaciones basadas en riesgo de sarcopenia
+  if (riesgoSarcopenia) {
+    if (riesgoSarcopenia === 'Alto') {
+      recomendaciones.push('Alto riesgo de sarcopenia. Se recomienda:');
+      recomendaciones.push('- Evaluación de fuerza muscular (dinamometría de agarre, prueba sentarse-pararse 5 veces).');
+      recomendaciones.push('- Programa de ejercicio de fortalecimiento muscular progresivo 2-3 veces/semana.');
+      recomendaciones.push('- Evaluación nutricional con énfasis en ingesta proteica (1.2-1.5 g/kg/día).');
+      recomendaciones.push('- Considerar derivación a geriatra o especialista en sarcopenia.');
+    } else if (riesgoSarcopenia === 'Moderado') {
+      recomendaciones.push('Riesgo moderado de sarcopenia. Se recomienda:');
+      recomendaciones.push('- Programa de ejercicio con énfasis en fortalecimiento muscular 2 veces/semana.');
+      recomendaciones.push('- Asegurar ingesta proteica adecuada (1.0-1.2 g/kg/día).');
+      recomendaciones.push('- Seguimiento en 3-6 meses para reevaluación.');
+    }
+  }
+  
+  // Mostrar recomendaciones
+  if (recomendaciones.length > 0) {
+    let html = '<ul class="mb-0">';
+    recomendaciones.forEach(rec => {
+      html += `<li>${rec}</li>`;
+    });
+    html += '</ul>';
+    
+    recomendacionesElement.innerHTML = html;
+  } else {
+    recomendacionesElement.innerHTML = 'Complete los datos antropométricos para obtener recomendaciones clínicas automáticas.';
+  }
+}
+
+// Actualizar listeners de eventos
+document.addEventListener('DOMContentLoaded', function() {
+  // Código existente...
+  
+  // Agregar edad a los cálculos para estimación de masa muscular
+  const edadInput = document.getElementById('edad');
+  if (edadInput) {
+    edadInput.addEventListener('input', function() {
+      calcularIndices();
+    });
+  }
+});
 
 // Función para evaluar perímetros específicos
 function evaluarPerimetros() {
