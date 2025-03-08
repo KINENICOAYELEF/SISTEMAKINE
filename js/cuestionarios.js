@@ -1317,6 +1317,7 @@ function calcularNDI() {
   // Actualizar la interpretación clínica y recomendaciones en la página
   document.getElementById('ndi-interpretacion-clinica').innerHTML = interpretacionClinica;
   document.getElementById('ndi-recomendaciones').innerHTML = recomendaciones;
+} // Añadir esta llave de cierre que falta para la función calcularNDI
 
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
@@ -1335,10 +1336,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PCS
   calcularPCS();
 
-   // Inicializar CSI
+  // Inicializar CSI
   calcularCSI();
 
-   // Inicializar TSK-11
+  // Inicializar TSK-11
   calcularTSK();
   
   // Inicializar DN4
