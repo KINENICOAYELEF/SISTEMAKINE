@@ -474,13 +474,8 @@
   }
 })();
 
-// No modificar la función toggleCuestionario ya que es compartida
-// Si necesitas una versión específica para cada sección, cambia su nombre
-  // En una integración real, aquí se guardarían los datos en Firebase
-}
-
-// Inicializar eventos cuando se muestra el contenedor
-function toggleCuestionario(id) {
+/// Versión específica para la sección postural
+function togglePostural(id) {
   const elemento = document.getElementById(id);
   if (elemento) {
     if (elemento.style.display === 'none') {
@@ -502,4 +497,16 @@ function toggleCuestionario(id) {
     }
   }
 }
+
+// Inicializar eventos cuando el documento esté cargado
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar la sección postural si existe
+  if (document.getElementById('evaluacion-postural-content')) {
+    // Configurar toggle específico para esta sección
+    const header = document.querySelector('.cuestionario-header[onclick="toggleCuestionario(\'evaluacion-postural-content\')"]');
+    if (header) {
+      header.setAttribute('onclick', 'togglePostural(\'evaluacion-postural-content\')');
+    }
+  }
+});
 </script>
