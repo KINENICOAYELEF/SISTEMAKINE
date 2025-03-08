@@ -9,50 +9,35 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!document.querySelector('.sidebar-toggle') && sidebar && content) {
     const sidebarToggle = document.createElement('button');
     sidebarToggle.className = 'sidebar-toggle';
-    sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
+    sidebarToggle.innerHTML = '<i class="fas fa-bars"></i><span class="sidebar-toggle-text">Menú</span>';
     document.body.appendChild(sidebarToggle);
+    
+    // Crear overlay una sola vez
+    const overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
     
     // Añadir evento de clic para el sidebar
     sidebarToggle.addEventListener('click', function() {
       sidebar.classList.toggle('active');
       document.body.classList.toggle('sidebar-active');
       
-      // Añadir overlay para cerrar el sidebar al tocar fuera
-      if (sidebar.classList.contains('active') && !document.querySelector('.sidebar-overlay')) {
-        const overlay = document.createElement('div');
-        overlay.className = 'sidebar-overlay';
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.right = '0';
-        overlay.style.bottom = '0';
-        overlay.style.background = 'rgba(0,0,0,0.5)';
-        overlay.style.zIndex = '1040';
-        overlay.style.display = 'none';
-        document.body.appendChild(overlay);
-        
-        // Mostrar con animación
+      if (sidebar.classList.contains('active')) {
+        // Mostrar overlay con animación
         setTimeout(() => {
           overlay.style.display = 'block';
         }, 10);
-        
-        overlay.addEventListener('click', function() {
-          sidebar.classList.remove('active');
-          document.body.classList.remove('sidebar-active');
-          overlay.style.display = 'none';
-          setTimeout(() => {
-            overlay.remove();
-          }, 300);
-        });
       } else {
-        const overlay = document.querySelector('.sidebar-overlay');
-        if (overlay) {
-          overlay.style.display = 'none';
-          setTimeout(() => {
-            overlay.remove();
-          }, 300);
-        }
+        // Ocultar overlay
+        overlay.style.display = 'none';
       }
+    });
+    
+    // Evento para cerrar el sidebar al hacer clic en el overlay
+    overlay.addEventListener('click', function() {
+      sidebar.classList.remove('active');
+      document.body.classList.remove('sidebar-active');
+      overlay.style.display = 'none';
     });
   }
   
