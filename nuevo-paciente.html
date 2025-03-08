@@ -6888,73 +6888,165 @@
           <div class="tab-content" id="escalas">
             <h3>7. Escalas y Cuestionarios Estandarizados</h3>
             
-            <h4>7.1 Escalas de Dolor</h4>
+             <h4>7.1 Cuestionarios Específicos por Región</h4>
+  
+  <!-- NDI (Neck Disability Index) -->
+  <div class="cuestionario-item">
+    <div class="cuestionario-header" onclick="toggleCuestionario('ndi-content')">
+      <h4><i class="fas fa-plus-circle"></i> Índice de Discapacidad Cervical (NDI)</h4>
+      <div class="resultado-badge" id="ndi-badge">No completado</div>
+    </div>
+    <div class="cuestionario-content" id="ndi-content" style="display: none;">
+      <p class="mb-3">Este cuestionario ha sido diseñado para dar información sobre cómo su dolor de cuello afecta su capacidad para realizar actividades de la vida diaria. Por favor, responda cada sección marcando SOLO UNA opción que mejor se aplique a usted.</p>
+      
+      <table class="table table-bordered mb-4">
+        <thead>
+          <tr>
+            <th>Sección</th>
+            <th>Opción 0</th>
+            <th>Opción 1</th>
+            <th>Opción 2</th>
+            <th>Opción 3</th>
+            <th>Opción 4</th>
+            <th>Opción 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 1. Intensidad del dolor -->
+          <tr>
+            <td>1. Intensidad del dolor</td>
+            <td class="text-center"><input type="radio" name="ndi_item1" value="0" onchange="calcularNDI()"><br>No tengo dolor en este momento</td>
+            <td class="text-center"><input type="radio" name="ndi_item1" value="1" onchange="calcularNDI()"><br>El dolor es muy leve en este momento</td>
+            <td class="text-center"><input type="radio" name="ndi_item1" value="2" onchange="calcularNDI()"><br>El dolor es moderado en este momento</td>
+            <td class="text-center"><input type="radio" name="ndi_item1" value="3" onchange="calcularNDI()"><br>El dolor es bastante fuerte en este momento</td>
+            <td class="text-center"><input type="radio" name="ndi_item1" value="4" onchange="calcularNDI()"><br>El dolor es muy fuerte en este momento</td>
+            <td class="text-center"><input type="radio" name="ndi_item1" value="5" onchange="calcularNDI()"><br>El dolor es el peor imaginable en este momento</td>
+          </tr>
+          
+          <!-- 2. Cuidado personal -->
+          <tr>
+            <td>2. Cuidado personal (lavarse, vestirse, etc.)</td>
+            <td class="text-center"><input type="radio" name="ndi_item2" value="0" onchange="calcularNDI()"><br>Puedo cuidarme normalmente sin que me aumente el dolor</td>
+            <td class="text-center"><input type="radio" name="ndi_item2" value="1" onchange="calcularNDI()"><br>Puedo cuidarme normalmente, pero esto me aumenta el dolor</td>
+            <td class="text-center"><input type="radio" name="ndi_item2" value="2" onchange="calcularNDI()"><br>Cuidarme me duele, y lo hago lenta y cuidadosamente</td>
+            <td class="text-center"><input type="radio" name="ndi_item2" value="3" onchange="calcularNDI()"><br>Necesito alguna ayuda, pero puedo hacer la mayor parte de mi cuidado personal</td>
+            <td class="text-center"><input type="radio" name="ndi_item2" value="4" onchange="calcularNDI()"><br>Necesito ayuda todos los días en la mayor parte de mi cuidado personal</td>
+            <td class="text-center"><input type="radio" name="ndi_item2" value="5" onchange="calcularNDI()"><br>No puedo vestirme, me lavo con dificultad y me quedo en la cama</td>
+          </tr>
+          
+          <!-- 3. Levantar peso -->
+          <tr>
+            <td>3. Levantar peso</td>
+            <td class="text-center"><input type="radio" name="ndi_item3" value="0" onchange="calcularNDI()"><br>Puedo levantar objetos pesados sin aumento del dolor</td>
+            <td class="text-center"><input type="radio" name="ndi_item3" value="1" onchange="calcularNDI()"><br>Puedo levantar objetos pesados pero me aumenta el dolor</td>
+            <td class="text-center"><input type="radio" name="ndi_item3" value="2" onchange="calcularNDI()"><br>El dolor me impide levantar objetos pesados del suelo, pero puedo hacerlo si están convenientemente colocados (ej. en una mesa)</td>
+            <td class="text-center"><input type="radio" name="ndi_item3" value="3" onchange="calcularNDI()"><br>El dolor me impide levantar objetos pesados, pero puedo levantar objetos medianos o ligeros si están convenientemente colocados</td>
+            <td class="text-center"><input type="radio" name="ndi_item3" value="4" onchange="calcularNDI()"><br>Solo puedo levantar objetos muy ligeros</td>
+            <td class="text-center"><input type="radio" name="ndi_item3" value="5" onchange="calcularNDI()"><br>No puedo levantar ni cargar nada</td>
+          </tr>
+          
+          <!-- 4. Lectura -->
+          <tr>
+            <td>4. Lectura</td>
+            <td class="text-center"><input type="radio" name="ndi_item4" value="0" onchange="calcularNDI()"><br>Puedo leer tanto como quiera sin dolor en el cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item4" value="1" onchange="calcularNDI()"><br>Puedo leer tanto como quiera con un ligero dolor en el cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item4" value="2" onchange="calcularNDI()"><br>Puedo leer tanto como quiera con dolor moderado en el cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item4" value="3" onchange="calcularNDI()"><br>No puedo leer tanto como quisiera debido a un dolor moderado en el cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item4" value="4" onchange="calcularNDI()"><br>Apenas puedo leer debido a un gran dolor en el cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item4" value="5" onchange="calcularNDI()"><br>No puedo leer nada en absoluto</td>
+          </tr>
+          
+          <!-- 5. Dolor de cabeza -->
+          <tr>
+            <td>5. Dolor de cabeza</td>
+            <td class="text-center"><input type="radio" name="ndi_item5" value="0" onchange="calcularNDI()"><br>No tengo ningún dolor de cabeza</td>
+            <td class="text-center"><input type="radio" name="ndi_item5" value="1" onchange="calcularNDI()"><br>Tengo dolores de cabeza leves que ocurren con poca frecuencia</td>
+            <td class="text-center"><input type="radio" name="ndi_item5" value="2" onchange="calcularNDI()"><br>Tengo dolores de cabeza moderados que ocurren con poca frecuencia</td>
+            <td class="text-center"><input type="radio" name="ndi_item5" value="3" onchange="calcularNDI()"><br>Tengo dolores de cabeza moderados que ocurren con frecuencia</td>
+            <td class="text-center"><input type="radio" name="ndi_item5" value="4" onchange="calcularNDI()"><br>Tengo dolores de cabeza intensos que ocurren con frecuencia</td>
+            <td class="text-center"><input type="radio" name="ndi_item5" value="5" onchange="calcularNDI()"><br>Tengo dolores de cabeza casi constantemente</td>
+          </tr>
+          
+          <!-- 6. Concentración -->
+          <tr>
+            <td>6. Concentración</td>
+            <td class="text-center"><input type="radio" name="ndi_item6" value="0" onchange="calcularNDI()"><br>Puedo concentrarme completamente cuando quiero sin dificultad</td>
+            <td class="text-center"><input type="radio" name="ndi_item6" value="1" onchange="calcularNDI()"><br>Puedo concentrarme completamente cuando quiero con ligera dificultad</td>
+            <td class="text-center"><input type="radio" name="ndi_item6" value="2" onchange="calcularNDI()"><br>Tengo un poco de dificultad para concentrarme cuando quiero</td>
+            <td class="text-center"><input type="radio" name="ndi_item6" value="3" onchange="calcularNDI()"><br>Tengo bastante dificultad para concentrarme cuando quiero</td>
+            <td class="text-center"><input type="radio" name="ndi_item6" value="4" onchange="calcularNDI()"><br>Tengo mucha dificultad para concentrarme cuando quiero</td>
+            <td class="text-center"><input type="radio" name="ndi_item6" value="5" onchange="calcularNDI()"><br>No puedo concentrarme en absoluto</td>
+          </tr>
+          
+          <!-- 7. Trabajo -->
+          <tr>
+            <td>7. Trabajo</td>
+            <td class="text-center"><input type="radio" name="ndi_item7" value="0" onchange="calcularNDI()"><br>Puedo trabajar tanto como quiera</td>
+            <td class="text-center"><input type="radio" name="ndi_item7" value="1" onchange="calcularNDI()"><br>Puedo hacer mi trabajo habitual, pero no más</td>
+            <td class="text-center"><input type="radio" name="ndi_item7" value="2" onchange="calcularNDI()"><br>Puedo hacer la mayor parte de mi trabajo habitual, pero no más</td>
+            <td class="text-center"><input type="radio" name="ndi_item7" value="3" onchange="calcularNDI()"><br>No puedo hacer mi trabajo habitual</td>
+            <td class="text-center"><input type="radio" name="ndi_item7" value="4" onchange="calcularNDI()"><br>Apenas puedo hacer algún trabajo</td>
+            <td class="text-center"><input type="radio" name="ndi_item7" value="5" onchange="calcularNDI()"><br>No puedo hacer ningún trabajo</td>
+          </tr>
+          
+          <!-- 8. Conducir -->
+          <tr>
+            <td>8. Conducir</td>
+            <td class="text-center"><input type="radio" name="ndi_item8" value="0" onchange="calcularNDI()"><br>Puedo conducir sin dolor de cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item8" value="1" onchange="calcularNDI()"><br>Puedo conducir tanto como quiera, pero con un ligero dolor de cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item8" value="2" onchange="calcularNDI()"><br>Puedo conducir tanto como quiera, pero con un dolor moderado de cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item8" value="3" onchange="calcularNDI()"><br>No puedo conducir tanto como quisiera debido al dolor moderado de cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item8" value="4" onchange="calcularNDI()"><br>Apenas puedo conducir debido al intenso dolor de cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item8" value="5" onchange="calcularNDI()"><br>No puedo conducir por el dolor de cuello</td>
+          </tr>
+          
+          <!-- 9. Dormir -->
+          <tr>
+            <td>9. Dormir</td>
+            <td class="text-center"><input type="radio" name="ndi_item9" value="0" onchange="calcularNDI()"><br>No tengo ningún problema para dormir</td>
+            <td class="text-center"><input type="radio" name="ndi_item9" value="1" onchange="calcularNDI()"><br>Mi sueño está ligeramente perturbado (menos de 1 hora de insomnio)</td>
+            <td class="text-center"><input type="radio" name="ndi_item9" value="2" onchange="calcularNDI()"><br>Mi sueño está moderadamente perturbado (1-2 horas de insomnio)</td>
+            <td class="text-center"><input type="radio" name="ndi_item9" value="3" onchange="calcularNDI()"><br>Mi sueño está bastante perturbado (2-3 horas de insomnio)</td>
+            <td class="text-center"><input type="radio" name="ndi_item9" value="4" onchange="calcularNDI()"><br>Mi sueño está muy perturbado (3-5 horas de insomnio)</td>
+            <td class="text-center"><input type="radio" name="ndi_item9" value="5" onchange="calcularNDI()"><br>Mi sueño está completamente perturbado (5-7 horas de insomnio)</td>
+          </tr>
+          
+          <!-- 10. Actividades recreativas -->
+          <tr>
+            <td>10. Actividades recreativas</td>
+            <td class="text-center"><input type="radio" name="ndi_item10" value="0" onchange="calcularNDI()"><br>Puedo participar en todas mis actividades recreativas sin dolor de cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item10" value="1" onchange="calcularNDI()"><br>Puedo participar en todas mis actividades recreativas con algo de dolor de cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item10" value="2" onchange="calcularNDI()"><br>Puedo participar en la mayoría de mis actividades recreativas habituales, pero no en todas, debido al dolor de cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item10" value="3" onchange="calcularNDI()"><br>Puedo participar en pocas de mis actividades recreativas habituales debido al dolor de cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item10" value="4" onchange="calcularNDI()"><br>Apenas puedo hacer actividades recreativas debido al dolor de cuello</td>
+            <td class="text-center"><input type="radio" name="ndi_item10" value="5" onchange="calcularNDI()"><br>No puedo realizar ninguna actividad recreativa</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="form-row">
+        <div class="form-col form-col-md-12">
+          <div class="resultado-container" id="ndi-resultado">
             <div class="form-row">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="escalaEVA" class="form-label">EVA (Escala Visual Analógica)</label>
-                  <input type="range" id="escalaEVA" name="escalaEVA" class="form-range" min="0" max="10" step="1" value="0" oninput="document.getElementById('escalaEVA_value').textContent = this.value;">
-                  <div class="d-flex justify-content-between">
-                    <span>0 (Sin dolor)</span>
-                    <span id="escalaEVA_value">0</span>
-                    <span>10 (Máximo dolor)</span>
+              <div class="form-col form-col-md-4">
+                <div class="resultado-label">Puntuación Total:</div>
+                <div class="resultado-valor" id="ndi-valor-total">-/50</div>
+                <div class="resultado-interpretacion" id="ndi-interpretacion-total">Complete el cuestionario</div>
+              </div>
+              <div class="form-col form-col-md-8">
+                <div class="resultado-label">Interpretación:</div>
+                <div class="form-row">
+                  <div class="form-col form-col-md-6">
+                    <div class="resultado-sublabel">Porcentaje:</div>
+                    <div class="resultado-valor" id="ndi-valor-porcentaje">-%</div>
+                  </div>
+                  <div class="form-col form-col-md-6">
+                    <div class="resultado-sublabel">Nivel de discapacidad:</div>
+                    <div class="resultado-valor" id="ndi-nivel-discapacidad">-</div>
                   </div>
                 </div>
               </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="escalaNumerica" class="form-label">Escala Numérica</label>
-                  <select id="escalaNumerica" name="escalaNumerica" class="form-select">
-                    <option value="">Seleccionar</option>
-                    <option value="0">0 - Sin dolor</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10 - Máximo dolor</option>
-                  </select>
-                </div>
-              </div>
             </div>
-            
-            <h4>7.2 Escalas Funcionales</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="escalaPSFS" class="form-label">PSFS (Patient-Specific Functional Scale)</label>
-                  <textarea id="escalaPSFS" name="escalaPSFS" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="escalaGROC" class="form-label">GROC (Global Rating of Change)</label>
-                  <textarea id="escalaGROC" name="escalaGROC" class="form-control" rows="2"></textarea>
-                </div>
-              </div>
-            </div>
-            
-            <h4>7.3 Cuestionarios Específicos</h4>
-            <div class="form-row">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="cuestionariosEspecificos" class="form-label">Cuestionarios aplicados</label>
-                  <textarea id="cuestionariosEspecificos" name="cuestionariosEspecificos" class="form-control" rows="3"></textarea>
-                </div>
-              </div>
-            </div>    
-            
-            <div class="form-row mt-4">
-              <div class="form-col form-col-md-12">
-                <button type="button" class="btn btn-secondary prev-tab" data-prev="evaluacion-fisica"><i class="fas fa-arrow-left"></i> Anterior</button>
-                <button type="button" class="btn btn-primary next-tab" data-next="banderas">Siguiente <i class="fas fa-arrow-right"></i></button>
-              </div>
-            </div>
-          </div>
           
           <!-- 8. Banderas -->
           <div class="tab-content" id="banderas">
