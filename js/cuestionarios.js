@@ -1033,10 +1033,23 @@ function calcularNDI() {
   // Verificar si se han contestado todas las preguntas
   const todasContestadasNDI = items.every(item => item !== null);
   
-  // Si no se han contestado todas, actualizar el badge y salir
+  // Actualizar el badge en la lista de cuestionarios si existe
+  const listaBadge = document.querySelector('[data-cuestionario="ndi"] .resultado-badge, .cuestionario-item-header .resultado-badge');
+  
+  // Si no se han contestado todas, actualizar los badges y salir
   if (!todasContestadasNDI) {
-    document.getElementById('ndi-badge').textContent = "Incompleto";
-    document.getElementById('ndi-badge').className = "resultado-badge incompleto";
+    // Actualizar badge dentro del cuestionario
+    if (document.getElementById('ndi-badge')) {
+      document.getElementById('ndi-badge').textContent = "No completado";
+      document.getElementById('ndi-badge').className = "resultado-badge no-completado";
+    }
+    
+    // Actualizar badge en la lista si existe
+    if (listaBadge) {
+      listaBadge.textContent = "No completado";
+      listaBadge.className = "resultado-badge no-completado";
+    }
+    
     return;
   }
   
@@ -1071,13 +1084,43 @@ function calcularNDI() {
   }
   
   // Actualizar elementos en la página
-  document.getElementById('ndi-valor-total').textContent = totalNDI + "/50";
-  document.getElementById('ndi-valor-porcentaje').textContent = porcentajeNDI.toFixed(1) + "%";
-  document.getElementById('ndi-nivel-discapacidad').textContent = nivelDiscapacidad;
+  if (document.getElementById('ndi-valor-total')) {
+    document.getElementById('ndi-valor-total').textContent = totalNDI + "/50";
+  }
+  
+  if (document.getElementById('ndi-valor-porcentaje')) {
+    document.getElementById('ndi-valor-porcentaje').textContent = porcentajeNDI.toFixed(1) + "%";
+  }
+  
+  if (document.getElementById('ndi-nivel-discapacidad')) {
+    document.getElementById('ndi-nivel-discapacidad').textContent = nivelDiscapacidad;
+  }
+  
+  // Actualizar el contenedor de resultados con la clase de color
+  const resultadoContainer = document.getElementById('ndi-resultado');
+  if (resultadoContainer) {
+    if (porcentajeNDI < 10) {
+      resultadoContainer.className = "resultado-container nivel-leve";
+    } else if (porcentajeNDI >= 10 && porcentajeNDI < 30) {
+      resultadoContainer.className = "resultado-container nivel-leve";
+    } else if (porcentajeNDI >= 30 && porcentajeNDI < 50) {
+      resultadoContainer.className = "resultado-container nivel-moderado";
+    } else if (porcentajeNDI >= 50) {
+      resultadoContainer.className = "resultado-container nivel-severo";
+    }
+  }
   
   // Actualizar estado del badge
-  document.getElementById('ndi-badge').textContent = nivelDiscapacidad;
-  document.getElementById('ndi-badge').className = "resultado-badge " + colorBadge;
+  if (document.getElementById('ndi-badge')) {
+    document.getElementById('ndi-badge').textContent = nivelDiscapacidad;
+    document.getElementById('ndi-badge').className = "resultado-badge " + colorBadge;
+  }
+  
+  // Actualizar badge en la lista si existe
+  if (listaBadge) {
+    listaBadge.textContent = nivelDiscapacidad;
+    listaBadge.className = "resultado-badge " + colorBadge;
+  }
   
   // Generar interpretación clínica basada en la puntuación
   let interpretacionClinica = "";
@@ -1313,6 +1356,18 @@ function calcularNDI() {
       </div>
     `;
   }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  const interpretacionClinicaEl = document.getElementById('ndi-interpretacion-clinica');
+  if (interpretacionClinicaEl) {
+    interpretacionClinicaEl.innerHTML = interpretacionClinica;
+  }
+  
+  const recomendacionesEl = document.getElementById('ndi-recomendaciones');
+  if (recomendacionesEl) {
+    recomendacionesEl.innerHTML = recomendaciones;
+  }
+}
   
   // Actualizar la interpretación clínica y recomendaciones en la página
   document.getElementById('ndi-interpretacion-clinica').innerHTML = interpretacionClinica;
