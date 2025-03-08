@@ -3606,289 +3606,270 @@
   </div>
 </div>
             
-            <h4>6.3 Evaluación Postural</h4>
-
-<!-- Alineación Corporal General -->
-<div class="card mb-4">
-  <div class="card-header bg-light">
-    <h5 class="mb-0">Alineación Corporal General</h5>
-  </div>
-  <div class="card-body">
-    <div class="alert alert-info mb-3">
-      <i class="fas fa-info-circle"></i> <strong>Nota:</strong> Los hallazgos posturales deben interpretarse en el contexto clínico completo del paciente. La evidencia actual muestra que las alteraciones posturales por sí solas no predicen necesariamente dolor o disfunción.
+            <!-- Sección 6.3 Evaluación Postural -->
+<h4>6.3 Evaluación Postural</h4>
+<div class="cuestionarios-acordeon">
+  <div class="cuestionario-item">
+    <div class="cuestionario-header" onclick="toggleCuestionario('evaluacion-postural-content')">
+      <h4><i class="fas fa-plus-circle"></i> Evaluación Postural Completa</h4>
+      <div class="resultado-badge" id="evaluacion-postural-badge">No completado</div>
     </div>
-    
-    <div class="form-row">
-      <div class="form-col form-col-md-12">
-        <div class="form-group">
-          <label for="alineacionCorporal" class="form-label">Descripción general de la alineación</label>
-          <textarea id="alineacionCorporal" name="alineacionCorporal" class="form-control" rows="2"></textarea>
+    <div class="cuestionario-content" id="evaluacion-postural-content" style="display: none;">
+      
+      <!-- Resumen visual de hallazgos -->
+      <div class="alert alert-info mb-3" id="resumen-postural-container">
+        <strong><i class="fas fa-info-circle"></i> Resumen de hallazgos posturales:</strong>
+        <div id="resumen-postural">No se han registrado hallazgos posturales.</div>
+      </div>
+      
+      <!-- Fotografías posturales -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Fotografías Posturales</h5>
         </div>
+        <div class="card-body">
+          <div class="alert alert-info mb-3">
+            <i class="fas fa-info-circle"></i> <strong>Nota:</strong> Las fotografías son útiles para el seguimiento visual. Capture imágenes estandarizadas desde tres vistas principales.
+          </div>
+          
+          <div class="row">
+            <!-- Vista anterior -->
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label for="foto-anterior" class="form-label">Vista Anterior</label>
+                <input type="file" class="form-control" id="foto-anterior" accept="image/*">
+                <div class="mt-2" id="preview-anterior"></div>
+                <div class="progress mt-2 d-none" id="progress-anterior">
+                  <div class="progress-bar" role="progressbar"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Vista lateral -->
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label for="foto-lateral" class="form-label">Vista Lateral</label>
+                <input type="file" class="form-control" id="foto-lateral" accept="image/*">
+                <div class="mt-2" id="preview-lateral"></div>
+                <div class="progress mt-2 d-none" id="progress-lateral">
+                  <div class="progress-bar" role="progressbar"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Vista posterior -->
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label for="foto-posterior" class="form-label">Vista Posterior</label>
+                <input type="file" class="form-control" id="foto-posterior" accept="image/*">
+                <div class="mt-2" id="preview-posterior"></div>
+                <div class="progress mt-2 d-none" id="progress-posterior">
+                  <div class="progress-bar" role="progressbar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group mt-2">
+            <label for="observacion-fotos" class="form-label">Observaciones sobre las fotografías</label>
+            <textarea id="observacion-fotos" name="observacion-fotos" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Evaluación Postural Relevante -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Evaluación Postural Relevante</h5>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-warning mb-3">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Evidencia actual:</strong> Solo se incluyen aspectos posturales con evidencia científica de correlación con función o dolor.
+          </div>
+          
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th width="25%">Región/Aspecto</th>
+                  <th width="35%">Hallazgo</th>
+                  <th width="20%">Relevancia Clínica</th>
+                  <th width="20%">Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Posición de cabeza -->
+                <tr>
+                  <td>Posición de cabeza</td>
+                  <td>
+                    <select id="posicion-cabeza" name="posicion-cabeza" class="form-select" onchange="actualizarRelevanciaPostural('posicion-cabeza')">
+                      <option value="">Seleccionar</option>
+                      <option value="Neutra">Alineación neutra</option>
+                      <option value="Anterior leve">Posición anterior leve (1-2 cm)</option>
+                      <option value="Anterior moderada">Posición anterior moderada (2-4 cm)</option>
+                      <option value="Anterior severa">Posición anterior severa (>4 cm)</option>
+                    </select>
+                  </td>
+                  <td id="relevancia-posicion-cabeza">No evaluado</td>
+                  <td>
+                    <input type="text" id="obs-posicion-cabeza" name="obs-posicion-cabeza" class="form-control">
+                  </td>
+                </tr>
+                
+                <!-- Posición de hombros -->
+                <tr>
+                  <td>Posición de hombros</td>
+                  <td>
+                    <select id="posicion-hombros" name="posicion-hombros" class="form-select" onchange="actualizarRelevanciaPostural('posicion-hombros')">
+                      <option value="">Seleccionar</option>
+                      <option value="Neutros">Alineación neutra</option>
+                      <option value="Protracción leve">Protracción bilateral leve</option>
+                      <option value="Protracción moderada">Protracción bilateral moderada</option>
+                      <option value="Asimetría significativa">Asimetría significativa</option>
+                    </select>
+                  </td>
+                  <td id="relevancia-posicion-hombros">No evaluado</td>
+                  <td>
+                    <input type="text" id="obs-posicion-hombros" name="obs-posicion-hombros" class="form-control">
+                  </td>
+                </tr>
+                
+                <!-- Alineación de rodilla en carga -->
+                <tr>
+                  <td>Alineación de rodillas</td>
+                  <td>
+                    <select id="alineacion-rodillas" name="alineacion-rodillas" class="form-select" onchange="actualizarRelevanciaPostural('alineacion-rodillas')">
+                      <option value="">Seleccionar</option>
+                      <option value="Neutra">Alineación neutra</option>
+                      <option value="Valgo leve">Valgo leve</option>
+                      <option value="Valgo moderado">Valgo moderado</option>
+                      <option value="Valgo dinámico">Valgo dinámico en carga</option>
+                      <option value="Varo">Varo significativo</option>
+                    </select>
+                  </td>
+                  <td id="relevancia-alineacion-rodillas">No evaluado</td>
+                  <td>
+                    <input type="text" id="obs-alineacion-rodillas" name="obs-alineacion-rodillas" class="form-control">
+                  </td>
+                </tr>
+                
+                <!-- Alineación del pie -->
+                <tr>
+                  <td>Alineación del pie</td>
+                  <td>
+                    <select id="alineacion-pie" name="alineacion-pie" class="form-select" onchange="actualizarRelevanciaPostural('alineacion-pie')">
+                      <option value="">Seleccionar</option>
+                      <option value="Neutro">Neutro</option>
+                      <option value="Pronación leve">Pronación leve</option>
+                      <option value="Pronación excesiva">Pronación excesiva</option>
+                      <option value="Supinación">Supinación significativa</option>
+                      <option value="Asimetría">Asimetría entre pies</option>
+                    </select>
+                  </td>
+                  <td id="relevancia-alineacion-pie">No evaluado</td>
+                  <td>
+                    <input type="text" id="obs-alineacion-pie" name="obs-alineacion-pie" class="form-control">
+                  </td>
+                </tr>
+                
+                <!-- Asimetrías -->
+                <tr>
+                  <td>Asimetrías significativas</td>
+                  <td>
+                    <select id="asimetrias" name="asimetrias" class="form-select" onchange="actualizarRelevanciaPostural('asimetrias')">
+                      <option value="">Seleccionar</option>
+                      <option value="No">No hay asimetrías relevantes</option>
+                      <option value="MMII leve">Asimetría MI leve (<1cm)</option>
+                      <option value="MMII significativa">Asimetría MI significativa (>1cm)</option>
+                      <option value="Pelvis">Asimetría pélvica</option>
+                      <option value="Tronco">Asimetría de tronco</option>
+                    </select>
+                  </td>
+                  <td id="relevancia-asimetrias">No evaluado</td>
+                  <td>
+                    <input type="text" id="obs-asimetrias" name="obs-asimetrias" class="form-control">
+                  </td>
+                </tr>
+                
+                <!-- Escoliosis -->
+                <tr>
+                  <td>Escoliosis</td>
+                  <td>
+                    <select id="escoliosis" name="escoliosis" class="form-select" onchange="actualizarRelevanciaPostural('escoliosis')">
+                      <option value="">Seleccionar</option>
+                      <option value="No">No presente</option>
+                      <option value="Leve">Leve (<10°)</option>
+                      <option value="Moderada">Moderada (10-20°)</option>
+                      <option value="Significativa">Significativa (>20°)</option>
+                      <option value="Estructural">Estructural (confirmada)</option>
+                    </select>
+                  </td>
+                  <td id="relevancia-escoliosis">No evaluado</td>
+                  <td>
+                    <input type="text" id="obs-escoliosis" name="obs-escoliosis" class="form-control">
+                  </td>
+                </tr>
+                
+                <!-- Ángulos posturales -->
+                <tr>
+                  <td>Ángulos posturales</td>
+                  <td>
+                    <div class="row g-2">
+                      <div class="col-6">
+                        <input type="number" id="angulo-cifosis" placeholder="Cifosis (°)" class="form-control">
+                      </div>
+                      <div class="col-6">
+                        <input type="number" id="angulo-lordosis" placeholder="Lordosis (°)" class="form-control">
+                      </div>
+                    </div>
+                  </td>
+                  <td id="relevancia-angulos">No medido</td>
+                  <td>
+                    <input type="text" id="obs-angulos" name="obs-angulos" class="form-control">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Interpretación Clínica -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Interpretación Clínica</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="alteraciones-relevantes" class="form-label">Alteraciones posturales relevantes para la condición actual</label>
+            <textarea id="alteraciones-relevantes" name="alteraciones-relevantes" class="form-control" rows="3"></textarea>
+          </div>
+          
+          <div class="form-group mt-3">
+            <label for="impresion-funcional" class="form-label">Impresión funcional</label>
+            <textarea id="impresion-funcional" name="impresion-funcional" class="form-control" rows="2" placeholder="¿Cómo impactan los hallazgos posturales en las actividades diarias/deportivas del paciente?"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Recomendaciones basadas en evidencia -->
+      <div class="alert alert-info mt-3" id="recomendaciones-posturales">
+        <h5><i class="fas fa-info-circle"></i> Recomendaciones basadas en evidencia</h5>
+        <ul>
+          <li>Los hallazgos posturales deben interpretarse como <strong>variantes individuales</strong> más que como "desviaciones" de un ideal arbitrario.</li>
+          <li>El abordaje terapéutico debe enfocarse en <strong>mejorar la función y movilidad</strong> más que en "corregir" la postura.</li>
+          <li>Considere que muchas variantes posturales son <strong>adaptaciones funcionales</strong> y no necesariamente patológicas.</li>
+          <li><span id="recomendacion-especifica">No hay recomendaciones específicas adicionales.</span></li>
+        </ul>
+      </div>
+      
+      <!-- Botones de acción -->
+      <div class="d-flex justify-content-between mt-3">
+        <button type="button" class="btn btn-secondary" onclick="limpiarEvaluacionPostural()">Limpiar evaluación</button>
+        <button type="button" class="btn btn-primary" onclick="guardarEvaluacionPostural()">Guardar evaluación</button>
       </div>
     </div>
   </div>
-</div>
-
-<!-- Evaluación Postural Detallada -->
-<div class="card mb-4">
-  <div class="card-header bg-light">
-    <h5 class="mb-0">Evaluación Postural Detallada</h5>
-  </div>
-  <div class="card-body">
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Región</th>
-            <th>Hallazgo</th>
-            <th>Observaciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Cabeza y cuello -->
-          <tr>
-            <td>Cabeza</td>
-            <td>
-              <select id="postura_cabeza" name="postura_cabeza" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Neutra">Alineación neutra</option>
-                <option value="Anterior">Posición anterior</option>
-                <option value="Inclinación lateral derecha">Inclinación lateral derecha</option>
-                <option value="Inclinación lateral izquierda">Inclinación lateral izquierda</option>
-                <option value="Rotación derecha">Rotación derecha</option>
-                <option value="Rotación izquierda">Rotación izquierda</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="obs_cabeza" name="obs_cabeza" class="form-control">
-            </td>
-          </tr>
-          
-          <!-- Hombros -->
-          <tr>
-            <td>Hombros</td>
-            <td>
-              <select id="postura_hombros" name="postura_hombros" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Nivelados">Nivelados</option>
-                <option value="Elevado derecho">Elevado derecho</option>
-                <option value="Elevado izquierdo">Elevado izquierdo</option>
-                <option value="Protracción">Protracción bilateral</option>
-                <option value="Retracción">Retracción bilateral</option>
-                <option value="Protracción derecha">Protracción derecha</option>
-                <option value="Protracción izquierda">Protracción izquierda</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="obs_hombros" name="obs_hombros" class="form-control">
-            </td>
-          </tr>
-          
-          <!-- Columna -->
-          <tr>
-            <td>Columna cervical</td>
-            <td>
-              <select id="postura_columna_cervical" name="postura_columna_cervical" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Lordosis normal">Lordosis normal</option>
-                <option value="Hiperlordosis">Hiperlordosis</option>
-                <option value="Rectificación">Rectificación</option>
-                <option value="Cifosis">Cifosis</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="obs_columna_cervical" name="obs_columna_cervical" class="form-control">
-            </td>
-          </tr>
-          
-          <tr>
-            <td>Columna dorsal</td>
-            <td>
-              <select id="postura_columna_dorsal" name="postura_columna_dorsal" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Cifosis normal">Cifosis normal</option>
-                <option value="Hipercifosis">Hipercifosis</option>
-                <option value="Rectificación">Rectificación</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="obs_columna_dorsal" name="obs_columna_dorsal" class="form-control">
-            </td>
-          </tr>
-          
-          <tr>
-            <td>Columna lumbar</td>
-            <td>
-              <select id="postura_columna_lumbar" name="postura_columna_lumbar" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Lordosis normal">Lordosis normal</option>
-                <option value="Hiperlordosis">Hiperlordosis</option>
-                <option value="Rectificación">Rectificación</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="obs_columna_lumbar" name="obs_columna_lumbar" class="form-control">
-            </td>
-          </tr>
-          
-          <tr>
-            <td>Escoliosis</td>
-            <td>
-              <select id="postura_escoliosis" name="postura_escoliosis" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="No">No presente</option>
-                <option value="Leve convexa derecha">Leve convexa derecha</option>
-                <option value="Leve convexa izquierda">Leve convexa izquierda</option>
-                <option value="Moderada convexa derecha">Moderada convexa derecha</option>
-                <option value="Moderada convexa izquierda">Moderada convexa izquierda</option>
-                <option value="Severa">Severa</option>
-                <option value="Estructural">Estructural</option>
-                <option value="Funcional">Funcional</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="obs_escoliosis" name="obs_escoliosis" class="form-control">
-            </td>
-          </tr>
-          
-          <!-- Pelvis -->
-          <tr>
-            <td>Pelvis</td>
-            <td>
-              <select id="postura_pelvis" name="postura_pelvis" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Neutra">Neutra</option>
-                <option value="Anteversión">Anteversión</option>
-                <option value="Retroversión">Retroversión</option>
-                <option value="Elevada derecha">Elevada derecha</option>
-                <option value="Elevada izquierda">Elevada izquierda</option>
-                <option value="Rotación anterior derecha">Rotación anterior derecha</option>
-                <option value="Rotación anterior izquierda">Rotación anterior izquierda</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="obs_pelvis" name="obs_pelvis" class="form-control">
-            </td>
-          </tr>
-          
-          <!-- Rodillas -->
-          <tr>
-            <td>Rodillas (plano frontal)</td>
-            <td>
-              <select id="postura_rodillas_frontal" name="postura_rodillas_frontal" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Neutras">Neutras</option>
-                <option value="Genu varo">Genu varo</option>
-                <option value="Genu valgo">Genu valgo</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="obs_rodillas_frontal" name="obs_rodillas_frontal" class="form-control">
-            </td>
-          </tr>
-          
-          <tr>
-            <td>Rodillas (plano sagital)</td>
-            <td>
-              <select id="postura_rodillas_sagital" name="postura_rodillas_sagital" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Neutras">Neutras</option>
-                <option value="Genu recurvatum">Genu recurvatum</option>
-                <option value="Genu flexum">Genu flexum</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="obs_rodillas_sagital" name="obs_rodillas_sagital" class="form-control">
-            </td>
-          </tr>
-          
-          <!-- Pies -->
-          <tr>
-            <td>Pies</td>
-            <td>
-              <select id="postura_pies" name="postura_pies" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Neutros">Neutros</option>
-                <option value="Pie plano">Pie plano</option>
-                <option value="Pie cavo">Pie cavo</option>
-                <option value="Pronación">Pronación</option>
-                <option value="Supinación">Supinación</option>
-                <option value="Hallux valgus">Hallux valgus</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="obs_pies" name="obs_pies" class="form-control">
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- Alteraciones Posturales y Recomendaciones -->
-<div class="card mb-4">
-  <div class="card-header bg-light">
-    <h5 class="mb-0">Alteraciones Posturales e Interpretación Clínica</h5>
-  </div>
-  <div class="card-body">
-    <div class="alert alert-warning mb-3">
-      <i class="fas fa-exclamation-triangle"></i> <strong>Evidencia actual:</strong> Las alteraciones posturales no tienen una correlación fuerte con el dolor. Considere factores como la cronicidad, adaptaciones funcionales y contexto biopsicosocial del paciente.
-    </div>
-    
-    <div class="form-row">
-      <div class="form-col form-col-md-12">
-        <div class="form-group">
-          <label for="alteracionesPosturales" class="form-label">Alteraciones posturales relevantes</label>
-          <textarea id="alteracionesPosturales" name="alteracionesPosturales" class="form-control" rows="2"></textarea>
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-row mt-3">
-      <div class="form-col form-col-md-12">
-        <div class="form-group">
-          <label for="interpretacionPostural" class="form-label">Interpretación clínica</label>
-          <textarea id="interpretacionPostural" name="interpretacionPostural" class="form-control" rows="3" placeholder="Interprete los hallazgos posturales en el contexto del paciente, considerando la función y no sólo la alineación..."></textarea>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Dominancia (requerido por la solicitud) -->
-<div class="card mb-4">
-  <div class="card-header bg-light">
-    <h5 class="mb-0">Lateralidad y Dominancia</h5>
-  </div>
-  <div class="card-body">
-    <div class="form-row">
-      <div class="form-col form-col-md-6">
-        <div class="form-group">
-          <label for="lateralidad" class="form-label">Observaciones sobre dominancia y lateralidad</label>
-          <textarea id="lateralidad" name="lateralidad" class="form-control" rows="2" placeholder="Registre observaciones relevantes sobre la dominancia y lateralidad del paciente..."></textarea>
-        </div>
-      </div>
-      <div class="form-col form-col-md-6">
-        <div class="form-group">
-          <label for="asimetrias" class="form-label">Asimetrías relevantes</label>
-          <textarea id="asimetrias" name="asimetrias" class="form-control" rows="2" placeholder="Describa asimetrías relevantes observadas y su posible significado clínico..."></textarea>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Recomendaciones basadas en evidencia -->
-<div class="alert alert-info mt-4" id="recomendaciones_posturales">
-  <h5><i class="fas fa-info-circle"></i> Recomendaciones basadas en evidencia</h5>
-  <ul>
-    <li>Los hallazgos posturales deben interpretarse como <strong>variantes individuales</strong> más que como "desviaciones" de un ideal arbitrario.</li>
-    <li>Existe amplia <strong>evidencia científica</strong> que muestra que no hay una correlación directa entre alteraciones posturales y dolor.</li>
-    <li>El abordaje terapéutico debe enfocarse en <strong>mejorar la función y movilidad</strong> más que en "corregir" la postura.</li>
-    <li>Considere que muchas variantes posturales son <strong>adaptaciones funcionales</strong> y no necesariamente patológicas.</li>
-    <li>La educación al paciente debe enfatizar que las variantes posturales son <strong>normales y frecuentes</strong> en la población asintomática.</li>
-  </ul>
 </div>
             
             <h4>6.4 Evaluación de Inspección y Palpación</h4>
