@@ -8183,5 +8183,41 @@ function evaluarFactoresPsicosociales() {
 <script src="js/rangos-movimiento.js"></script>
 <script src="js/patrones-movimiento.js"></script>
 <script src="js/fuerza-muscular.js"></script>
+// Agregar este código al final de tu página nuevo-paciente.html justo antes del cierre </body>
+// para verificar si el JavaScript se está cargando correctamente
+
+<script>
+  // Verificar si el DOM está completamente cargado
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM cargado completamente');
+    
+    // Verificar si podemos acceder a los elementos de evaluación postural
+    const posicionCabeza = document.getElementById('posicion-cabeza');
+    console.log('Elemento posición cabeza:', posicionCabeza);
+    
+    // Verificar si Firebase está disponible
+    if (typeof firebase !== 'undefined') {
+      console.log('Firebase está disponible');
+    } else {
+      console.log('Firebase NO está disponible - Error crítico');
+    }
+    
+    // Intentar agregar los event listeners manualmente
+    if (posicionCabeza) {
+      console.log('Añadiendo event listener a posición cabeza');
+      posicionCabeza.addEventListener('change', function() {
+        console.log('Cambio detectado en posición cabeza');
+        actualizarRelevanciaPostural('posicion-cabeza');
+      });
+    }
+    
+    // Verificar si las funciones están definidas
+    if (typeof actualizarRelevanciaPostural === 'function') {
+      console.log('Función actualizarRelevanciaPostural está definida');
+    } else {
+      console.log('Función actualizarRelevanciaPostural NO está definida - Error crítico');
+    }
+  });
+</script>          
 </body>
 </html>
