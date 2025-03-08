@@ -816,6 +816,15 @@ a:hover {
   margin: 0;
   list-style: none;
   border-bottom: 1px solid var(--color-border);
+  overflow-x: auto; /* Permite deslizar horizontalmente */
+  flex-wrap: nowrap; /* Evita que las pestañas se envuelvan */
+  -webkit-overflow-scrolling: touch; /* Mejora el desplazamiento táctil */
+  scrollbar-width: thin; /* Para Firefox */
+  white-space: nowrap; /* Evita saltos de línea */
+}
+
+.tab-nav li {
+  flex: 0 0 auto; /* Evita que las pestañas se compriman */
 }
 
 .tab-link {
