@@ -3702,7 +3702,7 @@
                 <tr>
                   <td>Posición de cabeza</td>
                   <td>
-                    <select id="posicion-cabeza" name="posicion-cabeza" class="form-select" onchange="actualizarRelevanciaPostural('posicion-cabeza')">
+                    <select id="posicion-cabeza" name="posicion-cabeza" class="form-select" onchange="evalPostural(this)">
                       <option value="">Seleccionar</option>
                       <option value="Neutra">Alineación neutra</option>
                       <option value="Anterior leve">Posición anterior leve (1-2 cm)</option>
@@ -3720,7 +3720,7 @@
                 <tr>
                   <td>Posición de hombros</td>
                   <td>
-                    <select id="posicion-hombros" name="posicion-hombros" class="form-select" onchange="actualizarRelevanciaPostural('posicion-hombros')">
+                    <select id="posicion-hombros" name="posicion-hombros" class="form-select" onchange="evalPostural(this)">
                       <option value="">Seleccionar</option>
                       <option value="Neutros">Alineación neutra</option>
                       <option value="Protracción leve">Protracción bilateral leve</option>
@@ -3738,13 +3738,13 @@
                 <tr>
                   <td>Alineación de rodillas</td>
                   <td>
-                    <select id="alineacion-rodillas" name="alineacion-rodillas" class="form-select" onchange="actualizarRelevanciaPostural('alineacion-rodillas')">
+                    <select id="alineacion-rodillas" name="alineacion-rodillas" class="form-select" onchange="evalPostural(this)">
                       <option value="">Seleccionar</option>
                       <option value="Neutra">Alineación neutra</option>
                       <option value="Valgo leve">Valgo leve</option>
                       <option value="Valgo moderado">Valgo moderado</option>
                       <option value="Valgo dinámico">Valgo dinámico en carga</option>
-                      <option value="Varo">Varo significativo</option>
+                      <option value="Varo significativo">Varo significativo</option>
                     </select>
                   </td>
                   <td id="relevancia-alineacion-rodillas">No evaluado</td>
@@ -3757,13 +3757,13 @@
                 <tr>
                   <td>Alineación del pie</td>
                   <td>
-                    <select id="alineacion-pie" name="alineacion-pie" class="form-select" onchange="actualizarRelevanciaPostural('alineacion-pie')">
+                    <select id="alineacion-pie" name="alineacion-pie" class="form-select" onchange="evalPostural(this)">
                       <option value="">Seleccionar</option>
                       <option value="Neutro">Neutro</option>
                       <option value="Pronación leve">Pronación leve</option>
                       <option value="Pronación excesiva">Pronación excesiva</option>
-                      <option value="Supinación">Supinación significativa</option>
-                      <option value="Asimetría">Asimetría entre pies</option>
+                      <option value="Supinación significativa">Supinación significativa</option>
+                      <option value="Asimetría entre pies">Asimetría entre pies</option>
                     </select>
                   </td>
                   <td id="relevancia-alineacion-pie">No evaluado</td>
@@ -3776,7 +3776,7 @@
                 <tr>
                   <td>Asimetrías significativas</td>
                   <td>
-                    <select id="asimetrias" name="asimetrias" class="form-select" onchange="actualizarRelevanciaPostural('asimetrias')">
+                    <select id="asimetrias" name="asimetrias" class="form-select" onchange="evalPostural(this)">
                       <option value="">Seleccionar</option>
                       <option value="No">No hay asimetrías relevantes</option>
                       <option value="MMII leve">Asimetría MI leve (<1cm)</option>
@@ -3795,7 +3795,7 @@
                 <tr>
                   <td>Escoliosis</td>
                   <td>
-                    <select id="escoliosis" name="escoliosis" class="form-select" onchange="actualizarRelevanciaPostural('escoliosis')">
+                    <select id="escoliosis" name="escoliosis" class="form-select" onchange="evalPostural(this)">
                       <option value="">Seleccionar</option>
                       <option value="No">No presente</option>
                       <option value="Leve">Leve (<10°)</option>
@@ -3816,10 +3816,10 @@
                   <td>
                     <div class="row g-2">
                       <div class="col-6">
-                        <input type="number" id="angulo-cifosis" placeholder="Cifosis (°)" class="form-control">
+                        <input type="number" id="angulo-cifosis" placeholder="Cifosis (°)" class="form-control" onchange="evalAngulos()">
                       </div>
                       <div class="col-6">
-                        <input type="number" id="angulo-lordosis" placeholder="Lordosis (°)" class="form-control">
+                        <input type="number" id="angulo-lordosis" placeholder="Lordosis (°)" class="form-control" onchange="evalAngulos()">
                       </div>
                     </div>
                   </td>
@@ -3859,7 +3859,7 @@
           <li>Los hallazgos posturales deben interpretarse como <strong>variantes individuales</strong> más que como "desviaciones" de un ideal arbitrario.</li>
           <li>El abordaje terapéutico debe enfocarse en <strong>mejorar la función y movilidad</strong> más que en "corregir" la postura.</li>
           <li>Considere que muchas variantes posturales son <strong>adaptaciones funcionales</strong> y no necesariamente patológicas.</li>
-          <li><span id="recomendacion-especifica">No hay recomendaciones específicas adicionales.</span></li>
+          <li id="recomendacion-especifica">No hay recomendaciones específicas adicionales.</li>
         </ul>
       </div>
       
@@ -3871,6 +3871,384 @@
     </div>
   </div>
 </div>
+
+<!-- Script para la funcionalidad de evaluación postural -->
+<script>
+// Función principal para evaluar hallazgos posturales
+function evalPostural(selectElement) {
+  const campo = selectElement.id;
+  const valor = selectElement.value;
+  const relevanciaElement = document.getElementById(`relevancia-${campo}`);
+  
+  if (!relevanciaElement) return;
+  
+  // Evaluar relevancia
+  let relevancia = '';
+  let clase = '';
+  
+  // Lógica por campo
+  if (campo === 'posicion-cabeza') {
+    if (valor === 'Neutra') {
+      relevancia = 'Normal';
+      clase = 'text-success';
+    } else if (valor.includes('leve')) {
+      relevancia = 'Baja';
+      clase = 'text-warning';
+    } else if (valor.includes('moderada')) {
+      relevancia = 'Moderada';
+      clase = 'text-warning';
+    } else if (valor.includes('severa')) {
+      relevancia = 'Alta';
+      clase = 'text-danger';
+    }
+  } 
+  else if (campo === 'posicion-hombros') {
+    if (valor === 'Neutros') {
+      relevancia = 'Normal';
+      clase = 'text-success';
+    } else if (valor.includes('leve')) {
+      relevancia = 'Baja';
+      clase = 'text-warning';
+    } else if (valor.includes('moderada')) {
+      relevancia = 'Moderada';
+      clase = 'text-warning';
+    } else if (valor.includes('significativa')) {
+      relevancia = 'Alta';
+      clase = 'text-danger';
+    }
+  }
+  else if (campo === 'alineacion-rodillas') {
+    if (valor === 'Neutra') {
+      relevancia = 'Normal';
+      clase = 'text-success';
+    } else if (valor.includes('leve')) {
+      relevancia = 'Baja';
+      clase = 'text-warning';
+    } else if (valor.includes('moderado')) {
+      relevancia = 'Moderada';
+      clase = 'text-warning';
+    } else if (valor.includes('dinámico') || valor.includes('significativo')) {
+      relevancia = 'Alta';
+      clase = 'text-danger';
+    }
+  }
+  else if (campo === 'alineacion-pie') {
+    if (valor === 'Neutro') {
+      relevancia = 'Normal';
+      clase = 'text-success';
+    } else if (valor.includes('leve')) {
+      relevancia = 'Baja';
+      clase = 'text-warning';
+    } else if (valor.includes('excesiva') || valor.includes('significativa')) {
+      relevancia = 'Alta';
+      clase = 'text-danger';
+    } else {
+      relevancia = 'Moderada';
+      clase = 'text-warning';
+    }
+  }
+  else if (campo === 'asimetrias') {
+    if (valor === 'No') {
+      relevancia = 'Normal';
+      clase = 'text-success';
+    } else if (valor.includes('leve')) {
+      relevancia = 'Baja';
+      clase = 'text-warning';
+    } else if (valor.includes('significativa')) {
+      relevancia = 'Alta';
+      clase = 'text-danger';
+    } else {
+      relevancia = 'Moderada';
+      clase = 'text-warning';
+    }
+  }
+  else if (campo === 'escoliosis') {
+    if (valor === 'No') {
+      relevancia = 'Normal';
+      clase = 'text-success';
+    } else if (valor === 'Leve') {
+      relevancia = 'Baja';
+      clase = 'text-warning';
+    } else if (valor === 'Moderada') {
+      relevancia = 'Moderada';
+      clase = 'text-warning';
+    } else {
+      relevancia = 'Alta';
+      clase = 'text-danger';
+    }
+  }
+  
+  // Actualizar el elemento de relevancia
+  if (relevancia) {
+    relevanciaElement.textContent = relevancia;
+    relevanciaElement.className = '';
+    relevanciaElement.classList.add(clase);
+  } else {
+    relevanciaElement.textContent = 'No evaluado';
+    relevanciaElement.className = '';
+  }
+  
+  // Actualizar recomendaciones y resumen
+  actualizarRecomendaciones();
+  actualizarResumen();
+  actualizarBadge();
+}
+
+// Función para evaluar ángulos posturales
+function evalAngulos() {
+  const cifosis = document.getElementById('angulo-cifosis').value;
+  const lordosis = document.getElementById('angulo-lordosis').value;
+  const relevanciaElement = document.getElementById('relevancia-angulos');
+  
+  if (!relevanciaElement) return;
+  
+  // Si no hay valores
+  if (!cifosis && !lordosis) {
+    relevanciaElement.textContent = 'No medido';
+    relevanciaElement.className = '';
+    return;
+  }
+  
+  // Evaluar relevancia
+  let relevancia = 'Normal';
+  let clase = 'text-success';
+  
+  if (cifosis && parseInt(cifosis) > 50) {
+    relevancia = 'Alta';
+    clase = 'text-danger';
+  } else if (cifosis && parseInt(cifosis) > 40) {
+    relevancia = 'Moderada';
+    clase = 'text-warning';
+  }
+  
+  if (lordosis && parseInt(lordosis) > 50) {
+    relevancia = 'Alta';
+    clase = 'text-danger';
+  } else if (lordosis && parseInt(lordosis) > 40 && relevancia !== 'Alta') {
+    relevancia = 'Moderada';
+    clase = 'text-warning';
+  }
+  
+  // Actualizar relevancia
+  relevanciaElement.textContent = relevancia;
+  relevanciaElement.className = '';
+  relevanciaElement.classList.add(clase);
+  
+  // Actualizar badge
+  actualizarBadge();
+}
+
+// Función para actualizar las recomendaciones
+function actualizarRecomendaciones() {
+  const recomendacionElement = document.getElementById('recomendacion-especifica');
+  if (!recomendacionElement) return;
+  
+  const recomendaciones = [];
+  
+  // Cabeza
+  const posicionCabeza = document.getElementById('posicion-cabeza').value;
+  if (posicionCabeza && posicionCabeza.includes('anterior')) {
+    recomendaciones.push('Para la posición anterior de cabeza, enfóquese en ejercicios de control motor cervical y fortalecimiento de flexores profundos, no en estiramientos pasivos.');
+  }
+  
+  // Hombros
+  const posicionHombros = document.getElementById('posicion-hombros').value;
+  if (posicionHombros && posicionHombros.includes('Protracción')) {
+    recomendaciones.push('Para la protracción de hombros, priorizar ejercicios de control motor escapular y fortalecimiento de trapecio medio/inferior.');
+  }
+  
+  // Rodillas
+  const alineacionRodillas = document.getElementById('alineacion-rodillas').value;
+  if (alineacionRodillas && alineacionRodillas.includes('dinámico')) {
+    recomendaciones.push('El valgo dinámico de rodilla tiene relación con riesgo de lesiones. Considere entrenamiento neuromuscular y fortalecimiento de cadera.');
+  }
+  
+  // Escoliosis
+  const escoliosis = document.getElementById('escoliosis').value;
+  if (escoliosis && (escoliosis === 'Significativa' || escoliosis === 'Estructural')) {
+    recomendaciones.push('Para escoliosis significativa, considere evaluación médica especializada y enfoque en ejercicios específicos de Schroth o similar.');
+  }
+  
+  // Actualizar elemento
+  if (recomendaciones.length > 0) {
+    recomendacionElement.innerHTML = recomendaciones.join('<br><br>');
+  } else {
+    recomendacionElement.textContent = 'No hay recomendaciones específicas adicionales.';
+  }
+}
+
+// Función para actualizar el resumen
+function actualizarResumen() {
+  const resumenElement = document.getElementById('resumen-postural');
+  if (!resumenElement) return;
+  
+  const campos = [
+    { id: 'posicion-cabeza', label: 'Cabeza' },
+    { id: 'posicion-hombros', label: 'Hombros' },
+    { id: 'alineacion-rodillas', label: 'Rodillas' },
+    { id: 'alineacion-pie', label: 'Pies' },
+    { id: 'asimetrias', label: 'Asimetrías' },
+    { id: 'escoliosis', label: 'Escoliosis' }
+  ];
+  
+  const hallazgos = [];
+  
+  campos.forEach(campo => {
+    const elemento = document.getElementById(campo.id);
+    if (elemento && elemento.value && 
+        elemento.value !== 'No' && 
+        elemento.value !== 'Neutro' && 
+        elemento.value !== 'Neutra' && 
+        elemento.value !== 'Neutros') {
+      hallazgos.push(`${campo.label}: ${elemento.value}`);
+    }
+  });
+  
+  // Actualizar resumen
+  if (hallazgos.length > 0) {
+    resumenElement.innerHTML = hallazgos.join('; ');
+    
+    // Actualizar campo de alteraciones relevantes si está vacío
+    const alteracionesElement = document.getElementById('alteraciones-relevantes');
+    if (alteracionesElement && alteracionesElement.value.trim() === '') {
+      alteracionesElement.value = hallazgos.join('.\n');
+    }
+  } else {
+    resumenElement.textContent = 'No se han registrado hallazgos posturales significativos.';
+  }
+}
+
+// Función para actualizar el badge
+function actualizarBadge() {
+  const badgeElement = document.getElementById('evaluacion-postural-badge');
+  if (!badgeElement) return;
+  
+  const campos = [
+    'posicion-cabeza', 'posicion-hombros', 'alineacion-rodillas', 
+    'alineacion-pie', 'asimetrias', 'escoliosis'
+  ];
+  
+  let completados = 0;
+  campos.forEach(campo => {
+    const elemento = document.getElementById(campo);
+    if (elemento && elemento.value) {
+      completados++;
+    }
+  });
+  
+  if (completados >= 4) {
+    badgeElement.textContent = 'Completado';
+    badgeElement.className = 'resultado-badge bg-success';
+  } else if (completados >= 2) {
+    badgeElement.textContent = 'Parcial';
+    badgeElement.className = 'resultado-badge bg-warning';
+  } else {
+    badgeElement.textContent = 'No completado';
+    badgeElement.className = 'resultado-badge bg-secondary';
+  }
+}
+
+// Función para limpiar la evaluación
+function limpiarEvaluacionPostural() {
+  if (!confirm('¿Está seguro de limpiar todos los datos de la evaluación postural?')) {
+    return;
+  }
+  
+  // Limpiar selects
+  const selects = [
+    'posicion-cabeza', 'posicion-hombros', 'alineacion-rodillas', 
+    'alineacion-pie', 'asimetrias', 'escoliosis'
+  ];
+  
+  selects.forEach(id => {
+    const elemento = document.getElementById(id);
+    if (elemento) elemento.value = '';
+  });
+  
+  // Limpiar inputs
+  const inputs = [
+    'obs-posicion-cabeza', 'obs-posicion-hombros', 'obs-alineacion-rodillas',
+    'obs-alineacion-pie', 'obs-asimetrias', 'obs-escoliosis',
+    'angulo-cifosis', 'angulo-lordosis', 'obs-angulos',
+    'alteraciones-relevantes', 'impresion-funcional', 'observacion-fotos'
+  ];
+  
+  inputs.forEach(id => {
+    const elemento = document.getElementById(id);
+    if (elemento) elemento.value = '';
+  });
+  
+  // Limpiar relevancia
+  const relevanciaElements = [
+    'relevancia-posicion-cabeza', 'relevancia-posicion-hombros', 'relevancia-alineacion-rodillas',
+    'relevancia-alineacion-pie', 'relevancia-asimetrias', 'relevancia-escoliosis', 'relevancia-angulos'
+  ];
+  
+  relevanciaElements.forEach(id => {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+      elemento.textContent = 'No evaluado';
+      elemento.className = '';
+    }
+  });
+  
+  // Resetear resumen
+  const resumenElement = document.getElementById('resumen-postural');
+  if (resumenElement) {
+    resumenElement.textContent = 'No se han registrado hallazgos posturales.';
+  }
+  
+  // Resetear recomendación
+  const recomendacionElement = document.getElementById('recomendacion-especifica');
+  if (recomendacionElement) {
+    recomendacionElement.textContent = 'No hay recomendaciones específicas adicionales.';
+  }
+  
+  // Resetear badge
+  const badgeElement = document.getElementById('evaluacion-postural-badge');
+  if (badgeElement) {
+    badgeElement.textContent = 'No completado';
+    badgeElement.className = 'resultado-badge bg-secondary';
+  }
+}
+
+// Función para guardar la evaluación
+function guardarEvaluacionPostural() {
+  alert('Evaluación postural guardada correctamente.');
+  
+  const badgeElement = document.getElementById('evaluacion-postural-badge');
+  if (badgeElement) {
+    badgeElement.textContent = 'Guardado';
+    badgeElement.className = 'resultado-badge bg-success';
+  }
+  
+  // En una integración real, aquí se guardarían los datos en Firebase
+}
+
+// Inicializar eventos cuando se muestra el contenedor
+function toggleCuestionario(id) {
+  const elemento = document.getElementById(id);
+  if (elemento) {
+    if (elemento.style.display === 'none') {
+      elemento.style.display = 'block';
+      // Cambiar ícono de + a -
+      const iconElement = elemento.previousElementSibling.querySelector('i');
+      if (iconElement) {
+        iconElement.classList.remove('fa-plus-circle');
+        iconElement.classList.add('fa-minus-circle');
+      }
+    } else {
+      elemento.style.display = 'none';
+      // Cambiar ícono de - a +
+      const iconElement = elemento.previousElementSibling.querySelector('i');
+      if (iconElement) {
+        iconElement.classList.remove('fa-minus-circle');
+        iconElement.classList.add('fa-plus-circle');
+      }
+    }
+  }
+}
+</script>
             
             <h4>6.4 Evaluación de Inspección y Palpación</h4>
 <div class="cuestionarios-acordeon">
