@@ -1,0 +1,152 @@
+<h4>6.2 Antropometría</h4>
+<div class="cuestionarios-acordeon">
+  <div class="cuestionario-item">
+    <div class="cuestionario-header" onclick="toggleCuestionario('antropometria-content')">
+      <h4><i class="fas fa-plus-circle"></i> Evaluación Antropométrica</h4>
+      <div class="resultado-badge" id="antropometria-badge">No completado</div>
+    </div>
+    <div class="cuestionario-content" id="antropometria-content" style="display: none;">
+      <!-- Medidas básicas: peso, talla, IMC -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label for="peso" class="form-label">Peso (kg)</label>
+          <input type="number" id="peso" name="peso" class="form-control" min="0" max="500" step="0.1">
+        </div>
+        <div class="col-md-4">
+          <label for="talla" class="form-label">Talla (cm)</label>
+          <input type="number" id="talla" name="talla" class="form-control" min="0" max="300">
+        </div>
+        <div class="col-md-4">
+          <label for="imc" class="form-label">IMC (kg/m²)</label>
+          <input type="number" id="imc" name="imc" class="form-control" min="0" max="100" step="0.01" readonly>
+          <div id="estado_imc" class="mt-1"></div>
+        </div>
+      </div>
+      
+      <h6 class="mb-2">Perímetros Corporales</h6>
+      <div class="table-responsive">
+        <table class="table table-bordered perimetros-table">
+          <thead>
+            <tr>
+              <th>Región</th>
+              <th>Derecha (cm)</th>
+              <th>Izquierda (cm)</th>
+              <th>Diferencia</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Cuello -->
+            <tr>
+              <td>Perímetro de cuello</td>
+              <td colspan="2"><input type="number" id="perimetro_cuello" name="perimetro_cuello" class="form-control perimetro-input" step="0.1" min="0"></td>
+              <td>-</td>
+              <td id="estado_cuello"></td>
+            </tr>
+            
+            <!-- Tronco -->
+            <tr>
+              <td>Perímetro cintura</td>
+              <td colspan="2"><input type="number" id="perimetro_cintura" name="perimetro_cintura" class="form-control perimetro-input" step="0.1" min="0"></td>
+              <td>-</td>
+              <td id="estado_cintura"></td>
+            </tr>
+            <tr>
+              <td>Perímetro cadera</td>
+              <td colspan="2"><input type="number" id="perimetro_cadera" name="perimetro_cadera" class="form-control perimetro-input" step="0.1" min="0"></td>
+              <td>-</td>
+              <td id="estado_cadera"></td>
+            </tr>
+            
+            <!-- Miembros superiores -->
+            <tr>
+              <td>Brazo relajado</td>
+              <td><input type="number" id="perimetro_brazo_der" name="perimetro_brazo_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_brazo_izq"></td>
+              <td><input type="number" id="perimetro_brazo_izq" name="perimetro_brazo_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_brazo_der"></td>
+              <td id="diff_brazo">-</td>
+              <td id="estado_brazo"></td>
+            </tr>
+            <tr>
+              <td>Brazo contraído</td>
+              <td><input type="number" id="perimetro_brazo_cont_der" name="perimetro_brazo_cont_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_brazo_cont_izq"></td>
+              <td><input type="number" id="perimetro_brazo_cont_izq" name="perimetro_brazo_cont_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_brazo_cont_der"></td>
+              <td id="diff_brazo_cont">-</td>
+              <td id="estado_brazo_cont"></td>
+            </tr>
+            
+            <!-- Miembros inferiores -->
+            <tr>
+              <td>Muslo proximal</td>
+              <td><input type="number" id="perimetro_muslo_prox_der" name="perimetro_muslo_prox_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_muslo_prox_izq"></td>
+              <td><input type="number" id="perimetro_muslo_prox_izq" name="perimetro_muslo_prox_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_muslo_prox_der"></td>
+              <td id="diff_muslo_prox">-</td>
+              <td id="estado_muslo_prox"></td>
+            </tr>
+            <tr>
+              <td>Muslo medio</td>
+              <td><input type="number" id="perimetro_muslo_med_der" name="perimetro_muslo_med_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_muslo_med_izq"></td>
+              <td><input type="number" id="perimetro_muslo_med_izq" name="perimetro_muslo_med_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_muslo_med_der"></td>
+              <td id="diff_muslo_med">-</td>
+              <td id="estado_muslo_med"></td>
+            </tr>
+            <tr>
+              <td>Pantorrilla</td>
+              <td><input type="number" id="perimetro_pantorrilla_der" name="perimetro_pantorrilla_der" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_pantorrilla_izq"></td>
+              <td><input type="number" id="perimetro_pantorrilla_izq" name="perimetro_pantorrilla_izq" class="form-control perimetro-input side-measurement" step="0.1" min="0" data-pair="perimetro_pantorrilla_der"></td>
+              <td id="diff_pantorrilla">-</td>
+              <td id="estado_pantorrilla"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Otros perímetros -->
+      <div class="mb-3">
+        <label for="otros_perimetros" class="form-label">Otros perímetros</label>
+        <textarea id="otros_perimetros" name="otros_perimetros" class="form-control" rows="2" placeholder="Registre aquí cualquier otra medida de perímetro corporal relevante..."></textarea>
+      </div>
+
+      <!-- Índices antropométricos -->
+      <h6 class="mb-2 mt-4">Índices Antropométricos</h6>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="indice_cintura_cadera" class="form-label">Índice cintura/cadera</label>
+          <input type="text" id="indice_cintura_cadera" name="indice_cintura_cadera" class="form-control" readonly>
+          <div id="estado_icc" class="mt-2"></div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="indice_cintura_altura" class="form-label">Índice cintura/altura</label>
+          <input type="text" id="indice_cintura_altura" name="indice_cintura_altura" class="form-control" readonly>
+          <div id="estado_ica" class="mt-2"></div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="indice_masa_muscular" class="form-label">Estimación de masa muscular</label>
+          <input type="text" id="indice_masa_muscular" name="indice_masa_muscular" class="form-control" readonly>
+          <div id="estado_imm" class="mt-2"></div>
+        </div>
+      </div>
+
+      <!-- Masa muscular apendicular y riesgo de sarcopenia -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="masa_muscular_apendicular" class="form-label">Masa muscular apendicular (kg)</label>
+          <input type="text" id="masa_muscular_apendicular" name="masa_muscular_apendicular" class="form-control" readonly>
+          <div id="estado_amma" class="mt-2"></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="riesgo_sarcopenia" class="form-label">Riesgo de sarcopenia</label>
+          <input type="text" id="riesgo_sarcopenia" name="riesgo_sarcopenia" class="form-control" readonly>
+          <div id="estado_sarcopenia" class="mt-2"></div>
+        </div>
+      </div>
+
+      <!-- Recomendaciones clínicas basadas en antropometría -->
+      <div class="alert alert-info mt-3" id="recomendaciones_antropometria">
+        <h6 class="mb-2"><i class="fas fa-info-circle"></i> Recomendaciones clínicas</h6>
+        <div id="texto_recomendaciones_antropometria">
+          Complete los datos antropométricos para obtener recomendaciones clínicas automáticas.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
