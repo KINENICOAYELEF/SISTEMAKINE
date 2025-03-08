@@ -1,11 +1,17 @@
 // Funciones para evaluación antropométrica
 document.addEventListener('DOMContentLoaded', function() {
+  console.log("DOM cargado - inicializando antropometría");
+  
+  // Verificar si podemos encontrar los elementos
+  verificarElementos();
+  
   // Calcular IMC cuando se ingresan peso y talla
   const pesoInput = document.getElementById('peso');
   const tallaInput = document.getElementById('talla');
   const imcInput = document.getElementById('imc');
   
   if (pesoInput && tallaInput && imcInput) {
+    console.log("Agregando event listeners a peso y talla");
     pesoInput.addEventListener('input', calcularIMC);
     tallaInput.addEventListener('input', calcularIMC);
   }
@@ -13,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Calcular diferencias en medidas bilaterales
   const medicionesLaterales = document.querySelectorAll('.side-measurement');
   if (medicionesLaterales.length > 0) {
+    console.log("Agregando event listeners a mediciones laterales");
     medicionesLaterales.forEach(input => {
       input.addEventListener('input', function() {
         calcularDiferenciasLaterales(this);
@@ -23,8 +30,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Calcular índices cuando se ingresan los perímetros necesarios
   const perimetroInputs = document.querySelectorAll('.perimetro-input');
   if (perimetroInputs.length > 0) {
+    console.log("Agregando event listeners a perímetros");
     perimetroInputs.forEach(input => {
       input.addEventListener('input', function() {
+        console.log("Cambio en perímetro:", input.id);
         calcularIndices();
         evaluarPerimetros();
       });
@@ -42,11 +51,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // También ejecutamos los cálculos al cargar la página si hay datos
   if (document.getElementById('peso') && document.getElementById('peso').value &&
       document.getElementById('talla') && document.getElementById('talla').value) {
+    console.log("Calculando IMC inicial");
     calcularIMC();
   }
   
   // Inicializar cálculos de índices si hay datos previos
   if (document.getElementById('perimetro_cintura') && document.getElementById('perimetro_cintura').value) {
+    console.log("Calculando índices iniciales");
     calcularIndices();
     evaluarPerimetros();
   }
@@ -62,8 +73,22 @@ document.addEventListener('DOMContentLoaded', function() {
   agregarEstilosAdicionales();
 });
 
+// Función para verificar si los elementos existen
+function verificarElementos() {
+  console.log("Verificando elementos de antropometría:");
+  console.log("peso:", document.getElementById('peso'));
+  console.log("talla:", document.getElementById('talla'));
+  console.log("imc:", document.getElementById('imc'));
+  console.log("perimetro_cuello:", document.getElementById('perimetro_cuello'));
+  console.log("perimetro_cintura:", document.getElementById('perimetro_cintura'));
+  console.log("perimetro_cadera:", document.getElementById('perimetro_cadera'));
+  console.log("texto_recomendaciones_antropometria:", document.getElementById('texto_recomendaciones_antropometria'));
+  console.log("recomendaciones_antropometria:", document.getElementById('recomendaciones_antropometria'));
+}
+
 // Función para calcular el IMC
 function calcularIMC() {
+  console.log("Ejecutando calcularIMC()");
   const peso = parseFloat(document.getElementById('peso').value);
   const talla = parseFloat(document.getElementById('talla').value);
   
@@ -105,7 +130,7 @@ function calcularIMC() {
       estadoImcElement.innerHTML = `<span class="badge" style="background-color: ${color}; color: white;">${estado}</span>`;
     }
     
-    actualizarRecomendaciones();
+    actualizarRecomendacionesAntropometria(); // IMPORTANTE: usar esta función, no actualizarRecomendaciones()
     actualizarEstadoAcordeonAntropometria();
   } else {
     document.getElementById('imc').value = '';
@@ -121,6 +146,7 @@ function calcularIMC() {
 
 // Función para calcular diferencias entre lados
 function calcularDiferenciasLaterales(input) {
+  console.log("Calculando diferencias laterales para:", input.id);
   const id = input.id;
   const pairId = input.getAttribute('data-pair');
   const pairInput = document.getElementById(pairId);
@@ -165,6 +191,7 @@ function calcularDiferenciasLaterales(input) {
 
 // Función para calcular los índices antropométricos
 function calcularIndices() {
+  console.log("Ejecutando calcularIndices()");
   // Índice Cintura/Cadera
   const cintura = parseFloat(document.getElementById('perimetro_cintura').value);
   const cadera = parseFloat(document.getElementById('perimetro_cadera').value);
@@ -299,12 +326,13 @@ function calcularIndices() {
   // Llamar a la nueva función para calcular masa muscular apendicular
   calcularMasaMuscularApendicular();
   
-  actualizarRecomendaciones();
+  actualizarRecomendacionesAntropometria(); // IMPORTANTE: usar esta función, no actualizarRecomendaciones()
   actualizarEstadoAcordeonAntropometria();
 }
 
 // Función para evaluar perímetros específicos
 function evaluarPerimetros() {
+  console.log("Ejecutando evaluarPerimetros()");
   // Evaluación de riesgo por perímetro de cuello
   const perimetroCuello = parseFloat(document.getElementById('perimetro_cuello').value);
   const estadoCuello = document.getElementById('estado_cuello');
@@ -382,10 +410,14 @@ function evaluarPerimetros() {
     
     estadoAbdominal.innerHTML = `<span class="badge" style="background-color: ${color}; color: white;">${estado}</span>`;
   }
+  
+  // También actualizar las recomendaciones cada vez que se evalúan los perímetros
+  actualizarRecomendacionesAntropometria();
 }
 
 // Función para calcular la masa muscular apendicular estimada basada en perímetros
 function calcularMasaMuscularApendicular() {
+  console.log("Ejecutando calcularMasaMuscularApendicular()");
   const peso = parseFloat(document.getElementById('peso').value);
   const talla = parseFloat(document.getElementById('talla').value);
   const genero = document.getElementById('genero') ? document.getElementById('genero').value : '';
@@ -510,8 +542,12 @@ function calcularMasaMuscularApendicular() {
 
 // Función mejorada para actualizar recomendaciones clínicas basadas en antropometría
 function actualizarRecomendacionesAntropometria() {
+  console.log("Ejecutando actualizarRecomendacionesAntropometria()");
   const recomendacionesElement = document.getElementById('texto_recomendaciones_antropometria');
-  if (!recomendacionesElement) return;
+  if (!recomendacionesElement) {
+    console.error("No se encontró el elemento texto_recomendaciones_antropometria");
+    return;
+  }
   
   const imc = parseFloat(document.getElementById('imc').value);
   const cintura = parseFloat(document.getElementById('perimetro_cintura').value);
@@ -520,6 +556,10 @@ function actualizarRecomendacionesAntropometria() {
   const riesgoSarcopenia = document.getElementById('riesgo_sarcopenia') ? 
                           document.getElementById('riesgo_sarcopenia').value : '';
   const perimetroCuello = parseFloat(document.getElementById('perimetro_cuello').value);
+  
+  console.log("Valores para recomendaciones:", {
+    imc, cintura, cadera, genero, riesgoSarcopenia, perimetroCuello
+  });
   
   let evaluacionRecomendaciones = [];
   let tratamientoRecomendaciones = [];
@@ -706,6 +746,8 @@ function actualizarRecomendacionesAntropometria() {
     colorPanel = 'alert-success';
   }
   
+  console.log("Cantidad de hallazgos:", cantidadHallazgos, "Color panel:", colorPanel);
+  
   // Cambiar color del panel de recomendaciones
   const panelRecomendaciones = document.getElementById('recomendaciones_antropometria');
   if (panelRecomendaciones) {
@@ -714,6 +756,10 @@ function actualizarRecomendacionesAntropometria() {
   
   // Preparar HTML con las recomendaciones
   let html = '';
+  
+  console.log("Recomendaciones de evaluación:", evaluacionRecomendaciones.length);
+  console.log("Recomendaciones de tratamiento:", tratamientoRecomendaciones.length);
+  console.log("Recomendaciones educativas:", educacionRecomendaciones.length);
   
   if (evaluacionRecomendaciones.length > 0 || tratamientoRecomendaciones.length > 0 || educacionRecomendaciones.length > 0) {
     if (evaluacionRecomendaciones.length > 0) {
@@ -744,13 +790,16 @@ function actualizarRecomendacionesAntropometria() {
     }
     
     recomendacionesElement.innerHTML = html;
+    console.log("Recomendaciones actualizadas con éxito");
   } else {
     recomendacionesElement.innerHTML = 'Complete los datos antropométricos para obtener recomendaciones clínicas automáticas.';
+    console.log("No hay suficientes datos para generar recomendaciones");
   }
 }
 
 // Función para actualizar el estado del acordeón de antropometría
 function actualizarEstadoAcordeonAntropometria() {
+  console.log("Ejecutando actualizarEstadoAcordeonAntropometria()");
   const peso = document.getElementById('peso').value;
   const talla = document.getElementById('talla').value;
   const perimetroCuello = document.getElementById('perimetro_cuello').value;
@@ -860,10 +909,10 @@ function agregarEstilosAdicionales() {
   document.head.appendChild(style);
 }
 
-// Función para guardar todos los datos adicionales en el objeto del paciente
 // Función para guardar todos los datos antropométricos en el objeto del paciente
 function prepararDatosAntropometriaPostural(formData) {
   // Esta función se debe llamar desde la función prepararDatosPaciente en pacientes.js
+  console.log("Preparando datos de antropometría para guardar");
   
   // Datos antropométricos
   formData.antropometria = {
@@ -897,4 +946,12 @@ function prepararDatosAntropometriaPostural(formData) {
 // Exponer las funciones necesarias globalmente para usarlas en otros archivos
 window.prepararDatosAntropometriaPostural = prepararDatosAntropometriaPostural;
 
+// Añadir esta función para forzar la actualización de recomendaciones
+// La puedes llamar desde la consola o añadir un botón para depuración
+function forzarActualizacionRecomendaciones() {
+  console.log("Forzando actualización de recomendaciones...");
+  actualizarRecomendacionesAntropometria();
+}
 
+// Exponer función para depuración
+window.forzarActualizacionRecomendaciones = forzarActualizacionRecomendaciones;
