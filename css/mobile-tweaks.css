@@ -1,0 +1,37 @@
+/* Ajustes para pestañas deslizables en móviles */
+@media (max-width: 767.98px) {
+  .tab-nav {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  
+  .tab-nav li {
+    flex: 0 0 auto;
+  }
+  
+  /* Botón para mostrar/ocultar sidebar en móviles */
+  .mobile-menu-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1060;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #8300e0;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border: none;
+    cursor: pointer;
+  }
+  
+  .mobile-menu-toggle i {
+    font-size: 20px;
+  }
+}
