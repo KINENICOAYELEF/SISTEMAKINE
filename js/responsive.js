@@ -5,12 +5,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const sidebar = document.querySelector('.sidebar');
   const content = document.querySelector('.content');
   
-  // Detectar si estamos en el dashboard
-  if (window.location.href.includes('dashboard.html')) {
-    document.body.classList.add('dashboard');
-  }
+  // Eliminar cualquier otro botón de menú existente que pueda interferir
+  const otherMenuButtons = document.querySelectorAll(
+    '#menu-toggle, .navbar-toggler, button[aria-label="Toggle navigation"], .btn-toggle-sidebar, .menu-toggle'
+  );
+  otherMenuButtons.forEach(button => {
+    button.style.display = 'none';
+    button.parentNode.removeChild(button);
+  });
   
-  // Crear botón para mostrar/ocultar sidebar en móviles
+  // Crear botón para mostrar/ocultar sidebar en móviles (solo si no existe aún)
   if (!document.querySelector('.sidebar-toggle') && sidebar && content) {
     const sidebarToggle = document.createElement('button');
     sidebarToggle.className = 'sidebar-toggle';
@@ -60,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.classList.remove('sidebar-active');
             overlay.style.display = 'none';
             sidebarToggle.setAttribute('aria-label', 'Abrir menú');
-          }, 150); // Un pequeño retraso para que se sienta el clic
+          }, 150);
         }
       });
     });
