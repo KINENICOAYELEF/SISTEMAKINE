@@ -4177,7 +4177,7 @@ function actualizarRecomendaciones() {
   recomendacionesTratamiento.classList.toggle('d-none', tratamientoRecomendaciones.length === 0);
   recomendacionesEducacion.classList.toggle('d-none', educacionRecomendaciones.length === 0);
   
-// Al final, actualizar el color con estilos en línea
+  // Al final, actualizar el color con estilos en línea
   if (recomendacionesElement) {
     const totalRecomendaciones = evalRecomendaciones.length + tratamientoRecomendaciones.length + educacionRecomendaciones.length;
     
@@ -4207,6 +4207,7 @@ function actualizarRecomendaciones() {
     recomendacionesElement.style.border = '1px solid transparent';
     recomendacionesElement.style.borderRadius = '0.25rem';
   }
+}
 
 // Función para actualizar el badge
 function actualizarBadge() {
@@ -4273,7 +4274,6 @@ function limpiarEvaluacionPostural() {
     'relevancia-alineacion-pie', 'relevancia-asimetrias', 'relevancia-escoliosis'
   ];
   
-  
   relevanciaElements.forEach(id => {
     const elemento = document.getElementById(id);
     if (elemento) {
@@ -4296,8 +4296,10 @@ function limpiarEvaluacionPostural() {
   // Resetear recomendaciones
   const recomendacionesElement = document.getElementById('recomendaciones-posturales');
   if (recomendacionesElement) {
-    recomendacionesElement.classList.remove('alert-success', 'alert-warning', 'alert-danger');
-    recomendacionesElement.classList.add('alert-info');
+    // Aplicar estilos en línea
+    recomendacionesElement.style.backgroundColor = '#d1ecf1'; // azul claro (info)
+    recomendacionesElement.style.borderColor = '#bee5eb';
+    recomendacionesElement.style.color = '#0c5460';
   }
   
   // Ocultar secciones de recomendaciones
