@@ -23,6 +23,27 @@ function guardarPaciente(patientData) {
       return docRef.id;
     });
 }
+// Obtener datos del paciente
+  const datosPaciente = {
+    // ... datos existentes del paciente ...
+    
+    // Agregar datos de la evaluación postural
+    evaluacionPostural: prepararDatosEvaluacionPostural()
+  };
+  
+  // Guardar en Firebase
+  const pacienteRef = firebase.firestore().collection('pacientes').doc(pacienteId);
+  
+  pacienteRef.set(datosPaciente, { merge: true })
+    .then(() => {
+      console.log('Paciente guardado correctamente con evaluación postural');
+      // ... código existente ...
+    })
+    .catch((error) => {
+      console.error('Error al guardar el paciente:', error);
+      alert('Error al guardar: ' + error.message);
+    });
+}
 
 // Función para actualizar un paciente existente
 function actualizarPaciente(patientId, patientData) {
