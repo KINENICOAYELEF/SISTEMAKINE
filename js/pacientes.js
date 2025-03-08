@@ -12,6 +12,19 @@ function cargarPaciente(patientId) {
     });
 }
 
+// Cargar datos de evaluación postural
+        cargarDatosEvaluacionPostural(paciente);
+        
+        // ... resto del código ...
+      } else {
+        console.log('No existe el paciente con ID:', pacienteId);
+      }
+    })
+    .catch((error) => {
+      console.error('Error al cargar el paciente:', error);
+    });
+}
+
 // Función para guardar un nuevo paciente
 function guardarPaciente(patientData) {
   // Añadir marca de tiempo
@@ -44,6 +57,98 @@ function guardarPaciente(patientData) {
       alert('Error al guardar: ' + error.message);
     });
 }
+
+// Función para cargar los datos de evaluación postural cuando se carga un paciente
+function cargarDatosEvaluacionPostural(paciente) {
+  if (!paciente || !paciente.evaluacionPostural) return;
+  
+  const ep = paciente.evaluacionPostural;
+  
+  // Cargar datos de posición cabeza
+  if (ep.cabeza) {
+    document.getElementById('posicion-cabeza').value = ep.cabeza.posicion || '';
+    document.getElementById('obs-posicion-cabeza').value = ep.cabeza.observaciones || '';
+    actualizarRelevanciaPostural('posicion-cabeza');
+  }
+  
+  // Cargar datos de hombros
+  if (ep.hombros) {
+    document.getElementById('posicion-hombros').value = ep.hombros.posicion || '';
+    document.getElementById('obs-posicion-hombros').value = ep.hombros.observaciones || '';
+    actualizarRelevanciaPostural('posicion-hombros');
+  }
+  
+  // Cargar datos de rodillas
+  if (ep.rodillas) {
+    document.getElementById('alineacion-rodillas').value = ep.rodillas.alineacion || '';
+    document.getElementById('obs-alineacion-rodillas').value = ep.rodillas.observaciones || '';
+    actualizarRelevanciaPostural('alineacion-rodillas');
+  }
+  
+  // Cargar datos de pies
+  if (ep.pies) {
+    document.getElementById('alineacion-pie').value = ep.pies.alineacion || '';
+    document.getElementById('obs-alineacion-pie').value = ep.pies.observaciones || '';
+    actualizarRelevanciaPostural('alineacion-pie');
+  }
+  
+  // Cargar datos de asimetrías
+  if (ep.asimetrias) {
+    document.getElementById('asimetrias').value = ep.asimetrias.tipo || '';
+    document.getElementById('obs-asimetrias').value = ep.asimetrias.observaciones || '';
+    actualizarRelevanciaPostural('asimetrias');
+  }
+  
+  // Cargar datos de escoliosis
+  if (ep.escoliosis) {
+    document.getElementById('escoliosis').value = ep.escoliosis.tipo || '';
+    document.getElementById('obs-escoliosis').value = ep.escoliosis.observaciones || '';
+    actualizarRelevanciaPostural('escoliosis');
+  }
+  
+  // Cargar datos de ángulos
+  if (ep.angulos) {
+    document.getElementById('angulo-cifosis').value = ep.angulos.cifosis || '';
+    document.getElementById('angulo-lordosis').value = ep.angulos.lordosis || '';
+    document.getElementById('obs-angulos').value = ep.angulos.observaciones || '';
+    evaluarAngulosPosturales();
+  }
+  
+  // Cargar datos de interpretación
+  if (ep.interpretacion) {
+    document.getElementById('alteraciones-relevantes').value = ep.interpretacion.alteracionesRelevantes || '';
+    document.getElementById('impresion-funcional').value = ep.interpretacion.impresionFuncional || '';
+  }
+  
+  // Cargar datos de fotos
+  if (ep.fotos) {
+    document.getElementById('observacion-fotos').value = ep.fotos.observaciones || '';
+    
+    // Cargar previews de fotos si existen URLs
+    if (ep.fotos.anterior) {
+      fotoAnteriorURL = ep.fotos.anterior;
+      document.getElementById('preview-anterior').innerHTML = 
+        `<img src="${fotoAnteriorURL}" class="img-fluid img-thumbnail" alt="Vista anterior">`;
+    }
+    
+    if (ep.fotos.lateral) {
+      fotoLateralURL = ep.fotos.lateral;
+      document.getElementById('preview-lateral').innerHTML = 
+        `<img src="${fotoLateralURL}" class="img-fluid img-thumbnail" alt="Vista lateral">`;
+    }
+    
+    if (ep.fotos.posterior) {
+      fotoPosteriorURL = ep.fotos.posterior;
+      document.getElementById('preview-posterior').innerHTML = 
+        `<img src="${fotoPosteriorURL}" class="img-fluid img-thumbnail" alt="Vista posterior">`;
+    }
+  }
+  
+  // Actualizar resumen y estado de completado
+  actualizarResumenPostural();
+  actualizarEstadoCompletado();
+}
+
 
 // Función para actualizar un paciente existente
 function actualizarPaciente(patientId, patientData) {
@@ -325,6 +430,38 @@ function recopilarDatosFormulario(formId) {
   });
   
   return formData;
+}
+
+// Agregar esto al final de tu código existente de guardarEvaluacionPostural()
+function guardarEvaluacionPostural() {
+  const datosEvaluacionPostural = prepararDatosEvaluacionPostural();
+  const pacienteId = document.getElementById('pacienteId').value;
+  
+  if (!pacienteId) {
+    alert('No se ha identificado un ID de paciente. Guarde primero los datos básicos.');
+    return;
+  }
+  
+  // Referencia al documento del paciente
+  const pacienteRef = firebase.firestore().collection('pacientes').doc(pacienteId);
+  
+  // Actualizar sólo la sección de evaluación postural
+  pacienteRef.update({
+    'evaluacionPostural': datosEvaluacionPostural
+  })
+  .then(() => {
+    console.log('Evaluación postural guardada correctamente');
+    alert('Evaluación postural guardada correctamente.');
+    
+    // Actualizar badge
+    const badgeElement = document.getElementById('evaluacion-postural-badge');
+    badgeElement.textContent = 'Guardado';
+    badgeElement.className = 'resultado-badge bg-success';
+  })
+  .catch((error) => {
+    console.error('Error al guardar la evaluación postural:', error);
+    alert('Error al guardar: ' + error.message);
+  });
 }
 
 // Exportar funciones para uso global
