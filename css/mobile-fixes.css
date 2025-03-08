@@ -44,33 +44,56 @@
   body.sidebar-active .content {
     margin-left: 200px;
   }
-  
-  .sidebar-toggle {
-    display: block;
-  }
 }
 
-/* Estilos para el botón de toggle */
+/* Estilos MEJORADOS para el botón de toggle */
 .sidebar-toggle {
   position: fixed;
   top: 10px;
   left: 10px;
   z-index: 1060;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
   background-color: #8300e0;
   color: white;
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  border: none;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+  border: 2px solid white;
   cursor: pointer;
+  font-size: 24px;
 }
 
+/* Texto "Menú" junto al icono */
+.sidebar-toggle-text {
+  font-size: 14px;
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+/* Hacer que el botón siempre esté visible en móviles */
 @media (max-width: 575.98px) {
   .sidebar-toggle {
-    display: flex;
+    display: flex !important;
   }
+}
+
+/* Estilo para el overlay mejorado */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 1040;
+  display: none;
+  pointer-events: none; /* Permitir interacción con elementos debajo */
+}
+
+/* Cuando el sidebar está activo, el overlay captura clics */
+body.sidebar-active .sidebar-overlay {
+  pointer-events: auto;
 }
