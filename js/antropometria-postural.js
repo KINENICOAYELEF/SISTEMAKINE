@@ -150,6 +150,7 @@ function calcularIndices() {
   if (cintura && cadera) {
     const icc = (cintura / cadera).toFixed(2);
     iccElement.value = icc;
+  
     
     // Evaluación de ICC según género
     const genero = document.getElementById('genero') ? document.getElementById('genero').value : '';
@@ -191,27 +192,27 @@ function calcularIndices() {
     if (estadoIccElement) estadoIccElement.innerHTML = '';
   }
   
-  // Índice Cintura/Altura
+  // CORRECCIÓN: Índice Cintura/Altura
   const altura = parseFloat(document.getElementById('talla').value);
   const icaElement = document.getElementById('indice_cintura_altura');
   const estadoIcaElement = document.getElementById('estado_ica');
   
   if (cintura && altura) {
-    const alturaMt = altura / 100; // Convertir cm a m
-    const ica = (cintura / alturaMt).toFixed(2);
+    // Calcular como se muestra en la imagen 3: (cintura/altura)*100
+    const ica = ((cintura / altura) * 100).toFixed(2);
     if (icaElement) icaElement.value = ica;
     
     // Evaluación de ICA
     let estadoIca = '';
     let colorIca = '';
     
-    if (ica < 0.40) {
+    if (ica < 40) {
       estadoIca = 'Riesgo bajo - Delgadez';
       colorIca = '#FFC107'; // Amarillo
-    } else if (ica >= 0.40 && ica <= 0.50) {
+    } else if (ica >= 40 && ica <= 50) {
       estadoIca = 'Normal';
       colorIca = '#28A745'; // Verde
-    } else if (ica > 0.50 && ica <= 0.60) {
+    } else if (ica > 50 && ica <= 60) {
       estadoIca = 'Riesgo aumentado';
       colorIca = '#FD7E14'; // Naranja
     } else {
@@ -276,6 +277,11 @@ function calcularIndices() {
   calcularMasaMuscularApendicular();
   
   actualizarRecomendacionesAntropometria();
+  
+  // Actualizar el estado del acordeón para mostrar que se ha completado
+  actualizarEstadoAcordeonAntropometria();
+}
+
 }
 // Función para evaluar perímetros específicos
 function evaluarPerimetros() {
