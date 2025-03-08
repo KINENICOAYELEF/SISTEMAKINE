@@ -1,120 +1,76 @@
 // SISTEMAKINE - Responsive JavaScript
 document.addEventListener('DOMContentLoaded', function() {
   // Elementos del DOM
+  const navbar = document.querySelector('.navbar');
   const sidebar = document.querySelector('.sidebar');
   const content = document.querySelector('.content');
   
-  // Detectar si estamos en el dashboard
-  const isDashboard = window.location.href.includes('dashboard.html');
-  
-  // Aplicar clase específica al body según la página
-  if (isDashboard) {
-    document.body.classList.add('dashboard-page');
-  }
-  
-  // Crear overlay para ambas versiones
-  if (!document.querySelector('.sidebar-overlay') && sidebar) {
-    const overlay = document.createElement('div');
-    overlay.className = 'sidebar-overlay';
-    document.body.appendChild(overlay);
+  // Crear botón para mostrar/ocultar sidebar en móviles
+  if (!document.querySelector('.sidebar-toggle') && sidebar && content) {
+    const sidebarToggle = document.createElement('button');
+    sidebarToggle.className = 'sidebar-toggle';
+    sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
+    document.body.appendChild(sidebarToggle);
     
-    // Evento para cerrar el sidebar al hacer clic en el overlay
-    overlay.addEventListener('click', function() {
-      if (isDashboard) {
-        // En dashboard, colapsar
-        sidebar.classList.remove('expanded');
-        document.body.classList.remove('sidebar-expanded');
+    // Añadir evento de clic para el sidebar
+    sidebarToggle.addEventListener('click', function() {
+      sidebar.classList.toggle('active');
+      document.body.classList.toggle('sidebar-active');
+      
+      // Añadir overlay para cerrar el sidebar al tocar fuera
+      if (sidebar.classList.contains('active') && !document.querySelector('.sidebar-overlay')) {
+        const overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.background = 'rgba(0,0,0,0.5)';
+        overlay.style.zIndex = '1040';
+        overlay.style.display = 'none';
+        document.body.appendChild(overlay);
+        
+        // Mostrar con animación
+        setTimeout(() => {
+          overlay.style.display = 'block';
+        }, 10);
+        
+        overlay.addEventListener('click', function() {
+          sidebar.classList.remove('active');
+          document.body.classList.remove('sidebar-active');
+          overlay.style.display = 'none';
+          setTimeout(() => {
+            overlay.remove();
+          }, 300);
+        });
       } else {
-        // En otras páginas, ocultar
-        sidebar.classList.remove('active');
-        document.body.classList.remove('sidebar-active');
-      }
-    });
-  }
-
-  // CONFIGURACIÓN ESPECÍFICA PARA EL DASHBOARD
-  if (isDashboard && sidebar) {
-    // En el dashboard, hacer que el sidebar sea clickable para expandir/colapsar
-    sidebar.addEventListener('click', function(e) {
-      // Solo expandir si hacemos clic en el sidebar mismo, no en los enlaces
-      if (e.target === sidebar || e.target.classList.contains('sidebar-header') || 
-          e.target.classList.contains('sidebar-brand') || e.target.classList.contains('sidebar-nav')) {
-        toggleDashboardSidebar();
-      }
-    });
-    
-    // Hacer que los ítems del sidebar sean clickables individualmente
-    const sidebarItems = sidebar.querySelectorAll('.sidebar-item');
-    sidebarItems.forEach(item => {
-      const link = item.querySelector('.sidebar-link');
-      
-      // Si es un enlace, configurar comportamiento
-      if (link) {
-        // Al hacer hover en modo de iconos, mostrar tooltip
-        link.setAttribute('data-title', link.querySelector('span') ? 
-                         link.querySelector('span').textContent.trim() : '');
-        
-        // Al hacer clic en un icono, primero expandir el sidebar
-        link.addEventListener('click', function(e) {
-          if (!sidebar.classList.contains('expanded')) {
-            e.preventDefault();
-            toggleDashboardSidebar();
-            
-            // Después de un delay, hacer clic en el enlace
-            setTimeout(() => {
-              this.click();
-            }, 300);
-          }
-        });
-      }
-    });
-    
-    // Función para alternar el estado del sidebar en dashboard
-    function toggleDashboardSidebar() {
-      sidebar.classList.toggle('expanded');
-      document.body.classList.toggle('sidebar-expanded');
-    }
-  }
-  // CONFIGURACIÓN PARA OTRAS PÁGINAS (NO DASHBOARD)
-  else if (!isDashboard && sidebar) {
-    // En otras páginas, crear botón para mostrar/ocultar sidebar
-    if (!document.querySelector('.sidebar-toggle')) {
-      const sidebarToggle = document.createElement('button');
-      sidebarToggle.className = 'sidebar-toggle';
-      sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
-      sidebarToggle.setAttribute('aria-label', 'Abrir menú');
-      document.body.appendChild(sidebarToggle);
-      
-      // Añadir evento de clic para el sidebar
-      sidebarToggle.addEventListener('click', function() {
-        sidebar.classList.toggle('active');
-        document.body.classList.toggle('sidebar-active');
-        
-        // Actualizar el aria-label según el estado
-        if (sidebar.classList.contains('active')) {
-          sidebarToggle.setAttribute('aria-label', 'Cerrar menú');
-          // Mostrar overlay con animación
-          document.querySelector('.sidebar-overlay').style.display = 'block';
-        } else {
-          sidebarToggle.setAttribute('aria-label', 'Abrir menú');
-          // Ocultar overlay
-          document.querySelector('.sidebar-overlay').style.display = 'none';
+        const overlay = document.querySelector('.sidebar-overlay');
+        if (overlay) {
+          overlay.style.display = 'none';
+          setTimeout(() => {
+            overlay.remove();
+          }, 300);
         }
-      });
+      }
+    });
+  }
+  
+  // Solo si existe una barra de navegación
+  if (navbar) {
+    // Crear el botón de menú si no existe
+    if (!document.querySelector('.menu-toggle')) {
+      const menuToggle = document.createElement('div');
+      menuToggle.className = 'menu-toggle';
+      menuToggle.innerHTML = '☰';
+      navbar.appendChild(menuToggle);
       
-      // También cerrar el sidebar al hacer clic en cualquier enlace
-      const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
-      sidebarLinks.forEach(link => {
-        link.addEventListener('click', function() {
-          if (window.innerWidth <= 767.98) {
-            setTimeout(() => {
-              sidebar.classList.remove('active');
-              document.body.classList.remove('sidebar-active');
-              document.querySelector('.sidebar-overlay').style.display = 'none';
-              sidebarToggle.setAttribute('aria-label', 'Abrir menú');
-            }, 150);
-          }
-        });
+      // Añadir evento de clic
+      menuToggle.addEventListener('click', function() {
+        const navbarNav = document.querySelector('.navbar-nav');
+        if (navbarNav) {
+          navbarNav.classList.toggle('show');
+        }
       });
     }
   }
@@ -122,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Hacer que todas las tablas sean responsive
   const tables = document.querySelectorAll('table');
   tables.forEach(table => {
+    // Si la tabla no está ya dentro de un contenedor responsive
     if (!table.parentElement.classList.contains('table-responsive')) {
       const wrapper = document.createElement('div');
       wrapper.className = 'table-responsive';
@@ -133,11 +90,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // Mejorar la experiencia de las pestañas en móviles
   const tabNav = document.querySelector('.tab-nav');
   if (tabNav) {
+    // Asegurarse de que se pueda desplazar horizontalmente
     tabNav.style.overflowX = 'auto';
     tabNav.style.flexWrap = 'nowrap';
     tabNav.style.whiteSpace = 'nowrap';
     tabNav.style.WebkitOverflowScrolling = 'touch';
     
+    // Ajustar el ancho de las pestañas en móviles
     const tabLinks = tabNav.querySelectorAll('.tab-link');
     if (window.innerWidth <= 575.98) {
       tabLinks.forEach(link => {
@@ -146,9 +105,12 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
     
+    // Desplazamiento suave al cambiar pestañas
     tabLinks.forEach(link => {
       link.addEventListener('click', function() {
+        // Obtener la posición del elemento
         const rect = this.getBoundingClientRect();
+        // Desplazar suavemente la pestaña al centro si es posible
         tabNav.scrollTo({
           left: rect.left + tabNav.scrollLeft - tabNav.clientWidth / 2 + rect.width / 2,
           behavior: 'smooth'
