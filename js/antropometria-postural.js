@@ -38,6 +38,28 @@ document.addEventListener('DOMContentLoaded', function() {
       calcularIndices();
     });
   }
+  
+  // También ejecutamos los cálculos al cargar la página si hay datos
+  if (document.getElementById('peso') && document.getElementById('peso').value &&
+      document.getElementById('talla') && document.getElementById('talla').value) {
+    calcularIMC();
+  }
+  
+  // Inicializar cálculos de índices si hay datos previos
+  if (document.getElementById('perimetro_cintura') && document.getElementById('perimetro_cintura').value) {
+    calcularIndices();
+    evaluarPerimetros();
+  }
+  
+  // Inicializar diferencias laterales si hay datos previos
+  document.querySelectorAll('.side-measurement').forEach(input => {
+    if (input.value) {
+      calcularDiferenciasLaterales(input);
+    }
+  });
+  
+  // Agregar estilos adicionales necesarios
+  agregarEstilosAdicionales();
 });
 
 // Función para calcular el IMC
@@ -84,6 +106,7 @@ function calcularIMC() {
     }
     
     actualizarRecomendacionesAntropometria();
+    actualizarEstadoAcordeonAntropometria();
   } else {
     document.getElementById('imc').value = '';
     document.getElementById('imc').style.backgroundColor = '';
@@ -139,6 +162,7 @@ function calcularDiferenciasLaterales(input) {
     }
   }
 }
+
 // Función para calcular los índices antropométricos
 function calcularIndices() {
   // Índice Cintura/Cadera
@@ -149,8 +173,7 @@ function calcularIndices() {
   
   if (cintura && cadera) {
     const icc = (cintura / cadera).toFixed(2);
-    iccElement.value = icc;
-  
+    if (iccElement) iccElement.value = icc;
     
     // Evaluación de ICC según género
     const genero = document.getElementById('genero') ? document.getElementById('genero').value : '';
@@ -192,7 +215,7 @@ function calcularIndices() {
     if (estadoIccElement) estadoIccElement.innerHTML = '';
   }
   
-  // CORRECCIÓN: Índice Cintura/Altura
+  // Índice Cintura/Altura
   const altura = parseFloat(document.getElementById('talla').value);
   const icaElement = document.getElementById('indice_cintura_altura');
   const estadoIcaElement = document.getElementById('estado_ica');
@@ -277,12 +300,9 @@ function calcularIndices() {
   calcularMasaMuscularApendicular();
   
   actualizarRecomendacionesAntropometria();
-  
-  // Actualizar el estado del acordeón para mostrar que se ha completado
   actualizarEstadoAcordeonAntropometria();
 }
 
-}
 // Función para evaluar perímetros específicos
 function evaluarPerimetros() {
   // Evaluación de riesgo por perímetro de cuello
@@ -363,6 +383,7 @@ function evaluarPerimetros() {
     estadoAbdominal.innerHTML = `<span class="badge" style="background-color: ${color}; color: white;">${estado}</span>`;
   }
 }
+
 // Función para calcular la masa muscular apendicular estimada basada en perímetros
 function calcularMasaMuscularApendicular() {
   const peso = parseFloat(document.getElementById('peso').value);
@@ -486,6 +507,7 @@ function calcularMasaMuscularApendicular() {
     if (estadoSarcopeniaElement) estadoSarcopeniaElement.innerHTML = '';
   }
 }
+
 // Función para actualizar recomendaciones clínicas basadas en antropometría
 function actualizarRecomendacionesAntropometria() {
   const recomendacionesElement = document.getElementById('texto_recomendaciones_antropometria');
@@ -583,189 +605,26 @@ function actualizarEstadoAcordeonAntropometria() {
   const antropometriaBadge = document.getElementById('antropometria-badge');
   
   // Verificar si se han completado los campos mínimos necesarios
-  if (peso && talla && (perimetroCuello || perimetroCintura || perimetroCadera)) {
+  if (antropometriaBadge && peso && talla && (perimetroCuello || perimetroCintura || perimetroCadera)) {
     antropometriaBadge.textContent = 'Completado';
     antropometriaBadge.classList.remove('badge-secondary');
     antropometriaBadge.classList.add('badge-success');
-  } else {
+  } else if (antropometriaBadge) {
     antropometriaBadge.textContent = 'No completado';
     antropometriaBadge.classList.remove('badge-success');
     antropometriaBadge.classList.add('badge-secondary');
   }
 }
 
-// Agregar esta función a los eventos de cambio en los inputs relevantes
-document.addEventListener('DOMContentLoaded', function() {
-  const antropometriaInputs = [
-    document.getElementById('peso'),
-    document.getElementById('talla'),
-    document.getElementById('perimetro_cuello'),
-    document.getElementById('perimetro_cintura'),
-    document.getElementById('perimetro_cadera')
-  ];
-  
-  antropometriaInputs.forEach(input => {
-    if (input) {
-      input.addEventListener('input', actualizarEstadoAcordeonAntropometria);
-    }
-  });
-});
-// Funciones para la evaluación postural
-document.addEventListener('DOMContentLoaded', function() {
-  // Monitorear cambios en los selectores de evaluación postural
-  const selectoresPosturales = document.querySelectorAll('select[id^="postura_"]');
-  if (selectoresPosturales.length > 0) {
-    selectoresPosturales.forEach(select => {
-      select.addEventListener('change', function() {
-        actualizarEstadoPostural(this);
-      });
-    });
-  }
-  
-  // Generar recomendaciones automáticas cuando se completan observaciones
-  const observacionesInputs = document.querySelectorAll('input[id^="obs_"]');
-  if (observacionesInputs.length > 0) {
-    observacionesInputs.forEach(input => {
-      input.addEventListener('input', function() {
-        actualizarInterpretacionPostural();
-      });
-    });
-  }
-  
-  // Actualizar interpretación cuando se cambia el texto de alteraciones posturales
-  const alteracionesPosturalesTextarea = document.getElementById('alteracionesPosturales');
-  if (alteracionesPosturalesTextarea) {
-    alteracionesPosturalesTextarea.addEventListener('input', function() {
-      actualizarInterpretacionPostural();
-    });
-  }
-});
-
-// Función para actualizar el estado visual de los elementos posturales seleccionados
-function actualizarEstadoPostural(selectElement) {
-  const id = selectElement.id;
-  const valor = selectElement.value;
-  
-  // Cambiar el color de fondo del select según la selección
-  if (valor && valor !== '') {
-    // Colores según el tipo de hallazgo
-    if (valor.includes('Normal') || valor.includes('Neutr') || valor === 'No') {
-      // Estado normal - verde claro
-      selectElement.style.backgroundColor = '#d4edda';
-      selectElement.style.color = '#155724';
-    } else if (valor.includes('Leve') || valor.includes('Moderada') || 
-               valor.includes('Hiperlordosis') || valor.includes('Hipercifosis') ||
-               valor === 'Protracción' || valor === 'Retracción') {
-      // Alteración moderada - amarillo claro
-      selectElement.style.backgroundColor = '#fff3cd';
-      selectElement.style.color = '#856404';
-    } else {
-      // Alteración importante - rojo claro
-      selectElement.style.backgroundColor = '#f8d7da';
-      selectElement.style.color = '#721c24';
-    }
-  } else {
-    // Sin selección - restablecer estilo
-    selectElement.style.backgroundColor = '';
-    selectElement.style.color = '';
-  }
-  
-  // Actualizar sugerencias automáticas y recomendaciones
-  actualizarInterpretacionPostural();
-  
-  // Si es un hallazgo relevante, sugerir agregarlo a las alteraciones posturales
-  if (valor && valor !== '' && 
-      !valor.includes('Normal') && !valor.includes('Neutr') && valor !== 'No') {
-    const region = id.replace('postura_', '');
-    const regionText = region.replace(/_/g, ' ');
-    
-    // Obtener el textarea de alteraciones posturales
-    const alteracionesTextarea = document.getElementById('alteracionesPosturales');
-    if (alteracionesTextarea) {
-      const textoActual = alteracionesTextarea.value.trim();
-      const nuevaAlteracion = `${regionText}: ${valor}`;
-      
-      // Verificar si la alteración ya está incluida en el texto
-      if (textoActual === '') {
-        alteracionesTextarea.value = nuevaAlteracion;
-      } else if (!textoActual.includes(nuevaAlteracion)) {
-        // Evitar duplicados
-        alteracionesTextarea.value = textoActual + '\n' + nuevaAlteracion;
-      }
-    }
-  }
-}
-
-// Función para actualizar automáticamente la interpretación postural
-function actualizarInterpretacionPostural() {
-  const selectoresPosturales = document.querySelectorAll('select[id^="postura_"]');
-  const interpretacionTextarea = document.getElementById('interpretacionPostural');
-  
-  if (!interpretacionTextarea) return;
-  
-  // Recopilar alteraciones seleccionadas
-  let alteracionesSeleccionadas = [];
-  selectoresPosturales.forEach(select => {
-    if (select.value && select.value !== '' && 
-        !select.value.includes('Normal') && !select.value.includes('Neutr') && select.value !== 'No') {
-      const region = select.id.replace('postura_', '');
-      alteracionesSeleccionadas.push({
-        region: region.replace(/_/g, ' '),
-        valor: select.value
-      });
-    }
-  });
-  
-  // Generar interpretación basada en la evidencia
-  let interpretacion = '';
-  
-  if (alteracionesSeleccionadas.length === 0) {
-    interpretacion = 'No se han detectado alteraciones posturales significativas. Postura dentro de parámetros normales.';
-  } else {
-    // Introducción basada en evidencia
-    interpretacion = 'INTERPRETACIÓN BASADA EN EVIDENCIA:\n\n';
-    interpretacion += 'Los hallazgos posturales observados deben interpretarse en el contexto clínico completo del paciente. ';
-    interpretacion += 'La evidencia científica actual muestra que las variaciones posturales son comunes en la población y no predicen necesariamente dolor o disfunción.\n\n';
-    
-    interpretacion += 'Hallazgos relevantes:\n';
-    
-    // Añadir los hallazgos específicos con interpretación basada en evidencia
-    alteracionesSeleccionadas.forEach(alteracion => {
-      interpretacion += `- ${alteracion.region} (${alteracion.valor}): `;
-      
-      // Interpretaciones específicas según la región y hallazgo
-      if (alteracion.region.includes('cervical') || alteracion.region.includes('dorsal') || 
-          alteracion.region.includes('lumbar')) {
-        interpretacion += 'Representa una variante común que por sí sola no se correlaciona con dolor. Evaluar su relevancia clínica en relación a los síntomas específicos y funcionalidad.';
-      } else if (alteracion.region.includes('cabeza') && alteracion.valor.includes('Anterior')) {
-        interpretacion += 'Hallazgo frecuente en la población general. La evidencia no respalda la "corrección postural" como objetivo principal, sino mejorar la funcionalidad y educación sobre dolor.';
-      } else if (alteracion.region.includes('escoliosis')) {
-        interpretacion += 'Evaluar su magnitud clínica y funcional. En casos leves a moderados, el enfoque debe ser funcional más que correctivo.';
-      } else if (alteracion.region.includes('pelvis')) {
-        interpretacion += 'Considerar su impacto en la función, más que como una alteración estructural a "corregir". Evaluar movilidad y control motor de la región.';
-      } else if (alteracion.region.includes('rodillas') || alteracion.region.includes('pies')) {
-        interpretacion += 'Evaluar su impacto en la marcha, equilibrio y funcionalidad. Considerar factores biomecánicos solo si existe correlación clara con los síntomas.';
-      } else {
-        interpretacion += 'Evaluar su relevancia clínica en el contexto de los síntomas y limitación funcional del paciente.';
-      }
-      
-      interpretacion += '\n';
-    });
-    
-    // Recomendaciones generales basadas en evidencia
-    interpretacion += '\nRECOMENDACIONES CLÍNICAS:\n';
-    interpretacion += '• Enfoque terapéutico: Priorizar intervenciones que mejoren la función y movilidad más que "corregir" la postura.\n';
-    interpretacion += '• Educación: Explicar al paciente que las variantes posturales son normales y frecuentes en la población asintomática.\n';
-    interpretacion += '• Abordaje biopsicosocial: Considerar factores psicológicos, creencias sobre postura y expectativas del paciente.\n';
-    interpretacion += '• Ejercicio: Promover variedad de movimientos y posturas, evitando el concepto de "postura ideal".';
-  }
-  
-  // Actualizar el campo de interpretación
-  interpretacionTextarea.value = interpretacion;
-}
 // Función para agregar CSS adicional necesario para las nuevas secciones
 function agregarEstilosAdicionales() {
+  // Verificar si ya existe un estilo con este ID para evitar duplicados
+  if (document.getElementById('antropometria-estilos-adicionales')) {
+    return;
+  }
+  
   const style = document.createElement('style');
+  style.id = 'antropometria-estilos-adicionales';
   style.textContent = `
     /* Estilos para la tabla de perímetros */
     .perimetros-table .table-secondary {
@@ -830,44 +689,21 @@ function agregarEstilosAdicionales() {
       background-color: #fff3cd;
       border-color: #ffeeba;
     }
+    
+    /* Estilos específicos para tu sistema */
+    .badge-success {
+      background-color: #28a745;
+      color: white;
+    }
+    
+    .badge-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
   `;
   
   document.head.appendChild(style);
 }
-
-// Ejecutar la función para agregar estilos al cargar la página
-document.addEventListener('DOMContentLoaded', function() {
-  agregarEstilosAdicionales();
-  
-  // También podemos agregar la inicialización de los cálculos automáticos aquí
-  // para asegurar que todos los elementos estén listos
-  
-  // Inicializar IMC si hay datos previos
-  if (document.getElementById('peso') && document.getElementById('peso').value &&
-      document.getElementById('talla') && document.getElementById('talla').value) {
-    calcularIMC();
-  }
-  
-  // Inicializar cálculos de índices si hay datos previos
-  if (document.getElementById('perimetro_cintura') && document.getElementById('perimetro_cintura').value) {
-    calcularIndices();
-    evaluarPerimetros();
-  }
-  
-  // Inicializar diferencias laterales si hay datos previos
-  document.querySelectorAll('.side-measurement').forEach(input => {
-    if (input.value) {
-      calcularDiferenciasLaterales(input);
-    }
-  });
-  
-  // Inicializar estado postural si hay selecciones previas
-  document.querySelectorAll('select[id^="postura_"]').forEach(select => {
-    if (select.value) {
-      actualizarEstadoPostural(select);
-    }
-  });
-});
 
 // Función para guardar todos los datos adicionales en el objeto del paciente
 function prepararDatosAntropometriaPostural(formData) {
@@ -890,9 +726,9 @@ function prepararDatosAntropometriaPostural(formData) {
   
   // Índices calculados
   formData.antropometria.indices = {
-    cintura_cadera: document.getElementById('indice_cintura_cadera').value,
-    cintura_altura: document.getElementById('indice_cintura_altura').value,
-    masa_muscular: document.getElementById('indice_masa_muscular').value,
+    cintura_cadera: document.getElementById('indice_cintura_cadera') ? document.getElementById('indice_cintura_cadera').value : '',
+    cintura_altura: document.getElementById('indice_cintura_altura') ? document.getElementById('indice_cintura_altura').value : '',
+    masa_muscular: document.getElementById('indice_masa_muscular') ? document.getElementById('indice_masa_muscular').value : '',
     masa_muscular_apendicular: document.getElementById('masa_muscular_apendicular') ? 
                               document.getElementById('masa_muscular_apendicular').value : '',
     riesgo_sarcopenia: document.getElementById('riesgo_sarcopenia') ? 
