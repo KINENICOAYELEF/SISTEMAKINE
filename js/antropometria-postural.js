@@ -571,6 +571,45 @@ function actualizarRecomendacionesAntropometria() {
     recomendacionesElement.innerHTML = 'Complete los datos antropométricos para obtener recomendaciones clínicas automáticas.';
   }
 }
+
+// Función para actualizar el estado del acordeón de antropometría
+function actualizarEstadoAcordeonAntropometria() {
+  const peso = document.getElementById('peso').value;
+  const talla = document.getElementById('talla').value;
+  const perimetroCuello = document.getElementById('perimetro_cuello').value;
+  const perimetroCintura = document.getElementById('perimetro_cintura').value;
+  const perimetroCadera = document.getElementById('perimetro_cadera').value;
+  
+  const antropometriaBadge = document.getElementById('antropometria-badge');
+  
+  // Verificar si se han completado los campos mínimos necesarios
+  if (peso && talla && (perimetroCuello || perimetroCintura || perimetroCadera)) {
+    antropometriaBadge.textContent = 'Completado';
+    antropometriaBadge.classList.remove('badge-secondary');
+    antropometriaBadge.classList.add('badge-success');
+  } else {
+    antropometriaBadge.textContent = 'No completado';
+    antropometriaBadge.classList.remove('badge-success');
+    antropometriaBadge.classList.add('badge-secondary');
+  }
+}
+
+// Agregar esta función a los eventos de cambio en los inputs relevantes
+document.addEventListener('DOMContentLoaded', function() {
+  const antropometriaInputs = [
+    document.getElementById('peso'),
+    document.getElementById('talla'),
+    document.getElementById('perimetro_cuello'),
+    document.getElementById('perimetro_cintura'),
+    document.getElementById('perimetro_cadera')
+  ];
+  
+  antropometriaInputs.forEach(input => {
+    if (input) {
+      input.addEventListener('input', actualizarEstadoAcordeonAntropometria);
+    }
+  });
+});
 // Funciones para la evaluación postural
 document.addEventListener('DOMContentLoaded', function() {
   // Monitorear cambios en los selectores de evaluación postural
