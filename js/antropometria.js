@@ -508,42 +508,135 @@ function calcularMasaMuscularApendicular() {
   }
 }
 
-// Función para actualizar recomendaciones clínicas basadas en antropometría
-function actualizarRecomendaciones() {
+// Función mejorada para actualizar recomendaciones clínicas basadas en antropometría
+function actualizarRecomendacionesAntropometria() {
   const recomendacionesElement = document.getElementById('texto_recomendaciones_antropometria');
   if (!recomendacionesElement) return;
   
   const imc = parseFloat(document.getElementById('imc').value);
   const cintura = parseFloat(document.getElementById('perimetro_cintura').value);
+  const cadera = parseFloat(document.getElementById('perimetro_cadera').value);
   const genero = document.getElementById('genero') ? document.getElementById('genero').value : '';
   const riesgoSarcopenia = document.getElementById('riesgo_sarcopenia') ? 
                           document.getElementById('riesgo_sarcopenia').value : '';
+  const perimetroCuello = parseFloat(document.getElementById('perimetro_cuello').value);
   
-  let recomendaciones = [];
+  let evaluacionRecomendaciones = [];
+  let tratamientoRecomendaciones = [];
+  let educacionRecomendaciones = [];
+  
+  // Color para el panel de recomendaciones basado en la cantidad de hallazgos
+  let colorPanel = 'alert-info';
+  let cantidadHallazgos = 0;
   
   // Recomendaciones basadas en IMC
   if (imc) {
     if (imc < 18.5) {
-      recomendaciones.push('IMC indica bajo peso. Considere evaluación nutricional y posibles causas de pérdida de peso.');
+      cantidadHallazgos++;
+      evaluacionRecomendaciones.push('IMC indica bajo peso. Considere evaluación nutricional completa.');
+      evaluacionRecomendaciones.push('Evaluar posibles causas de pérdida de peso (metabólicas, digestivas, psicológicas).');
+      tratamientoRecomendaciones.push('Derivación a nutricionista para plan de alimentación hipercalórico.');
+      educacionRecomendaciones.push('Explicar al paciente la importancia del aporte calórico adecuado para la recuperación funcional.');
     } else if (imc >= 25 && imc < 30) {
-      recomendaciones.push('IMC indica sobrepeso. Considere recomendaciones sobre actividad física y alimentación saludable.');
-    } else if (imc >= 30) {
-      recomendaciones.push('IMC indica obesidad. Se recomienda derivación a nutricionista y evaluación de factores de riesgo metabólico.');
+      cantidadHallazgos++;
+      evaluacionRecomendaciones.push('IMC indica sobrepeso. Evaluar composición corporal (% de grasa vs. masa muscular).');
+      tratamientoRecomendaciones.push('Recomendar actividad física regular (150 min/semana de ejercicio aeróbico moderado + 2 sesiones de fortalecimiento).');
+      tratamientoRecomendaciones.push('Considerar plan de alimentación equilibrado con déficit calórico moderado (300-500 kcal/día).');
+      educacionRecomendaciones.push('Educar sobre alimentación saludable y beneficios de la actividad física regular.');
+    } else if (imc >= 30 && imc < 35) {
+      cantidadHallazgos += 2;
+      evaluacionRecomendaciones.push('IMC indica obesidad grado I. Evaluar factores de riesgo metabólico (HTA, dislipidemia, glucosa).');
+      tratamientoRecomendaciones.push('Derivar a nutricionista para plan de alimentación estructurado.');
+      tratamientoRecomendaciones.push('Recomendar programa de ejercicio supervisado que combine actividad aeróbica y fortalecimiento.');
+      educacionRecomendaciones.push('Educar sobre complicaciones de la obesidad y beneficios de la pérdida de peso gradual (5-10% en 6 meses).');
+    } else if (imc >= 35) {
+      cantidadHallazgos += 3;
+      evaluacionRecomendaciones.push('IMC indica obesidad grado II-III. Evaluación médica completa para descartar patologías asociadas.');
+      evaluacionRecomendaciones.push('Evaluar limitaciones funcionales relacionadas con el peso.');
+      tratamientoRecomendaciones.push('Derivación a equipo multidisciplinario (médico, nutricionista, psicólogo).');
+      tratamientoRecomendaciones.push('Considerar programa de ejercicio adaptado a las limitaciones funcionales.');
+      educacionRecomendaciones.push('Establecer metas realistas y graduales de pérdida de peso.');
     }
   }
   
   // Recomendaciones basadas en perímetro de cintura
   if (cintura && genero) {
-    const riesgoElevado = (genero === 'Masculino' && cintura >= 102) || (genero === 'Femenino' && cintura >= 88);
+    const riesgoModerado = (genero === 'Masculino' && cintura >= 94 && cintura < 102) || 
+                           (genero === 'Femenino' && cintura >= 80 && cintura < 88);
+    const riesgoElevado = (genero === 'Masculino' && cintura >= 102) || 
+                          (genero === 'Femenino' && cintura >= 88);
     
     if (riesgoElevado) {
-      recomendaciones.push('Perímetro de cintura indica riesgo cardiovascular elevado. Considere evaluación de factores de riesgo metabólico y derivación a especialista.');
+      cantidadHallazgos += 2;
+      evaluacionRecomendaciones.push('Perímetro de cintura indica riesgo cardiovascular alto. Evaluar perfil lipídico, presión arterial y glucemia.');
+      tratamientoRecomendaciones.push('Priorizar reducción de grasa abdominal con ejercicio aeróbico regular (30-60 min/día, 5+ días/semana).');
+      tratamientoRecomendaciones.push('Considerar derivación a médico para evaluación de síndrome metabólico.');
+      educacionRecomendaciones.push('Educar sobre relación entre grasa abdominal y riesgo cardiovascular/metabólico.');
+    } else if (riesgoModerado) {
+      cantidadHallazgos++;
+      evaluacionRecomendaciones.push('Perímetro de cintura indica riesgo cardiovascular moderado.');
+      tratamientoRecomendaciones.push('Recomendar ejercicio regular combinando aeróbico (150 min/semana) y fortalecimiento (2 sesiones/semana).');
+      educacionRecomendaciones.push('Aconsejar sobre alimentación saludable enfatizando reducción de azúcares refinados y grasas saturadas.');
+    }
+  }
+  
+  // Recomendaciones basadas en índice cintura/cadera
+  const icc = document.getElementById('indice_cintura_cadera') ? 
+             parseFloat(document.getElementById('indice_cintura_cadera').value) : 0;
+  
+  if (icc && genero) {
+    const riesgoElevadoICC = (genero === 'Masculino' && icc > 1.0) || 
+                             (genero === 'Femenino' && icc > 0.85);
+    const riesgoModeradoICC = (genero === 'Masculino' && icc > 0.95 && icc <= 1.0) || 
+                              (genero === 'Femenino' && icc > 0.80 && icc <= 0.85);
+    
+    if (riesgoElevadoICC) {
+      cantidadHallazgos++;
+      evaluacionRecomendaciones.push('Índice cintura/cadera elevado indica distribución central de grasa con mayor riesgo metabólico.');
+      tratamientoRecomendaciones.push('Incorporar ejercicios específicos para core y zona abdominal además del programa de ejercicio general.');
+    } else if (riesgoModeradoICC) {
+      evaluacionRecomendaciones.push('Índice cintura/cadera moderadamente elevado, monitorizar en próximas evaluaciones.');
+    }
+  }
+  
+  // Recomendaciones basadas en índice cintura/altura
+  const ica = document.getElementById('indice_cintura_altura') ? 
+             parseFloat(document.getElementById('indice_cintura_altura').value) : 0;
+  
+  if (ica) {
+    if (ica > 60) {
+      cantidadHallazgos += 2;
+      evaluacionRecomendaciones.push('Índice cintura/altura indica riesgo cardiometabólico alto.');
+      tratamientoRecomendaciones.push('Priorizar estrategias de reducción de grasa abdominal.');
+    } else if (ica > 50 && ica <= 60) {
+      cantidadHallazgos++;
+      evaluacionRecomendaciones.push('Índice cintura/altura indica riesgo cardiometabólico aumentado.');
+      tratamientoRecomendaciones.push('Recomendar incremento progresivo de actividad física diaria.');
+    } else if (ica < 40) {
+      evaluacionRecomendaciones.push('Índice cintura/altura bajo, vigilar posible bajo peso.');
+    }
+  }
+  
+  // Recomendaciones basadas en perímetro de cuello
+  if (perimetroCuello && genero) {
+    const cuelloRiesgoAlto = (genero === 'Masculino' && perimetroCuello > 43) || 
+                             (genero === 'Femenino' && perimetroCuello > 38);
+    const cuelloRiesgoModerado = (genero === 'Masculino' && perimetroCuello > 40 && perimetroCuello <= 43) || 
+                                 (genero === 'Femenino' && perimetroCuello > 35 && perimetroCuello <= 38);
+    
+    if (cuelloRiesgoAlto) {
+      cantidadHallazgos++;
+      evaluacionRecomendaciones.push('Perímetro de cuello aumentado. Considerar screening para apnea del sueño y riesgo cardiovascular.');
+      educacionRecomendaciones.push('Informar sobre relación entre perímetro de cuello aumentado y alteraciones del sueño/respiratorias.');
+    } else if (cuelloRiesgoModerado) {
+      evaluacionRecomendaciones.push('Perímetro de cuello moderadamente aumentado. Consultar sobre calidad del sueño y ronquidos.');
     }
   }
   
   // Recomendaciones basadas en diferencias laterales
   const medidasLaterales = document.querySelectorAll('.side-measurement');
   let asimetriasSignificativas = false;
+  let asimetriasModeradas = false;
   
   medidasLaterales.forEach(input => {
     const id = input.id;
@@ -556,37 +649,99 @@ function actualizarRecomendaciones() {
       
       if (diff > 2) {
         asimetriasSignificativas = true;
+      } else if (diff > 1) {
+        asimetriasModeradas = true;
       }
     }
   });
   
   if (asimetriasSignificativas) {
-    recomendaciones.push('Se detectaron asimetrías significativas (>2cm) entre ambos lados. Considere evaluación funcional detallada y posibles causas (atrofia, hipertrofia, edema).');
+    cantidadHallazgos += 2;
+    evaluacionRecomendaciones.push('Asimetrías significativas (>2cm) entre miembros. Realizar evaluación funcional detallada.');
+    evaluacionRecomendaciones.push('Considerar evaluación de fuerza, movilidad y control motor para identificar déficits específicos.');
+    tratamientoRecomendaciones.push('Implementar programa de ejercicios para corregir desequilibrios musculares.');
+    tratamientoRecomendaciones.push('Evaluar necesidad de estudios de imagen si existe sospecha de patología estructural.');
+  } else if (asimetriasModeradas) {
+    cantidadHallazgos++;
+    evaluacionRecomendaciones.push('Asimetrías moderadas (1-2cm) entre miembros. Monitorizar en evaluaciones futuras.');
+    evaluacionRecomendaciones.push('Evaluar si las asimetrías están relacionadas con dominancia o factores ocupacionales/deportivos.');
   }
   
   // Recomendaciones basadas en riesgo de sarcopenia
   if (riesgoSarcopenia) {
     if (riesgoSarcopenia === 'Alto') {
-      recomendaciones.push('Alto riesgo de sarcopenia. Se recomienda:');
-      recomendaciones.push('- Evaluación de fuerza muscular (dinamometría de agarre, prueba sentarse-pararse 5 veces).');
-      recomendaciones.push('- Programa de ejercicio de fortalecimiento muscular progresivo 2-3 veces/semana.');
-      recomendaciones.push('- Evaluación nutricional con énfasis en ingesta proteica (1.2-1.5 g/kg/día).');
-      recomendaciones.push('- Considerar derivación a geriatra o especialista en sarcopenia.');
+      cantidadHallazgos += 3;
+      evaluacionRecomendaciones.push('Alto riesgo de sarcopenia. Evaluar:');
+      evaluacionRecomendaciones.push('- Fuerza muscular (dinamometría de agarre, prueba sentarse-pararse 5 veces).');
+      evaluacionRecomendaciones.push('- Desempeño físico (velocidad de marcha, Short Physical Performance Battery).');
+      evaluacionRecomendaciones.push('- Nivel de actividad física y factores de riesgo nutricionales.');
+      
+      tratamientoRecomendaciones.push('Intervenciones para sarcopenia:');
+      tratamientoRecomendaciones.push('- Programa de ejercicio de fortalecimiento muscular progresivo 2-3 veces/semana.');
+      tratamientoRecomendaciones.push('- Entrenamiento de resistencia con cargas moderadas-altas (60-80% 1RM).');
+      tratamientoRecomendaciones.push('- Evaluación nutricional con énfasis en ingesta proteica (1.2-1.5 g/kg/día).');
+      tratamientoRecomendaciones.push('- Considerar derivación a geriatra o especialista en sarcopenia.');
+      
+      educacionRecomendaciones.push('Educar sobre importancia de mantener la masa muscular, especialmente en adultos mayores.');
+      educacionRecomendaciones.push('Explicar el impacto de la sarcopenia en la funcionalidad y calidad de vida.');
     } else if (riesgoSarcopenia === 'Moderado') {
-      recomendaciones.push('Riesgo moderado de sarcopenia. Se recomienda:');
-      recomendaciones.push('- Programa de ejercicio con énfasis en fortalecimiento muscular 2 veces/semana.');
-      recomendaciones.push('- Asegurar ingesta proteica adecuada (1.0-1.2 g/kg/día).');
-      recomendaciones.push('- Seguimiento en 3-6 meses para reevaluación.');
+      cantidadHallazgos += 2;
+      evaluacionRecomendaciones.push('Riesgo moderado de sarcopenia. Evaluar fuerza muscular y desempeño físico.');
+      
+      tratamientoRecomendaciones.push('Programa preventivo para sarcopenia:');
+      tratamientoRecomendaciones.push('- Ejercicio con énfasis en fortalecimiento muscular 2 veces/semana.');
+      tratamientoRecomendaciones.push('- Asegurar ingesta proteica adecuada (1.0-1.2 g/kg/día).');
+      tratamientoRecomendaciones.push('- Reevaluación en 3-6 meses.');
+      
+      educacionRecomendaciones.push('Explicar la importancia de la prevención de la sarcopenia y sus beneficios.');
     }
   }
   
-  // Mostrar recomendaciones
-  if (recomendaciones.length > 0) {
-    let html = '<ul class="mb-0">';
-    recomendaciones.forEach(rec => {
-      html += `<li>${rec}</li>`;
-    });
-    html += '</ul>';
+  // Determinar color del panel según la cantidad de hallazgos
+  if (cantidadHallazgos >= 5) {
+    colorPanel = 'alert-danger';
+  } else if (cantidadHallazgos >= 3) {
+    colorPanel = 'alert-warning';
+  } else if (cantidadHallazgos >= 1) {
+    colorPanel = 'alert-success';
+  }
+  
+  // Cambiar color del panel de recomendaciones
+  const panelRecomendaciones = document.getElementById('recomendaciones_antropometria');
+  if (panelRecomendaciones) {
+    panelRecomendaciones.className = 'alert mt-3 ' + colorPanel;
+  }
+  
+  // Preparar HTML con las recomendaciones
+  let html = '';
+  
+  if (evaluacionRecomendaciones.length > 0 || tratamientoRecomendaciones.length > 0 || educacionRecomendaciones.length > 0) {
+    if (evaluacionRecomendaciones.length > 0) {
+      html += '<h6><i class="fas fa-clipboard-check"></i> Recomendaciones para evaluación:</h6>';
+      html += '<ul class="mb-3">';
+      evaluacionRecomendaciones.forEach(rec => {
+        html += `<li>${rec}</li>`;
+      });
+      html += '</ul>';
+    }
+    
+    if (tratamientoRecomendaciones.length > 0) {
+      html += '<h6><i class="fas fa-heartbeat"></i> Recomendaciones para tratamiento:</h6>';
+      html += '<ul class="mb-3">';
+      tratamientoRecomendaciones.forEach(rec => {
+        html += `<li>${rec}</li>`;
+      });
+      html += '</ul>';
+    }
+    
+    if (educacionRecomendaciones.length > 0) {
+      html += '<h6><i class="fas fa-chalkboard-teacher"></i> Recomendaciones educativas:</h6>';
+      html += '<ul class="mb-0">';
+      educacionRecomendaciones.forEach(rec => {
+        html += `<li>${rec}</li>`;
+      });
+      html += '</ul>';
+    }
     
     recomendacionesElement.innerHTML = html;
   } else {
