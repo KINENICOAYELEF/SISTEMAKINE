@@ -46,34 +46,38 @@
   }
 }
 
-/* Estilos MEJORADOS para el botón de toggle */
+/* NUEVO DISEÑO DEL BOTÓN DE MENÚ - Más estético e integrado */
 .sidebar-toggle {
   position: fixed;
-  top: 10px;
-  left: 10px;
+  top: 15px;
+  left: 15px;
   z-index: 1060;
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
-  background-color: #8300e0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Forma circular */
+  background-color: #8300e0; /* Color principal */
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-  border: 2px solid white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  border: none;
   cursor: pointer;
-  font-size: 24px;
+  opacity: 0.9;
+  transition: all 0.2s ease;
 }
 
-/* Texto "Menú" junto al icono */
-.sidebar-toggle-text {
-  font-size: 14px;
-  margin-left: 5px;
-  font-weight: bold;
+.sidebar-toggle:hover, .sidebar-toggle:focus {
+  opacity: 1;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transform: scale(1.05);
 }
 
-/* Hacer que el botón siempre esté visible en móviles */
+.sidebar-toggle i {
+  font-size: 20px;
+}
+
+/* Siempre visible en móviles */
 @media (max-width: 575.98px) {
   .sidebar-toggle {
     display: flex !important;
@@ -87,13 +91,24 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.15); /* Más transparente */
   z-index: 1040;
   display: none;
-  pointer-events: none; /* Permitir interacción con elementos debajo */
+  pointer-events: none;
 }
 
-/* Cuando el sidebar está activo, el overlay captura clics */
 body.sidebar-active .sidebar-overlay {
   pointer-events: auto;
+}
+
+/* Animación para el botón cuando el sidebar está activo */
+body.sidebar-active .sidebar-toggle {
+  left: 205px; /* Se mueve junto con el sidebar */
+  transform: rotate(180deg); /* Rota el icono */
+}
+
+/* Estilo para un dashboard más limpio */
+body.dashboard .sidebar-toggle {
+  background-color: rgba(131, 0, 224, 0.8);
+  backdrop-filter: blur(10px);
 }
