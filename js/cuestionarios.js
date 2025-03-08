@@ -1010,6 +1010,314 @@ function getPensamientosKinesiofobia(nivel) {
   }
 }
 
+// NDI - Neck Disability Index
+// ------------------------------
+
+function calcularNDI() {
+  console.log("Calculando NDI...");
+  
+  // Obtener todas las preguntas del NDI
+  const items = [
+    document.querySelector('input[name="ndi_item1"]:checked'),
+    document.querySelector('input[name="ndi_item2"]:checked'),
+    document.querySelector('input[name="ndi_item3"]:checked'),
+    document.querySelector('input[name="ndi_item4"]:checked'),
+    document.querySelector('input[name="ndi_item5"]:checked'),
+    document.querySelector('input[name="ndi_item6"]:checked'),
+    document.querySelector('input[name="ndi_item7"]:checked'),
+    document.querySelector('input[name="ndi_item8"]:checked'),
+    document.querySelector('input[name="ndi_item9"]:checked'),
+    document.querySelector('input[name="ndi_item10"]:checked')
+  ];
+  
+  // Verificar si se han contestado todas las preguntas
+  const todasContestadasNDI = items.every(item => item !== null);
+  
+  // Si no se han contestado todas, actualizar el badge y salir
+  if (!todasContestadasNDI) {
+    document.getElementById('ndi-badge').textContent = "Incompleto";
+    document.getElementById('ndi-badge').className = "resultado-badge incompleto";
+    return;
+  }
+  
+  // Calcular la puntuación total
+  let totalNDI = 0;
+  items.forEach(item => {
+    totalNDI += parseInt(item.value);
+  });
+  
+  // Calcular el porcentaje
+  const porcentajeNDI = (totalNDI / 50) * 100;
+  
+  // Determinar el nivel de discapacidad
+  let nivelDiscapacidad = "";
+  let colorBadge = "";
+  
+  if (porcentajeNDI < 10) {
+    nivelDiscapacidad = "Sin discapacidad";
+    colorBadge = "bajo";
+  } else if (porcentajeNDI >= 10 && porcentajeNDI < 30) {
+    nivelDiscapacidad = "Discapacidad leve";
+    colorBadge = "bajo-moderado";
+  } else if (porcentajeNDI >= 30 && porcentajeNDI < 50) {
+    nivelDiscapacidad = "Discapacidad moderada";
+    colorBadge = "moderado";
+  } else if (porcentajeNDI >= 50 && porcentajeNDI < 70) {
+    nivelDiscapacidad = "Discapacidad severa";
+    colorBadge = "moderado-alto";
+  } else {
+    nivelDiscapacidad = "Discapacidad completa";
+    colorBadge = "alto";
+  }
+  
+  // Actualizar elementos en la página
+  document.getElementById('ndi-valor-total').textContent = totalNDI + "/50";
+  document.getElementById('ndi-valor-porcentaje').textContent = porcentajeNDI.toFixed(1) + "%";
+  document.getElementById('ndi-nivel-discapacidad').textContent = nivelDiscapacidad;
+  
+  // Actualizar estado del badge
+  document.getElementById('ndi-badge').textContent = nivelDiscapacidad;
+  document.getElementById('ndi-badge').className = "resultado-badge " + colorBadge;
+  
+  // Generar interpretación clínica basada en la puntuación
+  let interpretacionClinica = "";
+  
+  if (porcentajeNDI < 10) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación NDI de <strong>${totalNDI}/50 (${porcentajeNDI.toFixed(1)}%)</strong>, lo que indica <strong>ausencia de discapacidad cervical</strong>.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>No experimenta limitaciones significativas en sus actividades diarias debido a dolor cervical</li>
+        <li>Es capaz de realizar sus actividades habituales sin restricciones importantes</li>
+        <li>Puede presentar molestias cervicales ocasionales sin impacto funcional</li>
+      </ul>
+    `;
+  } else if (porcentajeNDI >= 10 && porcentajeNDI < 30) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación NDI de <strong>${totalNDI}/50 (${porcentajeNDI.toFixed(1)}%)</strong>, lo que indica <strong>discapacidad cervical leve</strong>.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta algunas limitaciones en actividades específicas pero puede realizar la mayoría de las tareas cotidianas</li>
+        <li>Puede experimentar dolor cervical ocasional que no interfiere significativamente con su funcionalidad</li>
+        <li>Es posible que tenga algunas dificultades con actividades prolongadas que involucren la región cervical</li>
+        <li>Puede presentar momentos de mayor molestia alternados con períodos de menor sintomatología</li>
+      </ul>
+    `;
+  } else if (porcentajeNDI >= 30 && porcentajeNDI < 50) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación NDI de <strong>${totalNDI}/50 (${porcentajeNDI.toFixed(1)}%)</strong>, lo que indica <strong>discapacidad cervical moderada</strong>.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta limitaciones significativas en varias actividades cotidianas debido al dolor y la disfunción cervical</li>
+        <li>Probablemente tenga dificultades para mantener posturas prolongadas (como leer, trabajar en computadora)</li>
+        <li>Puede presentar alteraciones del sueño y dificultades en la concentración</li>
+        <li>Su capacidad para trabajar y realizar actividades recreativas está afectada moderadamente</li>
+        <li>Puede experimentar cefaleas asociadas a su problema cervical</li>
+      </ul>
+    `;
+  } else if (porcentajeNDI >= 50 && porcentajeNDI < 70) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación NDI de <strong>${totalNDI}/50 (${porcentajeNDI.toFixed(1)}%)</strong>, lo que indica <strong>discapacidad cervical severa</strong>.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Tiene limitaciones importantes en la mayoría de las actividades de la vida diaria</li>
+        <li>Presenta dificultades significativas para el autocuidado</li>
+        <li>Experimenta dolor cervical intenso que interfiere con la mayoría de sus actividades</li>
+        <li>Tiene restricciones severas para actividades laborales, recreativas y sociales</li>
+        <li>Probablemente presenta alteraciones importante del sueño y la concentración</li>
+        <li>Es probable que presente cefaleas recurrentes y/o irradiación de síntomas a miembros superiores</li>
+      </ul>
+    `;
+  } else {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación NDI de <strong>${totalNDI}/50 (${porcentajeNDI.toFixed(1)}%)</strong>, lo que indica <strong>discapacidad cervical completa</strong>.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta un impacto extremadamente severo en todas sus actividades cotidianas</li>
+        <li>Requiere asistencia para la mayoría de las actividades de autocuidado</li>
+        <li>Presenta un dolor cervical inhabilitante</li>
+        <li>Tiene una alta probabilidad de incapacidad laboral</li>
+        <li>Experimenta severas alteraciones del sueño, concentración y otras funciones cognitivas</li>
+        <li>Puede presentar sintomatología asociada como mareos, cefaleas intensas, alteraciones visuales o auditivas</li>
+        <li>Es posible que presente signos neurológicos significativos que requieran evaluación médica especializada</li>
+      </ul>
+      <p><strong>Nota:</strong> Puntuaciones en este rango pueden indicar una condición severa que requiere evaluación médica adicional (neurología/neurocirugía).</p>
+    `;
+  }
+  
+  // Generar recomendaciones terapéuticas
+  let recomendaciones = "";
+  
+  if (porcentajeNDI < 10) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Valoración postural para identificar factores de riesgo</li>
+          <li>Evaluación de la biomecánica laboral y ergonomía</li>
+          <li>Monitoreo periódico para prevenir el desarrollo de problemas cervicales</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Educación sobre higiene postural y ergonomía</li>
+          <li>Ejercicios preventivos de movilidad y fortalecimiento cervical</li>
+          <li>Técnicas de automovilización y estiramientos básicos</li>
+          <li>Recomendaciones para mantener la salud cervical en actividades cotidianas</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Importancia de mantener una adecuada postura cervical</li>
+          <li>Prevención y manejo temprano de molestias cervicales</li>
+          <li>Técnicas de relajación básicas para prevenir tensión cervical</li>
+          <li>Factores de riesgo a evitar para prevenir problemas cervicales futuros</li>
+        </ul>
+      </div>
+    `;
+  } else if (porcentajeNDI >= 10 && porcentajeNDI < 30) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Examen biomecánico completo de la región cervical y estructuras asociadas</li>
+          <li>Valoración de la movilidad articular y control motor cervical</li>
+          <li>Exploración de patrones de movimiento disfuncionales</li>
+          <li>Evaluación del estado de la musculatura cervical y periescapular</li>
+          <li>Análisis ergonómico de actividades habituales</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Terapia manual suave para restaurar la movilidad articular normal</li>
+          <li>Ejercicios de movilidad, estabilización y fortalecimiento progresivo</li>
+          <li>Técnicas de liberación miofascial y relajación muscular</li>
+          <li>Corrección postural y reeducación de patrones de movimiento</li>
+          <li>Adaptaciones ergonómicas en actividades laborales y cotidianas</li>
+          <li>Ejercicios de control motor cervical y escapular</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación sobre biomecánica cervical y patrones de movimiento adecuados</li>
+          <li>Estrategias de autogestión del dolor y tensión cervical</li>
+          <li>Técnicas de automovilización y autoestiramiento</li>
+          <li>Programa de ejercicios domiciliarios específicos</li>
+          <li>Modificaciones ergonómicas en actividades diarias y laborales</li>
+        </ul>
+      </div>
+    `;
+  } else if (porcentajeNDI >= 30 && porcentajeNDI < 50) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación detallada del patrón de dolor y restricción funcional</li>
+          <li>Valoración neurológica básica (reflejos, sensibilidad, fuerza)</li>
+          <li>Examen de la articulación temporomandibular y relación con síntomas</li>
+          <li>Evaluación de la musculatura profunda cervical y control motor</li>
+          <li>Análisis de factores psicosociales asociados</li>
+          <li>Evaluación de alteraciones del sueño y su impacto</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa multimodal progresivo con énfasis en control de dolor</li>
+          <li>Terapia manual para mejorar la movilidad y reducir dolor</li>
+          <li>Reeducación neuromuscular de la región cervical</li>
+          <li>Entrenamiento específico de musculatura flexora profunda</li>
+          <li>Tratamiento de puntos gatillo y tensión miofascial</li>
+          <li>Ejercicios de estabilización cervical y escapular</li>
+          <li>Aplicación de agentes físicos para control del dolor según necesidad</li>
+          <li>Estrategias de manejo del sueño y mejora de la función cognitiva</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Neurofisiología del dolor y su relación con la disfunción cervical</li>
+          <li>Estrategias activas de afrontamiento y autogestión del dolor</li>
+          <li>Importancia de la adherencia al programa de ejercicios</li>
+          <li>Modificaciones ambientales y ergonómicas específicas</li>
+          <li>Técnicas de manejo del estrés y su impacto en los síntomas cervicales</li>
+          <li>Progresión gradual en actividades funcionales</li>
+          <li>Estrategias para manejar exacerbaciones y prevenir recidivas</li>
+        </ul>
+      </div>
+    `;
+  } else if (porcentajeNDI >= 50) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación multidimensional del dolor y la discapacidad</li>
+          <li>Valoración neurológica completa y signos de bandera roja</li>
+          <li>Evaluación de factores psicosociales y de salud mental asociados</li>
+          <li>Análisis de comorbilidades y medicación actual</li>
+          <li>Valoración de factores de sensibilización central</li>
+          <li>Evaluación de impacto en actividades básicas de la vida diaria</li>
+          <li>Considerar derivación para estudios complementarios (imágenes/neurólogo)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Enfoque interdisciplinario (considerar manejo conjunto con medicina, psicología)</li>
+          <li>Programa gradual con énfasis inicial en reducción del dolor y mejora funcional básica</li>
+          <li>Terapia manual gentil y adaptada a la tolerancia del paciente</li>
+          <li>Neurodinámica y tratamiento de sensibilización periférica y central</li>
+          <li>Abordaje de factores psicosociales asociados a la discapacidad</li>
+          <li>Ejercicios de control motor comenzando con movimientos de baja carga</li>
+          <li>Estrategias de desensibilización gradual</li>
+          <li>Terapia de exposición gradual a actividades evitadas</li>
+          <li>Rehabilitación del sueño y técnicas de relajación profunda</li>
+          <li>Adaptaciones funcionales para actividades esenciales</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación intensiva sobre neurofisiología del dolor</li>
+          <li>Estrategias de autogestión del dolor crónico</li>
+          <li>Reconceptualización de creencias sobre el dolor y la discapacidad</li>
+          <li>Manejo de expectativas y establecimiento de objetivos realistas</li>
+          <li>Estrategias para romper el ciclo dolor-inactividad-más dolor</li>
+          <li>Técnicas de autorregulación emocional y manejo del estrés</li>
+          <li>Importancia de mantener roles sociales y prevenir el aislamiento</li>
+          <li>Planes de acción para manejar crisis y prevenir recaídas</li>
+          <li>Involucrar a familiares/cuidadores en el proceso terapéutico</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Consideraciones adicionales:</h6>
+        <ul>
+          <li>Considerar interconsulta con especialistas según hallazgos (neurología, reumatología)</li>
+          <li>Valorar la necesidad de apoyo psicológico especializado</li>
+          <li>Evaluar la necesidad de ayudas técnicas temporales</li>
+          <li>En casos de discapacidad severa persistente, considerar programas de rehabilitación intensiva</li>
+        </ul>
+      </div>
+    `;
+  }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  document.getElementById('ndi-interpretacion-clinica').innerHTML = interpretacionClinica;
+  document.getElementById('ndi-recomendaciones').innerHTML = recomendaciones;
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
@@ -1035,6 +1343,9 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Inicializar DN4
   calcularDN4();
+
+  // Inicializar NDI
+  calcularNDI();
   
   // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
