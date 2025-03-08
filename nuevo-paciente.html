@@ -6705,185 +6705,182 @@
     </div>
   </div>
 
-  <!-- Evaluación de Fuerza Funcional -->
-  <div class="cuestionario-item">
-    <div class="cuestionario-header" onclick="toggleCuestionario('fuerza-funcional-content')">
-      <h4><i class="fas fa-plus-circle"></i> Evaluación de Fuerza Funcional</h4>
-      <div class="resultado-badge" id="fuerza-funcional-badge">No completado</div>
-    </div>
-    <div class="cuestionario-content" id="fuerza-funcional-content" style="display: none;">
-      <p class="mb-3">Evalúe la fuerza en contextos funcionales relacionados con actividades de la vida diaria, laborales o deportivas.</p>
-      
-      <!-- Tests Funcionales Estándar -->
-<div class="card mb-4">
-  <div class="card-header bg-light">
-    <h5 class="mb-0">Tests Funcionales Estándar</h5>
-  </div>
-  <div class="card-body">
-    <!-- 30-second Sit-to-Stand Test -->
-    <div class="form-row mb-4">
-      <div class="form-col form-col-md-12">
-        <h6>30-second Sit-to-Stand Test</h6>
-        <p class="text-muted small">Mide la fuerza funcional de miembros inferiores contando cuántas veces el paciente puede levantarse y sentarse de una silla en 30 segundos.</p>
-      </div>
-    </div>
-    <div class="form-row mb-4">
-      <div class="form-col form-col-md-3">
-        <div class="form-group">
-          <label for="sit_to_stand_repeticiones" class="form-label">Repeticiones</label>
-          <input type="number" id="sit_to_stand_repeticiones" name="sit_to_stand_repeticiones" class="form-control" min="0" max="50" onchange="evaluarTestFuncional('sit_to_stand')">
-        </div>
-      </div>
-      <div class="form-col form-col-md-3">
-        <div class="form-group">
-          <label for="sit_to_stand_edad" class="form-label">Edad del paciente</label>
-          <input type="number" id="sit_to_stand_edad" name="sit_to_stand_edad" class="form-control" min="18" max="100" onchange="evaluarTestFuncional('sit_to_stand')">
-        </div>
-      </div>
-      <div class="form-col form-col-md-3">
-        <div class="form-group">
-          <label for="sit_to_stand_genero" class="form-label">Género</label>
-          <select id="sit_to_stand_genero" name="sit_to_stand_genero" class="form-select" onchange="evaluarTestFuncional('sit_to_stand')">
-            <option value="">Seleccionar</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Femenino">Femenino</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-col form-col-md-3">
-        <div class="form-group">
-          <label for="sit_to_stand_resultado" class="form-label">Resultado</label>
-          <div id="sit_to_stand_resultado" class="alert alert-secondary">Pendiente</div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Push-up Test -->
-    <div class="form-row mb-4">
-      <div class="form-col form-col-md-12">
-        <h6>Push-up Test</h6>
-        <p class="text-muted small">Evalúa la fuerza-resistencia de miembros superiores contando el número máximo de flexiones de brazos.</p>
-      </div>
-    </div>
-    <div class="form-row mb-4">
-      <div class="form-col form-col-md-3">
-        <div class="form-group">
-          <label for="push_up_repeticiones" class="form-label">Repeticiones</label>
-          <input type="number" id="push_up_repeticiones" name="push_up_repeticiones" class="form-control" min="0" max="100" onchange="evaluarTestFuncional('push_up')">
-        </div>
-      </div>
-      <div class="form-col form-col-md-3">
-        <div class="form-group">
-          <label for="push_up_edad" class="form-label">Edad del paciente</label>
-          <input type="number" id="push_up_edad" name="push_up_edad" class="form-control" min="18" max="100" onchange="evaluarTestFuncional('push_up')">
-        </div>
-      </div>
-      <div class="form-col form-col-md-3">
-        <div class="form-group">
-          <label for="push_up_genero" class="form-label">Género</label>
-          <select id="push_up_genero" name="push_up_genero" class="form-select" onchange="evaluarTestFuncional('push_up')">
-            <option value="">Seleccionar</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Femenino">Femenino</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-col form-col-md-3">
-        <div class="form-group">
-          <label for="push_up_resultado" class="form-label">Resultado</label>
-          <div id="push_up_resultado" class="alert alert-secondary">Pendiente</div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Otros Tests Funcionales -->
-    <div id="otros_tests_funcionales_container">
-      <!-- Los tests funcionales adicionales se agregarán aquí -->
-    </div>
-    
-    <div class="form-row mt-3">
-      <div class="form-col form-col-md-12">
-        <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarTestFuncional()">
-          <i class="fas fa-plus"></i> Agregar Otro Test Funcional
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+                    <!-- Evaluación de Fuerza Funcional -->
+                    <div class="cuestionario-item">
+                      <div class="cuestionario-header" onclick="toggleCuestionario('fuerza-funcional-content')">
+                        <h4><i class="fas fa-plus-circle"></i> Evaluación de Fuerza Funcional</h4>
+                        <div class="resultado-badge" id="fuerza-funcional-badge">No completado</div>
+                      </div>
+                      <div class="cuestionario-content" id="fuerza-funcional-content" style="display: none;">
+                        <p class="mb-3">Evalúe la fuerza en contextos funcionales relacionados con actividades de la vida diaria, laborales o deportivas.</p>
+                        
+                        <!-- Tests Funcionales Estándar -->
+                  <div class="card mb-4">
+                    <div class="card-header bg-light">
+                      <h5 class="mb-0">Tests Funcionales Estándar</h5>
+                    </div>
+                    <div class="card-body">
+                      <!-- 30-second Sit-to-Stand Test -->
+                      <div class="form-row mb-4">
+                        <div class="form-col form-col-md-12">
+                          <h6>30-second Sit-to-Stand Test</h6>
+                          <p class="text-muted small">Mide la fuerza funcional de miembros inferiores contando cuántas veces el paciente puede levantarse y sentarse de una silla en 30 segundos.</p>
+                        </div>
+                      </div>
+                      <div class="form-row mb-4">
+                        <div class="form-col form-col-md-3">
+                          <div class="form-group">
+                            <label for="sit_to_stand_repeticiones" class="form-label">Repeticiones</label>
+                            <input type="number" id="sit_to_stand_repeticiones" name="sit_to_stand_repeticiones" class="form-control" min="0" max="50" onchange="evaluarTestFuncional('sit_to_stand')">
+                          </div>
+                        </div>
+                        <div class="form-col form-col-md-3">
+                          <div class="form-group">
+                            <label for="sit_to_stand_edad" class="form-label">Edad del paciente</label>
+                            <input type="number" id="sit_to_stand_edad" name="sit_to_stand_edad" class="form-control" min="18" max="100" onchange="evaluarTestFuncional('sit_to_stand')">
+                          </div>
+                        </div>
+                        <div class="form-col form-col-md-3">
+                          <div class="form-group">
+                            <label for="sit_to_stand_genero" class="form-label">Género</label>
+                            <select id="sit_to_stand_genero" name="sit_to_stand_genero" class="form-select" onchange="evaluarTestFuncional('sit_to_stand')">
+                              <option value="">Seleccionar</option>
+                              <option value="Masculino">Masculino</option>
+                              <option value="Femenino">Femenino</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-col form-col-md-3">
+                          <div class="form-group">
+                            <label for="sit_to_stand_resultado" class="form-label">Resultado</label>
+                            <div id="sit_to_stand_resultado" class="alert alert-secondary">Pendiente</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Push-up Test -->
+                      <div class="form-row mb-4">
+                        <div class="form-col form-col-md-12">
+                          <h6>Push-up Test</h6>
+                          <p class="text-muted small">Evalúa la fuerza-resistencia de miembros superiores contando el número máximo de flexiones de brazos.</p>
+                        </div>
+                      </div>
+                      <div class="form-row mb-4">
+                        <div class="form-col form-col-md-3">
+                          <div class="form-group">
+                            <label for="push_up_repeticiones" class="form-label">Repeticiones</label>
+                            <input type="number" id="push_up_repeticiones" name="push_up_repeticiones" class="form-control" min="0" max="100" onchange="evaluarTestFuncional('push_up')">
+                          </div>
+                        </div>
+                        <div class="form-col form-col-md-3">
+                          <div class="form-group">
+                            <label for="push_up_edad" class="form-label">Edad del paciente</label>
+                            <input type="number" id="push_up_edad" name="push_up_edad" class="form-control" min="18" max="100" onchange="evaluarTestFuncional('push_up')">
+                          </div>
+                        </div>
+                        <div class="form-col form-col-md-3">
+                          <div class="form-group">
+                            <label for="push_up_genero" class="form-label">Género</label>
+                            <select id="push_up_genero" name="push_up_genero" class="form-select" onchange="evaluarTestFuncional('push_up')">
+                              <option value="">Seleccionar</option>
+                              <option value="Masculino">Masculino</option>
+                              <option value="Femenino">Femenino</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-col form-col-md-3">
+                          <div class="form-group">
+                            <label for="push_up_resultado" class="form-label">Resultado</label>
+                            <div id="push_up_resultado" class="alert alert-secondary">Pendiente</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Otros Tests Funcionales -->
+                      <div id="otros_tests_funcionales_container">
+                        <!-- Los tests funcionales adicionales se agregarán aquí -->
+                      </div>
+                      
+                      <div class="form-row mt-3">
+                        <div class="form-col form-col-md-12">
+                          <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarTestFuncional()">
+                            <i class="fas fa-plus"></i> Agregar Otro Test Funcional
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Tareas Específicas del Paciente -->
+                  <div class="card mb-4">
+                    <div class="card-header bg-light">
+                      <h5 class="mb-0">Tareas Específicas del Paciente</h5>
+                    </div>
+                    <div class="card-body">
+                      <p class="text-muted mb-3">Evalúe la capacidad del paciente para realizar tareas específicas relevantes para su contexto personal, laboral o deportivo.</p>
+                      
+                      <div id="tareas_especificas_container">
+                        <!-- Las tareas específicas se agregarán aquí -->
+                        <div class="form-row mb-3">
+                          <div class="form-col form-col-md-12">
+                            <p class="text-muted">Utilice el botón "Agregar Tarea Específica" para añadir tareas funcionales relevantes para este paciente.</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="form-row mt-3">
+                        <div class="form-col form-col-md-12">
+                          <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarTareaEspecifica()">
+                            <i class="fas fa-plus"></i> Agregar Tarea Específica
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Interpretación de fuerza funcional -->
+                  <div class="card mt-4 mb-4">
+                    <div class="card-header bg-primary text-white">
+                      <h5 class="mb-0">Interpretación y Recomendaciones</h5>
+                    </div>
+                    <div class="card-body">
+                      <div id="interpretacion_fuerza_funcional" class="mb-3">
+                        <h6>Interpretación Clínica:</h6>
+                        <div id="interpretacion-fuerza-funcional-texto">
+                          Complete la evaluación de fuerza funcional para obtener recomendaciones clínicas.
+                        </div>
+                      </div>
+                      
+                      <div id="recomendaciones_fuerza_funcional" class="mb-3">
+                        <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+                        <div id="recomendaciones-fuerza-funcional-texto">
+                          Complete la evaluación para obtener recomendaciones específicas.
+                        </div>
+                      </div>
+                      
+                      <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle"></i> Consideraciones clínicas:</h6>
+                        <ul>
+                          <li>La <strong>fuerza funcional</strong> tiene mayor validez ecológica que la fuerza analítica, especialmente para predecir el desempeño en actividades cotidianas.</li>
+                          <li>La <strong>calidad del movimiento</strong> durante las pruebas funcionales es tan importante como la cantidad/resultado numérico.</li>
+                          <li>Un buen rendimiento en tests funcionales suele correlacionar con <strong>menor riesgo de lesiones</strong> y mejor pronóstico de rehabilitación.</li>
+                          <li>Las <strong>tareas específicas</strong> deben evaluarse en condiciones similares a las reales (contexto, fatiga, variables cognitivas) para aumentar su validez.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-<!-- Tareas Específicas del Paciente -->
-<div class="card mb-4">
-  <div class="card-header bg-light">
-    <h5 class="mb-0">Tareas Específicas del Paciente</h5>
-  </div>
-  <div class="card-body">
-    <p class="text-muted mb-3">Evalúe la capacidad del paciente para realizar tareas específicas relevantes para su contexto personal, laboral o deportivo.</p>
-    
-    <div id="tareas_especificas_container">
-      <!-- Las tareas específicas se agregarán aquí -->
-      <div class="form-row mb-3">
-        <div class="form-col form-col-md-12">
-          <p class="text-muted">Utilice el botón "Agregar Tarea Específica" para añadir tareas funcionales relevantes para este paciente.</p>
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-row mt-3">
-      <div class="form-col form-col-md-12">
-        <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarTareaEspecifica()">
-          <i class="fas fa-plus"></i> Agregar Tarea Específica
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Interpretación de fuerza funcional -->
-<div class="card mt-4 mb-4">
-  <div class="card-header bg-primary text-white">
-    <h5 class="mb-0">Interpretación y Recomendaciones</h5>
-  </div>
-  <div class="card-body">
-    <div id="interpretacion_fuerza_funcional" class="mb-3">
-      <h6>Interpretación Clínica:</h6>
-      <div id="interpretacion-fuerza-funcional-texto">
-        Complete la evaluación de fuerza funcional para obtener recomendaciones clínicas.
-      </div>
-    </div>
-    
-    <div id="recomendaciones_fuerza_funcional" class="mb-3">
-      <h6>Recomendaciones para el Plan de Tratamiento:</h6>
-      <div id="recomendaciones-fuerza-funcional-texto">
-        Complete la evaluación para obtener recomendaciones específicas.
-      </div>
-    </div>
-    
-    <div class="alert alert-info">
-      <h6><i class="fas fa-info-circle"></i> Consideraciones clínicas:</h6>
-      <ul>
-        <li>La <strong>fuerza funcional</strong> tiene mayor validez ecológica que la fuerza analítica, especialmente para predecir el desempeño en actividades cotidianas.</li>
-        <li>La <strong>calidad del movimiento</strong> durante las pruebas funcionales es tan importante como la cantidad/resultado numérico.</li>
-        <li>Un buen rendimiento en tests funcionales suele correlacionar con <strong>menor riesgo de lesiones</strong> y mejor pronóstico de rehabilitación.</li>
-        <li>Las <strong>tareas específicas</strong> deben evaluarse en condiciones similares a las reales (contexto, fatiga, variables cognitivas) para aumentar su validez.</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<!-- IMPORTANTE: Cierre adecuado de la estructura de cuestionario -->
-    </div>
-  </div>
-</div>
-
-<!-- Botones de navegación al final de la sección 6 -->
-<div class="form-row mt-4 mb-4">
-  <div class="form-col form-col-md-12">
-    <button type="button" class="btn btn-secondary prev-section"><i class="fas fa-arrow-left"></i> Sección Anterior</button>
-    <button type="button" class="btn btn-primary next-tab" data-next="escalas">Siguiente Pestaña <i class="fas fa-arrow-right"></i></button>
-  </div>
-</div>
-
-</div><!-- Cierre de la pestaña 6 (Evaluación Física) -->
+            <!-- Botones de navegación al final de la sección 6 -->
+            <div class="form-row mt-4 mb-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-secondary prev-section"><i class="fas fa-arrow-left"></i> Sección Anterior</button>
+                <button type="button" class="btn btn-primary next-tab" data-next="escalas">Siguiente Pestaña <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div><!-- Cierre de la pestaña 6 (Evaluación Física) -->
 
           <!-- 7. Escalas -->
           <div class="tab-content" id="escalas">
