@@ -1,5 +1,5 @@
 <!-- Script para la funcionalidad de evaluación postural -->
-<script>
+
 // Script para la sección 6.3 Evaluación Postural
 (function() {
   // Todas las funciones de evaluación postural ahora están encapsuladas
@@ -509,4 +509,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
-</script>
