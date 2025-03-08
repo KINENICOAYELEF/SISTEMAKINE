@@ -3882,110 +3882,125 @@ function evalPostural(selectElement) {
   
   // Evaluar relevancia
   let relevancia = '';
-  let clase = '';
+  let colorFondo = '';
+  let colorTexto = 'white';
   
   // Lógica por campo
   if (campo === 'posicion-cabeza') {
     if (valor === 'Neutra') {
       relevancia = 'Normal';
-      clase = 'bg-success';
+      colorFondo = '#28a745'; // verde
     } else if (valor.includes('leve')) {
       relevancia = 'Baja';
-      clase = 'bg-warning';
+      colorFondo = '#ffc107'; // amarillo
+      colorTexto = 'black'; // texto negro para fondo amarillo
     } else if (valor.includes('moderada')) {
       relevancia = 'Moderada';
-      clase = 'bg-warning';
+      colorFondo = '#fd7e14'; // naranja
     } else if (valor.includes('severa')) {
       relevancia = 'Alta';
-      clase = 'bg-danger';
+      colorFondo = '#dc3545'; // rojo
     }
   } 
   else if (campo === 'posicion-hombros') {
     if (valor === 'Neutros') {
       relevancia = 'Normal';
-      clase = 'bg-success';
+      colorFondo = '#28a745';
     } else if (valor.includes('leve')) {
       relevancia = 'Baja';
-      clase = 'bg-warning';
+      colorFondo = '#ffc107';
+      colorTexto = 'black';
     } else if (valor.includes('moderada')) {
       relevancia = 'Moderada';
-      clase = 'bg-warning';
+      colorFondo = '#fd7e14';
     } else if (valor.includes('significativa')) {
       relevancia = 'Alta';
-      clase = 'bg-danger';
+      colorFondo = '#dc3545';
     }
   }
   else if (campo === 'alineacion-rodillas') {
     if (valor === 'Neutra') {
       relevancia = 'Normal';
-      clase = 'bg-success';
+      colorFondo = '#28a745';
     } else if (valor.includes('leve')) {
       relevancia = 'Baja';
-      clase = 'bg-warning';
+      colorFondo = '#ffc107';
+      colorTexto = 'black';
     } else if (valor.includes('moderado')) {
       relevancia = 'Moderada';
-      clase = 'bg-warning';
+      colorFondo = '#fd7e14';
     } else if (valor.includes('dinámico') || valor.includes('significativo')) {
       relevancia = 'Alta';
-      clase = 'bg-danger';
+      colorFondo = '#dc3545';
     }
   }
   else if (campo === 'alineacion-pie') {
     if (valor === 'Neutro') {
       relevancia = 'Normal';
-      clase = 'bg-success';
+      colorFondo = '#28a745';
     } else if (valor.includes('leve')) {
       relevancia = 'Baja';
-      clase = 'bg-warning';
+      colorFondo = '#ffc107';
+      colorTexto = 'black';
     } else if (valor.includes('excesiva') || valor.includes('significativa')) {
       relevancia = 'Alta';
-      clase = 'bg-danger';
+      colorFondo = '#dc3545';
     } else {
       relevancia = 'Moderada';
-      clase = 'bg-warning';
+      colorFondo = '#fd7e14';
     }
   }
   else if (campo === 'asimetrias') {
     if (valor === 'No') {
       relevancia = 'Normal';
-      clase = 'bg-success';
+      colorFondo = '#28a745';
     } else if (valor.includes('leve')) {
       relevancia = 'Baja';
-      clase = 'bg-warning';
+      colorFondo = '#ffc107';
+      colorTexto = 'black';
     } else if (valor.includes('significativa')) {
       relevancia = 'Alta';
-      clase = 'bg-danger';
+      colorFondo = '#dc3545';
     } else {
       relevancia = 'Moderada';
-      clase = 'bg-warning';
+      colorFondo = '#fd7e14';
     }
   }
   else if (campo === 'escoliosis') {
     if (valor === 'No') {
       relevancia = 'Normal';
-      clase = 'bg-success';
+      colorFondo = '#28a745';
     } else if (valor === 'Leve') {
       relevancia = 'Baja';
-      clase = 'bg-warning';
+      colorFondo = '#ffc107';
+      colorTexto = 'black';
     } else if (valor === 'Moderada') {
       relevancia = 'Moderada';
-      clase = 'bg-warning';
+      colorFondo = '#fd7e14';
     } else {
       relevancia = 'Alta';
-      clase = 'bg-danger';
+      colorFondo = '#dc3545';
     }
   }
   
-  // Actualizar el elemento de relevancia
+  // Actualizar el elemento de relevancia con estilos en línea
   if (relevancia) {
     relevanciaElement.textContent = relevancia;
-    // Eliminar todas las clases de fondo existentes
-    relevanciaElement.classList.remove('bg-success', 'bg-warning', 'bg-danger', 'bg-secondary');
-    relevanciaElement.classList.add(clase);
+    // Aplicar estilos en línea directamente
+    relevanciaElement.style.backgroundColor = colorFondo;
+    relevanciaElement.style.color = colorTexto;
+    relevanciaElement.style.padding = '5px';
+    relevanciaElement.style.borderRadius = '3px';
+    relevanciaElement.style.textAlign = 'center';
+    relevanciaElement.style.fontWeight = 'bold';
   } else {
     relevanciaElement.textContent = 'No evaluado';
-    relevanciaElement.classList.remove('bg-success', 'bg-warning', 'bg-danger');
-    relevanciaElement.classList.add('bg-secondary');
+    relevanciaElement.style.backgroundColor = '#6c757d'; // gris
+    relevanciaElement.style.color = 'white';
+    relevanciaElement.style.padding = '5px';
+    relevanciaElement.style.borderRadius = '3px';
+    relevanciaElement.style.textAlign = 'center';
+    relevanciaElement.style.fontWeight = 'bold';
   }
   
   // Actualizar recomendaciones y resumen
@@ -4162,20 +4177,36 @@ function actualizarRecomendaciones() {
   recomendacionesTratamiento.classList.toggle('d-none', tratamientoRecomendaciones.length === 0);
   recomendacionesEducacion.classList.toggle('d-none', educacionRecomendaciones.length === 0);
   
-  // Actualizar color de la sección de recomendaciones según cantidad total
-  const totalRecomendaciones = evalRecomendaciones.length + tratamientoRecomendaciones.length + educacionRecomendaciones.length;
-  recomendacionesElement.classList.remove('alert-info', 'alert-warning', 'alert-danger', 'alert-success');
-  
-  if (totalRecomendaciones === 0) {
-    recomendacionesElement.classList.add('alert-info');
-  } else if (totalRecomendaciones < 3) {
-    recomendacionesElement.classList.add('alert-success');
-  } else if (totalRecomendaciones < 7) {
-    recomendacionesElement.classList.add('alert-warning');
-  } else {
-    recomendacionesElement.classList.add('alert-danger');
+// Al final, actualizar el color con estilos en línea
+  if (recomendacionesElement) {
+    const totalRecomendaciones = evalRecomendaciones.length + tratamientoRecomendaciones.length + educacionRecomendaciones.length;
+    
+    // Aplicar estilos en línea directamente
+    if (totalRecomendaciones === 0) {
+      recomendacionesElement.style.backgroundColor = '#d1ecf1'; // azul claro (info)
+      recomendacionesElement.style.borderColor = '#bee5eb';
+      recomendacionesElement.style.color = '#0c5460';
+    } else if (totalRecomendaciones < 3) {
+      recomendacionesElement.style.backgroundColor = '#d4edda'; // verde claro (success)
+      recomendacionesElement.style.borderColor = '#c3e6cb';
+      recomendacionesElement.style.color = '#155724';
+    } else if (totalRecomendaciones < 7) {
+      recomendacionesElement.style.backgroundColor = '#fff3cd'; // amarillo claro (warning)
+      recomendacionesElement.style.borderColor = '#ffeeba';
+      recomendacionesElement.style.color = '#856404';
+    } else {
+      recomendacionesElement.style.backgroundColor = '#f8d7da'; // rojo claro (danger)
+      recomendacionesElement.style.borderColor = '#f5c6cb';
+      recomendacionesElement.style.color = '#721c24';
+    }
+    
+    // Asegurar que siempre tenga estilos de alerta
+    recomendacionesElement.style.position = 'relative';
+    recomendacionesElement.style.padding = '0.75rem 1.25rem';
+    recomendacionesElement.style.marginBottom = '1rem';
+    recomendacionesElement.style.border = '1px solid transparent';
+    recomendacionesElement.style.borderRadius = '0.25rem';
   }
-}
 
 // Función para actualizar el badge
 function actualizarBadge() {
@@ -4242,12 +4273,17 @@ function limpiarEvaluacionPostural() {
     'relevancia-alineacion-pie', 'relevancia-asimetrias', 'relevancia-escoliosis'
   ];
   
+  
   relevanciaElements.forEach(id => {
     const elemento = document.getElementById(id);
     if (elemento) {
       elemento.textContent = 'No evaluado';
-      elemento.classList.remove('bg-success', 'bg-warning', 'bg-danger');
-      elemento.classList.add('bg-secondary');
+      elemento.style.backgroundColor = '#6c757d'; // gris
+      elemento.style.color = 'white';
+      elemento.style.padding = '5px';
+      elemento.style.borderRadius = '3px';
+      elemento.style.textAlign = 'center';
+      elemento.style.fontWeight = 'bold';
     }
   });
   
