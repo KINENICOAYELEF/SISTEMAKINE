@@ -316,32 +316,5 @@
     }
   </script>
   <script src="js/responsive.js"></script>
-  <script>
-  // Código específico para arreglar el botón de menú en el dashboard
-  document.addEventListener('DOMContentLoaded', function() {
-    // Eliminar otros botones de menú que pueden estar en el dashboard
-    setTimeout(function() {
-      const otherMenuButtons = document.querySelectorAll(
-        '#menu-toggle, .navbar-toggler, button[aria-label="Toggle navigation"], .btn-toggle-sidebar, .menu-toggle, .navbar .sidebar-toggle'
-      );
-      otherMenuButtons.forEach(button => {
-        if (button && button.classList && !button.classList.contains('sidebar-toggle')) {
-          button.style.display = 'none';
-          if (button.parentNode) {
-            button.parentNode.removeChild(button);
-          }
-        }
-      });
-      
-      // Asegurarse de que nuestro botón tiene el estilo correcto
-      const ourButton = document.querySelector('.sidebar-toggle');
-      if (ourButton) {
-        ourButton.style.backgroundColor = '#8300e0';
-        ourButton.style.color = 'white';
-        ourButton.style.borderRadius = '50%';
-      }
-    }, 100);
-  });
-</script>
 </body>
 </html>
