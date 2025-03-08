@@ -4,15 +4,15 @@ document.addEventListener('DOMContentLoaded', function() {
   const sidebar = document.querySelector('.sidebar');
   const content = document.querySelector('.content');
   
-  // Remover cualquier botón o toggle previo
-  const oldButtons = document.querySelectorAll('#menu-toggle, .navbar-toggler, button[aria-label="Toggle navigation"], .btn-toggle-sidebar, .menu-toggle, .sidebar-toggle');
-  oldButtons.forEach(button => {
-    if (button && button.parentNode) {
-      button.parentNode.removeChild(button);
-    }
-  });
+  // Detectar si estamos en el dashboard
+  const isDashboard = window.location.href.includes('dashboard.html');
   
-  // Crear overlay para cerrar el sidebar expandido
+  // Aplicar clase específica al body según la página
+  if (isDashboard) {
+    document.body.classList.add('dashboard-page');
+  }
+  
+  // Crear overlay para ambas versiones
   if (!document.querySelector('.sidebar-overlay') && sidebar) {
     const overlay = document.createElement('div');
     overlay.className = 'sidebar-overlay';
@@ -20,24 +20,26 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Evento para cerrar el sidebar al hacer clic en el overlay
     overlay.addEventListener('click', function() {
-      sidebar.classList.remove('expanded');
-      document.body.classList.remove('sidebar-expanded');
+      if (isDashboard) {
+        // En dashboard, colapsar
+        sidebar.classList.remove('expanded');
+        document.body.classList.remove('sidebar-expanded');
+      } else {
+        // En otras páginas, ocultar
+        sidebar.classList.remove('active');
+        document.body.classList.remove('sidebar-active');
+      }
     });
   }
-  
-  // Si estamos en móvil, configurar el sidebar para ser clickable
-  if (window.innerWidth <= 767.98 && sidebar) {
-    // Detectar si estamos en dashboard para ajustar estilos 
-    if (window.location.href.includes('dashboard.html')) {
-      document.body.classList.add('dashboard');
-    }
-    
-    // Hacer que el sidebar sea clickable para expandir/colapsar
+
+  // CONFIGURACIÓN ESPECÍFICA PARA EL DASHBOARD
+  if (isDashboard && sidebar) {
+    // En el dashboard, hacer que el sidebar sea clickable para expandir/colapsar
     sidebar.addEventListener('click', function(e) {
       // Solo expandir si hacemos clic en el sidebar mismo, no en los enlaces
       if (e.target === sidebar || e.target.classList.contains('sidebar-header') || 
           e.target.classList.contains('sidebar-brand') || e.target.classList.contains('sidebar-nav')) {
-        toggleSidebar();
+        toggleDashboardSidebar();
       }
     });
     
@@ -46,31 +48,74 @@ document.addEventListener('DOMContentLoaded', function() {
     sidebarItems.forEach(item => {
       const link = item.querySelector('.sidebar-link');
       
-      // Si es un enlace sin hijos, que funcione normalmente
+      // Si es un enlace, configurar comportamiento
       if (link) {
-        if (window.innerWidth <= 767.98) {
-          // Al hacer hover en modo de iconos, mostrar un tooltip con el nombre
-          link.setAttribute('data-title', link.querySelector('span').textContent.trim());
-          
-          // En móviles, al hacer clic en un icono, primero expandir el sidebar
-          link.addEventListener('click', function(e) {
-            if (!sidebar.classList.contains('expanded')) {
-              e.preventDefault();
-              toggleSidebar();
-              // Después de un pequeño delay, hacer clic en el enlace
-              setTimeout(() => {
-                this.click();
-              }, 300);
-            }
-          });
-        }
+        // Al hacer hover en modo de iconos, mostrar tooltip
+        link.setAttribute('data-title', link.querySelector('span') ? 
+                         link.querySelector('span').textContent.trim() : '');
+        
+        // Al hacer clic en un icono, primero expandir el sidebar
+        link.addEventListener('click', function(e) {
+          if (!sidebar.classList.contains('expanded')) {
+            e.preventDefault();
+            toggleDashboardSidebar();
+            
+            // Después de un delay, hacer clic en el enlace
+            setTimeout(() => {
+              this.click();
+            }, 300);
+          }
+        });
       }
     });
     
-    // Función para alternar el estado del sidebar
-    function toggleSidebar() {
+    // Función para alternar el estado del sidebar en dashboard
+    function toggleDashboardSidebar() {
       sidebar.classList.toggle('expanded');
       document.body.classList.toggle('sidebar-expanded');
+    }
+  }
+  // CONFIGURACIÓN PARA OTRAS PÁGINAS (NO DASHBOARD)
+  else if (!isDashboard && sidebar) {
+    // En otras páginas, crear botón para mostrar/ocultar sidebar
+    if (!document.querySelector('.sidebar-toggle')) {
+      const sidebarToggle = document.createElement('button');
+      sidebarToggle.className = 'sidebar-toggle';
+      sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
+      sidebarToggle.setAttribute('aria-label', 'Abrir menú');
+      document.body.appendChild(sidebarToggle);
+      
+      // Añadir evento de clic para el sidebar
+      sidebarToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        document.body.classList.toggle('sidebar-active');
+        
+        // Actualizar el aria-label según el estado
+        if (sidebar.classList.contains('active')) {
+          sidebarToggle.setAttribute('aria-label', 'Cerrar menú');
+          // Mostrar overlay con animación
+          document.querySelector('.sidebar-overlay').style.display = 'block';
+        } else {
+          sidebarToggle.setAttribute('aria-label', 'Abrir menú');
+          // Ocultar overlay
+          document.querySelector('.sidebar-overlay').style.display = 'none';
+        }
+      });
+      
+      // También cerrar el sidebar al hacer clic en cualquier enlace
+      const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
+      sidebarLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 767.98) {
+            setTimeout(() => {
+              sidebar.classList.remove('active');
+              document.body.classList.remove('sidebar-active');
+              document.querySelector('.sidebar-overlay').style.display = 'none';
+              sidebarToggle.setAttribute('aria-label', 'Abrir menú');
+            }, 150);
+          }
+        });
+      });
     }
   }
   
@@ -111,15 +156,4 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
-  
-  // Ajustar sidebar al cambiar tamaño de ventana
-  window.addEventListener('resize', function() {
-    if (window.innerWidth > 767.98) {
-      // En escritorio, reset todo
-      if (sidebar) {
-        sidebar.classList.remove('expanded');
-        document.body.classList.remove('sidebar-expanded');
-      }
-    }
-  });
 });
