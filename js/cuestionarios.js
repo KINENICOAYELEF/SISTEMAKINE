@@ -2637,6 +2637,393 @@ function calcularRolandMorris() {
   }
 }
 
+// Función para calcular el Índice WOMAC (Western Ontario and McMaster Universities Osteoarthritis Index)
+function calcularWOMAC() {
+  console.log("Calculando WOMAC...");
+  
+  // Definir secciones del cuestionario
+  const seccionDolor = ["womac_a1", "womac_a2", "womac_a3", "womac_a4", "womac_a5"];
+  const seccionRigidez = ["womac_b1", "womac_b2"];
+  const seccionFuncion = [
+    "womac_c1", "womac_c2", "womac_c3", "womac_c4", "womac_c5", 
+    "womac_c6", "womac_c7", "womac_c8", "womac_c9", "womac_c10", 
+    "womac_c11", "womac_c12", "womac_c13", "womac_c14", "womac_c15", 
+    "womac_c16", "womac_c17"
+  ];
+  
+  // Función para obtener el valor de un ítem
+  function getItemValue(name) {
+    const radio = document.querySelector(`input[name="${name}"]:checked`);
+    return radio ? parseInt(radio.value) : null;
+  }
+  
+  // Calcular puntuaciones por sección
+  let puntuacionDolor = 0;
+  let itemsDolor = 0;
+  seccionDolor.forEach(item => {
+    const valor = getItemValue(item);
+    if (valor !== null) {
+      puntuacionDolor += valor;
+      itemsDolor++;
+    }
+  });
+  
+  let puntuacionRigidez = 0;
+  let itemsRigidez = 0;
+  seccionRigidez.forEach(item => {
+    const valor = getItemValue(item);
+    if (valor !== null) {
+      puntuacionRigidez += valor;
+      itemsRigidez++;
+    }
+  });
+  
+  let puntuacionFuncion = 0;
+  let itemsFuncion = 0;
+  seccionFuncion.forEach(item => {
+    const valor = getItemValue(item);
+    if (valor !== null) {
+      puntuacionFuncion += valor;
+      itemsFuncion++;
+    }
+  });
+  
+  // Calcular total de ítems respondidos
+  const totalItems = itemsDolor + itemsRigidez + itemsFuncion;
+  console.log("Total de ítems respondidos:", totalItems);
+  
+  // Verificar si hay suficientes ítems respondidos (al menos el 80% = 20 de 24 ítems)
+  const respuestasMinimas = 20;
+  const interaccionUsuario = totalItems >= 1; // Al menos 1 ítem respondido para considerar interacción
+  
+  // Si el usuario no ha interactuado con el cuestionario o no hay suficientes respuestas, mostramos "No completado"
+  if (!interaccionUsuario) {
+    if (document.getElementById('womac-badge')) {
+      document.getElementById('womac-badge').textContent = "No completado";
+      document.getElementById('womac-badge').className = "resultado-badge no-completado";
+    }
+    
+    if (document.getElementById('womac-interpretacion-total')) {
+      document.getElementById('womac-interpretacion-total').textContent = "Complete el cuestionario";
+    }
+    
+    if (document.getElementById('womac-interpretacion-clinica')) {
+      document.getElementById('womac-interpretacion-clinica').textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    }
+    
+    if (document.getElementById('womac-recomendaciones')) {
+      document.getElementById('womac-recomendaciones').textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+    }
+    
+    return;
+  }
+  
+  // Si no hay suficientes respuestas, indicarlo pero mostrar resultados parciales
+  let mensajeCompletado = "";
+  if (totalItems < respuestasMinimas) {
+    mensajeCompletado = "Cuestionario incompleto (menos del 80% de preguntas). Los resultados pueden no ser confiables.";
+  }
+  
+  // Cálculo de puntuaciones finales y normalizadas (0-100%)
+  const puntuacionTotal = puntuacionDolor + puntuacionRigidez + puntuacionFuncion;
+  
+  // WOMAC tiene un total posible de 96 puntos (5 ítems de dolor x 4 = 20, 2 ítems de rigidez x 4 = 8, 17 ítems de función x 4 = 68)
+  const maxPuntuacionDolor = 20;
+  const maxPuntuacionRigidez = 8;
+  const maxPuntuacionFuncion = 68;
+  const maxPuntuacionTotal = 96;
+  
+  // Normalizar puntuaciones para comparabilidad entre subescalas (0-100%)
+  const porcentajeDolor = (puntuacionDolor / (itemsDolor * 4)) * 100; // Cada ítem tiene valor máximo de 4
+  const porcentajeRigidez = (puntuacionRigidez / (itemsRigidez * 4)) * 100;
+  const porcentajeFuncion = (puntuacionFuncion / (itemsFuncion * 4)) * 100;
+  const porcentajeTotal = (puntuacionTotal / ((itemsDolor + itemsRigidez + itemsFuncion) * 4)) * 100;
+  
+  console.log("Puntuación dolor:", puntuacionDolor, `(${porcentajeDolor.toFixed(1)}%)`);
+  console.log("Puntuación rigidez:", puntuacionRigidez, `(${porcentajeRigidez.toFixed(1)}%)`);
+  console.log("Puntuación función:", puntuacionFuncion, `(${porcentajeFuncion.toFixed(1)}%)`);
+  console.log("Puntuación total:", puntuacionTotal, `(${porcentajeTotal.toFixed(1)}%)`);
+  
+  // Determinar el nivel de afectación basado en el porcentaje total
+  let nivelAfectacion = "";
+  let colorBadge = "";
+  let colorClase = "";
+  
+  if (porcentajeTotal < 30) {
+    nivelAfectacion = "Afectación leve";
+    colorBadge = "bajo";
+    colorClase = "nivel-leve";
+  } else if (porcentajeTotal < 60) {
+    nivelAfectacion = "Afectación moderada";
+    colorBadge = "moderado";
+    colorClase = "nivel-moderado";
+  } else {
+    nivelAfectacion = "Afectación severa";
+    colorBadge = "alto";
+    colorClase = "nivel-severo";
+  }
+  
+  // Actualizar elementos en la página
+  if (document.getElementById('womac-valor-total')) {
+    document.getElementById('womac-valor-total').textContent = `${puntuacionTotal}/${totalItems * 4} (${porcentajeTotal.toFixed(1)}%)`;
+  }
+  
+  if (document.getElementById('womac-valor-dolor')) {
+    document.getElementById('womac-valor-dolor').textContent = `${puntuacionDolor}/${itemsDolor * 4} (${porcentajeDolor.toFixed(1)}%)`;
+  }
+  
+  if (document.getElementById('womac-valor-rigidez')) {
+    document.getElementById('womac-valor-rigidez').textContent = `${puntuacionRigidez}/${itemsRigidez * 4} (${porcentajeRigidez.toFixed(1)}%)`;
+  }
+  
+  if (document.getElementById('womac-valor-funcion')) {
+    document.getElementById('womac-valor-funcion').textContent = `${puntuacionFuncion}/${itemsFuncion * 4} (${porcentajeFuncion.toFixed(1)}%)`;
+  }
+  
+  if (document.getElementById('womac-interpretacion-total')) {
+    document.getElementById('womac-interpretacion-total').textContent = mensajeCompletado || nivelAfectacion;
+    document.getElementById('womac-interpretacion-total').className = "resultado-interpretacion " + colorBadge.replace("bajo", "verde").replace("moderado", "amarillo").replace("alto", "rojo");
+  }
+  
+  // Actualizar estado del badge
+  if (document.getElementById('womac-badge')) {
+    document.getElementById('womac-badge').textContent = nivelAfectacion;
+    document.getElementById('womac-badge').className = "resultado-badge completado " + colorBadge;
+  }
+  
+  // Actualizar el contenedor de resultados con la clase de color
+  const resultadoContainer = document.getElementById('womac-resultado');
+  if (resultadoContainer) {
+    resultadoContainer.className = "resultado-container " + colorClase;
+  }
+  
+  // Generar interpretación clínica basada en la puntuación
+  let interpretacionClinica = "";
+  
+  if (porcentajeTotal < 30) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación WOMAC de <strong>${porcentajeTotal.toFixed(1)}%</strong>, lo que indica una <strong>afectación leve</strong> por osteoartritis.</p>
+      <p>Análisis por subescalas:</p>
+      <ul>
+        <li><strong>Dolor:</strong> ${porcentajeDolor.toFixed(1)}% - ${porcentajeDolor < 30 ? 'Leve' : porcentajeDolor < 60 ? 'Moderado' : 'Severo'}</li>
+        <li><strong>Rigidez:</strong> ${porcentajeRigidez.toFixed(1)}% - ${porcentajeRigidez < 30 ? 'Leve' : porcentajeRigidez < 60 ? 'Moderada' : 'Severa'}</li>
+        <li><strong>Función física:</strong> ${porcentajeFuncion.toFixed(1)}% - ${porcentajeFuncion < 30 ? 'Limitación leve' : porcentajeFuncion < 60 ? 'Limitación moderada' : 'Limitación severa'}</li>
+      </ul>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta síntomas leves de osteoartritis que tienen un impacto limitado en sus actividades diarias</li>
+        <li>Experimenta dolor ocasional, generalmente relacionado con actividades específicas</li>
+        <li>Presenta rigidez articular de baja intensidad, principalmente al inicio del movimiento</li>
+        <li>Mantiene buena funcionalidad para la mayoría de actividades cotidianas</li>
+        <li>Es probable que responda bien a medidas conservadoras como ejercicio terapéutico y educación</li>
+        <li>Tiene buen pronóstico para el mantenimiento de su función con intervención adecuada</li>
+      </ul>
+    `;
+  } else if (porcentajeTotal < 60) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación WOMAC de <strong>${porcentajeTotal.toFixed(1)}%</strong>, lo que indica una <strong>afectación moderada</strong> por osteoartritis.</p>
+      <p>Análisis por subescalas:</p>
+      <ul>
+        <li><strong>Dolor:</strong> ${porcentajeDolor.toFixed(1)}% - ${porcentajeDolor < 30 ? 'Leve' : porcentajeDolor < 60 ? 'Moderado' : 'Severo'}</li>
+        <li><strong>Rigidez:</strong> ${porcentajeRigidez.toFixed(1)}% - ${porcentajeRigidez < 30 ? 'Leve' : porcentajeRigidez < 60 ? 'Moderada' : 'Severa'}</li>
+        <li><strong>Función física:</strong> ${porcentajeFuncion.toFixed(1)}% - ${porcentajeFuncion < 30 ? 'Limitación leve' : porcentajeFuncion < 60 ? 'Limitación moderada' : 'Limitación severa'}</li>
+      </ul>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta síntomas significativos de osteoartritis que impactan en su calidad de vida</li>
+        <li>Presenta dolor moderado que puede limitar algunas actividades cotidianas</li>
+        <li>Tiene rigidez articular que afecta su movilidad, especialmente al inicio del movimiento</li>
+        <li>Muestra limitaciones funcionales para actividades como subir/bajar escaleras, caminar distancias prolongadas o realizar tareas domésticas pesadas</li>
+        <li>Probablemente ha desarrollado estrategias compensatorias para mantener sus actividades diarias</li>
+        <li>Requiere un programa de intervención estructurado para optimizar su función y controlar los síntomas</li>
+      </ul>
+    `;
+  } else {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación WOMAC de <strong>${porcentajeTotal.toFixed(1)}%</strong>, lo que indica una <strong>afectación severa</strong> por osteoartritis.</p>
+      <p>Análisis por subescalas:</p>
+      <ul>
+        <li><strong>Dolor:</strong> ${porcentajeDolor.toFixed(1)}% - ${porcentajeDolor < 30 ? 'Leve' : porcentajeDolor < 60 ? 'Moderado' : 'Severo'}</li>
+        <li><strong>Rigidez:</strong> ${porcentajeRigidez.toFixed(1)}% - ${porcentajeRigidez < 30 ? 'Leve' : porcentajeRigidez < 60 ? 'Moderada' : 'Severa'}</li>
+        <li><strong>Función física:</strong> ${porcentajeFuncion.toFixed(1)}% - ${porcentajeFuncion < 30 ? 'Limitación leve' : porcentajeFuncion < 60 ? 'Limitación moderada' : 'Limitación severa'}</li>
+      </ul>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta síntomas severos de osteoartritis con impacto significativo en su calidad de vida</li>
+        <li>Presenta dolor intenso que interfiere con actividades básicas de la vida diaria</li>
+        <li>Tiene rigidez articular importante que limita considerablemente su movilidad</li>
+        <li>Muestra limitaciones funcionales severas para múltiples actividades cotidianas como subir/bajar escaleras, ponerse calcetines, entrar/salir de la bañera, etc.</li>
+        <li>Probablemente requiere adaptaciones significativas o asistencia para algunas actividades</li>
+        <li>Puede haber desarrollado desacondicionamiento físico secundario a la limitación funcional</li>
+        <li>Necesita un abordaje multidisciplinario integral para optimizar su función y calidad de vida</li>
+        ${porcentajeTotal > 80 ? '<li>La severidad de los síntomas sugiere valorar opciones de intervención avanzadas, incluyendo posibles opciones quirúrgicas si están indicadas</li>' : ''}
+      </ul>
+    `;
+  }
+  
+  // Generar recomendaciones terapéuticas
+  let recomendaciones = "";
+  
+  if (porcentajeTotal < 30) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica detallada para identificar factores contribuyentes específicos</li>
+          <li>Valoración de patrones de movimiento y alineación articular</li>
+          <li>Análisis de la fuerza muscular y control motor periarticular</li>
+          <li>Evaluación de la distribución de cargas durante actividades funcionales</li>
+          <li>Valoración de factores modificables (peso, calzado, actividad física, etc.)</li>
+          <li>Identificación de factores desencadenantes específicos del dolor</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa de ejercicio terapéutico enfocado en fortalecimiento periarticular (nivel de evidencia 1A)</li>
+          <li>Ejercicios de control neuromuscular y propiocepción (nivel de evidencia 1B)</li>
+          <li>Entrenamiento aeróbico de bajo impacto (nivel de evidencia 1A)</li>
+          <li>Terapia manual según hallazgos biomecánicos específicos (nivel de evidencia 1B)</li>
+          <li>Técnicas de movilización articular dentro de rangos indoloros (nivel de evidencia 1B)</li>
+          <li>Educación sobre manejo de cargas articulares (nivel de evidencia 1A)</li>
+          <li>Estrategias de autocuidado y autogestión (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Información sobre fisiopatología básica de la osteoartritis</li>
+          <li>Importancia del ejercicio regular y gestión de peso</li>
+          <li>Estrategias de protección articular durante actividades cotidianas</li>
+          <li>Beneficios del ejercicio aeróbico de bajo impacto</li>
+          <li>Técnicas de automovilización y ejercicios domiciliarios</li>
+          <li>Manejo de la actividad física para optimizar el "dosis-respuesta"</li>
+          <li>Reconocimiento y manejo de factores desencadenantes</li>
+        </ul>
+      </div>
+    `;
+  } else if (porcentajeTotal < 60) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica completa incluyendo articulaciones proximales y distales</li>
+          <li>Valoración detallada de la fuerza, resistencia y control motor periarticular</li>
+          <li>Análisis de compensaciones funcionales desarrolladas</li>
+          <li>Evaluación de factores contribuyentes (peso, alineación, factores metabólicos)</li>
+          <li>Valoración del impacto funcional en actividades cotidianas</li>
+          <li>Identificación de barreras para la adherencia al ejercicio</li>
+          <li>Análisis de patrones de dolor y factores desencadenantes</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa multimodal combinando ejercicio terapéutico y educación (nivel de evidencia 1A)</li>
+          <li>Entrenamiento de fuerza progresivo para musculatura periarticular (nivel de evidencia 1A)</li>
+          <li>Ejercicios de control neuromuscular y estabilidad dinámica (nivel de evidencia 1A)</li>
+          <li>Programa de ejercicio aeróbico adaptado (nivel de evidencia 1A)</li>
+          <li>Terapia manual para optimizar movilidad y reducir dolor (nivel de evidencia 1B)</li>
+          <li>Técnicas de desensibilización para áreas hipersensibles (nivel de evidencia 1B)</li>
+          <li>Entrenamiento funcional específico para actividades limitadas (nivel de evidencia 1A)</li>
+          <li>Considerar órtesis o ayudas técnicas según necesidades individuales (nivel de evidencia 1B)</li>
+          <li>Técnicas de manejo del dolor complementarias (TENS, termoterapia) (nivel de evidencia 1B)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación detallada sobre fisiopatología de la osteoartritis</li>
+          <li>Estrategias activas de autogestión del dolor</li>
+          <li>Técnicas de protección articular y conservación de energía</li>
+          <li>Modificaciones ergonómicas en entorno doméstico y laboral</li>
+          <li>Importancia de la adherencia al programa de ejercicios</li>
+          <li>Manejo de expectativas y establecimiento de objetivos realistas</li>
+          <li>Pacing de actividades para optimizar función y controlar síntomas</li>
+          <li>Importancia del control de peso y nutrición adecuada</li>
+          <li>Reconocimiento y manejo de exacerbaciones</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación multidimensional completa: física, funcional y psicosocial</li>
+          <li>Valoración detallada del impacto en actividades de la vida diaria</li>
+          <li>Análisis de barreras y facilitadores para la funcionalidad</li>
+          <li>Evaluación de comorbilidades y su impacto en la presentación clínica</li>
+          <li>Valoración de factores psicosociales asociados</li>
+          <li>Identificación de recursos de apoyo y entorno social</li>
+          <li>Evaluación de necesidades de adaptación del entorno</li>
+          <li>Considerar valoración médica para opciones de tratamiento adicionales</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa multimodal intensivo con enfoque en función y control de síntomas (nivel de evidencia 1A)</li>
+          <li>Ejercicio terapéutico adaptado con progresión muy gradual (nivel de evidencia 1A)</li>
+          <li>Fortalecimiento específico de musculatura periarticular con técnicas adaptadas (nivel de evidencia 1A)</li>
+          <li>Entrenamiento de transferencias y movilidad funcional (nivel de evidencia 1A)</li>
+          <li>Terapia manual cuidadosa para optimizar movilidad y reducir dolor (nivel de evidencia 1B)</li>
+          <li>Técnicas avanzadas de manejo del dolor (nivel de evidencia 1A)</li>
+          <li>Entrenamiento específico en actividades básicas prioritarias (nivel de evidencia 1A)</li>
+          <li>Prescripción de órtesis, ayudas técnicas o adaptaciones (nivel de evidencia 1B)</li>
+          <li>Técnicas de desensibilización y modulación del dolor (nivel de evidencia 1B)</li>
+          <li>Considerar opciones terapéuticas adicionales en coordinación con equipo médico (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación integral sobre manejo de la osteoartritis avanzada</li>
+          <li>Estrategias avanzadas de autogestión del dolor</li>
+          <li>Técnicas específicas de protección articular y conservación de energía</li>
+          <li>Adaptaciones del entorno doméstico para maximizar independencia</li>
+          <li>Importancia del ejercicio adaptado incluso en fases avanzadas</li>
+          <li>Manejo de expectativas y establecimiento de objetivos funcionales realistas</li>
+          <li>Estrategias para mantener participación social e independencia</li>
+          <li>Información sobre opciones terapéuticas avanzadas cuando estén indicadas</li>
+          <li>Plan de manejo de crisis y exacerbaciones</li>
+          <li>Recursos comunitarios de apoyo disponibles</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Consideraciones adicionales:</h6>
+        <ul>
+          <li>Valorar la necesidad de abordaje interdisciplinar</li>
+          <li>Considerar derivación para evaluación de opciones terapéuticas avanzadas</li>
+          <li>Monitorización regular del estado funcional y ajuste del plan terapéutico</li>
+          <li>Implicar al entorno familiar/cuidadores en el proceso terapéutico</li>
+          <li>Evaluar necesidades de adaptación del entorno doméstico y laboral</li>
+        </ul>
+      </div>
+    `;
+  }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  const interpretacionClinicaEl = document.getElementById('womac-interpretacion-clinica');
+  if (interpretacionClinicaEl) {
+    interpretacionClinicaEl.innerHTML = interpretacionClinica;
+    console.log("Interpretación clínica actualizada");
+  }
+  
+  const recomendacionesEl = document.getElementById('womac-recomendaciones');
+  if (recomendacionesEl) {
+    recomendacionesEl.innerHTML = recomendaciones;
+    console.log("Recomendaciones actualizadas");
+  }
+}
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
@@ -2677,6 +3064,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Inicializar Roland Morris (añadir esta línea)
   calcularRolandMorris();
+
+  // Inicializar WOMAC (añadir esta línea)
+  calcularWOMAC();
   
   // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
