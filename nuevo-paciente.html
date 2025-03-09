@@ -8369,6 +8369,149 @@
   </div>
 </div>
 
+    <!-- START Back Tool (Stratified Treatment Approach for Back Pain) -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('startback-content')">
+    <h4><i class="fas fa-plus-circle"></i> START Back Tool (Estratificación de Riesgo para Dolor Lumbar)</h4>
+    <div class="resultado-badge" id="startback-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="startback-content" style="display: none;">
+    <p class="mb-3">Piense en las últimas 2 semanas al responder estas preguntas. Por favor, indique si está de acuerdo o en desacuerdo con las siguientes afirmaciones.</p>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="70%">Pregunta</th>
+          <th width="15%">En desacuerdo</th>
+          <th width="15%">De acuerdo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Pregunta 1: Irradiación -->
+        <tr>
+          <td>1. Mi dolor de espalda se ha extendido por mi pierna(s) en algún momento en las últimas 2 semanas.</td>
+          <td class="text-center"><input type="radio" name="startback_item1" value="0" onchange="calcularStartBack()"></td>
+          <td class="text-center"><input type="radio" name="startback_item1" value="1" onchange="calcularStartBack()"></td>
+        </tr>
+        
+        <!-- Pregunta 2: Dolor en otras zonas -->
+        <tr>
+          <td>2. He tenido dolor en hombro o cuello en algún momento en las últimas 2 semanas.</td>
+          <td class="text-center"><input type="radio" name="startback_item2" value="0" onchange="calcularStartBack()"></td>
+          <td class="text-center"><input type="radio" name="startback_item2" value="1" onchange="calcularStartBack()"></td>
+        </tr>
+        
+        <!-- Pregunta 3: Limitación para caminar -->
+        <tr>
+          <td>3. Solo he caminado distancias cortas debido a mi dolor de espalda.</td>
+          <td class="text-center"><input type="radio" name="startback_item3" value="0" onchange="calcularStartBack()"></td>
+          <td class="text-center"><input type="radio" name="startback_item3" value="1" onchange="calcularStartBack()"></td>
+        </tr>
+        
+        <!-- Pregunta 4: Vestirse lentamente -->
+        <tr>
+          <td>4. En las últimas 2 semanas, me he vestido más lentamente de lo normal debido a mi dolor de espalda.</td>
+          <td class="text-center"><input type="radio" name="startback_item4" value="0" onchange="calcularStartBack()"></td>
+          <td class="text-center"><input type="radio" name="startback_item4" value="1" onchange="calcularStartBack()"></td>
+        </tr>
+        
+        <!-- Pregunta 5: Actividad física segura -->
+        <tr>
+          <td>5. No es realmente seguro para una persona en mi condición estar físicamente activa.</td>
+          <td class="text-center"><input type="radio" name="startback_item5" value="0" onchange="calcularStartBack()"></td>
+          <td class="text-center"><input type="radio" name="startback_item5" value="1" onchange="calcularStartBack()"></td>
+        </tr>
+        
+        <!-- Pregunta 6: Preocupación -->
+        <tr>
+          <td>6. Me he preocupado mucho por mi dolor de espalda.</td>
+          <td class="text-center"><input type="radio" name="startback_item6" value="0" onchange="calcularStartBack()"></td>
+          <td class="text-center"><input type="radio" name="startback_item6" value="1" onchange="calcularStartBack()"></td>
+        </tr>
+        
+        <!-- Pregunta 7: Catastrofización -->
+        <tr>
+          <td>7. Siento que mi dolor de espalda es terrible y que nunca va a mejorar.</td>
+          <td class="text-center"><input type="radio" name="startback_item7" value="0" onchange="calcularStartBack()"></td>
+          <td class="text-center"><input type="radio" name="startback_item7" value="1" onchange="calcularStartBack()"></td>
+        </tr>
+        
+        <!-- Pregunta 8: Estado de ánimo -->
+        <tr>
+          <td>8. En general, no he disfrutado de las cosas que solía disfrutar.</td>
+          <td class="text-center"><input type="radio" name="startback_item8" value="0" onchange="calcularStartBack()"></td>
+          <td class="text-center"><input type="radio" name="startback_item8" value="1" onchange="calcularStartBack()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Pregunta 9: Molestia -->
+    <p class="mb-2">9. En general, ¿cuánto le ha molestado su dolor de espalda en las últimas 2 semanas?</p>
+    <div class="form-group mb-4">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="startback_item9" id="startback_item9_0" value="0" onchange="calcularStartBack()">
+        <label class="form-check-label" for="startback_item9_0">Nada</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="startback_item9" id="startback_item9_1" value="1" onchange="calcularStartBack()">
+        <label class="form-check-label" for="startback_item9_1">Un poco</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="startback_item9" id="startback_item9_2" value="2" onchange="calcularStartBack()">
+        <label class="form-check-label" for="startback_item9_2">Moderadamente</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="startback_item9" id="startback_item9_3" value="3" onchange="calcularStartBack()">
+        <label class="form-check-label" for="startback_item9_3">Bastante</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="startback_item9" id="startback_item9_4" value="4" onchange="calcularStartBack()">
+        <label class="form-check-label" for="startback_item9_4">Mucho</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="startback_item9" id="startback_item9_5" value="5" onchange="calcularStartBack()">
+        <label class="form-check-label" for="startback_item9_5">Extremadamente</label>
+      </div>
+    </div>
+    
+    <div class="resultado-container" id="startback-resultado">
+      <div class="form-row">
+        <div class="form-col form-col-md-4">
+          <div class="resultado-label">Puntuación Total:</div>
+          <div class="resultado-valor" id="startback-valor-total">-/9</div>
+          <div class="resultado-interpretacion" id="startback-interpretacion-total">Complete el cuestionario</div>
+        </div>
+        <div class="form-col form-col-md-8">
+          <div class="resultado-label">Subescala psicosocial:</div>
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="resultado-valor" id="startback-valor-psicosocial">-/5</div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="resultado-sublabel">Grupo de riesgo:</div>
+              <div class="resultado-valor" id="startback-grupo-riesgo">-</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="interpretacion-clinica-container mt-3">
+        <h5>Interpretación Clínica:</h5>
+        <div class="interpretacion-clinica" id="startback-interpretacion-clinica">
+          Complete el cuestionario para obtener la interpretación clínica.
+        </div>
+      </div>
+      
+      <div class="recomendaciones-container mt-3">
+        <h5>Recomendaciones Terapéuticas:</h5>
+        <div class="recomendaciones" id="startback-recomendaciones">
+          Complete el cuestionario para obtener recomendaciones terapéuticas.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
     
                   <div class="form-row mt-4">
                     <div class="form-col form-col-md-12">
