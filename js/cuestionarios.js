@@ -1356,6 +1356,298 @@ function calcularNDI() {
   }
 }
 
+// Función para calcular el puntaje del QuickDASH
+function calcularQuickDASH() {
+  console.log("Calculando QuickDASH...");
+  
+  // Obtener todas las preguntas del QuickDASH
+  const items = [
+    document.querySelector('input[name="quickdash_item1"]:checked'),
+    document.querySelector('input[name="quickdash_item2"]:checked'),
+    document.querySelector('input[name="quickdash_item3"]:checked'),
+    document.querySelector('input[name="quickdash_item4"]:checked'),
+    document.querySelector('input[name="quickdash_item5"]:checked'),
+    document.querySelector('input[name="quickdash_item6"]:checked'),
+    document.querySelector('input[name="quickdash_item7"]:checked'),
+    document.querySelector('input[name="quickdash_item8"]:checked'),
+    document.querySelector('input[name="quickdash_item9"]:checked'),
+    document.querySelector('input[name="quickdash_item10"]:checked'),
+    document.querySelector('input[name="quickdash_item11"]:checked')
+  ];
+  
+  console.log("Items encontrados:", items);
+  
+  // Contar cuántas preguntas han sido respondidas
+  const itemsRespondidos = items.filter(item => item !== null).length;
+  console.log("Items respondidos:", itemsRespondidos);
+  
+  // Para un resultado válido, al menos 10 de 11 preguntas deben ser respondidas
+  const respuestasMinimas = 10;
+  
+  // Si no se han contestado suficientes preguntas, actualizar el badge y salir
+  if (itemsRespondidos < respuestasMinimas) {
+    if (document.getElementById('quickdash-badge')) {
+      document.getElementById('quickdash-badge').textContent = "No completado";
+      document.getElementById('quickdash-badge').className = "resultado-badge no-completado";
+    }
+    
+    // Actualizar mensajes de resultados
+    if (document.getElementById('quickdash-interpretacion-total')) {
+      document.getElementById('quickdash-interpretacion-total').textContent = "Complete al menos 10 preguntas";
+    }
+    if (document.getElementById('quickdash-interpretacion-clinica')) {
+      document.getElementById('quickdash-interpretacion-clinica').textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    }
+    if (document.getElementById('quickdash-recomendaciones')) {
+      document.getElementById('quickdash-recomendaciones').textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+    }
+    
+    return;
+  }
+  
+  // Calcular la suma de los valores de las preguntas respondidas
+  let suma = 0;
+  items.forEach(item => {
+    if (item !== null) {
+      suma += parseInt(item.value);
+    }
+  });
+  console.log("Suma de valores:", suma);
+  
+  // Calcular el puntaje QuickDASH: [(suma / número de respuestas) - 1] × 25
+  // Esto da un puntaje de 0-100 donde 0 = sin discapacidad, 100 = máxima discapacidad
+  const puntajeQuickDASH = ((suma / itemsRespondidos) - 1) * 25;
+  const puntajeRedondeado = Math.round(puntajeQuickDASH * 10) / 10; // Redondear a 1 decimal
+  console.log("Puntaje QuickDASH:", puntajeRedondeado);
+  
+  // Determinar el nivel de discapacidad
+  let nivelDiscapacidad = "";
+  let colorBadge = "";
+  let colorClase = "";
+  
+  if (puntajeRedondeado < 16) {
+    nivelDiscapacidad = "Discapacidad mínima";
+    colorBadge = "bajo";
+    colorClase = "nivel-leve";
+  } else if (puntajeRedondeado < 41) {
+    nivelDiscapacidad = "Discapacidad moderada";
+    colorBadge = "moderado";
+    colorClase = "nivel-moderado";
+  } else {
+    nivelDiscapacidad = "Discapacidad severa";
+    colorBadge = "alto";
+    colorClase = "nivel-severo";
+  }
+  
+  // Actualizar elementos en la página
+  if (document.getElementById('quickdash-valor-total')) {
+    document.getElementById('quickdash-valor-total').textContent = puntajeRedondeado.toFixed(1) + "/100";
+  }
+  
+  if (document.getElementById('quickdash-nivel-discapacidad')) {
+    document.getElementById('quickdash-nivel-discapacidad').textContent = nivelDiscapacidad;
+  }
+  
+  if (document.getElementById('quickdash-interpretacion-total')) {
+    document.getElementById('quickdash-interpretacion-total').textContent = nivelDiscapacidad;
+    document.getElementById('quickdash-interpretacion-total').className = "resultado-interpretacion " + colorBadge.replace("bajo", "verde").replace("moderado", "amarillo").replace("alto", "rojo");
+  }
+  
+  // Actualizar el contenedor de resultados con la clase de color
+  const resultadoContainer = document.getElementById('quickdash-resultado');
+  if (resultadoContainer) {
+    resultadoContainer.className = "resultado-container " + colorClase;
+  }
+  
+  // Actualizar estado del badge
+  if (document.getElementById('quickdash-badge')) {
+    document.getElementById('quickdash-badge').textContent = nivelDiscapacidad;
+    document.getElementById('quickdash-badge').className = "resultado-badge completado " + colorBadge;
+  }
+  
+  // Generar interpretación clínica basada en la puntuación
+  let interpretacionClinica = "";
+  
+  if (puntajeRedondeado < 16) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación QuickDASH de <strong>${puntajeRedondeado.toFixed(1)}/100</strong>, lo que indica <strong>discapacidad mínima</strong> en el brazo, hombro o mano.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta limitaciones mínimas en sus actividades diarias relacionadas con el miembro superior</li>
+        <li>Puede realizar la mayoría de las tareas sin dificultad significativa</li>
+        <li>Presenta un nivel funcional adecuado para la mayoría de actividades cotidianas y laborales</li>
+        <li>Puede experimentar molestias leves que no interfieren significativamente con su calidad de vida</li>
+      </ul>
+    `;
+  } else if (puntajeRedondeado < 41) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación QuickDASH de <strong>${puntajeRedondeado.toFixed(1)}/100</strong>, lo que indica <strong>discapacidad moderada</strong> en el brazo, hombro o mano.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta limitaciones moderadas en actividades que involucran el miembro superior</li>
+        <li>Presenta dificultades para realizar algunas tareas cotidianas y laborales</li>
+        <li>Puede experimentar dolor o incomodidad que interfiere parcialmente con su funcionalidad</li>
+        <li>Posiblemente necesita adaptar o modificar ciertas actividades</li>
+        <li>Es probable que tenga restricciones en actividades recreativas que requieren uso activo del miembro superior</li>
+      </ul>
+    `;
+  } else {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación QuickDASH de <strong>${puntajeRedondeado.toFixed(1)}/100</strong>, lo que indica <strong>discapacidad severa</strong> en el brazo, hombro o mano.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta limitaciones importantes en la mayoría de actividades que involucran el miembro superior</li>
+        <li>Presenta dificultades significativas para realizar tareas cotidianas básicas</li>
+        <li>Probablemente experimenta dolor e incomodidad considerables que afectan su calidad de vida</li>
+        <li>Puede requerir asistencia para completar ciertas actividades</li>
+        <li>Es probable que presente restricciones importantes en actividades laborales y recreativas</li>
+        <li>El impacto en su funcionalidad general es notable, con posibles efectos en su independencia y bienestar emocional</li>
+      </ul>
+    `;
+  }
+  
+  // Generar recomendaciones terapéuticas
+  let recomendaciones = "";
+  
+  if (puntajeRedondeado < 16) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica detallada para identificar factores contribuyentes menores</li>
+          <li>Valoración de patrones de movimiento específicos y ergonomía</li>
+          <li>Análisis de actividades ocupacionales y recreativas de alta demanda</li>
+          <li>Evaluación de factores preventivos para evitar progresión</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Terapia manual focalizada en segmentos específicos con disfunción (nivel de evidencia 1A)</li>
+          <li>Ejercicios de movilidad y estabilización adaptados a necesidades específicas (nivel de evidencia 1A)</li>
+          <li>Optimización de patrones de movimiento para actividades específicas (nivel de evidencia 1B)</li>
+          <li>Programa preventivo para evitar recurrencias o progresión (nivel de evidencia 1B)</li>
+          <li>Técnicas de liberación miofascial para tejidos específicos afectados (nivel de evidencia 1B)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Estrategias de autocuidado y mantenimiento de la función</li>
+          <li>Ergonomía e higiene postural específica para actividades habituales</li>
+          <li>Ejercicios preventivos para realizar en casa</li>
+          <li>Signos de alerta para buscar atención temprana si los síntomas progresan</li>
+          <li>Modificaciones menores en actividades laborales/recreativas de alta demanda</li>
+        </ul>
+      </div>
+    `;
+  } else if (puntajeRedondeado < 41) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación neuromuscular y biomecánica completa del miembro superior</li>
+          <li>Análisis detallado de restricciones articulares, desequilibrios musculares y control motor</li>
+          <li>Valoración de impacto funcional en actividades laborales y de vida diaria</li>
+          <li>Examen de factores desencadenantes y perpetuantes</li>
+          <li>Evaluación de compensaciones proximales y distales</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa multimodal de rehabilitación con énfasis en recuperación funcional (nivel de evidencia 1A)</li>
+          <li>Terapia manual específica para disfunciones articulares identificadas (nivel de evidencia 1A)</li>
+          <li>Reeducación neuromuscular progresiva de patrones de movimiento (nivel de evidencia 1A)</li>
+          <li>Ejercicios de estabilización escapular y control motor (nivel de evidencia 1A)</li>
+          <li>Entrenamiento de resistencia progresiva para musculatura débil (nivel de evidencia 1A)</li>
+          <li>Técnicas de movilización neural según necesidades (nivel de evidencia 1B)</li>
+          <li>Modificación de actividades y ergonomía adaptada (nivel de evidencia 1B)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación sobre fisiopatología y mecanismos de la lesión</li>
+          <li>Pacing de actividades y técnicas de conservación de energía</li>
+          <li>Ergonomía específica para actividades problemáticas</li>
+          <li>Programa de ejercicios domiciliarios con progresión gradual</li>
+          <li>Estrategias de autogestión de síntomas y exacerbaciones</li>
+          <li>Modificaciones en actividades laborales y de ocio</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación multidimensional exhaustiva del miembro superior y sistemas relacionados</li>
+          <li>Valoración de banderas rojas y posibles complicaciones neurovasculares</li>
+          <li>Análisis detallado de limitaciones funcionales y su impacto en calidad de vida</li>
+          <li>Evaluación de factores psicosociales y barreras para la recuperación</li>
+          <li>Valoración de factores de sensibilización central y regional</li>
+          <li>Considerar estudios complementarios o interconsulta según hallazgos (nivel de evidencia 1B)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa interdisciplinario con objetivos funcionales específicos (nivel de evidencia 1A)</li>
+          <li>Terapia manual adaptada a la tolerancia y respuesta individual (nivel de evidencia 1A)</li>
+          <li>Estrategias de desensibilización para áreas hipersensibles (nivel de evidencia 1B)</li>
+          <li>Rehabilitación neuromuscular con énfasis en control motor y no en dolor (nivel de evidencia 1A)</li>
+          <li>Ejercicio terapéutico con progresión muy gradual y supervisada (nivel de evidencia 1A)</li>
+          <li>Entrenamiento funcional específico para actividades esenciales (nivel de evidencia 1A)</li>
+          <li>Técnicas de manejo del dolor (modalidades físicas, TENS) como complemento (nivel de evidencia 1B)</li>
+          <li>Considerar órtesis de posicionamiento o funcionales según necesidad (nivel de evidencia 2A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación intensiva en neurociencia del dolor cuando corresponda</li>
+          <li>Estrategias avanzadas de autogestión y resolución de problemas</li>
+          <li>Establecimiento de expectativas realistas y objetivos funcionales progresivos</li>
+          <li>Técnicas de conservación de energía y protección articular</li>
+          <li>Modificaciones significativas del entorno y actividades</li>
+          <li>Estrategias para mantener participación social y bienestar emocional</li>
+          <li>Plan de mantenimiento a largo plazo y prevención de recaídas</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Consideraciones adicionales:</h6>
+        <ul>
+          <li>Valorar la necesidad de interconsulta con especialistas según hallazgos clínicos</li>
+          <li>Considerar abordaje interdisciplinar en casos de discapacidad persistente</li>
+          <li>Evaluar factores ergonómicos y adaptaciones necesarias para actividades esenciales</li>
+          <li>Monitorizar respuesta al tratamiento y ajustar plan según evolución</li>
+        </ul>
+      </div>
+    `;
+  }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  const interpretacionClinicaEl = document.getElementById('quickdash-interpretacion-clinica');
+  if (interpretacionClinicaEl) {
+    interpretacionClinicaEl.innerHTML = interpretacionClinica;
+    console.log("Interpretación clínica actualizada");
+  }
+  
+  const recomendacionesEl = document.getElementById('quickdash-recomendaciones');
+  if (recomendacionesEl) {
+    recomendacionesEl.innerHTML = recomendaciones;
+    console.log("Recomendaciones actualizadas");
+  }
+}
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
