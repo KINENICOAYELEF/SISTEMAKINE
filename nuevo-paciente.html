@@ -7065,208 +7065,492 @@
     </div>
   </div>
   
-<!-- QuickDASH (Quick Disabilities of the Arm, Shoulder and Hand) -->
-<div class="cuestionario-item">
-  <div class="cuestionario-header" onclick="toggleCuestionario('quickdash-content')">
-    <h4><i class="fas fa-plus-circle"></i> Cuestionario QuickDASH (Discapacidad del Brazo, Hombro y Mano)</h4>
-    <div class="resultado-badge" id="quickdash-badge">No completado</div>
-  </div>
-  <div class="cuestionario-content" id="quickdash-content" style="display: none;">
-    <p class="mb-3">Este cuestionario evalúa su capacidad para realizar actividades con sus brazos, hombros o manos, así como los síntomas asociados. Por favor, responda cada pregunta basándose en su condición durante la última semana.</p>
-    
-    <table class="table table-bordered mb-4">
-      <thead>
-        <tr>
-          <th>Actividad</th>
-          <th>Sin dificultad</th>
-          <th>Dificultad leve</th>
-          <th>Dificultad moderada</th>
-          <th>Dificultad severa</th>
-          <th>Imposible de realizar</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- 1. Abrir un frasco nuevo o apretado -->
-        <tr>
-          <td>1. Abrir un frasco nuevo o apretado</td>
-          <td class="text-center"><input type="radio" name="quickdash_item1" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item1" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item1" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item1" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item1" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-        
-        <!-- 2. Realizar tareas domésticas pesadas -->
-        <tr>
-          <td>2. Realizar tareas domésticas pesadas (p. ej. lavar paredes, fregar el suelo)</td>
-          <td class="text-center"><input type="radio" name="quickdash_item2" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item2" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item2" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item2" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item2" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-        
-        <!-- 3. Cargar una bolsa de compras o un maletín -->
-        <tr>
-          <td>3. Cargar una bolsa de compras o un maletín</td>
-          <td class="text-center"><input type="radio" name="quickdash_item3" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item3" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item3" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item3" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item3" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-        
-        <!-- 4. Lavarse la espalda -->
-        <tr>
-          <td>4. Lavarse la espalda</td>
-          <td class="text-center"><input type="radio" name="quickdash_item4" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item4" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item4" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item4" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item4" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-        
-        <!-- 5. Usar un cuchillo para cortar alimentos -->
-        <tr>
-          <td>5. Usar un cuchillo para cortar alimentos</td>
-          <td class="text-center"><input type="radio" name="quickdash_item5" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item5" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item5" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item5" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item5" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-        
-        <!-- 6. Actividades recreativas -->
-        <tr>
-          <td>6. Actividades recreativas que requieren poco esfuerzo (jugar a las cartas, tejer, etc.)</td>
-          <td class="text-center"><input type="radio" name="quickdash_item6" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item6" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item6" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item6" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item6" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-        
-        <!-- 7. Actividades con movimiento libre del brazo -->
-        <tr>
-          <td>7. Actividades recreativas en las que se mueve el brazo libremente (ping pong, bádminton, natación, etc.)</td>
-          <td class="text-center"><input type="radio" name="quickdash_item7" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item7" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item7" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item7" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item7" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-        
-        <!-- 8. Transportar objetos -->
-        <tr>
-          <td>8. Actividades que requieren transportar objetos (p. ej. usar herramientas, conducir, etc.)</td>
-          <td class="text-center"><input type="radio" name="quickdash_item8" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item8" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item8" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item8" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item8" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <table class="table table-bordered mb-4">
-      <thead>
-        <tr>
-          <th>Durante la última semana...</th>
-          <th>Nada</th>
-          <th>Un poco</th>
-          <th>Regular</th>
-          <th>Bastante</th>
-          <th>Mucho</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- 9. Dificultad para dormir -->
-        <tr>
-          <td>9. ¿Cuánta dificultad ha tenido para dormir debido a dolor en brazo, hombro o mano?</td>
-          <td class="text-center"><input type="radio" name="quickdash_item9" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item9" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item9" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item9" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item9" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-        
-        <!-- 10. Sentirse menos capaz -->
-        <tr>
-          <td>10. ¿Se siente menos capaz, confiado o útil debido a su problema en brazo, hombro o mano?</td>
-          <td class="text-center"><input type="radio" name="quickdash_item10" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item10" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item10" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item10" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item10" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <table class="table table-bordered mb-4">
-      <thead>
-        <tr>
-          <th>Califique la gravedad de los siguientes síntomas en la última semana</th>
-          <th>Ninguno</th>
-          <th>Leve</th>
-          <th>Moderado</th>
-          <th>Severo</th>
-          <th>Extremo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- 11. Dolor en brazo, hombro o mano -->
-        <tr>
-          <td>11. Dolor en brazo, hombro o mano</td>
-          <td class="text-center"><input type="radio" name="quickdash_item11" value="1" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item11" value="2" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item11" value="3" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item11" value="4" onchange="calcularQuickDASH()"></td>
-          <td class="text-center"><input type="radio" name="quickdash_item11" value="5" onchange="calcularQuickDASH()"></td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <div class="resultado-container" id="quickdash-resultado">
-      <div class="form-row">
-        <div class="form-col form-col-md-4">
-          <div class="resultado-label">Puntuación Total:</div>
-          <div class="resultado-valor" id="quickdash-valor-total">-/100</div>
-          <div class="resultado-interpretacion" id="quickdash-interpretacion-total">Complete el cuestionario</div>
-        </div>
-        <div class="form-col form-col-md-8">
-          <div class="resultado-label">Interpretación:</div>
-          <div class="form-row">
-            <div class="form-col form-col-md-6">
-              <div class="resultado-sublabel">Nivel de discapacidad:</div>
-              <div class="resultado-valor" id="quickdash-nivel-discapacidad">-</div>
+          <!-- QuickDASH (Quick Disabilities of the Arm, Shoulder and Hand) -->
+          <div class="cuestionario-item">
+            <div class="cuestionario-header" onclick="toggleCuestionario('quickdash-content')">
+              <h4><i class="fas fa-plus-circle"></i> Cuestionario QuickDASH (Discapacidad del Brazo, Hombro y Mano)</h4>
+              <div class="resultado-badge" id="quickdash-badge">No completado</div>
+            </div>
+            <div class="cuestionario-content" id="quickdash-content" style="display: none;">
+              <p class="mb-3">Este cuestionario evalúa su capacidad para realizar actividades con sus brazos, hombros o manos, así como los síntomas asociados. Por favor, responda cada pregunta basándose en su condición durante la última semana.</p>
+              
+              <table class="table table-bordered mb-4">
+                <thead>
+                  <tr>
+                    <th>Actividad</th>
+                    <th>Sin dificultad</th>
+                    <th>Dificultad leve</th>
+                    <th>Dificultad moderada</th>
+                    <th>Dificultad severa</th>
+                    <th>Imposible de realizar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- 1. Abrir un frasco nuevo o apretado -->
+                  <tr>
+                    <td>1. Abrir un frasco nuevo o apretado</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item1" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item1" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item1" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item1" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item1" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                  
+                  <!-- 2. Realizar tareas domésticas pesadas -->
+                  <tr>
+                    <td>2. Realizar tareas domésticas pesadas (p. ej. lavar paredes, fregar el suelo)</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item2" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item2" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item2" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item2" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item2" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                  
+                  <!-- 3. Cargar una bolsa de compras o un maletín -->
+                  <tr>
+                    <td>3. Cargar una bolsa de compras o un maletín</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item3" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item3" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item3" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item3" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item3" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                  
+                  <!-- 4. Lavarse la espalda -->
+                  <tr>
+                    <td>4. Lavarse la espalda</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item4" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item4" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item4" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item4" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item4" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                  
+                  <!-- 5. Usar un cuchillo para cortar alimentos -->
+                  <tr>
+                    <td>5. Usar un cuchillo para cortar alimentos</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item5" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item5" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item5" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item5" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item5" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                  
+                  <!-- 6. Actividades recreativas -->
+                  <tr>
+                    <td>6. Actividades recreativas que requieren poco esfuerzo (jugar a las cartas, tejer, etc.)</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item6" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item6" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item6" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item6" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item6" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                  
+                  <!-- 7. Actividades con movimiento libre del brazo -->
+                  <tr>
+                    <td>7. Actividades recreativas en las que se mueve el brazo libremente (ping pong, bádminton, natación, etc.)</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item7" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item7" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item7" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item7" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item7" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                  
+                  <!-- 8. Transportar objetos -->
+                  <tr>
+                    <td>8. Actividades que requieren transportar objetos (p. ej. usar herramientas, conducir, etc.)</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item8" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item8" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item8" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item8" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item8" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <table class="table table-bordered mb-4">
+                <thead>
+                  <tr>
+                    <th>Durante la última semana...</th>
+                    <th>Nada</th>
+                    <th>Un poco</th>
+                    <th>Regular</th>
+                    <th>Bastante</th>
+                    <th>Mucho</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- 9. Dificultad para dormir -->
+                  <tr>
+                    <td>9. ¿Cuánta dificultad ha tenido para dormir debido a dolor en brazo, hombro o mano?</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item9" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item9" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item9" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item9" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item9" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                  
+                  <!-- 10. Sentirse menos capaz -->
+                  <tr>
+                    <td>10. ¿Se siente menos capaz, confiado o útil debido a su problema en brazo, hombro o mano?</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item10" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item10" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item10" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item10" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item10" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <table class="table table-bordered mb-4">
+                <thead>
+                  <tr>
+                    <th>Califique la gravedad de los siguientes síntomas en la última semana</th>
+                    <th>Ninguno</th>
+                    <th>Leve</th>
+                    <th>Moderado</th>
+                    <th>Severo</th>
+                    <th>Extremo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- 11. Dolor en brazo, hombro o mano -->
+                  <tr>
+                    <td>11. Dolor en brazo, hombro o mano</td>
+                    <td class="text-center"><input type="radio" name="quickdash_item11" value="1" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item11" value="2" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item11" value="3" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item11" value="4" onchange="calcularQuickDASH()"></td>
+                    <td class="text-center"><input type="radio" name="quickdash_item11" value="5" onchange="calcularQuickDASH()"></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <div class="resultado-container" id="quickdash-resultado">
+                <div class="form-row">
+                  <div class="form-col form-col-md-4">
+                    <div class="resultado-label">Puntuación Total:</div>
+                    <div class="resultado-valor" id="quickdash-valor-total">-/100</div>
+                    <div class="resultado-interpretacion" id="quickdash-interpretacion-total">Complete el cuestionario</div>
+                  </div>
+                  <div class="form-col form-col-md-8">
+                    <div class="resultado-label">Interpretación:</div>
+                    <div class="form-row">
+                      <div class="form-col form-col-md-6">
+                        <div class="resultado-sublabel">Nivel de discapacidad:</div>
+                        <div class="resultado-valor" id="quickdash-nivel-discapacidad">-</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="interpretacion-clinica-container mt-3">
+                  <h5>Interpretación Clínica:</h5>
+                  <div class="interpretacion-clinica" id="quickdash-interpretacion-clinica">
+                    Complete el cuestionario para obtener la interpretación clínica.
+                  </div>
+                </div>
+                
+                <div class="recomendaciones-container mt-3">
+                  <h5>Recomendaciones Terapéuticas:</h5>
+                  <div class="recomendaciones" id="quickdash-recomendaciones">
+                    Complete el cuestionario para obtener recomendaciones terapéuticas.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>  
+
+              <!-- SPADI (Shoulder Pain and Disability Index) -->
+          <div class="cuestionario-item">
+            <div class="cuestionario-header" onclick="toggleCuestionario('spadi-content')">
+              <h4><i class="fas fa-plus-circle"></i> Índice de Dolor y Discapacidad de Hombro (SPADI)</h4>
+              <div class="resultado-badge" id="spadi-badge">No completado</div>
+            </div>
+            <div class="cuestionario-content" id="spadi-content" style="display: none;">
+              <p class="mb-3">Este cuestionario evalúa su dolor y discapacidad en el hombro. Por favor, marque en cada pregunta el número que mejor represente su experiencia durante la última semana.</p>
+              
+              <!-- Sección de Dolor -->
+              <h5 class="mt-4 mb-3">Escala de Dolor</h5>
+              <p>¿Qué tan intenso es su dolor? (0 = sin dolor, 10 = el peor dolor imaginable)</p>
+              
+              <table class="table table-bordered mb-4">
+                <thead>
+                  <tr>
+                    <th>Situación</th>
+                    <th colspan="11">Intensidad del dolor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- 1. En su peor momento -->
+                  <tr>
+                    <td>1. En su peor momento</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor1" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 2. Al acostarse sobre el lado afectado -->
+                  <tr>
+                    <td>2. Al acostarse sobre el lado afectado</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor2" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 3. Al alcanzar algo en un estante alto -->
+                  <tr>
+                    <td>3. Al alcanzar algo en un estante alto</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor3" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 4. Al tocarse la nuca -->
+                  <tr>
+                    <td>4. Al tocarse la nuca</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor4" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 5. Al empujar con el brazo afectado -->
+                  <tr>
+                    <td>5. Al empujar con el brazo afectado</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_dolor5" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <!-- Sección de Discapacidad -->
+              <h5 class="mt-4 mb-3">Escala de Discapacidad</h5>
+              <p>¿Qué tanta dificultad tiene al realizar las siguientes actividades? (0 = sin dificultad, 10 = tan difícil que requiere ayuda)</p>
+              
+              <table class="table table-bordered mb-4">
+                <thead>
+                  <tr>
+                    <th>Actividad</th>
+                    <th colspan="11">Grado de dificultad</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- 1. Lavarse el cabello -->
+                  <tr>
+                    <td>1. Lavarse el cabello</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap1" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 2. Lavarse la espalda -->
+                  <tr>
+                    <td>2. Lavarse la espalda</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap2" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 3. Ponerse o quitarse una camiseta o jersey -->
+                  <tr>
+                    <td>3. Ponerse o quitarse una camiseta o jersey</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap3" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 4. Ponerse una camisa que se abotona por delante -->
+                  <tr>
+                    <td>4. Ponerse una camisa que se abotona por delante</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap4" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 5. Ponerse los pantalones -->
+                  <tr>
+                    <td>5. Ponerse los pantalones</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap5" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 6. Colocar un objeto en un estante alto -->
+                  <tr>
+                    <td>6. Colocar un objeto en un estante alto</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap6" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 7. Cargar un objeto pesado de 5 kg -->
+                  <tr>
+                    <td>7. Cargar un objeto pesado de 5 kg</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap7" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                  
+                  <!-- 8. Sacar algo del bolsillo trasero -->
+                  <tr>
+                    <td>8. Sacar algo del bolsillo trasero</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="0" onchange="calcularSPADI()"><br>0</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="1" onchange="calcularSPADI()"><br>1</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="2" onchange="calcularSPADI()"><br>2</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="3" onchange="calcularSPADI()"><br>3</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="4" onchange="calcularSPADI()"><br>4</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="5" onchange="calcularSPADI()"><br>5</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="6" onchange="calcularSPADI()"><br>6</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="7" onchange="calcularSPADI()"><br>7</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="8" onchange="calcularSPADI()"><br>8</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="9" onchange="calcularSPADI()"><br>9</td>
+                    <td class="text-center"><input type="radio" name="spadi_discap8" value="10" onchange="calcularSPADI()"><br>10</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <div class="resultado-container" id="spadi-resultado">
+                <div class="form-row">
+                  <div class="form-col form-col-md-4">
+                    <div class="resultado-label">Puntuación Total:</div>
+                    <div class="resultado-valor" id="spadi-valor-total">-/100</div>
+                    <div class="resultado-interpretacion" id="spadi-interpretacion-total">Complete el cuestionario</div>
+                  </div>
+                  <div class="form-col form-col-md-8">
+                    <div class="resultado-label">Subescalas:</div>
+                    <div class="form-row">
+                      <div class="form-col form-col-md-6">
+                        <div class="resultado-sublabel">Dolor:</div>
+                        <div class="resultado-valor" id="spadi-valor-dolor">-%</div>
+                      </div>
+                      <div class="form-col form-col-md-6">
+                        <div class="resultado-sublabel">Discapacidad:</div>
+                        <div class="resultado-valor" id="spadi-valor-discapacidad">-%</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="interpretacion-clinica-container mt-3">
+                  <h5>Interpretación Clínica:</h5>
+                  <div class="interpretacion-clinica" id="spadi-interpretacion-clinica">
+                    Complete el cuestionario para obtener la interpretación clínica.
+                  </div>
+                </div>
+                
+                <div class="recomendaciones-container mt-3">
+                  <h5>Recomendaciones Terapéuticas:</h5>
+                  <div class="recomendaciones" id="spadi-recomendaciones">
+                    Complete el cuestionario para obtener recomendaciones terapéuticas.
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      
-      <div class="interpretacion-clinica-container mt-3">
-        <h5>Interpretación Clínica:</h5>
-        <div class="interpretacion-clinica" id="quickdash-interpretacion-clinica">
-          Complete el cuestionario para obtener la interpretación clínica.
-        </div>
-      </div>
-      
-      <div class="recomendaciones-container mt-3">
-        <h5>Recomendaciones Terapéuticas:</h5>
-        <div class="recomendaciones" id="quickdash-recomendaciones">
-          Complete el cuestionario para obtener recomendaciones terapéuticas.
-        </div>
-      </div>
-    </div>
-  </div>
-</div>  
-  <div class="form-row mt-4">
-    <div class="form-col form-col-md-12">
-      <button type="button" class="btn btn-secondary prev-tab" data-prev="evaluacion-fisica"><i class="fas fa-arrow-left"></i> Anterior</button>
-      <button type="button" class="btn btn-primary next-tab" data-next="banderas">Siguiente <i class="fas fa-arrow-right"></i></button>
-    </div>
-  </div>
-</div>
+            <div class="form-row mt-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-secondary prev-tab" data-prev="evaluacion-fisica"><i class="fas fa-arrow-left"></i> Anterior</button>
+                <button type="button" class="btn btn-primary next-tab" data-next="banderas">Siguiente <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
           
           <!-- 8. Banderas -->
           <div class="tab-content" id="banderas">
