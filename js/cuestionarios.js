@@ -2322,6 +2322,293 @@ function calcularOswestry() {
   }
 }
 
+// Función para calcular el Cuestionario de Discapacidad de Roland Morris (RMDQ)
+function calcularRolandMorris() {
+  console.log("Calculando Roland Morris...");
+  
+  // Obtener todos los ítems del cuestionario
+  let puntuacionTotal = 0;
+  let itemsMarcados = 0;
+  
+  // Contar los ítems marcados (cada ítem marcado vale 1 punto)
+  for (let i = 1; i <= 24; i++) {
+    const item = document.getElementById(`rolandmorris_item${i}`);
+    if (item && item.checked) {
+      puntuacionTotal++;
+      itemsMarcados++;
+    }
+  }
+  
+  console.log("Items marcados:", itemsMarcados);
+  console.log("Puntuación total:", puntuacionTotal);
+  
+  // Calcular el porcentaje (sobre 24 puntos posibles)
+  const porcentaje = (puntuacionTotal / 24) * 100;
+  const porcentajeRedondeado = Math.round(porcentaje * 10) / 10; // Redondear a 1 decimal
+  
+  // Determinar el nivel de discapacidad
+  let nivelDiscapacidad = "";
+  let colorBadge = "";
+  let colorClase = "";
+  
+  if (puntuacionTotal <= 6) {
+    nivelDiscapacidad = "Discapacidad leve";
+    colorBadge = "bajo";
+    colorClase = "nivel-leve";
+  } else if (puntuacionTotal <= 12) {
+    nivelDiscapacidad = "Discapacidad moderada";
+    colorBadge = "moderado";
+    colorClase = "nivel-moderado";
+  } else {
+    nivelDiscapacidad = "Discapacidad severa";
+    colorBadge = "alto";
+    colorClase = "nivel-severo";
+  }
+  
+  // Actualizar elementos en la página
+  if (document.getElementById('rolandmorris-valor-total')) {
+    document.getElementById('rolandmorris-valor-total').textContent = puntuacionTotal + "/24";
+  }
+  
+  if (document.getElementById('rolandmorris-valor-porcentaje')) {
+    document.getElementById('rolandmorris-valor-porcentaje').textContent = porcentajeRedondeado.toFixed(1) + "%";
+  }
+  
+  if (document.getElementById('rolandmorris-nivel-discapacidad')) {
+    document.getElementById('rolandmorris-nivel-discapacidad').textContent = nivelDiscapacidad;
+  }
+  
+  if (document.getElementById('rolandmorris-interpretacion-total')) {
+    document.getElementById('rolandmorris-interpretacion-total').textContent = nivelDiscapacidad;
+    document.getElementById('rolandmorris-interpretacion-total').className = "resultado-interpretacion " + colorBadge.replace("bajo", "verde").replace("moderado", "amarillo").replace("alto", "rojo");
+  }
+  
+  // Actualizar estado del badge
+  if (document.getElementById('rolandmorris-badge')) {
+    // Siempre se considera completado, incluso si la puntuación es 0, porque es una respuesta válida
+    document.getElementById('rolandmorris-badge').textContent = nivelDiscapacidad;
+    document.getElementById('rolandmorris-badge').className = "resultado-badge completado " + colorBadge;
+  }
+  
+  // Actualizar el contenedor de resultados con la clase de color
+  const resultadoContainer = document.getElementById('rolandmorris-resultado');
+  if (resultadoContainer) {
+    resultadoContainer.className = "resultado-container " + colorClase;
+  }
+  
+  // Generar interpretación clínica basada en la puntuación
+  let interpretacionClinica = "";
+  
+  if (puntuacionTotal <= 6) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/24</strong> (${porcentajeRedondeado.toFixed(1)}%) en el Cuestionario de Discapacidad de Roland Morris, lo que indica <strong>discapacidad leve</strong> por dolor lumbar.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta algunas limitaciones funcionales específicas, pero puede realizar la mayoría de sus actividades cotidianas</li>
+        <li>Es probable que experimente dolor lumbar de intensidad leve a moderada que no interfiere significativamente con su funcionalidad general</li>
+        <li>Puede presentar dificultades principalmente con actividades que implican posturas o esfuerzos específicos</li>
+        <li>Mantiene su independencia en actividades de autocuidado y vida diaria</li>
+        <li>Es probable que responda bien a intervenciones conservadoras dirigidas a factores biomecánicos específicos</li>
+        <li>Tiene buen pronóstico para resolución o mejora sustancial con intervención apropiada</li>
+      </ul>
+    `;
+  } else if (puntuacionTotal <= 12) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/24</strong> (${porcentajeRedondeado.toFixed(1)}%) en el Cuestionario de Discapacidad de Roland Morris, lo que indica <strong>discapacidad moderada</strong> por dolor lumbar.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta limitaciones funcionales significativas en varias actividades de la vida diaria</li>
+        <li>Presenta dificultades con actividades como sentarse, levantarse, caminar distancias moderadas o realizar tareas domésticas</li>
+        <li>Es probable que haya desarrollado adaptaciones y compensaciones para manejar sus actividades cotidianas</li>
+        <li>Puede tener alteraciones del sueño, cambios en su movilidad y limitaciones en algunas actividades sociales o recreativas</li>
+        <li>Posiblemente presente signos de desacondicionamiento físico secundario a la limitación funcional</li>
+        <li>Puede estar desarrollando patrones de evitación de movimiento por temor al dolor</li>
+        <li>Requiere un enfoque terapéutico estructurado y multimodal</li>
+      </ul>
+    `;
+  } else {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/24</strong> (${porcentajeRedondeado.toFixed(1)}%) en el Cuestionario de Discapacidad de Roland Morris, lo que indica <strong>discapacidad severa</strong> por dolor lumbar.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta limitaciones funcionales importantes que afectan la mayoría de las actividades cotidianas</li>
+        <li>Presenta dificultades significativas para actividades básicas como vestirse, moverse en la cama, sentarse y estar de pie</li>
+        <li>Probablemente requiere ayuda para algunas actividades de autocuidado o movilidad</li>
+        <li>Muestra patrones evidentes de evitación del movimiento y comportamientos protectores</li>
+        <li>Es probable que presente alteraciones significativas del sueño y posiblemente cambios en el estado de ánimo</li>
+        <li>Puede haber desarrollado desacondicionamiento físico importante</li>
+        <li>Es posible que presente factores psicosociales significativos que complican el cuadro</li>
+        <li>Requiere un abordaje interdisciplinario intensivo</li>
+        ${puntuacionTotal >= 18 ? '<li>La severidad de la discapacidad sugiere la necesidad de evaluar posibles complicaciones o comorbilidades que puedan estar contribuyendo al cuadro</li>' : ''}
+      </ul>
+    `;
+  }
+  
+  // Generar recomendaciones terapéuticas
+  let recomendaciones = "";
+  
+  if (puntuacionTotal <= 6) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica detallada para identificar factores contribuyentes específicos</li>
+          <li>Valoración de patrones de movimiento y postura en actividades específicas que desencadenan síntomas</li>
+          <li>Análisis del control motor lumbopélvico</li>
+          <li>Evaluación de la activación muscular y potenciales desequilibrios</li>
+          <li>Análisis ergonómico de actividades laborales y recreativas</li>
+          <li>Identificación de factores predisponentes y perpetuantes</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Ejercicios específicos de control motor lumbopélvico (nivel de evidencia 1A)</li>
+          <li>Terapia manual según hallazgos biomecánicos específicos (nivel de evidencia 1B)</li>
+          <li>Programa de ejercicio terapéutico específico para corregir desequilibrios identificados (nivel de evidencia 1A)</li>
+          <li>Corrección de patrones de movimiento disfuncionales (nivel de evidencia 1B)</li>
+          <li>Técnicas de liberación miofascial según necesidad (nivel de evidencia 1B)</li>
+          <li>Educación postural específica para actividades problemáticas (nivel de evidencia 1B)</li>
+          <li>Reentrenamiento propioceptivo y de conciencia corporal (nivel de evidencia 1B)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación sobre biomecánica básica de la columna lumbar</li>
+          <li>Principios de protección articular durante actividades cotidianas</li>
+          <li>Recomendaciones ergonómicas específicas para actividades problemáticas</li>
+          <li>Importancia de mantener actividad física regular y evitar el reposo prolongado</li>
+          <li>Estrategias de autogestión y autocuidado</li>
+          <li>Programa de ejercicios domiciliarios específicos</li>
+          <li>Reconocimiento temprano de signos de alerta y manejo de exacerbaciones</li>
+        </ul>
+      </div>
+    `;
+  } else if (puntuacionTotal <= 12) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica integral de la región lumbopélvica y cadena cinética relacionada</li>
+          <li>Valoración detallada del control motor y patrones de activación muscular</li>
+          <li>Análisis de patrones compensatorios desarrollados</li>
+          <li>Evaluación de factores musculares: fuerza, resistencia, flexibilidad</li>
+          <li>Evaluación del impacto funcional en actividades cotidianas</li>
+          <li>Identificación de factores perpetuantes</li>
+          <li>Valoración de creencias y comportamientos asociados al dolor</li>
+          <li>Evaluación de factores de riesgo para cronicidad</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa multimodal combinando terapia manual y ejercicio terapéutico (nivel de evidencia 1A)</li>
+          <li>Ejercicios progresivos de control motor lumbopélvico (nivel de evidencia 1A)</li>
+          <li>Reentrenamiento de patrones funcionales de movimiento (nivel de evidencia 1A)</li>
+          <li>Fortalecimiento específico de musculatura deficitaria (nivel de evidencia 1A)</li>
+          <li>Programa de ejercicio cardiovascular adaptado (nivel de evidencia 1A)</li>
+          <li>Técnicas de desensibilización para áreas hipersensibles (nivel de evidencia 1B)</li>
+          <li>Estrategias de exposición gradual a actividades temidas (nivel de evidencia 1A)</li>
+          <li>Técnicas de liberación miofascial y movilización articular (nivel de evidencia 1B)</li>
+          <li>Ejercicios funcionales relacionados con actividades específicas limitadas (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación en neurociencia del dolor para modificar creencias erróneas</li>
+          <li>Estrategias activas de afrontamiento del dolor</li>
+          <li>Pacing de actividades y técnicas de conservación de energía</li>
+          <li>Modificaciones ergonómicas en entorno laboral y doméstico</li>
+          <li>Importancia de la adherencia al programa de ejercicios</li>
+          <li>Estrategias para reducir el miedo al movimiento</li>
+          <li>Técnicas de autogestión para manejar exacerbaciones</li>
+          <li>Importancia del sueño y estrategias para mejorarlo</li>
+          <li>Plan progresivo para retomar actividades funcionales</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación multidimensional biopsicosocial completa</li>
+          <li>Valoración específica de factores de sensibilización central y periférica</li>
+          <li>Evaluación de comorbilidades y factores contribuyentes</li>
+          <li>Análisis de impacto en calidad de vida y roles sociales</li>
+          <li>Identificación de barreras específicas para la recuperación funcional</li>
+          <li>Valoración de factores psicosociales y estado emocional</li>
+          <li>Evaluación de estrategias de afrontamiento y recursos de apoyo</li>
+          <li>Considerar evaluación de banderas amarillas, azules y negras</li>
+          <li>Evaluar posibles indicaciones para estudios complementarios o interconsultas</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Abordaje interdisciplinario coordinado (nivel de evidencia 1A)</li>
+          <li>Programa de ejercicio terapéutico con progresión muy gradual y supervisada (nivel de evidencia 1A)</li>
+          <li>Estrategias de manejo del dolor multimodales (nivel de evidencia 1A)</li>
+          <li>Terapia manual adaptada a la tolerancia del paciente (nivel de evidencia 1B)</li>
+          <li>Entrenamiento en actividades funcionales específicas prioritarias (nivel de evidencia 1A)</li>
+          <li>Intervenciones para mejorar la calidad del sueño (nivel de evidencia 1B)</li>
+          <li>Técnicas de exposición gradual para actividades evitadas (nivel de evidencia 1A)</li>
+          <li>Estrategias de autorregulación del sistema nervioso (nivel de evidencia 1B)</li>
+          <li>Abordaje específico de factores psicosociales identificados (nivel de evidencia 1A)</li>
+          <li>Considerar intervenciones para mejorar estado de ánimo cuando sea necesario (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación intensiva en neurociencia del dolor</li>
+          <li>Estrategias avanzadas de autogestión del dolor crónico</li>
+          <li>Importancia del enfoque activo en el proceso de rehabilitación</li>
+          <li>Establecimiento de expectativas realistas y objetivos funcionales graduales</li>
+          <li>Técnicas de conservación de energía y pacing de actividades</li>
+          <li>Estrategias para mejorar la calidad del sueño</li>
+          <li>Técnicas de regulación emocional y manejo del estrés</li>
+          <li>Importancia de mantener roles sociales significativos</li>
+          <li>Plan de manejo de exacerbaciones</li>
+          <li>Reconceptualización de la relación con el dolor</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Consideraciones adicionales:</h6>
+        <ul>
+          <li>Valorar la necesidad de interconsulta con otros especialistas según hallazgos clínicos</li>
+          <li>Considerar enfoque interdisciplinar que incluya psicología del dolor en casos complejos</li>
+          <li>Monitorización regular del progreso con ajustes al plan terapéutico</li>
+          <li>Enfoque biopsicosocial integral para el manejo a largo plazo</li>
+          <li>Evaluar necesidad de adaptaciones temporales en entorno laboral o doméstico</li>
+        </ul>
+      </div>
+    `;
+  }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  const interpretacionClinicaEl = document.getElementById('rolandmorris-interpretacion-clinica');
+  if (interpretacionClinicaEl) {
+    interpretacionClinicaEl.innerHTML = interpretacionClinica;
+    console.log("Interpretación clínica actualizada");
+  }
+  
+  const recomendacionesEl = document.getElementById('rolandmorris-recomendaciones');
+  if (recomendacionesEl) {
+    recomendacionesEl.innerHTML = recomendaciones;
+    console.log("Recomendaciones actualizadas");
+  }
+}
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
@@ -2359,6 +2646,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Inicializar Oswestry (añadir esta línea)
   calcularOswestry();
+
+  // Inicializar Roland Morris (añadir esta línea)
+  calcularRolandMorris();
   
   // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
