@@ -8240,6 +8240,135 @@
   </div>
 </div>
 
+    <!-- START MSK Tool (Stratified Targeted Treatment Tool for Musculoskeletal Conditions) -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('startmsk-content')">
+    <h4><i class="fas fa-plus-circle"></i> START MSK Tool (Estratificación de Riesgo Musculoesquelético)</h4>
+    <div class="resultado-badge" id="startmsk-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="startmsk-content" style="display: none;">
+    <p class="mb-3">Esta herramienta ayuda a identificar factores de riesgo para el desarrollo de dolor persistente y problemas funcionales. Por favor, responda a las siguientes preguntas pensando en su dolor musculoesquelético durante las últimas 2 semanas.</p>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="70%">Pregunta</th>
+          <th width="15%">En desacuerdo</th>
+          <th width="15%">De acuerdo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Pregunta 1: Irradiación -->
+        <tr>
+          <td>1. Mi dolor a veces se extiende a otras partes (por ejemplo, a mi espalda, hombro, brazos, piernas).</td>
+          <td class="text-center"><input type="radio" name="startmsk_item1" value="0" onchange="calcularStartMSK()"></td>
+          <td class="text-center"><input type="radio" name="startmsk_item1" value="1" onchange="calcularStartMSK()"></td>
+        </tr>
+        
+        <!-- Pregunta 2: Dolor en otras zonas -->
+        <tr>
+          <td>2. He tenido dolor en otros lugares del cuerpo además de mi dolencia principal.</td>
+          <td class="text-center"><input type="radio" name="startmsk_item2" value="0" onchange="calcularStartMSK()"></td>
+          <td class="text-center"><input type="radio" name="startmsk_item2" value="1" onchange="calcularStartMSK()"></td>
+        </tr>
+        
+        <!-- Pregunta 3: Limitación de movimiento -->
+        <tr>
+          <td>3. Me limito en ciertas actividades que podrían empeorar mi dolor.</td>
+          <td class="text-center"><input type="radio" name="startmsk_item3" value="0" onchange="calcularStartMSK()"></td>
+          <td class="text-center"><input type="radio" name="startmsk_item3" value="1" onchange="calcularStartMSK()"></td>
+        </tr>
+        
+        <!-- Pregunta 4: Problemas de movilidad -->
+        <tr>
+          <td>4. En el último par de semanas, he tenido problemas para vestirme (por ejemplo, ponerme calcetines, pantalones o zapatos) debido a mi dolor.</td>
+          <td class="text-center"><input type="radio" name="startmsk_item4" value="0" onchange="calcularStartMSK()"></td>
+          <td class="text-center"><input type="radio" name="startmsk_item4" value="1" onchange="calcularStartMSK()"></td>
+        </tr>
+        
+        <!-- Pregunta 5: Preocupación por el dolor -->
+        <tr>
+          <td>5. Me preocupa que mi dolor pueda empeorar.</td>
+          <td class="text-center"><input type="radio" name="startmsk_item5" value="0" onchange="calcularStartMSK()"></td>
+          <td class="text-center"><input type="radio" name="startmsk_item5" value="1" onchange="calcularStartMSK()"></td>
+        </tr>
+        
+        <!-- Pregunta 6: Catastrofización -->
+        <tr>
+          <td>6. Siento que mi problema es terrible y que nunca va a mejorar.</td>
+          <td class="text-center"><input type="radio" name="startmsk_item6" value="0" onchange="calcularStartMSK()"></td>
+          <td class="text-center"><input type="radio" name="startmsk_item6" value="1" onchange="calcularStartMSK()"></td>
+        </tr>
+        
+        <!-- Pregunta 7: Miedo al movimiento -->
+        <tr>
+          <td>7. En general, no he disfrutado de las cosas que solía disfrutar.</td>
+          <td class="text-center"><input type="radio" name="startmsk_item7" value="0" onchange="calcularStartMSK()"></td>
+          <td class="text-center"><input type="radio" name="startmsk_item7" value="1" onchange="calcularStartMSK()"></td>
+        </tr>
+        
+        <!-- Pregunta 8: Ansiedad -->
+        <tr>
+          <td>8. En las últimas 2 semanas, me he sentido tenso o ansioso.</td>
+          <td class="text-center"><input type="radio" name="startmsk_item8" value="0" onchange="calcularStartMSK()"></td>
+          <td class="text-center"><input type="radio" name="startmsk_item8" value="1" onchange="calcularStartMSK()"></td>
+        </tr>
+        
+        <!-- Pregunta 9: Depresión -->
+        <tr>
+          <td>9. En las últimas 2 semanas, me he sentido deprimido o con bajo estado de ánimo.</td>
+          <td class="text-center"><input type="radio" name="startmsk_item9" value="0" onchange="calcularStartMSK()"></td>
+          <td class="text-center"><input type="radio" name="startmsk_item9" value="1" onchange="calcularStartMSK()"></td>
+        </tr>
+        
+        <!-- Pregunta 10: Autosuficiencia -->
+        <tr>
+          <td>10. No estoy seguro de poder manejar mi dolor por mí mismo.</td>
+          <td class="text-center"><input type="radio" name="startmsk_item10" value="0" onchange="calcularStartMSK()"></td>
+          <td class="text-center"><input type="radio" name="startmsk_item10" value="1" onchange="calcularStartMSK()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="resultado-container" id="startmsk-resultado">
+      <div class="form-row">
+        <div class="form-col form-col-md-4">
+          <div class="resultado-label">Puntuación Total:</div>
+          <div class="resultado-valor" id="startmsk-valor-total">-/10</div>
+          <div class="resultado-interpretacion" id="startmsk-interpretacion-total">Complete el cuestionario</div>
+        </div>
+        <div class="form-col form-col-md-8">
+          <div class="resultado-label">Subescalas:</div>
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="resultado-sublabel">Física (ítems 1-4):</div>
+              <div class="resultado-valor" id="startmsk-valor-fisica">-/4</div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="resultado-sublabel">Psicosocial (ítems 5-10):</div>
+              <div class="resultado-valor" id="startmsk-valor-psicosocial">-/6</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="interpretacion-clinica-container mt-3">
+        <h5>Interpretación Clínica:</h5>
+        <div class="interpretacion-clinica" id="startmsk-interpretacion-clinica">
+          Complete el cuestionario para obtener la interpretación clínica.
+        </div>
+      </div>
+      
+      <div class="recomendaciones-container mt-3">
+        <h5>Recomendaciones Terapéuticas:</h5>
+        <div class="recomendaciones" id="startmsk-recomendaciones">
+          Complete el cuestionario para obtener recomendaciones terapéuticas.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
     
                   <div class="form-row mt-4">
                     <div class="form-col form-col-md-12">
