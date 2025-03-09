@@ -7544,6 +7544,189 @@
               </div>
             </div>
           </div>
+
+
+<!-- Índice de Discapacidad de Oswestry (ODI) -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('oswestry-content')">
+    <h4><i class="fas fa-plus-circle"></i> Índice de Discapacidad de Oswestry (ODI)</h4>
+    <div class="resultado-badge" id="oswestry-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="oswestry-content" style="display: none;">
+    <p class="mb-3">Este cuestionario ha sido diseñado para conocer cómo su dolor de espalda está afectando su capacidad para realizar actividades de la vida diaria. Por favor, conteste cada sección marcando SOLO UNA opción, aquella que mejor describa su situación actual.</p>
+    
+    <table class="table table-bordered mb-4">
+      <!-- Sección 1: Intensidad del dolor -->
+      <tr>
+        <td colspan="6" class="bg-light"><strong>1. Intensidad del dolor</strong></td>
+      </tr>
+      <tr>
+        <td class="text-center"><input type="radio" name="oswestry_item1" value="0" onchange="calcularOswestry()"><br>Puedo soportar el dolor sin necesidad de tomar analgésicos</td>
+        <td class="text-center"><input type="radio" name="oswestry_item1" value="1" onchange="calcularOswestry()"><br>El dolor es fuerte pero puedo arreglármelas sin tomar analgésicos</td>
+        <td class="text-center"><input type="radio" name="oswestry_item1" value="2" onchange="calcularOswestry()"><br>Los analgésicos me alivian completamente el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item1" value="3" onchange="calcularOswestry()"><br>Los analgésicos me alivian un poco el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item1" value="4" onchange="calcularOswestry()"><br>Los analgésicos apenas me alivian el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item1" value="5" onchange="calcularOswestry()"><br>Los analgésicos no me alivian el dolor y no los tomo</td>
+      </tr>
+      
+      <!-- Sección 2: Cuidados personales -->
+      <tr>
+        <td colspan="6" class="bg-light"><strong>2. Cuidados personales (lavarse, vestirse, etc.)</strong></td>
+      </tr>
+      <tr>
+        <td class="text-center"><input type="radio" name="oswestry_item2" value="0" onchange="calcularOswestry()"><br>Me las puedo arreglar solo sin que me aumente el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item2" value="1" onchange="calcularOswestry()"><br>Me las puedo arreglar solo pero esto me aumenta el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item2" value="2" onchange="calcularOswestry()"><br>Lavarme, vestirme, etc., me produce dolor y tengo que hacerlo despacio y con cuidado</td>
+        <td class="text-center"><input type="radio" name="oswestry_item2" value="3" onchange="calcularOswestry()"><br>Necesito alguna ayuda pero consigo hacer la mayoría de las cosas yo solo</td>
+        <td class="text-center"><input type="radio" name="oswestry_item2" value="4" onchange="calcularOswestry()"><br>Necesito ayuda para hacer la mayoría de las cosas</td>
+        <td class="text-center"><input type="radio" name="oswestry_item2" value="5" onchange="calcularOswestry()"><br>No puedo vestirme, me cuesta lavarme y suelo quedarme en la cama</td>
+      </tr>
+      
+      <!-- Sección 3: Levantar peso -->
+      <tr>
+        <td colspan="6" class="bg-light"><strong>3. Levantar peso</strong></td>
+      </tr>
+      <tr>
+        <td class="text-center"><input type="radio" name="oswestry_item3" value="0" onchange="calcularOswestry()"><br>Puedo levantar objetos pesados sin que me aumente el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item3" value="1" onchange="calcularOswestry()"><br>Puedo levantar objetos pesados pero me aumenta el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item3" value="2" onchange="calcularOswestry()"><br>El dolor me impide levantar objetos pesados del suelo, pero puedo hacerlo si están colocados en un sitio fácil como por ejemplo en una mesa</td>
+        <td class="text-center"><input type="radio" name="oswestry_item3" value="3" onchange="calcularOswestry()"><br>El dolor me impide levantar objetos pesados, pero sí puedo levantar objetos ligeros o medianos si están colocados en un sitio fácil</td>
+        <td class="text-center"><input type="radio" name="oswestry_item3" value="4" onchange="calcularOswestry()"><br>Sólo puedo levantar objetos muy ligeros</td>
+        <td class="text-center"><input type="radio" name="oswestry_item3" value="5" onchange="calcularOswestry()"><br>No puedo levantar ni acarrear ningún objeto</td>
+      </tr>
+      
+      <!-- Sección 4: Caminar -->
+      <tr>
+        <td colspan="6" class="bg-light"><strong>4. Caminar</strong></td>
+      </tr>
+      <tr>
+        <td class="text-center"><input type="radio" name="oswestry_item4" value="0" onchange="calcularOswestry()"><br>El dolor no me impide caminar cualquier distancia</td>
+        <td class="text-center"><input type="radio" name="oswestry_item4" value="1" onchange="calcularOswestry()"><br>El dolor me impide caminar más de un kilómetro</td>
+        <td class="text-center"><input type="radio" name="oswestry_item4" value="2" onchange="calcularOswestry()"><br>El dolor me impide caminar más de 500 metros</td>
+        <td class="text-center"><input type="radio" name="oswestry_item4" value="3" onchange="calcularOswestry()"><br>El dolor me impide caminar más de 250 metros</td>
+        <td class="text-center"><input type="radio" name="oswestry_item4" value="4" onchange="calcularOswestry()"><br>Sólo puedo caminar usando un bastón o muletas</td>
+        <td class="text-center"><input type="radio" name="oswestry_item4" value="5" onchange="calcularOswestry()"><br>Permanezco en la cama casi todo el tiempo y tengo que ir a rastras al baño</td>
+      </tr>
+      
+      <!-- Sección 5: Estar sentado -->
+      <tr>
+        <td colspan="6" class="bg-light"><strong>5. Estar sentado</strong></td>
+      </tr>
+      <tr>
+        <td class="text-center"><input type="radio" name="oswestry_item5" value="0" onchange="calcularOswestry()"><br>Puedo estar sentado en cualquier tipo de silla todo el tiempo que quiera</td>
+        <td class="text-center"><input type="radio" name="oswestry_item5" value="1" onchange="calcularOswestry()"><br>Puedo estar sentado en mi silla favorita todo el tiempo que quiera</td>
+        <td class="text-center"><input type="radio" name="oswestry_item5" value="2" onchange="calcularOswestry()"><br>El dolor me impide estar sentado más de una hora</td>
+        <td class="text-center"><input type="radio" name="oswestry_item5" value="3" onchange="calcularOswestry()"><br>El dolor me impide estar sentado más de media hora</td>
+        <td class="text-center"><input type="radio" name="oswestry_item5" value="4" onchange="calcularOswestry()"><br>El dolor me impide estar sentado más de 10 minutos</td>
+        <td class="text-center"><input type="radio" name="oswestry_item5" value="5" onchange="calcularOswestry()"><br>El dolor me impide estar sentado</td>
+      </tr>
+      
+      <!-- Sección 6: Estar de pie -->
+      <tr>
+        <td colspan="6" class="bg-light"><strong>6. Estar de pie</strong></td>
+      </tr>
+      <tr>
+        <td class="text-center"><input type="radio" name="oswestry_item6" value="0" onchange="calcularOswestry()"><br>Puedo estar de pie tanto tiempo como quiera sin que me aumente el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item6" value="1" onchange="calcularOswestry()"><br>Puedo estar de pie tanto tiempo como quiera pero me aumenta el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item6" value="2" onchange="calcularOswestry()"><br>El dolor me impide estar de pie más de una hora</td>
+        <td class="text-center"><input type="radio" name="oswestry_item6" value="3" onchange="calcularOswestry()"><br>El dolor me impide estar de pie más de media hora</td>
+        <td class="text-center"><input type="radio" name="oswestry_item6" value="4" onchange="calcularOswestry()"><br>El dolor me impide estar de pie más de 10 minutos</td>
+        <td class="text-center"><input type="radio" name="oswestry_item6" value="5" onchange="calcularOswestry()"><br>El dolor me impide estar de pie</td>
+      </tr>
+      
+      <!-- Sección 7: Dormir -->
+      <tr>
+        <td colspan="6" class="bg-light"><strong>7. Dormir</strong></td>
+      </tr>
+      <tr>
+        <td class="text-center"><input type="radio" name="oswestry_item7" value="0" onchange="calcularOswestry()"><br>El dolor no me impide dormir bien</td>
+        <td class="text-center"><input type="radio" name="oswestry_item7" value="1" onchange="calcularOswestry()"><br>Sólo puedo dormir si tomo pastillas</td>
+        <td class="text-center"><input type="radio" name="oswestry_item7" value="2" onchange="calcularOswestry()"><br>Incluso tomando pastillas duermo menos de 6 horas</td>
+        <td class="text-center"><input type="radio" name="oswestry_item7" value="3" onchange="calcularOswestry()"><br>Incluso tomando pastillas duermo menos de 4 horas</td>
+        <td class="text-center"><input type="radio" name="oswestry_item7" value="4" onchange="calcularOswestry()"><br>Incluso tomando pastillas duermo menos de 2 horas</td>
+        <td class="text-center"><input type="radio" name="oswestry_item7" value="5" onchange="calcularOswestry()"><br>El dolor me impide totalmente dormir</td>
+      </tr>
+      
+      <!-- Sección 8: Actividad sexual -->
+      <tr>
+        <td colspan="6" class="bg-light"><strong>8. Actividad sexual</strong></td>
+      </tr>
+      <tr>
+        <td class="text-center"><input type="radio" name="oswestry_item8" value="0" onchange="calcularOswestry()"><br>Mi actividad sexual es normal y no me aumenta el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item8" value="1" onchange="calcularOswestry()"><br>Mi actividad sexual es normal pero me aumenta el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item8" value="2" onchange="calcularOswestry()"><br>Mi actividad sexual es casi normal pero me aumenta mucho el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item8" value="3" onchange="calcularOswestry()"><br>Mi actividad sexual se ha visto muy limitada a causa del dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item8" value="4" onchange="calcularOswestry()"><br>Mi actividad sexual es casi nula a causa del dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item8" value="5" onchange="calcularOswestry()"><br>El dolor me impide todo tipo de actividad sexual</td>
+      </tr>
+      
+      <!-- Sección 9: Vida social -->
+      <tr>
+        <td colspan="6" class="bg-light"><strong>9. Vida social</strong></td>
+      </tr>
+      <tr>
+        <td class="text-center"><input type="radio" name="oswestry_item9" value="0" onchange="calcularOswestry()"><br>Mi vida social es normal y no me aumenta el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item9" value="1" onchange="calcularOswestry()"><br>Mi vida social es normal pero me aumenta el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item9" value="2" onchange="calcularOswestry()"><br>El dolor no tiene un efecto importante en mi vida social, pero sí impide mis actividades más enérgicas como bailar, etc.</td>
+        <td class="text-center"><input type="radio" name="oswestry_item9" value="3" onchange="calcularOswestry()"><br>El dolor ha limitado mi vida social y no salgo tan a menudo</td>
+        <td class="text-center"><input type="radio" name="oswestry_item9" value="4" onchange="calcularOswestry()"><br>El dolor ha limitado mi vida social al hogar</td>
+        <td class="text-center"><input type="radio" name="oswestry_item9" value="5" onchange="calcularOswestry()"><br>No tengo vida social a causa del dolor</td>
+      </tr>
+      
+      <!-- Sección 10: Viajar -->
+      <tr>
+        <td colspan="6" class="bg-light"><strong>10. Viajar</strong></td>
+      </tr>
+      <tr>
+        <td class="text-center"><input type="radio" name="oswestry_item10" value="0" onchange="calcularOswestry()"><br>Puedo viajar a cualquier sitio sin que me aumente el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item10" value="1" onchange="calcularOswestry()"><br>Puedo viajar a cualquier sitio, pero me aumenta el dolor</td>
+        <td class="text-center"><input type="radio" name="oswestry_item10" value="2" onchange="calcularOswestry()"><br>El dolor es fuerte pero aguanto viajes de más de 2 horas</td>
+        <td class="text-center"><input type="radio" name="oswestry_item10" value="3" onchange="calcularOswestry()"><br>El dolor me limita a viajes de menos de una hora</td>
+        <td class="text-center"><input type="radio" name="oswestry_item10" value="4" onchange="calcularOswestry()"><br>El dolor me limita a viajes cortos y necesarios de menos de 30 minutos</td>
+        <td class="text-center"><input type="radio" name="oswestry_item10" value="5" onchange="calcularOswestry()"><br>El dolor me impide viajar excepto para ir al médico o al hospital</td>
+      </tr>
+    </table>
+    
+    <div class="resultado-container" id="oswestry-resultado">
+      <div class="form-row">
+        <div class="form-col form-col-md-4">
+          <div class="resultado-label">Puntuación Total:</div>
+          <div class="resultado-valor" id="oswestry-valor-total">-/50</div>
+          <div class="resultado-interpretacion" id="oswestry-interpretacion-total">Complete el cuestionario</div>
+        </div>
+        <div class="form-col form-col-md-8">
+          <div class="resultado-label">Interpretación:</div>
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="resultado-sublabel">Porcentaje:</div>
+              <div class="resultado-valor" id="oswestry-valor-porcentaje">-%</div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="resultado-sublabel">Nivel de discapacidad:</div>
+              <div class="resultado-valor" id="oswestry-nivel-discapacidad">-</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="interpretacion-clinica-container mt-3">
+        <h5>Interpretación Clínica:</h5>
+        <div class="interpretacion-clinica" id="oswestry-interpretacion-clinica">
+          Complete el cuestionario para obtener la interpretación clínica.
+        </div>
+      </div>
+      
+      <div class="recomendaciones-container mt-3">
+        <h5>Recomendaciones Terapéuticas:</h5>
+        <div class="recomendaciones" id="oswestry-recomendaciones">
+          Complete el cuestionario para obtener recomendaciones terapéuticas.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
             <div class="form-row mt-4">
               <div class="form-col form-col-md-12">
                 <button type="button" class="btn btn-secondary prev-tab" data-prev="evaluacion-fisica"><i class="fas fa-arrow-left"></i> Anterior</button>
