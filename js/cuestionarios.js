@@ -3382,6 +3382,361 @@ function calcularStartMSK() {
   }
 }
 
+// Función para calcular el START Back Tool (Stratified Treatment Approach for Back Pain)
+function calcularStartBack() {
+  console.log("Calculando START Back Tool...");
+  
+  // Obtener todos los ítems del cuestionario
+  const items1a8 = [
+    document.querySelector('input[name="startback_item1"]:checked'),
+    document.querySelector('input[name="startback_item2"]:checked'),
+    document.querySelector('input[name="startback_item3"]:checked'),
+    document.querySelector('input[name="startback_item4"]:checked'),
+    document.querySelector('input[name="startback_item5"]:checked'),
+    document.querySelector('input[name="startback_item6"]:checked'),
+    document.querySelector('input[name="startback_item7"]:checked'),
+    document.querySelector('input[name="startback_item8"]:checked')
+  ];
+  
+  // Obtener el ítem 9 (qué tan molesto es el dolor)
+  const item9 = document.querySelector('input[name="startback_item9"]:checked');
+  
+  console.log("Items 1-8 encontrados:", items1a8);
+  console.log("Item 9 encontrado:", item9);
+  
+  // Contar cuántas preguntas han sido respondidas
+  const items1a8Respondidos = items1a8.filter(item => item !== null).length;
+  const item9Respondido = item9 !== null;
+  const itemsRespondidos = items1a8Respondidos + (item9Respondido ? 1 : 0);
+  
+  console.log("Items respondidos:", itemsRespondidos);
+  
+  // Verificar si el usuario ha interactuado con el cuestionario
+  const interaccionUsuario = itemsRespondidos > 0;
+  
+  // Si el usuario no ha interactuado con el cuestionario, mostramos "No completado"
+  if (!interaccionUsuario) {
+    if (document.getElementById('startback-badge')) {
+      document.getElementById('startback-badge').textContent = "No completado";
+      document.getElementById('startback-badge').className = "resultado-badge no-completado";
+    }
+    
+    if (document.getElementById('startback-interpretacion-total')) {
+      document.getElementById('startback-interpretacion-total').textContent = "Complete el cuestionario";
+    }
+    
+    if (document.getElementById('startback-interpretacion-clinica')) {
+      document.getElementById('startback-interpretacion-clinica').textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    }
+    
+    if (document.getElementById('startback-recomendaciones')) {
+      document.getElementById('startback-recomendaciones').textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+    }
+    
+    return;
+  }
+  
+  // Para un resultado válido, al menos 7 de 9 preguntas deben ser respondidas
+  const respuestasMinimas = 7;
+  
+  // Si no se han contestado suficientes preguntas, advertir pero continuar calculando
+  let mensajeCompletado = "";
+  if (itemsRespondidos < respuestasMinimas) {
+    mensajeCompletado = " (incompleto - los resultados pueden no ser confiables)";
+  }
+  
+  // Calcular puntuaciones
+  let puntuacionItems1a8 = 0;
+  
+  // Sumar valores de los ítems 1-8
+  items1a8.forEach(item => {
+    if (item !== null) {
+      puntuacionItems1a8 += parseInt(item.value);
+    }
+  });
+  
+  // Manejar el ítem 9 (se dicotomiza): 0-3 = 0 puntos, 4-5 = 1 punto
+  let puntuacionItem9 = 0;
+  if (item9 !== null) {
+    const valorItem9 = parseInt(item9.value);
+    if (valorItem9 >= 4) {
+      puntuacionItem9 = 1;
+    }
+  }
+  
+  // Calcular puntuación total
+  const puntuacionTotal = puntuacionItems1a8 + puntuacionItem9;
+  
+  // Calcular puntuación psicosocial (ítems 5-9)
+  let puntuacionPsicosocial = 0;
+  for (let i = 4; i < 8; i++) { // ítems 5-8 (posiciones 4-7 en el array)
+    if (items1a8[i] !== null) {
+      puntuacionPsicosocial += parseInt(items1a8[i].value);
+    }
+  }
+  puntuacionPsicosocial += puntuacionItem9; // Añadir ítem 9 a la subescala psicosocial
+  
+  console.log("Puntuación total:", puntuacionTotal);
+  console.log("Puntuación psicosocial:", puntuacionPsicosocial);
+  
+  // Determinar el grupo de riesgo según START Back
+  let grupoRiesgo = "";
+  let colorBadge = "";
+  let colorClase = "";
+  
+  if (puntuacionTotal <= 3) {
+    grupoRiesgo = "Riesgo bajo";
+    colorBadge = "bajo";
+    colorClase = "nivel-leve";
+  } else if (puntuacionPsicosocial < 4) {
+    grupoRiesgo = "Riesgo medio";
+    colorBadge = "moderado";
+    colorClase = "nivel-moderado";
+  } else {
+    grupoRiesgo = "Riesgo alto";
+    colorBadge = "alto";
+    colorClase = "nivel-severo";
+  }
+  
+  // Actualizar elementos en la página
+  if (document.getElementById('startback-valor-total')) {
+    document.getElementById('startback-valor-total').textContent = puntuacionTotal + "/9" + mensajeCompletado;
+  }
+  
+  if (document.getElementById('startback-valor-psicosocial')) {
+    document.getElementById('startback-valor-psicosocial').textContent = puntuacionPsicosocial + "/5";
+  }
+  
+  if (document.getElementById('startback-grupo-riesgo')) {
+    document.getElementById('startback-grupo-riesgo').textContent = grupoRiesgo;
+  }
+  
+  if (document.getElementById('startback-interpretacion-total')) {
+    document.getElementById('startback-interpretacion-total').textContent = grupoRiesgo;
+    document.getElementById('startback-interpretacion-total').className = "resultado-interpretacion " + colorBadge.replace("bajo", "verde").replace("moderado", "amarillo").replace("alto", "rojo");
+  }
+  
+  // Actualizar estado del badge
+  if (document.getElementById('startback-badge')) {
+    document.getElementById('startback-badge').textContent = grupoRiesgo;
+    document.getElementById('startback-badge').className = "resultado-badge completado " + colorBadge;
+  }
+  
+  // Actualizar el contenedor de resultados con la clase de color
+  const resultadoContainer = document.getElementById('startback-resultado');
+  if (resultadoContainer) {
+    resultadoContainer.className = "resultado-container " + colorClase;
+  }
+  
+  // Generar interpretación clínica basada en la puntuación
+  let interpretacionClinica = "";
+  
+  if (puntuacionTotal <= 3) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/9</strong> en el START Back Tool, con una subescala psicosocial de <strong>${puntuacionPsicosocial}/5</strong>, lo que indica un <strong>riesgo bajo</strong> de mal pronóstico para su dolor lumbar.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta un cuadro predominantemente biomecánico/nociceptivo</li>
+        <li>Tiene pocos factores psicosociales de mal pronóstico</li>
+        <li>Es probable que responda bien a un tratamiento fisioterapéutico estándar</li>
+        <li>Tiene buen pronóstico para la recuperación con intervención adecuada</li>
+        <li>Presenta pocos signos de sensibilización central o dolor generalizado</li>
+        <li>Tiene poca probabilidad de desarrollar dolor lumbar persistente o discapacitante</li>
+        <li>Se beneficiará de intervenciones basadas principalmente en educación, ejercicio y retorno a la actividad</li>
+      </ul>
+    `;
+  } else if (puntuacionPsicosocial < 4) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/9</strong> en el START Back Tool, con una subescala psicosocial de <strong>${puntuacionPsicosocial}/5</strong>, lo que indica un <strong>riesgo medio</strong> de mal pronóstico para su dolor lumbar.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta una combinación de factores físicos y psicosociales</li>
+        <li>Tiene síntomas físicos más significativos con algunos factores psicosociales</li>
+        <li>Puede presentar dolor referido y limitaciones funcionales importantes</li>
+        <li>Requiere un enfoque terapéutico que aborde tanto los aspectos físicos como los factores psicosociales emergentes</li>
+        <li>Se beneficiará de un tratamiento fisioterapéutico más intenso que incluya ejercicio terapéutico y componentes educativos</li>
+        <li>Tiene riesgo moderado de desarrollar problemas persistentes si no se aborda adecuadamente</li>
+        <li>Necesita un enfoque que promueva la autogestión y el retorno gradual a las actividades</li>
+      </ul>
+    `;
+  } else {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/9</strong> en el START Back Tool, con una subescala psicosocial de <strong>${puntuacionPsicosocial}/5</strong>, lo que indica un <strong>riesgo alto</strong> de mal pronóstico para su dolor lumbar.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta una condición compleja con factores de riesgo psicosociales significativos</li>
+        <li>Muestra señales evidentes de miedo-evitación, catastrofización o problemas de estado de ánimo</li>
+        <li>Es probable que presente signos de sensibilización central y dolor más generalizado</li>
+        <li>Tiene alto riesgo de desarrollar dolor lumbar persistente y discapacidad a largo plazo</li>
+        <li>Requiere un abordaje integrado psicológico y físico para mejorar los resultados</li>
+        <li>Se beneficiará de un enfoque que aborde específicamente los factores psicosociales identificados</li>
+        <li>Necesita intervenciones más intensivas y posiblemente un enfoque multidisciplinario</li>
+        <li>Debe recibir especial atención a las creencias y comportamientos relacionados con el dolor</li>
+      </ul>
+    `;
+  }
+  
+  // Generar recomendaciones terapéuticas
+  let recomendaciones = "";
+  
+  if (puntuacionTotal <= 3) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación física centrada en los factores biomecánicos específicos</li>
+          <li>Valoración de patrones de movimiento y control motor lumbar</li>
+          <li>Identificación de factores ergonómicos y posturales contribuyentes</li>
+          <li>Exploración de actividades y posiciones desencadenantes</li>
+          <li>Evaluación básica de factores de riesgo modificables</li>
+          <li>Análisis funcional de actividades limitadas específicas</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Tratamiento fisioterapéutico estándar enfocado en educación y autogestión (nivel de evidencia 1A)</li>
+          <li>Ejercicios específicos para mejorar el control motor lumbopélvico (nivel de evidencia 1A)</li>
+          <li>Terapia manual según hallazgos específicos, si está indicada (nivel de evidencia 1B)</li>
+          <li>Información sobre manejo del dolor y retorno seguro a la actividad (nivel de evidencia 1A)</li>
+          <li>Corrección de patrones de movimiento disfuncionales (nivel de evidencia 1B)</li>
+          <li>Educación sobre ergonomía y mecánica corporal (nivel de evidencia 1B)</li>
+          <li>Estrategias de autocuidado y autogestión (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación sobre la naturaleza benigna y autolimitada del dolor lumbar</li>
+          <li>Importancia de mantener la actividad física y evitar el reposo prolongado</li>
+          <li>Consejos específicos para el manejo del dolor durante actividades cotidianas</li>
+          <li>Promoción de la autogestión y responsabilidad del paciente en su recuperación</li>
+          <li>Establecimiento de expectativas realistas sobre el tiempo de recuperación</li>
+          <li>Explicación del papel del ejercicio en la recuperación y prevención</li>
+          <li>Estrategias para retornar a las actividades normales de manera segura</li>
+        </ul>
+      </div>
+    `;
+  } else if (puntuacionPsicosocial < 4) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica completa de la región lumbopélvica</li>
+          <li>Valoración del patrón de movimiento y control motor</li>
+          <li>Análisis de la irradiación del dolor y posibles componentes radiculares</li>
+          <li>Identificación de barreras físicas para la recuperación funcional</li>
+          <li>Exploración básica de factores psicosociales emergentes</li>
+          <li>Evaluación funcional detallada de actividades limitadas</li>
+          <li>Valoración de la condición física general y desacondicionamiento</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa fisioterapéutico más intenso con énfasis en el ejercicio terapéutico (nivel de evidencia 1A)</li>
+          <li>Entrenamiento específico del control motor lumbopélvico (nivel de evidencia 1A)</li>
+          <li>Ejercicios progresivos de estabilización dinámica (nivel de evidencia 1A)</li>
+          <li>Terapia manual como complemento al ejercicio activo (nivel de evidencia 1B)</li>
+          <li>Introducción gradual de ejercicios funcionales específicos (nivel de evidencia 1A)</li>
+          <li>Reentrenamiento de patrones de movimiento disfuncionales (nivel de evidencia 1B)</li>
+          <li>Abordaje de aspectos psicosociales emergentes mediante educación (nivel de evidencia 1A)</li>
+          <li>Programa de acondicionamiento físico progresivo (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación sobre neurobiología básica del dolor y factores contribuyentes</li>
+          <li>Explicación de la relación entre factores físicos y psicosociales en el dolor lumbar</li>
+          <li>Estrategias de autogestión activa y resolución de problemas</li>
+          <li>Técnicas de pacing para equilibrar actividad y descanso</li>
+          <li>Importancia de la actividad física regular y ejercicios específicos</li>
+          <li>Establecimiento de objetivos funcionales progresivos</li>
+          <li>Estrategias para manejar exacerbaciones del dolor</li>
+          <li>Desmitificación de creencias erróneas sobre el dolor lumbar</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación multidimensional biopsicosocial completa</li>
+          <li>Valoración detallada de factores psicosociales específicos (miedo-evitación, catastrofización, estado ánimo)</li>
+          <li>Análisis de creencias y comportamientos relacionados con el dolor</li>
+          <li>Evaluación de posibles mecanismos de sensibilización central</li>
+          <li>Identificación de patrones de evitación y limitación de actividades</li>
+          <li>Valoración del impacto en múltiples dimensiones de la vida</li>
+          <li>Evaluación de estrategias de afrontamiento actuales</li>
+          <li>Exploración de barreras específicas para la recuperación</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Enfoque integrado psicológico-físico intensivo (nivel de evidencia 1A)</li>
+          <li>Intervención cognitivo-conductual para abordar factores psicosociales (nivel de evidencia 1A)</li>
+          <li>Programa gradual de exposición a actividades temidas (nivel de evidencia 1A)</li>
+          <li>Educación intensiva en neurociencia del dolor (nivel de evidencia 1A)</li>
+          <li>Ejercicio terapéutico con énfasis en reducir el miedo al movimiento (nivel de evidencia 1A)</li>
+          <li>Estrategias específicas para abordar la catastrofización (nivel de evidencia 1A)</li>
+          <li>Técnicas de regulación emocional y manejo del estrés (nivel de evidencia 1B)</li>
+          <li>Entrenamiento en actividades funcionales significativas (nivel de evidencia 1A)</li>
+          <li>Terapia manual como componente complementario, no central (nivel de evidencia 1B)</li>
+          <li>Consideración de abordaje multidisciplinar en casos complejos (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación intensiva en neurociencia del dolor y mecanismos de sensibilización</li>
+          <li>Reconceptualización de las creencias sobre el dolor y su significado</li>
+          <li>Estrategias avanzadas de autogestión del dolor crónico</li>
+          <li>Técnicas específicas para manejar pensamientos catastróficos</li>
+          <li>Importancia del ejercicio seguro y exposición gradual a actividades temidas</li>
+          <li>Reconocimiento del impacto del estado emocional en la experiencia del dolor</li>
+          <li>Desarrollo de habilidades para la regulación emocional</li>
+          <li>Establecimiento de objetivos funcionales significativos y alcanzables</li>
+          <li>Estrategias para mejorar el sueño y manejar el estrés</li>
+          <li>Plan específico para prevención y manejo de recaídas</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Consideraciones adicionales:</h6>
+        <ul>
+          <li>Considerar derivación a psicólogo con experiencia en dolor crónico cuando sea necesario</li>
+          <li>Desarrollar plan de tratamiento a más largo plazo con seguimiento regular</li>
+          <li>Involucrar al paciente activamente en todas las decisiones terapéuticas</li>
+          <li>Coordinar con otros profesionales de la salud cuando sea necesario</li>
+          <li>Reevaluación regular utilizando instrumentos validados para monitorizar progreso</li>
+        </ul>
+      </div>
+    `;
+  }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  const interpretacionClinicaEl = document.getElementById('startback-interpretacion-clinica');
+  if (interpretacionClinicaEl) {
+    interpretacionClinicaEl.innerHTML = interpretacionClinica;
+    console.log("Interpretación clínica actualizada");
+  }
+  
+  const recomendacionesEl = document.getElementById('startback-recomendaciones');
+  if (recomendacionesEl) {
+    recomendacionesEl.innerHTML = recomendaciones;
+    console.log("Recomendaciones actualizadas");
+  }
+}
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
