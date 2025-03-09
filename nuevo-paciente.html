@@ -7065,8 +7065,201 @@
     </div>
   </div>
   
-  <!-- Aquí puedes agregar más cuestionarios específicos en el futuro -->
-  
+<!-- QuickDASH (Quick Disabilities of the Arm, Shoulder and Hand) -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('quickdash-content')">
+    <h4><i class="fas fa-plus-circle"></i> Cuestionario QuickDASH (Discapacidad del Brazo, Hombro y Mano)</h4>
+    <div class="resultado-badge" id="quickdash-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="quickdash-content" style="display: none;">
+    <p class="mb-3">Este cuestionario evalúa su capacidad para realizar actividades con sus brazos, hombros o manos, así como los síntomas asociados. Por favor, responda cada pregunta basándose en su condición durante la última semana.</p>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th>Actividad</th>
+          <th>Sin dificultad</th>
+          <th>Dificultad leve</th>
+          <th>Dificultad moderada</th>
+          <th>Dificultad severa</th>
+          <th>Imposible de realizar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 1. Abrir un frasco nuevo o apretado -->
+        <tr>
+          <td>1. Abrir un frasco nuevo o apretado</td>
+          <td class="text-center"><input type="radio" name="quickdash_item1" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item1" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item1" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item1" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item1" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+        
+        <!-- 2. Realizar tareas domésticas pesadas -->
+        <tr>
+          <td>2. Realizar tareas domésticas pesadas (p. ej. lavar paredes, fregar el suelo)</td>
+          <td class="text-center"><input type="radio" name="quickdash_item2" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item2" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item2" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item2" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item2" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+        
+        <!-- 3. Cargar una bolsa de compras o un maletín -->
+        <tr>
+          <td>3. Cargar una bolsa de compras o un maletín</td>
+          <td class="text-center"><input type="radio" name="quickdash_item3" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item3" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item3" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item3" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item3" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+        
+        <!-- 4. Lavarse la espalda -->
+        <tr>
+          <td>4. Lavarse la espalda</td>
+          <td class="text-center"><input type="radio" name="quickdash_item4" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item4" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item4" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item4" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item4" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+        
+        <!-- 5. Usar un cuchillo para cortar alimentos -->
+        <tr>
+          <td>5. Usar un cuchillo para cortar alimentos</td>
+          <td class="text-center"><input type="radio" name="quickdash_item5" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item5" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item5" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item5" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item5" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+        
+        <!-- 6. Actividades recreativas -->
+        <tr>
+          <td>6. Actividades recreativas que requieren poco esfuerzo (jugar a las cartas, tejer, etc.)</td>
+          <td class="text-center"><input type="radio" name="quickdash_item6" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item6" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item6" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item6" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item6" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+        
+        <!-- 7. Actividades con movimiento libre del brazo -->
+        <tr>
+          <td>7. Actividades recreativas en las que se mueve el brazo libremente (ping pong, bádminton, natación, etc.)</td>
+          <td class="text-center"><input type="radio" name="quickdash_item7" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item7" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item7" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item7" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item7" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+        
+        <!-- 8. Transportar objetos -->
+        <tr>
+          <td>8. Actividades que requieren transportar objetos (p. ej. usar herramientas, conducir, etc.)</td>
+          <td class="text-center"><input type="radio" name="quickdash_item8" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item8" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item8" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item8" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item8" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th>Durante la última semana...</th>
+          <th>Nada</th>
+          <th>Un poco</th>
+          <th>Regular</th>
+          <th>Bastante</th>
+          <th>Mucho</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 9. Dificultad para dormir -->
+        <tr>
+          <td>9. ¿Cuánta dificultad ha tenido para dormir debido a dolor en brazo, hombro o mano?</td>
+          <td class="text-center"><input type="radio" name="quickdash_item9" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item9" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item9" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item9" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item9" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+        
+        <!-- 10. Sentirse menos capaz -->
+        <tr>
+          <td>10. ¿Se siente menos capaz, confiado o útil debido a su problema en brazo, hombro o mano?</td>
+          <td class="text-center"><input type="radio" name="quickdash_item10" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item10" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item10" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item10" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item10" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th>Califique la gravedad de los siguientes síntomas en la última semana</th>
+          <th>Ninguno</th>
+          <th>Leve</th>
+          <th>Moderado</th>
+          <th>Severo</th>
+          <th>Extremo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 11. Dolor en brazo, hombro o mano -->
+        <tr>
+          <td>11. Dolor en brazo, hombro o mano</td>
+          <td class="text-center"><input type="radio" name="quickdash_item11" value="1" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item11" value="2" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item11" value="3" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item11" value="4" onchange="calcularQuickDASH()"></td>
+          <td class="text-center"><input type="radio" name="quickdash_item11" value="5" onchange="calcularQuickDASH()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="resultado-container" id="quickdash-resultado">
+      <div class="form-row">
+        <div class="form-col form-col-md-4">
+          <div class="resultado-label">Puntuación Total:</div>
+          <div class="resultado-valor" id="quickdash-valor-total">-/100</div>
+          <div class="resultado-interpretacion" id="quickdash-interpretacion-total">Complete el cuestionario</div>
+        </div>
+        <div class="form-col form-col-md-8">
+          <div class="resultado-label">Interpretación:</div>
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="resultado-sublabel">Nivel de discapacidad:</div>
+              <div class="resultado-valor" id="quickdash-nivel-discapacidad">-</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="interpretacion-clinica-container mt-3">
+        <h5>Interpretación Clínica:</h5>
+        <div class="interpretacion-clinica" id="quickdash-interpretacion-clinica">
+          Complete el cuestionario para obtener la interpretación clínica.
+        </div>
+      </div>
+      
+      <div class="recomendaciones-container mt-3">
+        <h5>Recomendaciones Terapéuticas:</h5>
+        <div class="recomendaciones" id="quickdash-recomendaciones">
+          Complete el cuestionario para obtener recomendaciones terapéuticas.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  
   <div class="form-row mt-4">
     <div class="form-col form-col-md-12">
       <button type="button" class="btn btn-secondary prev-tab" data-prev="evaluacion-fisica"><i class="fas fa-arrow-left"></i> Anterior</button>
