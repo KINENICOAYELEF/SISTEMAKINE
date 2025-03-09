@@ -1984,6 +1984,343 @@ function calcularSPADI() {
   }
 }
 
+// Función para calcular el Índice de Discapacidad de Oswestry (ODI)
+function calcularOswestry() {
+  console.log("Calculando Índice de Oswestry...");
+  
+  // Obtener todas las preguntas del Oswestry
+  const items = [
+    document.querySelector('input[name="oswestry_item1"]:checked'),
+    document.querySelector('input[name="oswestry_item2"]:checked'),
+    document.querySelector('input[name="oswestry_item3"]:checked'),
+    document.querySelector('input[name="oswestry_item4"]:checked'),
+    document.querySelector('input[name="oswestry_item5"]:checked'),
+    document.querySelector('input[name="oswestry_item6"]:checked'),
+    document.querySelector('input[name="oswestry_item7"]:checked'),
+    document.querySelector('input[name="oswestry_item8"]:checked'),
+    document.querySelector('input[name="oswestry_item9"]:checked'),
+    document.querySelector('input[name="oswestry_item10"]:checked')
+  ];
+  
+  console.log("Items encontrados:", items);
+  
+  // Contar cuántas preguntas han sido respondidas
+  const itemsRespondidos = items.filter(item => item !== null).length;
+  console.log("Items respondidos:", itemsRespondidos);
+  
+  // Para un resultado válido, al menos 8 de 10 preguntas deben ser respondidas
+  const respuestasMinimas = 8;
+  
+  // Si no se han contestado suficientes preguntas, actualizar el badge y salir
+  if (itemsRespondidos < respuestasMinimas) {
+    if (document.getElementById('oswestry-badge')) {
+      document.getElementById('oswestry-badge').textContent = "No completado";
+      document.getElementById('oswestry-badge').className = "resultado-badge no-completado";
+    }
+    
+    // Actualizar mensajes de resultados
+    if (document.getElementById('oswestry-interpretacion-total')) {
+      document.getElementById('oswestry-interpretacion-total').textContent = "Complete al menos 8 preguntas";
+    }
+    if (document.getElementById('oswestry-interpretacion-clinica')) {
+      document.getElementById('oswestry-interpretacion-clinica').textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    }
+    if (document.getElementById('oswestry-recomendaciones')) {
+      document.getElementById('oswestry-recomendaciones').textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+    }
+    
+    return;
+  }
+  
+  // Calcular la suma de los valores de las preguntas respondidas
+  let suma = 0;
+  items.forEach(item => {
+    if (item !== null) {
+      suma += parseInt(item.value);
+    }
+  });
+  console.log("Suma de valores:", suma);
+  
+  // Calcular la puntuación máxima posible (5 puntos por cada pregunta respondida)
+  const puntuacionMaxima = itemsRespondidos * 5;
+  
+  // Calcular el porcentaje de discapacidad
+  const porcentajeDiscapacidad = (suma / puntuacionMaxima) * 100;
+  const porcentajeRedondeado = Math.round(porcentajeDiscapacidad * 10) / 10; // Redondear a 1 decimal
+  console.log("Porcentaje de discapacidad:", porcentajeRedondeado);
+  
+  // Determinar el nivel de discapacidad
+  let nivelDiscapacidad = "";
+  let colorBadge = "";
+  let colorClase = "";
+  
+  if (porcentajeRedondeado < 21) {
+    nivelDiscapacidad = "Discapacidad mínima";
+    colorBadge = "bajo";
+    colorClase = "nivel-leve";
+  } else if (porcentajeRedondeado < 41) {
+    nivelDiscapacidad = "Discapacidad moderada";
+    colorBadge = "moderado";
+    colorClase = "nivel-moderado";
+  } else if (porcentajeRedondeado < 61) {
+    nivelDiscapacidad = "Discapacidad severa";
+    colorBadge = "alto";
+    colorClase = "nivel-severo";
+  } else if (porcentajeRedondeado < 81) {
+    nivelDiscapacidad = "Discapacidad muy severa";
+    colorBadge = "alto";
+    colorClase = "nivel-severo";
+  } else {
+    nivelDiscapacidad = "Discapacidad extrema";
+    colorBadge = "alto";
+    colorClase = "nivel-severo";
+  }
+  
+  // Actualizar elementos en la página
+  if (document.getElementById('oswestry-valor-total')) {
+    document.getElementById('oswestry-valor-total').textContent = suma + "/" + puntuacionMaxima;
+  }
+  
+  if (document.getElementById('oswestry-valor-porcentaje')) {
+    document.getElementById('oswestry-valor-porcentaje').textContent = porcentajeRedondeado.toFixed(1) + "%";
+  }
+  
+  if (document.getElementById('oswestry-nivel-discapacidad')) {
+    document.getElementById('oswestry-nivel-discapacidad').textContent = nivelDiscapacidad;
+  }
+  
+  if (document.getElementById('oswestry-interpretacion-total')) {
+    document.getElementById('oswestry-interpretacion-total').textContent = nivelDiscapacidad;
+    document.getElementById('oswestry-interpretacion-total').className = "resultado-interpretacion " + colorBadge.replace("bajo", "verde").replace("moderado", "amarillo").replace("alto", "rojo");
+  }
+  
+  // Actualizar el contenedor de resultados con la clase de color
+  const resultadoContainer = document.getElementById('oswestry-resultado');
+  if (resultadoContainer) {
+    resultadoContainer.className = "resultado-container " + colorClase;
+  }
+  
+  // Actualizar estado del badge
+  if (document.getElementById('oswestry-badge')) {
+    document.getElementById('oswestry-badge').textContent = nivelDiscapacidad;
+    document.getElementById('oswestry-badge').className = "resultado-badge completado " + colorBadge;
+  }
+  
+  // Generar interpretación clínica basada en la puntuación
+  let interpretacionClinica = "";
+  
+  if (porcentajeRedondeado < 21) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación ODI de <strong>${porcentajeRedondeado.toFixed(1)}%</strong>, lo que indica <strong>discapacidad mínima</strong> por dolor lumbar.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Puede realizar la mayoría de las actividades de su vida diaria sin restricciones significativas</li>
+        <li>Experimenta dolor lumbar, pero este no interfiere de manera importante con su funcionalidad</li>
+        <li>Es probable que presente limitaciones menores solo en actividades específicas de alta demanda para la columna lumbar</li>
+        <li>No requiere intervenciones extensivas, aunque se beneficiará de recomendaciones preventivas</li>
+        <li>Tiene buen pronóstico para recuperación completa con intervenciones adecuadas</li>
+      </ul>
+    `;
+  } else if (porcentajeRedondeado < 41) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación ODI de <strong>${porcentajeRedondeado.toFixed(1)}%</strong>, lo que indica <strong>discapacidad moderada</strong> por dolor lumbar.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta dificultades para algunas actividades de la vida diaria como sentarse, levantarse, y posiblemente para actividades laborales</li>
+        <li>Experimenta dolor significativo que interfiere con su funcionalidad en múltiples aspectos</li>
+        <li>Puede presentar limitaciones para viajar, levantar objetos, y posiblemente para el cuidado personal</li>
+        <li>Es posible que presente alteraciones del sueño y restricciones en su vida social</li>
+        <li>Requiere un enfoque terapéutico estructurado para mejorar su funcionalidad y reducir el dolor</li>
+        <li>Puede presentar comportamientos de evitación de movimientos debido al dolor</li>
+      </ul>
+    `;
+  } else if (porcentajeRedondeado < 61) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación ODI de <strong>${porcentajeRedondeado.toFixed(1)}%</strong>, lo que indica <strong>discapacidad severa</strong> por dolor lumbar.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta limitaciones importantes en múltiples aspectos de su vida diaria</li>
+        <li>El dolor lumbar es intenso y constituye el problema principal que afecta todas las áreas de la vida</li>
+        <li>Tiene dificultades significativas con actividades básicas como el cuidado personal, dormir, sentarse y estar de pie</li>
+        <li>Su vida social está considerablemente restringida debido al dolor</li>
+        <li>Puede presentar signos de deterioro físico por inactividad y desacondicionamiento</li>
+        <li>Probablemente ha desarrollado estrategias de afrontamiento mal adaptativas y patrones de movimiento disfuncionales</li>
+        <li>Requiere un abordaje multidisciplinario para manejar la condición</li>
+      </ul>
+    `;
+  } else {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación ODI de <strong>${porcentajeRedondeado.toFixed(1)}%</strong>, lo que indica <strong>${nivelDiscapacidad}</strong> por dolor lumbar.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta limitaciones extremadamente severas en prácticamente todas las áreas funcionales</li>
+        <li>El dolor es incapacitante y domina todos los aspectos de su vida</li>
+        <li>Tiene dificultades significativas incluso para actividades básicas de autocuidado</li>
+        <li>Su movilidad está severamente comprometida, posiblemente requiriendo ayudas para desplazarse</li>
+        <li>Presenta alteraciones importantes del sueño, estado de ánimo y calidad de vida</li>
+        <li>Es probable que tenga dependencia de medicación analgésica</li>
+        <li>Puede presentar factores psicosociales significativos que complican el cuadro</li>
+        <li>Requiere un abordaje multidisciplinario intensivo y posiblemente consideración de intervenciones especializadas</li>
+      </ul>
+    `;
+  }
+  
+  // Generar recomendaciones terapéuticas
+  let recomendaciones = "";
+  
+  if (porcentajeRedondeado < 21) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica para identificar factores contribuyentes específicos</li>
+          <li>Análisis de la postura y patrones de movimiento específicos</li>
+          <li>Valoración del control motor de la región lumbopélvica</li>
+          <li>Evaluación ergonómica de actividades laborales y recreativas</li>
+          <li>Identificación de factores de riesgo para cronicidad</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Ejercicios específicos para mejorar el control motor lumbopélvico (nivel de evidencia 1A)</li>
+          <li>Terapia manual según hallazgos biomecánicos específicos (nivel de evidencia 1B)</li>
+          <li>Programa de ejercicio terapéutico enfocado en estabilización y fortalecimiento (nivel de evidencia 1A)</li>
+          <li>Corrección de patrones de movimiento disfuncionales (nivel de evidencia 1B)</li>
+          <li>Ejercicios de extensibilidad para grupos musculares específicos si es necesario (nivel de evidencia 1B)</li>
+          <li>Reentrenamiento postural específico para actividades cotidianas (nivel de evidencia 1B)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación sobre anatomía y biomecánica básica de la columna lumbar</li>
+          <li>Recomendaciones ergonómicas para actividades específicas</li>
+          <li>Estrategias de autogestión y autocuidado</li>
+          <li>Importancia de mantener actividad física regular y evitar el reposo prolongado</li>
+          <li>Técnicas de protección articular para actividades de mayor carga</li>
+          <li>Reconocimiento temprano de señales de alerta y estrategias preventivas</li>
+        </ul>
+      </div>
+    `;
+  } else if (porcentajeRedondeado < 41) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica completa de la región lumbopélvica y cadena cinética relacionada</li>
+          <li>Valoración detallada del control motor y estabilidad dinámica</li>
+          <li>Análisis de patrones de movimiento y compensaciones</li>
+          <li>Evaluación de factores musculares: fuerza, resistencia, flexibilidad</li>
+          <li>Evaluación del impacto funcional en actividades cotidianas y laborales</li>
+          <li>Identificación de factores perpetuantes y barreras para la recuperación</li>
+          <li>Valoración de creencias y comportamientos asociados al dolor</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa multimodal que combine terapia manual y ejercicio terapéutico (nivel de evidencia 1A)</li>
+          <li>Ejercicios de control motor progresivos para la región lumbopélvica (nivel de evidencia 1A)</li>
+          <li>Programa graduado de fortalecimiento específico (nivel de evidencia 1A)</li>
+          <li>Reeducación postural y de patrones de movimiento (nivel de evidencia 1B)</li>
+          <li>Ejercicios funcionales relacionados con actividades específicas (nivel de evidencia 1A)</li>
+          <li>Técnicas de desensibilización si hay hiperalgesia localizada (nivel de evidencia 1B)</li>
+          <li>Entrenamiento en estrategias activas de afrontamiento (nivel de evidencia 1A)</li>
+          <li>Terapia manual específica para disfunciones articulares identificadas (nivel de evidencia 1B)</li>
+          <li>Ejercicios de resistencia cardiovascular adaptados (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación en neurociencia del dolor para modificar creencias mal adaptativas</li>
+          <li>Estrategias de autogestión activa del dolor</li>
+          <li>Pacing de actividades y técnicas de conservación de energía</li>
+          <li>Modificaciones ergonómicas en el entorno laboral y doméstico</li>
+          <li>Importancia de la adherencia al ejercicio terapéutico</li>
+          <li>Técnicas de protección articular para actividades de mayor demanda</li>
+          <li>Reducción del miedo al movimiento y promoción de actividad física regular</li>
+          <li>Reconocimiento y manejo de exacerbaciones</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación multidimensional completa: física, funcional y psicosocial</li>
+          <li>Valoración específica de banderas amarillas, azules y negras</li>
+          <li>Evaluación de comorbilidades y su impacto en la presentación clínica</li>
+          <li>Análisis de factores de sensibilización central y periférica</li>
+          <li>Evaluación del impacto en la calidad de vida y roles sociales</li>
+          <li>Valoración de estrategias de afrontamiento y recursos de apoyo</li>
+          <li>Identificación de barreras específicas para la recuperación funcional</li>
+          <li>Considerar estudios complementarios o interconsultas según los hallazgos (nivel de evidencia 1B)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Abordaje multidisciplinario coordinado (nivel de evidencia 1A)</li>
+          <li>Programa de ejercicio terapéutico con progresión muy gradual y supervisada (nivel de evidencia 1A)</li>
+          <li>Terapia manual adaptada a la tolerancia del paciente (nivel de evidencia 1B)</li>
+          <li>Estrategias de manejo del dolor multimodales (nivel de evidencia 1A)</li>
+          <li>Intervenciones cognitivo-conductuales para el manejo del dolor (nivel de evidencia 1A)</li>
+          <li>Exposición gradual a actividades evitadas por miedo (nivel de evidencia 1A)</li>
+          <li>Reeducación neuromuscular y propioceptiva (nivel de evidencia 1B)</li>
+          <li>Entrenamiento específico para actividades funcionales prioritarias (nivel de evidencia 1A)</li>
+          <li>Estrategias de regulación del sistema nervioso autonómico (nivel de evidencia 1B)</li>
+          <li>Considerar ayudas técnicas temporales según necesidades específicas (nivel de evidencia 2A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación intensiva en neurociencia del dolor</li>
+          <li>Estrategias avanzadas de autogestión del dolor crónico</li>
+          <li>Expectativas realistas y establecimiento de objetivos funcionales graduales</li>
+          <li>Técnicas de conservación de energía y protección articular</li>
+          <li>Importancia del sueño y estrategias para su mejora</li>
+          <li>Técnicas de regulación emocional y manejo del estrés</li>
+          <li>Participación activa en el proceso de rehabilitación</li>
+          <li>Estrategias para mantener roles sociales significativos</li>
+          <li>Plan de manejo de exacerbaciones y crisis</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Consideraciones adicionales:</h6>
+        <ul>
+          <li>Valorar la necesidad de interconsulta con especialistas según hallazgos clínicos</li>
+          <li>Considerar enfoque interdisciplinar que incluya psicología del dolor</li>
+          <li>Monitorización regular del progreso con ajustes al plan terapéutico</li>
+          <li>Enfoque biopsicosocial integral para el manejo a largo plazo</li>
+        </ul>
+      </div>
+    `;
+  }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  const interpretacionClinicaEl = document.getElementById('oswestry-interpretacion-clinica');
+  if (interpretacionClinicaEl) {
+    interpretacionClinicaEl.innerHTML = interpretacionClinica;
+    console.log("Interpretación clínica actualizada");
+  }
+  
+  const recomendacionesEl = document.getElementById('oswestry-recomendaciones');
+  if (recomendacionesEl) {
+    recomendacionesEl.innerHTML = recomendaciones;
+    console.log("Recomendaciones actualizadas");
+  }
+}
 
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
@@ -2019,6 +2356,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Inicializar SPADI (añadir esta línea)
   calcularSPADI();
+
+  // Inicializar Oswestry (añadir esta línea)
+  calcularOswestry();
   
   // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
