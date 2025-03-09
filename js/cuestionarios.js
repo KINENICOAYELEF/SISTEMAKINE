@@ -3737,6 +3737,335 @@ function calcularStartBack() {
   }
 }
 
+// Función para calcular el LEFS (Lower Extremity Functional Scale)
+function calcularLEFS() {
+  console.log("Calculando LEFS...");
+  
+  // Obtener todos los ítems del cuestionario
+  const items = [];
+  for (let i = 1; i <= 20; i++) {
+    items.push(document.querySelector(`input[name="lefs_item${i}"]:checked`));
+  }
+  
+  console.log("Items encontrados:", items);
+  
+  // Contar cuántas preguntas han sido respondidas
+  const itemsRespondidos = items.filter(item => item !== null).length;
+  console.log("Items respondidos:", itemsRespondidos);
+  
+  // Verificar si el usuario ha interactuado con el cuestionario
+  const interaccionUsuario = itemsRespondidos > 0;
+  
+  // Si el usuario no ha interactuado con el cuestionario, mostramos "No completado"
+  if (!interaccionUsuario) {
+    if (document.getElementById('lefs-badge')) {
+      document.getElementById('lefs-badge').textContent = "No completado";
+      document.getElementById('lefs-badge').className = "resultado-badge no-completado";
+    }
+    
+    if (document.getElementById('lefs-interpretacion-total')) {
+      document.getElementById('lefs-interpretacion-total').textContent = "Complete el cuestionario";
+    }
+    
+    if (document.getElementById('lefs-interpretacion-clinica')) {
+      document.getElementById('lefs-interpretacion-clinica').textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    }
+    
+    if (document.getElementById('lefs-recomendaciones')) {
+      document.getElementById('lefs-recomendaciones').textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+    }
+    
+    return;
+  }
+  
+  // Para un resultado válido, al menos 16 de 20 preguntas deben ser respondidas (80%)
+  const respuestasMinimas = 16;
+  
+  // Si no se han contestado suficientes preguntas, advertir pero continuar calculando
+  let mensajeCompletado = "";
+  if (itemsRespondidos < respuestasMinimas) {
+    mensajeCompletado = " (incompleto - los resultados pueden no ser confiables)";
+  }
+  
+  // Calcular puntuación total
+  let puntuacionTotal = 0;
+  
+  // Sumar valores de los ítems respondidos
+  items.forEach(item => {
+    if (item !== null) {
+      puntuacionTotal += parseInt(item.value);
+    }
+  });
+  
+  console.log("Puntuación total:", puntuacionTotal);
+  
+  // Calcular el porcentaje de función (0-100%)
+  const porcentajeFuncion = (puntuacionTotal / (itemsRespondidos * 4)) * 100;
+  const porcentajeRedondeado = Math.round(porcentajeFuncion * 10) / 10; // Redondear a 1 decimal
+  
+  // Determinar el nivel de discapacidad basado en la puntuación total (ajustado por ítems respondidos)
+  let nivelDiscapacidad = "";
+  let colorBadge = "";
+  let colorClase = "";
+  
+  // Ajustar los umbrales según la cantidad de ítems respondidos
+  const factorAjuste = itemsRespondidos / 20;
+  const umbralLeve = Math.round(56 * factorAjuste);
+  const umbralModerado = Math.round(32 * factorAjuste);
+  
+  if (puntuacionTotal >= umbralLeve) {
+    nivelDiscapacidad = "Limitación leve";
+    colorBadge = "bajo";
+    colorClase = "nivel-leve";
+  } else if (puntuacionTotal >= umbralModerado) {
+    nivelDiscapacidad = "Limitación moderada";
+    colorBadge = "moderado";
+    colorClase = "nivel-moderado";
+  } else {
+    nivelDiscapacidad = "Limitación severa";
+    colorBadge = "alto";
+    colorClase = "nivel-severo";
+  }
+  
+  // Actualizar elementos en la página
+  if (document.getElementById('lefs-valor-total')) {
+    document.getElementById('lefs-valor-total').textContent = puntuacionTotal + "/" + (itemsRespondidos * 4) + mensajeCompletado;
+  }
+  
+  if (document.getElementById('lefs-valor-porcentaje')) {
+    document.getElementById('lefs-valor-porcentaje').textContent = porcentajeRedondeado.toFixed(1) + "%";
+  }
+  
+  if (document.getElementById('lefs-nivel-discapacidad')) {
+    document.getElementById('lefs-nivel-discapacidad').textContent = nivelDiscapacidad;
+  }
+  
+  if (document.getElementById('lefs-interpretacion-total')) {
+    document.getElementById('lefs-interpretacion-total').textContent = nivelDiscapacidad;
+    document.getElementById('lefs-interpretacion-total').className = "resultado-interpretacion " + colorBadge.replace("bajo", "verde").replace("moderado", "amarillo").replace("alto", "rojo");
+  }
+  
+  // Actualizar estado del badge
+  if (document.getElementById('lefs-badge')) {
+    document.getElementById('lefs-badge').textContent = nivelDiscapacidad;
+    document.getElementById('lefs-badge').className = "resultado-badge completado " + colorBadge;
+  }
+  
+  // Actualizar el contenedor de resultados con la clase de color
+  const resultadoContainer = document.getElementById('lefs-resultado');
+  if (resultadoContainer) {
+    resultadoContainer.className = "resultado-container " + colorClase;
+  }
+  
+  // Generar interpretación clínica basada en la puntuación y porcentaje
+  let interpretacionClinica = "";
+  
+  if (puntuacionTotal >= umbralLeve) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/${itemsRespondidos * 4}</strong> en la Escala Funcional de Extremidad Inferior (LEFS), lo que equivale a un <strong>${porcentajeRedondeado.toFixed(1)}%</strong> de la función normal, indicando una <strong>limitación leve</strong> en la funcionalidad de la extremidad inferior.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Conserva buena capacidad funcional para la mayoría de actividades cotidianas y algunas recreativas</li>
+        <li>Presenta restricciones mínimas a leves en actividades específicas de mayor demanda</li>
+        <li>Puede experimentar algunas dificultades con actividades como correr, saltar, ponerse en cuclillas o arrodillarse</li>
+        <li>Logra caminar distancias moderadas sin limitaciones significativas</li>
+        <li>Tiene buen pronóstico para recuperación completa con intervención adecuada</li>
+        <li>Puede beneficiarse de intervenciones dirigidas a restaurar la función completa en actividades específicas</li>
+      </ul>
+      <p>La puntuación indica una diferencia mínima clínicamente importante (MCID) de 9 puntos con respecto a evaluaciones anteriores o futuras: los cambios superiores a 9 puntos deben considerarse clínicamente relevantes.</p>
+    `;
+  } else if (puntuacionTotal >= umbralModerado) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/${itemsRespondidos * 4}</strong> en la Escala Funcional de Extremidad Inferior (LEFS), lo que equivale a un <strong>${porcentajeRedondeado.toFixed(1)}%</strong> de la función normal, indicando una <strong>limitación moderada</strong> en la funcionalidad de la extremidad inferior.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta dificultades significativas en actividades de mayor demanda física</li>
+        <li>Puede realizar actividades básicas cotidianas con adaptaciones o compensaciones</li>
+        <li>Muestra limitaciones evidentes para actividades como correr, saltar o agacharse</li>
+        <li>Tiene dificultades moderadas con tareas como subir/bajar escaleras, caminar largas distancias o estar de pie por períodos prolongados</li>
+        <li>Puede experimentar restricciones en algunas actividades recreativas o deportivas</li>
+        <li>Probablemente ha desarrollado estrategias compensatorias para mantener su independencia funcional</li>
+        <li>Requiere un programa de rehabilitación progresivo para mejorar su capacidad funcional</li>
+      </ul>
+      <p>La puntuación indica una diferencia mínima clínicamente importante (MCID) de 9 puntos con respecto a evaluaciones anteriores o futuras: los cambios superiores a 9 puntos deben considerarse clínicamente relevantes.</p>
+    `;
+  } else {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/${itemsRespondidos * 4}</strong> en la Escala Funcional de Extremidad Inferior (LEFS), lo que equivale a un <strong>${porcentajeRedondeado.toFixed(1)}%</strong> de la función normal, indicando una <strong>limitación severa</strong> en la funcionalidad de la extremidad inferior.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta restricciones importantes en la mayoría de las actividades evaluadas</li>
+        <li>Presenta dificultades significativas incluso para actividades básicas de la vida diaria</li>
+        <li>Muestra limitaciones severas para caminar, subir escaleras, agacharse o permanecer de pie</li>
+        <li>Puede requerir adaptaciones o asistencia para algunas actividades cotidianas</li>
+        <li>Tiene imposibilidad o gran dificultad para realizar actividades de mayor demanda como correr o arrodillarse</li>
+        <li>Probablemente experimenta un impacto significativo en su calidad de vida y participación social</li>
+        <li>Requiere un programa de rehabilitación estructurado y progresivo, posiblemente con un enfoque interdisciplinario</li>
+      </ul>
+      <p>La puntuación indica una diferencia mínima clínicamente importante (MCID) de 9 puntos con respecto a evaluaciones anteriores o futuras: los cambios superiores a 9 puntos deben considerarse clínicamente relevantes.</p>
+    `;
+  }
+  
+  // Generar recomendaciones terapéuticas
+  let recomendaciones = "";
+  
+  if (puntuacionTotal >= umbralLeve) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica específica para identificar limitaciones residuales</li>
+          <li>Análisis de patrones de movimiento durante actividades más exigentes</li>
+          <li>Valoración de la fuerza, control motor y propiocepción</li>
+          <li>Evaluación funcional específica de actividades que aún presentan dificultad</li>
+          <li>Análisis de factores biomecánicos que puedan predisponer a recurrencias</li>
+          <li>Valoración de la capacidad para actividades deportivas o recreativas específicas</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Ejercicios de fortalecimiento progresivo para grupos musculares deficitarios (nivel de evidencia 1A)</li>
+          <li>Entrenamiento propioceptivo y de control neuromuscular avanzado (nivel de evidencia 1A)</li>
+          <li>Ejercicios funcionales específicos para las actividades que aún presentan limitación (nivel de evidencia 1A)</li>
+          <li>Programa de readaptación a actividades deportivas o recreativas específicas (nivel de evidencia 1B)</li>
+          <li>Ejercicios pliométricos y de potencia para actividades de mayor demanda (nivel de evidencia 1B)</li>
+          <li>Terapia manual específica según hallazgos biomecánicos puntuales (nivel de evidencia 1B)</li>
+          <li>Entrenamiento de estabilidad dinámica en situaciones funcionales (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Estrategias para optimizar el rendimiento en actividades específicas</li>
+          <li>Prevención de recidivas y manejo de factores de riesgo</li>
+          <li>Progresión apropiada en actividades deportivas o de alta demanda</li>
+          <li>Importancia del mantenimiento de la condición física general</li>
+          <li>Reconocimiento temprano y manejo de posibles exacerbaciones</li>
+          <li>Técnicas avanzadas de autocuidado y autogestión</li>
+          <li>Establecimiento de objetivos funcionales para lograr recuperación completa en actividades específicas</li>
+        </ul>
+      </div>
+    `;
+  } else if (puntuacionTotal >= umbralModerado) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica completa de la extremidad inferior</li>
+          <li>Valoración detallada de la fuerza, flexibilidad y control motor</li>
+          <li>Análisis de patrones de movimiento funcional</li>
+          <li>Identificación de compensaciones y adaptaciones</li>
+          <li>Evaluación del impacto funcional en actividades cotidianas y laborales</li>
+          <li>Análisis de dolor y su relación con actividades específicas</li>
+          <li>Evaluación de posibles factores contribuyentes (alineación, equilibrio muscular)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa progresivo de fortalecimiento muscular (nivel de evidencia 1A)</li>
+          <li>Ejercicios de control motor y estabilización articular (nivel de evidencia 1A)</li>
+          <li>Entrenamiento propioceptivo y de equilibrio (nivel de evidencia 1A)</li>
+          <li>Técnicas de movilización articular específicas según limitaciones (nivel de evidencia 1B)</li>
+          <li>Reeducación de patrones de movimiento funcional (nivel de evidencia 1A)</li>
+          <li>Programa de ejercicio aeróbico adaptado (nivel de evidencia 1A)</li>
+          <li>Entrenamiento funcional progresivo para actividades cotidianas afectadas (nivel de evidencia 1A)</li>
+          <li>Ejercicios de estabilidad dinámica y control excéntrico (nivel de evidencia 1A)</li>
+          <li>Estrategias para manejo del dolor durante actividades (nivel de evidencia 1B)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación sobre factores biomecánicos y su relación con la condición</li>
+          <li>Estrategias de modificación de actividades para optimizar la función</li>
+          <li>Técnicas de pacing para evitar sobrecargas y retrocesos</li>
+          <li>Progresión gradual de la actividad física y ejercicio</li>
+          <li>Principios de protección articular durante actividades cotidianas</li>
+          <li>Importancia de la adherencia al programa de ejercicios</li>
+          <li>Reconocimiento y manejo de factores que exacerban los síntomas</li>
+          <li>Establecimiento de objetivos funcionales realistas y progresivos</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación multidimensional incluyendo aspectos biomecánicos, funcionales y de dolor</li>
+          <li>Análisis de limitaciones primarias y restricciones secundarias</li>
+          <li>Valoración detallada de barreras para las actividades básicas</li>
+          <li>Identificación de factores perpetuantes o agravantes</li>
+          <li>Evaluación de impacto en actividades esenciales de la vida diaria</li>
+          <li>Análisis de posibles comorbilidades y su influencia</li>
+          <li>Valoración de posibles adaptaciones o ayudas técnicas necesarias</li>
+          <li>Evaluación de factores psicosociales asociados a la limitación funcional severa</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa de rehabilitación integral con progresión muy gradual (nivel de evidencia 1A)</li>
+          <li>Ejercicios iniciales en descarga o con asistencia según tolerancia (nivel de evidencia 1B)</li>
+          <li>Terapia manual para reducir dolor y mejorar movilidad (nivel de evidencia 1B)</li>
+          <li>Entrenamiento inicial de control motor básico y activación muscular (nivel de evidencia 1A)</li>
+          <li>Progresión gradual hacia fortalecimiento y estabilidad (nivel de evidencia 1A)</li>
+          <li>Entrenamiento funcional específico para actividades prioritarias (nivel de evidencia 1A)</li>
+          <li>Estrategias de manejo del dolor multimodales (nivel de evidencia 1A)</li>
+          <li>Consideración de órtesis o ayudas técnicas temporales si están indicadas (nivel de evidencia 1B)</li>
+          <li>Abordaje progresivo para actividades básicas como caminar, transferencias y escaleras (nivel de evidencia 1A)</li>
+          <li>Considerar enfoque interdisciplinario para optimizar resultados (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación sobre la condición y proceso de recuperación esperado</li>
+          <li>Estrategias específicas de autogestión para actividades básicas</li>
+          <li>Técnicas de conservación de energía y protección articular</li>
+          <li>Importancia de equilibrar actividad y descanso (pacing)</li>
+          <li>Adaptaciones temporales para optimizar la independencia funcional</li>
+          <li>Establecimiento de expectativas realistas y objetivos progresivos</li>
+          <li>Desmitificación de creencias limitantes sobre el movimiento y el dolor</li>
+          <li>Estrategias para manejo de exacerbaciones y retrocesos</li>
+          <li>Importancia de la participación activa en el proceso de rehabilitación</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Consideraciones adicionales:</h6>
+        <ul>
+          <li>Considerar evaluaciones complementarias si la limitación es desproporcionada o persistente</li>
+          <li>Valorar la necesidad de consulta con otros especialistas según hallazgos específicos</li>
+          <li>Establecer plan de seguimiento cercano para monitorizar progreso</li>
+          <li>Revisar periódicamente la necesidad de adaptaciones o ayudas técnicas</li>
+        </ul>
+      </div>
+    `;
+  }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  const interpretacionClinicaEl = document.getElementById('lefs-interpretacion-clinica');
+  if (interpretacionClinicaEl) {
+    interpretacionClinicaEl.innerHTML = interpretacionClinica;
+    console.log("Interpretación clínica actualizada");
+  }
+  
+  const recomendacionesEl = document.getElementById('lefs-recomendaciones');
+  if (recomendacionesEl) {
+    recomendacionesEl.innerHTML = recomendaciones;
+    console.log("Recomendaciones actualizadas");
+  }
+}
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
@@ -3786,6 +4115,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Inicializar START Back Tool (añadir esta línea)
   calcularStartBack();
+
+  // Inicializar LEFS (añadir esta línea)
+  calcularLEFS();
   
   // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
