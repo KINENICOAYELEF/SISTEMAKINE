@@ -2329,18 +2329,46 @@ function calcularRolandMorris() {
   // Obtener todos los ítems del cuestionario
   let puntuacionTotal = 0;
   let itemsMarcados = 0;
+  let interaccionUsuario = false;
   
   // Contar los ítems marcados (cada ítem marcado vale 1 punto)
   for (let i = 1; i <= 24; i++) {
     const item = document.getElementById(`rolandmorris_item${i}`);
-    if (item && item.checked) {
-      puntuacionTotal++;
-      itemsMarcados++;
+    if (item) {
+      // Verificar si el usuario ha interactuado con el cuestionario
+      if (item.checked) {
+        puntuacionTotal++;
+        itemsMarcados++;
+        interaccionUsuario = true;
+      }
     }
   }
   
   console.log("Items marcados:", itemsMarcados);
   console.log("Puntuación total:", puntuacionTotal);
+  console.log("Interacción usuario:", interaccionUsuario);
+  
+  // Si el usuario no ha interactuado con el cuestionario, mostramos "No completado"
+  if (!interaccionUsuario) {
+    if (document.getElementById('rolandmorris-badge')) {
+      document.getElementById('rolandmorris-badge').textContent = "No completado";
+      document.getElementById('rolandmorris-badge').className = "resultado-badge no-completado";
+    }
+    
+    if (document.getElementById('rolandmorris-interpretacion-total')) {
+      document.getElementById('rolandmorris-interpretacion-total').textContent = "Complete el cuestionario";
+    }
+    
+    if (document.getElementById('rolandmorris-interpretacion-clinica')) {
+      document.getElementById('rolandmorris-interpretacion-clinica').textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    }
+    
+    if (document.getElementById('rolandmorris-recomendaciones')) {
+      document.getElementById('rolandmorris-recomendaciones').textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+    }
+    
+    return;
+  }
   
   // Calcular el porcentaje (sobre 24 puntos posibles)
   const porcentaje = (puntuacionTotal / 24) * 100;
