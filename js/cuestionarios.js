@@ -4496,6 +4496,438 @@ function calcularHOOS() {
   }
 }
 
+// Función para calcular el KOOS (Knee Injury and Osteoarthritis Outcome Score)
+function calcularKOOS() {
+  console.log("Calculando KOOS...");
+  
+  // Definir las categorías de preguntas
+  const categorias = {
+    sintomas: ['koos_s1', 'koos_s2', 'koos_s3', 'koos_s4', 'koos_s5', 'koos_s6', 'koos_s7'],
+    dolor: ['koos_p1', 'koos_p2', 'koos_p3', 'koos_p4', 'koos_p5', 'koos_p6', 'koos_p7', 'koos_p8', 'koos_p9'],
+    avd: ['koos_a1', 'koos_a2', 'koos_a3', 'koos_a4', 'koos_a5', 'koos_a6', 'koos_a7', 'koos_a8', 'koos_a9', 'koos_a10', 
+          'koos_a11', 'koos_a12', 'koos_a13', 'koos_a14', 'koos_a15', 'koos_a16', 'koos_a17'],
+    deporte: ['koos_sp1', 'koos_sp2', 'koos_sp3', 'koos_sp4', 'koos_sp5'],
+    qol: ['koos_q1', 'koos_q2', 'koos_q3', 'koos_q4']
+  };
+  
+  // Función para obtener el valor de un ítem
+  function getItemValue(name) {
+    const radio = document.querySelector(`input[name="${name}"]:checked`);
+    return radio ? parseInt(radio.value) : null;
+  }
+  
+  // Contar ítems respondidos y calcular puntuaciones por categoría
+  const puntuaciones = {};
+  const itemsRespondidos = {};
+  const totalItems = {};
+  let totalRespondidos = 0;
+  let totalPreguntas = 0;
+  
+  for (const [categoria, items] of Object.entries(categorias)) {
+    puntuaciones[categoria] = 0;
+    itemsRespondidos[categoria] = 0;
+    totalItems[categoria] = items.length;
+    totalPreguntas += items.length;
+    
+    for (const item of items) {
+      const valor = getItemValue(item);
+      if (valor !== null) {
+        puntuaciones[categoria] += valor;
+        itemsRespondidos[categoria]++;
+        totalRespondidos++;
+      }
+    }
+  }
+  
+  console.log("Puntuaciones por categoría:", puntuaciones);
+  console.log("Items respondidos por categoría:", itemsRespondidos);
+  console.log("Total ítems respondidos:", totalRespondidos);
+  
+  // Verificar si el usuario ha interactuado con el cuestionario
+  const interaccionUsuario = totalRespondidos > 0;
+  
+  // Si el usuario no ha interactuado con el cuestionario, mostramos "No completado"
+  if (!interaccionUsuario) {
+    if (document.getElementById('koos-badge')) {
+      document.getElementById('koos-badge').textContent = "No completado";
+      document.getElementById('koos-badge').className = "resultado-badge no-completado";
+    }
+    
+    if (document.getElementById('koos-interpretacion-total')) {
+      document.getElementById('koos-interpretacion-total').textContent = "Complete el cuestionario";
+    }
+    
+    if (document.getElementById('koos-interpretacion-clinica')) {
+      document.getElementById('koos-interpretacion-clinica').textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    }
+    
+    if (document.getElementById('koos-recomendaciones')) {
+      document.getElementById('koos-recomendaciones').textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+    }
+    
+    return;
+  }
+  
+  // Para un resultado válido, al menos el 80% de los ítems deben ser respondidos en cada categoría
+  const respuestasMinimas = {};
+  let cuestionarioCompleto = true;
+  const categoriasSuficientes = [];
+  
+  for (const [categoria, total] of Object.entries(totalItems)) {
+    respuestasMinimas[categoria] = Math.ceil(total * 0.8);
+    if (itemsRespondidos[categoria] < respuestasMinimas[categoria]) {
+      cuestionarioCompleto = false;
+    } else {
+      categoriasSuficientes.push(categoria);
+    }
+  }
+  
+  let mensajeCompletado = "";
+  if (!cuestionarioCompleto) {
+    mensajeCompletado = " (incompleto - los resultados pueden no ser confiables)";
+  }
+  
+  // Calcular puntuaciones normalizadas (0-100, donde 100 = sin problemas)
+  const puntuacionesNormalizadas = {};
+  let puntuacionTotal = 0;
+  let contadorCategoriasValidas = 0;
+  
+  for (const [categoria, puntuacion] of Object.entries(puntuaciones)) {
+    if (itemsRespondidos[categoria] >= respuestasMinimas[categoria]) {
+      // Calcular la puntuación normalizada: 100 - (puntuación media * 25)
+      // Puntuación media = suma de valores / número de ítems respondidos
+      // Multiplicado por 25 para convertir de escala 0-4 a 0-100
+      const puntuacionMedia = puntuacion / itemsRespondidos[categoria];
+      puntuacionesNormalizadas[categoria] = 100 - (puntuacionMedia * 25);
+      puntuacionTotal += puntuacionesNormalizadas[categoria];
+      contadorCategoriasValidas++;
+    } else {
+      puntuacionesNormalizadas[categoria] = null;
+    }
+  }
+  
+  // Calcular puntuación total promediando las categorías válidas
+  const puntuacionTotalNormalizada = contadorCategoriasValidas > 0 ? 
+                                     puntuacionTotal / contadorCategoriasValidas : null;
+  
+  console.log("Puntuaciones normalizadas:", puntuacionesNormalizadas);
+  console.log("Puntuación total normalizada:", puntuacionTotalNormalizada);
+  
+  // Determinar el nivel de afectación basado en la puntuación total
+  let nivelAfectacion = "";
+  let colorBadge = "";
+  let colorClase = "";
+  
+  if (puntuacionTotalNormalizada !== null) {
+    if (puntuacionTotalNormalizada >= 70) {
+      nivelAfectacion = "Afectación leve";
+      colorBadge = "bajo";
+      colorClase = "nivel-leve";
+    } else if (puntuacionTotalNormalizada >= 40) {
+      nivelAfectacion = "Afectación moderada";
+      colorBadge = "moderado";
+      colorClase = "nivel-moderado";
+    } else {
+      nivelAfectacion = "Afectación severa";
+      colorBadge = "alto";
+      colorClase = "nivel-severo";
+    }
+  } else {
+    nivelAfectacion = "No evaluable";
+    colorBadge = "no-completado";
+    colorClase = "";
+  }
+  
+  // Actualizar elementos en la página
+  if (document.getElementById('koos-valor-total')) {
+    document.getElementById('koos-valor-total').textContent = puntuacionTotalNormalizada !== null ? 
+                                                           puntuacionTotalNormalizada.toFixed(1) + "%" + mensajeCompletado : 
+                                                           "No evaluable";
+  }
+  
+  // Actualizar valores de subescalas
+  const idsPorCategoria = {
+    sintomas: 'koos-valor-sintomas',
+    dolor: 'koos-valor-dolor',
+    avd: 'koos-valor-avd',
+    deporte: 'koos-valor-deporte',
+    qol: 'koos-valor-qol'
+  };
+  
+  for (const [categoria, id] of Object.entries(idsPorCategoria)) {
+    if (document.getElementById(id)) {
+      document.getElementById(id).textContent = puntuacionesNormalizadas[categoria] !== null ? 
+                                               puntuacionesNormalizadas[categoria].toFixed(1) + "%" : 
+                                               "No evaluable";
+    }
+  }
+  
+  if (document.getElementById('koos-interpretacion-total')) {
+    document.getElementById('koos-interpretacion-total').textContent = nivelAfectacion;
+    document.getElementById('koos-interpretacion-total').className = "resultado-interpretacion " + colorBadge.replace("bajo", "verde").replace("moderado", "amarillo").replace("alto", "rojo");
+  }
+  
+  // Actualizar estado del badge
+  if (document.getElementById('koos-badge')) {
+    document.getElementById('koos-badge').textContent = nivelAfectacion;
+    document.getElementById('koos-badge').className = "resultado-badge completado " + colorBadge;
+  }
+  
+  // Actualizar el contenedor de resultados con la clase de color
+  const resultadoContainer = document.getElementById('koos-resultado');
+  if (resultadoContainer) {
+    resultadoContainer.className = "resultado-container " + colorClase;
+  }
+  
+  // Generar interpretación clínica basada en la puntuación
+  let interpretacionClinica = "";
+  
+  if (puntuacionTotalNormalizada !== null) {
+    if (puntuacionTotalNormalizada >= 70) {
+      interpretacionClinica = `
+        <p>El paciente presenta una puntuación promedio del <strong>${puntuacionTotalNormalizada.toFixed(1)}%</strong> en el cuestionario KOOS, lo que indica una <strong>afectación leve</strong> en la función de rodilla y síntomas relacionados.</p>
+        <p>Análisis por subescalas:</p>
+        <ul>
+          ${puntuacionesNormalizadas.dolor !== null ? `<li><strong>Dolor:</strong> ${puntuacionesNormalizadas.dolor.toFixed(1)}% - ${puntuacionesNormalizadas.dolor >= 70 ? 'Leve' : puntuacionesNormalizadas.dolor >= 40 ? 'Moderado' : 'Severo'}</li>` : ''}
+          ${puntuacionesNormalizadas.sintomas !== null ? `<li><strong>Síntomas:</strong> ${puntuacionesNormalizadas.sintomas.toFixed(1)}% - ${puntuacionesNormalizadas.sintomas >= 70 ? 'Leves' : puntuacionesNormalizadas.sintomas >= 40 ? 'Moderados' : 'Severos'}</li>` : ''}
+          ${puntuacionesNormalizadas.avd !== null ? `<li><strong>Actividades de la vida diaria:</strong> ${puntuacionesNormalizadas.avd.toFixed(1)}% - ${puntuacionesNormalizadas.avd >= 70 ? 'Limitación leve' : puntuacionesNormalizadas.avd >= 40 ? 'Limitación moderada' : 'Limitación severa'}</li>` : ''}
+          ${puntuacionesNormalizadas.deporte !== null ? `<li><strong>Deportes/actividades recreativas:</strong> ${puntuacionesNormalizadas.deporte.toFixed(1)}% - ${puntuacionesNormalizadas.deporte >= 70 ? 'Limitación leve' : puntuacionesNormalizadas.deporte >= 40 ? 'Limitación moderada' : 'Limitación severa'}</li>` : ''}
+          ${puntuacionesNormalizadas.qol !== null ? `<li><strong>Calidad de vida:</strong> ${puntuacionesNormalizadas.qol.toFixed(1)}% - ${puntuacionesNormalizadas.qol >= 70 ? 'Poco afectada' : puntuacionesNormalizadas.qol >= 40 ? 'Moderadamente afectada' : 'Severamente afectada'}</li>` : ''}
+        </ul>
+        <p>Esta puntuación sugiere que el paciente:</p>
+        <ul>
+          <li>Conserva una buena funcionalidad de la rodilla para la mayoría de las actividades cotidianas</li>
+          <li>Presenta síntomas y dolor leves que no interfieren significativamente con su calidad de vida</li>
+          <li>Puede experimentar algunas limitaciones en actividades de mayor demanda o deportivas</li>
+          <li>Muestra buen pronóstico para mantener o mejorar su función con intervención adecuada</li>
+          <li>Probablemente responderá bien a intervenciones conservadoras dirigidas a factores biomecánicos específicos</li>
+        </ul>
+      `;
+    } else if (puntuacionTotalNormalizada >= 40) {
+      interpretacionClinica = `
+        <p>El paciente presenta una puntuación promedio del <strong>${puntuacionTotalNormalizada.toFixed(1)}%</strong> en el cuestionario KOOS, lo que indica una <strong>afectación moderada</strong> en la función de rodilla y síntomas relacionados.</p>
+        <p>Análisis por subescalas:</p>
+        <ul>
+          ${puntuacionesNormalizadas.dolor !== null ? `<li><strong>Dolor:</strong> ${puntuacionesNormalizadas.dolor.toFixed(1)}% - ${puntuacionesNormalizadas.dolor >= 70 ? 'Leve' : puntuacionesNormalizadas.dolor >= 40 ? 'Moderado' : 'Severo'}</li>` : ''}
+          ${puntuacionesNormalizadas.sintomas !== null ? `<li><strong>Síntomas:</strong> ${puntuacionesNormalizadas.sintomas.toFixed(1)}% - ${puntuacionesNormalizadas.sintomas >= 70 ? 'Leves' : puntuacionesNormalizadas.sintomas >= 40 ? 'Moderados' : 'Severos'}</li>` : ''}
+          ${puntuacionesNormalizadas.avd !== null ? `<li><strong>Actividades de la vida diaria:</strong> ${puntuacionesNormalizadas.avd.toFixed(1)}% - ${puntuacionesNormalizadas.avd >= 70 ? 'Limitación leve' : puntuacionesNormalizadas.avd >= 40 ? 'Limitación moderada' : 'Limitación severa'}</li>` : ''}
+          ${puntuacionesNormalizadas.deporte !== null ? `<li><strong>Deportes/actividades recreativas:</strong> ${puntuacionesNormalizadas.deporte.toFixed(1)}% - ${puntuacionesNormalizadas.deporte >= 70 ? 'Limitación leve' : puntuacionesNormalizadas.deporte >= 40 ? 'Limitación moderada' : 'Limitación severa'}</li>` : ''}
+          ${puntuacionesNormalizadas.qol !== null ? `<li><strong>Calidad de vida:</strong> ${puntuacionesNormalizadas.qol.toFixed(1)}% - ${puntuacionesNormalizadas.qol >= 70 ? 'Poco afectada' : puntuacionesNormalizadas.qol >= 40 ? 'Moderadamente afectada' : 'Severamente afectada'}</li>` : ''}
+        </ul>
+        <p>Esta puntuación sugiere que el paciente:</p>
+        <ul>
+          <li>Experimenta dolor y síntomas moderados en la rodilla que impactan en sus actividades diarias</li>
+          <li>Presenta dificultades significativas para algunas actividades funcionales como subir/bajar escaleras, ponerse en cuclillas o arrodillarse</li>
+          <li>Muestra limitaciones importantes para actividades deportivas o recreativas</li>
+          <li>Ha modificado algunas de sus actividades habituales debido a su condición de rodilla</li>
+          <li>Presenta una calidad de vida afectada por su problema de rodilla</li>
+          <li>Probablemente ha desarrollado adaptaciones y compensaciones para mantener su funcionalidad</li>
+          <li>Requiere un programa de intervención estructurado que aborde tanto el dolor como la función</li>
+        </ul>
+      `;
+    } else {
+      interpretacionClinica = `
+        <p>El paciente presenta una puntuación promedio del <strong>${puntuacionTotalNormalizada.toFixed(1)}%</strong> en el cuestionario KOOS, lo que indica una <strong>afectación severa</strong> en la función de rodilla y síntomas relacionados.</p>
+        <p>Análisis por subescalas:</p>
+        <ul>
+          ${puntuacionesNormalizadas.dolor !== null ? `<li><strong>Dolor:</strong> ${puntuacionesNormalizadas.dolor.toFixed(1)}% - ${puntuacionesNormalizadas.dolor >= 70 ? 'Leve' : puntuacionesNormalizadas.dolor >= 40 ? 'Moderado' : 'Severo'}</li>` : ''}
+          ${puntuacionesNormalizadas.sintomas !== null ? `<li><strong>Síntomas:</strong> ${puntuacionesNormalizadas.sintomas.toFixed(1)}% - ${puntuacionesNormalizadas.sintomas >= 70 ? 'Leves' : puntuacionesNormalizadas.sintomas >= 40 ? 'Moderados' : 'Severos'}</li>` : ''}
+          ${puntuacionesNormalizadas.avd !== null ? `<li><strong>Actividades de la vida diaria:</strong> ${puntuacionesNormalizadas.avd.toFixed(1)}% - ${puntuacionesNormalizadas.avd >= 70 ? 'Limitación leve' : puntuacionesNormalizadas.avd >= 40 ? 'Limitación moderada' : 'Limitación severa'}</li>` : ''}
+          ${puntuacionesNormalizadas.deporte !== null ? `<li><strong>Deportes/actividades recreativas:</strong> ${puntuacionesNormalizadas.deporte.toFixed(1)}% - ${puntuacionesNormalizadas.deporte >= 70 ? 'Limitación leve' : puntuacionesNormalizadas.deporte >= 40 ? 'Limitación moderada' : 'Limitación severa'}</li>` : ''}
+          ${puntuacionesNormalizadas.qol !== null ? `<li><strong>Calidad de vida:</strong> ${puntuacionesNormalizadas.qol.toFixed(1)}% - ${puntuacionesNormalizadas.qol >= 70 ? 'Poco afectada' : puntuacionesNormalizadas.qol >= 40 ? 'Moderadamente afectada' : 'Severamente afectada'}</li>` : ''}
+        </ul>
+        <p>Esta puntuación sugiere que el paciente:</p>
+        <ul>
+          <li>Experimenta dolor intenso y síntomas significativos que limitan severamente su función</li>
+          <li>Presenta dificultades importantes para actividades básicas de la vida diaria como caminar, subir escaleras o sentarse/levantarse</li>
+          <li>Tiene restricciones severas para actividades deportivas o recreativas</li>
+          <li>Muestra una calidad de vida significativamente afectada por su problema de rodilla</li>
+          <li>Puede requerir adaptaciones o asistencia para algunas actividades cotidianas</li>
+          <li>Probablemente ha modificado considerablemente su estilo de vida debido a su condición</li>
+          <li>Puede presentar problemas específicos como bloqueos, inestabilidad o rigidez significativa</li>
+          <li>Necesita un abordaje integral de su problema, posiblemente multidisciplinar</li>
+        </ul>
+      `;
+    }
+  } else {
+    interpretacionClinica = `
+      <p>No hay suficientes datos para realizar una interpretación clínica completa. Se requiere que al menos el 80% de los ítems de cada subescala sean respondidos para un análisis fiable.</p>
+      <p>Subescalas completadas adecuadamente:</p>
+      <ul>
+        ${categoriasSuficientes.map(cat => `<li>${cat === 'sintomas' ? 'Síntomas' : cat === 'dolor' ? 'Dolor' : cat === 'avd' ? 'Actividades de la vida diaria' : cat === 'deporte' ? 'Deportes/actividades recreativas' : 'Calidad de vida'}</li>`).join('')}
+      </ul>
+      <p>Por favor, complete las secciones restantes para obtener una interpretación más precisa.</p>
+    `;
+  }
+  
+  // Generar recomendaciones terapéuticas
+  let recomendaciones = "";
+  
+  if (puntuacionTotalNormalizada !== null) {
+    if (puntuacionTotalNormalizada >= 70) {
+      recomendaciones = `
+        <div class="recomendacion-seccion">
+          <h6>Evaluación:</h6>
+          <ul>
+            <li>Evaluación biomecánica detallada de la rodilla y articulaciones relacionadas</li>
+            <li>Valoración de la función de la musculatura periarticular (cuádriceps, isquiotibiales)</li>
+            <li>Análisis de patrones de movimiento y control motor en actividades específicas</li>
+            <li>Evaluación de la propiocepción y estabilidad dinámica</li>
+            <li>Valoración funcional específica para actividades que aún presentan dificultad</li>
+            <li>Análisis de factores de riesgo para progresión o recidiva</li>
+          </ul>
+        </div>
+        
+        <div class="recomendacion-seccion">
+          <h6>Intervención:</h6>
+          <ul>
+            <li>Fortalecimiento progresivo de la musculatura estabilizadora de rodilla (nivel de evidencia 1A)</li>
+            <li>Ejercicios específicos para mejorar el control neuromuscular (nivel de evidencia 1A)</li>
+            <li>Entrenamiento propioceptivo y de estabilidad dinámica (nivel de evidencia 1A)</li>
+            <li>Terapia manual específica según hallazgos biomecánicos (nivel de evidencia 1B)</li>
+            <li>Ejercicios funcionales para optimizar patrones de movimiento (nivel de evidencia 1A)</li>
+            <li>Programa de acondicionamiento general con énfasis en actividades de bajo impacto (nivel de evidencia 1A)</li>
+            <li>Entrenamiento específico para actividades deportivas o recreativas limitadas (nivel de evidencia 1B)</li>
+          </ul>
+        </div>
+        
+        <div class="recomendacion-seccion">
+          <h6>Educación:</h6>
+          <ul>
+            <li>Información sobre la naturaleza de su condición y pronóstico favorable</li>
+            <li>Estrategias de protección articular para actividades de mayor demanda</li>
+            <li>Importancia del mantenimiento de la masa muscular y control motor</li>
+            <li>Técnicas de autogestión y ejercicios de mantenimiento</li>
+            <li>Modificaciones para actividades deportivas o recreativas específicas</li>
+            <li>Reconocimiento temprano de señales de alerta y manejo de síntomas</li>
+            <li>Estrategias para prevenir recurrencias o progresión de síntomas</li>
+          </ul>
+        </div>
+      `;
+    } else if (puntuacionTotalNormalizada >= 40) {
+      recomendaciones = `
+        <div class="recomendacion-seccion">
+          <h6>Evaluación:</h6>
+          <ul>
+            <li>Evaluación biomecánica completa de rodilla y cadena cinética relacionada</li>
+            <li>Valoración detallada de la función muscular, flexibilidad y control motor</li>
+            <li>Análisis de patrones compensatorios y adaptaciones funcionales</li>
+            <li>Evaluación específica de síntomas como inestabilidad, bloqueos o rigidez</li>
+            <li>Valoración del impacto en actividades cotidianas y calidad de vida</li>
+            <li>Identificación de factores que exacerban y alivian los síntomas</li>
+            <li>Análisis de la distribución de cargas y patrones de movimiento</li>
+          </ul>
+        </div>
+        
+        <div class="recomendacion-seccion">
+          <h6>Intervención:</h6>
+          <ul>
+            <li>Programa multimodal de ejercicios terapéuticos progresivos (nivel de evidencia 1A)</li>
+            <li>Fortalecimiento específico del cuádriceps y musculatura estabilizadora (nivel de evidencia 1A)</li>
+            <li>Entrenamiento neuromuscular para mejorar control y estabilidad (nivel de evidencia 1A)</li>
+            <li>Ejercicios propioceptivos y de equilibrio (nivel de evidencia 1A)</li>
+            <li>Técnicas de movilización articular específicas según restricciones (nivel de evidencia 1B)</li>
+            <li>Programa de ejercicio aeróbico de bajo impacto (nivel de evidencia 1A)</li>
+            <li>Entrenamiento funcional para actividades cotidianas limitadas (nivel de evidencia 1A)</li>
+            <li>Estrategias específicas para manejo del dolor durante actividades (nivel de evidencia 1B)</li>
+            <li>Reeducación de patrones de movimiento compensatorios (nivel de evidencia 1B)</li>
+          </ul>
+        </div>
+        
+        <div class="recomendacion-seccion">
+          <h6>Educación:</h6>
+          <ul>
+            <li>Educación sobre la fisiopatología de la condición y factores contribuyentes</li>
+            <li>Técnicas de pacing y gestión de actividades para optimizar función</li>
+            <li>Estrategias de modificación de actividades para reducir sobrecarga articular</li>
+            <li>Importancia de la adherencia al programa de ejercicios</li>
+            <li>Manejo de expectativas y establecimiento de objetivos realistas</li>
+            <li>Principios de protección articular durante actividades cotidianas</li>
+            <li>Reconocimiento y manejo de factores desencadenantes de síntomas</li>
+            <li>Técnicas específicas para actividades problemáticas (escaleras, sentarse/levantarse, etc.)</li>
+          </ul>
+        </div>
+      `;
+    } else {
+      recomendaciones = `
+        <div class="recomendacion-seccion">
+          <h6>Evaluación:</h6>
+          <ul>
+            <li>Evaluación multidimensional detallada de factores físicos, funcionales y psicosociales</li>
+            <li>Valoración de limitaciones primarias y adaptaciones secundarias</li>
+            <li>Análisis del impacto en actividades esenciales de la vida diaria</li>
+            <li>Evaluación de posibles complicaciones mecánicas (bloqueos, inestabilidad)</li>
+            <li>Valoración de comorbilidades y su influencia en la presentación clínica</li>
+            <li>Análisis de la calidad de vida y participación social</li>
+            <li>Identificación de recursos de apoyo y barreras para la recuperación</li>
+            <li>Consideración de indicaciones para evaluación complementaria especializada</li>
+          </ul>
+        </div>
+        
+        <div class="recomendacion-seccion">
+          <h6>Intervención:</h6>
+          <ul>
+            <li>Programa integral con énfasis en control del dolor y mejora funcional (nivel de evidencia 1A)</li>
+            <li>Ejercicios terapéuticos con progresión muy gradual según tolerancia (nivel de evidencia 1A)</li>
+            <li>Fortalecimiento específico adaptado a la condición actual (nivel de evidencia 1A)</li>
+            <li>Terapia manual para reducir dolor y mejorar movilidad dentro de límites tolerables (nivel de evidencia 1B)</li>
+            <li>Entrenamiento específico para actividades funcionales prioritarias (nivel de evidencia 1A)</li>
+            <li>Ejercicio acuático si está disponible y es apropiado (nivel de evidencia 1A)</li>
+            <li>Técnicas multimodales para manejo del dolor (nivel de evidencia 1A)</li>
+            <li>Ejercicios de control motor y estabilización (nivel de evidencia 1A)</li>
+            <li>Consideración de órtesis o ayudas técnicas según necesidades específicas (nivel de evidencia 2A)</li>
+            <li>Abordaje físico-funcional que considere factores psicosociales (nivel de evidencia 1A)</li>
+          </ul>
+        </div>
+        
+        <div class="recomendacion-seccion">
+          <h6>Educación:</h6>
+          <ul>
+            <li>Educación detallada sobre la condición y opciones de manejo</li>
+            <li>Estrategias de autogestión y manejo activo de síntomas</li>
+            <li>Técnicas específicas de protección articular y conservación de energía</li>
+            <li>Modificaciones del entorno para optimizar la independencia funcional</li>
+            <li>Establecimiento de expectativas realistas y objetivos progresivos</li>
+            <li>Importancia del enfoque activo en la recuperación</li>
+            <li>Estrategias para mantener participación social y roles significativos</li>
+            <li>Técnicas para manejo de exacerbaciones y recaídas</li>
+            <li>Información sobre opciones terapéuticas avanzadas cuando sean apropiadas</li>
+          </ul>
+        </div>
+        
+        <div class="recomendacion-seccion">
+          <h6>Consideraciones adicionales:</h6>
+          <ul>
+            <li>Valorar derivación a especialista para evaluación avanzada en casos de afectación severa persistente</li>
+            <li>Considerar enfoque multidisciplinar para optimizar resultados</li>
+            <li>Evaluar necesidad de intervenciones para manejo del dolor adicionales</li>
+            <li>Establecer plan de seguimiento regular para monitorizar progreso</li>
+            <li>Reevaluar periódicamente usando el KOOS para documentar cambios</li>
+          </ul>
+        </div>
+      `;
+    }
+  } else {
+    recomendaciones = `
+      <p>No hay suficientes datos para proporcionar recomendaciones terapéuticas específicas. Se requiere completar al menos el 80% de los ítems de cada subescala para una evaluación fiable.</p>
+      <p>Por favor, complete las secciones restantes del cuestionario para recibir recomendaciones personalizadas.</p>
+    `;
+  }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  const interpretacionClinicaEl = document.getElementById('koos-interpretacion-clinica');
+  if (interpretacionClinicaEl) {
+    interpretacionClinicaEl.innerHTML = interpretacionClinica;
+    console.log("Interpretación clínica actualizada");
+  }
+  
+  const recomendacionesEl = document.getElementById('koos-recomendaciones');
+  if (recomendacionesEl) {
+    recomendacionesEl.innerHTML = recomendaciones;
+    console.log("Recomendaciones actualizadas");
+  }
+}
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
@@ -4551,6 +4983,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Inicializar HOOS (añadir esta línea)
   calcularHOOS();
+
+  // Inicializar KOOS (añadir esta línea)
+  calcularKOOS();
   
   // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
