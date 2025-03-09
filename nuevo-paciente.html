@@ -7895,321 +7895,350 @@
 </div>
 
           <!-- Cuestionario WOMAC (Western Ontario and McMaster Universities Osteoarthritis Index) -->
-      <div class="cuestionario-item">
-        <div class="cuestionario-header" onclick="toggleCuestionario('womac-content')">
-          <h4><i class="fas fa-plus-circle"></i> Índice de Osteoartritis WOMAC</h4>
-          <div class="resultado-badge" id="womac-badge">No completado</div>
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('womac-content')">
+    <h4><i class="fas fa-plus-circle"></i> Índice de Osteoartritis WOMAC</h4>
+    <div class="resultado-badge" id="womac-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="womac-content" style="display: none;">
+    <p class="mb-3">Las siguientes preguntas evalúan el dolor, rigidez y función física en relación con su articulación (rodilla o cadera). Por favor, indique la intensidad de estos síntomas durante las últimas 48 horas.</p>
+    
+    <!-- Sección de Dolor -->
+    <h5 class="mt-4 mb-3">Sección A: DOLOR</h5>
+    <p>¿Cuánto dolor tiene usted?</p>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th>Pregunta</th>
+          <th>Ninguno</th>
+          <th>Leve</th>
+          <th>Moderado</th>
+          <th>Severo</th>
+          <th>Extremo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- A1. Al caminar por una superficie plana -->
+        <tr>
+          <td>1. Al caminar por una superficie plana</td>
+          <td class="text-center"><input type="radio" name="womac_a1" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a1" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a1" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a1" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a1" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- A2. Al subir o bajar escaleras -->
+        <tr>
+          <td>2. Al subir o bajar escaleras</td>
+          <td class="text-center"><input type="radio" name="womac_a2" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a2" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a2" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a2" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a2" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- A3. Por la noche en la cama -->
+        <tr>
+          <td>3. Por la noche en la cama</td>
+          <td class="text-center"><input type="radio" name="womac_a3" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a3" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a3" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a3" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a3" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- A4. Al estar sentado o acostado -->
+        <tr>
+          <td>4. Al estar sentado o acostado</td>
+          <td class="text-center"><input type="radio" name="womac_a4" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a4" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a4" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a4" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a4" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- A5. Al estar de pie -->
+        <tr>
+          <td>5. Al estar de pie</td>
+          <td class="text-center"><input type="radio" name="womac_a5" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a5" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a5" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a5" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_a5" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Sección de Rigidez -->
+    <h5 class="mt-4 mb-3">Sección B: RIGIDEZ</h5>
+    <p>¿Cuánta rigidez presenta?</p>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th>Pregunta</th>
+          <th>Ninguno</th>
+          <th>Leve</th>
+          <th>Moderado</th>
+          <th>Severo</th>
+          <th>Extremo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- B1. Rigidez matutina -->
+        <tr>
+          <td>1. ¿Qué tan intensa es su rigidez después de despertarse por la mañana?</td>
+          <td class="text-center"><input type="radio" name="womac_b1" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_b1" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_b1" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_b1" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_b1" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- B2. Rigidez durante el día -->
+        <tr>
+          <td>2. ¿Qué tan intensa es su rigidez después de estar sentado, acostado o descansando durante el día?</td>
+          <td class="text-center"><input type="radio" name="womac_b2" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_b2" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_b2" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_b2" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_b2" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Sección de Función Física -->
+    <h5 class="mt-4 mb-3">Sección C: FUNCIÓN FÍSICA</h5>
+    <p>¿Qué grado de dificultad tiene al realizar las siguientes actividades?</p>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th>Pregunta</th>
+          <th>Ninguno</th>
+          <th>Leve</th>
+          <th>Moderado</th>
+          <th>Severo</th>
+          <th>Extremo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- C1. Bajar escaleras -->
+        <tr>
+          <td>1. Bajar escaleras</td>
+          <td class="text-center"><input type="radio" name="womac_c1" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c1" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c1" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c1" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c1" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C2. Subir escaleras -->
+        <tr>
+          <td>2. Subir escaleras</td>
+          <td class="text-center"><input type="radio" name="womac_c2" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c2" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c2" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c2" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c2" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C3. Levantarse de una silla -->
+        <tr>
+          <td>3. Levantarse de una silla</td>
+          <td class="text-center"><input type="radio" name="womac_c3" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c3" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c3" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c3" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c3" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C4. Estar de pie -->
+        <tr>
+          <td>4. Estar de pie</td>
+          <td class="text-center"><input type="radio" name="womac_c4" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c4" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c4" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c4" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c4" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C5. Agacharse -->
+        <tr>
+          <td>5. Agacharse para coger algo del suelo</td>
+          <td class="text-center"><input type="radio" name="womac_c5" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c5" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c5" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c5" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c5" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C6. Caminar en terreno llano -->
+        <tr>
+          <td>6. Caminar en terreno llano</td>
+          <td class="text-center"><input type="radio" name="womac_c6" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c6" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c6" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c6" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c6" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C7. Entrar y salir de un coche -->
+        <tr>
+          <td>7. Entrar y salir de un coche</td>
+          <td class="text-center"><input type="radio" name="womac_c7" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c7" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c7" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c7" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c7" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C8. Ir de compras -->
+        <tr>
+          <td>8. Ir de compras</td>
+          <td class="text-center"><input type="radio" name="womac_c8" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c8" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c8" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c8" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c8" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C9. Ponerse calcetines/medias -->
+        <tr>
+          <td>9. Ponerse calcetines o medias</td>
+          <td class="text-center"><input type="radio" name="womac_c9" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c9" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c9" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c9" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c9" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C10. Levantarse de la cama -->
+        <tr>
+          <td>10. Levantarse de la cama</td>
+          <td class="text-center"><input type="radio" name="womac_c10" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c10" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c10" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c10" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c10" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C11. Quitarse calcetines/medias -->
+        <tr>
+          <td>11. Quitarse calcetines o medias</td>
+          <td class="text-center"><input type="radio" name="womac_c11" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c11" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c11" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c11" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c11" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C12. Estar acostado en la cama -->
+        <tr>
+          <td>12. Estar acostado en la cama</td>
+          <td class="text-center"><input type="radio" name="womac_c12" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c12" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c12" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c12" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c12" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C13. Entrar/salir de la bañera/ducha -->
+        <tr>
+          <td>13. Entrar o salir de la bañera/ducha</td>
+          <td class="text-center"><input type="radio" name="womac_c13" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c13" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c13" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c13" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c13" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C14. Estar sentado -->
+        <tr>
+          <td>14. Estar sentado</td>
+          <td class="text-center"><input type="radio" name="womac_c14" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c14" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c14" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c14" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c14" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C15. Sentarse y levantarse del inodoro -->
+        <tr>
+          <td>15. Sentarse y levantarse del inodoro</td>
+          <td class="text-center"><input type="radio" name="womac_c15" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c15" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c15" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c15" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c15" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C16. Realizar tareas domésticas pesadas -->
+        <tr>
+          <td>16. Realizar tareas domésticas pesadas</td>
+          <td class="text-center"><input type="radio" name="womac_c16" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c16" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c16" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c16" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c16" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+        
+        <!-- C17. Realizar tareas domésticas ligeras -->
+        <tr>
+          <td>17. Realizar tareas domésticas ligeras</td>
+          <td class="text-center"><input type="radio" name="womac_c17" value="0" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c17" value="1" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c17" value="2" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c17" value="3" onchange="calcularWOMAC()"></td>
+          <td class="text-center"><input type="radio" name="womac_c17" value="4" onchange="calcularWOMAC()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="resultado-container" id="womac-resultado">
+      <div class="form-row">
+        <div class="form-col form-col-md-4">
+          <div class="resultado-label">Puntuación Total:</div>
+          <div class="resultado-valor" id="womac-valor-total">-/96</div>
+          <div class="resultado-interpretacion" id="womac-interpretacion-total">Complete el cuestionario</div>
         </div>
-        <div class="cuestionario-content" id="womac-content" style="display: none;">
-          <p class="mb-3">Las siguientes preguntas evalúan el dolor, rigidez y función física en relación con su articulación (rodilla o cadera). Por favor, indique la intensidad de estos síntomas durante las últimas 48 horas.</p>
-          
-          <!-- Sección de Dolor -->
-          <h5 class="mt-4 mb-3">Sección A: DOLOR</h5>
-          <p>¿Cuánto dolor tiene usted?</p>
-          
-          <table class="table table-bordered mb-4">
-            <thead>
-              <tr>
-                <th>Pregunta</th>
-                <th>Ninguno</th>
-                <th>Leve</th>
-                <th>Moderado</th>
-                <th>Severo</th>
-                <th>Extremo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- A1. Al caminar por una superficie plana -->
-              <tr>
-                <td>1. Al caminar por una superficie plana</td>
-                <td class="text-center"><input type="radio" name="womac_a1" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a1" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a1" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a1" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a1" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- A2. Al subir o bajar escaleras -->
-              <tr>
-                <td>2. Al subir o bajar escaleras</td>
-                <td class="text-center"><input type="radio" name="womac_a2" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a2" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a2" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a2" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a2" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- A3. Por la noche en la cama -->
-              <tr>
-                <td>3. Por la noche en la cama</td>
-                <td class="text-center"><input type="radio" name="womac_a3" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a3" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a3" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a3" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a3" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- A4. Al estar sentado o acostado -->
-              <tr>
-                <td>4. Al estar sentado o acostado</td>
-                <td class="text-center"><input type="radio" name="womac_a4" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a4" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a4" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a4" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a4" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- A5. Al estar de pie -->
-              <tr>
-                <td>5. Al estar de pie</td>
-                <td class="text-center"><input type="radio" name="womac_a5" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a5" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a5" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a5" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_a5" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <!-- Sección de Rigidez -->
-          <h5 class="mt-4 mb-3">Sección B: RIGIDEZ</h5>
-          <p>¿Cuánta rigidez presenta?</p>
-          
-          <table class="table table-bordered mb-4">
-            <thead>
-              <tr>
-                <th>Pregunta</th>
-                <th>Ninguno</th>
-                <th>Leve</th>
-                <th>Moderado</th>
-                <th>Severo</th>
-                <th>Extremo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- B1. Rigidez matutina -->
-              <tr>
-                <td>1. ¿Qué tan intensa es su rigidez después de despertarse por la mañana?</td>
-                <td class="text-center"><input type="radio" name="womac_b1" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_b1" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_b1" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_b1" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_b1" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- B2. Rigidez durante el día -->
-              <tr>
-                <td>2. ¿Qué tan intensa es su rigidez después de estar sentado, acostado o descansando durante el día?</td>
-                <td class="text-center"><input type="radio" name="womac_b2" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_b2" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_b2" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_b2" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_b2" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <!-- Sección de Función Física -->
-          <h5 class="mt-4 mb-3">Sección C: FUNCIÓN FÍSICA</h5>
-          <p>¿Qué grado de dificultad tiene al realizar las siguientes actividades?</p>
-          
-          <table class="table table-bordered mb-4">
-            <thead>
-              <tr>
-                <th>Pregunta</th>
-                <th>Ninguno</th>
-                <th>Leve</th>
-                <th>Moderado</th>
-                <th>Severo</th>
-                <th>Extremo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- C1. Bajar escaleras -->
-              <tr>
-                <td>1. Bajar escaleras</td>
-                <td class="text-center"><input type="radio" name="womac_c1" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c1" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c1" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c1" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c1" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C2. Subir escaleras -->
-              <tr>
-                <td>2. Subir escaleras</td>
-                <td class="text-center"><input type="radio" name="womac_c2" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c2" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c2" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c2" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c2" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C3. Levantarse de una silla -->
-              <tr>
-                <td>3. Levantarse de una silla</td>
-                <td class="text-center"><input type="radio" name="womac_c3" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c3" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c3" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c3" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c3" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C4. Estar de pie -->
-              <tr>
-                <td>4. Estar de pie</td>
-                <td class="text-center"><input type="radio" name="womac_c4" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c4" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c4" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c4" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c4" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C5. Agacharse -->
-              <tr>
-                <td>5. Agacharse para coger algo del suelo</td>
-                <td class="text-center"><input type="radio" name="womac_c5" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c5" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c5" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c5" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c5" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C6. Caminar en terreno llano -->
-              <tr>
-                <td>6. Caminar en terreno llano</td>
-                <td class="text-center"><input type="radio" name="womac_c6" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c6" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c6" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c6" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c6" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C7. Entrar y salir de un coche -->
-              <tr>
-                <td>7. Entrar y salir de un coche</td>
-                <td class="text-center"><input type="radio" name="womac_c7" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c7" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c7" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c7" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c7" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C8. Ir de compras -->
-              <tr>
-                <td>8. Ir de compras</td>
-                <td class="text-center"><input type="radio" name="womac_c8" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c8" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c8" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c8" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c8" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C9. Ponerse calcetines/medias -->
-              <tr>
-                <td>9. Ponerse calcetines o medias</td>
-                <td class="text-center"><input type="radio" name="womac_c9" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c9" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c9" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c9" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c9" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C10. Levantarse de la cama -->
-              <tr>
-                <td>10. Levantarse de la cama</td>
-                <td class="text-center"><input type="radio" name="womac_c10" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c10" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c10" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c10" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c10" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C11. Quitarse calcetines/medias -->
-              <tr>
-                <td>11. Quitarse calcetines o medias</td>
-                <td class="text-center"><input type="radio" name="womac_c11" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c11" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c11" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c11" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c11" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C12. Estar acostado en la cama -->
-              <tr>
-                <td>12. Estar acostado en la cama</td>
-                <td class="text-center"><input type="radio" name="womac_c12" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c12" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c12" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c12" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c12" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C13. Entrar/salir de la bañera/ducha -->
-              <tr>
-                <td>13. Entrar o salir de la bañera/ducha</td>
-                <td class="text-center"><input type="radio" name="womac_c13" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c13" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c13" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c13" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c13" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C14. Estar sentado -->
-              <tr>
-                <td>14. Estar sentado</td>
-                <td class="text-center"><input type="radio" name="womac_c14" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c14" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c14" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c14" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c14" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C15. Sentarse y levantarse del inodoro -->
-              <tr>
-                <td>15. Sentarse y levantarse del inodoro</td>
-                <td class="text-center"><input type="radio" name="womac_c15" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c15" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c15" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c15" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c15" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C16. Realizar tareas domésticas pesadas -->
-              <tr>
-                <td>16. Realizar tareas domésticas pesadas</td>
-                <td class="text-center"><input type="radio" name="womac_c16" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c16" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c16" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c16" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c16" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-              
-              <!-- C17. Realizar tareas domésticas ligeras -->
-              <tr>
-                <td>17. Realizar tareas domésticas ligeras</td>
-                <td class="text-center"><input type="radio" name="womac_c17" value="0" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c17" value="1" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c17" value="2" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c17" value="3" onchange="calcularWOMAC()"></td>
-                <td class="text-center"><input type="radio" name="womac_c17" value="4" onchange="calcularWOMAC()"></td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <div class="resultado-container" id="womac-resultado">
-            <div class="form-row">
-              <div class="form-col form-col-md-4">
-                <div class="resultado-label">Puntuación Total:</div>
-                <div class="resultado-valor" id="womac-valor-total">-/96</div>
-                <div class="resultado-interpretacion" id="womac-interpretacion-total">Complete el cuestionario</div>
-              </div>
-              <div class="form-col form-col-md-8">
-                <div class="resultado-label">Subescalas:</div>
-                <div class="form-row">
-                  <div class="form-col form-col-md-4">
-                    <div class="resultado-sublabel">Dolor:</div>
-                    <div class="resultado-valor" id="womac-valor-dolor">-/20</div
+        <div class="form-col form-col-md-8">
+          <div class="resultado-label">Subescalas:</div>
+          <div class="form-row">
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Dolor:</div>
+              <div class="resultado-valor" id="womac-valor-dolor">-/20</div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Rigidez:</div>
+              <div class="resultado-valor" id="womac-valor-rigidez">-/8</div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Función:</div>
+              <div class="resultado-valor" id="womac-valor-funcion">-/68</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="interpretacion-clinica-container mt-3">
+        <h5>Interpretación Clínica:</h5>
+        <div class="interpretacion-clinica" id="womac-interpretacion-clinica">
+          Complete el cuestionario para obtener la interpretación clínica.
+        </div>
+      </div>
+      
+      <div class="recomendaciones-container mt-3">
+        <h5>Recomendaciones Terapéuticas:</h5>
+        <div class="recomendaciones" id="womac-recomendaciones">
+          Complete el cuestionario para obtener recomendaciones terapéuticas.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
     
                   <div class="form-row mt-4">
