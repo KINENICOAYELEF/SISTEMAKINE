@@ -1676,6 +1676,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Inicializar NDI
   calcularNDI();
+
+  // Inicializar QuickDASH 
+  calcularQuickDASH();
   
   // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
