@@ -3425,6 +3425,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Inicializar WOMAC (añadir esta línea)
   calcularWOMAC();
+
+  // Inicializar START MSK Tool (añadir esta línea)
+  calcularStartMSK();
   
   // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
