@@ -3024,6 +3024,364 @@ function calcularWOMAC() {
   }
 }
 
+// Función para calcular el START MSK Tool (Stratified Targeted Treatment Tool for Musculoskeletal Conditions)
+function calcularStartMSK() {
+  console.log("Calculando START MSK Tool...");
+  
+  // Obtener todos los ítems del cuestionario
+  const items = [
+    document.querySelector('input[name="startmsk_item1"]:checked'),
+    document.querySelector('input[name="startmsk_item2"]:checked'),
+    document.querySelector('input[name="startmsk_item3"]:checked'),
+    document.querySelector('input[name="startmsk_item4"]:checked'),
+    document.querySelector('input[name="startmsk_item5"]:checked'),
+    document.querySelector('input[name="startmsk_item6"]:checked'),
+    document.querySelector('input[name="startmsk_item7"]:checked'),
+    document.querySelector('input[name="startmsk_item8"]:checked'),
+    document.querySelector('input[name="startmsk_item9"]:checked'),
+    document.querySelector('input[name="startmsk_item10"]:checked')
+  ];
+  
+  console.log("Items encontrados:", items);
+  
+  // Contar cuántas preguntas han sido respondidas
+  const itemsRespondidos = items.filter(item => item !== null).length;
+  console.log("Items respondidos:", itemsRespondidos);
+  
+  // Verificar si el usuario ha interactuado con el cuestionario
+  const interaccionUsuario = itemsRespondidos > 0;
+  
+  // Si el usuario no ha interactuado con el cuestionario, mostramos "No completado"
+  if (!interaccionUsuario) {
+    if (document.getElementById('startmsk-badge')) {
+      document.getElementById('startmsk-badge').textContent = "No completado";
+      document.getElementById('startmsk-badge').className = "resultado-badge no-completado";
+    }
+    
+    if (document.getElementById('startmsk-interpretacion-total')) {
+      document.getElementById('startmsk-interpretacion-total').textContent = "Complete el cuestionario";
+    }
+    
+    if (document.getElementById('startmsk-interpretacion-clinica')) {
+      document.getElementById('startmsk-interpretacion-clinica').textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    }
+    
+    if (document.getElementById('startmsk-recomendaciones')) {
+      document.getElementById('startmsk-recomendaciones').textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+    }
+    
+    return;
+  }
+  
+  // Para un resultado válido, al menos 8 de 10 preguntas deben ser respondidas
+  const respuestasMinimas = 8;
+  
+  // Si no se han contestado suficientes preguntas, advertir pero continuar calculando
+  let mensajeCompletado = "";
+  if (itemsRespondidos < respuestasMinimas) {
+    mensajeCompletado = " (incompleto - los resultados pueden no ser confiables)";
+  }
+  
+  // Calcular puntuaciones
+  let puntuacionTotal = 0;
+  let puntuacionFisica = 0;
+  let puntuacionPsicosocial = 0;
+  
+  // Sumar valores de los ítems respondidos y dividir por categorías
+  items.forEach((item, index) => {
+    if (item !== null) {
+      const valor = parseInt(item.value);
+      puntuacionTotal += valor;
+      
+      // Los ítems 1-4 son físicos
+      if (index < 4) {
+        puntuacionFisica += valor;
+      } 
+      // Los ítems 5-10 son psicosociales
+      else {
+        puntuacionPsicosocial += valor;
+      }
+    }
+  });
+  
+  console.log("Puntuación física:", puntuacionFisica);
+  console.log("Puntuación psicosocial:", puntuacionPsicosocial);
+  console.log("Puntuación total:", puntuacionTotal);
+  
+  // Determinar el nivel de riesgo basado en la puntuación total
+  let nivelRiesgo = "";
+  let colorBadge = "";
+  let colorClase = "";
+  
+  if (puntuacionTotal <= 3) {
+    nivelRiesgo = "Riesgo bajo";
+    colorBadge = "bajo";
+    colorClase = "nivel-leve";
+  } else if (puntuacionTotal <= 6) {
+    nivelRiesgo = "Riesgo medio";
+    colorBadge = "moderado";
+    colorClase = "nivel-moderado";
+  } else {
+    nivelRiesgo = "Riesgo alto";
+    colorBadge = "alto";
+    colorClase = "nivel-severo";
+  }
+  
+  // Clasificación adicional basada en la subescala psicosocial
+  let riesgoPsicosocial = puntuacionPsicosocial >= 4 ? "elevado" : "bajo";
+  
+  // Actualizar elementos en la página
+  if (document.getElementById('startmsk-valor-total')) {
+    document.getElementById('startmsk-valor-total').textContent = puntuacionTotal + "/10" + mensajeCompletado;
+  }
+  
+  if (document.getElementById('startmsk-valor-fisica')) {
+    document.getElementById('startmsk-valor-fisica').textContent = puntuacionFisica + "/4";
+  }
+  
+  if (document.getElementById('startmsk-valor-psicosocial')) {
+    document.getElementById('startmsk-valor-psicosocial').textContent = puntuacionPsicosocial + "/6 (" + riesgoPsicosocial + ")";
+  }
+  
+  if (document.getElementById('startmsk-interpretacion-total')) {
+    document.getElementById('startmsk-interpretacion-total').textContent = nivelRiesgo;
+    document.getElementById('startmsk-interpretacion-total').className = "resultado-interpretacion " + colorBadge.replace("bajo", "verde").replace("moderado", "amarillo").replace("alto", "rojo");
+  }
+  
+  // Actualizar estado del badge
+  if (document.getElementById('startmsk-badge')) {
+    document.getElementById('startmsk-badge').textContent = nivelRiesgo;
+    document.getElementById('startmsk-badge').className = "resultado-badge completado " + colorBadge;
+  }
+  
+  // Actualizar el contenedor de resultados con la clase de color
+  const resultadoContainer = document.getElementById('startmsk-resultado');
+  if (resultadoContainer) {
+    resultadoContainer.className = "resultado-container " + colorClase;
+  }
+  
+  // Generar interpretación clínica basada en la puntuación
+  let interpretacionClinica = "";
+  
+  if (puntuacionTotal <= 3) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/10</strong> en el START MSK Tool, indicando un <strong>riesgo bajo</strong> de desarrollar dolor persistente y problemas funcionales a largo plazo.</p>
+      <p>Puntuaciones por subescalas:</p>
+      <ul>
+        <li><strong>Subescala física:</strong> ${puntuacionFisica}/4 - ${puntuacionFisica <= 1 ? "Bajo impacto físico" : "Impacto físico moderado"}</li>
+        <li><strong>Subescala psicosocial:</strong> ${puntuacionPsicosocial}/6 - ${riesgoPsicosocial === "elevado" ? "<span class='text-danger'>Riesgo psicosocial elevado</span>" : "Riesgo psicosocial bajo"}</li>
+      </ul>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta un cuadro predominantemente biomecánico/nociceptivo</li>
+        <li>Tiene bajos niveles de factores psicosociales de mal pronóstico</li>
+        <li>Es probable que responda bien a un tratamiento fisioterapéutico estándar</li>
+        <li>Tiene buen pronóstico para la recuperación con intervención adecuada</li>
+        <li>Presenta pocos signos de sensibilización central o dolor generalizado</li>
+        ${riesgoPsicosocial === "elevado" ? "<li>Sin embargo, presenta algunos factores psicosociales que deben ser monitorizados durante el tratamiento</li>" : ""}
+      </ul>
+    `;
+  } else if (puntuacionTotal <= 6) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/10</strong> en el START MSK Tool, indicando un <strong>riesgo medio</strong> de desarrollar dolor persistente y problemas funcionales a largo plazo.</p>
+      <p>Puntuaciones por subescalas:</p>
+      <ul>
+        <li><strong>Subescala física:</strong> ${puntuacionFisica}/4 - ${puntuacionFisica <= 1 ? "Bajo impacto físico" : puntuacionFisica <= 2 ? "Impacto físico moderado" : "Impacto físico significativo"}</li>
+        <li><strong>Subescala psicosocial:</strong> ${puntuacionPsicosocial}/6 - ${riesgoPsicosocial === "elevado" ? "<span class='text-danger'>Riesgo psicosocial elevado</span>" : "Riesgo psicosocial bajo"}</li>
+      </ul>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta una combinación de factores biomecánicos/nociceptivos y psicosociales</li>
+        <li>${riesgoPsicosocial === "elevado" ? "Muestra factores psicosociales significativos que pueden complicar su recuperación" : "Presenta principalmente factores físicos que contribuyen a su condición"}</li>
+        <li>Requiere un enfoque terapéutico que aborde tanto los aspectos físicos como los psicosociales</li>
+        <li>Puede beneficiarse de una intervención más intensiva que el tratamiento estándar</li>
+        <li>Podría mostrar signos tempranos de sensibilización o dolor más generalizado</li>
+        <li>Es importante monitorizar la evolución y adaptar el tratamiento según la respuesta</li>
+      </ul>
+    `;
+  } else {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación de <strong>${puntuacionTotal}/10</strong> en el START MSK Tool, indicando un <strong>riesgo alto</strong> de desarrollar dolor persistente y problemas funcionales a largo plazo.</p>
+      <p>Puntuaciones por subescalas:</p>
+      <ul>
+        <li><strong>Subescala física:</strong> ${puntuacionFisica}/4 - ${puntuacionFisica <= 2 ? "Impacto físico moderado" : "Impacto físico significativo"}</li>
+        <li><strong>Subescala psicosocial:</strong> ${puntuacionPsicosocial}/6 - ${riesgoPsicosocial === "elevado" ? "<span class='text-danger'>Riesgo psicosocial elevado</span>" : "Riesgo psicosocial significativo a pesar de no alcanzar el umbral"}</li>
+      </ul>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta una condición compleja con factores de riesgo significativos para cronificación</li>
+        <li>Muestra una combinación de factores físicos y psicosociales que necesitan abordaje integrado</li>
+        <li>Es probable que presente signos de sensibilización central o dolor generalizado</li>
+        <li>Puede tener factores de catastrofización, miedo-evitación o ansiedad/depresión que complican el cuadro</li>
+        <li>Requiere un abordaje multidisciplinar y estratificado para optimizar resultados</li>
+        <li>Podría beneficiarse de una intervención psicológica específica como parte del tratamiento</li>
+        <li>Necesita establecer objetivos realistas y un plan terapéutico a más largo plazo</li>
+      </ul>
+    `;
+  }
+  
+  // Generar recomendaciones terapéuticas
+  let recomendaciones = "";
+  
+  if (puntuacionTotal <= 3) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica dirigida a la región afectada</li>
+          <li>Identificación de factores contribuyentes biomecánicos específicos</li>
+          <li>Valoración de patrones de movimiento y control motor</li>
+          <li>Análisis de cargas y demandas funcionales</li>
+          <li>Identificación de factores desencadenantes y perpetuantes</li>
+          <li>Evaluación básica de factores ergonómicos y posturales</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Tratamiento fisioterapéutico estándar (nivel de evidencia 1A)</li>
+          <li>Ejercicio terapéutico dirigido a la disfunción específica (nivel de evidencia 1A)</li>
+          <li>Terapia manual según hallazgos biomecánicos (nivel de evidencia 1B)</li>
+          <li>Educación sobre el proceso de recuperación y autogestión (nivel de evidencia 1A)</li>
+          <li>Corrección de patrones de movimiento alterados (nivel de evidencia 1B)</li>
+          <li>Recomendaciones para mantener actividad física general (nivel de evidencia 1A)</li>
+          ${riesgoPsicosocial === "elevado" ? "<li>Incluir componentes básicos para abordar factores psicosociales identificados (nivel de evidencia 1A)</li>" : ""}
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Explicación clara de la naturaleza del problema y su pronóstico favorable</li>
+          <li>Importancia de mantener actividad física y evitar el reposo excesivo</li>
+          <li>Estrategias de autocuidado y control de síntomas</li>
+          <li>Reconocimiento y manejo de factores desencadenantes</li>
+          <li>Establecimiento de expectativas realistas sobre el tiempo de recuperación</li>
+          <li>Importancia de la adherencia al programa de ejercicios</li>
+          ${riesgoPsicosocial === "elevado" ? "<li>Reconocimiento del impacto de los factores psicosociales en el dolor y la recuperación</li>" : ""}
+        </ul>
+      </div>
+    `;
+  } else if (puntuacionTotal <= 6) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica completa de la región afectada y áreas relacionadas</li>
+          <li>Valoración específica de factores psicosociales identificados</li>
+          <li>Análisis de factores funcionales y limitaciones en actividades</li>
+          <li>Identificación de creencias y comportamientos relacionados con el dolor</li>
+          <li>Evaluación de factores ergonómicos y ocupacionales</li>
+          <li>Valoración de posibles signos de sensibilización</li>
+          <li>Exploración de barreras potenciales para la recuperación</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Abordaje combinado físico y psicosocial (nivel de evidencia 1A)</li>
+          <li>Programa de ejercicio terapéutico específico y progresivo (nivel de evidencia 1A)</li>
+          <li>Terapia manual adaptada a los hallazgos específicos (nivel de evidencia 1B)</li>
+          <li>Estrategias de control del dolor basadas en la neurociencia (nivel de evidencia 1A)</li>
+          <li>Técnicas de exposición gradual a actividades temidas o evitadas (nivel de evidencia 1A)</li>
+          <li>Reentrenamiento funcional para actividades específicas (nivel de evidencia 1A)</li>
+          <li>Entrenamiento del control motor y estabilidad (nivel de evidencia 1B)</li>
+          ${riesgoPsicosocial === "elevado" ? "<li>Incorporar elementos de intervención cognitivo-conductual para factores psicosociales (nivel de evidencia 1A)</li>" : ""}
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación en neurociencia del dolor para modificar creencias maladaptativas</li>
+          <li>Explicación de la relación bidireccional entre factores físicos y psicosociales</li>
+          <li>Estrategias de afrontamiento activo del dolor</li>
+          <li>Técnicas de autogestión y resolución de problemas</li>
+          <li>Importancia del pacing de actividades y conservación de energía</li>
+          <li>Establecimiento de objetivos realistas a corto y medio plazo</li>
+          <li>Reconocimiento y manejo de exacerbaciones</li>
+          ${riesgoPsicosocial === "elevado" ? "<li>Estrategias específicas para manejar la ansiedad, catastrofización o miedo relacionados con el dolor</li>" : ""}
+        </ul>
+      </div>
+    `;
+  } else {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación multidimensional biopsicosocial completa</li>
+          <li>Valoración detallada de factores psicosociales y su impacto en la funcionalidad</li>
+          <li>Análisis de posibles mecanismos de sensibilización central</li>
+          <li>Identificación de patrones de evitación y comportamientos maladaptativos</li>
+          <li>Evaluación de impacto funcional en múltiples dimensiones de la vida</li>
+          <li>Valoración de posibles comorbilidades y su influencia recíproca</li>
+          <li>Exploración de factores contextuales y de soporte social</li>
+          <li>Evaluación de calidad del sueño y su relación con los síntomas</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Abordaje multidisciplinar coordinado (nivel de evidencia 1A)</li>
+          <li>Programa integrado de fisioterapia con componentes cognitivo-conductuales (nivel de evidencia 1A)</li>
+          <li>Exposición gradual y sistemática a actividades temidas (nivel de evidencia 1A)</li>
+          <li>Ejercicio terapéutico con progresión adaptada y enfoque funcional (nivel de evidencia 1A)</li>
+          <li>Técnicas específicas para modulación del dolor (nivel de evidencia 1B)</li>
+          <li>Estrategias de desensibilización para áreas hipersensibles (nivel de evidencia 1B)</li>
+          <li>Intervenciones dirigidas al manejo del estrés y regulación emocional (nivel de evidencia 1A)</li>
+          <li>Técnicas de control de la atención y mindfulness aplicado al dolor (nivel de evidencia 1A)</li>
+          <li>Terapia manual como componente complementario, no central (nivel de evidencia 1B)</li>
+          <li>Plan estructurado de retorno gradual a actividades funcionales (nivel de evidencia 1A)</li>
+          <li>Considerar derivación a psicología para intervención específica si es necesario (nivel de evidencia 1A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación intensiva en neurociencia del dolor y sensibilización central</li>
+          <li>Reconceptualización del dolor y su significado</li>
+          <li>Estrategias avanzadas de autogestión y regulación emocional</li>
+          <li>Técnicas específicas para manejar la catastrofización y pensamientos negativos</li>
+          <li>Importancia del pacing y establecimiento de límites saludables</li>
+          <li>Manejo de la incertidumbre y aceptación en el proceso terapéutico</li>
+          <li>Establecimiento de valores y objetivos funcionales significativos</li>
+          <li>Estrategias para mejorar la calidad del sueño y manejo del estrés</li>
+          <li>Comunicación efectiva con familiares y entorno laboral</li>
+          <li>Plan específico para prevención y manejo de recaídas</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Consideraciones adicionales:</h6>
+        <ul>
+          <li>Establecer plan de tratamiento a más largo plazo con objetivos progresivos</li>
+          <li>Considerar derivación a especialista en dolor en casos refractarios</li>
+          <li>Involucrar a familiares/cuidadores en el proceso terapéutico</li>
+          <li>Monitorización regular utilizando medidas de resultado centradas en el paciente</li>
+          <li>Coordinar con otros profesionales cuando sea necesario (médico, psicólogo, terapeuta ocupacional)</li>
+        </ul>
+      </div>
+    `;
+  }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  const interpretacionClinicaEl = document.getElementById('startmsk-interpretacion-clinica');
+  if (interpretacionClinicaEl) {
+    interpretacionClinicaEl.innerHTML = interpretacionClinica;
+    console.log("Interpretación clínica actualizada");
+  }
+  
+  const recomendacionesEl = document.getElementById('startmsk-recomendaciones');
+  if (recomendacionesEl) {
+    recomendacionesEl.innerHTML = recomendaciones;
+    console.log("Recomendaciones actualizadas");
+  }
+}
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
