@@ -9297,6 +9297,548 @@
     </div>
   </div>
 </div>
+
+    <!-- Cuestionario KOOS (Knee Injury and Osteoarthritis Outcome Score) -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('koos-content')">
+    <h4><i class="fas fa-plus-circle"></i> Cuestionario KOOS (Función y Síntomas de Rodilla)</h4>
+    <div class="resultado-badge" id="koos-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="koos-content" style="display: none;">
+    <p class="mb-3">Este cuestionario evalúa su percepción sobre su rodilla y su capacidad para realizar actividades cotidianas. Responda cada pregunta seleccionando la opción que mejor describa su situación durante la última semana.</p>
+    
+    <!-- Sección de Síntomas y Rigidez -->
+    <h5 class="mt-4 mb-3">S. SÍNTOMAS Y RIGIDEZ</h5>
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">Pregunta</th>
+          <th>Ninguno</th>
+          <th>Leve</th>
+          <th>Moderado</th>
+          <th>Severo</th>
+          <th>Extremo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- S1. Hinchazón -->
+        <tr>
+          <td>S1. ¿Ha notado hinchazón en la rodilla?</td>
+          <td class="text-center"><input type="radio" name="koos_s1" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s1" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s1" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s1" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s1" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- S2. Crujidos o chasquidos -->
+        <tr>
+          <td>S2. ¿Ha sentido crujidos, chasquidos u otro tipo de ruidos al mover la rodilla?</td>
+          <td class="text-center"><input type="radio" name="koos_s2" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s2" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s2" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s2" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s2" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- S3. Bloqueo de rodilla -->
+        <tr>
+          <td>S3. ¿Le ha ocurrido que la rodilla se bloquee o quede atascada al moverla?</td>
+          <td class="text-center"><input type="radio" name="koos_s3" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s3" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s3" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s3" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s3" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- S4. Extensión completa -->
+        <tr>
+          <td>S4. ¿Puede extender la rodilla completamente?</td>
+          <td class="text-center"><input type="radio" name="koos_s4" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s4" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s4" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s4" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s4" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- S5. Flexión completa -->
+        <tr>
+          <td>S5. ¿Puede doblar la rodilla completamente?</td>
+          <td class="text-center"><input type="radio" name="koos_s5" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s5" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s5" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s5" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s5" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- S6. Rigidez por la mañana -->
+        <tr>
+          <td>S6. ¿Cuánta rigidez nota en su rodilla al despertar por la mañana?</td>
+          <td class="text-center"><input type="radio" name="koos_s6" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s6" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s6" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s6" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s6" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- S7. Rigidez al estar sentado -->
+        <tr>
+          <td>S7. ¿Cuánta rigidez nota en su rodilla después de estar sentado o descansando durante el día?</td>
+          <td class="text-center"><input type="radio" name="koos_s7" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s7" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s7" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s7" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_s7" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Sección de Dolor -->
+    <h5 class="mt-4 mb-3">P. DOLOR</h5>
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">¿Cuánto dolor ha notado en su rodilla?</th>
+          <th>Ninguno</th>
+          <th>Leve</th>
+          <th>Moderado</th>
+          <th>Severo</th>
+          <th>Extremo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- P1. Frecuencia del dolor -->
+        <tr>
+          <td>P1. ¿Con qué frecuencia nota dolor en la rodilla?</td>
+          <td class="text-center"><input type="radio" name="koos_p1" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p1" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p1" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p1" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p1" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- P2. Girar sobre la rodilla -->
+        <tr>
+          <td>P2. Al girar o pivotar sobre la rodilla</td>
+          <td class="text-center"><input type="radio" name="koos_p2" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p2" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p2" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p2" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p2" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- P3. Extender completamente -->
+        <tr>
+          <td>P3. Al extender completamente la rodilla</td>
+          <td class="text-center"><input type="radio" name="koos_p3" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p3" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p3" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p3" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p3" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- P4. Flexionar completamente -->
+        <tr>
+          <td>P4. Al flexionar completamente la rodilla</td>
+          <td class="text-center"><input type="radio" name="koos_p4" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p4" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p4" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p4" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p4" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- P5. Caminar en superficie plana -->
+        <tr>
+          <td>P5. Al caminar sobre una superficie plana</td>
+          <td class="text-center"><input type="radio" name="koos_p5" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p5" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p5" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p5" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p5" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- P6. Subir o bajar escaleras -->
+        <tr>
+          <td>P6. Al subir o bajar escaleras</td>
+          <td class="text-center"><input type="radio" name="koos_p6" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p6" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p6" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p6" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p6" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- P7. Por la noche en la cama -->
+        <tr>
+          <td>P7. Por la noche en la cama</td>
+          <td class="text-center"><input type="radio" name="koos_p7" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p7" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p7" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p7" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p7" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- P8. Sentado o tumbado -->
+        <tr>
+          <td>P8. Al estar sentado o tumbado</td>
+          <td class="text-center"><input type="radio" name="koos_p8" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p8" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p8" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p8" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p8" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- P9. De pie -->
+        <tr>
+          <td>P9. Al estar de pie</td>
+          <td class="text-center"><input type="radio" name="koos_p9" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p9" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p9" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p9" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_p9" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Sección de Actividades de la Vida Diaria -->
+    <h5 class="mt-4 mb-3">A. ACTIVIDADES DE LA VIDA DIARIA</h5>
+    <p>Las siguientes preguntas tratan sobre su nivel de funcionamiento en las actividades cotidianas. Indique el grado de dificultad que ha experimentado a causa de su rodilla.</p>
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">Actividad</th>
+          <th>Ninguna</th>
+          <th>Leve</th>
+          <th>Moderada</th>
+          <th>Severa</th>
+          <th>Extrema</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- A1. Bajar escaleras -->
+        <tr>
+          <td>A1. Bajar escaleras</td>
+          <td class="text-center"><input type="radio" name="koos_a1" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a1" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a1" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a1" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a1" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A2. Subir escaleras -->
+        <tr>
+          <td>A2. Subir escaleras</td>
+          <td class="text-center"><input type="radio" name="koos_a2" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a2" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a2" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a2" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a2" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A3. Levantarse de una silla -->
+        <tr>
+          <td>A3. Levantarse de una silla</td>
+          <td class="text-center"><input type="radio" name="koos_a3" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a3" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a3" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a3" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a3" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A4. Estar de pie -->
+        <tr>
+          <td>A4. Permanecer de pie</td>
+          <td class="text-center"><input type="radio" name="koos_a4" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a4" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a4" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a4" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a4" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A5. Agacharse/recoger del suelo -->
+        <tr>
+          <td>A5. Agacharse/recoger algo del suelo</td>
+          <td class="text-center"><input type="radio" name="koos_a5" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a5" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a5" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a5" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a5" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A6. Caminar en superficie plana -->
+        <tr>
+          <td>A6. Caminar sobre una superficie plana</td>
+          <td class="text-center"><input type="radio" name="koos_a6" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a6" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a6" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a6" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a6" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A7. Entrar/salir del coche -->
+        <tr>
+          <td>A7. Entrar/salir de un coche</td>
+          <td class="text-center"><input type="radio" name="koos_a7" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a7" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a7" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a7" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a7" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A8. Ir de compras -->
+        <tr>
+          <td>A8. Ir de compras</td>
+          <td class="text-center"><input type="radio" name="koos_a8" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a8" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a8" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a8" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a8" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A9. Ponerse los calcetines/medias -->
+        <tr>
+          <td>A9. Ponerse los calcetines/medias</td>
+          <td class="text-center"><input type="radio" name="koos_a9" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a9" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a9" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a9" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a9" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A10. Levantarse de la cama -->
+        <tr>
+          <td>A10. Levantarse de la cama</td>
+          <td class="text-center"><input type="radio" name="koos_a10" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a10" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a10" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a10" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a10" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A11. Quitarse los calcetines/medias -->
+        <tr>
+          <td>A11. Quitarse los calcetines/medias</td>
+          <td class="text-center"><input type="radio" name="koos_a11" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a11" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a11" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a11" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a11" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A12. Tumbarse en la cama -->
+        <tr>
+          <td>A12. Tumbarse en la cama</td>
+          <td class="text-center"><input type="radio" name="koos_a12" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a12" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a12" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a12" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a12" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A13. Entrar/salir de la bañera -->
+        <tr>
+          <td>A13. Entrar/salir de la bañera</td>
+          <td class="text-center"><input type="radio" name="koos_a13" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a13" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a13" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a13" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a13" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A14. Sentarse -->
+        <tr>
+          <td>A14. Sentarse</td>
+          <td class="text-center"><input type="radio" name="koos_a14" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a14" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a14" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a14" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a14" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A15. Sentarse/levantarse del inodoro -->
+        <tr>
+          <td>A15. Sentarse/levantarse del inodoro</td>
+          <td class="text-center"><input type="radio" name="koos_a15" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a15" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a15" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a15" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a15" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A16. Tareas domésticas pesadas -->
+        <tr>
+          <td>A16. Realizar tareas domésticas pesadas (mover cajas pesadas, fregar suelos, etc.)</td>
+          <td class="text-center"><input type="radio" name="koos_a16" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a16" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a16" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a16" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a16" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- A17. Tareas domésticas ligeras -->
+        <tr>
+          <td>A17. Realizar tareas domésticas ligeras (cocinar, quitar el polvo, etc.)</td>
+          <td class="text-center"><input type="radio" name="koos_a17" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a17" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a17" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a17" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_a17" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Sección de Deportes y Actividades Recreativas -->
+    <h5 class="mt-4 mb-3">SP. DEPORTES Y ACTIVIDADES RECREATIVAS</h5>
+    <p>Las siguientes preguntas se refieren a su capacidad física cuando realiza actividades más exigentes. Responda según su experiencia durante la última semana.</p>
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">Actividad</th>
+          <th>Ninguna</th>
+          <th>Leve</th>
+          <th>Moderada</th>
+          <th>Severa</th>
+          <th>Extrema</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- SP1. Ponerse en cuclillas -->
+        <tr>
+          <td>SP1. Ponerse en cuclillas</td>
+          <td class="text-center"><input type="radio" name="koos_sp1" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp1" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp1" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp1" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp1" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- SP2. Correr -->
+        <tr>
+          <td>SP2. Correr</td>
+          <td class="text-center"><input type="radio" name="koos_sp2" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp2" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp2" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp2" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp2" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- SP3. Saltar -->
+        <tr>
+          <td>SP3. Saltar</td>
+          <td class="text-center"><input type="radio" name="koos_sp3" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp3" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp3" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp3" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp3" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- SP4. Girar sobre la rodilla -->
+        <tr>
+          <td>SP4. Girar o pivotar sobre la rodilla afectada</td>
+          <td class="text-center"><input type="radio" name="koos_sp4" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp4" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp4" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp4" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp4" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- SP5. Arrodillarse -->
+        <tr>
+          <td>SP5. Arrodillarse</td>
+          <td class="text-center"><input type="radio" name="koos_sp5" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp5" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp5" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp5" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_sp5" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Sección de Calidad de Vida -->
+    <h5 class="mt-4 mb-3">Q. CALIDAD DE VIDA</h5>
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">Pregunta</th>
+          <th>Nunca</th>
+          <th>Mensualmente</th>
+          <th>Semanalmente</th>
+          <th>Diariamente</th>
+          <th>Constantemente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Q1. Consciente de su problema de rodilla -->
+        <tr>
+          <td>Q1. ¿Con qué frecuencia es consciente de su problema de rodilla?</td>
+          <td class="text-center"><input type="radio" name="koos_q1" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q1" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q1" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q1" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q1" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">Pregunta</th>
+          <th>Nada</th>
+          <th>Ligeramente</th>
+          <th>Moderadamente</th>
+          <th>Gravemente</th>
+          <th>Totalmente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Q2. Modificar su estilo de vida -->
+        <tr>
+          <td>Q2. ¿Ha modificado su estilo de vida para evitar actividades que podrían dañar su rodilla?</td>
+          <td class="text-center"><input type="radio" name="koos_q2" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q2" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q2" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q2" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q2" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- Q3. Preocupación por falta de confianza -->
+        <tr>
+          <td>Q3. ¿Cuánta preocupación siente por la falta de confianza en su rodilla?</td>
+          <td class="text-center"><input type="radio" name="koos_q3" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q3" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q3" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q3" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q3" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+        <!-- Q4. Dificultades generales por la rodilla -->
+        <tr>
+          <td>Q4. En general, ¿cuánta dificultad le supone su rodilla?</td>
+          <td class="text-center"><input type="radio" name="koos_q4" value="0" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q4" value="1" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q4" value="2" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q4" value="3" onchange="calcularKOOS()"></td>
+          <td class="text-center"><input type="radio" name="koos_q4" value="4" onchange="calcularKOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="resultado-container" id="koos-resultado">
+      <div class="form-row">
+        <div class="form-col form-col-md-4">
+          <div class="resultado-label">Puntuación Total:</div>
+          <div class="resultado-valor" id="koos-valor-total">-%</div>
+          <div class="resultado-interpretacion" id="koos-interpretacion-total">Complete el cuestionario</div>
+        </div>
+        <div class="form-col form-col-md-8">
+          <div class="resultado-label">Subescalas:</div>
+          <div class="form-row">
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Dolor:</div>
+              <div class="resultado-valor" id="koos-valor-dolor">-%</div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Síntomas:</div>
+              <div class="resultado-valor" id="koos-valor-sintomas">-%</div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">AVD:</div>
+              <div class="resultado-valor" id="koos-valor-avd">-%</div>
+            </div>
+          </div>
+          <div class="form-row mt-2">
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Deporte:</div>
+              <div class="resultado-valor" id="koos-valor-deporte">-%</div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Calidad de vida:</div>
+              <div class="resultado-valor" id="koos-valor-qol">-%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="interpretacion-clinica-container mt-3">
+        <h5>Interpretación Clínica:</h5>
+        <div class="interpretacion-clinica" id="koos-interpretacion-clinica">
+          Complete el cuestionario para obtener la interpretación clínica.
+        </div>
+      </div>
+      
+      <div class="recomendaciones-container mt-3">
+        <h5>Recomendaciones Terapéuticas:</h5>
+        <div class="recomendaciones" id="koos-recomendaciones">
+          Complete el cuestionario para obtener recomendaciones terapéuticas.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
     
                   <div class="form-row mt-4">
                     <div class="form-col form-col-md-12">
