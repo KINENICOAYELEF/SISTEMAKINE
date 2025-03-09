@@ -1648,6 +1648,343 @@ function calcularQuickDASH() {
   }
 }
 
+// Función para calcular el puntaje del SPADI
+function calcularSPADI() {
+  console.log("Calculando SPADI...");
+  
+  // Obtener los ítems de dolor
+  const itemsDolor = [
+    document.querySelector('input[name="spadi_dolor1"]:checked'),
+    document.querySelector('input[name="spadi_dolor2"]:checked'),
+    document.querySelector('input[name="spadi_dolor3"]:checked'),
+    document.querySelector('input[name="spadi_dolor4"]:checked'),
+    document.querySelector('input[name="spadi_dolor5"]:checked')
+  ];
+  
+  // Obtener los ítems de discapacidad
+  const itemsDiscapacidad = [
+    document.querySelector('input[name="spadi_discap1"]:checked'),
+    document.querySelector('input[name="spadi_discap2"]:checked'),
+    document.querySelector('input[name="spadi_discap3"]:checked'),
+    document.querySelector('input[name="spadi_discap4"]:checked'),
+    document.querySelector('input[name="spadi_discap5"]:checked'),
+    document.querySelector('input[name="spadi_discap6"]:checked'),
+    document.querySelector('input[name="spadi_discap7"]:checked'),
+    document.querySelector('input[name="spadi_discap8"]:checked')
+  ];
+  
+  console.log("Ítems de dolor encontrados:", itemsDolor);
+  console.log("Ítems de discapacidad encontrados:", itemsDiscapacidad);
+  
+  // Contar los ítems respondidos
+  const dolorRespondidos = itemsDolor.filter(item => item !== null).length;
+  const discapacidadRespondidos = itemsDiscapacidad.filter(item => item !== null).length;
+  const totalRespondidos = dolorRespondidos + discapacidadRespondidos;
+  
+  console.log("Ítems de dolor respondidos:", dolorRespondidos);
+  console.log("Ítems de discapacidad respondidos:", discapacidadRespondidos);
+  
+  // El cuestionario debe tener al menos 10 de 13 ítems respondidos (80%) para ser válido
+  const respuestasMinimas = 10;
+  
+  // Si no hay suficientes respuestas, marcar como no completado
+  if (totalRespondidos < respuestasMinimas) {
+    if (document.getElementById('spadi-badge')) {
+      document.getElementById('spadi-badge').textContent = "No completado";
+      document.getElementById('spadi-badge').className = "resultado-badge no-completado";
+    }
+    
+    if (document.getElementById('spadi-interpretacion-total')) {
+      document.getElementById('spadi-interpretacion-total').textContent = "Complete al menos 10 preguntas";
+    }
+    if (document.getElementById('spadi-interpretacion-clinica')) {
+      document.getElementById('spadi-interpretacion-clinica').textContent = "Complete el cuestionario para obtener la interpretación clínica.";
+    }
+    if (document.getElementById('spadi-recomendaciones')) {
+      document.getElementById('spadi-recomendaciones').textContent = "Complete el cuestionario para obtener recomendaciones terapéuticas.";
+    }
+    
+    return;
+  }
+  
+  // Calcular puntuaciones
+  // Para cada sección, se suma el valor y se divide por el máximo posible (considerando solo preguntas respondidas)
+  
+  // Calcular puntuación de dolor
+  let sumaDolor = 0;
+  itemsDolor.forEach(item => {
+    if (item !== null) {
+      sumaDolor += parseInt(item.value);
+    }
+  });
+  const puntuacionDolor = (sumaDolor / (dolorRespondidos * 10)) * 100;
+  console.log("Puntuación de dolor:", puntuacionDolor);
+  
+  // Calcular puntuación de discapacidad
+  let sumaDiscapacidad = 0;
+  itemsDiscapacidad.forEach(item => {
+    if (item !== null) {
+      sumaDiscapacidad += parseInt(item.value);
+    }
+  });
+  const puntuacionDiscapacidad = (sumaDiscapacidad / (discapacidadRespondidos * 10)) * 100;
+  console.log("Puntuación de discapacidad:", puntuacionDiscapacidad);
+  
+  // Calcular puntuación total del SPADI (promedio de las dos subescalas)
+  const puntuacionTotal = (puntuacionDolor + puntuacionDiscapacidad) / 2;
+  const puntuacionRedondeada = Math.round(puntuacionTotal * 10) / 10; // Redondear a 1 decimal
+  console.log("Puntuación total SPADI:", puntuacionRedondeada);
+  
+  // Determinar el nivel de afectación
+  let nivelAfectacion = "";
+  let colorBadge = "";
+  let colorClase = "";
+  
+  if (puntuacionRedondeada < 30) {
+    nivelAfectacion = "Afectación leve";
+    colorBadge = "bajo";
+    colorClase = "nivel-leve";
+  } else if (puntuacionRedondeada < 60) {
+    nivelAfectacion = "Afectación moderada";
+    colorBadge = "moderado";
+    colorClase = "nivel-moderado";
+  } else {
+    nivelAfectacion = "Afectación severa";
+    colorBadge = "alto";
+    colorClase = "nivel-severo";
+  }
+  
+  // Actualizar elementos en la página
+  if (document.getElementById('spadi-valor-total')) {
+    document.getElementById('spadi-valor-total').textContent = puntuacionRedondeada.toFixed(1) + "/100";
+  }
+  
+  if (document.getElementById('spadi-valor-dolor')) {
+    document.getElementById('spadi-valor-dolor').textContent = Math.round(puntuacionDolor * 10) / 10 + "%";
+  }
+  
+  if (document.getElementById('spadi-valor-discapacidad')) {
+    document.getElementById('spadi-valor-discapacidad').textContent = Math.round(puntuacionDiscapacidad * 10) / 10 + "%";
+  }
+  
+  if (document.getElementById('spadi-interpretacion-total')) {
+    document.getElementById('spadi-interpretacion-total').textContent = nivelAfectacion;
+    document.getElementById('spadi-interpretacion-total').className = "resultado-interpretacion " + colorBadge.replace("bajo", "verde").replace("moderado", "amarillo").replace("alto", "rojo");
+  }
+  
+  // Actualizar el contenedor de resultados con la clase de color
+  const resultadoContainer = document.getElementById('spadi-resultado');
+  if (resultadoContainer) {
+    resultadoContainer.className = "resultado-container " + colorClase;
+  }
+  
+  // Actualizar estado del badge
+  if (document.getElementById('spadi-badge')) {
+    document.getElementById('spadi-badge').textContent = nivelAfectacion;
+    document.getElementById('spadi-badge').className = "resultado-badge completado " + colorBadge;
+  }
+  
+  // Generar interpretación clínica basada en la puntuación
+  let interpretacionClinica = "";
+  
+  if (puntuacionRedondeada < 30) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación SPADI de <strong>${puntuacionRedondeada.toFixed(1)}/100</strong>, indicando una <strong>afectación leve</strong> del hombro, con una puntuación de dolor de ${Math.round(puntuacionDolor * 10) / 10}% y una puntuación de discapacidad funcional de ${Math.round(puntuacionDiscapacidad * 10) / 10}%.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Presenta molestias leves a moderadas en el hombro que le permiten realizar la mayoría de actividades cotidianas</li>
+        <li>Experimenta ciertas limitaciones específicas, principalmente en actividades que involucran movimientos por encima de la cabeza o que requieren fuerza</li>
+        <li>Mantiene un buen nivel de funcionalidad general a pesar de las molestias</li>
+        <li>Es probable que responda bien a intervenciones conservadoras dirigidas a los factores biomecánicos específicos</li>
+      </ul>
+      <p>La diferencia entre las escalas de dolor (${Math.round(puntuacionDolor * 10) / 10}%) y discapacidad (${Math.round(puntuacionDiscapacidad * 10) / 10}%) ${Math.abs(puntuacionDolor - puntuacionDiscapacidad) > 15 ? 'muestra una discrepancia significativa, lo que sugiere que ' + (puntuacionDolor > puntuacionDiscapacidad ? 'el dolor es desproporcionado respecto a la limitación funcional' : 'el paciente ha desarrollado estrategias compensatorias a pesar del dolor') : 'muestra coherencia entre la experiencia de dolor y la limitación funcional'}.</p>
+    `;
+  } else if (puntuacionRedondeada < 60) {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación SPADI de <strong>${puntuacionRedondeada.toFixed(1)}/100</strong>, indicando una <strong>afectación moderada</strong> del hombro, con una puntuación de dolor de ${Math.round(puntuacionDolor * 10) / 10}% y una puntuación de discapacidad funcional de ${Math.round(puntuacionDiscapacidad * 10) / 10}%.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta dolor significativo en el hombro que interfiere con varias actividades cotidianas</li>
+        <li>Presenta limitaciones funcionales moderadas, particularmente en actividades que requieren elevación del brazo, movilidad completa o fuerza</li>
+        <li>Puede tener dificultades con actividades de autocuidado como vestirse o lavarse</li>
+        <li>Probablemente ha modificado la forma en que realiza algunas actividades para adaptarse a sus limitaciones</li>
+        <li>Es posible que presente alteraciones en patrones de movimiento y compensaciones posturales</li>
+      </ul>
+      <p>La diferencia entre las escalas de dolor (${Math.round(puntuacionDolor * 10) / 10}%) y discapacidad (${Math.round(puntuacionDiscapacidad * 10) / 10}%) ${Math.abs(puntuacionDolor - puntuacionDiscapacidad) > 15 ? 'muestra una discrepancia significativa, lo que sugiere que ' + (puntuacionDolor > puntuacionDiscapacidad ? 'el dolor es el síntoma predominante y puede haber componentes de sensibilización' : 'existen factores mecánicos o estructurales que limitan la función más allá del dolor experimentado') : 'indica una correlación clínica normal entre dolor y limitación funcional'}.</p>
+    `;
+  } else {
+    interpretacionClinica = `
+      <p>El paciente presenta una puntuación SPADI de <strong>${puntuacionRedondeada.toFixed(1)}/100</strong>, indicando una <strong>afectación severa</strong> del hombro, con una puntuación de dolor de ${Math.round(puntuacionDolor * 10) / 10}% y una puntuación de discapacidad funcional de ${Math.round(puntuacionDiscapacidad * 10) / 10}%.</p>
+      <p>Esta puntuación sugiere que el paciente:</p>
+      <ul>
+        <li>Experimenta dolor intenso en el hombro que limita sustancialmente su función diaria</li>
+        <li>Presenta dificultades significativas para realizar actividades básicas de autocuidado</li>
+        <li>Tiene limitaciones importantes en actividades como vestirse, bañarse y otras tareas cotidianas</li>
+        <li>Probablemente ha desarrollado patrones de movimiento compensatorios importantes</li>
+        <li>Puede presentar impacto emocional asociado a la limitación funcional</li>
+        <li>Es posible que tenga alteraciones del sueño debido al dolor nocturno o posicional</li>
+        <li>Puede requerir asistencia para ciertas actividades que involucran el hombro afectado</li>
+      </ul>
+      <p>La diferencia entre las escalas de dolor (${Math.round(puntuacionDolor * 10) / 10}%) y discapacidad (${Math.round(puntuacionDiscapacidad * 10) / 10}%) ${Math.abs(puntuacionDolor - puntuacionDiscapacidad) > 15 ? 'muestra una discrepancia significativa, lo que sugiere que ' + (puntuacionDolor > puntuacionDiscapacidad ? 'hay un componente importante de sensibilización que amplifica la experiencia dolorosa' : 'existen restricciones mecánicas o estructurales severas que limitan la función independientemente de la intensidad del dolor') : 'refleja una afectación global grave tanto en síntomas como en función'}.</p>
+    `;
+  }
+  
+  // Generar recomendaciones terapéuticas
+  let recomendaciones = "";
+  
+  if (puntuacionRedondeada < 30) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación biomecánica detallada de la articulación glenohumeral, complejo articular del hombro y región escapulotorácica</li>
+          <li>Valoración del control motor y patrones de activación muscular</li>
+          <li>Análisis de la postura y alineación escapular</li>
+          <li>Evaluación específica de actividades que provocan síntomas</li>
+          <li>Análisis ergonómico de actividades laborales o deportivas</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Terapia manual dirigida a restaurar la movilidad articular normal del complejo del hombro (nivel de evidencia 1A)</li>
+          <li>Ejercicios de estabilización escapular y control motor (nivel de evidencia 1A)</li>
+          <li>Reentrenamiento de patrones de movimiento específicos (nivel de evidencia 1B)</li>
+          <li>Fortalecimiento progresivo de la musculatura del manguito rotador (nivel de evidencia 1A)</li>
+          <li>Técnicas de liberación miofascial para tejidos blandos específicos (nivel de evidencia 1B)</li>
+          <li>Ejercicios de estiramiento para estructuras acortadas (nivel de evidencia 1B)</li>
+          <li>Corrección de desequilibrios posturales contribuyentes (nivel de evidencia 1B)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación sobre biomecánica del hombro y factores contribuyentes</li>
+          <li>Modificaciones posturales y ergonómicas durante actividades específicas</li>
+          <li>Técnicas de automovilización y autoestiramiento</li>
+          <li>Programa de ejercicios domiciliarios para mantenimiento</li>
+          <li>Estrategias preventivas para evitar recurrencias</li>
+          <li>Recomendaciones para actividades deportivas o laborales</li>
+        </ul>
+      </div>
+    `;
+  } else if (puntuacionRedondeada < 60) {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación integral del complejo articular del hombro incluyendo análisis en cadena cinética</li>
+          <li>Valoración detallada de disfunciones de movilidad, estabilidad y control motor</li>
+          <li>Análisis de patrones compensatorios desarrollados</li>
+          <li>Evaluación de factores contribuyentes proximales y distales</li>
+          <li>Valoración del impacto funcional en actividades específicas</li>
+          <li>Identificación de factores perpetuantes mecánicos y posturales</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa multimodal combinando terapia manual e intervenciones activas (nivel de evidencia 1A)</li>
+          <li>Movilización articular específica de todas las articulaciones del complejo del hombro (nivel de evidencia 1A)</li>
+          <li>Ejercicios terapéuticos progresivos para restaurar función (nivel de evidencia 1A)</li>
+          <li>Reeducación neuromuscular del control escapulohumeral (nivel de evidencia 1A)</li>
+          <li>Entrenamiento excéntrico específico para tendones afectados (nivel de evidencia 1A)</li>
+          <li>Entrenamiento propioceptivo y de estabilidad dinámica (nivel de evidencia 1B)</li>
+          <li>Técnicas neurodinámicas cuando estén indicadas (nivel de evidencia 1B)</li>
+          <li>Terapia de ejercicio funcional específico relacionado con actividades limitadas (nivel de evidencia 1A)</li>
+          <li>Modalidades físicas complementarias para control del dolor (nivel de evidencia 1B)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación detallada sobre fisiopatología y mecanismos de disfunción</li>
+          <li>Estrategias de autogestión del dolor y actividades desencadenantes</li>
+          <li>Técnicas de modificación de actividades para minimizar la sobrecarga</li>
+          <li>Programa de ejercicios domiciliarios estructurado con progresión clara</li>
+          <li>Estrategias ergonómicas específicas para actividades laborales y cotidianas</li>
+          <li>Pacing de actividades y técnicas de conservación de energía</li>
+          <li>Expectativas realistas sobre la recuperación y temporalidad del proceso</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    recomendaciones = `
+      <div class="recomendacion-seccion">
+        <h6>Evaluación:</h6>
+        <ul>
+          <li>Evaluación multidimensional exhaustiva del complejo del hombro y sistemas relacionados</li>
+          <li>Valoración de posibles complicaciones o banderas rojas requiriendo derivación</li>
+          <li>Análisis integral del impacto en calidad de vida y participación social</li>
+          <li>Evaluación de factores psicosociales y su influencia en la presentación clínica</li>
+          <li>Identificación de barreras para la recuperación funcional</li>
+          <li>Valoración de comorbilidades que puedan afectar el pronóstico</li>
+          <li>Análisis detallado de estrategias compensatorias y su impacto secundario</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Intervención:</h6>
+        <ul>
+          <li>Programa interdisciplinario estructurado con objetivos funcionales específicos (nivel de evidencia 1A)</li>
+          <li>Terapia manual cuidadosa respetando la tolerancia del tejido (nivel de evidencia 1A)</li>
+          <li>Estrategias de manejo del dolor multimodales (nivel de evidencia 1A)</li>
+          <li>Ejercicio terapéutico con progresión muy gradual y supervisada (nivel de evidencia 1A)</li>
+          <li>Reentrenamiento específico de control motor escapulohumeral (nivel de evidencia 1A)</li>
+          <li>Ejercicios graduados de exposición y tolerancia a la carga (nivel de evidencia 1A)</li>
+          <li>Entrenamiento funcional contextualizado a necesidades específicas (nivel de evidencia 1A)</li>
+          <li>Entrenamiento de compensaciones y adaptaciones funcionales cuando sea necesario (nivel de evidencia 1B)</li>
+          <li>Considerar modalidades complementarias como TENS o termoterapia para alivio sintomático (nivel de evidencia 1B)</li>
+          <li>Valorar necesidad de órtesis de estabilización o posicionamiento temporal (nivel de evidencia 2A)</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Educación:</h6>
+        <ul>
+          <li>Educación intensiva sobre neurofisiología del dolor cuando corresponda</li>
+          <li>Estrategias avanzadas de autogestión y adaptación funcional</li>
+          <li>Modificaciones significativas del entorno y actividades cotidianas</li>
+          <li>Establecimiento de expectativas realistas y objetivos funcionales progresivos</li>
+          <li>Técnicas de conservación de energía y protección articular</li>
+          <li>Estrategias para maximizar la participación social y mantener roles significativos</li>
+          <li>Plan de mantenimiento a largo plazo y prevención de complicaciones secundarias</li>
+          <li>Opciones terapéuticas complementarias y cuándo considerarlas</li>
+        </ul>
+      </div>
+      
+      <div class="recomendacion-seccion">
+        <h6>Consideraciones adicionales:</h6>
+        <ul>
+          <li>Valorar la necesidad de interconsulta médica especializada según hallazgos clínicos</li>
+          <li>Considerar estudios complementarios (ecografía, resonancia) en casos sin progresión adecuada</li>
+          <li>Monitorizar respuesta al tratamiento con reevaluaciones regulares usando el SPADI</li>
+          <li>Considerar la influencia de factores sistémicos (inflamatorios, metabólicos) en casos refractarios</li>
+          <li>Evaluar estrategias de manejo del dolor adicionales en casos de dolor persistente</li>
+        </ul>
+      </div>
+    `;
+  }
+  
+  // Actualizar la interpretación clínica y recomendaciones en la página
+  const interpretacionClinicaEl = document.getElementById('spadi-interpretacion-clinica');
+  if (interpretacionClinicaEl) {
+    interpretacionClinicaEl.innerHTML = interpretacionClinica;
+    console.log("Interpretación clínica actualizada");
+  }
+  
+  const recomendacionesEl = document.getElementById('spadi-recomendaciones');
+  if (recomendacionesEl) {
+    recomendacionesEl.innerHTML = recomendaciones;
+    console.log("Recomendaciones actualizadas");
+  }
+}
+
+
 // Inicializar los cuestionarios al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar PSFS
@@ -1679,6 +2016,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Inicializar QuickDASH 
   calcularQuickDASH();
+
+  // Inicializar SPADI (añadir esta línea)
+  calcularSPADI();
   
   // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
