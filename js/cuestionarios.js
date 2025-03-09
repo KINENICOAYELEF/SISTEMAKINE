@@ -3783,6 +3783,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Inicializar START MSK Tool (añadir esta línea)
   calcularStartMSK();
+
+  // Inicializar START Back Tool (añadir esta línea)
+  calcularStartBack();
   
   // Asegurarse de que los event listeners de toggle estén configurados correctamente
   document.querySelectorAll('.cuestionario-header').forEach(header => {
