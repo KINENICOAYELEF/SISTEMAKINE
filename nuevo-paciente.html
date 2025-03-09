@@ -8773,6 +8773,530 @@
     </div>
   </div>
 </div>
+
+    <!-- Cuestionario HOOS (Hip Disability and Osteoarthritis Outcome Score) -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('hoos-content')">
+    <h4><i class="fas fa-plus-circle"></i> Cuestionario HOOS (Función y Síntomas de Cadera)</h4>
+    <div class="resultado-badge" id="hoos-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="hoos-content" style="display: none;">
+    <p class="mb-3">Este cuestionario evalúa su percepción sobre su cadera y su capacidad para realizar actividades cotidianas. Responda cada pregunta seleccionando la opción que mejor describa su situación durante la última semana.</p>
+    
+    <!-- Sección de Síntomas y Rigidez -->
+    <h5 class="mt-4 mb-3">S. SÍNTOMAS Y RIGIDEZ</h5>
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">Pregunta</th>
+          <th>Ninguno</th>
+          <th>Leve</th>
+          <th>Moderado</th>
+          <th>Severo</th>
+          <th>Extremo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- S1. Sensación de crujido -->
+        <tr>
+          <td>S1. ¿Ha notado crujidos, chasquidos u otro tipo de ruidos en su cadera?</td>
+          <td class="text-center"><input type="radio" name="hoos_s1" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s1" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s1" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s1" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s1" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- S2. Dificultad para abrir piernas -->
+        <tr>
+          <td>S2. ¿Tiene dificultad para abrir las piernas completamente?</td>
+          <td class="text-center"><input type="radio" name="hoos_s2" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s2" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s2" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s2" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s2" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- S3. Dificultad para caminar con zancadas largas -->
+        <tr>
+          <td>S3. ¿Tiene dificultad para caminar con zancadas largas?</td>
+          <td class="text-center"><input type="radio" name="hoos_s3" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s3" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s3" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s3" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s3" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- S4. Rigidez por la mañana -->
+        <tr>
+          <td>S4. ¿Cuánta rigidez nota en su cadera justo después de despertarse por la mañana?</td>
+          <td class="text-center"><input type="radio" name="hoos_s4" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s4" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s4" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s4" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s4" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- S5. Rigidez al estar sentado -->
+        <tr>
+          <td>S5. ¿Cuánta rigidez nota en su cadera después de estar sentado o descansando durante el día?</td>
+          <td class="text-center"><input type="radio" name="hoos_s5" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s5" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s5" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s5" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_s5" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Sección de Dolor -->
+    <h5 class="mt-4 mb-3">P. DOLOR</h5>
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">¿Cuánto dolor ha notado en su cadera?</th>
+          <th>Ninguno</th>
+          <th>Leve</th>
+          <th>Moderado</th>
+          <th>Severo</th>
+          <th>Extremo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- P1. Frecuencia del dolor -->
+        <tr>
+          <td>P1. ¿Con qué frecuencia nota dolor en la cadera?</td>
+          <td class="text-center"><input type="radio" name="hoos_p1" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p1" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p1" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p1" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p1" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- P2. Extender cadera completamente -->
+        <tr>
+          <td>P2. Al extender la cadera completamente</td>
+          <td class="text-center"><input type="radio" name="hoos_p2" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p2" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p2" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p2" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p2" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- P3. Flexionar cadera completamente -->
+        <tr>
+          <td>P3. Al flexionar la cadera completamente</td>
+          <td class="text-center"><input type="radio" name="hoos_p3" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p3" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p3" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p3" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p3" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- P4. Caminar en superficie plana -->
+        <tr>
+          <td>P4. Al caminar sobre una superficie plana</td>
+          <td class="text-center"><input type="radio" name="hoos_p4" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p4" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p4" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p4" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p4" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- P5. Subir o bajar escaleras -->
+        <tr>
+          <td>P5. Al subir o bajar escaleras</td>
+          <td class="text-center"><input type="radio" name="hoos_p5" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p5" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p5" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p5" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p5" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- P6. Por la noche en la cama -->
+        <tr>
+          <td>P6. Por la noche en la cama</td>
+          <td class="text-center"><input type="radio" name="hoos_p6" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p6" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p6" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p6" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p6" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- P7. Sentado o tumbado -->
+        <tr>
+          <td>P7. Al estar sentado o tumbado</td>
+          <td class="text-center"><input type="radio" name="hoos_p7" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p7" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p7" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p7" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p7" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- P8. De pie -->
+        <tr>
+          <td>P8. Al estar de pie</td>
+          <td class="text-center"><input type="radio" name="hoos_p8" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p8" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p8" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p8" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p8" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- P9. Caminar sobre superficie dura -->
+        <tr>
+          <td>P9. Al caminar sobre una superficie dura (asfalto, hormigón, etc.)</td>
+          <td class="text-center"><input type="radio" name="hoos_p9" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p9" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p9" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p9" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p9" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- P10. Caminar sobre superficie irregular -->
+        <tr>
+          <td>P10. Al caminar sobre una superficie irregular</td>
+          <td class="text-center"><input type="radio" name="hoos_p10" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p10" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p10" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p10" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_p10" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Sección de Actividades de la Vida Diaria -->
+    <h5 class="mt-4 mb-3">A. ACTIVIDADES DE LA VIDA DIARIA</h5>
+    <p>Las siguientes preguntas tratan sobre su nivel de funcionamiento en las actividades cotidianas. Indique el grado de dificultad que ha experimentado a causa de su cadera.</p>
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">Actividad</th>
+          <th>Ninguna</th>
+          <th>Leve</th>
+          <th>Moderada</th>
+          <th>Severa</th>
+          <th>Extrema</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- A1. Bajar escaleras -->
+        <tr>
+          <td>A1. Bajar escaleras</td>
+          <td class="text-center"><input type="radio" name="hoos_a1" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a1" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a1" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a1" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a1" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A2. Subir escaleras -->
+        <tr>
+          <td>A2. Subir escaleras</td>
+          <td class="text-center"><input type="radio" name="hoos_a2" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a2" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a2" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a2" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a2" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A3. Levantarse de una silla -->
+        <tr>
+          <td>A3. Levantarse de una silla</td>
+          <td class="text-center"><input type="radio" name="hoos_a3" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a3" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a3" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a3" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a3" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A4. Estar de pie -->
+        <tr>
+          <td>A4. Permanecer de pie</td>
+          <td class="text-center"><input type="radio" name="hoos_a4" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a4" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a4" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a4" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a4" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A5. Agacharse/recoger del suelo -->
+        <tr>
+          <td>A5. Agacharse/recoger algo del suelo</td>
+          <td class="text-center"><input type="radio" name="hoos_a5" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a5" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a5" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a5" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a5" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A6. Caminar en superficie plana -->
+        <tr>
+          <td>A6. Caminar sobre una superficie plana</td>
+          <td class="text-center"><input type="radio" name="hoos_a6" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a6" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a6" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a6" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a6" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A7. Entrar/salir del coche -->
+        <tr>
+          <td>A7. Entrar/salir de un coche</td>
+          <td class="text-center"><input type="radio" name="hoos_a7" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a7" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a7" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a7" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a7" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A8. Ir de compras -->
+        <tr>
+          <td>A8. Ir de compras</td>
+          <td class="text-center"><input type="radio" name="hoos_a8" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a8" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a8" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a8" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a8" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A9. Ponerse los calcetines/medias -->
+        <tr>
+          <td>A9. Ponerse los calcetines/medias</td>
+          <td class="text-center"><input type="radio" name="hoos_a9" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a9" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a9" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a9" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a9" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A10. Levantarse de la cama -->
+        <tr>
+          <td>A10. Levantarse de la cama</td>
+          <td class="text-center"><input type="radio" name="hoos_a10" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a10" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a10" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a10" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a10" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A11. Quitarse los calcetines/medias -->
+        <tr>
+          <td>A11. Quitarse los calcetines/medias</td>
+          <td class="text-center"><input type="radio" name="hoos_a11" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a11" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a11" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a11" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a11" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A12. Tumbarse en la cama -->
+        <tr>
+          <td>A12. Tumbarse en la cama (darse la vuelta, mantener la posición de la cadera)</td>
+          <td class="text-center"><input type="radio" name="hoos_a12" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a12" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a12" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a12" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a12" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A13. Entrar/salir de la bañera -->
+        <tr>
+          <td>A13. Entrar/salir de la bañera</td>
+          <td class="text-center"><input type="radio" name="hoos_a13" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a13" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a13" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a13" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a13" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A14. Sentarse -->
+        <tr>
+          <td>A14. Sentarse</td>
+          <td class="text-center"><input type="radio" name="hoos_a14" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a14" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a14" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a14" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a14" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A15. Sentarse/levantarse del inodoro -->
+        <tr>
+          <td>A15. Sentarse/levantarse del inodoro</td>
+          <td class="text-center"><input type="radio" name="hoos_a15" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a15" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a15" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a15" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a15" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A16. Tareas domésticas pesadas -->
+        <tr>
+          <td>A16. Realizar tareas domésticas pesadas (mover cajas pesadas, fregar suelos, etc.)</td>
+          <td class="text-center"><input type="radio" name="hoos_a16" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a16" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a16" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a16" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a16" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- A17. Tareas domésticas ligeras -->
+        <tr>
+          <td>A17. Realizar tareas domésticas ligeras (cocinar, quitar el polvo, etc.)</td>
+          <td class="text-center"><input type="radio" name="hoos_a17" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a17" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a17" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a17" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_a17" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Sección de Deportes y Actividades Recreativas -->
+    <h5 class="mt-4 mb-3">SP. DEPORTES Y ACTIVIDADES RECREATIVAS</h5>
+    <p>Las siguientes preguntas se refieren a su capacidad física cuando realiza actividades más exigentes. Responda según su experiencia durante la última semana.</p>
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">Actividad</th>
+          <th>Ninguna</th>
+          <th>Leve</th>
+          <th>Moderada</th>
+          <th>Severa</th>
+          <th>Extrema</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- SP1. Ponerse en cuclillas -->
+        <tr>
+          <td>SP1. Ponerse en cuclillas</td>
+          <td class="text-center"><input type="radio" name="hoos_sp1" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp1" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp1" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp1" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp1" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- SP2. Correr -->
+        <tr>
+          <td>SP2. Correr</td>
+          <td class="text-center"><input type="radio" name="hoos_sp2" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp2" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp2" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp2" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp2" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- SP3. Girar sobre la pierna afectada -->
+        <tr>
+          <td>SP3. Girar/pivotar sobre la pierna afectada</td>
+          <td class="text-center"><input type="radio" name="hoos_sp3" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp3" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp3" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp3" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp3" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- SP4. Caminar sobre superficie irregular -->
+        <tr>
+          <td>SP4. Caminar sobre superficie irregular</td>
+          <td class="text-center"><input type="radio" name="hoos_sp4" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp4" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp4" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp4" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_sp4" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Sección de Calidad de Vida -->
+    <h5 class="mt-4 mb-3">Q. CALIDAD DE VIDA</h5>
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">Pregunta</th>
+          <th>Nunca</th>
+          <th>Mensualmente</th>
+          <th>Semanalmente</th>
+          <th>Diariamente</th>
+          <th>Constantemente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Q1. Consciente de su problema de cadera -->
+        <tr>
+          <td>Q1. ¿Con qué frecuencia es consciente de su problema de cadera?</td>
+          <td class="text-center"><input type="radio" name="hoos_q1" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q1" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q1" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q1" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q1" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th width="50%">Pregunta</th>
+          <th>Nada</th>
+          <th>Ligeramente</th>
+          <th>Moderadamente</th>
+          <th>Gravemente</th>
+          <th>Totalmente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Q2. Modificar su estilo de vida -->
+        <tr>
+          <td>Q2. ¿Ha modificado su estilo de vida para evitar actividades que podrían dañar su cadera?</td>
+          <td class="text-center"><input type="radio" name="hoos_q2" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q2" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q2" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q2" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q2" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- Q3. Preocupación por falta de confianza -->
+        <tr>
+          <td>Q3. ¿Cuánta preocupación siente por la falta de confianza en su cadera?</td>
+          <td class="text-center"><input type="radio" name="hoos_q3" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q3" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q3" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q3" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q3" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+        <!-- Q4. Dificultades generales por la cadera -->
+        <tr>
+          <td>Q4. En general, ¿cuánta dificultad le supone su cadera?</td>
+          <td class="text-center"><input type="radio" name="hoos_q4" value="0" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q4" value="1" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q4" value="2" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q4" value="3" onchange="calcularHOOS()"></td>
+          <td class="text-center"><input type="radio" name="hoos_q4" value="4" onchange="calcularHOOS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="resultado-container" id="hoos-resultado">
+      <div class="form-row">
+        <div class="form-col form-col-md-4">
+          <div class="resultado-label">Puntuación Total:</div>
+          <div class="resultado-valor" id="hoos-valor-total">-%</div>
+          <div class="resultado-interpretacion" id="hoos-interpretacion-total">Complete el cuestionario</div>
+        </div>
+        <div class="form-col form-col-md-8">
+          <div class="resultado-label">Subescalas:</div>
+          <div class="form-row">
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Dolor:</div>
+              <div class="resultado-valor" id="hoos-valor-dolor">-%</div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Síntomas:</div>
+              <div class="resultado-valor" id="hoos-valor-sintomas">-%</div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">AVD:</div>
+              <div class="resultado-valor" id="hoos-valor-avd">-%</div>
+            </div>
+          </div>
+          <div class="form-row mt-2">
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Deporte:</div>
+              <div class="resultado-valor" id="hoos-valor-deporte">-%</div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="resultado-sublabel">Calidad de vida:</div>
+              <div class="resultado-valor" id="hoos-valor-qol">-%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="interpretacion-clinica-container mt-3">
+        <h5>Interpretación Clínica:</h5>
+        <div class="interpretacion-clinica" id="hoos-interpretacion-clinica">
+          Complete el cuestionario para obtener la interpretación clínica.
+        </div>
+      </div>
+      
+      <div class="recomendaciones-container mt-3">
+        <h5>Recomendaciones Terapéuticas:</h5>
+        <div class="recomendaciones" id="hoos-recomendaciones">
+          Complete el cuestionario para obtener recomendaciones terapéuticas.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
     
                   <div class="form-row mt-4">
                     <div class="form-col form-col-md-12">
