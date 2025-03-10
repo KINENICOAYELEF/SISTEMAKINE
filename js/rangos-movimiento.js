@@ -532,9 +532,6 @@ function mostrarTablaROM() {
     if (tablaSeleccionada) {
       tablaSeleccionada.style.display = "block";
       
-      // Actualizar badge de estado
-      document.getElementById("rom-evaluation-badge").innerHTML = "En progreso";
-      document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-warning";
     }
   }
 }
@@ -1469,7 +1466,10 @@ function actualizarRecomendacionesROM(region) {
   let consideraciones = generarConsideracionesROM(region, datos);
   consideracionesElement.innerHTML = consideraciones;
   
-  // Actualizar badge de estado
+  // Actualizar badge de estado solo si hay datos reales
+if (Object.keys(datos.rangosActivos).length > 0 || 
+    Object.keys(datos.dolores).length > 0 || 
+    Object.keys(datos.funcionalidades).length > 0) {
   document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
   document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
 }
