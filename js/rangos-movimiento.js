@@ -580,6 +580,9 @@ function evaluarROM(inputId, valorMin, valorModerado, valorNormal) {
   
   // Calcular déficit funcional
   calcularDeficitFuncional(inputId);
+  
+  // Añadir esta línea al final de la función:
+  actualizarRecomendacionesROM(inputId.split('_')[0]); // Obtiene la región (cervical, etc.)
 }
 
 // Calcular diferencial entre ROM activo y pasivo
@@ -628,15 +631,112 @@ function calcularDiferencialAP(baseId) {
 
 // Interpretar el significado clínico del diferencial AP
 function interpretarDiferencialAP(baseId, diferencia) {
-  // Implementar según necesidad del componente de interpretación clínica
-  // Esta función se llamaría desde la función de calcularDiferencialAP
-  // y actualizaría la sección de interpretación con los hallazgos
+  const region = baseId.split('_')[0]; // Extraer región (ej: cervical, hombro)
+  const movimiento = baseId.split('_').slice(1).join('_'); // Extraer movimiento
+  
+  // Obtener elementos de interpretación
+  const interpretacionElement = document.getElementById(`interpretacion-${region}-texto`);
+  if (!interpretacionElement) return;
+  
+  // Interpretar según magnitud del diferencial y región específica
+  let interpretacion = '';
+  
+  if (diferencia <= 5) {
+    // Diferencial normal: probablemente no haya restricción articular significativa
+    return; // No añadir interpretación específica para diferenciales normales
+  } else if (diferencia <= 15) {
+    // Diferenciales moderados según región
+    switch (region) {
+      case 'cervical':
+        interpretacion = `<p class="alert alert-info">El diferencial activo-pasivo moderado en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
+        sugiere inhibición neuromuscular protectiva o debilidad de musculatura estabilizadora profunda. Considerar evaluación específica de flexores/extensores profundos cervicales y técnicas de activación muscular.</p>`;
+        break;
+      case 'hombro':
+        interpretacion = `<p class="alert alert-info">El diferencial activo-pasivo moderado en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
+        indica posible disfunción del ritmo escapulohumeral o inhibición neuromuscular de estabilizadores de escápula. Considerar evaluación de control motor escapular y ejercicios de reclutamiento progresivo.</p>`;
+        break;
+      case 'lumbar':
+        interpretacion = `<p class="alert alert-info">El diferencial activo-pasivo moderado en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
+        sugiere posible inhibición de musculatura estabilizadora local o alteración del control motor. Evaluar función de multífidos y transverso abdominal.</p>`;
+        break;
+      default:
+        interpretacion = `<p class="alert alert-info">El diferencial activo-pasivo moderado en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
+        sugiere inhibición neuromuscular o alteración del control motor. Considerar técnicas de activación muscular y ejercicios de control neuromotor.</p>`;
+    }
+  } else {
+    // Diferenciales significativos según región
+    switch (region) {
+      case 'cervical':
+        interpretacion = `<p class="alert alert-warning">El diferencial activo-pasivo significativo en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
+        indica importante inhibición neuromuscular, posible desacondicionamiento de estabilizadores profundos o alteración del control sensoriomotor cervical. 
+        Priorizar reentrenamiento motor con retroalimentación y considerar evaluación de mecanismos de sensibilización central.</p>`;
+        break;
+      case 'hombro':
+        interpretacion = `<p class="alert alert-warning">El diferencial activo-pasivo significativo en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
+        sugiere marcada disfunción del control neuromuscular, posible inhibición artrogénica o miedo al movimiento. 
+        Recomendado abordaje integrado con reeducación del ritmo escapulohumeral y trabajo progresivo de confianza en el movimiento.</p>`;
+        break;
+      case 'lumbar':
+        interpretacion = `<p class="alert alert-warning">El diferencial activo-pasivo significativo en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
+        indica importante alteración del control motor y posible inhibición por dolor. Considerar evaluación específica de mecanismos centrales de procesamiento del dolor
+        y priorizar reentrenamiento de estabilizadores locales con progresión gradual a patrones funcionales.</p>`;
+        break;
+      default:
+        interpretacion = `<p class="alert alert-warning">El diferencial activo-pasivo significativo en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
+        indica importante alteración del control neuromuscular o posible inhibición por dolor/miedo al movimiento. 
+        Considerar enfoque biopsicosocial incluyendo técnicas de exposición gradual al movimiento y reeducación neuromuscular.</p>`;
+    }
+  }
+  
+  // Añadir interpretación al elemento existente (sin reemplazar contenido previo)
+  // Primero verificar si ya existe una interpretación similar para evitar duplicados
+  if (!interpretacionElement.innerHTML.includes(obtenerNombreMovimiento(baseId)) || 
+      !interpretacionElement.innerHTML.includes(`${diferencia}°`)) {
+    interpretacionElement.innerHTML += interpretacion;
+  }
+}
+
+// Función auxiliar para obtener nombre descriptivo del movimiento
+function obtenerNombreMovimiento(baseId) {
+  const partes = baseId.split('_');
+  const region = partes[0];
+  const movimiento = partes.slice(1).join('_');
+  
+  const mapaMovimientos = {
+    "flexion": "flexión",
+    "extension": "extensión",
+    "abduccion": "abducción",
+    "aduccion": "aducción",
+    "rot_int": "rotación interna",
+    "rot_ext": "rotación externa",
+    "incl_der": "inclinación derecha",
+    "incl_izq": "inclinación izquierda",
+    "pron": "pronación",
+    "sup": "supinación",
+    "desv_rad": "desviación radial",
+    "desv_cub": "desviación cubital"
+  };
+  
+  const nombreMovimiento = mapaMovimientos[movimiento] || movimiento;
+  return `${nombreMovimiento} de ${region}`;
 }
 
 // Evaluar dolor durante ROM
-function evaluarDolorROM() {
-  // Implementar según necesidad para actualizar interpretación clínica
-  // Esta función se llamaría desde los selectores de dolor
+function evaluarDolorROM(selector) {
+  // Actualizar recomendaciones
+  const region = selector.id.split('_')[0]; // Ej: cervical
+  actualizarRecomendacionesROM(region);
+}
+
+// Evaluar la funcionalidad del ROM
+function evaluarFuncionalidadROM(selector) {
+  // Actualizar badge de estado
+  document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
+  document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
+  
+  // Actualizar recomendaciones
+  const region = selector.id.split('_')[0]; // Ej: cervical
+  actualizarRecomendacionesROM(region);
 }
 
 // Calcular déficit funcional por articulación
@@ -724,7 +824,7 @@ function calcularDeficitFuncional(inputId) {
 
 // Obtener valor normativo para un movimiento específico
 function obtenerValorNormativo(region, movimiento) {
-  // Mapa de valores normativos según región y movimiento
+  // Mapa completo de valores normativos según región y movimiento
   const valoresNormativos = {
     "cervical": {
       "flexion": 45,
@@ -742,12 +842,120 @@ function obtenerValorNormativo(region, movimiento) {
       "rot_int": 70,
       "rot_ext": 90
     },
-    // Añadir otras regiones según sea necesario
+    // Valores agregados para completar todas las regiones
+    "dorsal": {
+      "flexion": 45,
+      "extension": 25,
+      "incl_der": 20,
+      "incl_izq": 20,
+      "rot_der": 35,
+      "rot_izq": 35
+    },
+    "lumbar": {
+      "flexion": 60,
+      "extension": 25,
+      "incl_der": 25,
+      "incl_izq": 25,
+      "rot_der": 30,
+      "rot_izq": 30
+    },
+    "pelvis": {
+      "anteversion": 15,
+      "retroversion": 15,
+      "elevacion_der": 10,
+      "elevacion_izq": 10,
+      "rotacion_der": 15,
+      "rotacion_izq": 15
+    },
+    "codo": {
+      "flexion": 150,
+      "extension": 0,
+      "supinacion": 85,
+      "pronacion": 80
+    },
+    "muneca": {
+      "flexion": 80,
+      "extension": 70,
+      "desv_rad": 20,
+      "desv_cub": 30
+    },
+    "cadera": {
+      "flexion": 120,
+      "extension": 30,
+      "abduccion": 45,
+      "aduccion": 30,
+      "rot_int": 45,
+      "rot_ext": 45
+    },
+    "rodilla": {
+      "flexion": 135,
+      "extension": 0
+    },
+    "tobillo": {
+      "dorsiflexion": 20,
+      "plantiflexion": 50,
+      "inversion": 30,
+      "eversion": 20
+    },
+    "atm": {
+      "apertura": 40,
+      "lateralizacion_der": 10,
+      "lateralizacion_izq": 10,
+      "protrusion": 10,
+      "retrusion": 5
+    }
   };
   
   // Retornar valor normativo o 0 si no existe
   return (valoresNormativos[region] && valoresNormativos[region][movimiento]) ? 
     valoresNormativos[region][movimiento] : 0;
+}
+
+// Obtener valores normativos ajustados por edad y sexo
+function obtenerValoresNormativosPorEdadSexo(region, movimiento, edad, sexo) {
+  // Valores normativos base (adulto promedio)
+  const valoresBase = obtenerValorNormativo(region, movimiento);
+  
+  // Factores de ajuste según edad (porcentajes de reducción)
+  const factoresEdad = {
+    'menos30': 1.05, // 5% adicional para menores de 30
+    '30-45': 1.0,    // Valor de referencia (adulto promedio)
+    '46-60': 0.9,    // 10% de reducción
+    '61-75': 0.8,    // 20% de reducción
+    'mas75': 0.7     // 30% de reducción
+  };
+  
+  // Determinar factor por edad
+  let factorEdad = 1.0;
+  if (edad < 30) {
+    factorEdad = factoresEdad['menos30'];
+  } else if (edad <= 45) {
+    factorEdad = factoresEdad['30-45'];
+  } else if (edad <= 60) {
+    factorEdad = factoresEdad['46-60'];
+  } else if (edad <= 75) {
+    factorEdad = factoresEdad['61-75'];
+  } else {
+    factorEdad = factoresEdad['mas75'];
+  }
+  
+  // Factores de ajuste según sexo (ligeras diferencias en algunas regiones)
+  const factoresSexoRegiones = {
+    'hombro': { 'M': 1.05, 'F': 0.95 },
+    'cadera': { 'M': 0.95, 'F': 1.05 },
+    // Otras regiones con diferencias significativas
+  };
+  
+  // Determinar factor por sexo
+  let factorSexo = 1.0;
+  if (factoresSexoRegiones[region] && factoresSexoRegiones[region][sexo]) {
+    factorSexo = factoresSexoRegiones[region][sexo];
+  }
+  
+  // Calcular valor normativo ajustado
+  const valorAjustado = valoresBase * factorEdad * factorSexo;
+  
+  return Math.round(valorAjustado);
 }
 
 // Actualizar impacto en actividades según déficit funcional
@@ -845,8 +1053,241 @@ function obtenerActividadesAfectadas(region, deficitPromedio) {
       }
       break;
       
-    // Añadir otras regiones según sea necesario
-    
+    // Nuevas regiones agregadas
+    case "dorsal":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Respiración",
+          impacto: "Posible limitación en expansión torácica y volúmenes respiratorios.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 15) {
+        actividades.push({
+          nombre: "Posturas prolongadas",
+          impacto: "Dificultad para mantener posturas erguidas durante periodos prolongados.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 40) {
+        actividades.push({
+          nombre: "Actividades de brazos",
+          impacto: "Limitación en actividades que requieren movimientos coordinados de tronco y miembros superiores.",
+          colorClase: colorClase
+        });
+      }
+      break;
+      
+    case "lumbar":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Levantar objetos",
+          impacto: "Dificultad para levantar objetos desde el suelo o transportar cargas.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 15) {
+        actividades.push({
+          nombre: "Sentarse/levantarse",
+          impacto: "Posible dolor o dificultad en transiciones de sedestación a bipedestación.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 40) {
+        actividades.push({
+          nombre: "Tareas domésticas",
+          impacto: "Limitación significativa en actividades como barrer, lavar pisos o hacer camas.",
+          colorClase: colorClase
+        });
+      }
+      break;
+      
+    case "pelvis":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Marcha",
+          impacto: "Posible asimetría o alteración del patrón de marcha.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 15) {
+        actividades.push({
+          nombre: "Bipedestación prolongada",
+          impacto: "Dificultad para mantener postura estable durante períodos prolongados.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 40) {
+        actividades.push({
+          nombre: "Transferencias de peso",
+          impacto: "Limitación en actividades que requieren transferencias laterales de peso o cambios de dirección.",
+          colorClase: colorClase
+        });
+      }
+      break;
+      
+    case "codo":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Manipulación de objetos",
+          impacto: "Dificultad para rotar objetos o realizar tareas que requieren pronación/supinación.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 15) {
+        actividades.push({
+          nombre: "Alimentación",
+          impacto: "Limitación para llevar alimentos a la boca o usar cubiertos.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 40) {
+        actividades.push({
+          nombre: "Aseo personal",
+          impacto: "Dificultad para realizar actividades de higiene personal como peinarse o lavarse la cara.",
+          colorClase: colorClase
+        });
+      }
+      break;
+      
+    case "muneca":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Escritura/digitación",
+          impacto: "Limitación en actividades que requieren motricidad fina o uso de teclados.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 15) {
+        actividades.push({
+          nombre: "Tareas domésticas",
+          impacto: "Dificultad para abrir frascos, girar llaves o manipular objetos pequeños.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 40) {
+        actividades.push({
+          nombre: "Agarre de objetos",
+          impacto: "Limitación significativa en fuerza de agarre y manipulación de objetos.",
+          colorClase: colorClase
+        });
+      }
+      break;
+      
+    case "cadera":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Marcha",
+          impacto: "Alteración del patrón de marcha o limitación en velocidad/distancia.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 15) {
+        actividades.push({
+          nombre: "Sentarse/levantarse",
+          impacto: "Dificultad en transiciones de sedestación a bipedestación, especialmente desde sillas bajas.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 40) {
+        actividades.push({
+          nombre: "Escaleras",
+          impacto: "Limitación significativa para subir/bajar escaleras o superar obstáculos.",
+          colorClase: colorClase
+        });
+      }
+      break;
+      
+    case "rodilla":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Escaleras",
+          impacto: "Dificultad para subir/bajar escaleras, especialmente al descender.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 15) {
+        actividades.push({
+          nombre: "Sentarse/levantarse",
+          impacto: "Limitación en transiciones desde posiciones bajas o en sedestación prolongada.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 40) {
+        actividades.push({
+          nombre: "Caminar distancias",
+          impacto: "Dificultad significativa para caminar distancias moderadas o en terrenos irregulares.",
+          colorClase: colorClase
+        });
+      }
+      break;
+      
+    case "tobillo":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Caminar en terrenos irregulares",
+          impacto: "Dificultad para adaptarse a superficies irregulares o inestables.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 15) {
+        actividades.push({
+          nombre: "Subir pendientes",
+          impacto: "Limitación en rampas o superficies inclinadas que requieren dorsiflexión.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 40) {
+        actividades.push({
+          nombre: "Calzado",
+          impacto: "Dificultad para usar ciertos tipos de calzado o necesidad de adaptaciones.",
+          colorClase: colorClase
+        });
+      }
+      break;
+      
+    case "atm":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Masticación",
+          impacto: "Dificultad para masticar alimentos duros o de gran tamaño.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 15) {
+        actividades.push({
+          nombre: "Habla",
+          impacto: "Posible limitación durante conversaciones prolongadas o pronunciación de ciertas palabras.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 40) {
+        actividades.push({
+          nombre: "Expresiones faciales",
+          impacto: "Limitación en apertura bucal amplia o en movimientos expresivos.",
+          colorClase: colorClase
+        });
+      }
+      break;
+      
     default:
       actividades.push({
         nombre: "Actividades generales",
@@ -981,238 +1422,6 @@ function mostrarInterpretacionCapsular(region) {
   
   // Actualizar elemento de interpretación
   interpretacionElement.innerHTML = interpretacion;
-}
-// Inicialización cuando el documento está listo
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar estado de los acordeones
-    actualizarEstadoAcordeones();
-    
-    // Añadir event listeners a selectores principales
-    const romRegionSelect = document.getElementById('rom_region');
-    if (romRegionSelect) {
-        romRegionSelect.addEventListener('change', mostrarTablaROM);
-    }
-    
-    // Inicializar tooltips y popovers si usas Bootstrap
-    if (typeof bootstrap !== 'undefined') {
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function(tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-    }
-    
-    // Pre-cargar estados visuales si hay datos guardados
-    cargarDatosGuardados();
-
-   // Inicializar estado de los acordeones
-  actualizarEstadoAcordeones();
-  
-  // Añadir event listeners a selectores principales
-  const romRegionSelect = document.getElementById('rom_region');
-  if (romRegionSelect) {
-    romRegionSelect.addEventListener('change', mostrarTablaROM);
-  }
-  
-  // Inicializar tooltips y popovers si usas Bootstrap
-  if (typeof bootstrap !== 'undefined') {
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function(tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-  }
-  
-  // AÑADIR AQUÍ EL CÓDIGO DEL PASO 4
-  // Inicializar colores de selectores
-  const inicializarColoresSelectores = () => {
-    document.querySelectorAll('.dolor-selector, .funcionalidad-selector').forEach(selector => {
-      colorearSelector(selector);
-    });
-  };
-  
-  // Llamar a la función durante la carga de la página
-  inicializarColoresSelectores();
-  
-  // Pre-cargar estados visuales si hay datos guardados
-  cargarDatosGuardados();
-});
-  
-});
-
-// Función para actualizar estado de los acordeones
-function actualizarEstadoAcordeones() {
-    // Verificar estado del acordeón de patrones de movimiento
-    const patronesInputs = document.querySelectorAll('#patrones-movimiento-content select[id$="_calidad"]');
-    let patronesCompletados = 0;
-    
-    patronesInputs.forEach(input => {
-        if (input.value) {
-            patronesCompletados++;
-        }
-    });
-    
-    const patronesBadge = document.getElementById('patrones-movimiento-badge');
-    if (patronesBadge) {
-        if (patronesCompletados > 0) {
-            patronesBadge.innerHTML = patronesCompletados + " evaluados";
-            patronesBadge.className = "resultado-badge badge bg-info";
-        } else {
-            patronesBadge.innerHTML = "No completado";
-            patronesBadge.className = "resultado-badge badge bg-secondary";
-        }
-    }
-    
-    // Verificar estado del acordeón de ROM
-    const romInputs = document.querySelectorAll('.tabla-rom input[type="number"]');
-    let romCompletados = 0;
-    
-    romInputs.forEach(input => {
-        if (input.value) {
-            romCompletados++;
-        }
-    });
-    
-    const romBadge = document.getElementById('rom-evaluation-badge');
-    if (romBadge) {
-        if (romCompletados > 0) {
-            romBadge.innerHTML = "En progreso";
-            romBadge.className = "resultado-badge badge bg-info";
-        } else {
-            romBadge.innerHTML = "No completado";
-            romBadge.className = "resultado-badge badge bg-secondary";
-        }
-    }
-}
-
-// Función para cargar datos guardados (si existen)
-function cargarDatosGuardados() {
-    // Esta función debería implementarse según tu sistema de almacenamiento
-    // Podría recuperar datos de localStorage, sessionStorage o de tu backend
-    
-    // Ejemplo para localStorage:
-    const datosGuardados = localStorage.getItem('datos_patrones_movimiento');
-    if (datosGuardados) {
-        const datos = JSON.parse(datosGuardados);
-        // Restaurar valores en los campos
-        for (const id in datos) {
-            const elemento = document.getElementById(id);
-            if (elemento) {
-                if (elemento.type === 'checkbox') {
-                    elemento.checked = datos[id];
-                } else {
-                    elemento.value = datos[id];
-                }
-                
-                // Trigger change events para actualizar UI
-                if (elemento.tagName === 'SELECT') {
-                    if (id.endsWith('_calidad')) {
-                        evaluarPatronMovimiento(elemento, id.replace('_calidad', ''));
-                    } else if (id.endsWith('_impacto')) {
-                        actualizarImpactoFuncional(id.replace('_impacto', ''));
-                    }
-                }
-            }
-        }
-        
-        // Actualizar interpretaciones y visualizaciones
-        actualizarResumenVisual();
-    }
-}
-
-// Completar la función interpretarDiferencialAP
-function interpretarDiferencialAP(baseId, diferencia) {
-    const region = baseId.split('_')[0]; // Extraer región (ej: cervical, hombro)
-    
-    // Obtener elementos de interpretación
-    const interpretacionElement = document.getElementById(`interpretacion-${region}-texto`);
-    if (!interpretacionElement) return;
-    
-    // Interpretar según magnitud del diferencial
-    let interpretacion = '';
-    
-    if (diferencia <= 5) {
-        // Diferencial normal: probablemente no haya restricción articular significativa
-        return; // No añadir interpretación específica
-    } else if (diferencia <= 15) {
-        // Diferencial moderado
-        interpretacion = `<p class="alert alert-info">El diferencial activo-pasivo moderado en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
-        sugiere inhibición neuromuscular protectiva o debilidad muscular. Considerar técnicas de activación muscular y ejercicios de control motor.</p>`;
-    } else {
-        // Diferencial significativo
-        interpretacion = `<p class="alert alert-warning">El diferencial activo-pasivo significativo en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
-        indica posible inhibición refleja por dolor, debilidad muscular significativa o alteración en el control motor. 
-        Priorizar la reeducación neuromuscular y considerar técnicas de neuromodulación.</p>`;
-    }
-    
-    // Añadir interpretación al elemento existente (sin reemplazar contenido previo)
-    interpretacionElement.innerHTML += interpretacion;
-}
-
-// Función auxiliar para obtener nombre descriptivo del movimiento
-function obtenerNombreMovimiento(baseId) {
-    const partes = baseId.split('_');
-    const region = partes[0];
-    const movimiento = partes.slice(1).join('_');
-    
-    const mapaMovimientos = {
-        "flexion": "flexión",
-        "extension": "extensión",
-        "abduccion": "abducción",
-        "aduccion": "aducción",
-        "rot_int": "rotación interna",
-        "rot_ext": "rotación externa",
-        "incl_der": "inclinación derecha",
-        "incl_izq": "inclinación izquierda",
-        "pron": "pronación",
-        "sup": "supinación",
-        "desv_rad": "desviación radial",
-        "desv_cub": "desviación cubital"
-    };
-    
-    const nombreMovimiento = mapaMovimientos[movimiento] || movimiento;
-    return `${nombreMovimiento} de ${region}`;
-}
-
-// Colorear selectores según su selección
-function colorearSelector(selector) {
-  // Obtener el color del atributo data-color de la opción seleccionada
-  const opcionSeleccionada = selector.options[selector.selectedIndex];
-  const colorClase = opcionSeleccionada.getAttribute('data-color');
-  
-  // Resetear todas las clases de color
-  selector.className = selector.className.replace(/bg-\w+/g, '').trim();
-  
-  // Añadir la clase de color según la selección
-  if (colorClase) {
-    selector.classList.add('bg-' + colorClase);
-    
-    // Si es un color oscuro, añadir texto blanco
-    if (colorClase === 'primary' || colorClase === 'secondary' || colorClase === 'danger' || colorClase === 'dark') {
-      selector.classList.add('text-white');
-    } else {
-      selector.classList.remove('text-white');
-    }
-  }
-  
-  // Actualizar las recomendaciones
-  actualizarRecomendacionesROM(selector.id.split('_')[0]); // Obtiene la región (cervical, etc.)
-}
-
-// Evaluar la funcionalidad del ROM
-function evaluarFuncionalidadROM(selector) {
-  // Actualizar badge de estado
-  document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
-  document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
-  
-  // Actualizar recomendaciones
-  const region = selector.id.split('_')[0]; // Ej: cervical
-  actualizarRecomendacionesROM(region);
-}
-
-// Evaluar el dolor durante ROM
-function evaluarDolorROM(selector) {
-  // Actualizar recomendaciones
-  const region = selector.id.split('_')[0]; // Ej: cervical
-  actualizarRecomendacionesROM(region);
 }
 
 // Actualizar las recomendaciones basadas en la evaluación
@@ -1455,10 +1664,444 @@ function generarConsideracionesROM(region, datos) {
   return consideraciones;
 }
 
-// Modificar la función evaluarROM para actualizar las recomendaciones
-function evaluarROM(inputId, valorMin, valorModerado, valorNormal) {
-  // Código existente para evaluarROM
+// Colorear selectores según su selección
+function colorearSelector(selector) {
+  // Obtener el color del atributo data-color de la opción seleccionada
+  const opcionSeleccionada = selector.options[selector.selectedIndex];
+  const colorClase = opcionSeleccionada.getAttribute('data-color');
   
-  // Añadir esta línea al final de la función:
-  actualizarRecomendacionesROM(inputId.split('_')[0]); // Obtiene la región (cervical, etc.)
+  // Resetear todas las clases de color
+  selector.className = selector.className.replace(/bg-\w+/g, '').trim();
+  
+  // Añadir la clase de color según la selección
+  if (colorClase) {
+    selector.classList.add('bg-' + colorClase);
+    
+    // Si es un color oscuro, añadir texto blanco
+    if (colorClase === 'primary' || colorClase === 'secondary' || colorClase === 'danger' || colorClase === 'dark') {
+      selector.classList.add('text-white');
+    } else {
+      selector.classList.remove('text-white');
+    }
+  }
+  
+  // Actualizar las recomendaciones
+  actualizarRecomendacionesROM(selector.id.split('_')[0]); // Obtiene la región (cervical, etc.)
+}
+
+// Función para actualizar estado de los acordeones
+function actualizarEstadoAcordeones() {
+  // Verificar estado del acordeón de patrones de movimiento
+  const patronesInputs = document.querySelectorAll('#patrones-movimiento-content select[id$="_calidad"]');
+  let patronesCompletados = 0;
+  
+  patronesInputs.forEach(input => {
+    if (input.value) {
+      patronesCompletados++;
+    }
+  });
+  
+  const patronesBadge = document.getElementById('patrones-movimiento-badge');
+  if (patronesBadge) {
+    if (patronesCompletados > 0) {
+      patronesBadge.innerHTML = patronesCompletados + " evaluados";
+      patronesBadge.className = "resultado-badge badge bg-info";
+    } else {
+      patronesBadge.innerHTML = "No completado";
+      patronesBadge.className = "resultado-badge badge bg-secondary";
+    }
+  }
+  
+  // Verificar estado del acordeón de ROM
+  const romInputs = document.querySelectorAll('.tabla-rom input[type="number"]');
+  let romCompletados = 0;
+  
+  romInputs.forEach(input => {
+    if (input.value) {
+      romCompletados++;
+    }
+  });
+  
+  const romBadge = document.getElementById('rom-evaluation-badge');
+  if (romBadge) {
+    if (romCompletados > 0) {
+      romBadge.innerHTML = "En progreso";
+      romBadge.className = "resultado-badge badge bg-info";
+    } else {
+      romBadge.innerHTML = "No completado";
+      romBadge.className = "resultado-badge badge bg-secondary";
+    }
+  }
+}
+
+// Función para cargar datos guardados (si existen)
+function cargarDatosGuardados() {
+  // Esta función debería implementarse según tu sistema de almacenamiento
+  // Podría recuperar datos de localStorage, sessionStorage o de tu backend
+  
+  // Ejemplo para localStorage:
+  const datosGuardados = localStorage.getItem('datos_patrones_movimiento');
+  if (datosGuardados) {
+    const datos = JSON.parse(datosGuardados);
+    // Restaurar valores en los campos
+    for (const id in datos) {
+      const elemento = document.getElementById(id);
+      if (elemento) {
+        if (elemento.type === 'checkbox') {
+          elemento.checked = datos[id];
+        } else {
+          elemento.value = datos[id];
+        }
+        
+        // Trigger change events para actualizar UI
+        if (elemento.tagName === 'SELECT') {
+          if (id.endsWith('_calidad')) {
+            evaluarPatronMovimiento(elemento, id.replace('_calidad', ''));
+          } else if (id.endsWith('_impacto')) {
+            actualizarImpactoFuncional(id.replace('_impacto', ''));
+          }
+        }
+      }
+    }
+    
+    // Actualizar interpretaciones y visualizaciones
+    actualizarResumenVisual();
+  }
+}
+
+// Sistema de puntuación global
+function calcularPuntuacionGlobal() {
+  const regiones = ['cervical', 'dorsal', 'lumbar', 'pelvis', 'hombro', 'codo', 'muneca', 'cadera', 'rodilla', 'tobillo', 'atm'];
+  const puntuaciones = {};
+  let puntuacionTotal = 0;
+  let regionesEvaluadas = 0;
+  
+  // Recorrer cada región
+  regiones.forEach(region => {
+    const deficitElement = document.getElementById(`${region}_deficit_total`);
+    if (deficitElement && deficitElement.value) {
+      // Extraer el valor numérico del déficit (eliminar el símbolo %)
+      const deficitValue = parseFloat(deficitElement.value.replace('%', ''));
+      if (!isNaN(deficitValue)) {
+        // Convertir déficit a puntuación (mayor déficit = menor puntuación)
+        const puntuacion = Math.max(0, 100 - deficitValue);
+        puntuaciones[region] = puntuacion;
+        puntuacionTotal += puntuacion;
+        regionesEvaluadas++;
+      }
+    }
+  });
+  
+  // Calcular promedio si hay regiones evaluadas
+  const puntuacionPromedio = regionesEvaluadas > 0 ? puntuacionTotal / regionesEvaluadas : 0;
+  
+  // Actualizar UI con puntuación global
+  const puntuacionGlobalElement = document.getElementById('puntuacion_global');
+  if (puntuacionGlobalElement) {
+    puntuacionGlobalElement.value = puntuacionPromedio.toFixed(1) + '/100';
+    
+    // Actualizar barra visual
+    const barraGlobal = document.getElementById('puntuacion_global_visual');
+    if (barraGlobal) {
+      barraGlobal.querySelector('.progress-bar').style.width = puntuacionPromedio + "%";
+      
+      // Asignar color según puntuación
+      let colorClase = '';
+      if (puntuacionPromedio >= 80) {
+        colorClase = 'bg-success';
+      } else if (puntuacionPromedio >= 60) {
+        colorClase = 'bg-info';
+      } else if (puntuacionPromedio >= 40) {
+        colorClase = 'bg-warning';
+      } else {
+        colorClase = 'bg-danger';
+      }
+      
+      barraGlobal.querySelector('.progress-bar').className = `progress-bar ${colorClase}`;
+    }
+  }
+  
+  // Actualizar tabla de puntuaciones por región
+  actualizarTablaPuntuacionesRegion(puntuaciones);
+  
+  return {
+    puntuaciones: puntuaciones,
+    puntuacionPromedio: puntuacionPromedio
+  };
+}
+
+function actualizarTablaPuntuacionesRegion(puntuaciones) {
+  const tablaBody = document.getElementById('tabla_puntuaciones_cuerpo');
+  if (!tablaBody) return;
+  
+  // Limpiar tabla
+  tablaBody.innerHTML = '';
+  
+  // Mapeo de nombres descriptivos
+  const nombresRegiones = {
+    'cervical': 'Columna Cervical',
+    'dorsal': 'Columna Dorsal',
+    'lumbar': 'Columna Lumbar',
+    'pelvis': 'Pelvis/Sacroilíaca',
+    'hombro': 'Hombro',
+    'codo': 'Codo y Antebrazo',
+    'muneca': 'Muñeca y Mano',
+    'cadera': 'Cadera',
+    'rodilla': 'Rodilla',
+    'tobillo': 'Tobillo y Pie',
+    'atm': 'ATM'
+  };
+  
+  // Ordenar regiones por puntuación (menor a mayor)
+  const regionesOrdenadas = Object.keys(puntuaciones).sort((a, b) => puntuaciones[a] - puntuaciones[b]);
+  
+  // Crear filas para cada región
+  regionesOrdenadas.forEach(region => {
+    const puntuacion = puntuaciones[region];
+    const fila = document.createElement('tr');
+    
+    // Determinar color según puntuación
+    let colorClase = '';
+    let estadoTexto = '';
+    
+    if (puntuacion >= 80) {
+      colorClase = 'table-success';
+      estadoTexto = 'Óptimo';
+    } else if (puntuacion >= 60) {
+      colorClase = 'table-info';
+      estadoTexto = 'Funcional';
+    } else if (puntuacion >= 40) {
+      colorClase = 'table-warning';
+      estadoTexto = 'Limitado';
+    } else {
+      colorClase = 'table-danger';
+      estadoTexto = 'Disfuncional';
+    }
+    
+    fila.className = colorClase;
+    
+    fila.innerHTML = `
+      <td>${nombresRegiones[region] || region}</td>
+      <td>${puntuacion.toFixed(1)}/100</td>
+      <td>${estadoTexto}</td>
+    `;
+    
+    tablaBody.appendChild(fila);
+  });
+}
+
+// Generador automático de objetivos terapéuticos
+function generarObjetivosTerapeuticos() {
+  // Obtener datos de todas las regiones evaluadas
+  const puntuacionesGlobales = calcularPuntuacionGlobal();
+  const objetivosContainer = document.getElementById('objetivos_terapeuticos_container');
+  
+  if (!objetivosContainer || !puntuacionesGlobales.puntuaciones) return;
+  
+  // Limpiar contenedor
+  objetivosContainer.innerHTML = '';
+  
+  // Si no hay regiones evaluadas, mostrar mensaje
+  if (Object.keys(puntuacionesGlobales.puntuaciones).length === 0) {
+    objetivosContainer.innerHTML = '<div class="alert alert-info">Complete la evaluación de rangos de movimiento para generar objetivos terapéuticos automáticos.</div>';
+    return;
+  }
+  
+  // Ordenar regiones por prioridad (menor puntuación = mayor prioridad)
+  const regionesPriorizadas = Object.keys(puntuacionesGlobales.puntuaciones)
+    .sort((a, b) => puntuacionesGlobales.puntuaciones[a] - puntuacionesGlobales.puntuaciones[b]);
+  
+  // Crear sección de objetivos
+  const objetivosHTML = document.createElement('div');
+  objetivosHTML.className = 'objetivos-terapeuticos';
+  
+  // Crear lista de objetivos generales
+  let objetivosGenerales = '<h5>Objetivos Generales</h5><ul>';
+  
+  // Identificar regiones con mayor disfunción (puntuación < 60)
+  const regionesConDisfuncion = regionesPriorizadas.filter(r => puntuacionesGlobales.puntuaciones[r] < 60);
+  
+  if (regionesConDisfuncion.length > 0) {
+    objetivosGenerales += `<li>Restaurar la movilidad funcional en ${regionesConDisfuncion.length} segmento(s) identificados con limitación significativa.</li>`;
+    objetivosGenerales += '<li>Mejorar la calidad del movimiento y reducir el dolor asociado a los rangos de movimiento.</li>';
+    objetivosGenerales += '<li>Optimizar la funcionalidad en actividades de vida diaria afectadas por las limitaciones de movilidad.</li>';
+  } else {
+    objetivosGenerales += '<li>Optimizar los patrones de movimiento para maximizar la eficiencia biomecánica.</li>';
+    objetivosGenerales += '<li>Prevenir limitaciones funcionales mediante programas de mantenimiento de movilidad.</li>';
+  }
+  
+  objetivosGenerales += '</ul>';
+  
+  // Crear lista de objetivos específicos por región (máximo 3 regiones prioritarias)
+  let objetivosEspecificos = '<h5>Objetivos Específicos</h5><ul>';
+  
+  const regionesPrioritarias = regionesPriorizadas.slice(0, 3);
+  
+  regionesPrioritarias.forEach(region => {
+    const puntuacion = puntuacionesGlobales.puntuaciones[region];
+    
+    // Objetivos específicos según región y nivel de disfunción
+    switch (region) {
+      case 'cervical':
+        if (puntuacion < 40) {
+          objetivosEspecificos += '<li><strong>Columna Cervical:</strong> Restaurar rangos de movimiento funcionales priorizando rotación e inclinación lateral. Abordar factores neuromusculares que limitan el movimiento activo.</li>';
+        } else if (puntuacion < 60) {
+          objetivosEspecificos += '<li><strong>Columna Cervical:</strong> Mejorar la movilidad en los planos de movimiento limitados y optimizar el control neuromuscular durante movimientos combinados.</li>';
+        } else {
+          objetivosEspecificos += '<li><strong>Columna Cervical:</strong> Optimizar la calidad de movimiento y resistencia a la fatiga en rangos funcionales completos.</li>';
+        }
+        break;
+        
+      case 'hombro':
+        if (puntuacion < 40) {
+          objetivosEspecificos += '<li><strong>Hombro:</strong> Restaurar la movilidad funcional priorizando elevación y rotaciones. Abordar limitaciones en el ritmo escapulohumeral y factores neuromusculares.</li>';
+        } else if (puntuacion < 60) {
+          objetivosEspecificos += '<li><strong>Hombro:</strong> Mejorar rangos funcionales para actividades por encima de la cabeza y optimizar control neuromuscular del complejo del hombro.</li>';
+        } else {
+          objetivosEspecificos += '<li><strong>Hombro:</strong> Optimizar la coordinación de movimientos complejos y estabilidad dinámica en diferentes planos.</li>';
+        }
+        break;
+        
+      // Añadir casos para otras regiones
+      
+      default:
+        if (puntuacion < 40) {
+          objetivosEspecificos += `<li><strong>${region.charAt(0).toUpperCase() + region.slice(1)}:</strong> Restaurar rangos de movimiento funcionales y abordar factores que limitan la movilidad activa.</li>`;
+        } else if (puntuacion < 60) {
+          objetivosEspecificos += `<li><strong>${region.charAt(0).toUpperCase() + region.slice(1)}:</strong> Mejorar la calidad del movimiento y optimizar el control neuromuscular durante actividades funcionales.</li>`;
+        } else {
+          objetivosEspecificos += `<li><strong>${region.charAt(0).toUpperCase() + region.slice(1)}:</strong> Optimizar la eficiencia del movimiento y prevenir limitaciones futuras.</li>`;
+        }
+    }
+  });
+  
+  objetivosEspecificos += '</ul>';
+  
+  // Crear sección de estrategias basadas en evidencia
+  let estrategiasEvidencia = '<h5>Estrategias Basadas en Evidencia</h5><ul>';
+  // Estrategias generales según puntuación global media
+  if (puntuacionesGlobales.puntuacionPromedio < 40) {
+    estrategiasEvidencia += '<li>Priorizar técnicas de movilización articular específica para restaurar rangos básicos de movimiento.</li>';
+    estrategiasEvidencia += '<li>Implementar programas de ejercicio progresivo con énfasis inicial en control motor y calidad sobre cantidad.</li>';
+    estrategiasEvidencia += '<li>Considerar enfoques de neuromodulación para abordar componentes de dolor e inhibición que limitan el movimiento.</li>';
+  } else if (puntuacionesGlobales.puntuacionPromedio < 60) {
+    estrategiasEvidencia += '<li>Implementar programas de ejercicio terapéutico con progresión de control motor a fortalecimiento funcional.</li>';
+    estrategiasEvidencia += '<li>Integrar entrenamiento propioceptivo y de estabilidad dinámica en diferentes posiciones.</li>';
+    estrategiasEvidencia += '<li>Utilizar técnicas de movilización con movimiento para optimizar patrones neuromotores.</li>';
+  } else {
+    estrategiasEvidencia += '<li>Enfocar en entrenamiento neuromuscular avanzado con variabilidad de tareas y contextos.</li>';
+    estrategiasEvidencia += '<li>Implementar programas de prevención con ejercicios multiplanares y adaptabilidad a diferentes demandas.</li>';
+    estrategiasEvidencia += '<li>Integrar estrategias de autorregulación y gestión de carga para mantener movilidad óptima a largo plazo.</li>';
+  }
+  
+  estrategiasEvidencia += '</ul>';
+  
+  // Combinar todas las secciones
+  objetivosHTML.innerHTML = objetivosGenerales + objetivosEspecificos + estrategiasEvidencia;
+  
+  // Añadir al contenedor
+  objetivosContainer.appendChild(objetivosHTML);
+}
+
+// Función para añadir escucha a eventos para actualizar objetivos y puntuación global
+function inicializarSistemaDeObjetivos() {
+  // Añadir listener a todos los inputs de ROM para actualizar objetivos cuando cambien
+  document.querySelectorAll('.rom-input, .dolor-selector, .funcionalidad-selector').forEach(elemento => {
+    elemento.addEventListener('change', function() {
+      // Esperar un momento para que se actualicen todos los cálculos de déficit
+      setTimeout(() => {
+        calcularPuntuacionGlobal();
+        generarObjetivosTerapeuticos();
+      }, 500);
+    });
+  });
+  
+  // Añadir botón para actualizar objetivos manualmente
+  const botonActualizar = document.getElementById('actualizar_objetivos');
+  if (botonActualizar) {
+    botonActualizar.addEventListener('click', function() {
+      calcularPuntuacionGlobal();
+      generarObjetivosTerapeuticos();
+    });
+  }
+}
+
+// Inicialización cuando el documento está listo
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar estado de los acordeones
+  actualizarEstadoAcordeones();
+  
+  // Añadir event listeners a selectores principales
+  const romRegionSelect = document.getElementById('rom_region');
+  if (romRegionSelect) {
+    romRegionSelect.addEventListener('change', mostrarTablaROM);
+  }
+  
+  // Inicializar tooltips y popovers si usas Bootstrap
+  if (typeof bootstrap !== 'undefined') {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function(tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  }
+  
+  // Inicializar colores de selectores
+  const inicializarColoresSelectores = () => {
+    document.querySelectorAll('.dolor-selector, .funcionalidad-selector').forEach(selector => {
+      colorearSelector(selector);
+    });
+  };
+  
+  // Llamar a la función durante la carga de la página
+  inicializarColoresSelectores();
+  
+  // Pre-cargar estados visuales si hay datos guardados
+  cargarDatosGuardados();
+  
+  // Inicializar sistema de objetivos terapéuticos
+  inicializarSistemaDeObjetivos();
+});
+
+// Función para cambiar entre cuestionarios anidados
+function toggleCuestionario(id) {
+  const contenido = document.getElementById(id);
+  if (contenido) {
+    if (contenido.style.display === "none") {
+      contenido.style.display = "block";
+      // Cambiar icono del botón si existe
+      const boton = contenido.previousElementSibling;
+      if (boton && boton.querySelector('i.fas')) {
+        boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-plus-circle', 'fa-minus-circle');
+      }
+    } else {
+      contenido.style.display = "none";
+      // Cambiar icono del botón si existe
+      const boton = contenido.previousElementSibling;
+      if (boton && boton.querySelector('i.fas')) {
+        boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-minus-circle', 'fa-plus-circle');
+      }
+    }
+  }
+}
+
+// Función para cambiar entre secciones principales
+function toggleSeccion(id) {
+  const contenido = document.getElementById(id);
+  if (contenido) {
+    if (contenido.style.display === "none") {
+      contenido.style.display = "block";
+      // Cambiar icono del botón si existe
+      const boton = contenido.previousElementSibling;
+      if (boton && boton.querySelector('i.fas')) {
+        boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-angle-down', 'fa-angle-up');
+      }
+    } else {
+      contenido.style.display = "none";
+      // Cambiar icono del botón si existe
+      const boton = contenido.previousElementSibling;
+      if (boton && boton.querySelector('i.fas')) {
+        boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-angle-up', 'fa-angle-down');
+      }
+    }
+  }
 }
