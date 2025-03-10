@@ -1003,6 +1003,39 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Pre-cargar estados visuales si hay datos guardados
     cargarDatosGuardados();
+
+   // Inicializar estado de los acordeones
+  actualizarEstadoAcordeones();
+  
+  // Añadir event listeners a selectores principales
+  const romRegionSelect = document.getElementById('rom_region');
+  if (romRegionSelect) {
+    romRegionSelect.addEventListener('change', mostrarTablaROM);
+  }
+  
+  // Inicializar tooltips y popovers si usas Bootstrap
+  if (typeof bootstrap !== 'undefined') {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function(tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  }
+  
+  // AÑADIR AQUÍ EL CÓDIGO DEL PASO 4
+  // Inicializar colores de selectores
+  const inicializarColoresSelectores = () => {
+    document.querySelectorAll('.dolor-selector, .funcionalidad-selector').forEach(selector => {
+      colorearSelector(selector);
+    });
+  };
+  
+  // Llamar a la función durante la carga de la página
+  inicializarColoresSelectores();
+  
+  // Pre-cargar estados visuales si hay datos guardados
+  cargarDatosGuardados();
+});
+  
 });
 
 // Función para actualizar estado de los acordeones
