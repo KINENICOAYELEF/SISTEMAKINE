@@ -6053,241 +6053,245 @@
       </div>
       
       <!-- Subacordeón para Columna Cervical -->
-      <div class="cuestionario-item sub-acordeon">
-        <div class="cuestionario-header" onclick="toggleCuestionario('rom-cervical-content')">
-          <h5><i class="fas fa-plus-circle"></i> Columna Cervical</h5>
-          <div class="resultado-badge" id="rom-cervical-badge">No completado</div>
-        </div>
-        <div class="cuestionario-content" id="rom-cervical-content" style="display: none;">
-          <h5 class="mt-4 mb-3">Rangos de Movimiento: Columna Cervical</h5>
-          
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th rowspan="2">Movimiento</th>
-                  <th colspan="2">Rango Activo</th>
-                  <th colspan="2">Rango Pasivo</th>
-                  <th rowspan="2">Diferencial<br>A/P</th>
-                  <th rowspan="2">Dolor</th>
-                  <th rowspan="2">Funcionalidad</th>
-                  <th rowspan="2">Observaciones</th>
-                </tr>
-                <tr>
-                  <th>Grados</th>
-                  <th>Estado</th>
-                  <th>Grados</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Flexión</td>
-                  <td>
-                    <input type="number" id="cervical_flexion_activo" name="cervical_flexion_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_flexion_activo', 0, 35, 45)">
-                  </td>
-                  <td id="cervical_flexion_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_flexion_pasivo" name="cervical_flexion_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_flexion_pasivo', 0, 35, 45); calcularDiferencialAP('cervical_flexion')">
-                  </td>
-                  <td id="cervical_flexion_pasivo_estado"></td>
-                  <td id="cervical_flexion_diferencial"></td>
-                  <td>
-                    <select id="cervical_flexion_dolor" name="cervical_flexion_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                      <option value="Después">Después</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="cervical_flexion_funcionalidad" name="cervical_flexion_funcionalidad" class="form-select">
-                      <option value="">Seleccionar</option>
-                      <option value="Normal">Normal</option>
-                      <option value="Limitación leve">Limitación leve</option>
-                      <option value="Limitación moderada">Limitación moderada</option>
-                      <option value="Limitación severa">Limitación severa</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_flexion_obs" name="cervical_flexion_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Extensión</td>
-                  <td>
-                    <input type="number" id="cervical_extension_activo" name="cervical_extension_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_extension_activo', 0, 35, 45)">
-                  </td>
-                  <td id="cervical_extension_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_extension_pasivo" name="cervical_extension_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_extension_pasivo', 0, 35, 45); calcularDiferencialAP('cervical_extension')">
-                  </td>
-                  <td id="cervical_extension_pasivo_estado"></td>
-                  <td id="cervical_extension_diferencial"></td>
-                  <td>
-                    <select id="cervical_extension_dolor" name="cervical_extension_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                      <option value="Después">Después</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="cervical_extension_funcionalidad" name="cervical_extension_funcionalidad" class="form-select">
-                      <option value="">Seleccionar</option>
-                      <option value="Normal">Normal</option>
-                      <option value="Limitación leve">Limitación leve</option>
-                      <option value="Limitación moderada">Limitación moderada</option>
-                      <option value="Limitación severa">Limitación severa</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_extension_obs" name="cervical_extension_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Inclinación lateral derecha</td>
-                  <td>
-                    <input type="number" id="cervical_incl_der_activo" name="cervical_incl_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_der_activo', 0, 30, 45)">
-                  </td>
-                  <td id="cervical_incl_der_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_incl_der_pasivo" name="cervical_incl_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_der_pasivo', 0, 30, 45); calcularDiferencialAP('cervical_incl_der')">
-                  </td>
-                  <td id="cervical_incl_der_pasivo_estado"></td>
-                  <td id="cervical_incl_der_diferencial"></td>
-                  <td>
-                    <select id="cervical_incl_der_dolor" name="cervical_incl_der_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                      <option value="Después">Después</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="cervical_incl_der_funcionalidad" name="cervical_incl_der_funcionalidad" class="form-select">
-                      <option value="">Seleccionar</option>
-                      <option value="Normal">Normal</option>
-                      <option value="Limitación leve">Limitación leve</option>
-                      <option value="Limitación moderada">Limitación moderada</option>
-                      <option value="Limitación severa">Limitación severa</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_incl_der_obs" name="cervical_incl_der_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Inclinación lateral izquierda</td>
-                  <td>
-                    <input type="number" id="cervical_incl_izq_activo" name="cervical_incl_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_izq_activo', 0, 30, 45)">
-                  </td>
-                  <td id="cervical_incl_izq_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_incl_izq_pasivo" name="cervical_incl_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_izq_pasivo', 0, 30, 45); calcularDiferencialAP('cervical_incl_izq')">
-                  </td>
-                  <td id="cervical_incl_izq_pasivo_estado"></td>
-                  <td id="cervical_incl_izq_diferencial"></td>
-                  <td>
-                    <select id="cervical_incl_izq_dolor" name="cervical_incl_izq_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                      <option value="Después">Después</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="cervical_incl_izq_funcionalidad" name="cervical_incl_izq_funcionalidad" class="form-select">
-                      <option value="">Seleccionar</option>
-                      <option value="Normal">Normal</option>
-                      <option value="Limitación leve">Limitación leve</option>
-                      <option value="Limitación moderada">Limitación moderada</option>
-                      <option value="Limitación severa">Limitación severa</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_incl_izq_obs" name="cervical_incl_izq_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Rotación derecha</td>
-                  <td>
-                    <input type="number" id="cervical_rot_der_activo" name="cervical_rot_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_der_activo', 0, 50, 70)">
-                  </td>
-                  <td id="cervical_rot_der_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_rot_der_pasivo" name="cervical_rot_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_der_pasivo', 0, 50, 70); calcularDiferencialAP('cervical_rot_der')">
-                  </td>
-                  <td id="cervical_rot_der_pasivo_estado"></td>
-                  <td id="cervical_rot_der_diferencial"></td>
-                  <td>
-                    <select id="cervical_rot_der_dolor" name="cervical_rot_der_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                      <option value="Después">Después</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="cervical_rot_der_funcionalidad" name="cervical_rot_der_funcionalidad" class="form-select">
-                      <option value="">Seleccionar</option>
-                      <option value="Normal">Normal</option>
-                      <option value="Limitación leve">Limitación leve</option>
-                      <option value="Limitación moderada">Limitación moderada</option>
-                      <option value="Limitación severa">Limitación severa</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_rot_der_obs" name="cervical_rot_der_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Rotación izquierda</td>
-                  <td>
-                    <input type="number" id="cervical_rot_izq_activo" name="cervical_rot_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_izq_activo', 0, 50, 70)">
-                  </td>
-                  <td id="cervical_rot_izq_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_rot_izq_pasivo" name="cervical_rot_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_izq_pasivo', 0, 50, 70); calcularDiferencialAP('cervical_rot_izq')">
-                  </td>
-                  <td id="cervical_rot_izq_pasivo_estado"></td>
-                  <td id="cervical_rot_izq_diferencial"></td>
-                  <td>
-                    <select id="cervical_rot_izq_dolor" name="cervical_rot_izq_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                      <option value="Después">Después</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="cervical_rot_izq_funcionalidad" name="cervical_rot_izq_funcionalidad" class="form-select">
-                      <option value="">Seleccionar</option>
-                      <option value="Normal">Normal</option>
-                      <option value="Limitación leve">Limitación leve</option>
-                      <option value="Limitación moderada">Limitación moderada</option>
-                      <option value="Limitación severa">Limitación severa</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_rot_izq_obs" name="cervical_rot_izq_obs" class="form-control">
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+<div class="cuestionario-item sub-acordeon">
+  <div class="cuestionario-header" onclick="toggleCuestionario('rom-cervical-content')">
+    <h5><i class="fas fa-plus-circle"></i> Columna Cervical</h5>
+    <div class="resultado-badge" id="rom-cervical-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="rom-cervical-content" style="display: none;">
+    <h5 class="mt-4 mb-3">Rangos de Movimiento: Columna Cervical</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th rowspan="2">Movimiento</th>
+            <th colspan="2">Rango Activo</th>
+            <th colspan="2">Rango Pasivo</th>
+            <th rowspan="2">Diferencial<br>A/P</th>
+            <th rowspan="2">Dolor</th>
+            <th rowspan="2">Funcionalidad</th>
+            <th rowspan="2">Observaciones</th>
+          </tr>
+          <tr>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Flexión</td>
+            <td>
+              <input type="number" id="cervical_flexion_activo" name="cervical_flexion_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_flexion_activo', 0, 35, 45)">
+            </td>
+            <td id="cervical_flexion_activo_estado"></td>
+            <td>
+              <input type="number" id="cervical_flexion_pasivo" name="cervical_flexion_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_flexion_pasivo', 0, 35, 45); calcularDiferencialAP('cervical_flexion')">
+            </td>
+            <td id="cervical_flexion_pasivo_estado"></td>
+            <td id="cervical_flexion_diferencial"></td>
+            <td>
+              <select id="cervical_flexion_dolor" name="cervical_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cervical_flexion_funcionalidad" name="cervical_flexion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cervical_flexion_obs" name="cervical_flexion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Extensión</td>
+            <td>
+              <input type="number" id="cervical_extension_activo" name="cervical_extension_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_extension_activo', 0, 35, 45)">
+            </td>
+            <td id="cervical_extension_activo_estado"></td>
+            <td>
+              <input type="number" id="cervical_extension_pasivo" name="cervical_extension_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_extension_pasivo', 0, 35, 45); calcularDiferencialAP('cervical_extension')">
+            </td>
+            <td id="cervical_extension_pasivo_estado"></td>
+            <td id="cervical_extension_diferencial"></td>
+            <td>
+              <select id="cervical_extension_dolor" name="cervical_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cervical_extension_funcionalidad" name="cervical_extension_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cervical_extension_obs" name="cervical_extension_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Inclinación lateral derecha</td>
+            <td>
+              <input type="number" id="cervical_incl_der_activo" name="cervical_incl_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_der_activo', 0, 30, 45)">
+            </td>
+            <td id="cervical_incl_der_activo_estado"></td>
+            <td>
+              <input type="number" id="cervical_incl_der_pasivo" name="cervical_incl_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_der_pasivo', 0, 30, 45); calcularDiferencialAP('cervical_incl_der')">
+            </td>
+            <td id="cervical_incl_der_pasivo_estado"></td>
+            <td id="cervical_incl_der_diferencial"></td>
+            <td>
+              <select id="cervical_incl_der_dolor" name="cervical_incl_der_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cervical_incl_der_funcionalidad" name="cervical_incl_der_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cervical_incl_der_obs" name="cervical_incl_der_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Inclinación lateral izquierda</td>
+            <td>
+              <input type="number" id="cervical_incl_izq_activo" name="cervical_incl_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_izq_activo', 0, 30, 45)">
+            </td>
+            <td id="cervical_incl_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="cervical_incl_izq_pasivo" name="cervical_incl_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_izq_pasivo', 0, 30, 45); calcularDiferencialAP('cervical_incl_izq')">
+            </td>
+            <td id="cervical_incl_izq_pasivo_estado"></td>
+            <td id="cervical_incl_izq_diferencial"></td>
+            <td>
+              <select id="cervical_incl_izq_dolor" name="cervical_incl_izq_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cervical_incl_izq_funcionalidad" name="cervical_incl_izq_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cervical_incl_izq_obs" name="cervical_incl_izq_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Rotación derecha</td>
+            <td>
+              <input type="number" id="cervical_rot_der_activo" name="cervical_rot_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_der_activo', 0, 50, 70)">
+            </td>
+            <td id="cervical_rot_der_activo_estado"></td>
+            <td>
+              <input type="number" id="cervical_rot_der_pasivo" name="cervical_rot_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_der_pasivo', 0, 50, 70); calcularDiferencialAP('cervical_rot_der')">
+            </td>
+            <td id="cervical_rot_der_pasivo_estado"></td>
+            <td id="cervical_rot_der_diferencial"></td>
+            <td>
+              <select id="cervical_rot_der_dolor" name="cervical_rot_der_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cervical_rot_der_funcionalidad" name="cervical_rot_der_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cervical_rot_der_obs" name="cervical_rot_der_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Rotación izquierda</td>
+            <td>
+              <input type="number" id="cervical_rot_izq_activo" name="cervical_rot_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_izq_activo', 0, 50, 70)">
+            </td>
+            <td id="cervical_rot_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="cervical_rot_izq_pasivo" name="cervical_rot_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_izq_pasivo', 0, 50, 70); calcularDiferencialAP('cervical_rot_izq')">
+            </td>
+            <td id="cervical_rot_izq_pasivo_estado"></td>
+            <td id="cervical_rot_izq_diferencial"></td>
+            <td>
+              <select id="cervical_rot_izq_dolor" name="cervical_rot_izq_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cervical_rot_izq_funcionalidad" name="cervical_rot_izq_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cervical_rot_izq_obs" name="cervical_rot_izq_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Resto del contenido del subacordeón cervical igual que antes... -->
+  </div>
+</div>
           
           <!-- Calculadora de déficit funcional cervical -->
           <div class="card mt-4 mb-4">
