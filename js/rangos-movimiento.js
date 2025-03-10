@@ -1642,6 +1642,42 @@ function generarInterpretacionROM(region, datos) {
   if (diferencialSignificativo) {
     interpretacion += `<p>El diferencial activo-pasivo significativo sugiere posible inhibición neuromuscular o debilidad muscular específica.</p>`;
   }
+
+  // Interpretar movimientos accesorios si hay datos
+if (datos.movimientosAccesorios && Object.keys(datos.movimientosAccesorios).length > 0) {
+  interpretacion += `<p><strong>Movimientos accesorios:</strong> `;
+  
+  const moveHipomoviles = [];
+  const moveHipermoviles = [];
+  const moveBloqueados = [];
+  
+  for (const mov in datos.movimientosAccesorios) {
+    const calidad = datos.movimientosAccesorios[mov].calidad;
+    const nombreMov = mov.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    
+    if (calidad === "Hipomóvil") {
+      moveHipomoviles.push(nombreMov);
+    } else if (calidad === "Hipermóvil") {
+      moveHipermoviles.push(nombreMov);
+    } else if (calidad === "Bloqueado") {
+      moveBloqueados.push(nombreMov);
+    }
+  }
+  
+  if (moveBloqueados.length > 0) {
+    interpretacion += `Se detecta bloqueo en: ${moveBloqueados.join(", ")}. `;
+  }
+  
+  if (moveHipomoviles.length > 0) {
+    interpretacion += `Movilidad reducida en: ${moveHipomoviles.join(", ")}. `;
+  }
+  
+  if (moveHipermoviles.length > 0) {
+    interpretacion += `Hipermobilidad en: ${moveHipermoviles.join(", ")}. `;
+  }
+  
+  interpretacion += `</p>`;
+}
   
   return interpretacion;
 }
