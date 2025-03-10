@@ -591,7 +591,10 @@ function calcularDiferencialAP(baseId) {
   const pasivoInput = document.getElementById(baseId + "_pasivo");
   const diferencialElement = document.getElementById(baseId + "_diferencial");
   
-  if (!activoInput || !pasivoInput || !diferencialElement) return;
+  if (!activoInput || !pasivoInput || !diferencialElement) {
+    console.log("Error: No se encontraron los elementos para calcular diferencial de " + baseId);
+    return;
+  }
   
   const activoValor = parseFloat(activoInput.value);
   const pasivoValor = parseFloat(pasivoInput.value);
@@ -621,9 +624,8 @@ function calcularDiferencialAP(baseId) {
     colorClase = "bg-danger text-white";
   }
   
-  // Actualizar elemento de diferencial
-  diferencialElement.innerHTML = `${diferencia}° (${estado})`;
-  diferencialElement.className = colorClase;
+  // LÍNEA CORREGIDA: Mostrar el diferencial con formato claro
+  diferencialElement.innerHTML = `<span class="${colorClase}" style="padding: 2px 6px; border-radius: 4px;">${diferencia}° (${estado})</span>`;
   
   // Interpretar el diferencial
   interpretarDiferencialAP(baseId, diferencia);
