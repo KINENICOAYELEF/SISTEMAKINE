@@ -2099,10 +2099,25 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Inicializar colores de selectores
   const inicializarColoresSelectores = () => {
-    document.querySelectorAll('.dolor-selector, .funcionalidad-selector').forEach(selector => {
+  document.querySelectorAll('.dolor-selector, .funcionalidad-selector').forEach(selector => {
+    // No colorear los selectores que tienen "No" como valor inicial
+    if (selector.value !== "No") {
       colorearSelector(selector);
-    });
-  };
+    } else {
+      // Eliminar cualquier color que pueda tener
+      selector.className = selector.className.replace(/bg-\w+/g, '').trim();
+      // Asegurar que conserva las clases necesarias
+      if (!selector.className.includes('form-select')) {
+        selector.className += ' form-select';
+      }
+      if (!selector.className.includes('dolor-selector') && selector.id.includes('_dolor')) {
+        selector.className += ' dolor-selector';
+      } else if (!selector.className.includes('funcionalidad-selector') && selector.id.includes('_funcionalidad')) {
+        selector.className += ' funcionalidad-selector';
+      }
+    }
+  });
+};
   
   // Llamar a la función durante la carga de la página
   inicializarColoresSelectores();
