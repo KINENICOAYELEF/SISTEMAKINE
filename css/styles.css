@@ -1091,3 +1091,22 @@ a:hover {
 .checkbox-group .form-check {
   margin-bottom: 5px;
 }
+
+
+<!-- CSS para subacordeones -->
+<style>
+.sub-acordeon {
+  margin-left: 15px;
+  margin-bottom: 15px;
+  border-left: 3px solid #dee2e6;
+  padding-left: 15px;
+}
+
+.sub-acordeon .cuestionario-header {
+  background-color: #f8f9fa;
+}
+
+.sub-acordeon .cuestionario-header:hover {
+  background-color: #e9ecef;
+}
+</style>
