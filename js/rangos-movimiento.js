@@ -723,6 +723,13 @@ function obtenerNombreMovimiento(baseId) {
 
 // Evaluar dolor durante ROM
 function evaluarDolorROM(selector) {
+  // Colorear el selector
+  colorearSelector(selector);
+  
+  // Actualizar badge de estado
+  document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
+  document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
+  
   // Actualizar recomendaciones
   const region = selector.id.split('_')[0]; // Ej: cervical
   actualizarRecomendacionesROM(region);
@@ -730,6 +737,9 @@ function evaluarDolorROM(selector) {
 
 // Evaluar la funcionalidad del ROM
 function evaluarFuncionalidadROM(selector) {
+  // Colorear el selector
+  colorearSelector(selector);
+  
   // Actualizar badge de estado
   document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
   document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
@@ -1436,8 +1446,14 @@ function actualizarRecomendacionesROM(region) {
   // Recopilar todos los datos para esta región
   const datos = recopilarDatosROM(region);
   
-  // Si no hay datos suficientes, salir
-  if (Object.keys(datos.rangosActivos).length === 0) return;
+  // MODIFICACIÓN 2: Verificar si hay algún dato disponible (ya sea ángulos, funcionalidad o dolor)
+  const hayDatos = 
+    Object.keys(datos.rangosActivos).length > 0 || 
+    Object.keys(datos.dolores).length > 0 || 
+    Object.keys(datos.funcionalidades).length > 0;
+  
+  // Si no hay ningún dato, salir
+  if (!hayDatos) return;
   
   // Generar interpretación
   let interpretacion = generarInterpretacionROM(region, datos);
@@ -1450,9 +1466,12 @@ function actualizarRecomendacionesROM(region) {
   // Generar consideraciones
   let consideraciones = generarConsideracionesROM(region, datos);
   consideracionesElement.innerHTML = consideraciones;
+  
+  // Actualizar badge de estado
+  document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
+  document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
 }
 
-// Recopilar todos los datos de ROM para una región
 function recopilarDatosROM(region) {
   const datos = {
     rangosActivos: {},
@@ -1461,6 +1480,27 @@ function recopilarDatosROM(region) {
     dolores: {},
     funcionalidades: {}
   };
+  
+  // MODIFICACIÓN 1: Primero recopilamos todos los selectores de dolor y funcionalidad disponibles
+  // para capturar datos incluso si no hay ángulos ingresados
+  
+  // Recopilar datos de dolor para la región
+  const selectoresDolor = document.querySelectorAll(`select[id^="${region}_"][id$="_dolor"]`);
+  selectoresDolor.forEach(select => {
+    if (select.value) {
+      const movimiento = select.id.replace(`${region}_`, '').replace('_dolor', '');
+      datos.dolores[movimiento] = select.value;
+    }
+  });
+  
+  // Recopilar datos de funcionalidad para la región
+  const selectoresFuncionalidad = document.querySelectorAll(`select[id^="${region}_"][id$="_funcionalidad"]`);
+  selectoresFuncionalidad.forEach(select => {
+    if (select.value) {
+      const movimiento = select.id.replace(`${region}_`, '').replace('_funcionalidad', '');
+      datos.funcionalidades[movimiento] = select.value;
+    }
+  });
   
   // Buscar todos los inputs de rango activo para esta región
   const inputsActivos = document.querySelectorAll(`input[id^="${region}_"][id$="_activo"]`);
@@ -1483,18 +1523,6 @@ function recopilarDatosROM(region) {
           datos.diferenciales[movimiento] = valorPasivo - valor;
         }
       }
-      
-      // Buscar el dolor correspondiente
-      const selectDolor = document.getElementById(`${region}_${movimiento}_dolor`);
-      if (selectDolor) {
-        datos.dolores[movimiento] = selectDolor.value;
-      }
-      
-      // Buscar la funcionalidad correspondiente
-      const selectFuncionalidad = document.getElementById(`${region}_${movimiento}_funcionalidad`);
-      if (selectFuncionalidad) {
-        datos.funcionalidades[movimiento] = selectFuncionalidad.value;
-      }
     }
   });
   
@@ -1509,6 +1537,8 @@ function generarInterpretacionROM(region, datos) {
   let limitacionesLeves = 0;
   let movimientosDolorosos = 0;
   let diferencialSignificativo = false;
+  
+  // MODIFICACIÓN 3: Ahora consideramos datos de funcionalidad incluso sin ángulos
   
   // Contar limitaciones por severidad
   for (const movimiento in datos.funcionalidades) {
@@ -1540,26 +1570,55 @@ function generarInterpretacionROM(region, datos) {
     }
   }
   
-  // Construir interpretación basada en hallazgos
-  if (limitacionesSeveras > 0) {
-    interpretacion += `<p class="alert alert-danger">Se observa limitación severa en ${limitacionesSeveras} movimiento(s) de ${region}, `;
-    interpretacion += `indicando un compromiso importante de la movilidad con potencial impacto funcional significativo.</p>`;
-  } else if (limitacionesModeradas > 0) {
-    interpretacion += `<p class="alert alert-warning">Se observa limitación moderada en ${limitacionesModeradas} movimiento(s) de ${region}, `;
-    interpretacion += `sugiriendo restricción de movilidad con impacto funcional moderado.</p>`;
-  } else if (limitacionesLeves > 0) {
-    interpretacion += `<p class="alert alert-info">Se observa limitación leve en ${limitacionesLeves} movimiento(s) de ${region}, `;
-    interpretacion += `indicando restricciones menores que podrían impactar algunas actividades específicas.</p>`;
-  } else {
-    interpretacion += `<p class="alert alert-success">Los rangos de movimiento de ${region} se encuentran dentro de parámetros normales o funcionales.</p>`;
+  // MODIFICACIÓN 4: Ahora construimos interpretación basada en CUALQUIER dato disponible
+  
+  // Si hay datos de funcionalidad
+  if (limitacionesSeveras > 0 || limitacionesModeradas > 0 || limitacionesLeves > 0) {
+    if (limitacionesSeveras > 0) {
+      interpretacion += `<p class="alert alert-danger">Se observa limitación severa en ${limitacionesSeveras} movimiento(s) de ${region}, `;
+      interpretacion += `indicando un compromiso importante de la movilidad con potencial impacto funcional significativo.</p>`;
+    } else if (limitacionesModeradas > 0) {
+      interpretacion += `<p class="alert alert-warning">Se observa limitación moderada en ${limitacionesModeradas} movimiento(s) de ${region}, `;
+      interpretacion += `sugiriendo restricción de movilidad con impacto funcional moderado.</p>`;
+    } else if (limitacionesLeves > 0) {
+      interpretacion += `<p class="alert alert-info">Se observa limitación leve en ${limitacionesLeves} movimiento(s) de ${region}, `;
+      interpretacion += `indicando restricciones menores que podrían impactar algunas actividades específicas.</p>`;
+    }
+  } 
+  // Si no hay datos de funcionalidad pero hay rangos medidos
+  else if (Object.keys(datos.rangosActivos).length > 0) {
+    // Verificar si hay déficit según rangos medidos
+    let movimientosLimitados = 0;
+    for (const movimiento in datos.rangosActivos) {
+      const valorNormativo = obtenerValorNormativo(region, movimiento);
+      if (valorNormativo > 0 && datos.rangosActivos[movimiento] < valorNormativo * 0.9) {
+        movimientosLimitados++;
+      }
+    }
+    
+    if (movimientosLimitados > 0) {
+      interpretacion += `<p class="alert alert-info">Se detectan ${movimientosLimitados} movimiento(s) con rangos por debajo de valores normativos. `;
+      interpretacion += `Se recomienda completar la evaluación de funcionalidad para una interpretación más precisa.</p>`;
+    } else {
+      interpretacion += `<p class="alert alert-success">Los rangos de movimiento de ${region} se encuentran dentro de parámetros normales o funcionales.</p>`;
+    }
+  } 
+  // Si solo hay datos de dolor
+  else if (movimientosDolorosos > 0) {
+    interpretacion += `<p class="alert alert-warning">Se ha reportado dolor en ${movimientosDolorosos} movimiento(s) de ${region}. `;
+    interpretacion += `Se recomienda completar la evaluación de rangos y funcionalidad para una interpretación más completa.</p>`;
+  } 
+  // Si no hay datos concretos, pero se inició la evaluación
+  else {
+    interpretacion += `<p class="alert alert-info">Se ha iniciado la evaluación de ${region}. Complete los campos de rango de movimiento, funcionalidad o dolor para generar una interpretación detallada.</p>`;
   }
   
-  // Añadir interpretación sobre dolor
-  if (movimientosDolorosos > 0) {
+  // Añadir interpretación sobre dolor si hay datos
+  if (movimientosDolorosos > 0 && (limitacionesSeveras > 0 || limitacionesModeradas > 0 || limitacionesLeves > 0 || Object.keys(datos.rangosActivos).length > 0)) {
     interpretacion += `<p>Se evidencia dolor durante ${movimientosDolorosos} movimiento(s), lo que sugiere componente inflamatorio o sensibilización.</p>`;
   }
   
-  // Añadir interpretación sobre diferenciales
+  // Añadir interpretación sobre diferenciales si hay datos
   if (diferencialSignificativo) {
     interpretacion += `<p>El diferencial activo-pasivo significativo sugiere posible inhibición neuromuscular o debilidad muscular específica.</p>`;
   }
@@ -1606,28 +1665,48 @@ function generarRecomendacionesROM(region, datos) {
     }
   }
   
-  // Construir recomendaciones según hallazgos
-  if (limitacionesSeveras > 0) {
-    recomendaciones += `<li>Priorizar técnicas para <strong>recuperación progresiva de la movilidad</strong> con abordaje gradual.</li>`;
-    recomendaciones += `<li>Considerar tratamiento <strong>multimodal</strong> que incluya movilizaciones articulares y ejercicio terapéutico.</li>`;
-    recomendaciones += `<li>Implementar programa de <strong>ejercicios domiciliarios</strong> con progresión controlada.</li>`;
-  } else if (limitacionesModeradas > 0) {
-    recomendaciones += `<li>Implementar técnicas de <strong>movilización articular específica</strong> para los movimientos comprometidos.</li>`;
-    recomendaciones += `<li>Diseñar <strong>ejercicios de control motor</strong> con énfasis en calidad más que en rango.</li>`;
-    recomendaciones += `<li>Monitorizar la <strong>progresión</strong> enfocándose en mejorar la funcionalidad para actividades diarias.</li>`;
-  } else if (limitacionesLeves > 0) {
-    recomendaciones += `<li>Realizar <strong>ejercicios de movilidad</strong> enfocados en los movimientos limitados.</li>`;
-    recomendaciones += `<li>Integrar <strong>entrenamiento funcional</strong> que incluya los patrones de movimiento comprometidos.</li>`;
-    recomendaciones += `<li>Educar sobre <strong>ergonomía y posturas</strong> para prevenir limitaciones adicionales.</li>`;
+  // MODIFICACIÓN 5: Construir recomendaciones basadas en CUALQUIER dato disponible
+  
+  // Si hay datos de funcionalidad
+  if (limitacionesSeveras > 0 || limitacionesModeradas > 0 || limitacionesLeves > 0) {
+    if (limitacionesSeveras > 0) {
+      recomendaciones += `<li>Priorizar técnicas para <strong>recuperación progresiva de la movilidad</strong> con abordaje gradual.</li>`;
+      recomendaciones += `<li>Considerar tratamiento <strong>multimodal</strong> que incluya movilizaciones articulares y ejercicio terapéutico.</li>`;
+      recomendaciones += `<li>Implementar programa de <strong>ejercicios domiciliarios</strong> con progresión controlada.</li>`;
+    } else if (limitacionesModeradas > 0) {
+      recomendaciones += `<li>Implementar técnicas de <strong>movilización articular específica</strong> para los movimientos comprometidos.</li>`;
+      recomendaciones += `<li>Diseñar <strong>ejercicios de control motor</strong> con énfasis en calidad más que en rango.</li>`;
+      recomendaciones += `<li>Monitorizar la <strong>progresión</strong> enfocándose en mejorar la funcionalidad para actividades diarias.</li>`;
+    } else if (limitacionesLeves > 0) {
+      recomendaciones += `<li>Realizar <strong>ejercicios de movilidad</strong> enfocados en los movimientos limitados.</li>`;
+      recomendaciones += `<li>Integrar <strong>entrenamiento funcional</strong> que incluya los patrones de movimiento comprometidos.</li>`;
+      recomendaciones += `<li>Educar sobre <strong>ergonomía y posturas</strong> para prevenir limitaciones adicionales.</li>`;
+    }
+  } 
+  // Si solo hay datos de dolor
+  else if (movimientosDolorosos > 0) {
+    recomendaciones += `<li>Implementar <strong>evaluación detallada del dolor</strong> para identificar sus mecanismos y características.</li>`;
+    recomendaciones += `<li>Considerar <strong>técnicas de neuromodulación</strong> y educación en neurociencia del dolor.</li>`;
+    recomendaciones += `<li>Completar la evaluación de rangos para determinar el impacto del dolor en la movilidad funcional.</li>`;
+  }
+  // Si solo hay datos de rango
+  else if (Object.keys(datos.rangosActivos).length > 0) {
+    recomendaciones += `<li>Completar evaluación de funcionalidad y dolor para un abordaje terapéutico más específico.</li>`;
+    recomendaciones += `<li>Implementar <strong>evaluación cualitativa</strong> de los movimientos además de la medición cuantitativa.</li>`;
+    recomendaciones += `<li>Considerar impacto funcional de los rangos observados en actividades cotidianas.</li>`;
+  }
+  // Si no hay datos específicos
+  else {
+    recomendaciones += `<li>Complete la evaluación con datos de rangos de movimiento, dolor o funcionalidad para generar recomendaciones específicas.</li>`;
   }
   
-  // Añadir recomendaciones para dolor
-  if (movimientosDolorosos > 0) {
+  // Añadir recomendaciones específicas para dolor si hay datos
+  if (movimientosDolorosos > 0 && (limitacionesSeveras > 0 || limitacionesModeradas > 0 || limitacionesLeves > 0)) {
     recomendaciones += `<li>Implementar estrategias de <strong>modulación del dolor</strong> durante las técnicas terapéuticas.</li>`;
     recomendaciones += `<li>Considerar <strong>dosificación gradual</strong> de la intensidad para no exacerbar síntomas.</li>`;
   }
   
-  // Añadir recomendaciones para diferenciales
+  // Añadir recomendaciones para diferenciales si hay datos
   if (diferencialSignificativo) {
     recomendaciones += `<li>Incluir <strong>ejercicios de activación muscular</strong> específicos para mejorar el control neuromuscular.</li>`;
     recomendaciones += `<li>Considerar técnicas de <strong>facilitación neuromuscular propioceptiva</strong> para optimizar patrones de movimiento.</li>`;
@@ -1635,33 +1714,6 @@ function generarRecomendacionesROM(region, datos) {
   
   recomendaciones += "</ul>";
   return recomendaciones;
-}
-
-// Generar consideraciones adicionales
-function generarConsideracionesROM(region, datos) {
-  // Consideraciones específicas según la región
-  let consideraciones = "<ul>";
-  
-  switch (region) {
-    case "cervical":
-      consideraciones += `
-        <li>Correlacionar los hallazgos con la evaluación postural de cabeza y cuello.</li>
-        <li>Valorar la función de la musculatura profunda (flexores/extensores profundos) además de los rangos.</li>
-        <li>Considerar la influencia de factores ergonómicos y posturales en el trabajo/actividades diarias.</li>
-        <li>Evaluar la relación entre la movilidad cervical y la función vestibular/oculomotora en caso de síntomas asociados.</li>
-      `;
-      break;
-    case "dorsal":
-      consideraciones += `
-        <li>Evaluar la relación con la mecánica respiratoria.</li>
-        <li>Considerar la interacción con la función de la cintura escapular.</li>
-      `;
-      break;
-    // Añadir más regiones según sea necesario
-  }
-  
-  consideraciones += "</ul>";
-  return consideraciones;
 }
 
 // Colorear selectores según su selección
