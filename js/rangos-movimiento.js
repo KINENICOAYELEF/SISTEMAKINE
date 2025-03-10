@@ -1481,6 +1481,7 @@ function recopilarDatosROM(region) {
     diferenciales: {},
     dolores: {},
     funcionalidades: {}
+    movimientosAccesorios: {}
   };
   
   // MODIFICACIÓN 1: Primero recopilamos todos los selectores de dolor y funcionalidad disponibles
@@ -1525,6 +1526,23 @@ function recopilarDatosROM(region) {
           datos.diferenciales[movimiento] = valorPasivo - valor;
         }
       }
+    }
+  });
+
+// Recopilar datos de movimientos accesorios
+  const selectoresAccesorios = document.querySelectorAll(`select[id^="${region}_acc_"][id$="_calidad"]`);
+  
+  selectoresAccesorios.forEach(select => {
+    if (select.value) {
+      const idBase = select.id.replace("_calidad", "");
+      const nombre = idBase.replace(`${region}_acc_`, "");
+      const dolorSelector = document.getElementById(idBase + "_dolor");
+      const dolor = dolorSelector ? dolorSelector.value : "No";
+      
+      datos.movimientosAccesorios[nombre] = {
+        calidad: select.value,
+        dolor: dolor
+      };
     }
   });
   
@@ -1821,6 +1839,58 @@ function cargarDatosGuardados() {
     // Actualizar interpretaciones y visualizaciones
     actualizarResumenVisual();
   }
+}
+
+// Generar consideraciones adicionales
+function generarConsideracionesROM(region, datos) {
+  // Consideraciones específicas según la región
+  let consideraciones = "<ul>";
+  
+  switch (region) {
+    case "cervical":
+      consideraciones += `
+        <li>Correlacionar los hallazgos con la evaluación postural de cabeza y cuello.</li>
+        <li>Valorar la función de la musculatura profunda (flexores/extensores profundos) además de los rangos.</li>
+        <li>Considerar la influencia de factores ergonómicos y posturales en el trabajo/actividades diarias.</li>
+        <li>Evaluar la relación entre la movilidad cervical y la función vestibular/oculomotora en caso de síntomas asociados.</li>
+        <li>Valorar posibles compensaciones de la cintura escapular durante los movimientos cervicales.</li>
+      `;
+      break;
+    case "dorsal":
+      consideraciones += `
+        <li>Evaluar la relación con la mecánica respiratoria y expansión torácica.</li>
+        <li>Considerar la interacción con la función de la cintura escapular y postura de hombros.</li>
+        <li>Valorar posibles compensaciones lumbares o cervicales durante los movimientos.</li>
+        <li>Relacionar los hallazgos con la evaluación postural global, especialmente cifosis.</li>
+      `;
+      break;
+    case "lumbar":
+      consideraciones += `
+        <li>Correlacionar los hallazgos con el patrón de activación de la musculatura profunda local.</li>
+        <li>Evaluar el efecto de la posición pélvica en la movilidad lumbar.</li>
+        <li>Considerar factores de carga y ergonómicos en actividades cotidianas y laborales.</li>
+        <li>Valorar la influencia de la flexibilidad de cadenas miofasciales en la movilidad.</li>
+      `;
+      break;
+    case "hombro":
+      consideraciones += `
+        <li>Analizar la calidad del ritmo escapulohumeral durante los movimientos.</li>
+        <li>Evaluar la estabilidad dinámica durante actividades funcionales.</li>
+        <li>Considerar el efecto de la postura cervical y dorsal en la mecánica del hombro.</li>
+        <li>Valorar patrones de reclutamiento muscular y posibles compensaciones.</li>
+      `;
+      break;
+    // Otras regiones...
+    default:
+      consideraciones += `
+        <li>Complete más datos de la evaluación para obtener consideraciones específicas.</li>
+        <li>Correlacione los hallazgos con la historia clínica y mecanismos de lesión.</li>
+        <li>Considere el impacto funcional en las actividades relevantes para el paciente.</li>
+      `;
+  }
+  
+  consideraciones += "</ul>";
+  return consideraciones;
 }
 
 // Sistema de puntuación global
