@@ -1480,7 +1480,7 @@ function recopilarDatosROM(region) {
     rangosPasivos: {},
     diferenciales: {},
     dolores: {},
-    funcionalidades: {}
+    funcionalidades: {},
     movimientosAccesorios: {}
   };
   
