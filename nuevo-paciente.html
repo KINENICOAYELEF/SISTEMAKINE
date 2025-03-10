@@ -4311,745 +4311,1727 @@
             
             <!-- 6.5 Evaluación de Rangos de Movimiento -->
 <h4>6.5 Evaluación de Rangos de Movimiento</h4>
+
+<!-- Primer acordeón: Evaluación de Patrones de Movimiento Funcionales -->
 <div class="cuestionarios-acordeon">
   <div class="cuestionario-item">
-    <div class="cuestionario-header" onclick="toggleCuestionario('rom-evaluation-content')">
-      <h4><i class="fas fa-plus-circle"></i> Evaluación Completa de Rangos de Movimiento</h4>
-      <div class="resultado-badge" id="rom-evaluation-badge">No completado</div>
+    <div class="cuestionario-header" onclick="toggleCuestionario('patrones-movimiento-content')">
+      <h4><i class="fas fa-plus-circle"></i> Evaluación de Patrones de Movimiento Funcionales</h4>
+      <div class="resultado-badge" id="patrones-movimiento-badge">No completado</div>
     </div>
-    <div class="cuestionario-content" id="rom-evaluation-content" style="display: none;">
-      <!-- Selector de región anatómica para ROM -->
-      <div class="form-row mb-4">
-        <div class="form-col form-col-md-12">
-          <h5>Región Anatómica a Evaluar</h5>
-          <div class="form-group">
-            <label for="rom_region" class="form-label">Seleccione la región</label>
-            <select id="rom_region" name="rom_region" class="form-select" onchange="mostrarTablaROM()">
-              <option value="">Seleccionar</option>
-              <option value="columna_cervical">Columna Cervical</option>
-              <option value="columna_dorsal">Columna Dorsal</option>
-              <option value="columna_lumbar">Columna Lumbar</option>
-              <option value="hombro">Hombro</option>
-              <option value="codo">Codo y Antebrazo</option>
-              <option value="muneca_mano">Muñeca y Mano</option>
-              <option value="cadera">Cadera</option>
-              <option value="rodilla">Rodilla</option>
-              <option value="tobillo_pie">Tobillo y Pie</option>
-              <option value="atm">ATM (Articulación Temporomandibular)</option>
-            </select>
-          </div>
-        </div>
+    <div class="cuestionario-content" id="patrones-movimiento-content" style="display: none;">
+      <div class="alert alert-info mb-3">
+        <i class="fas fa-info-circle"></i> <strong>Nota:</strong> La evaluación de patrones de movimiento funcionales proporciona información valiosa sobre la calidad del movimiento, control motor y posibles compensaciones, lo que complementa la evaluación analítica de rangos articulares.
       </div>
 
-      <!-- Tablas de ROM para cada región (inicialmente ocultas) -->
-      <div id="tablas_rom_container">
-        <!-- Tabla ROM Columna Cervical -->
-        <div id="tabla_rom_columna_cervical" class="tabla-rom" style="display: none;">
-          <h5 class="mt-4 mb-3">Rangos de Movimiento: Columna Cervical</h5>
-          
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th rowspan="2">Movimiento</th>
-                  <th colspan="2">Rango Activo</th>
-                  <th colspan="2">Rango Pasivo</th>
-                  <th rowspan="2">Dolor</th>
-                  <th rowspan="2">Observaciones</th>
-                </tr>
-                <tr>
-                  <th>Grados</th>
-                  <th>Estado</th>
-                  <th>Grados</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Flexión</td>
-                  <td>
-                    <input type="number" id="cervical_flexion_activo" name="cervical_flexion_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_flexion_activo', 0, 35, 45)">
-                  </td>
-                  <td id="cervical_flexion_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_flexion_pasivo" name="cervical_flexion_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_flexion_pasivo', 0, 35, 45)">
-                  </td>
-                  <td id="cervical_flexion_pasivo_estado"></td>
-                  <td>
-                    <select id="cervical_flexion_dolor" name="cervical_flexion_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_flexion_obs" name="cervical_flexion_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Extensión</td>
-                  <td>
-                    <input type="number" id="cervical_extension_activo" name="cervical_extension_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_extension_activo', 0, 35, 45)">
-                  </td>
-                  <td id="cervical_extension_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_extension_pasivo" name="cervical_extension_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_extension_pasivo', 0, 35, 45)">
-                  </td>
-                  <td id="cervical_extension_pasivo_estado"></td>
-                  <td>
-                    <select id="cervical_extension_dolor" name="cervical_extension_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_extension_obs" name="cervical_extension_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Inclinación lateral derecha</td>
-                  <td>
-                    <input type="number" id="cervical_incl_der_activo" name="cervical_incl_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_der_activo', 0, 30, 45)">
-                  </td>
-                  <td id="cervical_incl_der_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_incl_der_pasivo" name="cervical_incl_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_der_pasivo', 0, 30, 45)">
-                  </td>
-                  <td id="cervical_incl_der_pasivo_estado"></td>
-                  <td>
-                    <select id="cervical_incl_der_dolor" name="cervical_incl_der_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_incl_der_obs" name="cervical_incl_der_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Inclinación lateral izquierda</td>
-                  <td>
-                    <input type="number" id="cervical_incl_izq_activo" name="cervical_incl_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_izq_activo', 0, 30, 45)">
-                  </td>
-                  <td id="cervical_incl_izq_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_incl_izq_pasivo" name="cervical_incl_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_incl_izq_pasivo', 0, 30, 45)">
-                  </td>
-                  <td id="cervical_incl_izq_pasivo_estado"></td>
-                  <td>
-                    <select id="cervical_incl_izq_dolor" name="cervical_incl_izq_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_incl_izq_obs" name="cervical_incl_izq_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Rotación derecha</td>
-                  <td>
-                    <input type="number" id="cervical_rot_der_activo" name="cervical_rot_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_der_activo', 0, 50, 70)">
-                  </td>
-                  <td id="cervical_rot_der_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_rot_der_pasivo" name="cervical_rot_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_der_pasivo', 0, 50, 70)">
-                  </td>
-                  <td id="cervical_rot_der_pasivo_estado"></td>
-                  <td>
-                    <select id="cervical_rot_der_dolor" name="cervical_rot_der_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_rot_der_obs" name="cervical_rot_der_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Rotación izquierda</td>
-                  <td>
-                    <input type="number" id="cervical_rot_izq_activo" name="cervical_rot_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_izq_activo', 0, 50, 70)">
-                  </td>
-                  <td id="cervical_rot_izq_activo_estado"></td>
-                  <td>
-                    <input type="number" id="cervical_rot_izq_pasivo" name="cervical_rot_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('cervical_rot_izq_pasivo', 0, 50, 70)">
-                  </td>
-                  <td id="cervical_rot_izq_pasivo_estado"></td>
-                  <td>
-                    <select id="cervical_rot_izq_dolor" name="cervical_rot_izq_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="cervical_rot_izq_obs" name="cervical_rot_izq_obs" class="form-control">
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <!-- Tabla ROM Hombro -->
-        <div id="tabla_rom_hombro" class="tabla-rom" style="display: none;">
-          <h5 class="mt-4 mb-3">Rangos de Movimiento: Hombro</h5>
-          
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th rowspan="2">Movimiento</th>
-                  <th colspan="2">Rango Activo</th>
-                  <th colspan="2">Rango Pasivo</th>
-                  <th rowspan="2">Dolor</th>
-                  <th rowspan="2">Observaciones</th>
-                </tr>
-                <tr>
-                  <th>Grados</th>
-                  <th>Estado</th>
-                  <th>Grados</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Flexión</td>
-                  <td>
-                    <input type="number" id="hombro_flexion_activo" name="hombro_flexion_activo" class="form-control rom-input" min="0" max="200" onchange="evaluarROM('hombro_flexion_activo', 0, 130, 180)">
-                  </td>
-                  <td id="hombro_flexion_activo_estado"></td>
-                  <td>
-                    <input type="number" id="hombro_flexion_pasivo" name="hombro_flexion_pasivo" class="form-control rom-input" min="0" max="200" onchange="evaluarROM('hombro_flexion_pasivo', 0, 130, 180)">
-                  </td>
-                  <td id="hombro_flexion_pasivo_estado"></td>
-                  <td>
-                    <select id="hombro_flexion_dolor" name="hombro_flexion_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="hombro_flexion_obs" name="hombro_flexion_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Extensión</td>
-                  <td>
-                    <input type="number" id="hombro_extension_activo" name="hombro_extension_activo" class="form-control rom-input" min="0" max="100" onchange="evaluarROM('hombro_extension_activo', 0, 30, 50)">
-                  </td>
-                  <td id="hombro_extension_activo_estado"></td>
-                  <td>
-                    <input type="number" id="hombro_extension_pasivo" name="hombro_extension_pasivo" class="form-control rom-input" min="0" max="100" onchange="evaluarROM('hombro_extension_pasivo', 0, 30, 50)">
-                  </td>
-                  <td id="hombro_extension_pasivo_estado"></td>
-                  <td>
-                    <select id="hombro_extension_dolor" name="hombro_extension_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="hombro_extension_obs" name="hombro_extension_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Abducción</td>
-                  <td>
-                    <input type="number" id="hombro_abduccion_activo" name="hombro_abduccion_activo" class="form-control rom-input" min="0" max="200" onchange="evaluarROM('hombro_abduccion_activo', 0, 130, 180)">
-                  </td>
-                  <td id="hombro_abduccion_activo_estado"></td>
-                  <td>
-                    <input type="number" id="hombro_abduccion_pasivo" name="hombro_abduccion_pasivo" class="form-control rom-input" min="0" max="200" onchange="evaluarROM('hombro_abduccion_pasivo', 0, 130, 180)">
-                  </td>
-                  <td id="hombro_abduccion_pasivo_estado"></td>
-                  <td>
-                    <select id="hombro_abduccion_dolor" name="hombro_abduccion_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="hombro_abduccion_obs" name="hombro_abduccion_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Aducción horizontal</td>
-                  <td>
-                    <input type="number" id="hombro_aduccion_hor_activo" name="hombro_aduccion_hor_activo" class="form-control rom-input" min="0" max="150" onchange="evaluarROM('hombro_aduccion_hor_activo', 0, 100, 130)">
-                  </td>
-                  <td id="hombro_aduccion_hor_activo_estado"></td>
-                  <td>
-                    <input type="number" id="hombro_aduccion_hor_pasivo" name="hombro_aduccion_hor_pasivo" class="form-control rom-input" min="0" max="150" onchange="evaluarROM('hombro_aduccion_hor_pasivo', 0, 100, 130)">
-                  </td>
-                  <td id="hombro_aduccion_hor_pasivo_estado"></td>
-                  <td>
-                    <select id="hombro_aduccion_hor_dolor" name="hombro_aduccion_hor_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="hombro_aduccion_hor_obs" name="hombro_aduccion_hor_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Rotación interna</td>
-                  <td>
-                    <input type="number" id="hombro_rot_int_activo" name="hombro_rot_int_activo" class="form-control rom-input" min="0" max="100" onchange="evaluarROM('hombro_rot_int_activo', 0, 55, 70)">
-                  </td>
-                  <td id="hombro_rot_int_activo_estado"></td>
-                  <td>
-                    <input type="number" id="hombro_rot_int_pasivo" name="hombro_rot_int_pasivo" class="form-control rom-input" min="0" max="100" onchange="evaluarROM('hombro_rot_int_pasivo', 0, 55, 70)">
-                  </td>
-                  <td id="hombro_rot_int_pasivo_estado"></td>
-                  <td>
-                    <select id="hombro_rot_int_dolor" name="hombro_rot_int_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="hombro_rot_int_obs" name="hombro_rot_int_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Rotación externa</td>
-                  <td>
-                    <input type="number" id="hombro_rot_ext_activo" name="hombro_rot_ext_activo" class="form-control rom-input" min="0" max="100" onchange="evaluarROM('hombro_rot_ext_activo', 0, 60, 90)">
-                  </td>
-                  <td id="hombro_rot_ext_activo_estado"></td>
-                  <td>
-                    <input type="number" id="hombro_rot_ext_pasivo" name="hombro_rot_ext_pasivo" class="form-control rom-input" min="0" max="100" onchange="evaluarROM('hombro_rot_ext_pasivo', 0, 60, 90)">
-                  </td>
-                  <td id="hombro_rot_ext_pasivo_estado"></td>
-                  <td>
-                    <select id="hombro_rot_ext_dolor" name="hombro_rot_ext_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="hombro_rot_ext_obs" name="hombro_rot_ext_obs" class="form-control">
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <!-- Tabla ROM Columna Lumbar -->
-        <div id="tabla_rom_columna_lumbar" class="tabla-rom" style="display: none;">
-          <h5 class="mt-4 mb-3">Rangos de Movimiento: Columna Lumbar</h5>
-          
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th rowspan="2">Movimiento</th>
-                  <th colspan="2">Rango Activo</th>
-                  <th colspan="2">Rango Pasivo</th>
-                  <th rowspan="2">Dolor</th>
-                  <th rowspan="2">Observaciones</th>
-                </tr>
-                <tr>
-                  <th>Grados</th>
-                  <th>Estado</th>
-                  <th>Grados</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Flexión</td>
-                  <td>
-                    <input type="number" id="lumbar_flexion_activo" name="lumbar_flexion_activo" class="form-control rom-input" min="0" max="120" onchange="evaluarROM('lumbar_flexion_activo', 0, 50, 60)">
-                  </td>
-                  <td id="lumbar_flexion_activo_estado"></td>
-                  <td>
-                    <input type="number" id="lumbar_flexion_pasivo" name="lumbar_flexion_pasivo" class="form-control rom-input" min="0" max="120" onchange="evaluarROM('lumbar_flexion_pasivo', 0, 50, 60)">
-                  </td>
-                  <td id="lumbar_flexion_pasivo_estado"></td>
-                  <td>
-                    <select id="lumbar_flexion_dolor" name="lumbar_flexion_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="lumbar_flexion_obs" name="lumbar_flexion_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Extensión</td>
-                  <td>
-                    <input type="number" id="lumbar_extension_activo" name="lumbar_extension_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('lumbar_extension_activo', 0, 20, 25)">
-                  </td>
-                  <td id="lumbar_extension_activo_estado"></td>
-                  <td>
-                    <input type="number" id="lumbar_extension_pasivo" name="lumbar_extension_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('lumbar_extension_pasivo', 0, 20, 25)">
-                  </td>
-                  <td id="lumbar_extension_pasivo_estado"></td>
-                  <td>
-                    <select id="lumbar_extension_dolor" name="lumbar_extension_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="lumbar_extension_obs" name="lumbar_extension_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Inclinación lateral derecha</td>
-                  <td>
-                    <input type="number" id="lumbar_incl_der_activo" name="lumbar_incl_der_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('lumbar_incl_der_activo', 0, 20, 25)">
-                  </td>
-                  <td id="lumbar_incl_der_activo_estado"></td>
-                  <td>
-                    <input type="number" id="lumbar_incl_der_pasivo" name="lumbar_incl_der_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('lumbar_incl_der_pasivo', 0, 20, 25)">
-                  </td>
-                  <td id="lumbar_incl_der_pasivo_estado"></td>
-                  <td>
-                    <select id="lumbar_incl_der_dolor" name="lumbar_incl_der_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="lumbar_incl_der_obs" name="lumbar_incl_der_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Inclinación lateral izquierda</td>
-                  <td>
-                    <input type="number" id="lumbar_incl_izq_activo" name="lumbar_incl_izq_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('lumbar_incl_izq_activo', 0, 20, 25)">
-                  </td>
-                  <td id="lumbar_incl_izq_activo_estado"></td>
-                  <td>
-                    <input type="number" id="lumbar_incl_izq_pasivo" name="lumbar_incl_izq_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('lumbar_incl_izq_pasivo', 0, 20, 25)">
-                  </td>
-                  <td id="lumbar_incl_izq_pasivo_estado"></td>
-                  <td>
-                    <select id="lumbar_incl_izq_dolor" name="lumbar_incl_izq_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="lumbar_incl_izq_obs" name="lumbar_incl_izq_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Rotación derecha</td>
-                  <td>
-                    <input type="number" id="lumbar_rot_der_activo" name="lumbar_rot_der_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('lumbar_rot_der_activo', 0, 30, 45)">
-                  </td>
-                  <td id="lumbar_rot_der_activo_estado"></td>
-                  <td>
-                    <input type="number" id="lumbar_rot_der_pasivo" name="lumbar_rot_der_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('lumbar_rot_der_pasivo', 0, 30, 45)">
-                  </td>
-                  <td id="lumbar_rot_der_pasivo_estado"></td>
-                  <td>
-                    <select id="lumbar_rot_der_dolor" name="lumbar_rot_der_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="lumbar_rot_der_obs" name="lumbar_rot_der_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Rotación izquierda</td>
-                  <td>
-                    <input type="number" id="lumbar_rot_izq_activo" name="lumbar_rot_izq_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('lumbar_rot_izq_activo', 0, 30, 45)">
-                  </td>
-                  <td id="lumbar_rot_izq_activo_estado"></td>
-                  <td>
-                    <input type="number" id="lumbar_rot_izq_pasivo" name="lumbar_rot_izq_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('lumbar_rot_izq_pasivo', 0, 30, 45)">
-                  </td>
-                  <td id="lumbar_rot_izq_pasivo_estado"></td>
-                  <td>
-                    <select id="lumbar_rot_izq_dolor" name="lumbar_rot_izq_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="lumbar_rot_izq_obs" name="lumbar_rot_izq_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Test de Schober</td>
-                  <td colspan="2">
-                    <input type="number" id="lumbar_schober" name="lumbar_schober" class="form-control" min="0" max="15" step="0.1" placeholder="Aumento en cm">
-                  </td>
-                  <td colspan="2">
-                    <select id="lumbar_schober_resultado" name="lumbar_schober_resultado" class="form-select">
-                      <option value="">Seleccionar</option>
-                      <option value="Normal">Normal (> 5 cm)</option>
-                      <option value="Limitado">Limitado (< 5 cm)</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="lumbar_schober_dolor" name="lumbar_schober_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Sí">Sí</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="lumbar_schober_obs" name="lumbar_schober_obs" class="form-control">
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <!-- Tabla ROM Rodilla -->
-        <div id="tabla_rom_rodilla" class="tabla-rom" style="display: none;">
-          <h5 class="mt-4 mb-3">Rangos de Movimiento: Rodilla</h5>
-          
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th rowspan="2">Movimiento</th>
-                  <th colspan="2">Rango Activo</th>
-                  <th colspan="2">Rango Pasivo</th>
-                  <th rowspan="2">Dolor</th>
-                  <th rowspan="2">Observaciones</th>
-                </tr>
-                <tr>
-                  <th>Grados</th>
-                  <th>Estado</th>
-                  <th>Grados</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Flexión</td>
-                  <td>
-                    <input type="number" id="rodilla_flexion_activo" name="rodilla_flexion_activo" class="form-control rom-input" min="0" max="170" onchange="evaluarROM('rodilla_flexion_activo', 0, 110, 135)">
-                  </td>
-                  <td id="rodilla_flexion_activo_estado"></td>
-                  <td>
-                    <input type="number" id="rodilla_flexion_pasivo" name="rodilla_flexion_pasivo" class="form-control rom-input" min="0" max="170" onchange="evaluarROM('rodilla_flexion_pasivo', 0, 110, 135)">
-                  </td>
-                  <td id="rodilla_flexion_pasivo_estado"></td>
-                  <td>
-                    <select id="rodilla_flexion_dolor" name="rodilla_flexion_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="rodilla_flexion_obs" name="rodilla_flexion_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Extensión</td>
-                  <td>
-                    <input type="number" id="rodilla_extension_activo" name="rodilla_extension_activo" class="form-control rom-input" min="-10" max="20" onchange="evaluarROM('rodilla_extension_activo', -10, -5, 0)">
-                  </td>
-                  <td id="rodilla_extension_activo_estado"></td>
-                  <td>
-                    <input type="number" id="rodilla_extension_pasivo" name="rodilla_extension_pasivo" class="form-control rom-input" min="-10" max="20" onchange="evaluarROM('rodilla_extension_pasivo', -10, -5, 0)">
-                  </td>
-                  <td id="rodilla_extension_pasivo_estado"></td>
-                  <td>
-                    <select id="rodilla_extension_dolor" name="rodilla_extension_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="rodilla_extension_obs" name="rodilla_extension_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Rotación interna (a 90° flexión)</td>
-                  <td>
-                    <input type="number" id="rodilla_rot_int_activo" name="rodilla_rot_int_activo" class="form-control rom-input" min="0" max="45" onchange="evaluarROM('rodilla_rot_int_activo', 0, 20, 30)">
-                  </td>
-                  <td id="rodilla_rot_int_activo_estado"></td>
-                  <td>
-                    <input type="number" id="rodilla_rot_int_pasivo" name="rodilla_rot_int_pasivo" class="form-control rom-input" min="0" max="45" onchange="evaluarROM('rodilla_rot_int_pasivo', 0, 20, 30)">
-                  </td>
-                  <td id="rodilla_rot_int_pasivo_estado"></td>
-                  <td>
-                    <select id="rodilla_rot_int_dolor" name="rodilla_rot_int_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="rodilla_rot_int_obs" name="rodilla_rot_int_obs" class="form-control">
-                  </td>
-                </tr>
-                <tr>
-                  <td>Rotación externa (a 90° flexión)</td>
-                  <td>
-                    <input type="number" id="rodilla_rot_ext_activo" name="rodilla_rot_ext_activo" class="form-control rom-input" min="0" max="45" onchange="evaluarROM('rodilla_rot_ext_activo', 0, 20, 30)">
-                  </td>
-                  <td id="rodilla_rot_ext_activo_estado"></td>
-                  <td>
-                    <input type="number" id="rodilla_rot_ext_pasivo" name="rodilla_rot_ext_pasivo" class="form-control rom-input" min="0" max="45" onchange="evaluarROM('rodilla_rot_ext_pasivo', 0, 20, 30)">
-                  </td>
-                  <td id="rodilla_rot_ext_pasivo_estado"></td>
-                  <td>
-                    <select id="rodilla_rot_ext_dolor" name="rodilla_rot_ext_dolor" class="form-select" onchange="evaluarDolorROM()">
-                      <option value="No">No</option>
-                      <option value="Inicio">Inicio</option>
-                      <option value="Medio">Medio</option>
-                      <option value="Final">Final</option>
-                      <option value="Todo">Todo el rango</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" id="rodilla_rot_ext_obs" name="rodilla_rot_ext_obs" class="form-control">
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <!-- Aquí seguirían las demás tablas para las regiones anatómicas -->
-      </div>
-
-      <!-- Movimientos Funcionales Personalizados -->
+      <!-- Patrones de Locomoción -->
       <div class="card mb-4">
         <div class="card-header bg-light">
-          <h5 class="mb-0">Movimientos Funcionales Específicos del Paciente</h5>
+          <h5 class="mb-0">Patrones de Locomoción</h5>
         </div>
         <div class="card-body">
-          <p class="text-muted mb-3">Agregue movimientos funcionales específicos relevantes para este paciente (relacionados con actividades de vida diaria, laborales, deportivas, etc.)</p>
-          
-          <div id="movimientos_funcionales_container">
-            <!-- Los movimientos funcionales se agregarán aquí -->
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th width="20%">Patrón</th>
+                  <th width="15%">Calidad</th>
+                  <th width="20%">Compensaciones</th>
+                  <th width="15%">Dolor</th>
+                  <th width="15%">Fatiga</th>
+                  <th width="15%">Impacto Funcional</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Marcha -->
+                <tr>
+                  <td>
+                    <strong>Marcha</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Desplazamiento bípedo</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="locomocion_marcha_calidad" name="locomocion_marcha_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'locomocion_marcha')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_marcha_comp_1" name="locomocion_marcha_comp[]" value="Asimetría de paso" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_marcha_comp_1">Asimetría de paso</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_marcha_comp_2" name="locomocion_marcha_comp[]" value="Disminución de balanceo" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_marcha_comp_2">Disminución de balanceo</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_marcha_comp_3" name="locomocion_marcha_comp[]" value="Apoyo alterado" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_marcha_comp_3">Apoyo alterado</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="locomocion_marcha_comp_otro" name="locomocion_marcha_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="locomocion_marcha_dolor" name="locomocion_marcha_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="locomocion_marcha_dolor_momento" name="locomocion_marcha_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="locomocion_marcha_fatiga" name="locomocion_marcha_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 min">Tras 10 min</option>
+                      <option value="Tras 5 min">Tras 5 min</option>
+                      <option value="Tras 1 min">Tras 1 min</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="locomocion_marcha_impacto" name="locomocion_marcha_impacto" class="form-select" onchange="actualizarImpactoFuncional('locomocion_marcha')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="locomocion_marcha_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Escaleras -->
+                <tr>
+                  <td>
+                    <strong>Escaleras</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Subir/bajar escalones</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="locomocion_escaleras_calidad" name="locomocion_escaleras_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'locomocion_escaleras')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_escaleras_comp_1" name="locomocion_escaleras_comp[]" value="Asimetría" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_escaleras_comp_1">Asimetría</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_escaleras_comp_2" name="locomocion_escaleras_comp[]" value="Necesita pasamanos" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_escaleras_comp_2">Necesita pasamanos</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_escaleras_comp_3" name="locomocion_escaleras_comp[]" value="Valgo de rodilla" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_escaleras_comp_3">Valgo de rodilla</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="locomocion_escaleras_comp_otro" name="locomocion_escaleras_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="locomocion_escaleras_dolor" name="locomocion_escaleras_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="locomocion_escaleras_dolor_momento" name="locomocion_escaleras_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="locomocion_escaleras_fatiga" name="locomocion_escaleras_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 min">Tras 10 min</option>
+                      <option value="Tras 5 min">Tras 5 min</option>
+                      <option value="Tras 1 min">Tras 1 min</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="locomocion_escaleras_impacto" name="locomocion_escaleras_impacto" class="form-select" onchange="actualizarImpactoFuncional('locomocion_escaleras')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="locomocion_escaleras_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Carrera -->
+                <tr>
+                  <td>
+                    <strong>Carrera</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Desplazamiento a velocidad</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="locomocion_carrera_calidad" name="locomocion_carrera_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'locomocion_carrera')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_carrera_comp_1" name="locomocion_carrera_comp[]" value="Asimetría" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_carrera_comp_1">Asimetría</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_carrera_comp_2" name="locomocion_carrera_comp[]" value="Pronación excesiva" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_carrera_comp_2">Pronación excesiva</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_carrera_comp_3" name="locomocion_carrera_comp[]" value="Crossover" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_carrera_comp_3">Crossover</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="locomocion_carrera_comp_otro" name="locomocion_carrera_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="locomocion_carrera_dolor" name="locomocion_carrera_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="locomocion_carrera_dolor_momento" name="locomocion_carrera_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="locomocion_carrera_fatiga" name="locomocion_carrera_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 min">Tras 10 min</option>
+                      <option value="Tras 5 min">Tras 5 min</option>
+                      <option value="Tras 1 min">Tras 1 min</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="locomocion_carrera_impacto" name="locomocion_carrera_impacto" class="form-select" onchange="actualizarImpactoFuncional('locomocion_carrera')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="locomocion_carrera_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Cambios de Dirección -->
+                <tr>
+                  <td>
+                    <strong>Cambios de dirección</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Giros y pivotes</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="locomocion_cambios_calidad" name="locomocion_cambios_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'locomocion_cambios')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_cambios_comp_1" name="locomocion_cambios_comp[]" value="Valgo dinámico" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_cambios_comp_1">Valgo dinámico</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_cambios_comp_2" name="locomocion_cambios_comp[]" value="Rotación excesiva" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_cambios_comp_2">Rotación excesiva</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_cambios_comp_3" name="locomocion_cambios_comp[]" value="Inestabilidad" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_cambios_comp_3">Inestabilidad</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="locomocion_cambios_comp_otro" name="locomocion_cambios_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="locomocion_cambios_dolor" name="locomocion_cambios_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="locomocion_cambios_dolor_momento" name="locomocion_cambios_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="locomocion_cambios_fatiga" name="locomocion_cambios_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 min">Tras 10 min</option>
+                      <option value="Tras 5 min">Tras 5 min</option>
+                      <option value="Tras 1 min">Tras 1 min</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="locomocion_cambios_impacto" name="locomocion_cambios_impacto" class="form-select" onchange="actualizarImpactoFuncional('locomocion_cambios')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="locomocion_cambios_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Sentarse/Levantarse -->
+                <tr>
+                  <td>
+                    <strong>Sentarse/Levantarse</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Transición sedestación-bipedestación</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="locomocion_sentarse_calidad" name="locomocion_sentarse_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'locomocion_sentarse')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_sentarse_comp_1" name="locomocion_sentarse_comp[]" value="Asimetría" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_sentarse_comp_1">Asimetría</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_sentarse_comp_2" name="locomocion_sentarse_comp[]" value="Necesita apoyo de manos" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_sentarse_comp_2">Necesita apoyo de manos</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="locomocion_sentarse_comp_3" name="locomocion_sentarse_comp[]" value="Valgo de rodilla" class="form-check-input">
+                      <label class="form-check-label" for="locomocion_sentarse_comp_3">Valgo de rodilla</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="locomocion_sentarse_comp_otro" name="locomocion_sentarse_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="locomocion_sentarse_dolor" name="locomocion_sentarse_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="locomocion_sentarse_dolor_momento" name="locomocion_sentarse_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="locomocion_sentarse_fatiga" name="locomocion_sentarse_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="locomocion_sentarse_impacto" name="locomocion_sentarse_impacto" class="form-select" onchange="actualizarImpactoFuncional('locomocion_sentarse')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="locomocion_sentarse_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           
+          <!-- Observaciones para locomoción -->
           <div class="form-row mt-3">
             <div class="form-col form-col-md-12">
-              <button type="button" class="btn btn-outline-primary btn-sm" id="agregar_movimiento_btn" onclick="agregarMovimientoFuncional()">
-                <i class="fas fa-plus"></i> Agregar Movimiento Funcional
+              <div class="form-group">
+                <label for="patrones_locomocion_obs" class="form-label">Observaciones adicionales sobre patrones de locomoción</label>
+                <textarea id="patrones_locomocion_obs" name="patrones_locomocion_obs" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patrones de Manipulación -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Patrones de Manipulación</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th width="20%">Patrón</th>
+                  <th width="15%">Calidad</th>
+                  <th width="20%">Compensaciones</th>
+                  <th width="15%">Dolor</th>
+                  <th width="15%">Fatiga</th>
+                  <th width="15%">Impacto Funcional</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Alcance Superior -->
+                <tr>
+                  <td>
+                    <strong>Alcance Superior</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Por encima del hombro</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_sup_calidad" name="manipulacion_alcance_sup_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'manipulacion_alcance_sup')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_alcance_sup_comp_1" name="manipulacion_alcance_sup_comp[]" value="Elevación de hombro" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_alcance_sup_comp_1">Elevación de hombro</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_alcance_sup_comp_2" name="manipulacion_alcance_sup_comp[]" value="Inclinación lateral" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_alcance_sup_comp_2">Inclinación lateral</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_alcance_sup_comp_3" name="manipulacion_alcance_sup_comp[]" value="Protracción cervical" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_alcance_sup_comp_3">Protracción cervical</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="manipulacion_alcance_sup_comp_otro" name="manipulacion_alcance_sup_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_sup_dolor" name="manipulacion_alcance_sup_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="manipulacion_alcance_sup_dolor_momento" name="manipulacion_alcance_sup_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_sup_fatiga" name="manipulacion_alcance_sup_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_sup_impacto" name="manipulacion_alcance_sup_impacto" class="form-select" onchange="actualizarImpactoFuncional('manipulacion_alcance_sup')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="manipulacion_alcance_sup_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Alcance Medio -->
+                <tr>
+                  <td>
+                    <strong>Alcance Medio</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">A nivel del tronco</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_med_calidad" name="manipulacion_alcance_med_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'manipulacion_alcance_med')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_alcance_med_comp_1" name="manipulacion_alcance_med_comp[]" value="Compensación con tronco" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_alcance_med_comp_1">Compensación con tronco</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_alcance_med_comp_2" name="manipulacion_alcance_med_comp[]" value="Rotación" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_alcance_med_comp_2">Rotación</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_alcance_med_comp_3" name="manipulacion_alcance_med_comp[]" value="Limitación articular" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_alcance_med_comp_3">Limitación articular</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="manipulacion_alcance_med_comp_otro" name="manipulacion_alcance_med_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_med_dolor" name="manipulacion_alcance_med_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="manipulacion_alcance_med_dolor_momento" name="manipulacion_alcance_med_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_med_fatiga" name="manipulacion_alcance_med_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_med_impacto" name="manipulacion_alcance_med_impacto" class="form-select" onchange="actualizarImpactoFuncional('manipulacion_alcance_med')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="manipulacion_alcance_med_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Alcance Inferior -->
+                <tr>
+                  <td>
+                    <strong>Alcance Inferior</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Por debajo de la cintura</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_inf_calidad" name="manipulacion_alcance_inf_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'manipulacion_alcance_inf')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_alcance_inf_comp_1" name="manipulacion_alcance_inf_comp[]" value="Flexión excesiva de tronco" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_alcance_inf_comp_1">Flexión excesiva de tronco</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_alcance_inf_comp_2" name="manipulacion_alcance_inf_comp[]" value="Falta de flexión de rodillas" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_alcance_inf_comp_2">Falta de flexión de rodillas</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_alcance_inf_comp_3" name="manipulacion_alcance_inf_comp[]" value="Necesita apoyo" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_alcance_inf_comp_3">Necesita apoyo</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="manipulacion_alcance_inf_comp_otro" name="manipulacion_alcance_inf_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_inf_dolor" name="manipulacion_alcance_inf_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="manipulacion_alcance_inf_dolor_momento" name="manipulacion_alcance_inf_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_inf_fatiga" name="manipulacion_alcance_inf_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="manipulacion_alcance_inf_impacto" name="manipulacion_alcance_inf_impacto" class="form-select" onchange="actualizarImpactoFuncional('manipulacion_alcance_inf')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="manipulacion_alcance_inf_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Manipulación Precisa -->
+                <tr>
+                  <td>
+                    <strong>Manipulación Precisa</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Destreza fina</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="manipulacion_precisa_calidad" name="manipulacion_precisa_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'manipulacion_precisa')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_precisa_comp_1" name="manipulacion_precisa_comp[]" value="Temblor" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_precisa_comp_1">Temblor</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_precisa_comp_2" name="manipulacion_precisa_comp[]" value="Limitación de pinza" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_precisa_comp_2">Limitación de pinza</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_precisa_comp_3" name="manipulacion_precisa_comp[]" value="Compensación con proximal" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_precisa_comp_3">Compensación con proximal</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="manipulacion_precisa_comp_otro" name="manipulacion_precisa_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="manipulacion_precisa_dolor" name="manipulacion_precisa_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="manipulacion_precisa_dolor_momento" name="manipulacion_precisa_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="manipulacion_precisa_fatiga" name="manipulacion_precisa_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 minutos">Tras 10 min.</option>
+                      <option value="Tras 5 minutos">Tras 5 min.</option>
+                      <option value="Tras 2 minutos">Tras 2 min.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="manipulacion_precisa_impacto" name="manipulacion_precisa_impacto" class="form-select" onchange="actualizarImpactoFuncional('manipulacion_precisa')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="manipulacion_precisa_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Agarre/Pinza -->
+                <tr>
+                  <td>
+                    <strong>Agarre/Pinza</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Fuerza de prensión</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="manipulacion_agarre_calidad" name="manipulacion_agarre_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'manipulacion_agarre')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_agarre_comp_1" name="manipulacion_agarre_comp[]" value="Debilidad" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_agarre_comp_1">Debilidad</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_agarre_comp_2" name="manipulacion_agarre_comp[]" value="Limitación articular" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_agarre_comp_2">Limitación articular</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="manipulacion_agarre_comp_3" name="manipulacion_agarre_comp[]" value="Substitución de patrón" class="form-check-input">
+                      <label class="form-check-label" for="manipulacion_agarre_comp_3">Substitución de patrón</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="manipulacion_agarre_comp_otro" name="manipulacion_agarre_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="manipulacion_agarre_dolor" name="manipulacion_agarre_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="manipulacion_agarre_dolor_momento" name="manipulacion_agarre_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="manipulacion_agarre_fatiga" name="manipulacion_agarre_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="manipulacion_agarre_impacto" name="manipulacion_agarre_impacto" class="form-select" onchange="actualizarImpactoFuncional('manipulacion_agarre')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="manipulacion_agarre_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Observaciones para manipulación -->
+          <div class="form-row mt-3">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="patrones_manipulacion_obs" class="form-label">Observaciones adicionales sobre patrones de manipulación</label>
+                <textarea id="patrones_manipulacion_obs" name="patrones_manipulacion_obs" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patrones de Carga -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Patrones de Carga</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th width="20%">Patrón</th>
+                  <th width="15%">Calidad</th>
+                  <th width="20%">Compensaciones</th>
+                  <th width="15%">Dolor</th>
+                  <th width="15%">Fatiga</th>
+                  <th width="15%">Impacto Funcional</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Sentadilla -->
+                <tr>
+                  <td>
+                    <strong>Sentadilla</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Flexión bilateral de MMII</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_sentadilla_calidad" name="carga_sentadilla_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'carga_sentadilla')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_sentadilla_comp_1" name="carga_sentadilla_comp[]" value="Valgo de rodilla" class="form-check-input">
+                      <label class="form-check-label" for="carga_sentadilla_comp_1">Valgo de rodilla</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_sentadilla_comp_2" name="carga_sentadilla_comp[]" value="Flexión excesiva de tronco" class="form-check-input">
+                      <label class="form-check-label" for="carga_sentadilla_comp_2">Flexión excesiva de tronco</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_sentadilla_comp_3" name="carga_sentadilla_comp[]" value="Elevación de talones" class="form-check-input">
+                      <label class="form-check-label" for="carga_sentadilla_comp_3">Elevación de talones</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="carga_sentadilla_comp_otro" name="carga_sentadilla_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_sentadilla_dolor" name="carga_sentadilla_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="carga_sentadilla_dolor_momento" name="carga_sentadilla_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_sentadilla_fatiga" name="carga_sentadilla_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_sentadilla_impacto" name="carga_sentadilla_impacto" class="form-select" onchange="actualizarImpactoFuncional('carga_sentadilla')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="carga_sentadilla_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Estocada -->
+                <tr>
+                  <td>
+                    <strong>Estocada</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Flexión asimétrica de MMII</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_estocada_calidad" name="carga_estocada_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'carga_estocada')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_estocada_comp_1" name="carga_estocada_comp[]" value="Valgo de rodilla" class="form-check-input">
+                      <label class="form-check-label" for="carga_estocada_comp_1">Valgo de rodilla</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_estocada_comp_2" name="carga_estocada_comp[]" value="Inclinación de tronco" class="form-check-input">
+                      <label class="form-check-label" for="carga_estocada_comp_2">Inclinación de tronco</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_estocada_comp_3" name="carga_estocada_comp[]" value="Falta de equilibrio" class="form-check-input">
+                      <label class="form-check-label" for="carga_estocada_comp_3">Falta de equilibrio</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="carga_estocada_comp_otro" name="carga_estocada_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_estocada_dolor" name="carga_estocada_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="carga_estocada_dolor_momento" name="carga_estocada_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_estocada_fatiga" name="carga_estocada_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_estocada_impacto" name="carga_estocada_impacto" class="form-select" onchange="actualizarImpactoFuncional('carga_estocada')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="carga_estocada_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Empuje -->
+                <tr>
+                  <td>
+                    <strong>Empuje</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Alejamiento de carga</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_empuje_calidad" name="carga_empuje_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'carga_empuje')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_empuje_comp_1" name="carga_empuje_comp[]" value="Falta de estabilidad central" class="form-check-input">
+                      <label class="form-check-label" for="carga_empuje_comp_1">Falta de estabilidad central</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_empuje_comp_2" name="carga_empuje_comp[]" value="Elevación de hombros" class="form-check-input">
+                      <label class="form-check-label" for="carga_empuje_comp_2">Elevación de hombros</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_empuje_comp_3" name="carga_empuje_comp[]" value="Protracción de cabeza" class="form-check-input">
+                      <label class="form-check-label" for="carga_empuje_comp_3">Protracción de cabeza</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="carga_empuje_comp_otro" name="carga_empuje_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_empuje_dolor" name="carga_empuje_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="carga_empuje_dolor_momento" name="carga_empuje_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_empuje_fatiga" name="carga_empuje_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_empuje_impacto" name="carga_empuje_impacto" class="form-select" onchange="actualizarImpactoFuncional('carga_empuje')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="carga_empuje_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Tracción -->
+                <tr>
+                  <td>
+                    <strong>Tracción</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Acercamiento de carga</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_traccion_calidad" name="carga_traccion_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'carga_traccion')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_traccion_comp_1" name="carga_traccion_comp[]" value="Protracción escapular" class="form-check-input">
+                      <label class="form-check-label" for="carga_traccion_comp_1">Protracción escapular</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_traccion_comp_2" name="carga_traccion_comp[]" value="Lordosis excesiva" class="form-check-input">
+                      <label class="form-check-label" for="carga_traccion_comp_2">Lordosis excesiva</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_traccion_comp_3" name="carga_traccion_comp[]" value="Asimetría" class="form-check-input">
+                      <label class="form-check-label" for="carga_traccion_comp_3">Asimetría</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="carga_traccion_comp_otro" name="carga_traccion_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_traccion_dolor" name="carga_traccion_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="carga_traccion_dolor_momento" name="carga_traccion_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_traccion_fatiga" name="carga_traccion_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_traccion_impacto" name="carga_traccion_impacto" class="form-select" onchange="actualizarImpactoFuncional('carga_traccion')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="carga_traccion_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Levantamiento -->
+                <tr>
+                  <td>
+                    <strong>Levantamiento</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Desde el suelo</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_levantamiento_calidad" name="carga_levantamiento_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'carga_levantamiento')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_levantamiento_comp_1" name="carga_levantamiento_comp[]" value="Flexión lumbar excesiva" class="form-check-input">
+                      <label class="form-check-label" for="carga_levantamiento_comp_1">Flexión lumbar excesiva</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_levantamiento_comp_2" name="carga_levantamiento_comp[]" value="Falta flexión cadera/rodilla" class="form-check-input">
+                      <label class="form-check-label" for="carga_levantamiento_comp_2">Falta flexión cadera/rodilla</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_levantamiento_comp_3" name="carga_levantamiento_comp[]" value="Asimetría de carga" class="form-check-input">
+                      <label class="form-check-label" for="carga_levantamiento_comp_3">Asimetría de carga</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="carga_levantamiento_comp_otro" name="carga_levantamiento_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_levantamiento_dolor" name="carga_levantamiento_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="carga_levantamiento_dolor_momento" name="carga_levantamiento_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_levantamiento_fatiga" name="carga_levantamiento_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_levantamiento_impacto" name="carga_levantamiento_impacto" class="form-select" onchange="actualizarImpactoFuncional('carga_levantamiento')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="carga_levantamiento_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Rotación con carga -->
+                <tr>
+                  <td>
+                    <strong>Rotación con carga</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Movimiento transversal</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_rotacion_calidad" name="carga_rotacion_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'carga_rotacion')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_rotacion_comp_1" name="carga_rotacion_comp[]" value="Falta de disociación" class="form-check-input">
+                      <label class="form-check-label" for="carga_rotacion_comp_1">Falta de disociación</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_rotacion_comp_2" name="carga_rotacion_comp[]" value="Rotación lumbar excesiva" class="form-check-input">
+                      <label class="form-check-label" for="carga_rotacion_comp_2">Rotación lumbar excesiva</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="carga_rotacion_comp_3" name="carga_rotacion_comp[]" value="Pérdida de equilibrio" class="form-check-input">
+                      <label class="form-check-label" for="carga_rotacion_comp_3">Pérdida de equilibrio</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="carga_rotacion_comp_otro" name="carga_rotacion_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="carga_rotacion_dolor" name="carga_rotacion_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="carga_rotacion_dolor_momento" name="carga_rotacion_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_rotacion_fatiga" name="carga_rotacion_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="carga_rotacion_impacto" name="carga_rotacion_impacto" class="form-select" onchange="actualizarImpactoFuncional('carga_rotacion')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="carga_rotacion_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Observaciones para patrones de carga -->
+          <div class="form-row mt-3">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="patrones_carga_obs" class="form-label">Observaciones adicionales sobre patrones de carga</label>
+                <textarea id="patrones_carga_obs" name="patrones_carga_obs" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patrones de Equilibrio -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Patrones de Equilibrio</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th width="20%">Patrón</th>
+                  <th width="15%">Calidad</th>
+                  <th width="20%">Compensaciones</th>
+                  <th width="15%">Dolor</th>
+                  <th width="15%">Fatiga</th>
+                  <th width="15%">Impacto Funcional</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Apoyo Monopodal -->
+                <tr>
+                  <td>
+                    <strong>Apoyo Monopodal</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Equilibrio sobre un pie</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="equilibrio_monopodal_calidad" name="equilibrio_monopodal_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'equilibrio_monopodal')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="equilibrio_monopodal_comp_1" name="equilibrio_monopodal_comp[]" value="Valgo de rodilla" class="form-check-input">
+                      <label class="form-check-label" for="equilibrio_monopodal_comp_1">Valgo de rodilla</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="equilibrio_monopodal_comp_2" name="equilibrio_monopodal_comp[]" value="Inclinación lateral de tronco" class="form-check-input">
+                      <div class="form-check">
+                      <input type="checkbox" id="equilibrio_monopodal_comp_2" name="equilibrio_monopodal_comp[]" value="Inclinación lateral de tronco" class="form-check-input">
+                      <label class="form-check-label" for="equilibrio_monopodal_comp_2">Inclinación lateral de tronco</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="equilibrio_monopodal_comp_3" name="equilibrio_monopodal_comp[]" value="Oscilaciones" class="form-check-input">
+                      <label class="form-check-label" for="equilibrio_monopodal_comp_3">Oscilaciones</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="equilibrio_monopodal_comp_otro" name="equilibrio_monopodal_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="equilibrio_monopodal_dolor" name="equilibrio_monopodal_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="equilibrio_monopodal_dolor_momento" name="equilibrio_monopodal_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="equilibrio_monopodal_fatiga" name="equilibrio_monopodal_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 30 segundos">Tras 30 seg.</option>
+                      <option value="Tras 15 segundos">Tras 15 seg.</option>
+                      <option value="Tras 5 segundos">Tras 5 seg.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="equilibrio_monopodal_impacto" name="equilibrio_monopodal_impacto" class="form-select" onchange="actualizarImpactoFuncional('equilibrio_monopodal')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="equilibrio_monopodal_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Superación de Obstáculos -->
+                <tr>
+                  <td>
+                    <strong>Superación de Obstáculos</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Pasar por encima/alrededor</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="equilibrio_obstaculos_calidad" name="equilibrio_obstaculos_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'equilibrio_obstaculos')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="equilibrio_obstaculos_comp_1" name="equilibrio_obstaculos_comp[]" value="Fijación visual excesiva" class="form-check-input">
+                      <label class="form-check-label" for="equilibrio_obstaculos_comp_1">Fijación visual excesiva</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="equilibrio_obstaculos_comp_2" name="equilibrio_obstaculos_comp[]" value="Necesita apoyo" class="form-check-input">
+                      <label class="form-check-label" for="equilibrio_obstaculos_comp_2">Necesita apoyo</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="equilibrio_obstaculos_comp_3" name="equilibrio_obstaculos_comp[]" value="Asimetría de movimiento" class="form-check-input">
+                      <label class="form-check-label" for="equilibrio_obstaculos_comp_3">Asimetría de movimiento</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="equilibrio_obstaculos_comp_otro" name="equilibrio_obstaculos_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="equilibrio_obstaculos_dolor" name="equilibrio_obstaculos_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="equilibrio_obstaculos_dolor_momento" name="equilibrio_obstaculos_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="equilibrio_obstaculos_fatiga" name="equilibrio_obstaculos_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="equilibrio_obstaculos_impacto" name="equilibrio_obstaculos_impacto" class="form-select" onchange="actualizarImpactoFuncional('equilibrio_obstaculos')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="equilibrio_obstaculos_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Transiciones Posturales -->
+                <tr>
+                  <td>
+                    <strong>Transiciones Posturales</strong>
+                    <div class="mt-1">
+                      <small class="text-muted">Cambios de posición</small>
+                    </div>
+                  </td>
+                  <td>
+                    <select id="equilibrio_transiciones_calidad" name="equilibrio_transiciones_calidad" class="form-select" onchange="evaluarPatronMovimiento(this, 'equilibrio_transiciones')">
+                      <option value="">Seleccionar</option>
+                      <option value="5">Óptima</option>
+                      <option value="4">Buena</option>
+                      <option value="3">Regular</option>
+                      <option value="2">Deficiente</option>
+                      <option value="1">Incapaz</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input type="checkbox" id="equilibrio_transiciones_comp_1" name="equilibrio_transiciones_comp[]" value="Lentitud" class="form-check-input">
+                      <label class="form-check-label" for="equilibrio_transiciones_comp_1">Lentitud</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="equilibrio_transiciones_comp_2" name="equilibrio_transiciones_comp[]" value="Utiliza apoyos" class="form-check-input">
+                      <label class="form-check-label" for="equilibrio_transiciones_comp_2">Utiliza apoyos</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" id="equilibrio_transiciones_comp_3" name="equilibrio_transiciones_comp[]" value="Inseguridad/Hesitación" class="form-check-input">
+                      <label class="form-check-label" for="equilibrio_transiciones_comp_3">Inseguridad/Hesitación</label>
+                    </div>
+                    <div class="mt-1">
+                      <input type="text" id="equilibrio_transiciones_comp_otro" name="equilibrio_transiciones_comp_otro" class="form-control form-control-sm" placeholder="Otras compensaciones...">
+                    </div>
+                  </td>
+                  <td>
+                    <select id="equilibrio_transiciones_dolor" name="equilibrio_transiciones_dolor" class="form-select">
+                      <option value="No">No</option>
+                      <option value="Leve">Leve (1-3)</option>
+                      <option value="Moderado">Moderado (4-6)</option>
+                      <option value="Severo">Severo (7-10)</option>
+                    </select>
+                    <select id="equilibrio_transiciones_dolor_momento" name="equilibrio_transiciones_dolor_momento" class="form-select mt-1">
+                      <option value="">Momento del dolor</option>
+                      <option value="Inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Final">Al final</option>
+                      <option value="Después">Después</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="equilibrio_transiciones_fatiga" name="equilibrio_transiciones_fatiga" class="form-select">
+                      <option value="">Seleccionar</option>
+                      <option value="No">Sin fatiga</option>
+                      <option value="Tras 10 repeticiones">Tras 10 rep.</option>
+                      <option value="Tras 5 repeticiones">Tras 5 rep.</option>
+                      <option value="Tras 2 repeticiones">Tras 2 rep.</option>
+                      <option value="Inmediata">Inmediata</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="equilibrio_transiciones_impacto" name="equilibrio_transiciones_impacto" class="form-select" onchange="actualizarImpactoFuncional('equilibrio_transiciones')">
+                      <option value="">Seleccionar</option>
+                      <option value="No afecta">No afecta</option>
+                      <option value="Afecta AVD">Afecta AVD</option>
+                      <option value="Afecta trabajo">Afecta trabajo</option>
+                      <option value="Afecta deporte">Afecta deporte</option>
+                      <option value="Incapacitante">Incapacitante</option>
+                    </select>
+                    <div id="equilibrio_transiciones_impacto_visual" class="mt-2 progress">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Observaciones para patrones de equilibrio -->
+          <div class="form-row mt-3">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="patrones_equilibrio_obs" class="form-label">Observaciones adicionales sobre patrones de equilibrio</label>
+                <textarea id="patrones_equilibrio_obs" name="patrones_equilibrio_obs" class="form-control" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patrones Específicos del Paciente -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Patrones Específicos del Paciente</h5>
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-3">Evalúe patrones de movimiento específicos relacionados con las actividades diarias, laborales o deportivas de este paciente.</p>
+          
+          <div id="patrones_especificos_container">
+            <!-- Los patrones específicos se agregarán aquí -->
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarPatronEspecifico()">
+                <i class="fas fa-plus"></i> Agregar Patrón Específico
               </button>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Movimientos Accesorios Articulares -->
-      <div class="card mb-4">
-        <div class="card-header bg-light">
-          <h5 class="mb-0">Evaluación de Movimientos Accesorios</h5>
-        </div>
-        <div class="card-body">
-          <p class="text-muted mb-3">Evalúe los movimientos accesorios de la articulación seleccionada (deslizamientos, tracciones, compresiones)</p>
           
-          <div id="movimientos_accesorios_container">
-            <p class="text-muted">Seleccione una región anatómica para ver los movimientos accesorios correspondientes.</p>
+          <!-- Plantilla para agregar patrones específicos (oculta inicialmente) -->
+          <div id="patron_especifico_template" style="display: none;">
+            <div class="form-row mb-3 patron-especifico">
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label for="patron_especifico_nombre" class="form-label">Nombre/Descripción</label>
+                  <input type="text" id="patron_especifico_nombre" name="patron_especifico_nombre[]" class="form-control" placeholder="Describa el patrón...">
+                </div>
+              </div>
+              <div class="form-col form-col-md-2">
+                <div class="form-group">
+                  <label for="patron_especifico_calidad" class="form-label">Calidad</label>
+                  <select id="patron_especifico_calidad" name="patron_especifico_calidad[]" class="form-select" onchange="evaluarPatronEspecifico(this)">
+                    <option value="">Seleccionar</option>
+                    <option value="5">Óptima</option>
+                    <option value="4">Buena</option>
+                    <option value="3">Regular</option>
+                    <option value="2">Deficiente</option>
+                    <option value="1">Incapaz</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col form-col-md-2">
+                <div class="form-group">
+                  <label for="patron_especifico_dolor" class="form-label">Dolor</label>
+                  <select id="patron_especifico_dolor" name="patron_especifico_dolor[]" class="form-select">
+                    <option value="No">No</option>
+                    <option value="Leve">Leve (1-3)</option>
+                    <option value="Moderado">Moderado (4-6)</option>
+                    <option value="Severo">Severo (7-10)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label for="patron_especifico_compensaciones" class="form-label">Compensaciones</label>
+                  <input type="text" id="patron_especifico_compensaciones" name="patron_especifico_compensaciones[]" class="form-control" placeholder="Compensaciones observadas...">
+                </div>
+              </div>
+              <div class="form-col form-col-md-2">
+                <div class="form-group">
+                  <label for="patron_especifico_impacto" class="form-label">Impacto</label>
+                  <select id="patron_especifico_impacto" name="patron_especifico_impacto[]" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="No afecta">No afecta</option>
+                    <option value="Afecta AVD">Afecta AVD</option>
+                    <option value="Afecta trabajo">Afecta trabajo</option>
+                    <option value="Afecta deporte">Afecta deporte</option>
+                    <option value="Incapacitante">Incapacitante</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col form-col-md-12 mt-2">
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarPatronEspecifico(this)">
+                  <i class="fas fa-times"></i> Eliminar
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Interpretación Clínica -->
+      <!-- Interpretación y Correlación con Actividades -->
       <div class="card mb-4">
         <div class="card-header bg-primary text-white">
-          <h5 class="mb-0">Interpretación Clínica y Recomendaciones</h5>
+          <h5 class="mb-0">Interpretación y Correlación con Actividades</h5>
         </div>
         <div class="card-body">
-          <div id="interpretacion_rom" class="mb-3">
-            <div class="interpretacion-clinica-container">
-              <h6>Interpretación Clínica:</h6>
-              <div class="interpretacion-clinica" id="interpretacion-rom-texto">
-                Complete la evaluación de rangos de movimiento para obtener la interpretación clínica.
-              </div>
+          <!-- Resumen visual de patrones afectados -->
+          <div class="mb-4">
+            <h6>Resumen de Patrones Afectados</h6>
+            <div id="patrones_resumen_visual" class="mt-3">
+              <!-- Se generará dinámicamente -->
+              <div class="alert alert-info">Complete la evaluación de patrones para generar un resumen visual.</div>
             </div>
           </div>
           
-          <div id="recomendaciones_rom" class="mb-3">
-            <div class="recomendaciones-container">
-              <h6>Recomendaciones para el Plan de Tratamiento:</h6>
-              <div class="recomendaciones" id="recomendaciones-rom-texto">
-                Complete la evaluación de rangos de movimiento para obtener recomendaciones para el plan de tratamiento.
-              </div>
+          <!-- Correlación con actividades -->
+          <div class="mb-4">
+            <h6>Correlación con Actividades Cotidianas</h6>
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm">
+                <thead>
+                  <tr>
+                    <th>Actividad</th>
+                    <th>Patrones Comprometidos</th>
+                    <th>Nivel de Dificultad</th>
+                    <th>Estrategias de Adaptación</th>
+                  </tr>
+                </thead>
+                <tbody id="actividades_correlacion_tabla">
+                  <!-- Se generará dinámicamente -->
+                  <tr>
+                    <td colspan="4" class="text-center">Complete la evaluación de patrones para generar correlaciones automáticas.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
           
+          <!-- Interpretación clínica -->
+          <div class="mb-3">
+            <h6>Interpretación Clínica:</h6>
+            <div id="interpretacion-patrones-texto" class="p-3 border rounded">
+              Complete la evaluación de patrones de movimiento para obtener la interpretación clínica.
+            </div>
+          </div>
+          
+          <!-- Recomendaciones -->
+          <div class="mb-3">
+            <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+            <div id="recomendaciones-patrones-texto" class="p-3 border rounded">
+              Complete la evaluación de patrones de movimiento para obtener recomendaciones para el plan de tratamiento.
+            </div>
+          </div>
+          
+          <!-- Consideraciones basadas en evidencia -->
           <div class="alert alert-info mt-4">
-            <h6><i class="fas fa-info-circle"></i> Consideraciones sobre rangos de movimiento basadas en evidencia:</h6>
+            <h6><i class="fas fa-info-circle"></i> Consideraciones basadas en evidencia:</h6>
             <ul>
-              <li>Existe una <strong>amplia variabilidad individual</strong> en los rangos de movimiento normales, influenciada por factores como edad, sexo, actividad física habitual y características anatómicas.</li>
-              <li>La <strong>asimetría leve</strong> (5-15°) entre lados no necesariamente indica patología y puede ser una variante normal.</li>
-              <li>El <strong>dolor</strong> durante el movimiento es frecuentemente más relevante clínicamente que el rango articular por sí solo.</li>
-              <li>Los <strong>rangos funcionales</strong> (los necesarios para actividades diarias) son más importantes que alcanzar valores normativos completos.</li>
-              <li>La <strong>calidad del movimiento</strong> y patrones de compensación deben valorarse junto con los grados de movimiento.</li>
+              <li>La <strong>calidad del movimiento</strong> es frecuentemente más relevante que la cantidad (rango) para predecir lesiones y funcionalidad.</li>
+              <li>Los patrones de movimiento son <strong>específicos por tarea</strong> y deben evaluarse en el contexto de las actividades relevantes para el paciente.</li>
+              <li>Las <strong>asimetrías y compensaciones</strong> persistentes pueden predisponer a lesiones recurrentes.</li>
+              <li>El <strong>control motor</strong> debe evaluarse en diferentes contextos (estático, dinámico, bajo fatiga, etc.).</li>
+              <li>La <strong>reeducación de patrones</strong> de movimiento disfuncionales es más efectiva cuando se combina con estrategias cognitivas y feedback.</li>
             </ul>
           </div>
         </div>
@@ -5058,6 +6040,7 @@
   </div>
 </div>
 
+            
   <!-- Patrones de Movimiento Funcionales -->
 <div class="card mb-4">
   <div class="card-header bg-primary text-white">
