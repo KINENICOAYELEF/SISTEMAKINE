@@ -6040,10 +6040,25 @@
   </div>
 </div>
 
-            <!-- Tablas de ROM para cada región (inicialmente ocultas) -->
-      <div id="tablas_rom_container">
-        <!-- Tabla ROM Columna Cervical -->
-        <div id="tabla_rom_columna_cervical" class="tabla-rom" style="display: none;">
+            <!-- Segundo acordeón: Evaluación Completa de Rangos de Movimiento -->
+<div class="cuestionarios-acordeon">
+  <div class="cuestionario-item">
+    <div class="cuestionario-header" onclick="toggleCuestionario('rom-evaluation-content')">
+      <h4><i class="fas fa-plus-circle"></i> Evaluación Completa de Rangos de Movimiento</h4>
+      <div class="resultado-badge" id="rom-evaluation-badge">No completado</div>
+    </div>
+    <div class="cuestionario-content" id="rom-evaluation-content" style="display: none;">
+      <div class="alert alert-info mb-3">
+        <i class="fas fa-info-circle"></i> <strong>Nota:</strong> Seleccione el segmento anatómico a evaluar en los acordeones a continuación.
+      </div>
+      
+      <!-- Subacordeón para Columna Cervical -->
+      <div class="cuestionario-item sub-acordeon">
+        <div class="cuestionario-header" onclick="toggleCuestionario('rom-cervical-content')">
+          <h5><i class="fas fa-plus-circle"></i> Columna Cervical</h5>
+          <div class="resultado-badge" id="rom-cervical-badge">No completado</div>
+        </div>
+        <div class="cuestionario-content" id="rom-cervical-content" style="display: none;">
           <h5 class="mt-4 mb-3">Rangos de Movimiento: Columna Cervical</h5>
           
           <div class="table-responsive">
@@ -6506,7 +6521,97 @@
             </div>
           </div>
         </div>
-            
+      </div>
+      
+      <!-- Subacordeón para Columna Dorsal -->
+      <div class="cuestionario-item sub-acordeon">
+        <div class="cuestionario-header" onclick="toggleCuestionario('rom-dorsal-content')">
+          <h5><i class="fas fa-plus-circle"></i> Columna Dorsal</h5>
+          <div class="resultado-badge" id="rom-dorsal-badge">No completado</div>
+        </div>
+        <div class="cuestionario-content" id="rom-dorsal-content" style="display: none;">
+          <p class="text-center text-muted">Contenido para evaluación de Columna Dorsal</p>
+          <!-- Aquí irían las tablas y contenido similar al de columna cervical -->
+        </div>
+      </div>
+      
+      <!-- Subacordeón para Columna Lumbar -->
+      <div class="cuestionario-item sub-acordeon">
+        <div class="cuestionario-header" onclick="toggleCuestionario('rom-lumbar-content')">
+          <h5><i class="fas fa-plus-circle"></i> Columna Lumbar</h5>
+          <div class="resultado-badge" id="rom-lumbar-badge">No completado</div>
+        </div>
+        <div class="cuestionario-content" id="rom-lumbar-content" style="display: none;">
+          <p class="text-center text-muted">Contenido para evaluación de Columna Lumbar</p>
+          <!-- Aquí irían las tablas y contenido similar al de columna cervical -->
+        </div>
+      </div>
+      
+      <!-- Subacordeón para Pelvis/Sacroilíaca/Cóccix -->
+      <div class="cuestionario-item sub-acordeon">
+        <div class="cuestionario-header" onclick="toggleCuestionario('rom-pelvis-content')">
+          <h5><i class="fas fa-plus-circle"></i> Pelvis/Sacroilíaca/Cóccix</h5>
+          <div class="resultado-badge" id="rom-pelvis-badge">No completado</div>
+        </div>
+        <div class="cuestionario-content" id="rom-pelvis-content" style="display: none;">
+          <p class="text-center text-muted">Contenido para evaluación de Pelvis/Sacroilíaca/Cóccix</p>
+          <!-- Aquí irían las tablas y contenido similar al de columna cervical -->
+        </div>
+      </div>
+      
+      <!-- Subacordeón para Hombro -->
+      <div class="cuestionario-item sub-acordeon">
+        <div class="cuestionario-header" onclick="toggleCuestionario('rom-hombro-content')">
+          <h5><i class="fas fa-plus-circle"></i> Hombro</h5>
+          <div class="resultado-badge" id="rom-hombro-badge">No completado</div>
+        </div>
+        <div class="cuestionario-content" id="rom-hombro-content" style="display: none;">
+          <p class="text-center text-muted">Contenido para evaluación de Hombro</p>
+          <!-- Aquí irían las tablas y contenido similar al de columna cervical -->
+        </div>
+      </div>
+      
+      <!-- Continúa con los demás subacordeones para cada región anatómica... -->
+      
+      <!-- Interpretación clínica global -->
+      <div class="card mt-4 mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Interpretación Clínica Global de Rangos de Movimiento</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <h6>Resumen de Déficit Funcional por Regiones</h6>
+              <div id="resumen_deficit_regiones" class="mb-4">
+                <p class="text-muted">Complete la evaluación de al menos una región para generar el resumen.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-12">
+              <h6>Integración con Patrones de Movimiento</h6>
+              <div id="integracion_patrones_rom" class="mb-4">
+                <p class="text-muted">Complete la evaluación de patrones de movimiento y rangos para obtener una integración.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-12">
+              <h6>Recomendaciones Globales</h6>
+              <div id="recomendaciones_globales_rom" class="p-3 border rounded">
+                <p class="text-muted">Complete la evaluación de rangos para obtener recomendaciones globales.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
             
             <h4>6.6 Evaluación de Fuerza Muscular</h4>
