@@ -1956,6 +1956,98 @@ document.addEventListener('DOMContentLoaded', function() {
     romBadge.innerHTML = "No completado";
     romBadge.className = "resultado-badge badge bg-secondary";
   }
+
+  // Código para actualizar la interpretación global de rangos de movimiento
+  function actualizarInterpretacionGlobal() {
+    // Buscar los contenedores específicos para cada sección de interpretación
+    const resumenDeficitElement = document.querySelector('#resumen_deficit_texto');
+    const integracionPatronesElement = document.querySelector('#integracion_patrones_texto');
+    const recomendacionesGlobalesElement = document.querySelector('#recomendaciones_globales_texto');
+    
+    // Si no encontramos los elementos específicos, intentar con selectores más generales
+    const contenedoresTexto = document.querySelectorAll('.card-body p, .interpretacion-texto, .resumen-texto');
+    
+    // Verificar si hay al menos una región con déficit calculado
+    let regionesEvaluadas = [];
+    const deficitInputs = document.querySelectorAll('input[id$="_deficit_total"]');
+    
+    deficitInputs.forEach(input => {
+      if (input.value) {
+        const region = input.id.split('_')[0];
+        regionesEvaluadas.push({
+          nombre: region,
+          deficit: input.value
+        });
+      }
+    });
+    
+    // Si no hay regiones evaluadas, no cambiar nada
+    if (regionesEvaluadas.length === 0) return;
+    
+    // Crear texto para el resumen de déficit funcional
+    let resumenTexto = '';
+    if (regionesEvaluadas.length > 0) {
+      resumenTexto = `<p>Se ha evaluado ${regionesEvaluadas.length} región(es): `;
+      regionesEvaluadas.forEach((region, index) => {
+        // Convertir primera letra a mayúscula y nombre más amigable
+        let nombreRegion = region.nombre;
+        switch(nombreRegion) {
+          case 'cervical': nombreRegion = 'Columna Cervical'; break;
+          case 'dorsal': nombreRegion = 'Columna Dorsal'; break;
+          case 'lumbar': nombreRegion = 'Columna Lumbar'; break;
+          case 'pelvis': nombreRegion = 'Pelvis/Sacroilíaca'; break;
+          case 'hombro': nombreRegion = 'Hombro'; break;
+          // Añade otros casos según necesites
+        }
+        
+        resumenTexto += `${nombreRegion} (Déficit: ${region.deficit})`;
+        
+        // Añadir separador
+        if (index < regionesEvaluadas.length - 1) {
+          resumenTexto += ', ';
+        }
+      });
+      resumenTexto += '</p>';
+      
+      // Añadir evaluación general
+      resumenTexto += '<p>El análisis de los rangos de movimiento indica alteraciones que requieren abordaje específico en las regiones evaluadas.</p>';
+    }
+    
+    // Aplicar el texto a los elementos encontrados
+    if (resumenDeficitElement) {
+      resumenDeficitElement.innerHTML = resumenTexto;
+    } else {
+      // Si no encontramos el elemento específico, intentar actualizar el primer párrafo genérico
+      contenedoresTexto.forEach(elem => {
+        if (elem.textContent.includes('Complete la evaluación') || elem.textContent.includes('regiones')) {
+          elem.innerHTML = resumenTexto;
+        }
+      });
+    }
+    
+    // Crear texto para recomendaciones globales
+    if (recomendacionesGlobalesElement) {
+      recomendacionesGlobalesElement.innerHTML = `
+        <p>Basado en la evaluación de ${regionesEvaluadas.length} región(es), se recomienda:</p>
+        <ul>
+          <li>Implementar un programa de ejercicios terapéuticos para las regiones con déficit funcional.</li>
+          <li>Monitorizar la evolución de la movilidad con evaluaciones periódicas.</li>
+          <li>Integrar técnicas de control motor y entrenamiento funcional adaptadas a las limitaciones identificadas.</li>
+        </ul>
+      `;
+    }
+  }
+  
+  // Llamar a la función cuando se cambia cualquier input o select relevante
+  document.querySelectorAll('input[type="number"], select[id*="_dolor"], select[id*="_funcionalidad"]').forEach(element => {
+    element.addEventListener('change', function() {
+      // Permitir que se completen los cálculos de déficit primero
+      setTimeout(actualizarInterpretacionGlobal, 500);
+    });
+  });
+  
+  // También llamar al cargar la página
+  setTimeout(actualizarInterpretacionGlobal, 1000);
 });
 // Función para cambiar entre cuestionarios anidados
 function toggleCuestionario(id) {
@@ -2035,62 +2127,6 @@ function toggleSeccion(id) {
         regionBadge.className = regionBadge.className.replace(/bg-\w+/g, "bg-success");
       }
     });
-
-// Código para actualizar la interpretación global
-  function actualizarInterpretacionGlobal() {
-    // Buscar el contenedor de interpretación global
-    const interpretacionContainer = document.querySelector('.interpretacion-global-texto');
-    if (!interpretacionContainer) return;
-    
-    // Verificar si hay al menos una región con déficit calculado
-    let regionesEvaluadas = [];
-    const deficitInputs = document.querySelectorAll('input[id$="_deficit_total"]');
-    
-    deficitInputs.forEach(input => {
-      if (input.value) {
-        const region = input.id.split('_')[0];
-        regionesEvaluadas.push(region);
-      }
-    });
-    
-    // Si no hay regiones evaluadas, no hacer nada
-    if (regionesEvaluadas.length === 0) return;
-    
-    // Crear un resumen simple
-    let texto = '<p><strong>Resumen de regiones evaluadas:</strong> ';
-    regionesEvaluadas.forEach((region, index) => {
-      // Convertir primera letra a mayúscula
-      const regionCapitalizada = region.charAt(0).toUpperCase() + region.slice(1);
-      texto += regionCapitalizada;
-      
-      // Añadir déficit si está disponible
-      const deficitInput = document.getElementById(`${region}_deficit_total`);
-      if (deficitInput && deficitInput.value) {
-        texto += ` (Déficit: ${deficitInput.value})`;
-      }
-      
-      // Añadir separador
-      if (index < regionesEvaluadas.length - 1) {
-        texto += ', ';
-      }
-    });
-    texto += '</p>';
-    
-    // Añadir recomendación general
-    texto += '<p>Se recomienda verificar los detalles específicos de cada región evaluada y considerar completar las evaluaciones pendientes.</p>';
-    
-    // Actualizar el contenido
-    interpretacionContainer.innerHTML = texto;
-  }
-  
-  // Llamar a la función cuando se cambia cualquier input relevante
-  document.querySelectorAll('input[type="number"], select[id*="_dolor"], select[id*="_funcionalidad"]').forEach(element => {
-    element.addEventListener('change', actualizarInterpretacionGlobal);
-  });
-  
-  // También llamar cuando se carga la página
-  setTimeout(actualizarInterpretacionGlobal, 1000);
-    
   });
 
 
