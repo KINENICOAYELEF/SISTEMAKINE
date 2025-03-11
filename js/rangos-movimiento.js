@@ -2036,3 +2036,59 @@ function toggleSeccion(id) {
       }
     });
   });
+
+// Código para actualizar la interpretación global
+  function actualizarInterpretacionGlobal() {
+    // Buscar el contenedor de interpretación global
+    const interpretacionContainer = document.querySelector('.interpretacion-global-texto');
+    if (!interpretacionContainer) return;
+    
+    // Verificar si hay al menos una región con déficit calculado
+    let regionesEvaluadas = [];
+    const deficitInputs = document.querySelectorAll('input[id$="_deficit_total"]');
+    
+    deficitInputs.forEach(input => {
+      if (input.value) {
+        const region = input.id.split('_')[0];
+        regionesEvaluadas.push(region);
+      }
+    });
+    
+    // Si no hay regiones evaluadas, no hacer nada
+    if (regionesEvaluadas.length === 0) return;
+    
+    // Crear un resumen simple
+    let texto = '<p><strong>Resumen de regiones evaluadas:</strong> ';
+    regionesEvaluadas.forEach((region, index) => {
+      // Convertir primera letra a mayúscula
+      const regionCapitalizada = region.charAt(0).toUpperCase() + region.slice(1);
+      texto += regionCapitalizada;
+      
+      // Añadir déficit si está disponible
+      const deficitInput = document.getElementById(`${region}_deficit_total`);
+      if (deficitInput && deficitInput.value) {
+        texto += ` (Déficit: ${deficitInput.value})`;
+      }
+      
+      // Añadir separador
+      if (index < regionesEvaluadas.length - 1) {
+        texto += ', ';
+      }
+    });
+    texto += '</p>';
+    
+    // Añadir recomendación general
+    texto += '<p>Se recomienda verificar los detalles específicos de cada región evaluada y considerar completar las evaluaciones pendientes.</p>';
+    
+    // Actualizar el contenido
+    interpretacionContainer.innerHTML = texto;
+  }
+  
+  // Llamar a la función cuando se cambia cualquier input relevante
+  document.querySelectorAll('input[type="number"], select[id*="_dolor"], select[id*="_funcionalidad"]').forEach(element => {
+    element.addEventListener('change', actualizarInterpretacionGlobal);
+  });
+  
+  // También llamar cuando se carga la página
+  setTimeout(actualizarInterpretacionGlobal, 1000);
+
