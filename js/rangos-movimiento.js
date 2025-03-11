@@ -1957,6 +1957,19 @@ document.addEventListener('DOMContentLoaded', function() {
     romBadge.className = "resultado-badge badge bg-secondary";
   }
 
+// AÑADIR AQUÍ los event listeners para la interpretación global
+  // Llamar a la función cuando se cambia cualquier input o select relevante
+  document.querySelectorAll('input, select').forEach(element => {
+    element.addEventListener('change', function() {
+      // Permitir que se completen los cálculos primero
+      setTimeout(actualizarInterpretacionGlobal, 500);
+    });
+  });
+  
+  // También llamar al cargar la página
+  setTimeout(actualizarInterpretacionGlobal, 1000);
+});
+  
 // Función completa para la interpretación global que detecta cualquier dato
 function actualizarInterpretacionGlobal() {
   // Buscar los contenedores para cada sección
