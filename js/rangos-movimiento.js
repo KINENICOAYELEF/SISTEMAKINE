@@ -572,13 +572,6 @@ function evaluarROM(inputId, valorMin, valorModerado, valorNormal) {
   // Actualizar badge de estado general
   document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
   document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
-
-  // Actualizar también el badge de la región específica
-const region = inputId.split('_')[0]; // Obtiene la región (cervical, etc.)
-const regionBadge = document.getElementById(region + "_badge");
-if (regionBadge) {
-  regionBadge.innerHTML = "Evaluado";
-  regionBadge.className = "badge bg-success float-end";
   
   // Calcular déficit funcional
   calcularDeficitFuncional(inputId);
@@ -733,13 +726,6 @@ function evaluarDolorROM(selector) {
   // Actualizar badge de estado
   document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
   document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
-
-  // Actualizar también el badge de la región específica
-const region = selector.id.split('_')[0]; // Obtiene la región (cervical, etc.)
-const regionBadge = document.getElementById(region + "_badge");
-if (regionBadge) {
-  regionBadge.innerHTML = "Evaluado";
-  regionBadge.className = "badge bg-success float-end";
   
   // Actualizar recomendaciones
   const region = selector.id.split('_')[0]; // Ej: cervical
@@ -754,14 +740,6 @@ function evaluarFuncionalidadROM(selector) {
   // Actualizar badge de estado
   document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
   document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
-
-  // Actualizar también el badge de la región específica
-const region = selector.id.split('_')[0]; // Obtiene la región (cervical, etc.)
-const regionBadge = document.getElementById(region + "_badge");
-if (regionBadge) {
-  regionBadge.innerHTML = "Evaluado";
-  regionBadge.className = "badge bg-success float-end";
-}
   
   // Actualizar recomendaciones
   const region = selector.id.split('_')[0]; // Ej: cervical
@@ -2022,3 +2000,39 @@ function toggleSeccion(id) {
     }
   }
 }
+
+// Código nuevo para actualizar badges de regiones
+  const inputs = document.querySelectorAll('input[type="number"]');
+  inputs.forEach(input => {
+    input.addEventListener('change', function() {
+      // Extraer la región del ID (por ejemplo, "cervical_flexion_activo" -> "cervical")
+      const region = this.id.split('_')[0];
+      
+      // Buscar el badge de la región
+      const regionBadge = document.querySelector(`#${region}_badge, [id*="${region}"][class*="badge"]`);
+      
+      // Si existe y tiene valor, cambiar a evaluado
+      if (regionBadge && this.value) {
+        regionBadge.innerHTML = "Evaluado";
+        regionBadge.className = regionBadge.className.replace(/bg-\w+/g, "bg-success");
+      }
+    });
+  });
+  
+  // También para selectores
+  const selects = document.querySelectorAll('select[id*="_dolor"], select[id*="_funcionalidad"]');
+  selects.forEach(select => {
+    select.addEventListener('change', function() {
+      // Extraer la región del ID
+      const region = this.id.split('_')[0];
+      
+      // Buscar el badge de la región
+      const regionBadge = document.querySelector(`#${region}_badge, [id*="${region}"][class*="badge"]`);
+      
+      // Si existe y tiene valor distinto del predeterminado, cambiar a evaluado
+      if (regionBadge && this.value && this.value !== "No" && this.value !== "Normal") {
+        regionBadge.innerHTML = "Evaluado";
+        regionBadge.className = regionBadge.className.replace(/bg-\w+/g, "bg-success");
+      }
+    });
+  });
