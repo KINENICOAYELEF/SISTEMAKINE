@@ -8405,748 +8405,794 @@
   <div class="cuestionario-content" id="rom-hombro-content" style="display: none;">
     <h5 class="mt-4 mb-3">Rangos de Movimiento: Hombro</h5>
     
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th rowspan="2">Movimiento</th>
-            <th colspan="2">Hombro Derecho</th>
-            <th colspan="2">Hombro Izquierdo</th>
-            <th rowspan="2">Diferencial<br>Der-Izq</th>
-            <th rowspan="2">Dolor</th>
-            <th rowspan="2">Funcionalidad</th>
-            <th rowspan="2">Observaciones</th>
-          </tr>
-          <tr>
-            <th>Activo</th>
-            <th>Pasivo</th>
-            <th>Activo</th>
-            <th>Pasivo</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Articulación Glenohumeral -->
-          <tr class="table-secondary">
-            <td colspan="9"><strong>Articulación Glenohumeral</strong></td>
-          </tr>
-          <tr>
-            <td>Flexión</td>
-            <td>
-              <input type="number" id="hombro_flexion_der_activo" name="hombro_flexion_der_activo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_flexion_der_activo', 0, 150, 180)">
-              <div id="hombro_flexion_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_flexion_der_pasivo" name="hombro_flexion_der_pasivo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_flexion_der_pasivo', 0, 150, 180); calcularDiferencialAP('hombro_flexion_der')">
-              <div id="hombro_flexion_der_pasivo_estado"></div>
-              <div id="hombro_flexion_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_flexion_izq_activo" name="hombro_flexion_izq_activo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_flexion_izq_activo', 0, 150, 180)">
-              <div id="hombro_flexion_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_flexion_izq_pasivo" name="hombro_flexion_izq_pasivo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_flexion_izq_pasivo', 0, 150, 180); calcularDiferencialAP('hombro_flexion_izq')">
-              <div id="hombro_flexion_izq_pasivo_estado"></div>
-              <div id="hombro_flexion_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_flexion_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_flexion_dolor" name="hombro_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_flexion_funcionalidad" name="hombro_flexion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_flexion_obs" name="hombro_flexion_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Extensión</td>
-            <td>
-              <input type="number" id="hombro_extension_der_activo" name="hombro_extension_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_extension_der_activo', 0, 40, 50)">
-              <div id="hombro_extension_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_extension_der_pasivo" name="hombro_extension_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_extension_der_pasivo', 0, 40, 50); calcularDiferencialAP('hombro_extension_der')">
-              <div id="hombro_extension_der_pasivo_estado"></div>
-              <div id="hombro_extension_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_extension_izq_activo" name="hombro_extension_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_extension_izq_activo', 0, 40, 50)">
-              <div id="hombro_extension_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_extension_izq_pasivo" name="hombro_extension_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_extension_izq_pasivo', 0, 40, 50); calcularDiferencialAP('hombro_extension_izq')">
-              <div id="hombro_extension_izq_pasivo_estado"></div>
-              <div id="hombro_extension_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_extension_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_extension_dolor" name="hombro_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_extension_funcionalidad" name="hombro_extension_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_extension_obs" name="hombro_extension_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Abducción</td>
-            <td>
-              <input type="number" id="hombro_abduccion_der_activo" name="hombro_abduccion_der_activo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_abduccion_der_activo', 0, 150, 180)">
-              <div id="hombro_abduccion_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_abduccion_der_pasivo" name="hombro_abduccion_der_pasivo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_abduccion_der_pasivo', 0, 150, 180); calcularDiferencialAP('hombro_abduccion_der')">
-              <div id="hombro_abduccion_der_pasivo_estado"></div>
-              <div id="hombro_abduccion_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_abduccion_izq_activo" name="hombro_abduccion_izq_activo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_abduccion_izq_activo', 0, 150, 180)">
-              <div id="hombro_abduccion_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_abduccion_izq_pasivo" name="hombro_abduccion_izq_pasivo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_abduccion_izq_pasivo', 0, 150, 180); calcularDiferencialAP('hombro_abduccion_izq')">
-              <div id="hombro_abduccion_izq_pasivo_estado"></div>
-              <div id="hombro_abduccion_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_abduccion_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_abduccion_dolor" name="hombro_abduccion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_abduccion_funcionalidad" name="hombro_abduccion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_abduccion_obs" name="hombro_abduccion_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Aducción</td>
-            <td>
-              <input type="number" id="hombro_aduccion_der_activo" name="hombro_aduccion_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_aduccion_der_activo', 0, 20, 30)">
-              <div id="hombro_aduccion_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_aduccion_der_pasivo" name="hombro_aduccion_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_aduccion_der_pasivo', 0, 20, 30); calcularDiferencialAP('hombro_aduccion_der')">
-              <div id="hombro_aduccion_der_pasivo_estado"></div>
-              <div id="hombro_aduccion_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_aduccion_izq_activo" name="hombro_aduccion_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_aduccion_izq_activo', 0, 20, 30)">
-              <div id="hombro_aduccion_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_aduccion_izq_pasivo" name="hombro_aduccion_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_aduccion_izq_pasivo', 0, 20, 30); calcularDiferencialAP('hombro_aduccion_izq')">
-              <div id="hombro_aduccion_izq_pasivo_estado"></div>
-              <div id="hombro_aduccion_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_aduccion_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_aduccion_dolor" name="hombro_aduccion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_aduccion_funcionalidad" name="hombro_aduccion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_aduccion_obs" name="hombro_aduccion_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Rotación interna</td>
-            <td>
-              <input type="number" id="hombro_rot_int_der_activo" name="hombro_rot_int_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_int_der_activo', 0, 50, 70)">
-              <div id="hombro_rot_int_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_rot_int_der_pasivo" name="hombro_rot_int_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_int_der_pasivo', 0, 50, 70); calcularDiferencialAP('hombro_rot_int_der')">
-              <div id="hombro_rot_int_der_pasivo_estado"></div>
-              <div id="hombro_rot_int_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_rot_int_izq_activo" name="hombro_rot_int_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_int_izq_activo', 0, 50, 70)">
-              <div id="hombro_rot_int_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_rot_int_izq_pasivo" name="hombro_rot_int_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_int_izq_pasivo', 0, 50, 70); calcularDiferencialAP('hombro_rot_int_izq')">
-              <div id="hombro_rot_int_izq_pasivo_estado"></div>
-              <div id="hombro_rot_int_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_rot_int_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_rot_int_dolor" name="hombro_rot_int_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_rot_int_funcionalidad" name="hombro_rot_int_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_rot_int_obs" name="hombro_rot_int_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Rotación externa</td>
-            <td>
-              <input type="number" id="hombro_rot_ext_der_activo" name="hombro_rot_ext_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_ext_der_activo', 0, 70, 90)">
-              <div id="hombro_rot_ext_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_rot_ext_der_pasivo" name="hombro_rot_ext_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_ext_der_pasivo', 0, 70, 90); calcularDiferencialAP('hombro_rot_ext_der')">
-              <div id="hombro_rot_ext_der_pasivo_estado"></div>
-              <div id="hombro_rot_ext_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_rot_ext_izq_activo" name="hombro_rot_ext_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_ext_izq_activo', 0, 70, 90)">
-              <div id="hombro_rot_ext_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_rot_ext_izq_pasivo" name="hombro_rot_ext_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_ext_izq_pasivo', 0, 70, 90); calcularDiferencialAP('hombro_rot_ext_izq')">
-              <div id="hombro_rot_ext_izq_pasivo_estado"></div>
-              <div id="hombro_rot_ext_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_rot_ext_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_rot_ext_dolor" name="hombro_rot_ext_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_rot_ext_funcionalidad" name="hombro_rot_ext_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_rot_ext_obs" name="hombro_rot_ext_obs" class="form-control">
-            </td>
-          </tr>
-
-          <!-- Articulación Escapulotorácica -->
-          <tr class="table-secondary">
-            <td colspan="9"><strong>Articulación Escapulotorácica</strong></td>
-          </tr>
-          <tr>
-            <td>Elevación escapular</td>
-            <td>
-              <input type="number" id="hombro_elev_escap_der_activo" name="hombro_elev_escap_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_elev_escap_der_activo', 0, 30, 40)">
-              <div id="hombro_elev_escap_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_elev_escap_der_pasivo" name="hombro_elev_escap_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_elev_escap_der_pasivo', 0, 30, 40); calcularDiferencialAP('hombro_elev_escap_der')">
-              <div id="hombro_elev_escap_der_pasivo_estado"></div>
-              <div id="hombro_elev_escap_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_elev_escap_izq_activo" name="hombro_elev_escap_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_elev_escap_izq_activo', 0, 30, 40)">
-              <div id="hombro_elev_escap_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_elev_escap_izq_pasivo" name="hombro_elev_escap_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_elev_escap_izq_pasivo', 0, 30, 40); calcularDiferencialAP('hombro_elev_escap_izq')">
-              <div id="hombro_elev_escap_izq_pasivo_estado"></div>
-              <div id="hombro_elev_escap_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_elev_escap_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_elev_escap_dolor" name="hombro_elev_escap_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_elev_escap_funcionalidad" name="hombro_elev_escap_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_elev_escap_obs" name="hombro_elev_escap_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Descenso escapular</td>
-            <td>
-              <input type="number" id="hombro_desc_escap_der_activo" name="hombro_desc_escap_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_desc_escap_der_activo', 0, 30, 40)">
-              <div id="hombro_desc_escap_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_desc_escap_der_pasivo" name="hombro_desc_escap_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_desc_escap_der_pasivo', 0, 30, 40); calcularDiferencialAP('hombro_desc_escap_der')">
-              <div id="hombro_desc_escap_der_pasivo_estado"></div>
-              <div id="hombro_desc_escap_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_desc_escap_izq_activo" name="hombro_desc_escap_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_desc_escap_izq_activo', 0, 30, 40)">
-              <div id="hombro_desc_escap_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_desc_escap_izq_pasivo" name="hombro_desc_escap_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_desc_escap_izq_pasivo', 0, 30, 40); calcularDiferencialAP('hombro_desc_escap_izq')">
-              <div id="hombro_desc_escap_izq_pasivo_estado"></div>
-              <div id="hombro_desc_escap_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_desc_escap_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_desc_escap_dolor" name="hombro_desc_escap_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_desc_escap_funcionalidad" name="hombro_desc_escap_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_desc_escap_obs" name="hombro_desc_escap_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Protracción escapular</td>
-            <td>
-              <input type="number" id="hombro_protr_escap_der_activo" name="hombro_protr_escap_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_protr_escap_der_activo', 0, 25, 35)">
-              <div id="hombro_protr_escap_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_protr_escap_der_pasivo" name="hombro_protr_escap_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_protr_escap_der_pasivo', 0, 25, 35); calcularDiferencialAP('hombro_protr_escap_der')">
-              <div id="hombro_protr_escap_der_pasivo_estado"></div>
-              <div id="hombro_protr_escap_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_protr_escap_izq_activo" name="hombro_protr_escap_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_protr_escap_izq_activo', 0, 25, 35)">
-              <div id="hombro_protr_escap_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_protr_escap_izq_pasivo" name="hombro_protr_escap_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_protr_escap_izq_pasivo', 0, 25, 35); calcularDiferencialAP('hombro_protr_escap_izq')">
-              <div id="hombro_protr_escap_izq_pasivo_estado"></div>
-              <div id="hombro_protr_escap_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_protr_escap_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_protr_escap_dolor" name="hombro_protr_escap_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_protr_escap_funcionalidad" name="hombro_protr_escap_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_protr_escap_obs" name="hombro_protr_escap_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Retracción escapular</td>
-            <td>
-              <input type="number" id="hombro_retr_escap_der_activo" name="hombro_retr_escap_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_retr_escap_der_activo', 0, 25, 35)">
-              <div id="hombro_retr_escap_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_retr_escap_der_pasivo" name="hombro_retr_escap_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_retr_escap_der_pasivo', 0, 25, 35); calcularDiferencialAP('hombro_retr_escap_der')">
-              <div id="hombro_retr_escap_der_pasivo_estado"></div>
-              <div id="hombro_retr_escap_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_retr_escap_izq_activo" name="hombro_retr_escap_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_retr_escap_izq_activo', 0, 25, 35)">
-              <div id="hombro_retr_escap_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_retr_escap_izq_pasivo" name="hombro_retr_escap_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_retr_escap_izq_pasivo', 0, 25, 35); calcularDiferencialAP('hombro_retr_escap_izq')">
-              <div id="hombro_retr_escap_izq_pasivo_estado"></div>
-              <div id="hombro_retr_escap_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_retr_escap_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_retr_escap_dolor" name="hombro_retr_escap_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_retr_escap_funcionalidad" name="hombro_retr_escap_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_retr_escap_obs" name="hombro_retr_escap_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Báscula escapular externa</td>
-            <td>
-              <input type="number" id="hombro_basc_ext_der_activo" name="hombro_basc_ext_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_basc_ext_der_activo', 0, 20, 30)">
-              <div id="hombro_basc_ext_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_basc_ext_der_pasivo" name="hombro_basc_ext_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_basc_ext_der_pasivo', 0, 20, 30); calcularDiferencialAP('hombro_basc_ext_der')">
-              <div id="hombro_basc_ext_der_pasivo_estado"></div>
-              <div id="hombro_basc_ext_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_basc_ext_izq_activo" name="hombro_basc_ext_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_basc_ext_izq_activo', 0, 20, 30)">
-              <div id="hombro_basc_ext_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_basc_ext_izq_pasivo" name="hombro_basc_ext_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_basc_ext_izq_pasivo', 0, 20, 30); calcularDiferencialAP('hombro_basc_ext_izq')">
-              <div id="hombro_basc_ext_izq_pasivo_estado"></div>
-              <div id="hombro_basc_ext_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_basc_ext_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_basc_ext_dolor" name="hombro_basc_ext_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_basc_ext_funcionalidad" name="hombro_basc_ext_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_basc_ext_obs" name="hombro_basc_ext_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Báscula escapular interna</td>
-            <td>
-              <input type="number" id="hombro_basc_int_der_activo" name="hombro_basc_int_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_basc_int_der_activo', 0, 20, 30)">
-              <div id="hombro_basc_int_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_basc_int_der_pasivo" name="hombro_basc_int_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_basc_int_der_pasivo', 0, 20, 30); calcularDiferencialAP('hombro_basc_int_der')">
-              <div id="hombro_basc_int_der_pasivo_estado"></div>
-              <div id="hombro_basc_int_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_basc_int_izq_activo" name="hombro_basc_int_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_basc_int_izq_activo', 0, 20, 30)">
-              <div id="hombro_basc_int_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_basc_int_izq_pasivo" name="hombro_basc_int_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_basc_int_izq_pasivo', 0, 20, 30); calcularDiferencialAP('hombro_basc_int_izq')">
-              <div id="hombro_basc_int_izq_pasivo_estado"></div>
-              <div id="hombro_basc_int_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_basc_int_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_basc_int_dolor" name="hombro_basc_int_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_basc_int_funcionalidad" name="hombro_basc_int_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_basc_int_obs" name="hombro_basc_int_obs" class="form-control">
-            </td>
-          </tr>
-
-          <!-- Articulación Esternoclavicular -->
-          <tr class="table-secondary">
-            <td colspan="9"><strong>Articulación Esternoclavicular</strong></td>
-          </tr>
-          <tr>
-            <td>Elevación clavicular</td>
-            <td>
-              <input type="number" id="hombro_elev_clav_der_activo" name="hombro_elev_clav_der_activo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_elev_clav_der_activo', 0, 25, 35)">
-              <div id="hombro_elev_clav_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_elev_clav_der_pasivo" name="hombro_elev_clav_der_pasivo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_elev_clav_der_pasivo', 0, 25, 35); calcularDiferencialAP('hombro_elev_clav_der')">
-              <div id="hombro_elev_clav_der_pasivo_estado"></div>
-              <div id="hombro_elev_clav_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_elev_clav_izq_activo" name="hombro_elev_clav_izq_activo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_elev_clav_izq_activo', 0, 25, 35)">
-              <div id="hombro_elev_clav_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_elev_clav_izq_pasivo" name="hombro_elev_clav_izq_pasivo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_elev_clav_izq_pasivo', 0, 25, 35); calcularDiferencialAP('hombro_elev_clav_izq')">
-              <div id="hombro_elev_clav_izq_pasivo_estado"></div>
-              <div id="hombro_elev_clav_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_elev_clav_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_elev_clav_dolor" name="hombro_elev_clav_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_elev_clav_funcionalidad" name="hombro_elev_clav_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_elev_clav_obs" name="hombro_elev_clav_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Depresión clavicular</td>
-            <td>
-              <input type="number" id="hombro_dep_clav_der_activo" name="hombro_dep_clav_der_activo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_dep_clav_der_activo', 0, 15, 25)">
-              <div id="hombro_dep_clav_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_dep_clav_der_pasivo" name="hombro_dep_clav_der_pasivo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_dep_clav_der_pasivo', 0, 15, 25); calcularDiferencialAP('hombro_dep_clav_der')">
-              <div id="hombro_dep_clav_der_pasivo_estado"></div>
-              <div id="hombro_dep_clav_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_dep_clav_izq_activo" name="hombro_dep_clav_izq_activo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_dep_clav_izq_activo', 0, 15, 25)">
-              <div id="hombro_dep_clav_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_dep_clav_izq_pasivo" name="hombro_dep_clav_izq_pasivo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_dep_clav_izq_pasivo', 0, 15, 25); calcularDiferencialAP('hombro_dep_clav_izq')">
-              <div id="hombro_dep_clav_izq_pasivo_estado"></div>
-              <div id="hombro_dep_clav_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_dep_clav_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_dep_clav_dolor" name="hombro_dep_clav_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_dep_clav_funcionalidad" name="hombro_dep_clav_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_dep_clav_obs" name="hombro_dep_clav_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Protracción clavicular</td>
-            <td>
-              <input type="number" id="hombro_protr_clav_der_activo" name="hombro_protr_clav_der_activo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_protr_clav_der_activo', 0, 15, 25)">
-              <div id="hombro_protr_clav_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_protr_clav_der_pasivo" name="hombro_protr_clav_der_pasivo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_protr_clav_der_pasivo', 0, 15, 25); calcularDiferencialAP('hombro_protr_clav_der')">
-              <div id="hombro_protr_clav_der_pasivo_estado"></div>
-              <div id="hombro_protr_clav_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_protr_clav_izq_activo" name="hombro_protr_clav_izq_activo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_protr_clav_izq_activo', 0, 15, 25)">
-              <div id="hombro_protr_clav_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_protr_clav_izq_pasivo" name="hombro_protr_clav_izq_pasivo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_protr_clav_izq_pasivo', 0, 15, 25); calcularDiferencialAP('hombro_protr_clav_izq')">
-              <div id="hombro_protr_clav_izq_pasivo_estado"></div>
-              <div id="hombro_protr_clav_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_protr_clav_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_protr_clav_dolor" name="hombro_protr_clav_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_protr_clav_funcionalidad" name="hombro_protr_clav_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_protr_clav_obs" name="hombro_protr_clav_obs" class="form-control">
-            </td>
-          </tr>
-          <tr>
-            <td>Retracción clavicular</td>
-            <td>
-              <input type="number" id="hombro_retr_clav_der_activo" name="hombro_retr_clav_der_activo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_retr_clav_der_activo', 0, 15, 25)">
-              <div id="hombro_retr_clav_der_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_retr_clav_der_pasivo" name="hombro_retr_clav_der_pasivo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_retr_clav_der_pasivo', 0, 15, 25); calcularDiferencialAP('hombro_retr_clav_der')">
-              <div id="hombro_retr_clav_der_pasivo_estado"></div>
-              <div id="hombro_retr_clav_der_diferencial"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_retr_clav_izq_activo" name="hombro_retr_clav_izq_activo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_retr_clav_izq_activo', 0, 15, 25)">
-              <div id="hombro_retr_clav_izq_activo_estado"></div>
-            </td>
-            <td>
-              <input type="number" id="hombro_retr_clav_izq_pasivo" name="hombro_retr_clav_izq_pasivo" class="form-control rom-input" min="0" max="50" onchange="evaluarROM('hombro_retr_clav_izq_pasivo', 0, 15, 25); calcularDiferencialAP('hombro_retr_clav_izq')">
-              <div id="hombro_retr_clav_izq_pasivo_estado"></div>
-              <div id="hombro_retr_clav_izq_diferencial"></div>
-            </td>
-            <td>
-              <div id="hombro_retr_clav_bilateral_diferencial"></div>
-            </td>
-            <td>
-              <select id="hombro_retr_clav_dolor" name="hombro_retr_clav_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
-                <option value="No" data-color="success">No</option>
-                <option value="Derecho" data-color="warning">Derecho</option>
-                <option value="Izquierdo" data-color="warning">Izquierdo</option>
-                <option value="Bilateral" data-color="danger">Bilateral</option>
-              </select>
-            </td>
-            <td>
-              <select id="hombro_retr_clav_funcionalidad" name="hombro_retr_clav_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
-                <option value="" data-color="secondary">Seleccionar</option>
-                <option value="Normal" data-color="success">Normal</option>
-                <option value="Limitación leve" data-color="info">Limitación leve</option>
-                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
-                <option value="Limitación severa" data-color="danger">Limitación severa</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" id="hombro_retr_clav_obs" name="hombro_retr_clav_obs" class="form-control">
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Articulación Glenohumeral -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Articulación Glenohumeral</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th rowspan="2">Movimiento</th>
+                <th colspan="2">Hombro Derecho</th>
+                <th colspan="2">Hombro Izquierdo</th>
+                <th rowspan="2">Diferencial<br>Der-Izq</th>
+                <th rowspan="2">Dolor</th>
+                <th rowspan="2">Funcionalidad</th>
+                <th rowspan="2">Observaciones</th>
+              </tr>
+              <tr>
+                <th>Activo</th>
+                <th>Pasivo</th>
+                <th>Activo</th>
+                <th>Pasivo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Flexión</td>
+                <td>
+                  <input type="number" id="hombro_flexion_der_activo" name="hombro_flexion_der_activo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_flexion_der_activo', 0, 150, 180)">
+                  <div id="hombro_flexion_der_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_flexion_der_pasivo" name="hombro_flexion_der_pasivo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_flexion_der_pasivo', 0, 150, 180); calcularDiferencialAP('hombro_flexion_der')">
+                  <div id="hombro_flexion_der_pasivo_estado"></div>
+                  <div id="hombro_flexion_der_diferencial"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_flexion_izq_activo" name="hombro_flexion_izq_activo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_flexion_izq_activo', 0, 150, 180)">
+                  <div id="hombro_flexion_izq_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_flexion_izq_pasivo" name="hombro_flexion_izq_pasivo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_flexion_izq_pasivo', 0, 150, 180); calcularDiferencialAP('hombro_flexion_izq')">
+                  <div id="hombro_flexion_izq_pasivo_estado"></div>
+                  <div id="hombro_flexion_izq_diferencial"></div>
+                </td>
+                <td>
+                  <div id="hombro_flexion_bilateral_diferencial"></div>
+                </td>
+                <td>
+                  <select id="hombro_flexion_dolor" name="hombro_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_flexion_funcionalidad" name="hombro_flexion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_flexion_obs" name="hombro_flexion_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Extensión</td>
+                <td>
+                  <input type="number" id="hombro_extension_der_activo" name="hombro_extension_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_extension_der_activo', 0, 40, 50)">
+                  <div id="hombro_extension_der_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_extension_der_pasivo" name="hombro_extension_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_extension_der_pasivo', 0, 40, 50); calcularDiferencialAP('hombro_extension_der')">
+                  <div id="hombro_extension_der_pasivo_estado"></div>
+                  <div id="hombro_extension_der_diferencial"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_extension_izq_activo" name="hombro_extension_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_extension_izq_activo', 0, 40, 50)">
+                  <div id="hombro_extension_izq_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_extension_izq_pasivo" name="hombro_extension_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_extension_izq_pasivo', 0, 40, 50); calcularDiferencialAP('hombro_extension_izq')">
+                  <div id="hombro_extension_izq_pasivo_estado"></div>
+                  <div id="hombro_extension_izq_diferencial"></div>
+                </td>
+                <td>
+                  <div id="hombro_extension_bilateral_diferencial"></div>
+                </td>
+                <td>
+                  <select id="hombro_extension_dolor" name="hombro_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_extension_funcionalidad" name="hombro_extension_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_extension_obs" name="hombro_extension_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Abducción</td>
+                <td>
+                  <input type="number" id="hombro_abduccion_der_activo" name="hombro_abduccion_der_activo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_abduccion_der_activo', 0, 150, 180)">
+                  <div id="hombro_abduccion_der_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_abduccion_der_pasivo" name="hombro_abduccion_der_pasivo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_abduccion_der_pasivo', 0, 150, 180); calcularDiferencialAP('hombro_abduccion_der')">
+                  <div id="hombro_abduccion_der_pasivo_estado"></div>
+                  <div id="hombro_abduccion_der_diferencial"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_abduccion_izq_activo" name="hombro_abduccion_izq_activo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_abduccion_izq_activo', 0, 150, 180)">
+                  <div id="hombro_abduccion_izq_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_abduccion_izq_pasivo" name="hombro_abduccion_izq_pasivo" class="form-control rom-input" min="0" max="180" onchange="evaluarROM('hombro_abduccion_izq_pasivo', 0, 150, 180); calcularDiferencialAP('hombro_abduccion_izq')">
+                  <div id="hombro_abduccion_izq_pasivo_estado"></div>
+                  <div id="hombro_abduccion_izq_diferencial"></div>
+                </td>
+                <td>
+                  <div id="hombro_abduccion_bilateral_diferencial"></div>
+                </td>
+                <td>
+                  <select id="hombro_abduccion_dolor" name="hombro_abduccion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_abduccion_funcionalidad" name="hombro_abduccion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_abduccion_obs" name="hombro_abduccion_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Aducción</td>
+                <td>
+                  <input type="number" id="hombro_aduccion_der_activo" name="hombro_aduccion_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_aduccion_der_activo', 0, 20, 30)">
+                  <div id="hombro_aduccion_der_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_aduccion_der_pasivo" name="hombro_aduccion_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_aduccion_der_pasivo', 0, 20, 30); calcularDiferencialAP('hombro_aduccion_der')">
+                  <div id="hombro_aduccion_der_pasivo_estado"></div>
+                  <div id="hombro_aduccion_der_diferencial"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_aduccion_izq_activo" name="hombro_aduccion_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_aduccion_izq_activo', 0, 20, 30)">
+                  <div id="hombro_aduccion_izq_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_aduccion_izq_pasivo" name="hombro_aduccion_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_aduccion_izq_pasivo', 0, 20, 30); calcularDiferencialAP('hombro_aduccion_izq')">
+                  <div id="hombro_aduccion_izq_pasivo_estado"></div>
+                  <div id="hombro_aduccion_izq_diferencial"></div>
+                </td>
+                <td>
+                  <div id="hombro_aduccion_bilateral_diferencial"></div>
+                </td>
+                <td>
+                  <select id="hombro_aduccion_dolor" name="hombro_aduccion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_aduccion_funcionalidad" name="hombro_aduccion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_aduccion_obs" name="hombro_aduccion_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Rotación interna</td>
+                <td>
+                  <input type="number" id="hombro_rot_int_der_activo" name="hombro_rot_int_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_int_der_activo', 0, 50, 70)">
+                  <div id="hombro_rot_int_der_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_rot_int_der_pasivo" name="hombro_rot_int_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_int_der_pasivo', 0, 50, 70); calcularDiferencialAP('hombro_rot_int_der')">
+                  <div id="hombro_rot_int_der_pasivo_estado"></div>
+                  <div id="hombro_rot_int_der_diferencial"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_rot_int_izq_activo" name="hombro_rot_int_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_int_izq_activo', 0, 50, 70)">
+                  <div id="hombro_rot_int_izq_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_rot_int_izq_pasivo" name="hombro_rot_int_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_int_izq_pasivo', 0, 50, 70); calcularDiferencialAP('hombro_rot_int_izq')">
+                  <div id="hombro_rot_int_izq_pasivo_estado"></div>
+                  <div id="hombro_rot_int_izq_diferencial"></div>
+                </td>
+                <td>
+                  <div id="hombro_rot_int_bilateral_diferencial"></div>
+                </td>
+                <td>
+                  <select id="hombro_rot_int_dolor" name="hombro_rot_int_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_rot_int_funcionalidad" name="hombro_rot_int_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_rot_int_obs" name="hombro_rot_int_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Rotación externa</td>
+                <td>
+                  <input type="number" id="hombro_rot_ext_der_activo" name="hombro_rot_ext_der_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_ext_der_activo', 0, 70, 90)">
+                  <div id="hombro_rot_ext_der_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_rot_ext_der_pasivo" name="hombro_rot_ext_der_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_ext_der_pasivo', 0, 70, 90); calcularDiferencialAP('hombro_rot_ext_der')">
+                  <div id="hombro_rot_ext_der_pasivo_estado"></div>
+                  <div id="hombro_rot_ext_der_diferencial"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_rot_ext_izq_activo" name="hombro_rot_ext_izq_activo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_ext_izq_activo', 0, 70, 90)">
+                  <div id="hombro_rot_ext_izq_activo_estado"></div>
+                </td>
+                <td>
+                  <input type="number" id="hombro_rot_ext_izq_pasivo" name="hombro_rot_ext_izq_pasivo" class="form-control rom-input" min="0" max="90" onchange="evaluarROM('hombro_rot_ext_izq_pasivo', 0, 70, 90); calcularDiferencialAP('hombro_rot_ext_izq')">
+                  <div id="hombro_rot_ext_izq_pasivo_estado"></div>
+                  <div id="hombro_rot_ext_izq_diferencial"></div>
+                </td>
+                <td>
+                  <div id="hombro_rot_ext_bilateral_diferencial"></div>
+                </td>
+                <td>
+                  <select id="hombro_rot_ext_dolor" name="hombro_rot_ext_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_rot_ext_funcionalidad" name="hombro_rot_ext_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_rot_ext_obs" name="hombro_rot_ext_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-          
+    
+    <!-- Articulación Escapulotorácica -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Articulación Escapulotorácica</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Movimiento</th>
+                <th>Lado Derecho</th>
+                <th>Lado Izquierdo</th>
+                <th>Dolor</th>
+                <th>Funcionalidad</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Elevación escapular</td>
+                <td>
+                  <select id="hombro_elev_escap_der_calidad" name="hombro_elev_escap_der_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_elev_escap_izq_calidad" name="hombro_elev_escap_izq_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_elev_escap_dolor" name="hombro_elev_escap_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_elev_escap_funcionalidad" name="hombro_elev_escap_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_elev_escap_obs" name="hombro_elev_escap_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Descenso escapular</td>
+                <td>
+                  <select id="hombro_desc_escap_der_calidad" name="hombro_desc_escap_der_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_desc_escap_izq_calidad" name="hombro_desc_escap_izq_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_desc_escap_dolor" name="hombro_desc_escap_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_desc_escap_funcionalidad" name="hombro_desc_escap_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_desc_escap_obs" name="hombro_desc_escap_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Protracción escapular</td>
+                <td>
+                  <select id="hombro_protr_escap_der_calidad" name="hombro_protr_escap_der_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_protr_escap_izq_calidad" name="hombro_protr_escap_izq_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_protr_escap_dolor" name="hombro_protr_escap_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_protr_escap_funcionalidad" name="hombro_protr_escap_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_protr_escap_obs" name="hombro_protr_escap_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Retracción escapular</td>
+                <td>
+                  <select id="hombro_retr_escap_der_calidad" name="hombro_retr_escap_der_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_retr_escap_izq_calidad" name="hombro_retr_escap_izq_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_retr_escap_dolor" name="hombro_retr_escap_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_retr_escap_funcionalidad" name="hombro_retr_escap_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_retr_escap_obs" name="hombro_retr_escap_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Báscula escapular externa</td>
+                <td>
+                  <select id="hombro_basc_ext_der_calidad" name="hombro_basc_ext_der_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_basc_ext_izq_calidad" name="hombro_basc_ext_izq_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_basc_ext_dolor" name="hombro_basc_ext_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_basc_ext_funcionalidad" name="hombro_basc_ext_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_basc_ext_obs" name="hombro_basc_ext_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Báscula escapular interna</td>
+                <td>
+                  <select id="hombro_basc_int_der_calidad" name="hombro_basc_int_der_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_basc_int_izq_calidad" name="hombro_basc_int_izq_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_basc_int_dolor" name="hombro_basc_int_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_basc_int_funcionalidad" name="hombro_basc_int_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_basc_int_obs" name="hombro_basc_int_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Articulación Esternoclavicular -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Articulación Esternoclavicular</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Movimiento</th>
+                <th>Lado Derecho</th>
+                <th>Lado Izquierdo</th>
+                <th>Dolor</th>
+                <th>Funcionalidad</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Elevación clavicular</td>
+                <td>
+                  <select id="hombro_elev_clav_der_calidad" name="hombro_elev_clav_der_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_elev_clav_izq_calidad" name="hombro_elev_clav_izq_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_elev_clav_dolor" name="hombro_elev_clav_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_elev_clav_funcionalidad" name="hombro_elev_clav_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_elev_clav_obs" name="hombro_elev_clav_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Depresión clavicular</td>
+                <td>
+                  <select id="hombro_dep_clav_der_calidad" name="hombro_dep_clav_der_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_dep_clav_izq_calidad" name="hombro_dep_clav_izq_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_dep_clav_dolor" name="hombro_dep_clav_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_dep_clav_funcionalidad" name="hombro_dep_clav_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_dep_clav_obs" name="hombro_dep_clav_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Protracción clavicular</td>
+                <td>
+                  <select id="hombro_protr_clav_der_calidad" name="hombro_protr_clav_der_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_protr_clav_izq_calidad" name="hombro_protr_clav_izq_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_protr_clav_dolor" name="hombro_protr_clav_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_protr_clav_funcionalidad" name="hombro_protr_clav_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_protr_clav_obs" name="hombro_protr_clav_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Retracción clavicular</td>
+                <td>
+                  <select id="hombro_retr_clav_der_calidad" name="hombro_retr_clav_der_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_retr_clav_izq_calidad" name="hombro_retr_clav_izq_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Limitación leve" data-color="info" class="bg-info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning" class="bg-warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger" class="bg-danger text-white">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_retr_clav_dolor" name="hombro_retr_clav_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Inicio" data-color="info">Inicio</option>
+                    <option value="Medio" data-color="warning">Medio</option>
+                    <option value="Final" data-color="warning">Final</option>
+                    <option value="Todo" data-color="danger">Todo el rango</option>
+                    <option value="Después" data-color="danger">Después</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="hombro_retr_clav_funcionalidad" name="hombro_retr_clav_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Limitación leve" data-color="info">Limitación leve</option>
+                    <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                    <option value="Limitación severa" data-color="danger">Limitación severa</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="hombro_retr_clav_obs" name="hombro_retr_clav_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
     <!-- Calculadora de déficit funcional hombro -->
     <div class="card mt-4 mb-4">
       <div class="card-header bg-light">
@@ -9473,7 +9519,7 @@
             <h6>Hombro Derecho</h6>
             <div class="form-group mb-3">
               <label for="hombro_patron_capsular_der" class="form-label">Patrón de restricción (ordenado por limitación)</label>
-              <select id="hombro_patron_capsular_der" name="hombro_patron_capsular_der" class="form-select" onchange="mostrarInterpretacionCapsular('hombro_der')">
+              <select id="hombro_patron_capsular_der" name="hombro_patron_capsular_der" class="form-select" onchange="mostrarInterpretacionCapsular('hombro')">
                 <option value="">Seleccionar</option>
                 <option value="No presenta">No presenta patrón capsular</option>
                 <option value="Abd > Rot Ext > Rot Int">Abd. > Rot. Ext. > Rot. Int.</option>
@@ -9492,7 +9538,7 @@
             <h6>Hombro Izquierdo</h6>
             <div class="form-group mb-3">
               <label for="hombro_patron_capsular_izq" class="form-label">Patrón de restricción (ordenado por limitación)</label>
-              <select id="hombro_patron_capsular_izq" name="hombro_patron_capsular_izq" class="form-select" onchange="mostrarInterpretacionCapsular('hombro_izq')">
+              <select id="hombro_patron_capsular_izq" name="hombro_patron_capsular_izq" class="form-select" onchange="mostrarInterpretacionCapsular('hombro')">
                 <option value="">Seleccionar</option>
                 <option value="No presenta">No presenta patrón capsular</option>
                 <option value="Abd > Rot Ext > Rot Int">Abd. > Rot. Ext. > Rot. Int.</option>
@@ -9536,34 +9582,14 @@
           <div class="col-md-6">
             <h6>Hombro Derecho</h6>
             <div class="form-group mb-3">
-              <label for="hombro_ritmo_esc_der" class="form-label">Calidad del ritmo escapulohumeral</label>
-              <select id="hombro_ritmo_esc_der" name="hombro_ritmo_esc_der" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
-                <option value="Disritmia leve" data-color="info" class="bg-info">Disritmia leve</option>
-                <option value="Disritmia moderada" data-color="warning" class="bg-warning">Disritmia moderada</option>
-                <option value="Disritmia severa" data-color="danger" class="bg-danger text-white">Disritmia severa</option>
-              </select>
-            </div>
-            <div class="form-group mb-3">
-              <label for="hombro_ritmo_esc_der_obs" class="form-label">Observaciones</label>
+              <label for="hombro_ritmo_esc_der_obs" class="form-label">Observaciones Ritmo Escapulohumeral</label>
               <textarea id="hombro_ritmo_esc_der_obs" name="hombro_ritmo_esc_der_obs" class="form-control" rows="3"></textarea>
             </div>
           </div>
           <div class="col-md-6">
             <h6>Hombro Izquierdo</h6>
             <div class="form-group mb-3">
-              <label for="hombro_ritmo_esc_izq" class="form-label">Calidad del ritmo escapulohumeral</label>
-              <select id="hombro_ritmo_esc_izq" name="hombro_ritmo_esc_izq" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
-                <option value="Disritmia leve" data-color="info" class="bg-info">Disritmia leve</option>
-                <option value="Disritmia moderada" data-color="warning" class="bg-warning">Disritmia moderada</option>
-                <option value="Disritmia severa" data-color="danger" class="bg-danger text-white">Disritmia severa</option>
-              </select>
-            </div>
-            <div class="form-group mb-3">
-              <label for="hombro_ritmo_esc_izq_obs" class="form-label">Observaciones</label>
+              <label for="hombro_ritmo_esc_izq_obs" class="form-label">Observaciones Ritmo Escapulohumeral</label>
               <textarea id="hombro_ritmo_esc_izq_obs" name="hombro_ritmo_esc_izq_obs" class="form-control" rows="3"></textarea>
             </div>
           </div>
@@ -9584,23 +9610,7 @@
           </div>
         </div>
         
-        <div id="recomendaciones_hombro" class="mb-3">
-          <h6>Recomendaciones para el Plan de Tratamiento:</h6>
-          <div id="recomendaciones-hombro-texto" class="p-3 border rounded">
-            Complete la evaluación para obtener recomendaciones específicas.
-          </div>
-        </div>
-        
-        <div id="consideraciones_hombro" class="mb-3">
-          <h6>Consideraciones Adicionales:</h6>
-          <div id="consideraciones-hombro-texto" class="p-3 border rounded">
-            Complete la evaluación para obtener consideraciones adicionales específicas.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+              
       
       <!-- Continúa con los demás subacordeones para cada región anatómica... -->
       
