@@ -2035,7 +2035,6 @@ function toggleSeccion(id) {
         regionBadge.className = regionBadge.className.replace(/bg-\w+/g, "bg-success");
       }
     });
-  });
 
 // Código para actualizar la interpretación global
   function actualizarInterpretacionGlobal() {
@@ -2091,4 +2090,8 @@ function toggleSeccion(id) {
   
   // También llamar cuando se carga la página
   setTimeout(actualizarInterpretacionGlobal, 1000);
+    
+  });
+
+
 
