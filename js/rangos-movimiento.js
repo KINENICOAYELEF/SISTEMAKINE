@@ -720,30 +720,46 @@ function obtenerNombreMovimiento(baseId) {
 
 // Evaluar dolor durante ROM
 function evaluarDolorROM(selector) {
-  // Colorear el selector
-  colorearSelector(selector);
-  
-  // Actualizar badge de estado
-  document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
-  document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
-  
-  // Actualizar recomendaciones
-  const region = selector.id.split('_')[0]; // Ej: cervical
-  actualizarRecomendacionesROM(region);
+  try {
+    // Colorear el selector
+    colorearSelector(selector);
+    
+    // Actualizar badge de estado
+    const badge = document.getElementById("rom-evaluation-badge");
+    if (badge) {
+      badge.innerHTML = "Evaluado";
+      badge.className = "resultado-badge badge bg-success";
+    }
+    
+    // Actualizar recomendaciones
+    const region = selector.id.split('_')[0]; // Ej: cervical
+    actualizarRecomendacionesROM(region);
+  } catch (error) {
+    console.error("Error en evaluarDolorROM:", error);
+    // No hacer nada más, simplemente evitar que el error detenga todo
+  }
 }
 
 // Evaluar la funcionalidad del ROM
 function evaluarFuncionalidadROM(selector) {
-  // Colorear el selector
-  colorearSelector(selector);
-  
-  // Actualizar badge de estado
-  document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
-  document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
-  
-  // Actualizar recomendaciones
-  const region = selector.id.split('_')[0]; // Ej: cervical
-  actualizarRecomendacionesROM(region);
+  try {
+    // Colorear el selector
+    colorearSelector(selector);
+    
+    // Actualizar badge de estado
+    const badge = document.getElementById("rom-evaluation-badge");
+    if (badge) {
+      badge.innerHTML = "Evaluado";
+      badge.className = "resultado-badge badge bg-success";
+    }
+    
+    // Actualizar recomendaciones
+    const region = selector.id.split('_')[0]; // Ej: cervical
+    actualizarRecomendacionesROM(region);
+  } catch (error) {
+    console.error("Error en evaluarFuncionalidadROM:", error);
+    // No hacer nada más, simplemente evitar que el error detenga todo
+  }
 }
 
 // Calcular déficit funcional por articulación
@@ -2065,9 +2081,15 @@ function actualizarInterpretacionGlobalAvanzada() {
     let regionesEvaluadas = [];
     
     regiones.forEach(region => {
-      // Verificar cualquier tipo de dato en esta región
-      const inputsRegion = document.querySelectorAll(`input[id^="${region}_"]`);
-      const selectoresRegion = document.querySelectorAll(`select[id^="${region}_"]`);
+  try {
+    // Verificar cualquier tipo de dato en esta región
+    const inputsRegion = document.querySelectorAll(`input[id^="${region}_"]`);
+    // ... resto del código para esta región ...
+  } catch (regionError) {
+    console.error(`Error procesando región ${region}:`, regionError);
+    // Continuar con la siguiente región
+  }
+});
       
       let hayDatos = false;
       let deficitValue = 0;
@@ -2121,16 +2143,19 @@ function actualizarInterpretacionGlobalAvanzada() {
     // Si no hay regiones con datos, salir
     if (regionesEvaluadas.length === 0) return;
     
-    // 2. GENERAR TEXTOS DE INTERPRETACIÓN
-    
-    // Resumen de déficit
-    let resumenHTML = generarResumenDeficit(regionesEvaluadas);
-    
-    // Integración con patrones
-    let integracionHTML = generarIntegracionPatrones(regionesEvaluadas);
-    
-    // Recomendaciones
-    let recomendacionesHTML = generarRecomendaciones(regionesEvaluadas);
+    // 2. GENERAR TEXTOS DE INTERPRETACIÓN - solo si tenemos datos
+let resumenHTML = "";
+let integracionHTML = "";
+let recomendacionesHTML = "";
+
+try {
+  resumenHTML = generarResumenDeficit(regionesEvaluadas);
+  integracionHTML = generarIntegracionPatrones(regionesEvaluadas);
+  recomendacionesHTML = generarRecomendaciones(regionesEvaluadas);
+} catch (genError) {
+  console.error("Error generando textos:", genError);
+  // No detenerse, intentar usar lo que se haya podido generar
+}
     
     // 3. ACTUALIZAR ELEMENTOS EN LA PÁGINA
     
@@ -2144,31 +2169,36 @@ function actualizarInterpretacionGlobalAvanzada() {
     let actualizadoRecomendaciones = false;
 
     // Buscar específicamente elementos con los textos exactos que queremos reemplazar
-    parrafos.forEach(elemento => {
-      // Actualizar sección de resumen de déficit
-      if (elemento.textContent.includes('Complete la evaluación de al menos una región') ||
-          elemento.textContent.includes('Complete la evaluación de al')) {
-        console.log("Actualizando resumen de déficit");
-        elemento.innerHTML = resumenHTML;
-        actualizadoResumen = true;
-      }
-      
-      // Actualizar sección de integración con patrones
-      if (elemento.textContent.includes('Complete la evaluación de patrones') ||
-          elemento.textContent.includes('integración')) {
-        console.log("Actualizando integración con patrones");
-        elemento.innerHTML = integracionHTML;
-        actualizadoIntegracion = true;
-      }
-      
-      // Actualizar sección de recomendaciones
-      if (elemento.textContent.includes('Complete la evaluación de rangos para obtener') ||
-          elemento.textContent.includes('recomendaciones globales')) {
-        console.log("Actualizando recomendaciones");
-        elemento.innerHTML = recomendacionesHTML;
-        actualizadoRecomendaciones = true;
-      }
-    });
+parrafos.forEach(elemento => {
+  try {
+    // Actualizar sección de resumen de déficit
+    if (elemento.textContent.includes('Complete la evaluación de al menos una región') ||
+        elemento.textContent.includes('Complete la evaluación de al')) {
+      console.log("Actualizando resumen de déficit");
+      elemento.innerHTML = resumenHTML;
+      actualizadoResumen = true;
+    }
+    
+    // Actualizar sección de integración con patrones
+    if (elemento.textContent.includes('Complete la evaluación de patrones') ||
+        elemento.textContent.includes('integración')) {
+      console.log("Actualizando integración con patrones");
+      elemento.innerHTML = integracionHTML;
+      actualizadoIntegracion = true;
+    }
+    
+    // Actualizar sección de recomendaciones
+    if (elemento.textContent.includes('Complete la evaluación de rangos para obtener') ||
+        elemento.textContent.includes('recomendaciones globales')) {
+      console.log("Actualizando recomendaciones");
+      elemento.innerHTML = recomendacionesHTML;
+      actualizadoRecomendaciones = true;
+    }
+  } catch (elementoError) {
+    console.error("Error actualizando elemento:", elementoError);
+    // Continuar con el siguiente elemento
+  }
+});
 
     // Informar si no se encontraron elementos para actualizar
     if (!actualizadoResumen && !actualizadoIntegracion && !actualizadoRecomendaciones) {
