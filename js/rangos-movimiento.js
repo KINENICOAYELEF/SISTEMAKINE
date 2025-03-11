@@ -734,6 +734,14 @@ function evaluarDolorROM(selector) {
   // Actualizar badge de estado
   document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
   document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
+
+  // Actualizar también el badge de la región específica
+const region = selector.id.split('_')[0]; // Obtiene la región (cervical, etc.)
+const regionBadge = document.getElementById(region + "_badge");
+if (regionBadge) {
+  regionBadge.innerHTML = "Evaluado";
+  regionBadge.className = "badge bg-success float-end";
+}
   
   // Actualizar recomendaciones
   const region = selector.id.split('_')[0]; // Ej: cervical
@@ -748,6 +756,14 @@ function evaluarFuncionalidadROM(selector) {
   // Actualizar badge de estado
   document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
   document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
+
+  // Actualizar también el badge de la región específica
+const region = selector.id.split('_')[0]; // Obtiene la región (cervical, etc.)
+const regionBadge = document.getElementById(region + "_badge");
+if (regionBadge) {
+  regionBadge.innerHTML = "Evaluado";
+  regionBadge.className = "badge bg-success float-end";
+}
   
   // Actualizar recomendaciones
   const region = selector.id.split('_')[0]; // Ej: cervical
