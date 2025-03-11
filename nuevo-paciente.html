@@ -7464,16 +7464,937 @@
 </div>
       
       <!-- Subacordeón para Pelvis/Sacroilíaca/Cóccix -->
-      <div class="cuestionario-item sub-acordeon">
-        <div class="cuestionario-header" onclick="toggleCuestionario('rom-pelvis-content')">
-          <h5><i class="fas fa-plus-circle"></i> Pelvis/Sacroilíaca/Cóccix</h5>
-          <div class="resultado-badge" id="rom-pelvis-badge">No completado</div>
+<div class="cuestionario-item sub-acordeon">
+  <div class="cuestionario-header" onclick="toggleCuestionario('rom-pelvis-content')">
+    <h5><i class="fas fa-plus-circle"></i> Pelvis/Sacroilíaca/Cóccix</h5>
+    <div class="resultado-badge" id="rom-pelvis-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="rom-pelvis-content" style="display: none;">
+    <h5 class="mt-4 mb-3">Rangos de Movimiento: Pelvis/Sacroilíaca/Cóccix</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th rowspan="2">Movimiento</th>
+            <th colspan="2">Rango Activo</th>
+            <th colspan="2">Rango Pasivo</th>
+            <th rowspan="2">Diferencial<br>A/P</th>
+            <th rowspan="2">Dolor</th>
+            <th rowspan="2">Funcionalidad</th>
+            <th rowspan="2">Observaciones</th>
+          </tr>
+          <tr>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Movimientos Pélvicos -->
+          <tr class="table-secondary">
+            <td colspan="9"><strong>Movimientos Pélvicos</strong></td>
+          </tr>
+          <tr>
+            <td>Anteversión pélvica</td>
+            <td>
+              <input type="number" id="pelvis_anteversion_activo" name="pelvis_anteversion_activo" class="form-control rom-input" min="0" max="45" onchange="evaluarROM('pelvis_anteversion_activo', 0, 10, 15)">
+            </td>
+            <td id="pelvis_anteversion_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_anteversion_pasivo" name="pelvis_anteversion_pasivo" class="form-control rom-input" min="0" max="45" onchange="evaluarROM('pelvis_anteversion_pasivo', 0, 10, 15); calcularDiferencialAP('pelvis_anteversion')">
+            </td>
+            <td id="pelvis_anteversion_pasivo_estado"></td>
+            <td id="pelvis_anteversion_diferencial"></td>
+            <td>
+              <select id="pelvis_anteversion_dolor" name="pelvis_anteversion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_anteversion_funcionalidad" name="pelvis_anteversion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_anteversion_obs" name="pelvis_anteversion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Retroversión pélvica</td>
+            <td>
+              <input type="number" id="pelvis_retroversion_activo" name="pelvis_retroversion_activo" class="form-control rom-input" min="0" max="45" onchange="evaluarROM('pelvis_retroversion_activo', 0, 10, 15)">
+            </td>
+            <td id="pelvis_retroversion_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_retroversion_pasivo" name="pelvis_retroversion_pasivo" class="form-control rom-input" min="0" max="45" onchange="evaluarROM('pelvis_retroversion_pasivo', 0, 10, 15); calcularDiferencialAP('pelvis_retroversion')">
+            </td>
+            <td id="pelvis_retroversion_pasivo_estado"></td>
+            <td id="pelvis_retroversion_diferencial"></td>
+            <td>
+              <select id="pelvis_retroversion_dolor" name="pelvis_retroversion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_retroversion_funcionalidad" name="pelvis_retroversion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_retroversion_obs" name="pelvis_retroversion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Elevación pélvica derecha</td>
+            <td>
+              <input type="number" id="pelvis_elevacion_der_activo" name="pelvis_elevacion_der_activo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('pelvis_elevacion_der_activo', 0, 5, 10)">
+            </td>
+            <td id="pelvis_elevacion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_elevacion_der_pasivo" name="pelvis_elevacion_der_pasivo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('pelvis_elevacion_der_pasivo', 0, 5, 10); calcularDiferencialAP('pelvis_elevacion_der')">
+            </td>
+            <td id="pelvis_elevacion_der_pasivo_estado"></td>
+            <td id="pelvis_elevacion_der_diferencial"></td>
+            <td>
+              <select id="pelvis_elevacion_der_dolor" name="pelvis_elevacion_der_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_elevacion_der_funcionalidad" name="pelvis_elevacion_der_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_elevacion_der_obs" name="pelvis_elevacion_der_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Elevación pélvica izquierda</td>
+            <td>
+              <input type="number" id="pelvis_elevacion_izq_activo" name="pelvis_elevacion_izq_activo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('pelvis_elevacion_izq_activo', 0, 5, 10)">
+            </td>
+            <td id="pelvis_elevacion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_elevacion_izq_pasivo" name="pelvis_elevacion_izq_pasivo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('pelvis_elevacion_izq_pasivo', 0, 5, 10); calcularDiferencialAP('pelvis_elevacion_izq')">
+            </td>
+            <td id="pelvis_elevacion_izq_pasivo_estado"></td>
+            <td id="pelvis_elevacion_izq_diferencial"></td>
+            <td>
+              <select id="pelvis_elevacion_izq_dolor" name="pelvis_elevacion_izq_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_elevacion_izq_funcionalidad" name="pelvis_elevacion_izq_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_elevacion_izq_obs" name="pelvis_elevacion_izq_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Rotación pélvica derecha</td>
+            <td>
+              <input type="number" id="pelvis_rotacion_der_activo" name="pelvis_rotacion_der_activo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('pelvis_rotacion_der_activo', 0, 10, 15)">
+            </td>
+            <td id="pelvis_rotacion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_rotacion_der_pasivo" name="pelvis_rotacion_der_pasivo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('pelvis_rotacion_der_pasivo', 0, 10, 15); calcularDiferencialAP('pelvis_rotacion_der')">
+            </td>
+            <td id="pelvis_rotacion_der_pasivo_estado"></td>
+            <td id="pelvis_rotacion_der_diferencial"></td>
+            <td>
+              <select id="pelvis_rotacion_der_dolor" name="pelvis_rotacion_der_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_rotacion_der_funcionalidad" name="pelvis_rotacion_der_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_rotacion_der_obs" name="pelvis_rotacion_der_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Rotación pélvica izquierda</td>
+            <td>
+              <input type="number" id="pelvis_rotacion_izq_activo" name="pelvis_rotacion_izq_activo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('pelvis_rotacion_izq_activo', 0, 10, 15)">
+            </td>
+            <td id="pelvis_rotacion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_rotacion_izq_pasivo" name="pelvis_rotacion_izq_pasivo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('pelvis_rotacion_izq_pasivo', 0, 10, 15); calcularDiferencialAP('pelvis_rotacion_izq')">
+            </td>
+            <td id="pelvis_rotacion_izq_pasivo_estado"></td>
+            <td id="pelvis_rotacion_izq_diferencial"></td>
+            <td>
+              <select id="pelvis_rotacion_izq_dolor" name="pelvis_rotacion_izq_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_rotacion_izq_funcionalidad" name="pelvis_rotacion_izq_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_rotacion_izq_obs" name="pelvis_rotacion_izq_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Torsión ilíaca ant. derecha</td>
+            <td>
+              <input type="number" id="pelvis_torsion_ant_der_activo" name="pelvis_torsion_ant_der_activo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('pelvis_torsion_ant_der_activo', 0, 5, 8)">
+            </td>
+            <td id="pelvis_torsion_ant_der_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_torsion_ant_der_pasivo" name="pelvis_torsion_ant_der_pasivo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('pelvis_torsion_ant_der_pasivo', 0, 5, 8); calcularDiferencialAP('pelvis_torsion_ant_der')">
+            </td>
+            <td id="pelvis_torsion_ant_der_pasivo_estado"></td>
+            <td id="pelvis_torsion_ant_der_diferencial"></td>
+            <td>
+              <select id="pelvis_torsion_ant_der_dolor" name="pelvis_torsion_ant_der_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_torsion_ant_der_funcionalidad" name="pelvis_torsion_ant_der_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_torsion_ant_der_obs" name="pelvis_torsion_ant_der_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Torsión ilíaca ant. izquierda</td>
+            <td>
+              <input type="number" id="pelvis_torsion_ant_izq_activo" name="pelvis_torsion_ant_izq_activo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('pelvis_torsion_ant_izq_activo', 0, 5, 8)">
+            </td>
+            <td id="pelvis_torsion_ant_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_torsion_ant_izq_pasivo" name="pelvis_torsion_ant_izq_pasivo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('pelvis_torsion_ant_izq_pasivo', 0, 5, 8); calcularDiferencialAP('pelvis_torsion_ant_izq')">
+            </td>
+            <td id="pelvis_torsion_ant_izq_pasivo_estado"></td>
+            <td id="pelvis_torsion_ant_izq_diferencial"></td>
+            <td>
+              <select id="pelvis_torsion_ant_izq_dolor" name="pelvis_torsion_ant_izq_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_torsion_ant_izq_funcionalidad" name="pelvis_torsion_ant_izq_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_torsion_ant_izq_obs" name="pelvis_torsion_ant_izq_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Torsión ilíaca post. derecha</td>
+            <td>
+              <input type="number" id="pelvis_torsion_post_der_activo" name="pelvis_torsion_post_der_activo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('pelvis_torsion_post_der_activo', 0, 5, 8)">
+            </td>
+            <td id="pelvis_torsion_post_der_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_torsion_post_der_pasivo" name="pelvis_torsion_post_der_pasivo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('pelvis_torsion_post_der_pasivo', 0, 5, 8); calcularDiferencialAP('pelvis_torsion_post_der')">
+            </td>
+            <td id="pelvis_torsion_post_der_pasivo_estado"></td>
+            <td id="pelvis_torsion_post_der_diferencial"></td>
+            <td>
+              <select id="pelvis_torsion_post_der_dolor" name="pelvis_torsion_post_der_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_torsion_post_der_funcionalidad" name="pelvis_torsion_post_der_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_torsion_post_der_obs" name="pelvis_torsion_post_der_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Torsión ilíaca post. izquierda</td>
+            <td>
+              <input type="number" id="pelvis_torsion_post_izq_activo" name="pelvis_torsion_post_izq_activo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('pelvis_torsion_post_izq_activo', 0, 5, 8)">
+            </td>
+            <td id="pelvis_torsion_post_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_torsion_post_izq_pasivo" name="pelvis_torsion_post_izq_pasivo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('pelvis_torsion_post_izq_pasivo', 0, 5, 8); calcularDiferencialAP('pelvis_torsion_post_izq')">
+            </td>
+            <td id="pelvis_torsion_post_izq_pasivo_estado"></td>
+            <td id="pelvis_torsion_post_izq_diferencial"></td>
+            <td>
+              <select id="pelvis_torsion_post_izq_dolor" name="pelvis_torsion_post_izq_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_torsion_post_izq_funcionalidad" name="pelvis_torsion_post_izq_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_torsion_post_izq_obs" name="pelvis_torsion_post_izq_obs" class="form-control">
+            </td>
+          </tr>
+          
+          <!-- Movimientos Sacroilíacos -->
+          <tr class="table-secondary">
+            <td colspan="9"><strong>Movimientos Sacroilíacos</strong></td>
+          </tr>
+          <tr>
+            <td>Nutación sacra</td>
+            <td>
+              <input type="number" id="pelvis_nutacion_activo" name="pelvis_nutacion_activo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_nutacion_activo', 0, 5, 8)">
+            </td>
+            <td id="pelvis_nutacion_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_nutacion_pasivo" name="pelvis_nutacion_pasivo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_nutacion_pasivo', 0, 5, 8); calcularDiferencialAP('pelvis_nutacion')">
+            </td>
+            <td id="pelvis_nutacion_pasivo_estado"></td>
+            <td id="pelvis_nutacion_diferencial"></td>
+            <td>
+              <select id="pelvis_nutacion_dolor" name="pelvis_nutacion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_nutacion_funcionalidad" name="pelvis_nutacion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_nutacion_obs" name="pelvis_nutacion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Contranutación sacra</td>
+            <td>
+              <input type="number" id="pelvis_contranutacion_activo" name="pelvis_contranutacion_activo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_contranutacion_activo', 0, 5, 8)">
+            </td>
+            <td id="pelvis_contranutacion_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_contranutacion_pasivo" name="pelvis_contranutacion_pasivo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_contranutacion_pasivo', 0, 5, 8); calcularDiferencialAP('pelvis_contranutacion')">
+            </td>
+            <td id="pelvis_contranutacion_pasivo_estado"></td>
+            <td id="pelvis_contranutacion_diferencial"></td>
+            <td>
+              <select id="pelvis_contranutacion_dolor" name="pelvis_contranutacion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_contranutacion_funcionalidad" name="pelvis_contranutacion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_contranutacion_obs" name="pelvis_contranutacion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Movilidad SI derecha</td>
+            <td>
+              <input type="number" id="pelvis_mov_si_der_activo" name="pelvis_mov_si_der_activo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_mov_si_der_activo', 0, 5, 10)">
+            </td>
+            <td id="pelvis_mov_si_der_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_mov_si_der_pasivo" name="pelvis_mov_si_der_pasivo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_mov_si_der_pasivo', 0, 5, 10); calcularDiferencialAP('pelvis_mov_si_der')">
+            </td>
+            <td id="pelvis_mov_si_der_pasivo_estado"></td>
+            <td id="pelvis_mov_si_der_diferencial"></td>
+            <td>
+              <select id="pelvis_mov_si_der_dolor" name="pelvis_mov_si_der_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_mov_si_der_funcionalidad" name="pelvis_mov_si_der_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_mov_si_der_obs" name="pelvis_mov_si_der_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Movilidad SI izquierda</td>
+            <td>
+              <input type="number" id="pelvis_mov_si_izq_activo" name="pelvis_mov_si_izq_activo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_mov_si_izq_activo', 0, 5, 10)">
+            </td>
+            <td id="pelvis_mov_si_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_mov_si_izq_pasivo" name="pelvis_mov_si_izq_pasivo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_mov_si_izq_pasivo', 0, 5, 10); calcularDiferencialAP('pelvis_mov_si_izq')">
+            </td>
+            <td id="pelvis_mov_si_izq_pasivo_estado"></td>
+            <td id="pelvis_mov_si_izq_diferencial"></td>
+            <td>
+              <select id="pelvis_mov_si_izq_dolor" name="pelvis_mov_si_izq_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_mov_si_izq_funcionalidad" name="pelvis_mov_si_izq_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_mov_si_izq_obs" name="pelvis_mov_si_izq_obs" class="form-control">
+            </td>
+          </tr>
+          
+          <!-- Movimientos Coccígeos y Sínfisis Púbica -->
+          <tr class="table-secondary">
+            <td colspan="9"><strong>Movimientos Coccígeos y Sínfisis Púbica</strong></td>
+          </tr>
+          <tr>
+            <td>Flexión coccígea</td>
+            <td>
+              <input type="number" id="pelvis_flex_coccix_activo" name="pelvis_flex_coccix_activo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_flex_coccix_activo', 0, 5, 10)">
+            </td>
+            <td id="pelvis_flex_coccix_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_flex_coccix_pasivo" name="pelvis_flex_coccix_pasivo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_flex_coccix_pasivo', 0, 5, 10); calcularDiferencialAP('pelvis_flex_coccix')">
+            </td>
+            <td id="pelvis_flex_coccix_pasivo_estado"></td>
+            <td id="pelvis_flex_coccix_diferencial"></td>
+            <td>
+              <select id="pelvis_flex_coccix_dolor" name="pelvis_flex_coccix_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_flex_coccix_funcionalidad" name="pelvis_flex_coccix_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_flex_coccix_obs" name="pelvis_flex_coccix_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Extensión coccígea</td>
+            <td>
+              <input type="number" id="pelvis_ext_coccix_activo" name="pelvis_ext_coccix_activo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_ext_coccix_activo', 0, 5, 10)">
+            </td>
+            <td id="pelvis_ext_coccix_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_ext_coccix_pasivo" name="pelvis_ext_coccix_pasivo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_ext_coccix_pasivo', 0, 5, 10); calcularDiferencialAP('pelvis_ext_coccix')">
+            </td>
+            <td id="pelvis_ext_coccix_pasivo_estado"></td>
+            <td id="pelvis_ext_coccix_diferencial"></td>
+            <td>
+              <select id="pelvis_ext_coccix_dolor" name="pelvis_ext_coccix_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_ext_coccix_funcionalidad" name="pelvis_ext_coccix_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_ext_coccix_obs" name="pelvis_ext_coccix_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Movilidad sínfisis púbica</td>
+            <td>
+              <input type="number" id="pelvis_sinfisis_activo" name="pelvis_sinfisis_activo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_sinfisis_activo', 0, 3, 5)">
+            </td>
+            <td id="pelvis_sinfisis_activo_estado"></td>
+            <td>
+              <input type="number" id="pelvis_sinfisis_pasivo" name="pelvis_sinfisis_pasivo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('pelvis_sinfisis_pasivo', 0, 3, 5); calcularDiferencialAP('pelvis_sinfisis')">
+            </td>
+            <td id="pelvis_sinfisis_pasivo_estado"></td>
+            <td id="pelvis_sinfisis_diferencial"></td>
+            <td>
+              <select id="pelvis_sinfisis_dolor" name="pelvis_sinfisis_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="pelvis_sinfisis_funcionalidad" name="pelvis_sinfisis_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pelvis_sinfisis_obs" name="pelvis_sinfisis_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+          
+    <!-- Calculadora de déficit funcional pelvis -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Calculadora de Déficit Funcional Pélvico/Sacroilíaco</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="pelvis_deficit_total" class="form-label">Déficit Total (%)</label>
+              <input type="text" id="pelvis_deficit_total" name="pelvis_deficit_total" class="form-control" readonly>
+            </div>
+            <div id="pelvis_deficit_visual" class="mt-2 progress">
+              <div class="progress-bar bg-info" role="progressbar" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="pelvis_deficit_interpretacion" class="form-label">Interpretación Clínica</label>
+              <select id="pelvis_deficit_interpretacion" name="pelvis_deficit_interpretacion" class="form-select" disabled>
+                <option value="">Pendiente de cálculo</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="cuestionario-content" id="rom-pelvis-content" style="display: none;">
-          <p class="text-center text-muted">Contenido para evaluación de Pelvis/Sacroilíaca/Cóccix</p>
-          <!-- Aquí irían las tablas y contenido similar al de columna cervical -->
+        
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <h6>Impacto en Actividades Diarias</h6>
+            <ul id="pelvis_impacto_actividades" class="list-group">
+              <!-- Se generará dinámicamente -->
+              <li class="list-group-item list-group-item-info">Complete la evaluación para ver el impacto en actividades.</li>
+            </ul>
+          </div>
         </div>
       </div>
+    </div>
+    
+    <!-- Movimientos accesorios SI/Pelvis/Cóccix -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Movimientos Accesorios Sacroilíacos/Pélvicos/Coccígeos</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Movimiento</th>
+                <th>Calidad</th>
+                <th>Dolor</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Compresión sacroilíaca</td>
+                <td>
+                  <select id="pelvis_acc_compresion_calidad" name="pelvis_acc_compresion_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Hipomóvil" data-color="warning" class="bg-warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info" class="bg-info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger" class="bg-danger text-white">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="pelvis_acc_compresion_dolor" name="pelvis_acc_compresion_dolor" class="form-select">
+                    <option value="No" data-color="success" class="bg-success text-white">No</option>
+                    <option value="Leve" data-color="info" class="bg-info">Leve</option>
+                    <option value="Moderado" data-color="warning" class="bg-warning">Moderado</option>
+                    <option value="Severo" data-color="danger" class="bg-danger text-white">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger" class="bg-danger text-white">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="pelvis_acc_compresion_obs" name="pelvis_acc_compresion_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Distracción sacroilíaca</td>
+                <td>
+                  <select id="pelvis_acc_distraccion_calidad" name="pelvis_acc_distraccion_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Hipomóvil" data-color="warning" class="bg-warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info" class="bg-info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger" class="bg-danger text-white">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="pelvis_acc_distraccion_dolor" name="pelvis_acc_distraccion_dolor" class="form-select">
+                    <option value="No" data-color="success" class="bg-success text-white">No</option>
+                    <option value="Leve" data-color="info" class="bg-info">Leve</option>
+                    <option value="Moderado" data-color="warning" class="bg-warning">Moderado</option>
+                    <option value="Severo" data-color="danger" class="bg-danger text-white">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger" class="bg-danger text-white">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="pelvis_acc_distraccion_obs" name="pelvis_acc_distraccion_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento SI craneal</td>
+                <td>
+                  <select id="pelvis_acc_desl_craneal_calidad" name="pelvis_acc_desl_craneal_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Hipomóvil" data-color="warning" class="bg-warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info" class="bg-info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger" class="bg-danger text-white">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="pelvis_acc_desl_craneal_dolor" name="pelvis_acc_desl_craneal_dolor" class="form-select">
+                    <option value="No" data-color="success" class="bg-success text-white">No</option>
+                    <option value="Leve" data-color="info" class="bg-info">Leve</option>
+                    <option value="Moderado" data-color="warning" class="bg-warning">Moderado</option>
+                    <option value="Severo" data-color="danger" class="bg-danger text-white">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger" class="bg-danger text-white">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="pelvis_acc_desl_craneal_obs" name="pelvis_acc_desl_craneal_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento SI caudal</td>
+                <td>
+                  <select id="pelvis_acc_desl_caudal_calidad" name="pelvis_acc_desl_caudal_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Hipomóvil" data-color="warning" class="bg-warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info" class="bg-info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger" class="bg-danger text-white">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="pelvis_acc_desl_caudal_dolor" name="pelvis_acc_desl_caudal_dolor" class="form-select">
+                    <option value="No" data-color="success" class="bg-success text-white">No</option>
+                    <option value="Leve" data-color="info" class="bg-info">Leve</option>
+                    <option value="Moderado" data-color="warning" class="bg-warning">Moderado</option>
+                    <option value="Severo" data-color="danger" class="bg-danger text-white">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger" class="bg-danger text-white">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="pelvis_acc_desl_caudal_obs" name="pelvis_acc_desl_caudal_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Thrust sacroilíaco</td>
+                <td>
+                  <select id="pelvis_acc_thrust_calidad" name="pelvis_acc_thrust_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Hipomóvil" data-color="warning" class="bg-warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info" class="bg-info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger" class="bg-danger text-white">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="pelvis_acc_thrust_dolor" name="pelvis_acc_thrust_dolor" class="form-select">
+                    <option value="No" data-color="success" class="bg-success text-white">No</option>
+                    <option value="Leve" data-color="info" class="bg-info">Leve</option>
+                    <option value="Moderado" data-color="warning" class="bg-warning">Moderado</option>
+                    <option value="Severo" data-color="danger" class="bg-danger text-white">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger" class="bg-danger text-white">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="pelvis_acc_thrust_obs" name="pelvis_acc_thrust_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Movilidad coccígea</td>
+                <td>
+                  <select id="pelvis_acc_coccigea_calidad" name="pelvis_acc_coccigea_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Hipomóvil" data-color="warning" class="bg-warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info" class="bg-info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger" class="bg-danger text-white">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="pelvis_acc_coccigea_dolor" name="pelvis_acc_coccigea_dolor" class="form-select">
+                    <option value="No" data-color="success" class="bg-success text-white">No</option>
+                    <option value="Leve" data-color="info" class="bg-info">Leve</option>
+                    <option value="Moderado" data-color="warning" class="bg-warning">Moderado</option>
+                    <option value="Severo" data-color="danger" class="bg-danger text-white">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger" class="bg-danger text-white">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="pelvis_acc_coccigea_obs" name="pelvis_acc_coccigea_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Movilidad sínfisis púbica</td>
+                <td>
+                  <select id="pelvis_acc_sinfisis_calidad" name="pelvis_acc_sinfisis_calidad" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Normal" data-color="success" class="bg-success text-white">Normal</option>
+                    <option value="Hipomóvil" data-color="warning" class="bg-warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info" class="bg-info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger" class="bg-danger text-white">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="pelvis_acc_sinfisis_dolor" name="pelvis_acc_sinfisis_dolor" class="form-select">
+                    <option value="No" data-color="success" class="bg-success text-white">No</option>
+                    <option value="Leve" data-color="info" class="bg-info">Leve</option>
+                    <option value="Moderado" data-color="warning" class="bg-warning">Moderado</option>
+                    <option value="Severo" data-color="danger" class="bg-danger text-white">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger" class="bg-danger text-white">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="pelvis_acc_sinfisis_obs" name="pelvis_acc_sinfisis_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Patrones de restricción SI/pélvicos -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Patrón de Restricción Sacroilíaca/Pélvica</h5>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-col form-col-md-6">
+            <div class="form-group">
+              <label for="pelvis_patron_capsular" class="form-label">Patrón de restricción (ordenado por limitación)</label>
+              <select id="pelvis_patron_capsular" name="pelvis_patron_capsular" class="form-select" onchange="mostrarInterpretacionCapsular('pelvis')">
+                <option value="">Seleccionar</option>
+                <option value="No presenta">No presenta patrón específico</option>
+                <option value="Anteversión > Rotación > Elevación">Antev. > Rot. > Elev.</option>
+                <option value="Retroversión > Rotación > Elevación">Retrov. > Rot. > Elev.</option>
+                <option value="Elevación unilateral > Rotación > Inclinación">Elev. uni. > Rot. > Incl.</option>
+                <option value="Rotación > Elevación > Ante/Retroversión">Rot. > Elev. > Ante/Retrov.</option>
+                <option value="Nutación > Torsión > Elevación">Nutac. > Tors. > Elev.</option>
+                <option value="Contranutación > Torsión > Rotación">Contranut. > Tors. > Rot.</option>
+                <option value="Otro">Otro (especificar)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-col form-col-md-6" id="pelvis_patron_otro_container" style="display: none;">
+            <div class="form-group">
+              <label for="pelvis_patron_otro" class="form-label">Especifique otro patrón</label>
+              <input type="text" id="pelvis_patron_otro" name="pelvis_patron_otro" class="form-control">
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row mt-3">
+          <div class="form-col form-col-md-12">
+            <div class="card">
+              <div class="card-header bg-info text-white">
+                <h6 class="mb-0">Interpretación Clínica del Patrón</h6>
+              </div>
+              <div class="card-body">
+                <div id="pelvis_interpretacion_capsular">
+                  <p>Seleccione un patrón de restricción para obtener la interpretación clínica.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación clínica de pelvis/SI/cóccix -->
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Interpretación Clínica y Recomendaciones: Pelvis/Sacroilíaca/Cóccix</h5>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion_pelvis" class="mb-3">
+          <h6>Interpretación Clínica:</h6>
+          <div id="interpretacion-pelvis-texto" class="p-3 border rounded">
+            Complete la evaluación de rangos de movimiento para obtener la interpretación clínica.
+          </div>
+        </div>
+        
+        <div id="recomendaciones_pelvis" class="mb-3">
+          <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+          <div id="recomendaciones-pelvis-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener recomendaciones específicas.
+          </div>
+        </div>
+        
+        <div id="consideraciones_pelvis" class="mb-3">
+          <h6>Consideraciones Adicionales:</h6>
+          <div id="consideraciones-pelvis-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener consideraciones adicionales específicas.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
       
       <!-- Subacordeón para Hombro -->
       <div class="cuestionario-item sub-acordeon">
