@@ -718,8 +718,14 @@ function obtenerNombreMovimiento(baseId) {
   return `${nombreMovimiento} de ${region}`;
 }
 
-// Evaluar dolor durante ROM
+// Evaluar dolor durante ROM - Versión mejorada
 function evaluarDolorROM(selector) {
+  // Verificar que el selector existe y es válido
+  if (!selector || typeof selector !== 'object' || !selector.id) {
+    console.error("Error: Selector inválido en evaluarDolorROM");
+    return;
+  }
+  
   try {
     // Colorear el selector
     colorearSelector(selector);
@@ -729,19 +735,36 @@ function evaluarDolorROM(selector) {
     if (badge) {
       badge.innerHTML = "Evaluado";
       badge.className = "resultado-badge badge bg-success";
+    } else {
+      console.warn("Badge de evaluación ROM no encontrado");
     }
     
-    // Actualizar recomendaciones
-    const region = selector.id.split('_')[0]; // Ej: cervical
-    actualizarRecomendacionesROM(region);
+    // Extraer región del id del selector con verificación
+    const idParts = selector.id.split('_');
+    if (idParts && idParts.length > 0) {
+      const region = idParts[0]; // Ej: cervical
+      // Actualizar recomendaciones solo si region es válida
+      if (region && typeof region === 'string' && region.length > 0) {
+        actualizarRecomendacionesROM(region);
+      } else {
+        console.warn("No se pudo extraer una región válida del selector:", selector.id);
+      }
+    }
   } catch (error) {
     console.error("Error en evaluarDolorROM:", error);
-    // No hacer nada más, simplemente evitar que el error detenga todo
+    console.error("Selector:", selector);
+    // No propagar el error
   }
 }
 
-// Evaluar la funcionalidad del ROM
+// Evaluar la funcionalidad del ROM - Versión mejorada
 function evaluarFuncionalidadROM(selector) {
+  // Verificar que el selector existe y es válido
+  if (!selector || typeof selector !== 'object' || !selector.id) {
+    console.error("Error: Selector inválido en evaluarFuncionalidadROM");
+    return;
+  }
+  
   try {
     // Colorear el selector
     colorearSelector(selector);
@@ -751,17 +774,27 @@ function evaluarFuncionalidadROM(selector) {
     if (badge) {
       badge.innerHTML = "Evaluado";
       badge.className = "resultado-badge badge bg-success";
+    } else {
+      console.warn("Badge de evaluación ROM no encontrado");
     }
     
-    // Actualizar recomendaciones
-    const region = selector.id.split('_')[0]; // Ej: cervical
-    actualizarRecomendacionesROM(region);
+    // Extraer región del id del selector con verificación
+    const idParts = selector.id.split('_');
+    if (idParts && idParts.length > 0) {
+      const region = idParts[0]; // Ej: cervical
+      // Actualizar recomendaciones solo si region es válida
+      if (region && typeof region === 'string' && region.length > 0) {
+        actualizarRecomendacionesROM(region);
+      } else {
+        console.warn("No se pudo extraer una región válida del selector:", selector.id);
+      }
+    }
   } catch (error) {
     console.error("Error en evaluarFuncionalidadROM:", error);
-    // No hacer nada más, simplemente evitar que el error detenga todo
+    console.error("Selector:", selector);
+    // No propagar el error
   }
 }
-
 // Calcular déficit funcional por articulación
 function calcularDeficitFuncional(inputId) {
   // Extraer región de la evaluación actual
@@ -1554,29 +1587,60 @@ function mostrarInterpretacionCapsular(region) {
   interpretacionElement.innerHTML = interpretacion;
 }
 
-// Colorear selectores según su selección
+// Función mejorada para colorear selectores
 function colorearSelector(selector) {
-  // Obtener el color del atributo data-color de la opción seleccionada
-  const opcionSeleccionada = selector.options[selector.selectedIndex];
-  const colorClase = opcionSeleccionada.getAttribute('data-color');
-  
-  // Resetear todas las clases de color
-  selector.className = selector.className.replace(/bg-\w+/g, '').trim();
-  
-  // Añadir la clase de color según la selección
-  if (colorClase) {
-    selector.classList.add('bg-' + colorClase);
-    
-    // Si es un color oscuro, añadir texto blanco
-    if (colorClase === 'primary' || colorClase === 'secondary' || colorClase === 'danger' || colorClase === 'dark') {
-      selector.classList.add('text-white');
-    } else {
-      selector.classList.remove('text-white');
+  try {
+    // Verificar que el selector existe y es válido
+    if (!selector || typeof selector !== 'object') {
+      console.error("Error: Selector inválido en colorearSelector");
+      return;
     }
+    
+    // Verificar que el selector tiene opciones y un índice seleccionado válido
+    if (!selector.options || selector.selectedIndex === undefined || selector.selectedIndex < 0) {
+      console.warn("El selector no tiene opciones válidas o no hay selección");
+      return;
+    }
+    
+    // Obtener la opción seleccionada con verificación
+    const opcionSeleccionada = selector.options[selector.selectedIndex];
+    if (!opcionSeleccionada) {
+      console.warn("No se pudo obtener la opción seleccionada");
+      return;
+    }
+    
+    // Obtener el color del atributo data-color de la opción seleccionada
+    const colorClase = opcionSeleccionada.getAttribute('data-color');
+    
+    // Resetear todas las clases de color con seguridad
+    if (selector.className) {
+      selector.className = selector.className.replace(/bg-\w+/g, '').trim();
+    }
+    
+    // Añadir la clase de color según la selección
+    if (colorClase) {
+      selector.classList.add('bg-' + colorClase);
+      
+      // Si es un color oscuro, añadir texto blanco
+      if (colorClase === 'primary' || colorClase === 'secondary' || colorClase === 'danger' || colorClase === 'dark') {
+        selector.classList.add('text-white');
+      } else {
+        selector.classList.remove('text-white');
+      }
+    }
+    
+    // Actualizar las recomendaciones si es posible obtener la región
+    try {
+      if (selector.id && selector.id.includes('_')) {
+        actualizarRecomendacionesROM(selector.id.split('_')[0]);
+      }
+    } catch (regionError) {
+      console.warn("No se pudo actualizar las recomendaciones:", regionError);
+    }
+  } catch (error) {
+    console.error("Error en colorearSelector:", error);
+    // No propagar el error
   }
-  
-  // Actualizar las recomendaciones
-  actualizarRecomendacionesROM(selector.id.split('_')[0]); // Obtiene la región (cervical, etc.)
 }
 
 // Función para actualizar estado de los acordeones
@@ -2067,325 +2131,179 @@ function toggleSeccion(id) {
 
 // Función para actualizar la interpretación global avanzada
 function actualizarInterpretacionGlobalAvanzada() {
+  console.log("Iniciando actualización de interpretación global");
+  
   try {
-    console.log("Iniciando actualización de interpretación global");
-    
     // Verificar si existen elementos clave
     const existenParrafos = document.querySelectorAll('p, div').length > 0;
     if (!existenParrafos) {
       console.error("No se encontraron párrafos o divs para actualizar");
       return; // Detener la función si no hay elementos para actualizar
     }
+    
     // 1. RECOPILAR DATOS DE REGIONES
     const regiones = ['cervical', 'dorsal', 'lumbar', 'pelvis', 'hombro', 'codo', 'muneca', 'cadera', 'rodilla', 'tobillo', 'atm'];
     let regionesEvaluadas = [];
     
+    // Procesar cada región individualmente para que un error en una no afecte a las demás
     regiones.forEach(region => {
-  try {
-    // Verificar cualquier tipo de dato en esta región
-    const inputsRegion = document.querySelectorAll(`input[id^="${region}_"]`);
-    // ... resto del código para esta región ...
-  } catch (regionError) {
-    console.error(`Error procesando región ${region}:`, regionError);
-    // Continuar con la siguiente región
-  }
-});
-      
-      let hayDatos = false;
-      let deficitValue = 0;
-      let funcionalesComprometidos = false;
-      let hayDolor = false;
-      
-      // Buscar déficit si existe
-      const deficitInput = document.getElementById(`${region}_deficit_total`);
-      if (deficitInput && deficitInput.value) {
-        deficitValue = parseFloat(deficitInput.value.replace('%', '').trim()) || 0;
-        hayDatos = true;
-      }
-      
-      // Verificar otros inputs con valores
-      inputsRegion.forEach(input => {
-        if (input.value && input.value !== "0") {
-          hayDatos = true;
-        }
-      });
-      
-      // Verificar selectores con valores distintos al predeterminado
-      selectoresRegion.forEach(select => {
-        if (select.value && select.value !== "" && select.value !== "No" && 
-            select.value !== "Normal" && select.value !== "Seleccione...") {
-          hayDatos = true;
-          
-          // Detectar si hay problemas funcionales
-          if (select.id.includes('_funcionalidad') && 
-              (select.value.includes('Limitación') || select.value.includes('Disfunción'))) {
-            funcionalesComprometidos = true;
-          }
-          
-          // Detectar si hay dolor
-          if (select.id.includes('_dolor') && select.value !== "No") {
-            hayDolor = true;
-          }
-        }
-      });
-      
-      if (hayDatos) {
-        regionesEvaluadas.push({
-          nombre: region,
-          deficit: deficitValue,
-          conDeficitCalculado: deficitInput && deficitInput.value ? true : false,
-          funcionalesComprometidos: funcionalesComprometidos,
-          hayDolor: hayDolor
-        });
-      }
-    });
-    
-    // Si no hay regiones con datos, salir
-    if (regionesEvaluadas.length === 0) return;
-    
-    // 2. GENERAR TEXTOS DE INTERPRETACIÓN - solo si tenemos datos
-let resumenHTML = "";
-let integracionHTML = "";
-let recomendacionesHTML = "";
-
-try {
-  resumenHTML = generarResumenDeficit(regionesEvaluadas);
-  integracionHTML = generarIntegracionPatrones(regionesEvaluadas);
-  recomendacionesHTML = generarRecomendaciones(regionesEvaluadas);
-} catch (genError) {
-  console.error("Error generando textos:", genError);
-  // No detenerse, intentar usar lo que se haya podido generar
-}
-    
-    // 3. ACTUALIZAR ELEMENTOS EN LA PÁGINA
-    
-    // Buscar todos los párrafos que pueden contener texto a reemplazar
-    const parrafos = document.querySelectorAll('p, div');
-    console.log("Encontrados " + parrafos.length + " párrafos/divs para revisar");
-    
-    // Variables para verificar si se actualizaron elementos
-    let actualizadoResumen = false;
-    let actualizadoIntegracion = false;
-    let actualizadoRecomendaciones = false;
-
-    // Buscar específicamente elementos con los textos exactos que queremos reemplazar
-parrafos.forEach(elemento => {
-  try {
-    // Actualizar sección de resumen de déficit
-    if (elemento.textContent.includes('Complete la evaluación de al menos una región') ||
-        elemento.textContent.includes('Complete la evaluación de al')) {
-      console.log("Actualizando resumen de déficit");
-      elemento.innerHTML = resumenHTML;
-      actualizadoResumen = true;
-    }
-    
-    // Actualizar sección de integración con patrones
-    if (elemento.textContent.includes('Complete la evaluación de patrones') ||
-        elemento.textContent.includes('integración')) {
-      console.log("Actualizando integración con patrones");
-      elemento.innerHTML = integracionHTML;
-      actualizadoIntegracion = true;
-    }
-    
-    // Actualizar sección de recomendaciones
-    if (elemento.textContent.includes('Complete la evaluación de rangos para obtener') ||
-        elemento.textContent.includes('recomendaciones globales')) {
-      console.log("Actualizando recomendaciones");
-      elemento.innerHTML = recomendacionesHTML;
-      actualizadoRecomendaciones = true;
-    }
-  } catch (elementoError) {
-    console.error("Error actualizando elemento:", elementoError);
-    // Continuar con el siguiente elemento
-  }
-});
-
-    // Informar si no se encontraron elementos para actualizar
-    if (!actualizadoResumen && !actualizadoIntegracion && !actualizadoRecomendaciones) {
-      console.warn("No se encontraron elementos que coincidan con los textos a reemplazar");
-    }
-  } catch (error) {
-    console.error("Error al actualizar interpretación global:");
-    console.error("Mensaje de error: " + error.message);
-    console.error("Detalles completos:", error);
-  }
-}
-
-// Función para generar el resumen de déficit
-function generarResumenDeficit(regionesEvaluadas) {
-  let texto = '';
-  
-  if (regionesEvaluadas.length === 1) {
-    const region = regionesEvaluadas[0];
-    texto += `<strong>Se ha evaluado ${getNombreDescriptivo(region.nombre)}</strong>`;
-    
-    if (region.conDeficitCalculado) {
-      texto += ` con un déficit funcional de ${region.deficit.toFixed(1)}%.`;
-    } else if (region.funcionalesComprometidos) {
-      texto += ` detectando compromiso funcional.`;
-    } else if (region.hayDolor) {
-      texto += ` detectando presencia de dolor.`;
-    } else {
-      texto += ` obteniendo datos preliminares.`;
-    }
-  } else {
-    texto += `<strong>Se han evaluado ${regionesEvaluadas.length} regiones</strong>: `;
-    
-    regionesEvaluadas.forEach((region, index) => {
-      texto += getNombreDescriptivo(region.nombre);
-      
-      if (region.conDeficitCalculado) {
-        texto += ` (${region.deficit.toFixed(1)}%)`;
+      try {
+        // Verificar cualquier tipo de dato en esta región
+        const inputsRegion = document.querySelectorAll(`input[id^="${region}_"]`) || [];
+        const selectoresRegion = document.querySelectorAll(`select[id^="${region}_"]`) || [];
         
-        // Añadir indicadores visuales según déficit
-        if (region.deficit > 30) {
-          texto += " ⚠️⚠️";
-        } else if (region.deficit > 15) {
-          texto += " ⚠️";
+        let hayDatos = false;
+        let deficitValue = 0;
+        let funcionalesComprometidos = false;
+        let hayDolor = false;
+        
+        // Buscar déficit si existe
+        const deficitInput = document.getElementById(`${region}_deficit_total`);
+        if (deficitInput && deficitInput.value) {
+          deficitValue = parseFloat(deficitInput.value.replace('%', '').trim()) || 0;
+          hayDatos = true;
         }
-      }
-      
-      if (index < regionesEvaluadas.length - 1) {
-        texto += ', ';
+        
+        // Verificar otros inputs con valores
+        if (inputsRegion && inputsRegion.length > 0) {
+          inputsRegion.forEach(input => {
+            if (input.value && input.value !== "0") {
+              hayDatos = true;
+            }
+          });
+        }
+        
+        // Verificar selectores con valores distintos al predeterminado
+        if (selectoresRegion && selectoresRegion.length > 0) {
+          selectoresRegion.forEach(select => {
+            if (select.value && select.value !== "" && select.value !== "No" && 
+                select.value !== "Normal" && select.value !== "Seleccione...") {
+              hayDatos = true;
+              
+              // Detectar si hay problemas funcionales
+              if (select.id.includes('_funcionalidad') && 
+                  (select.value.includes('Limitación') || select.value.includes('Disfunción'))) {
+                funcionalesComprometidos = true;
+              }
+              
+              // Detectar si hay dolor
+              if (select.id.includes('_dolor') && select.value !== "No") {
+                hayDolor = true;
+              }
+            }
+          });
+        }
+        
+        if (hayDatos) {
+          regionesEvaluadas.push({
+            nombre: region,
+            deficit: deficitValue,
+            conDeficitCalculado: deficitInput && deficitInput.value ? true : false,
+            funcionalesComprometidos: funcionalesComprometidos,
+            hayDolor: hayDolor
+          });
+        }
+      } catch (regionError) {
+        console.error(`Error procesando región ${region}:`, regionError);
+        // Continuar con la siguiente región
       }
     });
     
-    texto += '.';
-  }
-  
-  // Añadir análisis de distribución si hay suficientes regiones
-  if (regionesEvaluadas.length >= 2) {
-    // Verificar si hay problemas en columna
-    const problemaColumna = regionesEvaluadas.some(r => ['cervical', 'dorsal', 'lumbar', 'pelvis'].includes(r.nombre));
-    // Verificar problemas en extremidades
-    const problemaExtremidades = regionesEvaluadas.some(r => 
-      ['hombro', 'codo', 'muneca', 'cadera', 'rodilla', 'tobillo'].includes(r.nombre));
-    
-    texto += '<br><br><strong>Distribución:</strong> ';
-    
-    if (problemaColumna && problemaExtremidades) {
-      texto += 'Patrón mixto con compromiso axial y apendicular que sugiere alteraciones biomecánicas relacionadas.';
-    } else if (problemaColumna) {
-      texto += 'Compromiso principalmente axial que puede indicar alteraciones posturales o estructurales.';
-    } else if (problemaExtremidades) {
-      texto += 'Compromiso principalmente apendicular que sugiere patrón de uso/sobreuso específico.';
+    // Si no hay regiones con datos, salir sin cambiar nada
+    if (regionesEvaluadas.length === 0) {
+      console.log("No se encontraron regiones con datos suficientes");
+      return;
     }
-  }
-  
-  return texto;
-}
-
-// Función para generar integración con patrones
-function generarIntegracionPatrones(regionesEvaluadas) {
-  let texto = '<strong>Integración funcional:</strong> ';
-  
-  // Analizar si hay patrones de movimiento evaluados
-  const patronesEvaluados = document.querySelectorAll('select[id$="_calidad"]');
-  const hayPatronesEvaluados = Array.from(patronesEvaluados).some(p => p.value);
-  
-  if (hayPatronesEvaluados) {
-    texto += 'Los hallazgos de ROM muestran correlación con alteraciones en patrones funcionales. ';
     
-    // Analizar cadenas funcionales afectadas
-    if (regionesEvaluadas.length >= 2) {
-      const regiones = regionesEvaluadas.map(r => r.nombre);
-      
-      // Detectar patrones de cadenas
-      if (regiones.includes('cervical') && (regiones.includes('hombro') || regiones.includes('dorsal'))) {
-        texto += '<br><br>Se detecta patrón de afectación en cadena cervicoescapular que compromete la biomecánica del cuadrante superior. ';
+    // 2. GENERAR TEXTOS DE INTERPRETACIÓN
+    let resumenHTML = "";
+    let integracionHTML = "";
+    let recomendacionesHTML = "";
+    
+    try {
+      resumenHTML = generarResumenDeficit(regionesEvaluadas);
+    } catch (resumenError) {
+      console.error("Error generando resumen de déficit:", resumenError);
+      resumenHTML = "<p>Error al generar resumen. Por favor, complete más datos.</p>";
+    }
+    
+    try {
+      integracionHTML = generarIntegracionPatrones(regionesEvaluadas);
+    } catch (integracionError) {
+      console.error("Error generando integración de patrones:", integracionError);
+      integracionHTML = "<p>Error al generar integración. Por favor, complete más datos.</p>";
+    }
+    
+    try {
+      recomendacionesHTML = generarRecomendaciones(regionesEvaluadas);
+    } catch (recomendacionesError) {
+      console.error("Error generando recomendaciones:", recomendacionesError);
+      recomendacionesHTML = "<p>Error al generar recomendaciones. Por favor, complete más datos.</p>";
+    }
+    
+    // 3. ACTUALIZAR ELEMENTOS EN LA PÁGINA - Solo si se generaron textos válidos
+    if (resumenHTML && integracionHTML && recomendacionesHTML) {
+      try {
+        // Buscar elementos específicos por contenido de texto aproximado
+        const parrafos = document.querySelectorAll('p, div');
+        
+        let actualizadoResumen = false;
+        let actualizadoIntegracion = false;
+        let actualizadoRecomendaciones = false;
+        
+        parrafos.forEach(elemento => {
+          try {
+            const contenido = elemento.textContent || "";
+            
+            // Actualizar sección de resumen de déficit
+            if (!actualizadoResumen && 
+                (contenido.includes('Complete la evaluación de al menos una región') ||
+                 contenido.includes('Complete la evaluación de al'))) {
+              elemento.innerHTML = resumenHTML;
+              actualizadoResumen = true;
+              console.log("Resumen actualizado correctamente");
+            }
+            
+            // Actualizar sección de integración con patrones
+            if (!actualizadoIntegracion && 
+                (contenido.includes('Complete la evaluación de patrones') ||
+                 contenido.includes('integración'))) {
+              elemento.innerHTML = integracionHTML;
+              actualizadoIntegracion = true;
+              console.log("Integración actualizada correctamente");
+            }
+            
+            // Actualizar sección de recomendaciones
+            if (!actualizadoRecomendaciones && 
+                (contenido.includes('Complete la evaluación de rangos para obtener') ||
+                 contenido.includes('recomendaciones globales'))) {
+              elemento.innerHTML = recomendacionesHTML;
+              actualizadoRecomendaciones = true;
+              console.log("Recomendaciones actualizadas correctamente");
+            }
+          } catch (elementoError) {
+            console.error("Error al actualizar un elemento específico:", elementoError);
+            // Continuar con el siguiente elemento
+          }
+        });
+        
+        // Informar sobre actualizaciones
+        if (!actualizadoResumen) console.warn("No se encontró el elemento para actualizar el resumen");
+        if (!actualizadoIntegracion) console.warn("No se encontró el elemento para actualizar la integración");
+        if (!actualizadoRecomendaciones) console.warn("No se encontró el elemento para actualizar las recomendaciones");
+        
+      } catch (actualizacionError) {
+        console.error("Error durante la actualización de elementos HTML:", actualizacionError);
       }
-      
-      if ((regiones.includes('lumbar') || regiones.includes('pelvis')) && 
-          (regiones.includes('cadera') || regiones.includes('rodilla'))) {
-        texto += '<br><br>Se identifica alteración en cadena lumbopélvica-femoral que afecta el sistema de transferencia de cargas. ';
-      }
-    }
-  } else {
-    texto += 'Las alteraciones de movilidad identificadas sugieren potencial impacto en patrones de movimiento. ';
-    
-    // Si hay regiones con función comprometida, destacarlas
-    const regionesComprometidas = regionesEvaluadas.filter(r => r.funcionalesComprometidos);
-    if (regionesComprometidas.length > 0) {
-      texto += `<br><br>Especialmente en ${regionesComprometidas.map(r => getNombreDescriptivo(r.nombre)).join(', ')}, donde la limitación podría comprometer actividades funcionales significativamente. `;
+    } else {
+      console.warn("No se generaron todos los textos necesarios para la actualización");
     }
     
-    if (regionesEvaluadas.some(r => r.hayDolor)) {
-      texto += '<br><br>La presencia de dolor durante el movimiento sugiere componente nociceptivo activo que puede amplificar las alteraciones funcionales.';
-    }
+  } catch (errorGlobal) {
+    console.error("Error general en actualizarInterpretacionGlobalAvanzada:", errorGlobal);
+    console.error("Mensaje:", errorGlobal.message);
+    console.error("Línea:", errorGlobal.lineNumber);
+    console.error("Ubicación:", errorGlobal.stack);
   }
-  
-  return texto;
-}
-
-// Función para generar recomendaciones
-function generarRecomendaciones(regionesEvaluadas) {
-  let texto = '<strong>Abordaje recomendado:</strong><br><br><ul>';
-  
-  // Clasificar regiones por tipo
-  const regColumna = regionesEvaluadas.filter(r => ['cervical', 'dorsal', 'lumbar', 'pelvis'].includes(r.nombre));
-  const regExtremidadSup = regionesEvaluadas.filter(r => ['hombro', 'codo', 'muneca'].includes(r.nombre));
-  const regExtremidadInf = regionesEvaluadas.filter(r => ['cadera', 'rodilla', 'tobillo'].includes(r.nombre));
-  
-  // Regiones con déficit severo (>30%) o con datos de compromiso funcional
-  const regSeveras = regionesEvaluadas.filter(r => 
-    (r.conDeficitCalculado && r.deficit > 30) || r.funcionalesComprometidos);
-  
-  // Regiones con dolor reportado
-  const regDolorosas = regionesEvaluadas.filter(r => r.hayDolor);
-  
-  // Recomendaciones específicas según hallazgos
-  if (regColumna.length > 0) {
-    texto += '<li>Implementar programa de <strong>reeducación postural integrada</strong> con énfasis en control motor segmentario.</li>';
-  }
-  
-  if (regExtremidadSup.length > 0) {
-    texto += '<li>Incluir ejercicios de <strong>cadena cinética</strong> para miembro superior con progresión funcional.</li>';
-  }
-  
-  if (regExtremidadInf.length > 0) {
-    texto += '<li>Desarrollar programa de <strong>fortalecimiento y estabilidad</strong> para miembro inferior con énfasis en control neuromuscular.</li>';
-  }
-  
-  if (regSeveras.length > 0) {
-    texto += '<li>Priorizar el abordaje de ';
-    regSeveras.forEach((region, index) => {
-      texto += getNombreDescriptivo(region.nombre);
-      if (index < regSeveras.length - 1) texto += ', ';
-    });
-    texto += ' mediante técnicas combinadas de terapia manual y ejercicio terapéutico.</li>';
-  }
-  
-  if (regDolorosas.length > 0) {
-    texto += '<li>Implementar estrategias de <strong>modulación del dolor</strong> para las regiones sintomáticas, integradas con el abordaje funcional.</li>';
-  }
-  
-  // Recomendaciones generales pero útiles
-  texto += `
-    <li>Implementar un <strong>programa progresivo</strong> de ejercicios con fases de control motor → resistencia → función específica.</li>
-    <li>Reevaluar periódicamente utilizando los mismos parámetros para objetivar evolución.</li>
-  `;
-  
-  texto += '</ul>';
-  
-  return texto;
-}
-
-// Función para obtener nombres descriptivos de las regiones
-function getNombreDescriptivo(regionId) {
-  const nombresRegiones = {
-    'cervical': 'Columna Cervical',
-    'dorsal': 'Columna Dorsal',
-    'lumbar': 'Columna Lumbar',
-    'pelvis': 'Articulación Sacroilíaca/Pelvis',
-    'hombro': 'Complejo del Hombro',
-    'codo': 'Codo y Antebrazo',
-    'muneca': 'Muñeca y Mano',
-    'cadera': 'Articulación de Cadera',
-    'rodilla': 'Articulación de Rodilla',
-    'tobillo': 'Tobillo y Pie',
-    'atm': 'ATM'
-  };
-  
-  return nombresRegiones[regionId] || regionId.charAt(0).toUpperCase() + regionId.slice(1);
-}    
+}   
 
