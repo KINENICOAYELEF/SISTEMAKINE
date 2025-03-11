@@ -570,8 +570,11 @@ function evaluarROM(inputId, valorMin, valorModerado, valorNormal) {
   estadoElement.className = colorClase;
   
   // Actualizar badge de estado general
-  document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
-  document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
+  const romEvaluationBadge = document.getElementById("rom-evaluation-badge");
+  if (romEvaluationBadge) {
+    romEvaluationBadge.innerHTML = "Evaluado";
+    romEvaluationBadge.className = "resultado-badge badge bg-success";
+  }
   
   // Calcular déficit funcional
   calcularDeficitFuncional(inputId);
@@ -619,7 +622,7 @@ function calcularDiferencialAP(baseId) {
     colorClase = "bg-danger text-white";
   }
   
-  // LÍNEA CORREGIDA: Mostrar el diferencial con formato claro
+  // Mostrar el diferencial con formato claro
   diferencialElement.innerHTML = `<span class="${colorClase}" style="padding: 2px 6px; border-radius: 4px;">${diferencia}° (${estado})</span>`;
   
   // Interpretar el diferencial
@@ -663,7 +666,7 @@ function interpretarDiferencialAP(baseId, diferencia) {
   } else {
     // Diferenciales significativos según región
     switch (region) {
-        case 'cervical':
+      case 'cervical':
         interpretacion = `<p class="alert alert-warning">El diferencial activo-pasivo significativo en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
         indica importante inhibición neuromuscular, posible desacondicionamiento de estabilizadores profundos o alteración del control sensoriomotor cervical. 
         Priorizar reentrenamiento motor con retroalimentación y considerar evaluación de mecanismos de sensibilización central.</p>`;
@@ -724,8 +727,11 @@ function evaluarDolorROM(selector) {
   colorearSelector(selector);
   
   // Actualizar badge de estado
-  document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
-  document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
+  const romBadge = document.getElementById("rom-evaluation-badge");
+  if (romBadge) {
+    romBadge.innerHTML = "Evaluado";
+    romBadge.className = "resultado-badge badge bg-success";
+  }
   
   // Actualizar recomendaciones
   const region = selector.id.split('_')[0]; // Ej: cervical
@@ -738,8 +744,11 @@ function evaluarFuncionalidadROM(selector) {
   colorearSelector(selector);
   
   // Actualizar badge de estado
-  document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
-  document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
+  const romBadge = document.getElementById("rom-evaluation-badge");
+  if (romBadge) {
+    romBadge.innerHTML = "Evaluado";
+    romBadge.className = "resultado-badge badge bg-success";
+  }
   
   // Actualizar recomendaciones
   const region = selector.id.split('_')[0]; // Ej: cervical
@@ -795,7 +804,12 @@ function calcularDeficitFuncional(inputId) {
   deficitTotalElement.value = deficitPromedio.toFixed(1) + "%";
   
   // Actualizar barra visual
-  deficitVisualElement.querySelector('.progress-bar').style.width = deficitPromedio + "%";
+  if (deficitVisualElement && deficitVisualElement.querySelector('.progress-bar')) {
+    deficitVisualElement.querySelector('.progress-bar').style.width = deficitPromedio + "%";
+  } else {
+    console.log("Error: No se encontró elemento de barra visual para déficit de " + region);
+    return;
+  }
   
   // Cambiar color según severidad
   let colorClase = "";
@@ -949,8 +963,8 @@ function obtenerValoresNormativosPorEdadSexo(region, movimiento, edad, sexo) {
   // Factores de ajuste según sexo (ligeras diferencias en algunas regiones)
   const factoresSexoRegiones = {
     'hombro': { 'M': 1.05, 'F': 0.95 },
-    'cadera': { 'M': 0.95, 'F': 1.05 },
-    // Otras regiones con diferencias significativas
+    'cadera': { 'M': 0.95, 'F': 1.05 }
+    // Otras regiones con diferencias significativas pueden añadirse aquí
   };
   
   // Determinar factor por sexo
@@ -1060,8 +1074,42 @@ function obtenerActividadesAfectadas(region, deficitPromedio) {
       }
       break;
       
-    // Más casos para otras regiones...
-    // [Omitido para brevedad pero mantén todo el código original para las demás regiones]
+    // Otras regiones
+    case "lumbar":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Permanecer de pie",
+          impacto: "Dificultad para mantener postura de pie prolongada sin dolor o fatiga.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 20) {
+        actividades.push({
+          nombre: "Actividades del hogar",
+          impacto: "Limitación para barrer, limpiar, levantar objetos del suelo sin compensaciones.",
+          colorClase: colorClase
+        });
+      }
+      break;
+      
+    case "cadera":
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Caminar distancias",
+          impacto: "Dificultad para recorrer distancias prolongadas sin fatiga o dolor.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 20) {
+        actividades.push({
+          nombre: "Subir escaleras",
+          impacto: "Limitación para subir escaleras con patrón recíproco normal.",
+          colorClase: colorClase
+        });
+      }
+      break;
     
     default:
       actividades.push({
@@ -1111,8 +1159,11 @@ function actualizarRecomendacionesROM(region) {
   if (Object.keys(datos.rangosActivos).length > 0 || 
       Object.keys(datos.dolores).length > 0 || 
       Object.keys(datos.funcionalidades).length > 0) {
-    document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
-    document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
+    const romBadge = document.getElementById("rom-evaluation-badge");
+    if (romBadge) {
+      romBadge.innerHTML = "Evaluado";
+      romBadge.className = "resultado-badge badge bg-success";
+    }
   }
 }
 
@@ -1216,7 +1267,7 @@ function generarInterpretacionROM(region, datos) {
     }
   }
 
-// Contar movimientos dolorosos
+  // Contar movimientos dolorosos
   for (const movimiento in datos.dolores) {
     if (datos.dolores[movimiento] !== "No") {
       movimientosDolorosos++;
@@ -1264,7 +1315,7 @@ function generarInterpretacionROM(region, datos) {
       interpretacion += `<p class="alert alert-success">Los rangos de movimiento de ${region} se encuentran dentro de parámetros normales o funcionales.</p>`;
     }
   } 
-  // Si solo hay datos de dolor
+ // Si solo hay datos de dolor
   else if (movimientosDolorosos > 0) {
     interpretacion += `<p class="alert alert-warning">Se ha reportado dolor en ${movimientosDolorosos} movimiento(s) de ${region}. `;
     interpretacion += `Se recomienda completar la evaluación de rangos y funcionalidad para una interpretación más completa.</p>`;
@@ -1362,7 +1413,7 @@ function generarRecomendacionesROM(region, datos) {
     }
   }
 
-// Construir recomendaciones basadas en CUALQUIER dato disponible
+  // Construir recomendaciones basadas en CUALQUIER dato disponible
   
   // Si hay datos de funcionalidad
   if (limitacionesSeveras > 0 || limitacionesModeradas > 0 || limitacionesLeves > 0) {
@@ -1616,30 +1667,34 @@ function cargarDatosGuardados() {
   // Ejemplo para localStorage:
   const datosGuardados = localStorage.getItem('datos_patrones_movimiento');
   if (datosGuardados) {
-    const datos = JSON.parse(datosGuardados);
-    // Restaurar valores en los campos
-    for (const id in datos) {
-      const elemento = document.getElementById(id);
-      if (elemento) {
-        if (elemento.type === 'checkbox') {
-          elemento.checked = datos[id];
-        } else {
-          elemento.value = datos[id];
-        }
-        
-        // Trigger change events para actualizar UI
-        if (elemento.tagName === 'SELECT') {
-          if (id.endsWith('_calidad')) {
-            evaluarPatronMovimiento(elemento, id.replace('_calidad', ''));
-          } else if (id.endsWith('_impacto')) {
-            actualizarImpactoFuncional(id.replace('_impacto', ''));
+    try {
+      const datos = JSON.parse(datosGuardados);
+      // Restaurar valores en los campos
+      for (const id in datos) {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+          if (elemento.type === 'checkbox') {
+            elemento.checked = datos[id];
+          } else {
+            elemento.value = datos[id];
+          }
+          
+          // Trigger change events para actualizar UI
+          if (elemento.tagName === 'SELECT') {
+            if (id.endsWith('_calidad')) {
+              evaluarPatronMovimiento(elemento, id.replace('_calidad', ''));
+            } else if (id.endsWith('_impacto')) {
+              actualizarImpactoFuncional(id.replace('_impacto', ''));
+            }
           }
         }
       }
+      
+      // Actualizar interpretaciones y visualizaciones
+      actualizarResumenVisual();
+    } catch (error) {
+      console.error("Error al cargar datos guardados:", error);
     }
-    
-    // Actualizar interpretaciones y visualizaciones
-    actualizarResumenVisual();
   }
 }
 
@@ -1676,7 +1731,7 @@ function calcularPuntuacionGlobal() {
     
     // Actualizar barra visual
     const barraGlobal = document.getElementById('puntuacion_global_visual');
-    if (barraGlobal) {
+    if (barraGlobal && barraGlobal.querySelector('.progress-bar')) {
       barraGlobal.querySelector('.progress-bar').style.width = puntuacionPromedio + "%";
       
       // Asignar color según puntuación
@@ -1811,40 +1866,76 @@ function generarObjetivosTerapeuticos() {
   
   const regionesPrioritarias = regionesPriorizadas.slice(0, 3);
   
+  // Mapeo de nombres descriptivos para mostrar en lugar de los IDs
+  const nombresRegiones = {
+    'cervical': 'Columna Cervical',
+    'dorsal': 'Columna Dorsal',
+    'lumbar': 'Columna Lumbar',
+    'pelvis': 'Articulación Sacroilíaca/Pelvis',
+    'hombro': 'Complejo del Hombro',
+    'codo': 'Codo y Antebrazo',
+    'muneca': 'Muñeca y Mano',
+    'cadera': 'Articulación de Cadera',
+    'rodilla': 'Articulación de Rodilla',
+    'tobillo': 'Tobillo y Pie',
+    'atm': 'ATM'
+  };
+  
   regionesPrioritarias.forEach(region => {
     const puntuacion = puntuacionesGlobales.puntuaciones[region];
+    const nombreRegion = nombresRegiones[region] || region.charAt(0).toUpperCase() + region.slice(1);
     
     // Objetivos específicos según región y nivel de disfunción
     switch (region) {
       case 'cervical':
         if (puntuacion < 40) {
-          objetivosEspecificos += '<li><strong>Columna Cervical:</strong> Restaurar rangos de movimiento funcionales priorizando rotación e inclinación lateral. Abordar factores neuromusculares que limitan el movimiento activo.</li>';
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Restaurar rangos de movimiento funcionales priorizando rotación e inclinación lateral. Abordar factores neuromusculares que limitan el movimiento activo.</li>`;
         } else if (puntuacion < 60) {
-          objetivosEspecificos += '<li><strong>Columna Cervical:</strong> Mejorar la movilidad en los planos de movimiento limitados y optimizar el control neuromuscular durante movimientos combinados.</li>';
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Mejorar la movilidad en los planos de movimiento limitados y optimizar el control neuromuscular durante movimientos combinados.</li>`;
         } else {
-          objetivosEspecificos += '<li><strong>Columna Cervical:</strong> Optimizar la calidad de movimiento y resistencia a la fatiga en rangos funcionales completos.</li>';
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Optimizar la calidad de movimiento y resistencia a la fatiga en rangos funcionales completos.</li>`;
         }
         break;
         
       case 'hombro':
         if (puntuacion < 40) {
-          objetivosEspecificos += '<li><strong>Hombro:</strong> Restaurar la movilidad funcional priorizando elevación y rotaciones. Abordar limitaciones en el ritmo escapulohumeral y factores neuromusculares.</li>';
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Restaurar la movilidad funcional priorizando elevación y rotaciones. Abordar limitaciones en el ritmo escapulohumeral y factores neuromusculares.</li>`;
         } else if (puntuacion < 60) {
-          objetivosEspecificos += '<li><strong>Hombro:</strong> Mejorar rangos funcionales para actividades por encima de la cabeza y optimizar control neuromuscular del complejo del hombro.</li>';
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Mejorar rangos funcionales para actividades por encima de la cabeza y optimizar control neuromuscular del complejo del hombro.</li>`;
         } else {
-          objetivosEspecificos += '<li><strong>Hombro:</strong> Optimizar la coordinación de movimientos complejos y estabilidad dinámica en diferentes planos.</li>';
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Optimizar la coordinación de movimientos complejos y estabilidad dinámica en diferentes planos.</li>`;
         }
         break;
         
-      // Añadir casos para otras regiones
-      
+      // Casos para otras regiones
+      case 'lumbar':
+        if (puntuacion < 40) {
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Restaurar movilidad segmentaria y control motor básico. Abordar inhibición neuromuscular de estabilizadores locales.</li>`;
+        } else if (puntuacion < 60) {
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Mejorar coordinación de movimientos funcionales y resistencia de estabilizadores globales.</li>`;
+        } else {
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Optimizar control de cargas y movimientos complejos con enfoque preventivo.</li>`;
+        }
+        break;
+        
+      case 'cadera':
+        if (puntuacion < 40) {
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Recuperar rangos de movimiento en planos principales y mejorar disociación lumbopélvica.</li>`;
+        } else if (puntuacion < 60) {
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Optimizar control neuromuscular durante actividades como marcha, escaleras y transiciones.</li>`;
+        } else {
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Potenciar la estabilidad dinámica durante actividades funcionales de alta demanda.</li>`;
+        }
+        break;
+        
+      // Caso por defecto para otras regiones
       default:
         if (puntuacion < 40) {
-          objetivosEspecificos += `<li><strong>${region.charAt(0).toUpperCase() + region.slice(1)}:</strong> Restaurar rangos de movimiento funcionales y abordar factores que limitan la movilidad activa.</li>`;
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Restaurar rangos de movimiento funcionales y abordar factores que limitan la movilidad activa.</li>`;
         } else if (puntuacion < 60) {
-          objetivosEspecificos += `<li><strong>${region.charAt(0).toUpperCase() + region.slice(1)}:</strong> Mejorar la calidad del movimiento y optimizar el control neuromuscular durante actividades funcionales.</li>`;
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Mejorar la calidad del movimiento y optimizar el control neuromuscular durante actividades funcionales.</li>`;
         } else {
-          objetivosEspecificos += `<li><strong>${region.charAt(0).toUpperCase() + region.slice(1)}:</strong> Optimizar la eficiencia del movimiento y prevenir limitaciones futuras.</li>`;
+          objetivosEspecificos += `<li><strong>${nombreRegion}:</strong> Optimizar la eficiencia del movimiento y prevenir limitaciones futuras.</li>`;
         }
     }
   });
@@ -1900,6 +1991,49 @@ function inicializarSistemaDeObjetivos() {
   }
 }
 
+// Funciones para manejar los acordeones y secciones plegables
+function toggleCuestionario(id) {
+  const contenido = document.getElementById(id);
+  if (contenido) {
+    if (contenido.style.display === "none") {
+      contenido.style.display = "block";
+      // Cambiar icono del botón si existe
+      const boton = contenido.previousElementSibling;
+      if (boton && boton.querySelector('i.fas')) {
+        boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-plus-circle', 'fa-minus-circle');
+      }
+    } else {
+      contenido.style.display = "none";
+      // Cambiar icono del botón si existe
+      const boton = contenido.previousElementSibling;
+      if (boton && boton.querySelector('i.fas')) {
+        boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-minus-circle', 'fa-plus-circle');
+      }
+    }
+  }
+}
+
+function toggleSeccion(id) {
+  const contenido = document.getElementById(id);
+  if (contenido) {
+    if (contenido.style.display === "none") {
+      contenido.style.display = "block";
+      // Cambiar icono del botón si existe
+      const boton = contenido.previousElementSibling;
+      if (boton && boton.querySelector('i.fas')) {
+        boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-angle-down', 'fa-angle-up');
+      }
+    } else {
+      contenido.style.display = "none";
+      // Cambiar icono del botón si existe
+      const boton = contenido.previousElementSibling;
+      if (boton && boton.querySelector('i.fas')) {
+        boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-angle-up', 'fa-angle-down');
+      }
+    }
+  }
+}
+
 // Inicialización cuando el documento está listo
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar estado de los acordeones
@@ -1909,11 +2043,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const romRegionSelect = document.getElementById('rom_region');
   if (romRegionSelect) {
     romRegionSelect.addEventListener('change', mostrarTablaROM);
+    
+    // Mostrar la tabla ROM por defecto si hay región seleccionada
+    if (romRegionSelect.value) {
+      mostrarTablaROM();
+    }
   }
   
   // Inicializar tooltips y popovers si usas Bootstrap
   if (typeof bootstrap !== 'undefined') {
-    const tooltipTriggerList = [].slice .call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(function(tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl);
     });
@@ -1944,66 +2083,18 @@ document.addEventListener('DOMContentLoaded', function() {
   // Llamar a la función durante la carga de la página
   inicializarColoresSelectores();
   
-  // Pre-cargar estados visuales si hay datos guardados
-  cargarDatosGuardados();
-  
   // Inicializar sistema de objetivos terapéuticos
   inicializarSistemaDeObjetivos();
-
-  // CORRECCIÓN: Establecer el badge principal a "No completado"
+  
+  // CORRECCIÓN: Establecer el acordeón principal de rangos a "No completado"
   const romBadge = document.getElementById('rom-evaluation-badge');
   if (romBadge) {
     romBadge.innerHTML = "No completado";
     romBadge.className = "resultado-badge badge bg-secondary";
   }
-
-  // Función para cambiar entre cuestionarios anidados
-  function toggleCuestionario(id) {
-    const contenido = document.getElementById(id);
-    if (contenido) {
-      if (contenido.style.display === "none") {
-        contenido.style.display = "block";
-        // Cambiar icono del botón si existe
-        const boton = contenido.previousElementSibling;
-        if (boton && boton.querySelector('i.fas')) {
-          boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-plus-circle', 'fa-minus-circle');
-        }
-      } else {
-        contenido.style.display = "none";
-        // Cambiar icono del botón si existe
-        const boton = contenido.previousElementSibling;
-        if (boton && boton.querySelector('i.fas')) {
-          boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-minus-circle', 'fa-plus-circle');
-        }
-      }
-    }
-  }
-
-  // Función para cambiar entre secciones principales
-  function toggleSeccion(id) {
-    const contenido = document.getElementById(id);
-    if (contenido) {
-      if (contenido.style.display === "none") {
-        contenido.style.display = "block";
-        // Cambiar icono del botón si existe
-        const boton = contenido.previousElementSibling;
-        if (boton && boton.querySelector('i.fas')) {
-          boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-angle-down', 'fa-angle-up');
-        }
-      } else {
-        contenido.style.display = "none";
-        // Cambiar icono del botón si existe
-        const boton = contenido.previousElementSibling;
-        if (boton && boton.querySelector('i.fas')) {
-          boton.querySelector('i.fas').className = boton.querySelector('i.fas').className.replace('fa-angle-up', 'fa-angle-down');
-        }
-      }
-    }
-  }
-
-  // Código nuevo para actualizar badges de regiones
-  const inputs = document.querySelectorAll('input[type="number"]');
-  inputs.forEach(input => {
+  
+  // Event listeners para inputs de número
+  document.querySelectorAll('input[type="number"]').forEach(input => {
     input.addEventListener('change', function() {
       // Extraer la región del ID (por ejemplo, "cervical_flexion_activo" -> "cervical")
       const region = this.id.split('_')[0];
@@ -2016,12 +2107,33 @@ document.addEventListener('DOMContentLoaded', function() {
         regionBadge.innerHTML = "Evaluado";
         regionBadge.className = regionBadge.className.replace(/bg-\w+/g, "bg-success");
       }
+      
+      // Si es un input activo, evaluarlo según valores normativos
+      if (this.id.endsWith("_activo")) {
+        const region = this.id.split('_')[0];
+        const movimiento = this.id.replace(`${region}_`, "").replace("_activo", "");
+        const valorMin = 0;
+        const valorModerado = obtenerValorNormativo(region, movimiento) * 0.6;
+        const valorNormal = obtenerValorNormativo(region, movimiento);
+        
+        evaluarROM(this.id, valorMin, valorModerado, valorNormal);
+      }
+      
+      // Si es un input pasivo, calcular diferencial si existe el activo correspondiente
+      if (this.id.endsWith("_pasivo")) {
+        const baseId = this.id.replace("_pasivo", "");
+        const activoId = baseId + "_activo";
+        const activoInput = document.getElementById(activoId);
+        
+        if (activoInput && activoInput.value) {
+          calcularDiferencialAP(baseId);
+        }
+      }
     });
   });
   
-  // También para selectores
-  const selects = document.querySelectorAll('select[id*="_dolor"], select[id*="_funcionalidad"]');
-  selects.forEach(select => {
+  // Event listeners para selectores de dolor y funcionalidad
+  document.querySelectorAll('select[id*="_dolor"], select[id*="_funcionalidad"]').forEach(select => {
     select.addEventListener('change', function() {
       // Extraer la región del ID
       const region = this.id.split('_')[0];
@@ -2034,6 +2146,24 @@ document.addEventListener('DOMContentLoaded', function() {
         regionBadge.innerHTML = "Evaluado";
         regionBadge.className = regionBadge.className.replace(/bg-\w+/g, "bg-success");
       }
+      
+      // Colorear selector y actualizar
+      if (this.id.includes("_dolor")) {
+        evaluarDolorROM(this);
+      } else if (this.id.includes("_funcionalidad")) {
+        evaluarFuncionalidadROM(this);
+      }
     });
   });
+  
+  // Event listeners para patrones capsulares
+  document.querySelectorAll('select[id$="_patron_capsular"]').forEach(select => {
+    select.addEventListener('change', function() {
+      const region = this.id.split('_')[0];
+      mostrarInterpretacionCapsular(region);
+    });
+  });
+  
+  // Pre-cargar estados visuales si hay datos guardados
+  cargarDatosGuardados();
 });
