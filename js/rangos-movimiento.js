@@ -1949,6 +1949,13 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Inicializar sistema de objetivos terapéuticos
   inicializarSistemaDeObjetivos();
+
+  // CORRECCIÓN: Establecer el acordeón principal de rangos a "No completado"
+const rangosCompletaBadge = document.querySelector('span.badge:has(+ a:contains("Evaluación Completa de Rangos de Movimiento")), #rangos-completa-badge');
+if (rangosCompletaBadge) {
+  rangosCompletaBadge.innerHTML = "No completado";
+  rangosCompletaBadge.className = "resultado-badge badge bg-secondary";
+}
 });
 
 // Función para cambiar entre cuestionarios anidados
@@ -1993,11 +2000,4 @@ function toggleSeccion(id) {
       }
     }
   }
-}
-
-// Corregir el estado del badge para Evaluación Completa de Rangos de Movimiento
-const romEvaluationBadge = document.getElementById('rom-evaluation-badge');
-if (romEvaluationBadge) {
-  romEvaluationBadge.innerHTML = "No completado";
-  romEvaluationBadge.className = "resultado-badge badge bg-secondary";
 }
