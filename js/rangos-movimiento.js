@@ -1950,14 +1950,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar sistema de objetivos terapéuticos
   inicializarSistemaDeObjetivos();
 
-  // CORRECCIÓN: Establecer el acordeón principal de rangos a "No completado"
-const rangosCompletaBadge = document.querySelector('span.badge:has(+ a:contains("Evaluación Completa de Rangos de Movimiento")), #rangos-completa-badge');
-if (rangosCompletaBadge) {
-  rangosCompletaBadge.innerHTML = "No completado";
-  rangosCompletaBadge.className = "resultado-badge badge bg-secondary";
-}
+  // CORRECCIÓN: Establecer el badge de evaluación ROM a "No completado"
+  const romBadge = document.getElementById('rom-evaluation-badge');
+  if (romBadge) {
+    romBadge.innerHTML = "No completado";
+    romBadge.className = "resultado-badge badge bg-secondary";
+  }
 });
-
 // Función para cambiar entre cuestionarios anidados
 function toggleCuestionario(id) {
   const contenido = document.getElementById(id);
