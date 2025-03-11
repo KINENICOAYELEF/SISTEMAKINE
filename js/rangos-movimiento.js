@@ -1994,3 +1994,10 @@ function toggleSeccion(id) {
     }
   }
 }
+
+// Corregir el estado del badge para Evaluación Completa de Rangos de Movimiento
+const romEvaluationBadge = document.getElementById('rom-evaluation-badge');
+if (romEvaluationBadge) {
+  romEvaluationBadge.innerHTML = "No completado";
+  romEvaluationBadge.className = "resultado-badge badge bg-secondary";
+}
