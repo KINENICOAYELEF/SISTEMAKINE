@@ -579,7 +579,6 @@ const regionBadge = document.getElementById(region + "_badge");
 if (regionBadge) {
   regionBadge.innerHTML = "Evaluado";
   regionBadge.className = "badge bg-success float-end";
-}
   
   // Calcular déficit funcional
   calcularDeficitFuncional(inputId);
@@ -741,7 +740,6 @@ const regionBadge = document.getElementById(region + "_badge");
 if (regionBadge) {
   regionBadge.innerHTML = "Evaluado";
   regionBadge.className = "badge bg-success float-end";
-}
   
   // Actualizar recomendaciones
   const region = selector.id.split('_')[0]; // Ej: cervical
