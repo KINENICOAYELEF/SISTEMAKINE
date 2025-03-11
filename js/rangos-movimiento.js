@@ -1956,21 +1956,17 @@ if (romBadge) {
   romBadge.innerHTML = "No completado";
   romBadge.className = "resultado-badge badge bg-secondary";
 }
-  });
   // Añadir listener para actualizar la interpretación global
-  document.querySelectorAll('input, select').forEach(element => {
-    element.addEventListener('change', function() {
-      // Permitir que se completen los cálculos primero
-      setTimeout(actualizarInterpretacionGlobalAvanzada, 500);
-    });
-  });
-  
-  // También actualizar al cargar la página
-  setTimeout(actualizarInterpretacionGlobalAvanzada, 1000);
+document.querySelectorAll('input, select').forEach(element => {
+ element.addEventListener('change', function() {
+   // Permitir que se completen los cálculos primero
+   setTimeout(actualizarInterpretacionGlobalAvanzada, 500);
+ });
 });
 
 // También actualizar al cargar la página
 setTimeout(actualizarInterpretacionGlobalAvanzada, 1000);
+});
 
 
 // Función para cambiar entre cuestionarios anidados
