@@ -1950,347 +1950,25 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar sistema de objetivos terapéuticos
   inicializarSistemaDeObjetivos();
 
-  // CORRECCIÓN: Establecer el badge de evaluación ROM a "No completado"
-  const romBadge = document.getElementById('rom-evaluation-badge');
-  if (romBadge) {
-    romBadge.innerHTML = "No completado";
-    romBadge.className = "resultado-badge badge bg-secondary";
-  }
+  // CORRECCIÓN: Establecer el badge principal a "No completado"
+const romBadge = document.getElementById('rom-evaluation-badge');
+if (romBadge) {
+  romBadge.innerHTML = "No completado";
+  romBadge.className = "resultado-badge badge bg-secondary";
+}
 
-// AÑADIR AQUÍ los event listeners para la interpretación global
-  // Llamar a la función cuando se cambia cualquier input o select relevante
-  document.querySelectorAll('input, select').forEach(element => {
-    element.addEventListener('change', function() {
-      // Permitir que se completen los cálculos primero
-      setTimeout(actualizarInterpretacionGlobal, 500);
-    });
+// Añadir listener para actualizar la interpretación global
+document.querySelectorAll('input, select').forEach(element => {
+  element.addEventListener('change', function() {
+    // Permitir que se completen los cálculos primero
+    setTimeout(actualizarInterpretacionGlobalAvanzada, 500);
   });
-  
-  // También llamar al cargar la página
-  setTimeout(actualizarInterpretacionGlobal, 1000);
 });
-  
-// Función completa para la interpretación global que detecta cualquier dato
-function actualizarInterpretacionGlobal() {
-  // Buscar los contenedores para cada sección
-  const resumenDeficitElement = document.querySelector('[id*="resumen_deficit"], [id*="resumen"][id*="deficit"], p:contains("Complete la evaluación de al menos")');
-  const integracionPatronesElement = document.querySelector('[id*="integracion_patrones"], [id*="integracion"][id*="patrones"], p:contains("Complete la evaluación de patrones")');
-  const recomendacionesGlobalesElement = document.querySelector('[id*="recomendaciones_globales"], [id*="recomendaciones"], p:contains("Complete la evaluación de rangos para obtener")');
-  
-  // Recopilar información de regiones con CUALQUIER dato ingresado
-  let regionesConDatos = [];
-  const regiones = ['cervical', 'dorsal', 'lumbar', 'pelvis', 'hombro', 'codo', 'muneca', 'cadera', 'rodilla', 'tobillo', 'atm'];
-  
-  regiones.forEach(region => {
-    // Verificar cualquier tipo de dato en esta región
-    const inputsRegion = document.querySelectorAll(`input[id^="${region}_"]`);
-    const selectoresRegion = document.querySelectorAll(`select[id^="${region}_"]`);
-    
-    let hayDatos = false;
-    let deficitValue = 0;
-    let funcionalesComprometidos = false;
-    let hayDolor = false;
-    
-    // Buscar déficit si existe
-    const deficitInput = document.getElementById(`${region}_deficit_total`);
-    if (deficitInput && deficitInput.value) {
-      deficitValue = parseFloat(deficitInput.value.replace('%', '').trim()) || 0;
-      hayDatos = true;
-    }
-    
-    // Verificar otros inputs con valores
-    inputsRegion.forEach(input => {
-      if (input.value && input.value !== "0") {
-        hayDatos = true;
-      }
-    });
-    
-    // Verificar selectores con valores distintos al predeterminado
-    selectoresRegion.forEach(select => {
-      if (select.value && select.value !== "" && select.value !== "No" && 
-          select.value !== "Normal" && select.value !== "Seleccione...") {
-        hayDatos = true;
-        
-        // Detectar si hay problemas funcionales
-        if (select.id.includes('_funcionalidad') && 
-            (select.value.includes('Limitación') || select.value.includes('Disfunción'))) {
-          funcionalesComprometidos = true;
-        }
-        
-        // Detectar si hay dolor
-        if (select.id.includes('_dolor') && select.value !== "No") {
-          hayDolor = true;
-        }
-      }
-    });
-    
-    if (hayDatos) {
-      regionesConDatos.push({
-        nombre: region,
-        deficit: deficitValue,
-        conDeficitCalculado: deficitInput && deficitInput.value ? true : false,
-        funcionalesComprometidos: funcionalesComprometidos,
-        hayDolor: hayDolor,
-        severidad: clasificarSeveridad(deficitValue)
-      });
-    }
-  });
-  
-  // Si no hay regiones con datos, no cambiar nada
-  if (regionesConDatos.length === 0) return;
-  
-  // Ordenar regiones por déficit (mayor a menor) si hay déficit calculado
-  regionesConDatos.sort((a, b) => {
-    if (a.conDeficitCalculado && b.conDeficitCalculado) {
-      return b.deficit - a.deficit;
-    } else if (a.conDeficitCalculado) {
-      return -1;
-    } else if (b.conDeficitCalculado) {
-      return 1;
-    }
-    return 0;
-  });
-  
-  // 1. RESUMEN DE DÉFICIT FUNCIONAL
-  if (resumenDeficitElement) {
-    let resumenHTML = '<p><strong>Evaluación Integral:</strong> ';
-    
-    if (regionesConDatos.length === 1) {
-      const region = regionesConDatos[0];
-      if (region.conDeficitCalculado) {
-        resumenHTML += `Se ha evaluado ${getNombreDescriptivo(region.nombre)} con un déficit funcional ${region.severidad.texto} (${region.deficit.toFixed(1)}%).`;
-      } else {
-        resumenHTML += `Se ha iniciado la evaluación de ${getNombreDescriptivo(region.nombre)}, `;
-        if (region.funcionalesComprometidos) {
-          resumenHTML += `detectando compromiso funcional.`;
-        } else if (region.hayDolor) {
-          resumenHTML += `detectando presencia de dolor.`;
-        } else {
-          resumenHTML += `obteniendo datos preliminares.`;
-        }
-      }
-      resumenHTML += '</p>';
-    } else {
-      resumenHTML += `Se han evaluado ${regionesConDatos.length} regiones: `;
-      
-      // Mostrar primero las regiones con déficit calculado
-      const regionesConDeficit = regionesConDatos.filter(r => r.conDeficitCalculado);
-      const regionesSinDeficit = regionesConDatos.filter(r => !r.conDeficitCalculado);
-      
-      if (regionesConDeficit.length > 0) {
-        regionesConDeficit.forEach((region, index) => {
-          resumenHTML += `${getNombreDescriptivo(region.nombre)} (${region.deficit.toFixed(1)}%${region.severidad.emoji})`;
-          
-          if (index < regionesConDeficit.length - 1) {
-            resumenHTML += ', ';
-          }
-        });
-        
-        if (regionesSinDeficit.length > 0) {
-          resumenHTML += ' y ';
-        }
-      }
-      
-      if (regionesSinDeficit.length > 0) {
-        const nombresRestantes = regionesSinDeficit.map(r => getNombreDescriptivo(r.nombre)).join(', ');
-        resumenHTML += `${nombresRestantes} (evaluación parcial)`;
-      }
-      
-      resumenHTML += '.</p>';
-      
-      // Añadir análisis de distribución si hay suficientes regiones
-      if (regionesConDatos.length >= 2) {
-        resumenHTML += analizarDistribucionProblemas(regionesConDatos);
-      }
-    }
-    
-    resumenDeficitElement.innerHTML = resumenHTML;
-  }
-  
-  // 2. INTEGRACIÓN CON PATRONES DE MOVIMIENTO
-  if (integracionPatronesElement) {
-    let integracionHTML = '<p><strong>Integración funcional:</strong> ';
-    
-    // Analizar si hay patrones de movimiento evaluados
-    const patronesEvaluados = document.querySelectorAll('select[id$="_calidad"]');
-    const hayPatronesEvaluados = Array.from(patronesEvaluados).some(p => p.value);
-    
-    if (hayPatronesEvaluados) {
-      integracionHTML += 'Los hallazgos de ROM muestran correlación con alteraciones en patrones de movimiento funcionales, ';
-      integracionHTML += 'sugiriendo una limitación integrada que afecta la biomecánica global.</p>';
-      
-      // Analizar cadenas funcionales afectadas
-      if (regionesConDatos.length >= 2) {
-        integracionHTML += analizarCadenasFuncionales(regionesConDatos);
-      }
-    } else {
-      integracionHTML += 'Las alteraciones de movilidad identificadas sugieren potencial impacto en patrones de movimiento. ';
-      
-      // Si hay regiones con déficit severo, destacarlas
-      const regionesSeveras = regionesConDatos.filter(r => r.conDeficitCalculado && r.deficit > 30);
-      if (regionesSeveras.length > 0) {
-        integracionHTML += `Especialmente en ${regionesSeveras.map(r => getNombreDescriptivo(r.nombre)).join(', ')}, donde la limitación podría comprometer actividades funcionales significativamente. `;
-      }
-      
-      integracionHTML += 'Se recomienda completar la evaluación de patrones funcionales para una correlación más precisa.</p>';
-    }
-    
-    integracionPatronesElement.innerHTML = integracionHTML;
-  }
-  
-  // 3. RECOMENDACIONES GLOBALES
-  if (recomendacionesGlobalesElement) {
-    let recomendacionesHTML = '<p><strong>Abordaje recomendado:</strong></p><ul>';
-    
-    // Clasificar regiones por tipo
-    const regColumna = regionesConDatos.filter(r => ['cervical', 'dorsal', 'lumbar', 'pelvis'].includes(r.nombre));
-    const regExtremidadSup = regionesConDatos.filter(r => ['hombro', 'codo', 'muneca'].includes(r.nombre));
-    const regExtremidadInf = regionesConDatos.filter(r => ['cadera', 'rodilla', 'tobillo'].includes(r.nombre));
-    
-    // Regiones con déficit severo (>30%) o con datos de compromiso funcional
-    const regSeveras = regionesConDatos.filter(r => 
-      (r.conDeficitCalculado && r.deficit > 30) || r.funcionalesComprometidos);
-    
-    // Regiones con dolor reportado
-    const regDolorosas = regionesConDatos.filter(r => r.hayDolor);
-    
-    // Recomendaciones específicas según hallazgos
-    if (regColumna.length > 0) {
-      recomendacionesHTML += '<li>Implementar programa de <strong>reeducación postural integrada</strong> con énfasis en control motor segmentario.</li>';
-    }
-    
-    if (regExtremidadSup.length > 0) {
-      recomendacionesHTML += '<li>Incluir ejercicios de <strong>cadena cinética</strong> para miembro superior con progresión funcional.</li>';
-    }
-    
-    if (regExtremidadInf.length > 0) {
-      recomendacionesHTML += '<li>Desarrollar programa de <strong>fortalecimiento y estabilidad</strong> para miembro inferior con énfasis en control neuromuscular.</li>';
-    }
-    
-    if (regSeveras.length > 0) {
-      recomendacionesHTML += '<li>Priorizar el abordaje de ';
-      regSeveras.forEach((region, index) => {
-        recomendacionesHTML += `${getNombreDescriptivo(region.nombre)}`;
-        if (index < regSeveras.length - 1) recomendacionesHTML += ', ';
-      });
-      recomendacionesHTML += ' mediante técnicas combinadas de terapia manual y ejercicio terapéutico.</li>';
-    }
-    
-    if (regDolorosas.length > 0) {
-      recomendacionesHTML += '<li>Implementar estrategias de <strong>modulación del dolor</strong> para las regiones sintomáticas, integradas con el abordaje funcional.</li>';
-    }
-    
-    // Recomendaciones generales pero útiles
-    recomendacionesHTML += `
-      <li>Implementar un <strong>programa progresivo</strong> de ejercicios con fases de: control motor → resistencia → función específica.</li>
-      <li>Reevaluar periódicamente utilizando los mismos parámetros para objetivar evolución.</li>
-    `;
-    
-    // Si hay evaluaciones parciales, recomendar completarlas
-    const regionesParciales = regionesConDatos.filter(r => !r.conDeficitCalculado);
-    if (regionesParciales.length > 0) {
-      recomendacionesHTML += `<li>Completar la evaluación de déficit funcional para ${regionesParciales.map(r => getNombreDescriptivo(r.nombre)).join(', ')} para un análisis más preciso.</li>`;
-    }
-    
-    recomendacionesHTML += '</ul>';
-    
-    recomendacionesGlobalesElement.innerHTML = recomendacionesHTML;
-  }
-}
 
-// Función para clasificar la severidad del déficit
-function clasificarSeveridad(deficitValue) {
-  if (deficitValue < 10) {
-    return { texto: "mínimo", clase: "text-success", emoji: "✓" };
-  } else if (deficitValue < 20) {
-    return { texto: "leve", clase: "text-info", emoji: "⚠️" };
-  } else if (deficitValue < 30) {
-    return { texto: "moderado", clase: "text-warning", emoji: "⚠️⚠️" };
-  } else {
-    return { texto: "severo", clase: "text-danger", emoji: "⚠️⚠️⚠️" };
-  }
-}
+// También actualizar al cargar la página
+setTimeout(actualizarInterpretacionGlobalAvanzada, 1000);
 
-// Función para obtener nombres descriptivos de las regiones
-function getNombreDescriptivo(regionId) {
-  const nombresRegiones = {
-    'cervical': 'Columna Cervical',
-    'dorsal': 'Columna Dorsal',
-    'lumbar': 'Columna Lumbar',
-    'pelvis': 'Articulación Sacroilíaca/Pelvis',
-    'hombro': 'Complejo del Hombro',
-    'codo': 'Codo y Antebrazo',
-    'muneca': 'Muñeca y Mano',
-    'cadera': 'Articulación de Cadera',
-    'rodilla': 'Articulación de Rodilla',
-    'tobillo': 'Tobillo y Pie',
-    'atm': 'ATM'
-  };
-  
-  return nombresRegiones[regionId] || regionId.charAt(0).toUpperCase() + regionId.slice(1);
-}
 
-// Función para analizar la distribución de problemas
-function analizarDistribucionProblemas(regionesConDatos) {
-  // Determinar si hay un patrón (ej: más problemas en un lado o en ciertas cadenas)
-  const ladoIzquierdo = regionesConDatos.filter(r => r.nombre.includes('_izq') || r.nombre.includes('_izquierda')).length;
-  const ladoDerecho = regionesConDatos.filter(r => r.nombre.includes('_der') || r.nombre.includes('_derecha')).length;
-  
-  let analisis = '<p><strong>Análisis de distribución:</strong> ';
-  
-  if (ladoIzquierdo > ladoDerecho + 1) {
-    analisis += 'Se observa predominio de compromiso en hemicuerpo izquierdo, ';
-  } else if (ladoDerecho > ladoIzquierdo + 1) {
-    analisis += 'Se observa predominio de compromiso en hemicuerpo derecho, ';
-  }
-  
-  // Verificar si hay problemas en columna
-  const problemaColumna = regionesConDatos.some(r => ['cervical', 'dorsal', 'lumbar', 'pelvis'].includes(r.nombre));
-  // Verificar problemas en extremidades
-  const problemaExtremidades = regionesConDatos.some(r => 
-    ['hombro', 'codo', 'muneca', 'cadera', 'rodilla', 'tobillo'].includes(r.nombre));
-  
-  if (problemaColumna && problemaExtremidades) {
-    analisis += 'con compromiso axial y apendicular que sugiere un patrón de disfunción global.';
-  } else if (problemaColumna) {
-    analisis += 'con afectación principalmente axial que podría indicar alteraciones posturales o degenerativas.';
-  } else if (problemaExtremidades) {
-    analisis += 'con afectación principalmente apendicular que podría relacionarse con patrones de uso o sobreuso específicos.';
-  } else {
-    analisis += 'los datos actuales son insuficientes para determinar un patrón claro de distribución.';
-  }
-  
-  analisis += '</p>';
-  return analisis;
-}
-
-// Función para analizar cadenas funcionales
-function analizarCadenasFuncionales(regionesConDatos) {
-  const regiones = regionesConDatos.map(r => r.nombre);
-  let analisis = '<p><strong>Cadenas funcionales:</strong> ';
-  
-  // Detectar patrones de cadenas
-  if (regiones.includes('cervical') && (regiones.includes('hombro') || regiones.includes('dorsal'))) {
-    analisis += 'Patrón de afectación en cadena cervicoescapular que puede comprometer la biomecánica del cuadrante superior. ';
-  }
-  
-  if ((regiones.includes('lumbar') || regiones.includes('pelvis')) && 
-      (regiones.includes('cadera') || regiones.includes('rodilla'))) {
-    analisis += 'Alteración en cadena lumbopélvica-femoral que sugiere disfunción en el sistema de transferencia de cargas. ';
-  }
-  
-  if (regiones.includes('dorsal') && regiones.includes('lumbar') && regiones.includes('pelvis')) {
-    analisis += 'Compromiso global del eje axial que requiere abordaje integrado de estabilidad central. ';
-  }
-  
-  if (analisis === '<p><strong>Cadenas funcionales:</strong> ') {
-    analisis += 'Con los datos actuales, no se detectan patrones claros de afectación en cadenas funcionales.';
-  }
-  
-  analisis += '</p>';
-  return analisis;
-}
-});
 // Función para cambiar entre cuestionarios anidados
 function toggleCuestionario(id) {
   const contenido = document.getElementById(id);
@@ -2369,7 +2047,289 @@ function toggleSeccion(id) {
         regionBadge.className = regionBadge.className.replace(/bg-\w+/g, "bg-success");
       }
     });
-  });
+
+  // Añade esta función al final de tu archivo (fuera de cualquier otra función)
+function actualizarInterpretacionGlobalAvanzada() {
+  try {
+    // 1. RECOPILAR DATOS DE REGIONES
+    const regiones = ['cervical', 'dorsal', 'lumbar', 'pelvis', 'hombro', 'codo', 'muneca', 'cadera', 'rodilla', 'tobillo', 'atm'];
+    let regionesEvaluadas = [];
+    
+    regiones.forEach(region => {
+      // Verificar cualquier tipo de dato en esta región
+      const inputsRegion = document.querySelectorAll(`input[id^="${region}_"]`);
+      const selectoresRegion = document.querySelectorAll(`select[id^="${region}_"]`);
+      
+      let hayDatos = false;
+      let deficitValue = 0;
+      let funcionalesComprometidos = false;
+      let hayDolor = false;
+      
+      // Buscar déficit si existe
+      const deficitInput = document.getElementById(`${region}_deficit_total`);
+      if (deficitInput && deficitInput.value) {
+        deficitValue = parseFloat(deficitInput.value.replace('%', '').trim()) || 0;
+        hayDatos = true;
+      }
+      
+      // Verificar otros inputs con valores
+      inputsRegion.forEach(input => {
+        if (input.value && input.value !== "0") {
+          hayDatos = true;
+        }
+      });
+      
+      // Verificar selectores con valores distintos al predeterminado
+      selectoresRegion.forEach(select => {
+        if (select.value && select.value !== "" && select.value !== "No" && 
+            select.value !== "Normal" && select.value !== "Seleccione...") {
+          hayDatos = true;
+          
+          // Detectar si hay problemas funcionales
+          if (select.id.includes('_funcionalidad') && 
+              (select.value.includes('Limitación') || select.value.includes('Disfunción'))) {
+            funcionalesComprometidos = true;
+          }
+          
+          // Detectar si hay dolor
+          if (select.id.includes('_dolor') && select.value !== "No") {
+            hayDolor = true;
+          }
+        }
+      });
+      
+      if (hayDatos) {
+        regionesEvaluadas.push({
+          nombre: region,
+          deficit: deficitValue,
+          conDeficitCalculado: deficitInput && deficitInput.value ? true : false,
+          funcionalesComprometidos: funcionalesComprometidos,
+          hayDolor: hayDolor
+        });
+      }
+    });
+    
+    // Si no hay regiones con datos, salir
+    if (regionesEvaluadas.length === 0) return;
+    
+    // 2. GENERAR TEXTOS DE INTERPRETACIÓN
+    
+    // Resumen de déficit
+    let resumenHTML = generarResumenDeficit(regionesEvaluadas);
+    
+    // Integración con patrones
+    let integracionHTML = generarIntegracionPatrones(regionesEvaluadas);
+    
+    // Recomendaciones
+    let recomendacionesHTML = generarRecomendaciones(regionesEvaluadas);
+    
+    // 3. ACTUALIZAR ELEMENTOS EN LA PÁGINA
+    
+    // Buscar todos los párrafos que pueden contener texto a reemplazar
+    const parrafos = document.querySelectorAll('p, div');
+    
+    parrafos.forEach(elemento => {
+      // Actualizar sección de resumen de déficit
+      if (elemento.textContent.includes('Complete la evaluación de al menos una región') ||
+          elemento.textContent.includes('Complete la evaluación de al')) {
+        elemento.innerHTML = resumenHTML;
+      }
+      
+      // Actualizar sección de integración con patrones
+      if (elemento.textContent.includes('Complete la evaluación de patrones') ||
+          elemento.textContent.includes('integración')) {
+        elemento.innerHTML = integracionHTML;
+      }
+      
+      // Actualizar sección de recomendaciones
+      if (elemento.textContent.includes('Complete la evaluación de rangos para obtener') ||
+          elemento.textContent.includes('recomendaciones globales')) {
+        elemento.innerHTML = recomendacionesHTML;
+      }
+    });
+  } catch (error) {
+    console.error("Error al actualizar interpretación global:", error);
+  }
+}
+
+// Función para generar el resumen de déficit
+function generarResumenDeficit(regionesEvaluadas) {
+  let texto = '';
+  
+  if (regionesEvaluadas.length === 1) {
+    const region = regionesEvaluadas[0];
+    texto += `<strong>Se ha evaluado ${getNombreDescriptivo(region.nombre)}</strong>`;
+    
+    if (region.conDeficitCalculado) {
+      texto += ` con un déficit funcional de ${region.deficit.toFixed(1)}%.`;
+    } else if (region.funcionalesComprometidos) {
+      texto += ` detectando compromiso funcional.`;
+    } else if (region.hayDolor) {
+      texto += ` detectando presencia de dolor.`;
+    } else {
+      texto += ` obteniendo datos preliminares.`;
+    }
+  } else {
+    texto += `<strong>Se han evaluado ${regionesEvaluadas.length} regiones</strong>: `;
+    
+    regionesEvaluadas.forEach((region, index) => {
+      texto += getNombreDescriptivo(region.nombre);
+      
+      if (region.conDeficitCalculado) {
+        texto += ` (${region.deficit.toFixed(1)}%)`;
+        
+        // Añadir indicadores visuales según déficit
+        if (region.deficit > 30) {
+          texto += " ⚠️⚠️";
+        } else if (region.deficit > 15) {
+          texto += " ⚠️";
+        }
+      }
+      
+      if (index < regionesEvaluadas.length - 1) {
+        texto += ', ';
+      }
+    });
+    
+    texto += '.';
+  }
+  
+  // Añadir análisis de distribución si hay suficientes regiones
+  if (regionesEvaluadas.length >= 2) {
+    // Verificar si hay problemas en columna
+    const problemaColumna = regionesEvaluadas.some(r => ['cervical', 'dorsal', 'lumbar', 'pelvis'].includes(r.nombre));
+    // Verificar problemas en extremidades
+    const problemaExtremidades = regionesEvaluadas.some(r => 
+      ['hombro', 'codo', 'muneca', 'cadera', 'rodilla', 'tobillo'].includes(r.nombre));
+    
+    texto += '<br><br><strong>Distribución:</strong> ';
+    
+    if (problemaColumna && problemaExtremidades) {
+      texto += 'Patrón mixto con compromiso axial y apendicular que sugiere alteraciones biomecánicas relacionadas.';
+    } else if (problemaColumna) {
+      texto += 'Compromiso principalmente axial que puede indicar alteraciones posturales o estructurales.';
+    } else if (problemaExtremidades) {
+      texto += 'Compromiso principalmente apendicular que sugiere patrón de uso/sobreuso específico.';
+    }
+  }
+  
+  return texto;
+}
+
+// Función para generar integración con patrones
+function generarIntegracionPatrones(regionesEvaluadas) {
+  let texto = '<strong>Integración funcional:</strong> ';
+  
+  // Analizar si hay patrones de movimiento evaluados
+  const patronesEvaluados = document.querySelectorAll('select[id$="_calidad"]');
+  const hayPatronesEvaluados = Array.from(patronesEvaluados).some(p => p.value);
+  
+  if (hayPatronesEvaluados) {
+    texto += 'Los hallazgos de ROM muestran correlación con alteraciones en patrones funcionales. ';
+    
+    // Analizar cadenas funcionales afectadas
+    if (regionesEvaluadas.length >= 2) {
+      const regiones = regionesEvaluadas.map(r => r.nombre);
+      
+      // Detectar patrones de cadenas
+      if (regiones.includes('cervical') && (regiones.includes('hombro') || regiones.includes('dorsal'))) {
+        texto += '<br><br>Se detecta patrón de afectación en cadena cervicoescapular que compromete la biomecánica del cuadrante superior. ';
+      }
+      
+      if ((regiones.includes('lumbar') || regiones.includes('pelvis')) && 
+          (regiones.includes('cadera') || regiones.includes('rodilla'))) {
+        texto += '<br><br>Se identifica alteración en cadena lumbopélvica-femoral que afecta el sistema de transferencia de cargas. ';
+      }
+    }
+  } else {
+    texto += 'Las alteraciones de movilidad identificadas sugieren potencial impacto en patrones de movimiento. ';
+    
+    // Si hay regiones con función comprometida, destacarlas
+    const regionesComprometidas = regionesEvaluadas.filter(r => r.funcionalesComprometidos);
+    if (regionesComprometidas.length > 0) {
+      texto += `<br><br>Especialmente en ${regionesComprometidas.map(r => getNombreDescriptivo(r.nombre)).join(', ')}, donde la limitación podría comprometer actividades funcionales significativamente. `;
+    }
+    
+    if (regionesEvaluadas.some(r => r.hayDolor)) {
+      texto += '<br><br>La presencia de dolor durante el movimiento sugiere componente nociceptivo activo que puede amplificar las alteraciones funcionales.';
+    }
+  }
+  
+  return texto;
+}
+
+// Función para generar recomendaciones
+function generarRecomendaciones(regionesEvaluadas) {
+  let texto = '<strong>Abordaje recomendado:</strong><br><br><ul>';
+  
+  // Clasificar regiones por tipo
+  const regColumna = regionesEvaluadas.filter(r => ['cervical', 'dorsal', 'lumbar', 'pelvis'].includes(r.nombre));
+  const regExtremidadSup = regionesEvaluadas.filter(r => ['hombro', 'codo', 'muneca'].includes(r.nombre));
+  const regExtremidadInf = regionesEvaluadas.filter(r => ['cadera', 'rodilla', 'tobillo'].includes(r.nombre));
+  
+  // Regiones con déficit severo (>30%) o con datos de compromiso funcional
+  const regSeveras = regionesEvaluadas.filter(r => 
+    (r.conDeficitCalculado && r.deficit > 30) || r.funcionalesComprometidos);
+  
+  // Regiones con dolor reportado
+  const regDolorosas = regionesEvaluadas.filter(r => r.hayDolor);
+  
+  // Recomendaciones específicas según hallazgos
+  if (regColumna.length > 0) {
+    texto += '<li>Implementar programa de <strong>reeducación postural integrada</strong> con énfasis en control motor segmentario.</li>';
+  }
+  
+  if (regExtremidadSup.length > 0) {
+    texto += '<li>Incluir ejercicios de <strong>cadena cinética</strong> para miembro superior con progresión funcional.</li>';
+  }
+  
+  if (regExtremidadInf.length > 0) {
+    texto += '<li>Desarrollar programa de <strong>fortalecimiento y estabilidad</strong> para miembro inferior con énfasis en control neuromuscular.</li>';
+  }
+  
+  if (regSeveras.length > 0) {
+    texto += '<li>Priorizar el abordaje de ';
+    regSeveras.forEach((region, index) => {
+      texto += getNombreDescriptivo(region.nombre);
+      if (index < regSeveras.length - 1) texto += ', ';
+    });
+    texto += ' mediante técnicas combinadas de terapia manual y ejercicio terapéutico.</li>';
+  }
+  
+  if (regDolorosas.length > 0) {
+    texto += '<li>Implementar estrategias de <strong>modulación del dolor</strong> para las regiones sintomáticas, integradas con el abordaje funcional.</li>';
+  }
+  
+  // Recomendaciones generales pero útiles
+  texto += `
+    <li>Implementar un <strong>programa progresivo</strong> de ejercicios con fases de control motor → resistencia → función específica.</li>
+    <li>Reevaluar periódicamente utilizando los mismos parámetros para objetivar evolución.</li>
+  `;
+  
+  texto += '</ul>';
+  
+  return texto;
+}
+
+// Función para obtener nombres descriptivos de las regiones
+function getNombreDescriptivo(regionId) {
+  const nombresRegiones = {
+    'cervical': 'Columna Cervical',
+    'dorsal': 'Columna Dorsal',
+    'lumbar': 'Columna Lumbar',
+    'pelvis': 'Articulación Sacroilíaca/Pelvis',
+    'hombro': 'Complejo del Hombro',
+    'codo': 'Codo y Antebrazo',
+    'muneca': 'Muñeca y Mano',
+    'cadera': 'Articulación de Cadera',
+    'rodilla': 'Articulación de Rodilla',
+    'tobillo': 'Tobillo y Pie',
+    'atm': 'ATM'
+  };
+  
+  return nombresRegiones[regionId] || regionId.charAt(0).toUpperCase() + regionId.slice(1);
+}
+});
 
 
 
