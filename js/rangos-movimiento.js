@@ -572,6 +572,14 @@ function evaluarROM(inputId, valorMin, valorModerado, valorNormal) {
   // Actualizar badge de estado general
   document.getElementById("rom-evaluation-badge").innerHTML = "Evaluado";
   document.getElementById("rom-evaluation-badge").className = "resultado-badge badge bg-success";
+
+  // Actualizar también el badge de la región específica
+const region = inputId.split('_')[0]; // Obtiene la región (cervical, etc.)
+const regionBadge = document.getElementById(region + "_badge");
+if (regionBadge) {
+  regionBadge.innerHTML = "Evaluado";
+  regionBadge.className = "badge bg-success float-end";
+}
   
   // Calcular déficit funcional
   calcularDeficitFuncional(inputId);
