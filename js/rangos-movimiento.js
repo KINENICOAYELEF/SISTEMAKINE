@@ -1956,13 +1956,17 @@ if (romBadge) {
   romBadge.innerHTML = "No completado";
   romBadge.className = "resultado-badge badge bg-secondary";
 }
-
-// Añadir listener para actualizar la interpretación global
-document.querySelectorAll('input, select').forEach(element => {
-  element.addEventListener('change', function() {
-    // Permitir que se completen los cálculos primero
-    setTimeout(actualizarInterpretacionGlobalAvanzada, 500);
   });
+  // Añadir listener para actualizar la interpretación global
+  document.querySelectorAll('input, select').forEach(element => {
+    element.addEventListener('change', function() {
+      // Permitir que se completen los cálculos primero
+      setTimeout(actualizarInterpretacionGlobalAvanzada, 500);
+    });
+  });
+  
+  // También actualizar al cargar la página
+  setTimeout(actualizarInterpretacionGlobalAvanzada, 1000);
 });
 
 // También actualizar al cargar la página
@@ -2048,7 +2052,7 @@ function toggleSeccion(id) {
       }
     });
 
-  // Añade esta función al final de tu archivo (fuera de cualquier otra función)
+// Función para actualizar la interpretación global avanzada
 function actualizarInterpretacionGlobalAvanzada() {
   try {
     // 1. RECOPILAR DATOS DE REGIONES
@@ -2328,8 +2332,5 @@ function getNombreDescriptivo(regionId) {
   };
   
   return nombresRegiones[regionId] || regionId.charAt(0).toUpperCase() + regionId.slice(1);
-}
-});
-
-
+}    
 
