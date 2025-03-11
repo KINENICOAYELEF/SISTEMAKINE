@@ -2047,10 +2047,19 @@ function toggleSeccion(id) {
         regionBadge.className = regionBadge.className.replace(/bg-\w+/g, "bg-success");
       }
     });
+  });
 
 // Función para actualizar la interpretación global avanzada
 function actualizarInterpretacionGlobalAvanzada() {
   try {
+    console.log("Iniciando actualización de interpretación global");
+    
+    // Verificar si existen elementos clave
+    const existenParrafos = document.querySelectorAll('p, div').length > 0;
+    if (!existenParrafos) {
+      console.error("No se encontraron párrafos o divs para actualizar");
+      return; // Detener la función si no hay elementos para actualizar
+    }
     // 1. RECOPILAR DATOS DE REGIONES
     const regiones = ['cervical', 'dorsal', 'lumbar', 'pelvis', 'hombro', 'codo', 'muneca', 'cadera', 'rodilla', 'tobillo', 'atm'];
     let regionesEvaluadas = [];
@@ -2127,28 +2136,48 @@ function actualizarInterpretacionGlobalAvanzada() {
     
     // Buscar todos los párrafos que pueden contener texto a reemplazar
     const parrafos = document.querySelectorAll('p, div');
+    console.log("Encontrados " + parrafos.length + " párrafos/divs para revisar");
     
+    // Variables para verificar si se actualizaron elementos
+    let actualizadoResumen = false;
+    let actualizadoIntegracion = false;
+    let actualizadoRecomendaciones = false;
+
+    // Buscar específicamente elementos con los textos exactos que queremos reemplazar
     parrafos.forEach(elemento => {
       // Actualizar sección de resumen de déficit
       if (elemento.textContent.includes('Complete la evaluación de al menos una región') ||
           elemento.textContent.includes('Complete la evaluación de al')) {
+        console.log("Actualizando resumen de déficit");
         elemento.innerHTML = resumenHTML;
+        actualizadoResumen = true;
       }
       
       // Actualizar sección de integración con patrones
       if (elemento.textContent.includes('Complete la evaluación de patrones') ||
           elemento.textContent.includes('integración')) {
+        console.log("Actualizando integración con patrones");
         elemento.innerHTML = integracionHTML;
+        actualizadoIntegracion = true;
       }
       
       // Actualizar sección de recomendaciones
       if (elemento.textContent.includes('Complete la evaluación de rangos para obtener') ||
           elemento.textContent.includes('recomendaciones globales')) {
+        console.log("Actualizando recomendaciones");
         elemento.innerHTML = recomendacionesHTML;
+        actualizadoRecomendaciones = true;
       }
     });
+
+    // Informar si no se encontraron elementos para actualizar
+    if (!actualizadoResumen && !actualizadoIntegracion && !actualizadoRecomendaciones) {
+      console.warn("No se encontraron elementos que coincidan con los textos a reemplazar");
+    }
   } catch (error) {
-    console.error("Error al actualizar interpretación global:", error);
+    console.error("Error al actualizar interpretación global:");
+    console.error("Mensaje de error: " + error.message);
+    console.error("Detalles completos:", error);
   }
 }
 
