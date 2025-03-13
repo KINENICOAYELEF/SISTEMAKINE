@@ -632,7 +632,7 @@ function calcularDiferencialAP(baseId) {
 // Interpretar el significado clínico del diferencial AP
 function interpretarDiferencialAP(baseId, diferencia) {
   const region = baseId.split('_')[0]; // Extraer región (ej: cervical, hombro)
-  const movimiento = baseId.split('_').slice(1).join('_'); // Extraer movimiento
+  const movimiento = extraerMovimientoDesdeId(baseId); // Extraer movimiento correctamente
   
   // Obtener elementos de interpretación
   const interpretacionElement = document.getElementById(`interpretacion-${region}-texto`);
@@ -701,7 +701,7 @@ function interpretarDiferencialAP(baseId, diferencia) {
 function obtenerNombreMovimiento(baseId) {
   const partes = baseId.split('_');
   const region = partes[0];
-  const movimiento = partes.slice(1).join('_');
+  const movimiento = extraerMovimientoDesdeId(baseId);
   
   const mapaMovimientos = {
     "flexion": "flexión",
@@ -847,7 +847,13 @@ movimiento = movimiento.replace("_izq", "").replace("_der", "");
 }
 
 // Obtener valor normativo para un movimiento específico
-function obtenerValorNormativo(region, movimiento) {
+function obtenerValorNormativo(region, movimientoOId) {
+  // Determinar si se pasó un ID completo o solo el nombre del movimiento
+  let movimiento = movimientoOId;
+  if (movimientoOId.includes('_')) {
+    // Es un ID completo, extraer el movimiento
+    movimiento = extraerMovimientoDesdeId(movimientoOId);
+  }
   // Mapa completo de valores normativos según región y movimiento
   const valoresNormativos = {
     "cervical": {
@@ -1222,7 +1228,7 @@ function recopilarDatosROM(region) {
   const inputsActivos = document.querySelectorAll(`input[id^="${region}_"][id$="_activo"]`);
   
   inputsActivos.forEach(input => {
-    const movimiento = input.id.replace(`${region}_`, '').replace('_activo', '');
+    const movimiento = extraerMovimientoDesdeId(input.id);
     const valor = parseFloat(input.value);
     
     if (!isNaN(valor)) {
@@ -2218,8 +2224,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const region = this.id.split('_')[0];
         const movimiento = this.id.replace(`${region}_`, "").replace("_activo", "");
         const valorMin = 0;
-        const valorModerado = obtenerValorNormativo(region, movimiento) * 0.6;
-        const valorNormal = obtenerValorNormativo(region, movimiento);
+        const valorNormal = obtenerValorNormativo(region, this.id);
+        const valorModerado = valorNormal * 0.6;
         
         evaluarROM(this.id, valorMin, valorModerado, valorNormal);
       }
@@ -2235,6 +2241,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
     });
+
+    // Forzar reevaluación de todos los campos activos
+  document.querySelectorAll('input[type="number"][id$="_activo"]').forEach(input => {
+    if (input.value) {
+      const region = input.id.split('_')[0];
+      const valorMin = 0;
+      const valorNormativo = obtenerValorNormativo(region, input.id);
+      const valorModerado = valorNormativo * 0.6;
+      
+      evaluarROM(input.id, valorMin, valorModerado, valorNormativo);
+    }
   });
   
   // Event listeners para selectores de dolor y funcionalidad
@@ -2271,4 +2288,35 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Pre-cargar estados visuales si hay datos guardados
   cargarDatosGuardados();
+
+
+  // Función auxiliar para extraer correctamente el movimiento desde cualquier ID
+function extraerMovimientoDesdeId(id) {
+  // Primero dividimos el ID por guiones bajos
+  const partes = id.split('_');
+  
+  // Verificar si contiene _izq_ o _der_ para identificar si es bilateral
+  const esBilateral = id.includes('_izq_') || id.includes('_der_');
+  
+  // Extraer el movimiento según el caso
+  let movimiento;
+  
+  if (esBilateral) {
+    // Es bilateral, así que el formato es region_movimiento_lado_activo
+    // Remover región
+    let temp = id.replace(partes[0] + '_', '');
+    // Remover _izq_activo o _der_activo o _izq_pasivo o _der_pasivo
+    temp = temp.replace('_izq_activo', '').replace('_der_activo', '').replace('_izq_pasivo', '').replace('_der_pasivo', '');
+    movimiento = temp;
+  } else {
+    // No es bilateral, así que el formato es region_movimiento_activo
+    // Remover región
+    let temp = id.replace(partes[0] + '_', '');
+    // Remover _activo o _pasivo
+    temp = temp.replace('_activo', '').replace('_pasivo', '');
+    movimiento = temp;
+  }
+  
+  return movimiento;
+}
 });
