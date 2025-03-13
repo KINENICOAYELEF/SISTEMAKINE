@@ -652,9 +652,10 @@ function interpretarDiferencialAP(baseId, diferencia) {
         sugiere inhibición neuromuscular protectiva o debilidad de musculatura estabilizadora profunda. Considerar evaluación específica de flexores/extensores profundos cervicales y técnicas de activación muscular.</p>`;
         break;
       case 'hombro':
-        interpretacion = `<p class="alert alert-info">El diferencial activo-pasivo moderado en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
-        indica posible disfunción del ritmo escapulohumeral o inhibición neuromuscular de estabilizadores de escápula. Considerar evaluación de control motor escapular y ejercicios de reclutamiento progresivo.</p>`;
-        break;
+    interpretacion = `<p class="alert alert-warning">El diferencial activo-pasivo significativo en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
+    sugiere marcada disfunción del control neuromuscular, posible inhibición artrogénica o miedo al movimiento. 
+    Recomendado abordaje integrado con reeducación del ritmo escapulohumeral y trabajo progresivo de confianza en el movimiento.</p>`;
+    break;
       case 'lumbar':
         interpretacion = `<p class="alert alert-info">El diferencial activo-pasivo moderado en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
         sugiere posible inhibición de musculatura estabilizadora local o alteración del control motor. Evaluar función de multífidos y transverso abdominal.</p>`;
@@ -1049,30 +1050,46 @@ function obtenerActividadesAfectadas(region, deficitPromedio) {
       break;
       
     case "hombro":
-      if (deficitPromedio >= 25) {
-        actividades.push({
-          nombre: "Vestirse",
-          impacto: "Dificultad para colocarse prendas por encima de la cabeza o abrocharse detrás.",
-          colorClase: colorClase
-        });
-      }
-      
-      if (deficitPromedio >= 15) {
-        actividades.push({
-          nombre: "Alcanzar objetos",
-          impacto: "Limitación para alcanzar objetos en estantes altos o detrás del cuerpo.",
-          colorClase: colorClase
-        });
-      }
-      
-      if (deficitPromedio >= 40) {
-        actividades.push({
-          nombre: "Cargar objetos",
-          impacto: "Dificultad para levantar y transportar cargas por encima del nivel del hombro.",
-          colorClase: colorClase
-        });
-      }
-      break;
+  if (deficitPromedio >= 25) {
+    actividades.push({
+      nombre: "Vestirse",
+      impacto: "Dificultad para colocarse prendas por encima de la cabeza o abrocharse por detrás.",
+      colorClase: colorClase
+    });
+  }
+  
+  if (deficitPromedio >= 15) {
+    actividades.push({
+      nombre: "Alcanzar objetos elevados",
+      impacto: "Limitación para alcanzar objetos en estanterías altas o elevar los brazos por encima de la cabeza.",
+      colorClase: colorClase
+    });
+  }
+  
+  if (deficitPromedio >= 35) {
+    actividades.push({
+      nombre: "Cargar objetos",
+      impacto: "Dificultad para transportar cargas, especialmente con el brazo separado del cuerpo.",
+      colorClase: colorClase
+    });
+  }
+  
+  if (deficitPromedio >= 45) {
+    actividades.push({
+      nombre: "Actividades laborales",
+      impacto: "Limitación significativa en trabajos con manipulación por encima del nivel del hombro o movimientos repetitivos.",
+      colorClase: colorClase
+    });
+  }
+  
+  if (deficitPromedio >= 30) {
+    actividades.push({
+      nombre: "Higiene personal",
+      impacto: "Dificultad para actividades como lavarse el cabello, peinarse o alcanzar la espalda.",
+      colorClase: colorClase
+    });
+  }
+  break;
       
     // Otras regiones
     case "lumbar":
@@ -1496,13 +1513,16 @@ function generarConsideracionesROM(region, datos) {
       `;
       break;
     case "hombro":
-      consideraciones += `
-        <li>Analizar la calidad del ritmo escapulohumeral durante los movimientos.</li>
-        <li>Evaluar la estabilidad dinámica durante actividades funcionales.</li>
-        <li>Considerar el efecto de la postura cervical y dorsal en la mecánica del hombro.</li>
-        <li>Valorar patrones de reclutamiento muscular y posibles compensaciones.</li>
-      `;
-      break;
+  consideraciones += `
+    <li>Analizar la calidad del ritmo escapulohumeral durante los movimientos.</li>
+    <li>Valorar la estabilidad dinámica durante actividades funcionales específicas.</li>
+    <li>Considerar la función de los estabilizadores escapulares y su activación secuencial.</li>
+    <li>Evaluar la influencia de la región cervical y torácica en la biomecánica del hombro.</li>
+    <li>En caso de diferencial activo-pasivo significativo, valorar inhibición neuromuscular y estrategias de activación.</li>
+    <li>Ante patrones de restricción capsular, considerar el estadio de irritabilidad para dosificar intervenciones.</li>
+    <li>En atletas de lanzamiento o deportes overhead, evaluar específicamente las adaptaciones posturales y funcionales.</li>
+  `;
+  break;
     // Otras regiones...
     default:
       consideraciones += `
