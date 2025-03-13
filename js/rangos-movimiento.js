@@ -536,7 +536,6 @@ function mostrarTablaROM() {
 
 // Evaluar estado de rango de movimiento
 function evaluarROM(inputId, valorMin, valorModerado, valorNormal) {
-  console.log("Evaluando:", inputId, "con valores:", valorMin, valorModerado, valorNormal);
   const input = document.getElementById(inputId);
   const estadoElement = document.getElementById(inputId + "_estado");
   
