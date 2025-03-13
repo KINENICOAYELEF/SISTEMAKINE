@@ -1572,121 +1572,121 @@ function mostrarInterpretacionCapsular(region) {
   // Interpretaciones específicas para cada patrón
   let interpretacion = "";
   
-  switch (patronSelect.value) {
-    case "Rotación contralateral > Inclinación lateral contralateral > Extensión":
-      interpretacion = `
-        <p>Este patrón de restricción es consistente con <strong>disfunción de las articulaciones cigapofisarias (facetarias) C2-C7</strong>, particularmente en su componente de deslizamiento.</p>
-        <p>Estructuras potencialmente involucradas:</p>
-        <ul>
-          <li>Cápsula articular facetaria (especialmente su porción posterior)</li>
-          <li>Ligamentos longitudinales y potencialmente uncoarticulares</li>
-        </ul>
-        <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
-        <ul>
-          <li>Técnicas de movilización articular específica para restaurar el deslizamiento facetario</li>
-          <li>Ejercicios de control motor cervical con énfasis en rotación e inclinación lateral</li>
-          <li>Reeducación neuromuscular con retroalimentación</li>
-        </ul>
-      `;
-      break;
-      
-    // Otros casos del switch...
-      
-    default:
-      interpretacion = `
-        <p>El patrón de restricción identificado no corresponde con los patrones capsulares clásicos, lo que podría indicar una combinación de factores o un mecanismo no típico.</p>
-        <p>Consideraciones clínicas:</p>
-        <ul>
-          <li>Evaluar factores neuromusculares y propioceptivos</li>
-          <li>Considerar influencias de segmentos adyacentes</li>
-          <li>Valorar aspectos posturales globales que puedan influir</li>
-        </ul>
-        <p>Se recomienda un abordaje integrado que combine técnicas articulares, neurodinámicas y de control motor adaptadas a las restricciones específicas observadas.</p>
-      `;
+  // Patrones específicos según la región
+  if (region === "cervical") {
+    switch (patronSelect.value) {
+      case "Rotación contralateral > Inclinación lateral contralateral > Extensión":
+        interpretacion = `
+          <p>Este patrón de restricción es consistente con <strong>disfunción de las articulaciones cigapofisarias (facetarias) C2-C7</strong>, particularmente en su componente de deslizamiento.</p>
+          <p>Estructuras potencialmente involucradas:</p>
+          <ul>
+            <li>Cápsula articular facetaria (especialmente su porción posterior)</li>
+            <li>Ligamentos longitudinales y potencialmente uncoarticulares</li>
+          </ul>
+          <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
+          <ul>
+            <li>Técnicas de movilización articular específica para restaurar el deslizamiento facetario</li>
+            <li>Ejercicios de control motor cervical con énfasis en rotación e inclinación lateral</li>
+            <li>Reeducación neuromuscular con retroalimentación</li>
+          </ul>
+        `;
+        break;
+      // Mantén aquí cualquier otro caso cervical existente
+      default:
+        interpretacion = `
+          <p>El patrón de restricción identificado no corresponde con los patrones capsulares clásicos cervicales, lo que podría indicar una combinación de factores o un mecanismo no típico.</p>
+          <p>Consideraciones clínicas:</p>
+          <ul>
+            <li>Evaluar factores neuromusculares y propioceptivos</li>
+            <li>Considerar influencias de segmentos adyacentes</li>
+            <li>Valorar aspectos posturales globales que puedan influir</li>
+          </ul>
+          <p>Se recomienda un abordaje integrado que combine técnicas articulares, neurodinámicas y de control motor adaptadas a las restricciones específicas observadas.</p>
+        `;
+    }
+  } 
+  // NUEVOS PATRONES PARA EL HOMBRO
+  else if (region === "hombro") {
+    switch (patronSelect.value) {
+      case "Rotación externa > Abducción > Rotación interna":
+        interpretacion = `
+          <p>Este patrón de restricción es consistente con <strong>capsulitis adhesiva o "hombro congelado"</strong> en fase inicial-intermedia, con compromiso predominante de la cápsula anteroinferior.</p>
+          <p>Estructuras potencialmente involucradas:</p>
+          <ul>
+            <li>Cápsula articular glenohumeral (especialmente porción anteroinferior)</li>
+            <li>Ligamento glenohumeral inferior</li>
+            <li>Receso axilar de la cápsula</li>
+          </ul>
+          <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
+          <ul>
+            <li>Técnicas de movilización articular específicas para la cápsula anteroinferior</li>
+            <li>Ejercicios pendulares y de deslizamiento gradual</li>
+            <li>Progresión cautelosa respetando el umbral de dolor para evitar exacerbaciones</li>
+            <li>Consideración de técnicas neuromoduladoras en casos de dolor severo</li>
+          </ul>
+        `;
+        break;
+        
+      case "Rotación interna > Extensión > Rotación externa":
+        interpretacion = `
+          <p>Este patrón de restricción sugiere <strong>compromiso de la cápsula posterior</strong>, frecuentemente asociado a patologías que afectan el espacio posterior como:</p>
+          <p>Estructuras potencialmente involucradas:</p>
+          <ul>
+            <li>Cápsula glenohumeral posterior</li>
+            <li>Intervalo rotador posterior</li>
+            <li>Posible tensión adaptativa en músculos rotadores externos</li>
+          </ul>
+          <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
+          <ul>
+            <li>Técnicas de deslizamiento posterior y movilización específica del intervalo posterior</li>
+            <li>Ejercicios de estiramiento gradual para la cápsula posterior</li>
+            <li>Normalización del ritmo escapulohumeral y activación de estabilizadores escapulares</li>
+            <li>En deportistas de lanzamiento, incluir programa de prevención específico</li>
+          </ul>
+        `;
+        break;
+        
+      case "Flexión > Abducción > Rotación externa":
+        interpretacion = `
+          <p>Este patrón de restricción es compatible con <strong>compromiso de la cápsula inferior y anteroinferior</strong>, frecuentemente observado en:</p>
+          <p>Estructuras potencialmente involucradas:</p>
+          <ul>
+            <li>Cápsula glenohumeral inferior</li>
+            <li>Ligamento glenohumeral inferior (banda anterior)</li>
+            <li>Posibles adherencias en el receso axilar</li>
+          </ul>
+          <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
+          <ul>
+            <li>Técnicas de movilización con énfasis en el deslizamiento inferior y anterior</li>
+            <li>Restauración progresiva de la movilidad respetando la irritabilidad articular</li>
+            <li>Ejercicios de control motor para normalizar la artrocinemática</li>
+            <li>Valoración y tratamiento de la función escapular asociada</li>
+          </ul>
+        `;
+        break;
+        
+      default:
+        interpretacion = `
+          <p>El patrón de restricción identificado no corresponde con los patrones capsulares clásicos del hombro, lo que podría sugerir:</p>
+          <ul>
+            <li>Combinación de factores capsulares y no capsulares</li>
+            <li>Mecanismos compensatorios por disfunción de la articulación escapulotorácica</li>
+            <li>Posible implicación neurodinámica o alteración del control motor</li>
+          </ul>
+          <p>Se recomienda un abordaje que incluya:</p>
+          <ul>
+            <li>Evaluación completa del ritmo escapulohumeral</li>
+            <li>Valoración de elementos neuromiofasciales regionales</li>
+            <li>Técnicas combinadas articulares y neurodinámicas</li>
+            <li>Reeducación del control motor del complejo del hombro</li>
+          </ul>
+        `;
+    }
   }
-
-  // NUEVOS PATRONES PARA EL HOMBRO - Añadir exactamente este bloque
-else if (region === "hombro") {
-  switch (patronSelect.value) {
-    case "Rotación externa > Abducción > Rotación interna":
-      interpretacion = `
-        <p>Este patrón de restricción es consistente con <strong>capsulitis adhesiva o "hombro congelado"</strong> en fase inicial-intermedia, con compromiso predominante de la cápsula anteroinferior.</p>
-        <p>Estructuras potencialmente involucradas:</p>
-        <ul>
-          <li>Cápsula articular glenohumeral (especialmente porción anteroinferior)</li>
-          <li>Ligamento glenohumeral inferior</li>
-          <li>Receso axilar de la cápsula</li>
-        </ul>
-        <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
-        <ul>
-          <li>Técnicas de movilización articular específicas para la cápsula anteroinferior</li>
-          <li>Ejercicios pendulares y de deslizamiento gradual</li>
-          <li>Progresión cautelosa respetando el umbral de dolor para evitar exacerbaciones</li>
-          <li>Consideración de técnicas neuromoduladoras en casos de dolor severo</li>
-        </ul>
-      `;
-      break;
-      
-    case "Rotación interna > Extensión > Rotación externa":
-      interpretacion = `
-        <p>Este patrón de restricción sugiere <strong>compromiso de la cápsula posterior</strong>, frecuentemente asociado a patologías que afectan el espacio posterior como:</p>
-        <p>Estructuras potencialmente involucradas:</p>
-        <ul>
-          <li>Cápsula glenohumeral posterior</li>
-          <li>Intervalo rotador posterior</li>
-          <li>Posible tensión adaptativa en músculos rotadores externos</li>
-        </ul>
-        <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
-        <ul>
-          <li>Técnicas de deslizamiento posterior y movilización específica del intervalo posterior</li>
-          <li>Ejercicios de estiramiento gradual para la cápsula posterior</li>
-          <li>Normalización del ritmo escapulohumeral y activación de estabilizadores escapulares</li>
-          <li>En deportistas de lanzamiento, incluir programa de prevención específico</li>
-        </ul>
-      `;
-      break;
-      
-    case "Flexión > Abducción > Rotación externa":
-      interpretacion = `
-        <p>Este patrón de restricción es compatible con <strong>compromiso de la cápsula inferior y anteroinferior</strong>, frecuentemente observado en:</p>
-        <p>Estructuras potencialmente involucradas:</p>
-        <ul>
-          <li>Cápsula glenohumeral inferior</li>
-          <li>Ligamento glenohumeral inferior (banda anterior)</li>
-          <li>Posibles adherencias en el receso axilar</li>
-        </ul>
-        <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
-        <ul>
-          <li>Técnicas de movilización con énfasis en el deslizamiento inferior y anterior</li>
-          <li>Restauración progresiva de la movilidad respetando la irritabilidad articular</li>
-          <li>Ejercicios de control motor para normalizar la artrocinemática</li>
-          <li>Valoración y tratamiento de la función escapular asociada</li>
-        </ul>
-      `;
-      break;
-      
-    default:
-      interpretacion = `
-        <p>El patrón de restricción identificado no corresponde con los patrones capsulares clásicos del hombro, lo que podría sugerir:</p>
-        <ul>
-          <li>Combinación de factores capsulares y no capsulares</li>
-          <li>Mecanismos compensatorios por disfunción de la articulación escapulotorácica</li>
-          <li>Posible implicación neurodinámica o alteración del control motor</li>
-        </ul>
-        <p>Se recomienda un abordaje que incluya:</p>
-        <ul>
-          <li>Evaluación completa del ritmo escapulohumeral</li>
-          <li>Valoración de elementos neuromiofasciales regionales</li>
-          <li>Técnicas combinadas articulares y neurodinámicas</li>
-          <li>Reeducación del control motor del complejo del hombro</li>
-        </ul>
-      `;
+  // Caso por defecto para otras regiones
+  else {
+    interpretacion = `<p>Seleccione un patrón de restricción para obtener una interpretación específica para esta región.</p>`;
   }
-}
-// Caso por defecto para otras regiones
-else {
-  interpretacion = `<p>Seleccione un patrón de restricción para obtener una interpretación específica para esta región.</p>`;
-}
   
   // Actualizar elemento de interpretación
   interpretacionElement.innerHTML = interpretacion;
