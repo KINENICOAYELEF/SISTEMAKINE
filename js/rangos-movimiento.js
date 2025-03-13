@@ -550,16 +550,6 @@ function evaluarROM(inputId, valorMin, valorModerado, valorNormal) {
     return;
   }
   
-  // Si no se proporcionaron valores de referencia, obtenerlos automáticamente
-  if (!valorNormal || valorNormal <= 0) {
-    const partes = inputId.split("_");
-    const region = partes[0]; // Ej: cervical, hombro, etc.
-    
-    // Usar el inputId completo para extraer correctamente el movimiento
-    valorNormal = obtenerValorNormativo(region, inputId);
-    valorModerado = valorNormal * 0.6; // 60% del valor normal como umbral moderado
-  }
-  
   // Evaluar estado según valores normativos
   let estado = "";
   let colorClase = "";
@@ -642,7 +632,7 @@ function calcularDiferencialAP(baseId) {
 // Interpretar el significado clínico del diferencial AP
 function interpretarDiferencialAP(baseId, diferencia) {
   const region = baseId.split('_')[0]; // Extraer región (ej: cervical, hombro)
-  const movimiento = extraerMovimientoDesdeId(baseId); // Extraer movimiento correctamente
+  const movimiento = baseId.split('_').slice(1).join('_'); // Extraer movimiento
   
   // Obtener elementos de interpretación
   const interpretacionElement = document.getElementById(`interpretacion-${region}-texto`);
@@ -662,10 +652,9 @@ function interpretarDiferencialAP(baseId, diferencia) {
         sugiere inhibición neuromuscular protectiva o debilidad de musculatura estabilizadora profunda. Considerar evaluación específica de flexores/extensores profundos cervicales y técnicas de activación muscular.</p>`;
         break;
       case 'hombro':
-    interpretacion = `<p class="alert alert-warning">El diferencial activo-pasivo significativo en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
-    sugiere marcada disfunción del control neuromuscular, posible inhibición artrogénica o miedo al movimiento. 
-    Recomendado abordaje integrado con reeducación del ritmo escapulohumeral y trabajo progresivo de confianza en el movimiento.</p>`;
-    break;
+        interpretacion = `<p class="alert alert-info">El diferencial activo-pasivo moderado en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
+        indica posible disfunción del ritmo escapulohumeral o inhibición neuromuscular de estabilizadores de escápula. Considerar evaluación de control motor escapular y ejercicios de reclutamiento progresivo.</p>`;
+        break;
       case 'lumbar':
         interpretacion = `<p class="alert alert-info">El diferencial activo-pasivo moderado en ${obtenerNombreMovimiento(baseId)} (${diferencia}°) 
         sugiere posible inhibición de musculatura estabilizadora local o alteración del control motor. Evaluar función de multífidos y transverso abdominal.</p>`;
@@ -711,7 +700,7 @@ function interpretarDiferencialAP(baseId, diferencia) {
 function obtenerNombreMovimiento(baseId) {
   const partes = baseId.split('_');
   const region = partes[0];
-  const movimiento = extraerMovimientoDesdeId(baseId);
+  const movimiento = partes.slice(1).join('_');
   
   const mapaMovimientos = {
     "flexion": "flexión",
@@ -794,9 +783,7 @@ function calcularDeficitFuncional(inputId) {
     const valor = parseFloat(input.value);
     if (!isNaN(valor)) {
       // Determinar déficit según el movimiento y región
-      let movimiento = input.id.replace(`${region}_`, "").replace("_activo", "");
-// Remover sufijos de lado (_izq o _der) si existen
-movimiento = movimiento.replace("_izq", "").replace("_der", "");
+      const movimiento = input.id.replace(`${region}_`, "").replace("_activo", "");
       const valorNormativo = obtenerValorNormativo(region, movimiento);
       
       if (valorNormativo > 0) {
@@ -857,20 +844,7 @@ movimiento = movimiento.replace("_izq", "").replace("_der", "");
 }
 
 // Obtener valor normativo para un movimiento específico
-function obtenerValorNormativo(region, movimientoOId) {
-  // Determinar si se pasó un ID completo o solo el nombre del movimiento
-  let movimiento = movimientoOId;
-  if (typeof movimientoOId === 'string' && movimientoOId.includes('_')) {
-    // Es un ID completo, extraer el movimiento
-    movimiento = extraerMovimientoDesdeId(movimientoOId);
-  }
-  
-  // Verificar si el movimiento incluye sufijos de lado (izq/der)
-  if (typeof movimiento === 'string') {
-    // Eliminar cualquier sufijo de lado que quede
-    movimiento = movimiento.replace('_izq', '').replace('_der', '');
-  }
-  
+function obtenerValorNormativo(region, movimiento) {
   // Mapa completo de valores normativos según región y movimiento
   const valoresNormativos = {
     "cervical": {
@@ -889,7 +863,7 @@ function obtenerValorNormativo(region, movimientoOId) {
       "rot_int": 70,
       "rot_ext": 90
     },
-    // Resto del objeto valoresNormativos sin cambios
+    // Valores agregados para completar todas las regiones
     "dorsal": {
       "flexion": 45,
       "extension": 25,
@@ -1075,46 +1049,30 @@ function obtenerActividadesAfectadas(region, deficitPromedio) {
       break;
       
     case "hombro":
-  if (deficitPromedio >= 25) {
-    actividades.push({
-      nombre: "Vestirse",
-      impacto: "Dificultad para colocarse prendas por encima de la cabeza o abrocharse por detrás.",
-      colorClase: colorClase
-    });
-  }
-  
-  if (deficitPromedio >= 15) {
-    actividades.push({
-      nombre: "Alcanzar objetos elevados",
-      impacto: "Limitación para alcanzar objetos en estanterías altas o elevar los brazos por encima de la cabeza.",
-      colorClase: colorClase
-    });
-  }
-  
-  if (deficitPromedio >= 35) {
-    actividades.push({
-      nombre: "Cargar objetos",
-      impacto: "Dificultad para transportar cargas, especialmente con el brazo separado del cuerpo.",
-      colorClase: colorClase
-    });
-  }
-  
-  if (deficitPromedio >= 45) {
-    actividades.push({
-      nombre: "Actividades laborales",
-      impacto: "Limitación significativa en trabajos con manipulación por encima del nivel del hombro o movimientos repetitivos.",
-      colorClase: colorClase
-    });
-  }
-  
-  if (deficitPromedio >= 30) {
-    actividades.push({
-      nombre: "Higiene personal",
-      impacto: "Dificultad para actividades como lavarse el cabello, peinarse o alcanzar la espalda.",
-      colorClase: colorClase
-    });
-  }
-  break;
+      if (deficitPromedio >= 25) {
+        actividades.push({
+          nombre: "Vestirse",
+          impacto: "Dificultad para colocarse prendas por encima de la cabeza o abrocharse detrás.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 15) {
+        actividades.push({
+          nombre: "Alcanzar objetos",
+          impacto: "Limitación para alcanzar objetos en estantes altos o detrás del cuerpo.",
+          colorClase: colorClase
+        });
+      }
+      
+      if (deficitPromedio >= 40) {
+        actividades.push({
+          nombre: "Cargar objetos",
+          impacto: "Dificultad para levantar y transportar cargas por encima del nivel del hombro.",
+          colorClase: colorClase
+        });
+      }
+      break;
       
     // Otras regiones
     case "lumbar":
@@ -1245,7 +1203,7 @@ function recopilarDatosROM(region) {
   const inputsActivos = document.querySelectorAll(`input[id^="${region}_"][id$="_activo"]`);
   
   inputsActivos.forEach(input => {
-    const movimiento = extraerMovimientoDesdeId(input.id);
+    const movimiento = input.id.replace(`${region}_`, '').replace('_activo', '');
     const valor = parseFloat(input.value);
     
     if (!isNaN(valor)) {
@@ -1538,16 +1496,13 @@ function generarConsideracionesROM(region, datos) {
       `;
       break;
     case "hombro":
-  consideraciones += `
-    <li>Analizar la calidad del ritmo escapulohumeral durante los movimientos.</li>
-    <li>Valorar la estabilidad dinámica durante actividades funcionales específicas.</li>
-    <li>Considerar la función de los estabilizadores escapulares y su activación secuencial.</li>
-    <li>Evaluar la influencia de la región cervical y torácica en la biomecánica del hombro.</li>
-    <li>En caso de diferencial activo-pasivo significativo, valorar inhibición neuromuscular y estrategias de activación.</li>
-    <li>Ante patrones de restricción capsular, considerar el estadio de irritabilidad para dosificar intervenciones.</li>
-    <li>En atletas de lanzamiento o deportes overhead, evaluar específicamente las adaptaciones posturales y funcionales.</li>
-  `;
-  break;
+      consideraciones += `
+        <li>Analizar la calidad del ritmo escapulohumeral durante los movimientos.</li>
+        <li>Evaluar la estabilidad dinámica durante actividades funcionales.</li>
+        <li>Considerar el efecto de la postura cervical y dorsal en la mecánica del hombro.</li>
+        <li>Valorar patrones de reclutamiento muscular y posibles compensaciones.</li>
+      `;
+      break;
     // Otras regiones...
     default:
       consideraciones += `
@@ -1597,120 +1552,37 @@ function mostrarInterpretacionCapsular(region) {
   // Interpretaciones específicas para cada patrón
   let interpretacion = "";
   
-  // Patrones específicos según la región
-  if (region === "cervical") {
-    switch (patronSelect.value) {
-      case "Rotación contralateral > Inclinación lateral contralateral > Extensión":
-        interpretacion = `
-          <p>Este patrón de restricción es consistente con <strong>disfunción de las articulaciones cigapofisarias (facetarias) C2-C7</strong>, particularmente en su componente de deslizamiento.</p>
-          <p>Estructuras potencialmente involucradas:</p>
-          <ul>
-            <li>Cápsula articular facetaria (especialmente su porción posterior)</li>
-            <li>Ligamentos longitudinales y potencialmente uncoarticulares</li>
-          </ul>
-          <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
-          <ul>
-            <li>Técnicas de movilización articular específica para restaurar el deslizamiento facetario</li>
-            <li>Ejercicios de control motor cervical con énfasis en rotación e inclinación lateral</li>
-            <li>Reeducación neuromuscular con retroalimentación</li>
-          </ul>
-        `;
-        break;
-      // Mantén aquí cualquier otro caso cervical existente
-      default:
-        interpretacion = `
-          <p>El patrón de restricción identificado no corresponde con los patrones capsulares clásicos cervicales, lo que podría indicar una combinación de factores o un mecanismo no típico.</p>
-          <p>Consideraciones clínicas:</p>
-          <ul>
-            <li>Evaluar factores neuromusculares y propioceptivos</li>
-            <li>Considerar influencias de segmentos adyacentes</li>
-            <li>Valorar aspectos posturales globales que puedan influir</li>
-          </ul>
-          <p>Se recomienda un abordaje integrado que combine técnicas articulares, neurodinámicas y de control motor adaptadas a las restricciones específicas observadas.</p>
-        `;
-    }
-  } 
-  // NUEVOS PATRONES PARA EL HOMBRO
-  else if (region === "hombro") {
-    switch (patronSelect.value) {
-      case "Rotación externa > Abducción > Rotación interna":
-        interpretacion = `
-          <p>Este patrón de restricción es consistente con <strong>capsulitis adhesiva o "hombro congelado"</strong> en fase inicial-intermedia, con compromiso predominante de la cápsula anteroinferior.</p>
-          <p>Estructuras potencialmente involucradas:</p>
-          <ul>
-            <li>Cápsula articular glenohumeral (especialmente porción anteroinferior)</li>
-            <li>Ligamento glenohumeral inferior</li>
-            <li>Receso axilar de la cápsula</li>
-          </ul>
-          <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
-          <ul>
-            <li>Técnicas de movilización articular específicas para la cápsula anteroinferior</li>
-            <li>Ejercicios pendulares y de deslizamiento gradual</li>
-            <li>Progresión cautelosa respetando el umbral de dolor para evitar exacerbaciones</li>
-            <li>Consideración de técnicas neuromoduladoras en casos de dolor severo</li>
-          </ul>
-        `;
-        break;
-        
-      case "Rotación interna > Extensión > Rotación externa":
-        interpretacion = `
-          <p>Este patrón de restricción sugiere <strong>compromiso de la cápsula posterior</strong>, frecuentemente asociado a patologías que afectan el espacio posterior como:</p>
-          <p>Estructuras potencialmente involucradas:</p>
-          <ul>
-            <li>Cápsula glenohumeral posterior</li>
-            <li>Intervalo rotador posterior</li>
-            <li>Posible tensión adaptativa en músculos rotadores externos</li>
-          </ul>
-          <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
-          <ul>
-            <li>Técnicas de deslizamiento posterior y movilización específica del intervalo posterior</li>
-            <li>Ejercicios de estiramiento gradual para la cápsula posterior</li>
-            <li>Normalización del ritmo escapulohumeral y activación de estabilizadores escapulares</li>
-            <li>En deportistas de lanzamiento, incluir programa de prevención específico</li>
-          </ul>
-        `;
-        break;
-        
-      case "Flexión > Abducción > Rotación externa":
-        interpretacion = `
-          <p>Este patrón de restricción es compatible con <strong>compromiso de la cápsula inferior y anteroinferior</strong>, frecuentemente observado en:</p>
-          <p>Estructuras potencialmente involucradas:</p>
-          <ul>
-            <li>Cápsula glenohumeral inferior</li>
-            <li>Ligamento glenohumeral inferior (banda anterior)</li>
-            <li>Posibles adherencias en el receso axilar</li>
-          </ul>
-          <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
-          <ul>
-            <li>Técnicas de movilización con énfasis en el deslizamiento inferior y anterior</li>
-            <li>Restauración progresiva de la movilidad respetando la irritabilidad articular</li>
-            <li>Ejercicios de control motor para normalizar la artrocinemática</li>
-            <li>Valoración y tratamiento de la función escapular asociada</li>
-          </ul>
-        `;
-        break;
-        
-      default:
-        interpretacion = `
-          <p>El patrón de restricción identificado no corresponde con los patrones capsulares clásicos del hombro, lo que podría sugerir:</p>
-          <ul>
-            <li>Combinación de factores capsulares y no capsulares</li>
-            <li>Mecanismos compensatorios por disfunción de la articulación escapulotorácica</li>
-            <li>Posible implicación neurodinámica o alteración del control motor</li>
-          </ul>
-          <p>Se recomienda un abordaje que incluya:</p>
-          <ul>
-            <li>Evaluación completa del ritmo escapulohumeral</li>
-            <li>Valoración de elementos neuromiofasciales regionales</li>
-            <li>Técnicas combinadas articulares y neurodinámicas</li>
-            <li>Reeducación del control motor del complejo del hombro</li>
-          </ul>
-        `;
-    }
-  }
-  // Caso por defecto para otras regiones
-  else {
-    interpretacion = `<p>Seleccione un patrón de restricción para obtener una interpretación específica para esta región.</p>`;
+  switch (patronSelect.value) {
+    case "Rotación contralateral > Inclinación lateral contralateral > Extensión":
+      interpretacion = `
+        <p>Este patrón de restricción es consistente con <strong>disfunción de las articulaciones cigapofisarias (facetarias) C2-C7</strong>, particularmente en su componente de deslizamiento.</p>
+        <p>Estructuras potencialmente involucradas:</p>
+        <ul>
+          <li>Cápsula articular facetaria (especialmente su porción posterior)</li>
+          <li>Ligamentos longitudinales y potencialmente uncoarticulares</li>
+        </ul>
+        <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
+        <ul>
+          <li>Técnicas de movilización articular específica para restaurar el deslizamiento facetario</li>
+          <li>Ejercicios de control motor cervical con énfasis en rotación e inclinación lateral</li>
+          <li>Reeducación neuromuscular con retroalimentación</li>
+        </ul>
+      `;
+      break;
+      
+    // Otros casos del switch...
+      
+    default:
+      interpretacion = `
+        <p>El patrón de restricción identificado no corresponde con los patrones capsulares clásicos, lo que podría indicar una combinación de factores o un mecanismo no típico.</p>
+        <p>Consideraciones clínicas:</p>
+        <ul>
+          <li>Evaluar factores neuromusculares y propioceptivos</li>
+          <li>Considerar influencias de segmentos adyacentes</li>
+          <li>Valorar aspectos posturales globales que puedan influir</li>
+        </ul>
+        <p>Se recomienda un abordaje integrado que combine técnicas articulares, neurodinámicas y de control motor adaptadas a las restricciones específicas observadas.</p>
+      `;
   }
   
   // Actualizar elemento de interpretación
@@ -2241,8 +2113,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const region = this.id.split('_')[0];
         const movimiento = this.id.replace(`${region}_`, "").replace("_activo", "");
         const valorMin = 0;
-        const valorNormal = obtenerValorNormativo(region, this.id);
-        const valorModerado = valorNormal * 0.6;
+        const valorModerado = obtenerValorNormativo(region, movimiento) * 0.6;
+        const valorNormal = obtenerValorNormativo(region, movimiento);
         
         evaluarROM(this.id, valorMin, valorModerado, valorNormal);
       }
@@ -2258,17 +2130,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
     });
-
-    // Forzar reevaluación de todos los campos activos
-  document.querySelectorAll('input[type="number"][id$="_activo"]').forEach(input => {
-    if (input.value) {
-      const region = input.id.split('_')[0];
-      const valorMin = 0;
-      const valorNormativo = obtenerValorNormativo(region, input.id);
-      const valorModerado = valorNormativo * 0.6;
-      
-      evaluarROM(input.id, valorMin, valorModerado, valorNormativo);
-    }
   });
   
   // Event listeners para selectores de dolor y funcionalidad
@@ -2305,41 +2166,4 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Pre-cargar estados visuales si hay datos guardados
   cargarDatosGuardados();
-
-
-  // Función auxiliar para extraer correctamente el movimiento desde cualquier ID
-function extraerMovimientoDesdeId(id) {
-  // Primero dividimos el ID por guiones bajos
-  const partes = id.split('_');
-  
-  // Verificar si contiene izq o der (sin necesidad de guiones adicionales)
-  const esBilateral = id.includes('_izq') || id.includes('_der');
-  
-  // Extraer el movimiento según el caso
-  let movimiento;
-  
-  if (esBilateral) {
-    // Para el caso bilateral, el movimiento suele ser el segundo elemento
-    if (partes.length >= 3) {
-      // Región_Movimiento_Lado_Activo - tomamos solo Movimiento
-      movimiento = partes[1];
-    } else {
-      // Caso de respaldo por si la estructura es diferente
-      movimiento = id.replace(partes[0] + '_', '')
-                    .replace('_izq', '').replace('_der', '')
-                    .replace('_activo', '').replace('_pasivo', '');
-    }
-  } else {
-    // No es bilateral, el segundo elemento es el movimiento
-    if (partes.length >= 2) {
-      movimiento = partes[1];
-    } else {
-      // Caso de respaldo
-      movimiento = id.replace(partes[0] + '_', '')
-                    .replace('_activo', '').replace('_pasivo', '');
-    }
-  }
-  
-  return movimiento;
-}
 });
