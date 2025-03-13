@@ -536,6 +536,7 @@ function mostrarTablaROM() {
 
 // Evaluar estado de rango de movimiento
 function evaluarROM(inputId, valorMin, valorModerado, valorNormal) {
+  console.log("Evaluando:", inputId, "con valores:", valorMin, valorModerado, valorNormal);
   const input = document.getElementById(inputId);
   const estadoElement = document.getElementById(inputId + "_estado");
   
@@ -784,7 +785,9 @@ function calcularDeficitFuncional(inputId) {
     const valor = parseFloat(input.value);
     if (!isNaN(valor)) {
       // Determinar déficit según el movimiento y región
-      const movimiento = input.id.replace(`${region}_`, "").replace("_activo", "");
+      let movimiento = input.id.replace(`${region}_`, "").replace("_activo", "");
+// Remover sufijos de lado (_izq o _der) si existen
+movimiento = movimiento.replace("_izq", "").replace("_der", "");
       const valorNormativo = obtenerValorNormativo(region, movimiento);
       
       if (valorNormativo > 0) {
