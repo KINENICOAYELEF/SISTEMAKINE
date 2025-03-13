@@ -550,6 +550,16 @@ function evaluarROM(inputId, valorMin, valorModerado, valorNormal) {
     return;
   }
   
+  // Si no se proporcionaron valores de referencia, obtenerlos automáticamente
+  if (!valorNormal || valorNormal <= 0) {
+    const partes = inputId.split("_");
+    const region = partes[0]; // Ej: cervical, hombro, etc.
+    
+    // Usar el inputId completo para extraer correctamente el movimiento
+    valorNormal = obtenerValorNormativo(region, inputId);
+    valorModerado = valorNormal * 0.6; // 60% del valor normal como umbral moderado
+  }
+  
   // Evaluar estado según valores normativos
   let estado = "";
   let colorClase = "";
@@ -850,10 +860,17 @@ movimiento = movimiento.replace("_izq", "").replace("_der", "");
 function obtenerValorNormativo(region, movimientoOId) {
   // Determinar si se pasó un ID completo o solo el nombre del movimiento
   let movimiento = movimientoOId;
-  if (movimientoOId.includes('_')) {
+  if (typeof movimientoOId === 'string' && movimientoOId.includes('_')) {
     // Es un ID completo, extraer el movimiento
     movimiento = extraerMovimientoDesdeId(movimientoOId);
   }
+  
+  // Verificar si el movimiento incluye sufijos de lado (izq/der)
+  if (typeof movimiento === 'string') {
+    // Eliminar cualquier sufijo de lado que quede
+    movimiento = movimiento.replace('_izq', '').replace('_der', '');
+  }
+  
   // Mapa completo de valores normativos según región y movimiento
   const valoresNormativos = {
     "cervical": {
@@ -872,7 +889,7 @@ function obtenerValorNormativo(region, movimientoOId) {
       "rot_int": 70,
       "rot_ext": 90
     },
-    // Valores agregados para completar todas las regiones
+    // Resto del objeto valoresNormativos sin cambios
     "dorsal": {
       "flexion": 45,
       "extension": 25,
@@ -2295,26 +2312,32 @@ function extraerMovimientoDesdeId(id) {
   // Primero dividimos el ID por guiones bajos
   const partes = id.split('_');
   
-  // Verificar si contiene _izq_ o _der_ para identificar si es bilateral
-  const esBilateral = id.includes('_izq_') || id.includes('_der_');
+  // Verificar si contiene izq o der (sin necesidad de guiones adicionales)
+  const esBilateral = id.includes('_izq') || id.includes('_der');
   
   // Extraer el movimiento según el caso
   let movimiento;
   
   if (esBilateral) {
-    // Es bilateral, así que el formato es region_movimiento_lado_activo
-    // Remover región
-    let temp = id.replace(partes[0] + '_', '');
-    // Remover _izq_activo o _der_activo o _izq_pasivo o _der_pasivo
-    temp = temp.replace('_izq_activo', '').replace('_der_activo', '').replace('_izq_pasivo', '').replace('_der_pasivo', '');
-    movimiento = temp;
+    // Para el caso bilateral, el movimiento suele ser el segundo elemento
+    if (partes.length >= 3) {
+      // Región_Movimiento_Lado_Activo - tomamos solo Movimiento
+      movimiento = partes[1];
+    } else {
+      // Caso de respaldo por si la estructura es diferente
+      movimiento = id.replace(partes[0] + '_', '')
+                    .replace('_izq', '').replace('_der', '')
+                    .replace('_activo', '').replace('_pasivo', '');
+    }
   } else {
-    // No es bilateral, así que el formato es region_movimiento_activo
-    // Remover región
-    let temp = id.replace(partes[0] + '_', '');
-    // Remover _activo o _pasivo
-    temp = temp.replace('_activo', '').replace('_pasivo', '');
-    movimiento = temp;
+    // No es bilateral, el segundo elemento es el movimiento
+    if (partes.length >= 2) {
+      movimiento = partes[1];
+    } else {
+      // Caso de respaldo
+      movimiento = id.replace(partes[0] + '_', '')
+                    .replace('_activo', '').replace('_pasivo', '');
+    }
   }
   
   return movimiento;
