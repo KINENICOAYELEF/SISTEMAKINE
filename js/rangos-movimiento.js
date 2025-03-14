@@ -899,13 +899,20 @@ function calcularDeficitFuncional(inputId) {
 function obtenerValorNormativo(region, movimiento) {
   // Mapa completo de valores normativos según región y movimiento
   const valoresNormativos = {
+    // Función mejorada para obtener valores normativos
+function obtenerValorNormativo(region, movimiento) {
+  // Normalizar el movimiento para casos especiales
+  const movNormalizado = movimiento.replace('incl_der', 'incl').replace('incl_izq', 'incl')
+                                  .replace('rot_der', 'rot').replace('rot_izq', 'rot')
+                                  .replace('rot_int', 'rot_int').replace('rot_ext', 'rot_ext');
+  
+  // Mapa completo de valores normativos según región y movimiento
+  const valoresNormativos = {
     "cervical": {
       "flexion": 45,
       "extension": 45,
-      "incl_der": 45,
-      "incl_izq": 45,
-      "rot_der": 70,
-      "rot_izq": 70
+      "incl": 45,
+      "rot": 70
     },
     "hombro": {
       "flexion": 180,
@@ -915,30 +922,23 @@ function obtenerValorNormativo(region, movimiento) {
       "rot_int": 70,
       "rot_ext": 90
     },
-    // Valores agregados para completar todas las regiones
     "dorsal": {
       "flexion": 45,
       "extension": 25,
-      "incl_der": 20,
-      "incl_izq": 20,
-      "rot_der": 35,
-      "rot_izq": 35
+      "incl": 20,
+      "rot": 35
     },
     "lumbar": {
       "flexion": 60,
       "extension": 25,
-      "incl_der": 25,
-      "incl_izq": 25,
-      "rot_der": 30,
-      "rot_izq": 30
+      "incl": 25,
+      "rot": 30
     },
     "pelvis": {
       "anteversion": 15,
       "retroversion": 15,
-      "elevacion_der": 10,
-      "elevacion_izq": 10,
-      "rotacion_der": 15,
-      "rotacion_izq": 15
+      "elevacion": 10,
+      "rotacion": 15
     },
     "codo": {
       "flexion": 150,
@@ -972,8 +972,7 @@ function obtenerValorNormativo(region, movimiento) {
     },
     "atm": {
       "apertura": 40,
-      "lateralizacion_der": 10,
-      "lateralizacion_izq": 10,
+      "lateralizacion": 10,
       "protrusion": 10,
       "retrusion": 5
     }
@@ -2352,18 +2351,22 @@ document.addEventListener('DOMContentLoaded', function() {
   cargarDatosGuardados();
 
   // Función auxiliar para extraer correctamente el movimiento desde cualquier ID
+// Función auxiliar para extraer correctamente el movimiento desde cualquier ID
 function extraerMovimientoDesdeId(id) {
-  // Dividimos el ID por guiones bajos
   const partes = id.split('_');
+  const region = partes[0];
   
-  // Para regiones bilaterales como hombro, necesitamos extraer solo el movimiento
-  // En casos como "hombro_flexion_der_activo", queremos extraer "flexion"
-  if (partes.length > 1) {
-    return partes[1];  // La segunda parte siempre es el movimiento
+  // Detectar si el ID contiene lado (izq/der)
+  if (partes.length >= 4 && (partes[2] === 'izq' || partes[2] === 'der')) {
+    // Formato: region_movimiento_lado_tipo (ej. hombro_flexion_der_activo)
+    return partes[1];
+  } else if (partes.length >= 3) {
+    // Formato: region_movimiento_tipo (ej. cervical_flexion_activo)
+    return partes[1];
   }
   
-  // Si algo sale mal, devolvemos el ID original
-  return id;
+  // Si no se puede determinar, devolver la parte después de la región
+  return id.replace(region + '_', '').split('_')[0];
 }
 
   // Añadir event listeners específicos para hombro
