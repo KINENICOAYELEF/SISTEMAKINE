@@ -783,38 +783,57 @@ function calcularDeficitFuncional(inputId) {
   const interpretacionElement = document.getElementById(region + "_deficit_interpretacion");
   const impactoActividadesElement = document.getElementById(region + "_impacto_actividades");
   
-  if (!deficitTotalElement || !deficitVisualElement || !interpretacionElement || !impactoActividadesElement) return;
+  if (!deficitTotalElement || !deficitVisualElement) {
+    console.log("Elementos de déficit no encontrados para " + region);
+    return;
+  }
   
   // Recopilar todos los inputs de ROM activo para esta región
   const inputsActivos = document.querySelectorAll(`input[id^="${region}_"][id$="_activo"]`);
   
   // Si no hay inputs suficientes, salir
-  if (inputsActivos.length === 0) return;
+  if (inputsActivos.length === 0) {
+    console.log("No se encontraron inputs activos para " + region);
+    return;
+  }
   
   // Calcular déficit promedio
   let totalDeficit = 0;
   let movimientosEvaluados = 0;
   
+  // Para debugging
+  console.log("Calculando déficit para " + region + " con " + inputsActivos.length + " inputs");
+  
   inputsActivos.forEach(input => {
     const valor = parseFloat(input.value);
     if (!isNaN(valor)) {
-      // Determinar déficit según el movimiento y región
-      const movimiento = input.id.replace(`${region}_`, "").replace("_activo", "");
+      // Obtener el movimiento base (flexion, extension, etc.)
+      const movimiento = extraerMovimientoDesdeId(input.id);
+      
+      // Obtener valor normativo
       const valorNormativo = obtenerValorNormativo(region, movimiento);
       
       if (valorNormativo > 0) {
+        // Calcular déficit en porcentaje
         const deficitPorcentaje = Math.max(0, Math.min(100, 100 - (valor / valorNormativo * 100)));
         totalDeficit += deficitPorcentaje;
         movimientosEvaluados++;
+        
+        // Para debugging
+        console.log("  Movimiento: " + movimiento + ", Valor: " + valor + ", Normativo: " + valorNormativo + ", Déficit: " + deficitPorcentaje.toFixed(1) + "%");
       }
     }
   });
   
   // Si no hay movimientos evaluados, salir
-  if (movimientosEvaluados === 0) return;
+  if (movimientosEvaluados === 0) {
+    console.log("No hay movimientos evaluados con valor para " + region);
+    return;
+  }
   
   // Calcular déficit promedio
   const deficitPromedio = totalDeficit / movimientosEvaluados;
+  console.log("Déficit promedio calculado: " + deficitPromedio.toFixed(1) + "%");
   
   // Actualizar elementos visuales
   deficitTotalElement.value = deficitPromedio.toFixed(1) + "%";
@@ -824,7 +843,11 @@ function calcularDeficitFuncional(inputId) {
     deficitVisualElement.querySelector('.progress-bar').style.width = deficitPromedio + "%";
   } else {
     console.log("Error: No se encontró elemento de barra visual para déficit de " + region);
-    return;
+    // Crear elementos si faltan
+    if (deficitVisualElement && !deficitVisualElement.querySelector('.progress-bar')) {
+      deficitVisualElement.innerHTML = '<div class="progress"><div class="progress-bar" style="width: 0%"></div></div>';
+      deficitVisualElement.querySelector('.progress-bar').style.width = deficitPromedio + "%";
+    }
   }
   
   // Cambiar color según severidad
@@ -845,18 +868,31 @@ function calcularDeficitFuncional(inputId) {
     interpretacion = "Limitación severa";
   }
   
-  deficitVisualElement.querySelector('.progress-bar').className = `progress-bar ${colorClase}`;
+  if (deficitVisualElement && deficitVisualElement.querySelector('.progress-bar')) {
+    deficitVisualElement.querySelector('.progress-bar').className = `progress-bar ${colorClase}`;
+  }
   
-  // Actualizar interpretación
-  interpretacionElement.innerHTML = '';
-  const option = document.createElement('option');
-  option.value = interpretacion.toLowerCase().replace(" ", "_");
-  option.text = interpretacion;
-  option.selected = true;
-  interpretacionElement.appendChild(option);
+  // Actualizar interpretación si existe el elemento
+  if (interpretacionElement) {
+    // Limpiar opciones existentes
+    interpretacionElement.innerHTML = '';
+    const option = document.createElement('option');
+    option.value = interpretacion.toLowerCase().replace(" ", "_");
+    option.text = interpretacion;
+    option.selected = true;
+    interpretacionElement.appendChild(option);
+  }
   
-  // Actualizar impacto en actividades
-  actualizarImpactoActividades(region, deficitPromedio);
+  // Actualizar impacto en actividades si existe el elemento
+  if (impactoActividadesElement) {
+    actualizarImpactoActividades(region, deficitPromedio);
+  }
+  
+  // Forzar actualización de recomendaciones
+  actualizarRecomendacionesROM(region);
+  
+  // Devolver el déficit para uso en otras funciones
+  return deficitPromedio;
 }
 
 // Obtener valor normativo para un movimiento específico
@@ -1140,24 +1176,43 @@ function obtenerActividadesAfectadas(region, deficitPromedio) {
 
 // Actualizar las recomendaciones basadas en la evaluación
 function actualizarRecomendacionesROM(region) {
+  console.log("Actualizando recomendaciones para " + region);
+  
   // Elementos de interpretación y recomendaciones
   const interpretacionElement = document.getElementById(`interpretacion-${region}-texto`);
   const recomendacionesElement = document.getElementById(`recomendaciones-${region}-texto`);
   const consideracionesElement = document.getElementById(`consideraciones-${region}-texto`);
   
-  if (!interpretacionElement || !recomendacionesElement || !consideracionesElement) return;
+  if (!interpretacionElement) {
+    console.log(`No se encontró elemento interpretacion-${region}-texto`);
+    return;
+  }
+  if (!recomendacionesElement) {
+    console.log(`No se encontró elemento recomendaciones-${region}-texto`);
+    return;
+  }
+  if (!consideracionesElement) {
+    console.log(`No se encontró elemento consideraciones-${region}-texto`);
+    return;
+  }
   
   // Recopilar todos los datos para esta región
   const datos = recopilarDatosROM(region);
+  console.log("Datos recopilados:", datos);
   
-  // Verificar si hay algún dato disponible (ya sea ángulos, funcionalidad o dolor)
+  // Verificar si hay algún dato disponible
   const hayDatos = 
     Object.keys(datos.rangosActivos).length > 0 || 
     Object.keys(datos.dolores).length > 0 || 
     Object.keys(datos.funcionalidades).length > 0;
   
-  // Si no hay ningún dato, salir
-  if (!hayDatos) return;
+  // Si no hay ningún dato, mostrar mensaje básico y salir
+  if (!hayDatos) {
+    interpretacionElement.innerHTML = `<p class="alert alert-info">Complete la evaluación de ${region} para generar interpretaciones.</p>`;
+    recomendacionesElement.innerHTML = `<p>Añada valores de rango de movimiento para obtener recomendaciones.</p>`;
+    consideracionesElement.innerHTML = `<p>Complete la evaluación para recibir consideraciones específicas.</p>`;
+    return;
+  }
   
   // Generar interpretación
   let interpretacion = generarInterpretacionROM(region, datos);
@@ -1171,16 +1226,14 @@ function actualizarRecomendacionesROM(region) {
   let consideraciones = generarConsideracionesROM(region, datos);
   consideracionesElement.innerHTML = consideraciones;
   
-  // Actualizar badge de estado solo si hay datos reales
-  if (Object.keys(datos.rangosActivos).length > 0 || 
-      Object.keys(datos.dolores).length > 0 || 
-      Object.keys(datos.funcionalidades).length > 0) {
-    const romBadge = document.getElementById("rom-evaluation-badge");
-    if (romBadge) {
-      romBadge.innerHTML = "Evaluado";
-      romBadge.className = "resultado-badge badge bg-success";
-    }
+  // Actualizar badge de estado
+  const romBadge = document.getElementById("rom-evaluation-badge");
+  if (romBadge) {
+    romBadge.innerHTML = "Evaluado";
+    romBadge.className = "resultado-badge badge bg-success";
   }
+  
+  console.log("Recomendaciones actualizadas para " + region);
 }
 
 // Recopilar datos ROM
@@ -2280,4 +2333,107 @@ function extraerMovimientoDesdeId(id) {
   // Si algo sale mal, devolvemos el ID original
   return id;
 }
+
+  // Añadir event listeners específicos para hombro
+function inicializarEventListenersHombro() {
+  // Seleccionar todos los inputs de rango para hombro
+  const inputsHombro = document.querySelectorAll('input[id^="hombro_"][type="number"]');
+  
+  inputsHombro.forEach(input => {
+    // Agregar listener con manejo de evento
+    input.addEventListener('input', function() {
+      console.log('Cambio en input de hombro:', this.id, 'valor:', this.value);
+      
+      // Para inputs activos, evaluar ROM y calcular déficit
+      if (this.id.endsWith('_activo')) {
+        const region = 'hombro';
+        const movimiento = extraerMovimientoDesdeId(this.id);
+        const valorNormal = obtenerValorNormativo(region, movimiento);
+        const valorModerado = valorNormal * 0.6;
+        
+        console.log(`Evaluando ROM ${movimiento} con valor normal ${valorNormal}`);
+        evaluarROM(this.id, 0, valorModerado, valorNormal);
+        
+        // Forzar cálculo de déficit después de un breve retraso
+        setTimeout(() => {
+          calcularDeficitFuncional(this.id);
+          actualizarRecomendacionesROM('hombro');
+        }, 100);
+      }
+      
+      // Para inputs pasivos, calcular diferencial
+      if (this.id.endsWith('_pasivo')) {
+        const baseId = this.id.replace('_pasivo', '');
+        const activoId = baseId + '_activo';
+        const activoInput = document.getElementById(activoId);
+        
+        if (activoInput && activoInput.value) {
+          calcularDiferencialAP(baseId);
+          
+          // Forzar actualización de recomendaciones
+          setTimeout(() => {
+            actualizarRecomendacionesROM('hombro');
+          }, 100);
+        }
+      }
+    });
+    
+    // También agregar listener para evento change (cuando pierde foco)
+    input.addEventListener('change', function() {
+      // Forzar actualización global después de cambios
+      setTimeout(() => {
+        calcularDeficitFuncional(this.id);
+        actualizarRecomendacionesROM('hombro');
+        
+        // Actualizar objetivos y puntuación global
+        calcularPuntuacionGlobal();
+        generarObjetivosTerapeuticos();
+      }, 200);
+    });
+  });
+  
+  console.log('Event listeners para hombro inicializados');
+}
+
+// Llamar a la función al final de la inicialización
+inicializarEventListenersHombro();
+
+  // Añadir botón para cálculo manual de déficit del hombro
+function agregarBotonCalculoManual() {
+  const contenedorCalculadora = document.querySelector('.calculadora-deficit-hombro');
+  
+  if (contenedorCalculadora) {
+    // Crear botón si no existe
+    if (!document.getElementById('btn_calcular_deficit_hombro')) {
+      const boton = document.createElement('button');
+      boton.id = 'btn_calcular_deficit_hombro';
+      boton.className = 'btn btn-primary mt-2';
+      boton.innerHTML = '<i class="fas fa-calculator"></i> Calcular Déficit';
+      boton.onclick = function() {
+        // Forzar cálculo del déficit tomando cualquier input como referencia
+        const primerInput = document.querySelector('input[id^="hombro_"][id$="_activo"]');
+        if (primerInput) {
+          calcularDeficitFuncional(primerInput.id);
+          actualizarRecomendacionesROM('hombro');
+          
+          // Actualizar objetivos y puntuación global
+          calcularPuntuacionGlobal();
+          generarObjetivosTerapeuticos();
+          
+          // Mostrar mensaje de éxito
+          alert('Cálculo de déficit funcional completado');
+        } else {
+          alert('No se encontraron inputs para calcular el déficit');
+        }
+      };
+      
+      // Insertar el botón después del título de la calculadora
+      contenedorCalculadora.insertAdjacentElement('beforeend', boton);
+      console.log('Botón de cálculo manual añadido');
+    }
+  }
+}
+
+// Llamar a la función para agregar el botón
+setTimeout(agregarBotonCalculoManual, 1000);
 });
