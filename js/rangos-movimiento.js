@@ -1236,8 +1236,10 @@ function actualizarRecomendacionesROM(region) {
   console.log("Recomendaciones actualizadas para " + region);
 }
 
-// Recopilar datos ROM
+// Recopilar datos ROM - VERSIÓN CORREGIDA
 function recopilarDatosROM(region) {
+  console.log("Recopilando datos para región: " + region);
+  
   const datos = {
     rangosActivos: {},
     rangosPasivos: {},
@@ -1247,52 +1249,81 @@ function recopilarDatosROM(region) {
     movimientosAccesorios: {}
   };
   
-  // Primero recopilamos todos los selectores de dolor y funcionalidad disponibles
-  // para capturar datos incluso si no hay ángulos ingresados
-  
-  // Recopilar datos de dolor para la región
+  // MEJORA 1: Recopilar datos de dolor para la región
   const selectoresDolor = document.querySelectorAll(`select[id^="${region}_"][id$="_dolor"]`);
+  console.log(`Encontrados ${selectoresDolor.length} selectores de dolor`);
+  
   selectoresDolor.forEach(select => {
     if (select.value) {
-      const movimiento = select.id.replace(`${region}_`, '').replace('_dolor', '');
-      datos.dolores[movimiento] = select.value;
+      // Extraer el nombre del movimiento del ID
+      const idCompleto = select.id;
+      const movimientoCompleto = idCompleto.replace(`${region}_`, '').replace('_dolor', '');
+      
+      // Guardar datos
+      datos.dolores[movimientoCompleto] = select.value;
+      console.log(`Dolor en ${movimientoCompleto}: ${select.value}`);
     }
   });
   
-  // Recopilar datos de funcionalidad para la región
+  // MEJORA 2: Recopilar datos de funcionalidad para la región
   const selectoresFuncionalidad = document.querySelectorAll(`select[id^="${region}_"][id$="_funcionalidad"]`);
+  console.log(`Encontrados ${selectoresFuncionalidad.length} selectores de funcionalidad`);
+  
   selectoresFuncionalidad.forEach(select => {
     if (select.value) {
-      const movimiento = select.id.replace(`${region}_`, '').replace('_funcionalidad', '');
-      datos.funcionalidades[movimiento] = select.value;
+      const idCompleto = select.id;
+      const movimientoCompleto = idCompleto.replace(`${region}_`, '').replace('_funcionalidad', '');
+      
+      datos.funcionalidades[movimientoCompleto] = select.value;
+      console.log(`Funcionalidad en ${movimientoCompleto}: ${select.value}`);
     }
   });
   
-  // Buscar todos los inputs de rango activo para esta región
+  // MEJORA 3: Buscar todos los inputs de rango activo con identificación más precisa
   const inputsActivos = document.querySelectorAll(`input[id^="${region}_"][id$="_activo"]`);
+  console.log(`Encontrados ${inputsActivos.length} inputs activos`);
   
   inputsActivos.forEach(input => {
-    const movimiento = input.id.replace(`${region}_`, '').replace('_activo', '');
-    const valor = parseFloat(input.value);
-    
-    if (!isNaN(valor)) {
-      datos.rangosActivos[movimiento] = valor;
+    if (input.value) {
+      const idCompleto = input.id;
+      const valor = parseFloat(input.value);
+      
+      // Obtener el movimiento completo para preservar información
+      const movimientoCompleto = idCompleto.replace(`${region}_`, '').replace('_activo', '');
+      
+      // Identificar el tipo de movimiento básico para valores normativos
+      let movimientoBasico = "";
+      
+      if (idCompleto.includes('_flexion')) movimientoBasico = "flexion";
+      else if (idCompleto.includes('_extension')) movimientoBasico = "extension";
+      else if (idCompleto.includes('_abduccion')) movimientoBasico = "abduccion";
+      else if (idCompleto.includes('_aduccion')) movimientoBasico = "aduccion";
+      else if (idCompleto.includes('_rot_int')) movimientoBasico = "rot_int";
+      else if (idCompleto.includes('_rot_ext')) movimientoBasico = "rot_ext";
+      
+      console.log(`Movimiento identificado: ${movimientoCompleto} (básico: ${movimientoBasico})`);
+      
+      // Guardar ambos para diferentes propósitos
+      datos.rangosActivos[movimientoCompleto] = valor;
+      
+      // También guardar una versión simplificada para valores normativos
+      if (movimientoBasico && !datos.rangosActivos[movimientoBasico]) {
+        datos.rangosActivos[movimientoBasico] = valor;
+      }
       
       // Buscar el rango pasivo correspondiente
-      const inputPasivo = document.getElementById(`${region}_${movimiento}_pasivo`);
-      if (inputPasivo) {
+      const inputPasivo = document.getElementById(`${region}_${movimientoCompleto}_pasivo`);
+      if (inputPasivo && inputPasivo.value) {
         const valorPasivo = parseFloat(inputPasivo.value);
-        if (!isNaN(valorPasivo)) {
-          datos.rangosPasivos[movimiento] = valorPasivo;
-          
-          // Calcular diferencial
-          datos.diferenciales[movimiento] = valorPasivo - valor;
-        }
+        datos.rangosPasivos[movimientoCompleto] = valorPasivo;
+        
+        // Calcular diferencial
+        datos.diferenciales[movimientoCompleto] = valorPasivo - valor;
       }
     }
   });
 
-  // Recopilar datos de movimientos accesorios
+  // MEJORA 4: Recopilar datos de movimientos accesorios (sin cambios)
   const selectoresAccesorios = document.querySelectorAll(`select[id^="${region}_acc_"][id$="_calidad"]`);
   
   selectoresAccesorios.forEach(select => {
@@ -1309,6 +1340,7 @@ function recopilarDatosROM(region) {
     }
   });
   
+  console.log("Datos recopilados:", datos);
   return datos;
 }
 
@@ -2436,4 +2468,37 @@ function agregarBotonCalculoManual() {
 
 // Llamar a la función para agregar el botón
 setTimeout(agregarBotonCalculoManual, 1000);
+
+  // Añadir botón de ayuda que actualiza los cálculos del hombro
+function añadirBotonActualizacionHombro() {
+  const contenedor = document.querySelector('#tabla_rom_hombro') || document.querySelector('div[id*="hombro"]');
+  
+  if (contenedor && !document.getElementById('btn_actualizar_hombro')) {
+    const boton = document.createElement('button');
+    boton.id = 'btn_actualizar_hombro';
+    boton.className = 'btn btn-primary mt-3 mb-3';
+    boton.innerHTML = '<i class="fas fa-sync"></i> Actualizar Cálculos e Interpretación';
+    boton.style.width = '100%';
+    
+    boton.onclick = function() {
+      // Forzar actualización de todos los datos
+      const primerInput = document.querySelector('input[id^="hombro_"][id$="_activo"]');
+      if (primerInput) {
+        const region = 'hombro';
+        evaluarROM(primerInput.id);
+        calcularDeficitFuncional(primerInput.id);
+        actualizarRecomendacionesROM('hombro');
+        alert('Cálculos e interpretaciones actualizados exitosamente');
+      }
+      return false;
+    };
+    
+    contenedor.appendChild(boton);
+  }
+}
+
+// Inicializar botón después de cargar la página
+setTimeout(añadirBotonActualizacionHombro, 1000);
+
+  
 });
