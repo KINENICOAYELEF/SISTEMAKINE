@@ -1,5 +1,41 @@
 // Funciones para la sección de Patrones de Movimiento Funcionales
 
+// Función de diagnóstico para mostrar IDs de elementos importantes
+function mostrarElementosDiagnostico() {
+  console.log("=== DIAGNÓSTICO DE ELEMENTOS ===");
+  
+  // Verificar elementos de hombro
+  const elementos = [
+    "hombro_deficit_total", 
+    "hombro_deficit_visual",
+    "interpretacion-hombro-texto",
+    "recomendaciones-hombro-texto",
+    "consideraciones-hombro-texto"
+  ];
+  
+  elementos.forEach(id => {
+    const elemento = document.getElementById(id);
+    console.log(`${id}: ${elemento ? "ENCONTRADO" : "NO ENCONTRADO"}`);
+  });
+  
+  // Verificar inputs de hombro
+  const inputsHombro = document.querySelectorAll('input[id^="hombro_"]');
+  console.log(`Inputs de hombro encontrados: ${inputsHombro.length}`);
+  
+  // Verificar selectores de dolor y funcionalidad
+  const selectoresDolor = document.querySelectorAll('select[id^="hombro_"][id$="_dolor"]');
+  console.log(`Selectores de dolor encontrados: ${selectoresDolor.length}`);
+  
+  const selectoresFuncionalidad = document.querySelectorAll('select[id^="hombro_"][id$="_funcionalidad"]');
+  console.log(`Selectores de funcionalidad encontrados: ${selectoresFuncionalidad.length}`);
+}
+
+// Ejecutar diagnóstico cuando la página cargue
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(mostrarElementosDiagnostico, 1000);
+  
+  // Resto del código existente...
+
 // Evaluar patrón de movimiento y actualizar estado visual
 function evaluarPatronMovimiento(elemento, idPatron) {
   const valor = elemento.value;
