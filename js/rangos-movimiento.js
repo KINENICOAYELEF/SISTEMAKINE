@@ -1353,9 +1353,9 @@ function actualizarRecomendacionesROM(region) {
     
     // Recopilar todos los datos para esta región
     const datos = recopilarDatosROM(region);
-    console.log("Datos recopilados:", datos);
+    console.log(`Datos recopilados para actualizar recomendaciones de ${region}:`, datos);
     
-    // Verificar si hay algún dato disponible
+    // Verificar si hay algún dato disponible (incluso solo dolor o funcionalidad)
     const hayDatos = 
       Object.keys(datos.rangosActivos).length > 0 || 
       Object.keys(datos.dolores).length > 0 || 
@@ -1364,7 +1364,7 @@ function actualizarRecomendacionesROM(region) {
     // Si no hay ningún dato, mostrar mensaje básico y salir
     if (!hayDatos) {
       interpretacionElement.innerHTML = `<p class="alert alert-info">Complete la evaluación de ${region} para generar interpretaciones.</p>`;
-      recomendacionesElement.innerHTML = `<p>Añada valores de rango de movimiento para obtener recomendaciones.</p>`;
+      recomendacionesElement.innerHTML = `<p>Añada valores de rango de movimiento, dolor o funcionalidad para obtener recomendaciones.</p>`;
       if (consideracionesElement) {
         consideracionesElement.innerHTML = `<p>Complete la evaluación para recibir consideraciones específicas.</p>`;
       }
@@ -1399,7 +1399,6 @@ function actualizarRecomendacionesROM(region) {
     return false;
   }
 }
-
 // FUNCIÓN MEJORADA: Recopilar datos ROM
 function recopilarDatosROM(region) {
   try {
@@ -2605,51 +2604,22 @@ function toggleSeccion(id) {
 }
 
 // FUNCIONES ADICIONALES PARA SOLUCIONAR PROBLEMAS ESPECÍFICOS
-
 // Función para actualizar manualmente todos los cálculos de una región
 function actualizarCalculosRegion(region) {
   try {
-    console.log(`Actualizando cálculos para región ${region}`);
+    alert(`Actualizando cálculos para región ${region}...`);
+    const resultado = forzarActualizacionRegion(region);
     
-    // Buscar todos los inputs activos para la región
-    let inputsActivos;
-    if (region === 'hombro' || region === 'cadera') {
-      // Para regiones bilaterales
-      inputsActivos = document.querySelectorAll(`input[id^="${region}_"][id*="_activo"]`);
+    if (resultado) {
+      alert(`Cálculos e interpretaciones de ${region} actualizados correctamente`);
     } else {
-      // Para regiones no bilaterales
-      inputsActivos = document.querySelectorAll(`input[id^="${region}_"][id$="_activo"]`);
+      alert(`Hubo problemas al actualizar ${region}. Asegúrate de haber ingresado al menos un tipo de dato (ángulos, dolor o funcionalidad)`);
     }
     
-    // Calcular todos los diferenciales
-    inputsActivos.forEach(input => {
-      if (input.value) {
-        // Evaluar ROM para este input
-        evaluarROM(input.id);
-        
-        // Obtener ID base para diferencial
-        let baseId = input.id.replace('_activo', '');
-        
-        // Buscar input pasivo correspondiente
-        const inputPasivo = document.getElementById(baseId + '_pasivo');
-        if (inputPasivo && inputPasivo.value) {
-          calcularDiferencialAP(baseId);
-        }
-      }
-    });
-    
-    // Calcular déficit funcional si hay inputs disponibles
-    if (inputsActivos.length > 0) {
-      calcularDeficitFuncional(inputsActivos[0].id);
-    }
-    
-    // Actualizar recomendaciones
-    actualizarRecomendacionesROM(region);
-    
-    console.log(`Cálculos actualizados para ${region}`);
-    return true;
+    return resultado;
   } catch (error) {
     console.error(`Error en actualizarCalculosRegion para ${region}:`, error);
+    alert(`Error al actualizar ${region}. Intenta recargar la página.`);
     return false;
   }
 }
@@ -2701,7 +2671,8 @@ function actualizarTodosLosCalculos() {
     const regiones = ['cervical', 'dorsal', 'lumbar', 'pelvis', 'hombro', 'codo', 'muneca', 'cadera', 'rodilla', 'tobillo', 'atm'];
     
     regiones.forEach(region => {
-      actualizarCalculosRegion(region);
+      // Forzar actualización completa de la región
+      forzarActualizacionRegion(region);
     });
     
     // Actualizar puntuación global y objetivos
@@ -2709,9 +2680,11 @@ function actualizarTodosLosCalculos() {
     generarObjetivosTerapeuticos();
     
     console.log("Todos los cálculos actualizados");
+    alert("Actualización completa. Si no ves actualizaciones, revisa que hayas ingresado datos en al menos uno de estos campos: ángulos, dolor o funcionalidad.");
     return true;
   } catch (error) {
     console.error("Error en actualizarTodosLosCalculos:", error);
+    alert("Ocurrió un error durante la actualización. Intenta recargar la página.");
     return false;
   }
 }
@@ -3054,4 +3027,92 @@ function diagnosticarSistema() {
     navegador: navigator.userAgent,
     funcionesDisponibles: funcionesCriticas.filter(f => typeof window[f] === 'function')
   };
+}
+
+// Función mejorada para forzar la actualización de una región
+function forzarActualizacionRegion(region) {
+  try {
+    console.log(`Forzando actualización para región ${region}`);
+    
+    // 1. Recopilar todos los datos disponibles
+    const datos = recopilarDatosROM(region);
+    console.log("Datos recopilados:", datos);
+    
+    // 2. Procesar datos de dolor (si no hay ángulos)
+    if (Object.keys(datos.dolores).length > 0 && Object.keys(datos.rangosActivos).length === 0) {
+      console.log(`Región ${region} tiene datos de dolor pero no de ángulos. Procesando solo dolor.`);
+      
+      // Buscar elementos de interpretación
+      const interpretacionElement = document.getElementById(`interpretacion-${region}-texto`);
+      const recomendacionesElement = document.getElementById(`recomendaciones-${region}-texto`);
+      
+      if (interpretacionElement && recomendacionesElement) {
+        // Generar interpretación basada solo en dolor
+        let interpretacion = `<p class="alert alert-warning">Se ha reportado dolor en ${Object.keys(datos.dolores).length} movimiento(s) de ${region}. `;
+        interpretacion += `Se recomienda completar la evaluación de rangos y funcionalidad para una interpretación más completa.</p>`;
+        
+        interpretacionElement.innerHTML = interpretacion;
+        
+        // Generar recomendaciones básicas para dolor
+        let recomendaciones = "<ul>";
+        recomendaciones += `<li>Implementar <strong>evaluación detallada del dolor</strong> para identificar sus mecanismos y características.</li>`;
+        recomendaciones += `<li>Considerar <strong>técnicas de neuromodulación</strong> y educación en neurociencia del dolor.</li>`;
+        recomendaciones += `<li>Completar la evaluación de rangos para determinar el impacto del dolor en la movilidad funcional.</li>`;
+        recomendaciones += "</ul>";
+        
+        recomendacionesElement.innerHTML = recomendaciones;
+      }
+    }
+    
+    // 3. Procesar datos de funcionalidad (si no hay ángulos)
+    if (Object.keys(datos.funcionalidades).length > 0 && Object.keys(datos.rangosActivos).length === 0) {
+      console.log(`Región ${region} tiene datos de funcionalidad pero no de ángulos. Procesando solo funcionalidad.`);
+      actualizarRecomendacionesROM(region);
+    }
+    
+    // 4. Actualizar cálculos de ángulos si existen
+    if (Object.keys(datos.rangosActivos).length > 0) {
+      // Evaluar todos los valores de rango activo
+      for (const movimiento in datos.rangosActivos) {
+        const inputId = `${region}_${movimiento}_activo`;
+        const input = document.getElementById(inputId);
+        if (input) {
+          console.log(`Evaluando ROM para ${inputId}`);
+          evaluarROM(inputId);
+        }
+      }
+      
+      // Calcular diferenciales
+      for (const movimiento in datos.rangosPasivos) {
+        const baseId = `${region}_${movimiento}`;
+        const activoId = baseId + '_activo';
+        const activoInput = document.getElementById(activoId);
+        
+        if (activoInput && activoInput.value) {
+          console.log(`Calculando diferencial para ${baseId}`);
+          calcularDiferencialAP(baseId);
+        }
+      }
+      
+      // Calcular déficit funcional
+      console.log(`Calculando déficit funcional para ${region}`);
+      calcularDeficitFuncional(`${region}_cualquier_movimiento_activo`); // El ID exacto no importa, solo la región
+    }
+    
+    // 5. Forzar actualización de recomendaciones siempre
+    console.log(`Actualizando recomendaciones para ${region}`);
+    actualizarRecomendacionesROM(region);
+    
+    // 6. Actualizar badges de estado
+    const regionBadge = document.getElementById(`rom-${region}-badge`);
+    if (regionBadge) {
+      regionBadge.innerHTML = "Evaluado";
+      regionBadge.className = "resultado-badge badge bg-success";
+    }
+    
+    return true;
+  } catch (error) {
+    console.error(`Error en forzarActualizacionRegion para ${region}:`, error);
+    return false;
+  }
 }
