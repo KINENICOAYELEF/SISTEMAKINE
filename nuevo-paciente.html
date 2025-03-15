@@ -13821,6 +13821,611 @@
   </div>
 </div>
 
+
+      <!-- Subacordeón para ATM -->
+<div class="cuestionario-item sub-acordeon">
+  <div class="cuestionario-header" onclick="toggleCuestionario('rom-atm-content')">
+    <h5><i class="fas fa-plus-circle"></i> Articulación Temporomandibular (ATM)</h5>
+    <div class="resultado-badge" id="rom-atm-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="rom-atm-content" style="display: none;">
+    <h5 class="mt-4 mb-3">Rangos de Movimiento: Articulación Temporomandibular</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th rowspan="2">Movimiento</th>
+            <th colspan="2">Rango Activo</th>
+            <th colspan="2">Rango Pasivo</th>
+            <th rowspan="2">Diferencial<br>A/P</th>
+            <th rowspan="2">Dolor</th>
+            <th rowspan="2">Funcionalidad</th>
+            <th rowspan="2">Observaciones</th>
+          </tr>
+          <tr>
+            <th>Milímetros</th>
+            <th>Estado</th>
+            <th>Milímetros</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Apertura bucal</td>
+            <td>
+              <input type="number" id="atm_apertura_activo" name="atm_apertura_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('atm_apertura_activo', 0, 30, 40)">
+            </td>
+            <td id="atm_apertura_activo_estado"></td>
+            <td>
+              <input type="number" id="atm_apertura_pasivo" name="atm_apertura_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('atm_apertura_pasivo', 0, 30, 40); calcularDiferencialAP('atm_apertura')">
+            </td>
+            <td id="atm_apertura_pasivo_estado"></td>
+            <td id="atm_apertura_diferencial"></td>
+            <td>
+              <select id="atm_apertura_dolor" name="atm_apertura_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="atm_apertura_funcionalidad" name="atm_apertura_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="atm_apertura_obs" name="atm_apertura_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Lateralización derecha</td>
+            <td>
+              <input type="number" id="atm_lateralizacion_der_activo" name="atm_lateralizacion_der_activo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('atm_lateralizacion_der_activo', 0, 7, 10)">
+            </td>
+            <td id="atm_lateralizacion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="atm_lateralizacion_der_pasivo" name="atm_lateralizacion_der_pasivo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('atm_lateralizacion_der_pasivo', 0, 7, 10); calcularDiferencialAP('atm_lateralizacion_der')">
+            </td>
+            <td id="atm_lateralizacion_der_pasivo_estado"></td>
+            <td id="atm_lateralizacion_der_diferencial"></td>
+            <td>
+              <select id="atm_lateralizacion_der_dolor" name="atm_lateralizacion_der_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="atm_lateralizacion_der_funcionalidad" name="atm_lateralizacion_der_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="atm_lateralizacion_der_obs" name="atm_lateralizacion_der_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Lateralización izquierda</td>
+            <td>
+              <input type="number" id="atm_lateralizacion_izq_activo" name="atm_lateralizacion_izq_activo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('atm_lateralizacion_izq_activo', 0, 7, 10)">
+            </td>
+            <td id="atm_lateralizacion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="atm_lateralizacion_izq_pasivo" name="atm_lateralizacion_izq_pasivo" class="form-control rom-input" min="0" max="20" onchange="evaluarROM('atm_lateralizacion_izq_pasivo', 0, 7, 10); calcularDiferencialAP('atm_lateralizacion_izq')">
+            </td>
+            <td id="atm_lateralizacion_izq_pasivo_estado"></td>
+            <td id="atm_lateralizacion_izq_diferencial"></td>
+            <td>
+              <select id="atm_lateralizacion_izq_dolor" name="atm_lateralizacion_izq_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="atm_lateralizacion_izq_funcionalidad" name="atm_lateralizacion_izq_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="atm_lateralizacion_izq_obs" name="atm_lateralizacion_izq_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Protrusión</td>
+            <td>
+              <input type="number" id="atm_protrusion_activo" name="atm_protrusion_activo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('atm_protrusion_activo', 0, 7, 10)">
+            </td>
+            <td id="atm_protrusion_activo_estado"></td>
+            <td>
+              <input type="number" id="atm_protrusion_pasivo" name="atm_protrusion_pasivo" class="form-control rom-input" min="0" max="15" onchange="evaluarROM('atm_protrusion_pasivo', 0, 7, 10); calcularDiferencialAP('atm_protrusion')">
+            </td>
+            <td id="atm_protrusion_pasivo_estado"></td>
+            <td id="atm_protrusion_diferencial"></td>
+            <td>
+              <select id="atm_protrusion_dolor" name="atm_protrusion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="atm_protrusion_funcionalidad" name="atm_protrusion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="atm_protrusion_obs" name="atm_protrusion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Retrusión</td>
+            <td>
+              <input type="number" id="atm_retrusion_activo" name="atm_retrusion_activo" class="form-control rom-input" min="0" max="10" onchange="evaluarROM('atm_retrusion_activo', 0, 3, 5)">
+            </td>
+            <td id="atm_retrusion_activo_estado"></td>
+            <td>
+              <input type="number" id="atm_retrusion_pasivo" name="atm_retrusion_pasivo" class="form-control rom-input" min="0" max="10" onchange="evaluarROM('atm_retrusion_pasivo', 0, 3, 5); calcularDiferencialAP('atm_retrusion')">
+            </td>
+            <td id="atm_retrusion_pasivo_estado"></td>
+            <td id="atm_retrusion_diferencial"></td>
+            <td>
+              <select id="atm_retrusion_dolor" name="atm_retrusion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="atm_retrusion_funcionalidad" name="atm_retrusion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="atm_retrusion_obs" name="atm_retrusion_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Evaluación complementaria específica de ATM -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Evaluación Complementaria Específica ATM</h5>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="atm_patron_apertura" class="form-label">Patrón de Apertura</label>
+              <select id="atm_patron_apertura" name="atm_patron_apertura" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Línea recta" data-color="success">Línea recta</option>
+                <option value="Desviación corregida" data-color="info">Desviación corregida (S)</option>
+                <option value="Desviación derecha" data-color="warning">Desviación derecha no corregida</option>
+                <option value="Desviación izquierda" data-color="warning">Desviación izquierda no corregida</option>
+                <option value="Irregular" data-color="danger">Irregular o errático</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="atm_ruidos_articulares" class="form-label">Ruidos Articulares</label>
+              <select id="atm_ruidos_articulares" name="atm_ruidos_articulares" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Ausentes" data-color="success">Ausentes</option>
+                <option value="Clic apertura" data-color="warning">Clic en apertura</option>
+                <option value="Clic cierre" data-color="warning">Clic en cierre</option>
+                <option value="Clic recíproco" data-color="warning">Clic recíproco (apertura y cierre)</option>
+                <option value="Crepitación fina" data-color="danger">Crepitación fina</option>
+                <option value="Crepitación gruesa" data-color="danger">Crepitación gruesa</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="atm_posicion_disco_derecho" class="form-label">Estado Disco Articular Derecho</label>
+              <select id="atm_posicion_disco_derecho" name="atm_posicion_disco_derecho" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Posición normal</option>
+                <option value="DASR" data-color="info">DASR (desplazamiento con reducción)</option>
+                <option value="DASNR" data-color="warning">DASNR (sin reducción - apertura limitada)</option>
+                <option value="DASNR-abrir" data-color="warning">DASNR con apertura normal</option>
+                <option value="Sospecha patología estructural" data-color="danger">Sospecha alteración estructural</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="atm_posicion_disco_izquierdo" class="form-label">Estado Disco Articular Izquierdo</label>
+              <select id="atm_posicion_disco_izquierdo" name="atm_posicion_disco_izquierdo" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Posición normal</option>
+                <option value="DASR" data-color="info">DASR (desplazamiento con reducción)</option>
+                <option value="DASNR" data-color="warning">DASNR (sin reducción - apertura limitada)</option>
+                <option value="DASNR-abrir" data-color="warning">DASNR con apertura normal</option>
+                <option value="Sospecha patología estructural" data-color="danger">Sospecha alteración estructural</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="atm_alteracion_oclusal" class="form-label">Alteración Oclusal</label>
+              <select id="atm_alteracion_oclusal" name="atm_alteracion_oclusal" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="No evidente" data-color="success">No evidente</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderada" data-color="warning">Moderada</option>
+                <option value="Severa" data-color="danger">Severa</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="atm_contacto_prematuro" class="form-label">Contactos Prematuros/Interferencias</label>
+              <select id="atm_contacto_prematuro" name="atm_contacto_prematuro" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="No detectados" data-color="success">No detectados</option>
+                <option value="Leves" data-color="info">Leves</option>
+                <option value="Moderados" data-color="warning">Moderados</option>
+                <option value="Severos" data-color="danger">Severos</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Calculadora de déficit funcional ATM -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Calculadora de Déficit Funcional ATM</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="atm_deficit_total" class="form-label">Déficit Total (%)</label>
+              <input type="text" id="atm_deficit_total" name="atm_deficit_total" class="form-control" readonly>
+            </div>
+            <div id="atm_deficit_visual" class="mt-2 progress">
+              <div class="progress-bar bg-info" role="progressbar" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="atm_deficit_interpretacion" class="form-label">Interpretación Clínica</label>
+              <select id="atm_deficit_interpretacion" name="atm_deficit_interpretacion" class="form-select" disabled>
+                <option value="">Pendiente de cálculo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <h6>Impacto en Actividades Diarias</h6>
+            <ul id="atm_impacto_actividades" class="list-group">
+              <!-- Se generará dinámicamente -->
+              <li class="list-group-item list-group-item-info">Complete la evaluación para ver el impacto en actividades.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Movimientos accesorios de la ATM -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Movimientos Accesorios de la ATM</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Movimiento</th>
+                <th>Calidad Derecha</th>
+                <th>Dolor Derecho</th>
+                <th>Calidad Izquierda</th>
+                <th>Dolor Izquierdo</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tracción mandibular</td>
+                <td>
+                  <select id="atm_acc_traccion_der_calidad" name="atm_acc_traccion_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_traccion_der_dolor" name="atm_acc_traccion_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_traccion_izq_calidad" name="atm_acc_traccion_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_traccion_izq_dolor" name="atm_acc_traccion_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="atm_acc_traccion_obs" name="atm_acc_traccion_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Compresión articular</td>
+                <td>
+                  <select id="atm_acc_compresion_der_calidad" name="atm_acc_compresion_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_compresion_der_dolor" name="atm_acc_compresion_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_compresion_izq_calidad" name="atm_acc_compresion_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_compresion_izq_dolor" name="atm_acc_compresion_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="atm_acc_compresion_obs" name="atm_acc_compresion_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento medial</td>
+                <td>
+                  <select id="atm_acc_desliz_med_der_calidad" name="atm_acc_desliz_med_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_desliz_med_der_dolor" name="atm_acc_desliz_med_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_desliz_med_izq_calidad" name="atm_acc_desliz_med_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_desliz_med_izq_dolor" name="atm_acc_desliz_med_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="atm_acc_desliz_med_obs" name="atm_acc_desliz_med_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento lateral</td>
+                <td>
+                  <select id="atm_acc_desliz_lat_der_calidad" name="atm_acc_desliz_lat_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_desliz_lat_der_dolor" name="atm_acc_desliz_lat_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_desliz_lat_izq_calidad" name="atm_acc_desliz_lat_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="atm_acc_desliz_lat_izq_dolor" name="atm_acc_desliz_lat_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="atm_acc_desliz_lat_obs" name="atm_acc_desliz_lat_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Patrones de restricción capsular -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Patrón de Restricción ATM</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="atm_patron_capsular" class="form-label">Patrón de restricción (ordenado por limitación)</label>
+              <select id="atm_patron_capsular" name="atm_patron_capsular" class="form-select" onchange="mostrarInterpretacionCapsular('atm')">
+                <option value="">Seleccionar</option>
+                <option value="No presenta">No presenta patrón capsular</option>
+                <option value="Apertura > Lateralización > Protrusión">Apertura > Lateralización > Protrusión</option>
+                <option value="Lateralización > Apertura > Protrusión">Lateralización > Apertura > Protrusión</option>
+                <option value="Protrusión > Apertura > Lateralización">Protrusión > Apertura > Lateralización</option>
+                <option value="Otro">Otro (especificar)</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6" id="atm_patron_otro_container" style="display: none;">
+            <div class="form-group">
+              <label for="atm_patron_otro" class="form-label">Especifique otro patrón</label>
+              <input type="text" id="atm_patron_otro" name="atm_patron_otro" class="form-control">
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header bg-info text-white">
+                <h6 class="mb-0">Interpretación Clínica del Patrón</h6>
+              </div>
+              <div class="card-body">
+                <div id="atm_interpretacion_capsular">
+                  <p>Seleccione un patrón de restricción para obtener la interpretación clínica.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación clínica de ATM -->
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Interpretación Clínica y Recomendaciones: ATM</h5>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion_atm" class="mb-3">
+          <h6>Interpretación Clínica:</h6>
+          <div id="interpretacion-atm-texto" class="p-3 border rounded">
+            Complete la evaluación de rangos de movimiento para obtener la interpretación clínica.
+          </div>
+        </div>
+        
+        <div id="recomendaciones_atm" class="mb-3">
+          <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+          <div id="recomendaciones-atm-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener recomendaciones específicas.
+          </div>
+        </div>
+        
+        <div id="consideraciones_atm" class="mb-3">
+          <h6>Consideraciones Adicionales:</h6>
+          <div id="consideraciones-atm-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener consideraciones adicionales específicas.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
       
       <!-- Continúa con los demás subacordeones para cada región anatómica... -->
       
