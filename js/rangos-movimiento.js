@@ -1414,17 +1414,64 @@ function recopilarDatosROM(region) {
     };
     
     // RECOPILACIÓN MEJORADA DE DOLOR
-    // Para regiones bilaterales como hombro, los selectores de dolor no tienen indicación de lado
-    let selectoresDolor;
-    
-    if (region === 'hombro' || region === 'cadera') {
-      // Enfoque especial para regiones bilaterales
-      // Buscamos los selectores de dolor que NO tienen _izq_ o _der_ en su ID
-      selectoresDolor = document.querySelectorAll(`select[id^="${region}_"][id$="_dolor"]:not([id*="_izq_"]):not([id*="_der_"])`);
-    } else {
-      // Enfoque estándar para otras regiones
-      selectoresDolor = document.querySelectorAll(`select[id^="${region}_"][id$="_dolor"]`);
+console.log(`Recopilando selectores de dolor para ${region}`);
+let selectoresDolor;
+
+// Enfoque específico para regiones bilaterales (hombro, cadera, etc.)
+if (region === 'hombro' || region === 'cadera') {
+  // Capturamos TODOS los selectores que contengan el nombre de la región y "dolor" en su ID
+  selectoresDolor = document.querySelectorAll(`select[id*="${region}"][id*="dolor"]`);
+  
+  console.log(`Enfoque especial para región bilateral: encontrados ${selectoresDolor.length} selectores de dolor`);
+  
+  // Debug para ver qué selectores encontramos
+  selectoresDolor.forEach(sel => {
+    console.log(`ID selector dolor: ${sel.id}, valor: ${sel.value}`);
+  });
+  
+  // Procesar todos los selectores de dolor encontrados
+  selectoresDolor.forEach(select => {
+    if (select.value && select.value !== "No") {
+      // Para regiones bilaterales, determinamos el movimiento por el ID del select
+      let movimiento = '';
+      
+      // Mapeo según la estructura observada
+      if (select.id.includes('flexion')) {
+        movimiento = 'flexion';
+      } else if (select.id.includes('extension')) {
+        movimiento = 'extension';
+      } else if (select.id.includes('abduccion')) {
+        movimiento = 'abduccion';
+      } else if (select.id.includes('aduccion')) {
+        movimiento = 'aduccion';
+      } else if (select.id.includes('rot_int')) {
+        movimiento = 'rot_int';
+      } else if (select.id.includes('rot_ext')) {
+        movimiento = 'rot_ext';
+      }
+      
+      if (movimiento) {
+        datos.dolores[movimiento] = select.value;
+        console.log(`Dolor en ${movimiento}: ${select.value}`);
+      }
     }
+  });
+} else {
+  // Enfoque estándar para regiones no bilaterales
+  selectoresDolor = document.querySelectorAll(`select[id^="${region}_"][id$="_dolor"]`);
+  console.log(`Encontrados ${selectoresDolor.length} selectores de dolor estándar para ${region}`);
+  
+  selectoresDolor.forEach(select => {
+    if (select.value && select.value !== "No") {
+      // Extraer el movimiento del ID (parte entre 'region_' y '_dolor')
+      const idCompleto = select.id;
+      const movimientoCompleto = idCompleto.replace(`${region}_`, '').replace('_dolor', '');
+      
+      datos.dolores[movimientoCompleto] = select.value;
+      console.log(`Dolor en ${movimientoCompleto}: ${select.value}`);
+    }
+  });
+}
     
     console.log(`Encontrados ${selectoresDolor.length} selectores de dolor para ${region}`);
     
@@ -1440,15 +1487,57 @@ function recopilarDatosROM(region) {
     });
     
     // RECOPILACIÓN MEJORADA DE FUNCIONALIDAD
-    // Similar al enfoque para dolor
-    let selectoresFuncionalidad;
-    
-    if (region === 'hombro' || region === 'cadera') {
-      selectoresFuncionalidad = document.querySelectorAll(`select[id^="${region}_"][id$="_funcionalidad"]:not([id*="_izq_"]):not([id*="_der_"])`);
-    } else {
-      selectoresFuncionalidad = document.querySelectorAll(`select[id^="${region}_"][id$="_funcionalidad"]`);
+// Similar al enfoque para dolor
+let selectoresFuncionalidad;
+
+// Enfoque específico para regiones bilaterales
+if (region === 'hombro' || region === 'cadera') {
+  // Capturamos TODOS los selectores que contengan el nombre de la región y "funcionalidad" en su ID
+  selectoresFuncionalidad = document.querySelectorAll(`select[id*="${region}"][id*="funcionalidad"]`);
+  
+  console.log(`Enfoque especial para funcionalidad: encontrados ${selectoresFuncionalidad.length} selectores`);
+  
+  // Procesar todos los selectores de funcionalidad encontrados
+  selectoresFuncionalidad.forEach(select => {
+    if (select.value && select.value !== "") {
+      // Para regiones bilaterales, determinamos el movimiento por el ID del selector
+      let movimiento = '';
+      
+      // Mapeo según la estructura observada
+      if (select.id.includes('flexion')) {
+        movimiento = 'flexion';
+      } else if (select.id.includes('extension')) {
+        movimiento = 'extension';
+      } else if (select.id.includes('abduccion')) {
+        movimiento = 'abduccion';
+      } else if (select.id.includes('aduccion')) {
+        movimiento = 'aduccion';
+      } else if (select.id.includes('rot_int')) {
+        movimiento = 'rot_int';
+      } else if (select.id.includes('rot_ext')) {
+        movimiento = 'rot_ext';
+      }
+      
+      if (movimiento) {
+        datos.funcionalidades[movimiento] = select.value;
+        console.log(`Funcionalidad en ${movimiento}: ${select.value}`);
+      }
     }
-    
+  });
+} else {
+  // Enfoque estándar para regiones no bilaterales
+  selectoresFuncionalidad = document.querySelectorAll(`select[id^="${region}_"][id$="_funcionalidad"]`);
+  
+  selectoresFuncionalidad.forEach(select => {
+    if (select.value && select.value !== "") {
+      const idCompleto = select.id;
+      const movimientoCompleto = idCompleto.replace(`${region}_`, '').replace('_funcionalidad', '');
+      
+      datos.funcionalidades[movimientoCompleto] = select.value;
+      console.log(`Funcionalidad en ${movimientoCompleto}: ${select.value}`);
+    }
+  });
+}
     console.log(`Encontrados ${selectoresFuncionalidad.length} selectores de funcionalidad para ${region}`);
     
     selectoresFuncionalidad.forEach(select => {
@@ -2640,24 +2729,33 @@ function agregarBotonesActualizacionManual() {
   }
 }
 
-// Función para actualizar manualmente todos los cálculos de todas las regiones
 function actualizarTodosLosCalculos() {
   try {
     console.log("Actualizando todos los cálculos");
     
     const regiones = ['cervical', 'dorsal', 'lumbar', 'pelvis', 'hombro', 'codo', 'muneca', 'cadera', 'rodilla', 'tobillo', 'atm'];
+    let regionesActualizadas = 0;
     
     regiones.forEach(region => {
       // Forzar actualización completa de la región
-      forzarActualizacionRegion(region);
+      const resultado = forzarActualizacionRegion(region);
+      if (resultado) {
+        regionesActualizadas++;
+      }
     });
     
     // Actualizar puntuación global y objetivos
     calcularPuntuacionGlobal();
     generarObjetivosTerapeuticos();
     
-    console.log("Todos los cálculos actualizados");
-    alert("Actualización completa. Si no ves actualizaciones, revisa que hayas ingresado datos en al menos uno de estos campos: ángulos, dolor o funcionalidad.");
+    console.log(`${regionesActualizadas} regiones actualizadas correctamente`);
+    
+    if (regionesActualizadas > 0) {
+      alert(`Actualización completa. Se actualizaron ${regionesActualizadas} regiones con datos.`);
+    } else {
+      alert("No se encontraron datos para actualizar. Ingresa al menos un valor de ángulo, dolor o funcionalidad en alguna región.");
+    }
+    
     return true;
   } catch (error) {
     console.error("Error en actualizarTodosLosCalculos:", error);
@@ -3081,11 +3179,11 @@ function forzarActualizacionRegion(region) {
     actualizarRecomendacionesROM(region);
     
     // 6. Actualizar badges de estado
-    const regionBadge = document.getElementById(`rom-${region}-badge`);
-    if (regionBadge) {
-      regionBadge.innerHTML = "Evaluado";
-      regionBadge.className = "resultado-badge badge bg-success";
-    }
+  const regionBadge = document.getElementById(`rom-${region}-badge`);
+  if (regionBadge) {
+    regionBadge.innerHTML = "Evaluado";
+    regionBadge.className = "resultado-badge badge bg-success";
+  }
     
     return true;
   } catch (error) {
