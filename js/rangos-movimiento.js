@@ -1413,82 +1413,59 @@ function recopilarDatosROM(region) {
       movimientosAccesorios: {}
     };
     
-    // RECOPILACIÓN DE DOLOR
-    // Usamos un selector más complejo para manejar diferentes patrones de IDs
-    let selectoresDolor = document.querySelectorAll(`select[id^="${region}_"][id$="_dolor"], select[id*="${region}_"][id*="_dolor"]`);
+    // RECOPILACIÓN MEJORADA DE DOLOR
+    // Para regiones bilaterales como hombro, los selectores de dolor no tienen indicación de lado
+    let selectoresDolor;
+    
+    if (region === 'hombro' || region === 'cadera') {
+      // Enfoque especial para regiones bilaterales
+      // Buscamos los selectores de dolor que NO tienen _izq_ o _der_ en su ID
+      selectoresDolor = document.querySelectorAll(`select[id^="${region}_"][id$="_dolor"]:not([id*="_izq_"]):not([id*="_der_"])`);
+    } else {
+      // Enfoque estándar para otras regiones
+      selectoresDolor = document.querySelectorAll(`select[id^="${region}_"][id$="_dolor"]`);
+    }
+    
     console.log(`Encontrados ${selectoresDolor.length} selectores de dolor para ${region}`);
     
     selectoresDolor.forEach(select => {
       if (select.value) {
-        // Extraer el movimiento del ID
-        let movimientoCompleto = '';
+        // Extraer el movimiento del ID (parte entre 'region_' y '_dolor')
+        const idCompleto = select.id;
+        const movimientoCompleto = idCompleto.replace(`${region}_`, '').replace('_dolor', '');
         
-        if (select.id.includes('_izq_') || select.id.includes('_der_')) {
-          // Caso bilateral con lado
-          const partes = select.id.split('_');
-          const lado = partes.find(p => p === 'izq' || p === 'der');
-          const baseSinRegion = select.id.replace(`${region}_`, '');
-          // Extraer el movimiento eliminando región, lado y "dolor"
-          movimientoCompleto = baseSinRegion.replace(`_${lado}_dolor`, '');
-          // Añadir lado al movimiento para diferenciar
-          movimientoCompleto = `${movimientoCompleto}_${lado}`;
-        } else if (select.id.endsWith('_dolor')) {
-          // Caso estándar
-          movimientoCompleto = select.id.replace(`${region}_`, '').replace('_dolor', '');
-        } else {
-          // Otros casos (por ejemplo, dolor en medio del ID)
-          const idSinRegion = select.id.replace(`${region}_`, '');
-          const partesId = idSinRegion.split('_');
-          const indiceDolor = partesId.indexOf('dolor');
-          
-          if (indiceDolor > 0) {
-            // Tomar partes antes de "dolor" como el movimiento
-            movimientoCompleto = partesId.slice(0, indiceDolor).join('_');
-          }
-        }
-        
-        // Solo guardar si se pudo extraer un movimiento
-        if (movimientoCompleto) {
-          datos.dolores[movimientoCompleto] = select.value;
-          console.log(`Dolor en ${movimientoCompleto}: ${select.value}`);
-        }
+        datos.dolores[movimientoCompleto] = select.value;
+        console.log(`Dolor en ${movimientoCompleto}: ${select.value}`);
       }
     });
     
-    // RECOPILACIÓN DE FUNCIONALIDAD
-    // Similar al patrón anterior
-    let selectoresFuncionalidad = document.querySelectorAll(`select[id^="${region}_"][id$="_funcionalidad"]`);
+    // RECOPILACIÓN MEJORADA DE FUNCIONALIDAD
+    // Similar al enfoque para dolor
+    let selectoresFuncionalidad;
+    
+    if (region === 'hombro' || region === 'cadera') {
+      selectoresFuncionalidad = document.querySelectorAll(`select[id^="${region}_"][id$="_funcionalidad"]:not([id*="_izq_"]):not([id*="_der_"])`);
+    } else {
+      selectoresFuncionalidad = document.querySelectorAll(`select[id^="${region}_"][id$="_funcionalidad"]`);
+    }
+    
     console.log(`Encontrados ${selectoresFuncionalidad.length} selectores de funcionalidad para ${region}`);
     
     selectoresFuncionalidad.forEach(select => {
       if (select.value) {
-        let movimientoCompleto = '';
+        const idCompleto = select.id;
+        const movimientoCompleto = idCompleto.replace(`${region}_`, '').replace('_funcionalidad', '');
         
-        // Manejamos distintos patrones de IDs
-        if (select.id.includes('_izq_') || select.id.includes('_der_')) {
-          // Caso bilateral con lado
-          const partes = select.id.split('_');
-          const lado = partes.find(p => p === 'izq' || p === 'der');
-          const baseSinRegion = select.id.replace(`${region}_`, '');
-          movimientoCompleto = baseSinRegion.replace(`_${lado}_funcionalidad`, '');
-          movimientoCompleto = `${movimientoCompleto}_${lado}`;
-        } else {
-          // Caso estándar
-          movimientoCompleto = select.id.replace(`${region}_`, '').replace('_funcionalidad', '');
-        }
-        
-        if (movimientoCompleto) {
-          datos.funcionalidades[movimientoCompleto] = select.value;
-          console.log(`Funcionalidad en ${movimientoCompleto}: ${select.value}`);
-        }
+        datos.funcionalidades[movimientoCompleto] = select.value;
+        console.log(`Funcionalidad en ${movimientoCompleto}: ${select.value}`);
       }
     });
     
     // RECOPILACIÓN DE RANGOS ACTIVOS Y PASIVOS
-    // Para hombro y otras regiones bilaterales, usamos un selector adaptado
+    // Para hombro y otras regiones bilaterales, necesitamos manejar ambos lados
     let selectorActivos = '';
     
-    if (region === 'hombro') {
+    if (region === 'hombro' || region === 'cadera') {
       // Para hombro buscamos patrones que incluyan _izq_ o _der_
       selectorActivos = `input[id^="${region}_"][id*="_activo"]`;
     } else {
@@ -1562,7 +1539,7 @@ function recopilarDatosROM(region) {
       }
     });
     
-    console.log(`Datos completamente recopilados para ${region}`);
+    console.log(`Datos completamente recopilados para ${region}:`, datos);
     return datos;
   } catch (error) {
     console.error(`Error en recopilarDatosROM para ${region}:`, error);
