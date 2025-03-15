@@ -3178,12 +3178,20 @@ function forzarActualizacionRegion(region) {
     console.log(`Actualizando recomendaciones para ${region}`);
     actualizarRecomendacionesROM(region);
     
-    // 6. Actualizar badges de estado
-  const regionBadge = document.getElementById(`rom-${region}-badge`);
-  if (regionBadge) {
-    regionBadge.innerHTML = "Evaluado";
-    regionBadge.className = "resultado-badge badge bg-success";
-  }
+    // 6. Actualizar badges de estado SOLO si hay datos reales
+const hayDatosReales = 
+  Object.keys(datos.rangosActivos).length > 0 || 
+  Object.keys(datos.dolores).length > 0 || 
+  Object.keys(datos.funcionalidades).length > 0;
+
+const regionBadge = document.getElementById(`rom-${region}-badge`);
+if (regionBadge && hayDatosReales) {
+  regionBadge.innerHTML = "Evaluado";
+  regionBadge.className = "resultado-badge badge bg-success";
+} else if (regionBadge) {
+  regionBadge.innerHTML = "No completado";
+  regionBadge.className = "resultado-badge badge bg-secondary";
+}
     
     return true;
   } catch (error) {
