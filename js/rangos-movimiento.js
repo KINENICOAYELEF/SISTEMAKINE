@@ -3186,3 +3186,78 @@ if (regionBadge && hayDatosReales) {
     return false;
   }
 }
+
+// Añade este código al final de tu archivo rangos-movimiento-13 SIRVE.js
+
+// Prevenir comportamiento por defecto de la tecla Enter
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    // Prevenir comportamiento por defecto sólo si no está en un textarea o en un campo de texto específico
+    const target = event.target;
+    const isTextInput = target.tagName === 'TEXTAREA' || 
+                        (target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'number'));
+    
+    // Permitir Enter en áreas de texto, pero prevenir en otros elementos
+    if (!isTextInput) {
+      event.preventDefault();
+      return false;
+    }
+  }
+});
+
+// Modificar las funciones que generan alertas para evitar llamadas duplicadas
+// 1. Modificar actualizarCalculosRegion para evitar múltiples alertas
+const originalActualizarCalculosRegion = window.actualizarCalculosRegion;
+if (typeof originalActualizarCalculosRegion === 'function') {
+  window.actualizarCalculosRegion = function(region) {
+    // Bandera para evitar múltiples alertas durante una actualización
+    if (window.isUpdatingRegion) return;
+    
+    window.isUpdatingRegion = true;
+    const resultado = originalActualizarCalculosRegion(region);
+    window.isUpdatingRegion = false;
+    
+    return resultado;
+  };
+}
+
+// 2. Modificar actualizarTodosLosCalculos para usar una sola alerta
+const originalActualizarTodosLosCalculos = window.actualizarTodosLosCalculos;
+if (typeof originalActualizarTodosLosCalculos === 'function') {
+  window.actualizarTodosLosCalculos = function() {
+    // Bandera para evitar alertas múltiples
+    if (window.isUpdatingAllCalculations) return;
+    
+    window.isUpdatingAllCalculations = true;
+    const resultado = originalActualizarTodosLosCalculos();
+    window.isUpdatingAllCalculations = false;
+    
+    return resultado;
+  };
+}
+
+// 3. Sobrescribir la función de alerta para evitar múltiples alertas en un corto período
+// Guardar la función original alert
+const originalAlert = window.alert;
+// Variable para guardar el último mensaje mostrado
+let lastAlertMessage = '';
+// Variable para guardar el tiempo del último alert
+let lastAlertTime = 0;
+
+// Sobrescribir la función alert
+window.alert = function(message) {
+  const currentTime = new Date().getTime();
+  // Evitar alertas duplicadas en un intervalo de 2 segundos
+  if (message === lastAlertMessage && currentTime - lastAlertTime < 2000) {
+    return; // No mostrar alerta duplicada
+  }
+  
+  // Actualizar último mensaje y tiempo
+  lastAlertMessage = message;
+  lastAlertTime = currentTime;
+  
+  // Llamar a la alerta original
+  originalAlert(message);
+};
+
+console.log("🔧 Solución anti-alertas múltiples instalada correctamente");
