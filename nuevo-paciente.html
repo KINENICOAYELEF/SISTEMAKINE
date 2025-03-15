@@ -11765,6 +11765,912 @@
     </div>
   </div>
 </div>
+
+
+      <!-- Subacordeón para Rodilla -->
+<div class="cuestionario-item sub-acordeon">
+  <div class="cuestionario-header" onclick="toggleCuestionario('rom-rodilla-content')">
+    <h5><i class="fas fa-plus-circle"></i> Rodilla</h5>
+    <div class="resultado-badge" id="rom-rodilla-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="rom-rodilla-content" style="display: none;">
+    <h5 class="mt-4 mb-3">Rangos de Movimiento: Rodilla</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th rowspan="2">Movimiento</th>
+            <th colspan="2">Rango Activo Izquierdo</th>
+            <th colspan="2">Rango Pasivo Izquierdo</th>
+            <th rowspan="2">Diferencial<br>A/P Izq.</th>
+            <th colspan="2">Rango Activo Derecho</th>
+            <th colspan="2">Rango Pasivo Derecho</th>
+            <th rowspan="2">Diferencial<br>A/P Der.</th>
+            <th rowspan="2">Dolor</th>
+            <th rowspan="2">Funcionalidad</th>
+            <th rowspan="2">Observaciones</th>
+          </tr>
+          <tr>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Flexión</td>
+            <td>
+              <input type="number" id="rodilla_flexion_izq_activo" name="rodilla_flexion_izq_activo" class="form-control rom-input" min="0" max="160" onchange="evaluarROM('rodilla_flexion_izq_activo', 0, 110, 135)">
+            </td>
+            <td id="rodilla_flexion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="rodilla_flexion_izq_pasivo" name="rodilla_flexion_izq_pasivo" class="form-control rom-input" min="0" max="160" onchange="evaluarROM('rodilla_flexion_izq_pasivo', 0, 110, 135); calcularDiferencialAP('rodilla_flexion_izq')">
+            </td>
+            <td id="rodilla_flexion_izq_pasivo_estado"></td>
+            <td id="rodilla_flexion_izq_diferencial"></td>
+            <td>
+              <input type="number" id="rodilla_flexion_der_activo" name="rodilla_flexion_der_activo" class="form-control rom-input" min="0" max="160" onchange="evaluarROM('rodilla_flexion_der_activo', 0, 110, 135)">
+            </td>
+            <td id="rodilla_flexion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="rodilla_flexion_der_pasivo" name="rodilla_flexion_der_pasivo" class="form-control rom-input" min="0" max="160" onchange="evaluarROM('rodilla_flexion_der_pasivo', 0, 110, 135); calcularDiferencialAP('rodilla_flexion_der')">
+            </td>
+            <td id="rodilla_flexion_der_pasivo_estado"></td>
+            <td id="rodilla_flexion_der_diferencial"></td>
+            <td>
+              <select id="rodilla_flexion_dolor" name="rodilla_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_flexion_funcionalidad" name="rodilla_flexion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_flexion_obs" name="rodilla_flexion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Extensión</td>
+            <td>
+              <input type="number" id="rodilla_extension_izq_activo" name="rodilla_extension_izq_activo" class="form-control rom-input" min="-10" max="10" onchange="evaluarROM('rodilla_extension_izq_activo', -5, 0, 0)">
+            </td>
+            <td id="rodilla_extension_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="rodilla_extension_izq_pasivo" name="rodilla_extension_izq_pasivo" class="form-control rom-input" min="-10" max="10" onchange="evaluarROM('rodilla_extension_izq_pasivo', -5, 0, 0); calcularDiferencialAP('rodilla_extension_izq')">
+            </td>
+            <td id="rodilla_extension_izq_pasivo_estado"></td>
+            <td id="rodilla_extension_izq_diferencial"></td>
+            <td>
+              <input type="number" id="rodilla_extension_der_activo" name="rodilla_extension_der_activo" class="form-control rom-input" min="-10" max="10" onchange="evaluarROM('rodilla_extension_der_activo', -5, 0, 0)">
+            </td>
+            <td id="rodilla_extension_der_activo_estado"></td>
+            <td>
+              <input type="number" id="rodilla_extension_der_pasivo" name="rodilla_extension_der_pasivo" class="form-control rom-input" min="-10" max="10" onchange="evaluarROM('rodilla_extension_der_pasivo', -5, 0, 0); calcularDiferencialAP('rodilla_extension_der')">
+            </td>
+            <td id="rodilla_extension_der_pasivo_estado"></td>
+            <td id="rodilla_extension_der_diferencial"></td>
+            <td>
+              <select id="rodilla_extension_dolor" name="rodilla_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_extension_funcionalidad" name="rodilla_extension_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_extension_obs" name="rodilla_extension_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Rotación interna (30° flexión)</td>
+            <td>
+              <input type="number" id="rodilla_rot_int_izq_activo" name="rodilla_rot_int_izq_activo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('rodilla_rot_int_izq_activo', 0, 10, 15)">
+            </td>
+            <td id="rodilla_rot_int_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="rodilla_rot_int_izq_pasivo" name="rodilla_rot_int_izq_pasivo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('rodilla_rot_int_izq_pasivo', 0, 10, 15); calcularDiferencialAP('rodilla_rot_int_izq')">
+            </td>
+            <td id="rodilla_rot_int_izq_pasivo_estado"></td>
+            <td id="rodilla_rot_int_izq_diferencial"></td>
+            <td>
+              <input type="number" id="rodilla_rot_int_der_activo" name="rodilla_rot_int_der_activo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('rodilla_rot_int_der_activo', 0, 10, 15)">
+            </td>
+            <td id="rodilla_rot_int_der_activo_estado"></td>
+            <td>
+              <input type="number" id="rodilla_rot_int_der_pasivo" name="rodilla_rot_int_der_pasivo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('rodilla_rot_int_der_pasivo', 0, 10, 15); calcularDiferencialAP('rodilla_rot_int_der')">
+            </td>
+            <td id="rodilla_rot_int_der_pasivo_estado"></td>
+            <td id="rodilla_rot_int_der_diferencial"></td>
+            <td>
+              <select id="rodilla_rot_int_dolor" name="rodilla_rot_int_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_rot_int_funcionalidad" name="rodilla_rot_int_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_rot_int_obs" name="rodilla_rot_int_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Rotación externa (30° flexión)</td>
+            <td>
+              <input type="number" id="rodilla_rot_ext_izq_activo" name="rodilla_rot_ext_izq_activo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('rodilla_rot_ext_izq_activo', 0, 15, 20)">
+            </td>
+            <td id="rodilla_rot_ext_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="rodilla_rot_ext_izq_pasivo" name="rodilla_rot_ext_izq_pasivo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('rodilla_rot_ext_izq_pasivo', 0, 15, 20); calcularDiferencialAP('rodilla_rot_ext_izq')">
+            </td>
+            <td id="rodilla_rot_ext_izq_pasivo_estado"></td>
+            <td id="rodilla_rot_ext_izq_diferencial"></td>
+            <td>
+              <input type="number" id="rodilla_rot_ext_der_activo" name="rodilla_rot_ext_der_activo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('rodilla_rot_ext_der_activo', 0, 15, 20)">
+            </td>
+            <td id="rodilla_rot_ext_der_activo_estado"></td>
+            <td>
+              <input type="number" id="rodilla_rot_ext_der_pasivo" name="rodilla_rot_ext_der_pasivo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('rodilla_rot_ext_der_pasivo', 0, 15, 20); calcularDiferencialAP('rodilla_rot_ext_der')">
+            </td>
+            <td id="rodilla_rot_ext_der_pasivo_estado"></td>
+            <td id="rodilla_rot_ext_der_diferencial"></td>
+            <td>
+              <select id="rodilla_rot_ext_dolor" name="rodilla_rot_ext_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_rot_ext_funcionalidad" name="rodilla_rot_ext_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_rot_ext_obs" name="rodilla_rot_ext_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Evaluación del Patrón de Flexo-extensión -->
+    <h5 class="mt-4 mb-3">Análisis del Patrón de Flexo-extensión</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Fase del Movimiento</th>
+            <th>Rodilla Izquierda</th>
+            <th>Rodilla Derecha</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Inicio flexión (0-30°)</td>
+            <td>
+              <select id="rodilla_flexion_inicio_izq" name="rodilla_flexion_inicio_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (fluido)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (hesitación)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (bloqueo)</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_flexion_inicio_der" name="rodilla_flexion_inicio_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (fluido)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (hesitación)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (bloqueo)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_flexion_inicio_obs" name="rodilla_flexion_inicio_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Flexión media (31-90°)</td>
+            <td>
+              <select id="rodilla_flexion_media_izq" name="rodilla_flexion_media_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (fluido)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (crepitación)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (bloqueo)</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_flexion_media_der" name="rodilla_flexion_media_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (fluido)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (crepitación)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (bloqueo)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_flexion_media_obs" name="rodilla_flexion_media_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Flexión final (91-135°)</td>
+            <td>
+              <select id="rodilla_flexion_final_izq" name="rodilla_flexion_final_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (fluido)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (resistencia)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (tope duro)</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_flexion_final_der" name="rodilla_flexion_final_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (fluido)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (resistencia)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (tope duro)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_flexion_final_obs" name="rodilla_flexion_final_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Extensión final (últimos 10°)</td>
+            <td>
+              <select id="rodilla_extension_final_izq" name="rodilla_extension_final_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (rotación automática)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (sin rotación)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (imposible)</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_extension_final_der" name="rodilla_extension_final_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (rotación automática)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (sin rotación)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (imposible)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_extension_final_obs" name="rodilla_extension_final_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Evaluación de Movimiento Patelofemoral -->
+    <h5 class="mt-4 mb-3">Evaluación del Movimiento Patelofemoral</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Movimiento</th>
+            <th>Rótula Izquierda</th>
+            <th>Rótula Derecha</th>
+            <th>Dolor</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Deslizamiento medial</td>
+            <td>
+              <select id="rodilla_rotula_medial_izq" name="rodilla_rotula_medial_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_rotula_medial_der" name="rodilla_rotula_medial_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_rotula_medial_dolor" name="rodilla_rotula_medial_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_rotula_medial_obs" name="rodilla_rotula_medial_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Deslizamiento lateral</td>
+            <td>
+              <select id="rodilla_rotula_lateral_izq" name="rodilla_rotula_lateral_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_rotula_lateral_der" name="rodilla_rotula_lateral_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_rotula_lateral_dolor" name="rodilla_rotula_lateral_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_rotula_lateral_obs" name="rodilla_rotula_lateral_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Deslizamiento caudal</td>
+            <td>
+              <select id="rodilla_rotula_caudal_izq" name="rodilla_rotula_caudal_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_rotula_caudal_der" name="rodilla_rotula_caudal_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_rotula_caudal_dolor" name="rodilla_rotula_caudal_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_rotula_caudal_obs" name="rodilla_rotula_caudal_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Deslizamiento craneal</td>
+            <td>
+              <select id="rodilla_rotula_craneal_izq" name="rodilla_rotula_craneal_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_rotula_craneal_der" name="rodilla_rotula_craneal_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_rotula_craneal_dolor" name="rodilla_rotula_craneal_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_rotula_craneal_obs" name="rodilla_rotula_craneal_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Movimiento durante flexión activa</td>
+            <td>
+              <select id="rodilla_tracking_pf_izq" name="rodilla_tracking_pf_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (centrado)</option>
+                <option value="Desviación leve" data-color="info">Desviación leve</option>
+                <option value="Desviación moderada" data-color="warning">Desviación moderada lateral</option>
+                <option value="Desviación severa" data-color="danger">Desviación severa lateral</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_tracking_pf_der" name="rodilla_tracking_pf_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (centrado)</option>
+                <option value="Desviación leve" data-color="info">Desviación leve</option>
+                <option value="Desviación moderada" data-color="warning">Desviación moderada lateral</option>
+                <option value="Desviación severa" data-color="danger">Desviación severa lateral</option>
+              </select>
+            </td>
+            <td>
+              <select id="rodilla_tracking_pf_dolor" name="rodilla_tracking_pf_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="rodilla_tracking_pf_obs" name="rodilla_tracking_pf_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Calculadora de déficit funcional rodilla -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Calculadora de Déficit Funcional Rodilla</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="rodilla_deficit_total" class="form-label">Déficit Total (%)</label>
+              <input type="text" id="rodilla_deficit_total" name="rodilla_deficit_total" class="form-control" readonly>
+            </div>
+            <div id="rodilla_deficit_visual" class="mt-2 progress">
+              <div class="progress-bar bg-info" role="progressbar" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="rodilla_deficit_interpretacion" class="form-label">Interpretación Clínica</label>
+              <select id="rodilla_deficit_interpretacion" name="rodilla_deficit_interpretacion" class="form-select" disabled>
+                <option value="">Pendiente de cálculo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <h6>Impacto en Actividades Diarias</h6>
+            <ul id="rodilla_impacto_actividades" class="list-group">
+              <!-- Se generará dinámicamente -->
+              <li class="list-group-item list-group-item-info">Complete la evaluación para ver el impacto en actividades.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Evaluación de articulaciones asociadas -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Evaluación de Articulaciones Asociadas</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Articulación</th>
+                <th>Movilidad</th>
+                <th>Dolor</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tibiofemoral</td>
+                <td>
+                  <select id="rodilla_art_tibiofemoral_movilidad" name="rodilla_art_tibiofemoral_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_art_tibiofemoral_dolor" name="rodilla_art_tibiofemoral_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="rodilla_art_tibiofemoral_obs" name="rodilla_art_tibiofemoral_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Patelofemoral</td>
+                <td>
+                  <select id="rodilla_art_patelofemoral_movilidad" name="rodilla_art_patelofemoral_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_art_patelofemoral_dolor" name="rodilla_art_patelofemoral_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="rodilla_art_patelofemoral_obs" name="rodilla_art_patelofemoral_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Tibioperonea proximal</td>
+                <td>
+                  <select id="rodilla_art_tibioperonea_movilidad" name="rodilla_art_tibioperonea_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_art_tibioperonea_dolor" name="rodilla_art_tibioperonea_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="rodilla_art_tibioperonea_obs" name="rodilla_art_tibioperonea_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Movimientos accesorios de la rodilla -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Movimientos Accesorios de la Rodilla</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Movimiento</th>
+                <th>Calidad Izquierdo</th>
+                <th>Dolor Izquierdo</th>
+                <th>Calidad Derecho</th>
+                <th>Dolor Derecho</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tracción tibiofemoral</td>
+                <td>
+                  <select id="rodilla_acc_traccion_tf_izq_calidad" name="rodilla_acc_traccion_tf_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_traccion_tf_izq_dolor" name="rodilla_acc_traccion_tf_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_traccion_tf_der_calidad" name="rodilla_acc_traccion_tf_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_traccion_tf_der_dolor" name="rodilla_acc_traccion_tf_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="rodilla_acc_traccion_tf_obs" name="rodilla_acc_traccion_tf_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento anterior tibia</td>
+                <td>
+                  <select id="rodilla_acc_desliz_ant_izq_calidad" name="rodilla_acc_desliz_ant_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_desliz_ant_izq_dolor" name="rodilla_acc_desliz_ant_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_desliz_ant_der_calidad" name="rodilla_acc_desliz_ant_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_desliz_ant_der_dolor" name="rodilla_acc_desliz_ant_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="rodilla_acc_desliz_ant_obs" name="rodilla_acc_desliz_ant_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento posterior tibia</td>
+                <td>
+                  <select id="rodilla_acc_desliz_post_izq_calidad" name="rodilla_acc_desliz_post_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_desliz_post_izq_dolor" name="rodilla_acc_desliz_post_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_desliz_post_der_calidad" name="rodilla_acc_desliz_post_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_desliz_post_der_dolor" name="rodilla_acc_desliz_post_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="rodilla_acc_desliz_post_obs" name="rodilla_acc_desliz_post_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Desplazamiento patelar</td>
+                <td>
+                  <select id="rodilla_acc_patelar_izq_calidad" name="rodilla_acc_patelar_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_patelar_izq_dolor" name="rodilla_acc_patelar_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_patelar_der_calidad" name="rodilla_acc_patelar_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="rodilla_acc_patelar_der_dolor" name="rodilla_acc_patelar_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="rodilla_acc_patelar_obs" name="rodilla_acc_patelar_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Patrones de restricción capsular -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Patrón de Restricción Capsular de la Rodilla</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="rodilla_patron_capsular" class="form-label">Patrón de restricción (ordenado por limitación)</label>
+              <select id="rodilla_patron_capsular" name="rodilla_patron_capsular" class="form-select" onchange="mostrarInterpretacionCapsular('rodilla')">
+                <option value="">Seleccionar</option>
+                <option value="No presenta">No presenta patrón capsular</option>
+                <option value="Flexión > Extensión > Rotación interna">Flexión > Extensión > Rotación interna</option>
+                <option value="Extensión > Flexión > Rotación externa">Extensión > Flexión > Rotación externa</option>
+                <option value="Rotación externa > Flexión > Rotación interna">Rotación externa > Flexión > Rotación interna</option>
+                <option value="Otro">Otro (especificar)</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6" id="rodilla_patron_otro_container" style="display: none;">
+            <div class="form-group">
+              <label for="rodilla_patron_otro" class="form-label">Especifique otro patrón</label>
+              <input type="text" id="rodilla_patron_otro" name="rodilla_patron_otro" class="form-control">
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header bg-info text-white">
+                <h6 class="mb-0">Interpretación Clínica del Patrón</h6>
+              </div>
+              <div class="card-body">
+                <div id="rodilla_interpretacion_capsular">
+                  <p>Seleccione un patrón de restricción para obtener la interpretación clínica.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación clínica de la rodilla -->
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Interpretación Clínica y Recomendaciones: Rodilla</h5>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion_rodilla" class="mb-3">
+          <h6>Interpretación Clínica:</h6>
+          <div id="interpretacion-rodilla-texto" class="p-3 border rounded">
+            Complete la evaluación de rangos de movimiento para obtener la interpretación clínica.
+          </div>
+        </div>
+        
+        <div id="recomendaciones_rodilla" class="mb-3">
+          <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+          <div id="recomendaciones-rodilla-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener recomendaciones específicas.
+          </div>
+        </div>
+        
+        <div id="consideraciones_rodilla" class="mb-3">
+          <h6>Consideraciones Adicionales:</h6>
+          <div id="consideraciones-rodilla-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener consideraciones adicionales específicas.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
       
       <!-- Continúa con los demás subacordeones para cada región anatómica... -->
       
