@@ -1913,49 +1913,48 @@ function generarConsideracionesROM(region, datos) {
   }
 }
 
-// Función completa para mostrar interpretación del patrón capsular - Todas las regiones
+// Mostrar interpretación del patrón capsular
 function mostrarInterpretacionCapsular(region) {
-  const patronSelect = document.getElementById(region + "_patron_capsular");
-  const interpretacionElement = document.getElementById(region + "_interpretacion_capsular");
-  const patronOtroContainer = document.getElementById(region + "_patron_otro_container");
-  
-  if (!patronSelect || !interpretacionElement) {
-    console.error(`Elementos para patrón capsular de ${region} no encontrados`);
-    return;
-  }
-  
-  // Mostrar/ocultar campo para "otro" patrón
-  if (patronOtroContainer) {
-    patronOtroContainer.style.display = patronSelect.value === "Otro" ? "block" : "none";
-  }
-  
-  // Si no hay selección, mostrar mensaje por defecto
-  if (!patronSelect.value) {
-    interpretacionElement.innerHTML = "<p>Seleccione un patrón de restricción para obtener la interpretación clínica.</p>";
-    return;
-  }
-  
-  // Si seleccionó "No presenta", mostrar mensaje correspondiente para cualquier región
-  if (patronSelect.value === "No presenta") {
-    interpretacionElement.innerHTML = `
-      <p>No se identifica un patrón de restricción capsular, lo que sugiere que la limitación del movimiento probablemente no sea de origen capsular/articular.</p>
-      <p>Considere evaluar:</p>
-      <ul>
-        <li>Mecanismos neuromotores (control motor, activación muscular)</li>
-        <li>Factores sensoriales o propioceptivos que limiten el movimiento</li>
-        <li>Alteraciones posturales o compensaciones biomecánicas regionales</li>
-        <li>Factores psicosociales que puedan estar afectando el movimiento</li>
-      </ul>
-    `;
-    return;
-  }
-  
-  // Interpretaciones específicas para cada región y patrón
-  let interpretacion = "";
-  
-  // Patrones según la región anatómica
-  switch (region) {
-    case "cervical":
+  try {
+    const patronSelect = document.getElementById(region + "_patron_capsular");
+    const interpretacionElement = document.getElementById(region + "_interpretacion_capsular");
+    const patronOtroContainer = document.getElementById(region + "_patron_otro_container");
+    
+    if (!patronSelect || !interpretacionElement) {
+      console.log(`No se encontraron elementos para patrón capsular de ${region}`);
+      return false;
+    }
+    
+    // Mostrar/ocultar campo para "otro" patrón
+    if (patronOtroContainer) {
+      patronOtroContainer.style.display = patronSelect.value === "Otro" ? "block" : "none";
+    }
+    
+    // Si no hay selección, mostrar mensaje por defecto
+    if (!patronSelect.value) {
+      interpretacionElement.innerHTML = "<p>Seleccione un patrón de restricción para obtener la interpretación clínica.</p>";
+      return false;
+    }
+    
+    // Si seleccionó "No presenta", mostrar mensaje correspondiente
+    if (patronSelect.value === "No presenta") {
+      interpretacionElement.innerHTML = `
+        <p>No se identifica un patrón de restricción capsular, lo que sugiere que la limitación del movimiento probablemente no sea de origen capsular/articular.</p>
+        <p>Considere evaluar:</p>
+        <ul>
+        <li>Factores neuromusculares (activación muscular, control motor)</li>
+          <li>Aspectos propioceptivos o de confianza en el movimiento</li>
+          <li>Factores posturales o compensatorios</li>
+        </ul>
+      `;
+      return true;
+    }
+    
+    // Interpretaciones específicas para cada patrón
+    let interpretacion = "";
+    
+    // Patrones específicos según la región
+    if (region === "cervical") {
       switch (patronSelect.value) {
         case "Rotación contralateral > Inclinación lateral contralateral > Extensión":
           interpretacion = `
@@ -1963,845 +1962,107 @@ function mostrarInterpretacionCapsular(region) {
             <p>Estructuras potencialmente involucradas:</p>
             <ul>
               <li>Cápsula articular facetaria (especialmente su porción posterior)</li>
-              <li>Ligamentos vertebrales posteriores</li>
-              <li>Posible alteración de la orientación articular facetaria</li>
+              <li>Ligamentos longitudinales y potencialmente uncoarticulares</li>
             </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
+            <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
             <ul>
               <li>Técnicas de movilización articular específica para restaurar el deslizamiento facetario</li>
-              <li>Ejercicios de control motor cervical con énfasis en estabilización segmentaria</li>
-              <li>Reeducación sensoriomotora con retroalimentación visual y táctil</li>
-              <li>Abordaje progresivo hacia patrones de movimiento funcionales</li>
+              <li>Ejercicios de control motor cervical con énfasis en rotación e inclinación lateral</li>
+              <li>Reeducación neuromuscular con retroalimentación</li>
             </ul>
           `;
           break;
-        case "Extensión > Inclinación lateral > Rotación":
-          interpretacion = `
-            <p>Este patrón sugiere <strong>restricción del segmento articular anterior</strong> o alteración del movimiento de las articulaciones uncovertebrales.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Componentes capsulares anteriores</li>
-              <li>Ligamento longitudinal anterior</li>
-              <li>Posibles cambios articulares en uncovertebrales</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Movilización articular con énfasis en técnicas de flexión y deslizamiento anterior</li>
-              <li>Ejercicios específicos para restaurar la coordinación neuromuscular profunda</li>
-              <li>Corrección de factores posturales que aumenten la carga sobre estructuras anteriores</li>
-              <li>Integración con reeducación de la región craneocervical</li>
-            </ul>
-          `;
-          break;
-        case "Flexión > Inclinación lateral > Rotación":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>disfunción de las estructuras posteriores articulares</strong> de la columna cervical.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Componentes ligamentosos posteriores (interespinosos, amarillo, supraespinoso)</li>
-              <li>Cápsula facetaria en su porción posterior</li>
-              <li>Posible alteración de la cinemática intervertebral</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización específica en flexión controlada</li>
-              <li>Fortalecimiento progresivo del sistema flexor profundo</li>
-              <li>Ejercicios de coordinación neuromuscular y reeducación sensoriomotora</li>
-              <li>Integración con control postural y de la región escapular</li>
-            </ul>
-          `;
-          break;
+        // Otros casos cervicales pueden agregarse aquí
         default:
           interpretacion = `
-            <p>El patrón de restricción identificado no corresponde con los patrones capsulares clásicos cervicales descritos en la literatura, lo que podría indicar:</p>
+            <p>El patrón de restricción identificado no corresponde con los patrones capsulares clásicos cervicales, lo que podría indicar una combinación de factores o un mecanismo no típico.</p>
+            <p>Consideraciones clínicas:</p>
             <ul>
-              <li>Una combinación de factores biomecánicos afectando múltiples segmentos</li>
-              <li>Alteración del control sensoriomotor cervical</li>
-              <li>Influencia de regiones adyacentes (craneocervical, cervicotorácica)</li>
+              <li>Evaluar factores neuromusculares y propioceptivos</li>
+              <li>Considerar influencias de segmentos adyacentes</li>
+              <li>Valorar aspectos posturales globales que puedan influir</li>
             </ul>
-            <p>Abordaje recomendado según evidencia:</p>
-            <ul>
-              <li>Evaluación segmentaria específica para identificar disfunciones articulares primarias</li>
-              <li>Valoración del control motor y propiocepción cervical</li>
-              <li>Tratamiento integrado que combine movilización segmentaria y reeducación neuromuscular</li>
-              <li>Considerar evaluación y tratamiento de regiones adyacentes</li>
-            </ul>
+            <p>Se recomienda un abordaje integrado que combine técnicas articulares, neurodinámicas y de control motor adaptadas a las restricciones específicas observadas.</p>
           `;
       }
-      break;
-
-    case "dorsal":
-      switch (patronSelect.value) {
-        case "Rotación > Extensión > Flexión lateral":
-          interpretacion = `
-            <p>Este patrón es consistente con <strong>disfunción de la mecánica costovertebral y facetaria dorsal</strong>, que limita particularmente el componente rotacional.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Articulaciones costovertebral y costotransversa</li>
-              <li>Cápsula articular facetaria dorsal</li>
-              <li>Alteración de la orientación articular facetaria dorsal</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización específica costovertebral y costotransversa</li>
-              <li>Ejercicios respiratorios con componente de movilidad costal</li>
-              <li>Integración con control de la región escapulotorácica</li>
-              <li>Progresión hacia patrones funcionales con componente rotacional</li>
-            </ul>
-          `;
-          break;
-        case "Flexión > Flexión lateral > Rotación":
-          interpretacion = `
-            <p>Este patrón sugiere <strong>restricción de los elementos posteriores dorsales</strong>, que afecta principalmente la extensibilidad segmentaria.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Ligamentos interespinosos y supraespinosos</li>
-              <li>Cápsula articular facetaria en su porción posterior</li>
-              <li>Posible alteración de la cinemática intervertebral dorsal</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización segmentaria en flexión controlada</li>
-              <li>Ejercicios de automovilización con asistencia respiratoria</li>
-              <li>Abordaje integrado de la postura y movilidad global dorsal</li>
-              <li>Reeducación del patrón respiratorio y su relación con la movilidad torácica</li>
-            </ul>
-          `;
-          break;
-        case "Extensión > Flexión lateral > Rotación":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>restricción de los elementos anteriores dorsales</strong>, que limita la cinemática en extensión.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Ligamento longitudinal anterior</li>
-              <li>Componentes capsuloligamentosos anterolaterales</li>
-              <li>Articulaciones costovertebrales en su porción anterior</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento posterior para restaurar la movilidad anterior</li>
-              <li>Ejercicios específicos de extensión torácica en combinación con control respiratorio</li>
-              <li>Reeducación de la mecánica escapulotorácica</li>
-              <li>Integración con la región cervicotorácica y toracolumbar</li>
-            </ul>
-          `;
-          break;
-        default:
-          interpretacion = `
-            <p>El patrón identificado no corresponde con los patrones capsulares típicos dorsales, lo que podría sugerir:</p>
-            <ul>
-              <li>Disfunción combinada costovertebral y facetaria</li>
-              <li>Alteración regional de la mecánica respiratoria</li>
-              <li>Adaptaciones posturales que modifican la cinemática dorsal típica</li>
-            </ul>
-            <p>Abordaje recomendado según evidencia:</p>
-            <ul>
-              <li>Evaluación detallada de la función costovertebral y su relación con la respiración</li>
-              <li>Valoración de la influencia de las regiones adyacentes y la cintura escapular</li>
-              <li>Tratamiento integrado que combine técnicas articulares y función respiratoria</li>
-              <li>Reeducación postural con énfasis en la región torácica</li>
-            </ul>
-          `;
-      }
-      break;
-
-    case "lumbar":
-      switch (patronSelect.value) {
-        case "Flexión > Extensión > Rotación":
-          interpretacion = `
-            <p>Este patrón es consistente con <strong>disfunción de las articulaciones facetarias lumbares</strong>, que limita principalmente la extensión segmentaria.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular facetaria (especialmente su porción posterolateral)</li>
-              <li>Ligamentos interespinosos</li>
-              <li>Alteraciones en la orientación de superficies facetarias</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización articular específica para facetarias lumbares</li>
-              <li>Ejercicios de control motor con énfasis en neutralización pélvica</li>
-              <li>Reeducación del patrón de extensión lumbar con estabilización</li>
-              <li>Integración progresiva con actividades funcionales</li>
-            </ul>
-          `;
-          break;
-        case "Extensión > Rotación > Flexión lateral":
-          interpretacion = `
-            <p>Este patrón sugiere <strong>alteración del componente articular anterior</strong> o posible disfunción intrasegmentaria.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Componentes anteriores del complejo triarticular lumbar</li>
-              <li>Ligamento longitudinal anterior</li>
-              <li>Alteración de la biomecánica del disco intervertebral</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de apertura del espacio articular con control de carga</li>
-              <li>Ejercicios específicos de estabilización segmentaria</li>
-              <li>Reeducación del control neuromuscular de la región lumbopélvica</li>
-              <li>Progresión controlada hacia patrones funcionales con mayor carga</li>
-            </ul>
-          `;
-          break;
-        case "Rotación > Flexión lateral > Flexión":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>disfunción de la orientación facetaria</strong>, predominantemente en la capacidad rotacional.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular facetaria (principalmente en su porción posterior)</li>
-              <li>Alteración de la orientación sagital de las superficies facetarias</li>
-              <li>Posible influencia de la estabilidad rotacional segmentaria</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización rotacional específica con control</li>
-              <li>Ejercicios de estabilización segmentaria en planos transversales</li>
-              <li>Reeducación del control neuromuscular rotacional</li>
-              <li>Integración progresiva con actividades funcionales multiplanares</li>
-            </ul>
-          `;
-          break;
-        default:
-          interpretacion = `
-            <p>El patrón identificado no corresponde con los patrones capsulares típicos lumbares, lo que podría indicar:</p>
-            <ul>
-              <li>Alteración del control motor regional más que restricción articular específica</li>
-              <li>Combinación de factores segmentarios y regionales</li>
-              <li>Influencia significativa de regiones adyacentes (toracolumbar, lumbosacra)</li>
-            </ul>
-            <p>Abordaje recomendado según evidencia:</p>
-            <ul>
-              <li>Evaluación detallada del control neuromuscular y estabilidad lumbar</li>
-              <li>Valoración de la función de musculatura local y global</li>
-              <li>Tratamiento integrado con énfasis en control motor y estabilidad dinámica</li>
-              <li>Reeducación de patrones de movimiento funcionales completos</li>
-            </ul>
-          `;
-      }
-      break;
-
-    case "pelvis":
-      switch (patronSelect.value) {
-        case "Nutación > Rotación posterior > Traslación cefálica":
-          interpretacion = `
-            <p>Este patrón es consistente con <strong>restricción de la movilidad sacroilíaca posterior</strong>, limitando principalmente el movimiento de contranutación.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Ligamentos sacroilíacos posteriores</li>
-              <li>Cápsula de la articulación sacroilíaca en su porción posterior</li>
-              <li>Alteración de la congruencia articular sacroilíaca posterior</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización específica para restaurar la cinemática sacroilíaca</li>
-              <li>Ejercicios de control motor lumbopélvico</li>
-              <li>Reeducación de la transferencia de carga a través de la pelvis</li>
-              <li>Integración con patrones funcionales de la extremidad inferior</li>
-            </ul>
-          `;
-          break;
-        case "Contranutación > Rotación anterior > Traslación caudal":
-          interpretacion = `
-            <p>Este patrón sugiere <strong>restricción de la movilidad sacroilíaca anterior</strong>, con limitación predominante de la nutación.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Ligamentos sacroilíacos anteriores</li>
-              <li>Cápsula de la articulación sacroilíaca en su porción anterior</li>
-              <li>Alteración de la transferencia de carga anterior a través de la articulación</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización específica para restaurar el componente anterior</li>
-              <li>Ejercicios de estabilización pélvica dinámica</li>
-              <li>Reeducación del control motor lumbopélvico integrado</li>
-              <li>Normalización de la activación de la musculatura del suelo pélvico</li>
-            </ul>
-          `;
-          break;
-        case "Rotación > Traslación lateral > Inclinación":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>disfunción de la movilidad iliosacra unilateral</strong>, que afecta la cinemática rotacional de la pelvis.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular sacroilíaca unilateral</li>
-              <li>Ligamentos iliolumbares</li>
-              <li>Alteración de la transferencia de carga asimétrica a través de la pelvis</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización específica unilateral</li>
-              <li>Ejercicios de control motor para restaurar la simetría funcional</li>
-              <li>Reeducación del patrón de transferencia de carga en actividades funcionales</li>
-              <li>Integración con la cadena cinética de extremidad inferior ipsilateral</li>
-            </ul>
-          `;
-          break;
-        default:
-          interpretacion = `
-            <p>El patrón identificado no corresponde con los patrones típicos de restricción sacroilíaca, lo que podría indicar:</p>
-            <ul>
-              <li>Disfunción combinada sacroilíaca y lumbosacra</li>
-              <li>Alteración del control motor y estabilidad lumbopélvica global</li>
-              <li>Adaptaciones complejas que modifican la transferencia de carga a través de la pelvis</li>
-            </ul>
-            <p>Abordaje recomendado según evidencia:</p>
-            <ul>
-              <li>Evaluación detallada de la función lumbopélvica integrada</li>
-              <li>Valoración del control motor en tareas funcionales específicas</li>
-              <li>Tratamiento multimodal con énfasis en estabilidad y control neuromuscular</li>
-              <li>Reeducación de patrones de movimiento funcionales completos</li>
-            </ul>
-          `;
-      }
-      break;
-
-    case "hombro":
+    } 
+    // Patrones para el hombro (muy importantes)
+    else if (region === "hombro") {
       switch (patronSelect.value) {
         case "Rotación externa > Abducción > Rotación interna":
           interpretacion = `
-            <p>Este patrón es consistente con <strong>disfunción capsular anteroinferior</strong>, frecuentemente observado en capsulitis adhesiva en fase inicial-intermedia.</p>
+            <p>Este patrón de restricción es consistente con <strong>capsulitis adhesiva o "hombro congelado"</strong> en fase inicial-intermedia, con compromiso predominante de la cápsula anteroinferior.</p>
             <p>Estructuras potencialmente involucradas:</p>
             <ul>
-              <li>Cápsula articular glenohumeral anteroinferior</li>
-              <li>Ligamento glenohumeral inferior (banda anterior)</li>
-              <li>Receso axilar de la cápsula articular</li>
+              <li>Cápsula articular glenohumeral (especialmente porción anteroinferior)</li>
+              <li>Ligamento glenohumeral inferior</li>
+              <li>Receso axilar de la cápsula</li>
             </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
+            <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
             <ul>
-              <li>Técnicas de movilización articular específicas para la región anteroinferior</li>
-              <li>Ejercicios pendulares y de deslizamiento con progresión controlada</li>
-              <li>Abordaje neurofisiológico del dolor si está presente</li>
-              <li>Restauración progresiva del ritmo escapulohumeral</li>
+              <li>Técnicas de movilización articular específicas para la cápsula anteroinferior</li>
+              <li>Ejercicios pendulares y de deslizamiento gradual</li>
+              <li>Progresión cautelosa respetando el umbral de dolor para evitar exacerbaciones</li>
+              <li>Consideración de técnicas neuromoduladoras en casos de dolor severo</li>
             </ul>
           `;
           break;
+          
         case "Rotación interna > Extensión > Rotación externa":
           interpretacion = `
-            <p>Este patrón sugiere <strong>restricción capsular posterior</strong>, frecuentemente asociado a adaptaciones específicas o cambios degenerativos posteriores.</p>
+            <p>Este patrón de restricción sugiere <strong>compromiso de la cápsula posterior</strong>, frecuentemente asociado a patologías que afectan el espacio posterior como:</p>
             <p>Estructuras potencialmente involucradas:</p>
             <ul>
               <li>Cápsula glenohumeral posterior</li>
               <li>Intervalo rotador posterior</li>
-              <li>Alteración de la centralización de la cabeza humeral</li>
+              <li>Posible tensión adaptativa en músculos rotadores externos</li>
             </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
+            <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
             <ul>
-              <li>Técnicas de deslizamiento anterior específico y movilización posterior</li>
-              <li>Ejercicios de control neuromuscular para centralización humeral</li>
+              <li>Técnicas de deslizamiento posterior y movilización específica del intervalo posterior</li>
+              <li>Ejercicios de estiramiento gradual para la cápsula posterior</li>
               <li>Normalización del ritmo escapulohumeral y activación de estabilizadores escapulares</li>
-              <li>Progresión hacia patrones funcionales específicos</li>
+              <li>En deportistas de lanzamiento, incluir programa de prevención específico</li>
             </ul>
           `;
           break;
+          
         case "Flexión > Abducción > Rotación externa":
           interpretacion = `
-            <p>Este patrón es compatible con <strong>restricción capsular inferior</strong>, que afecta la biomecánica del receso axilar y estructuras inferiores.</p>
+            <p>Este patrón de restricción es compatible con <strong>compromiso de la cápsula inferior y anteroinferior</strong>, frecuentemente observado en:</p>
             <p>Estructuras potencialmente involucradas:</p>
             <ul>
               <li>Cápsula glenohumeral inferior</li>
-              <li>Ligamento glenohumeral inferior (complejo)</li>
-              <li>Alteración de la cinemática del receso axilar durante la elevación</li>
+              <li>Ligamento glenohumeral inferior (banda anterior)</li>
+              <li>Posibles adherencias en el receso axilar</li>
             </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
+            <p>Enfoque terapéutico recomendado (basado en evidencia):</p>
             <ul>
-              <li>Técnicas de movilización con énfasis en el deslizamiento inferior y lateral</li>
-              <li>Ejercicios de control motor para normalizar la artrocinemática glenohumeral</li>
-              <li>Reeducación del ritmo escapulohumeral durante la elevación</li>
-              <li>Integración con la función escapulotorácica</li>
+              <li>Técnicas de movilización con énfasis en el deslizamiento inferior y anterior</li>
+              <li>Restauración progresiva de la movilidad respetando la irritabilidad articular</li>
+              <li>Ejercicios de control motor para normalizar la artrocinemática</li>
+              <li>Valoración y tratamiento de la función escapular asociada</li>
             </ul>
           `;
           break;
+          
         default:
           interpretacion = `
-            <p>El patrón identificado no corresponde con los patrones capsulares clásicos del hombro, lo que podría indicar:</p>
+            <p>El patrón de restricción identificado no corresponde con los patrones capsulares clásicos del hombro, lo que podría sugerir:</p>
             <ul>
-              <li>Disfunción combinada del complejo articular del hombro</li>
-              <li>Alteración primaria de la mecánica escapulotorácica</li>
-              <li>Adaptaciones complejas que modifican la cinemática típica del hombro</li>
+              <li>Combinación de factores capsulares y no capsulares</li>
+              <li>Mecanismos compensatorios por disfunción de la articulación escapulotorácica</li>
+              <li>Posible implicación neurodinámica o alteración del control motor</li>
             </ul>
-            <p>Abordaje recomendado según evidencia:</p>
+            <p>Se recomienda un abordaje que incluya:</p>
             <ul>
-              <li>Evaluación detallada del ritmo escapulohumeral y patrón de reclutamiento muscular</li>
-              <li>Valoración de la estabilidad dinámica en diferentes posiciones funcionales</li>
-              <li>Tratamiento integrado que aborde el complejo del hombro como unidad funcional</li>
-              <li>Reeducación neuromuscular progresiva y específica</li>
+              <li>Evaluación completa del ritmo escapulohumeral</li>
+              <li>Valoración de elementos neuromiofasciales regionales</li>
+              <li>Técnicas combinadas articulares y neurodinámicas</li>
+              <li>Reeducación del control motor del complejo del hombro</li>
             </ul>
           `;
       }
-      break;
-
-    case "codo":
-      switch (patronSelect.value) {
-        case "Extensión > Supinación > Pronación":
-          interpretacion = `
-            <p>Este patrón es consistente con <strong>restricción capsular anterolateral</strong>, que limita principalmente la extensión final.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular anterior del codo</li>
-              <li>Ligamento colateral radial (porción anterior)</li>
-              <li>Alteración de la cinemática humerorradial anterior</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento posterior específico de la articulación humerorradial</li>
-              <li>Ejercicios de movilización controlada en extensión progresiva</li>
-              <li>Reeducación neuromuscular de la activación del tríceps</li>
-              <li>Normalización de la movilidad de la articulación radiocubital proximal</li>
-            </ul>
-          `;
-          break;
-        case "Flexión > Pronación > Supinación":
-          interpretacion = `
-            <p>Este patrón sugiere <strong>restricción capsular posterior</strong>, que limita la flexión completa del codo.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular posterior del codo</li>
-              <li>Receso olecraniano</li>
-              <li>Posible alteración de la superficie articular posterior</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento anterior de la articulación humerocubital</li>
-              <li>Movilización del receso olecraniano con control neuromuscular</li>
-              <li>Reeducación de la flexión con progresión gradual</li>
-              <li>Integración con la cadena cinética del miembro superior</li>
-            </ul>
-          `;
-          break;
-        case "Pronación > Flexión > Extensión":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>disfunción de la articulación radiocubital proximal</strong>, que altera principalmente la pronosupinación.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula de la articulación radiocubital proximal</li>
-              <li>Ligamento anular del radio</li>
-              <li>Alteración de la cinemática rotacional del radio</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización específica para la articulación radiocubital proximal</li>
-              <li>Ejercicios de control motor para la pronosupinación</li>
-              <li>Normalización de la mecánica de la membrana interósea</li>
-              <li>Restauración progresiva de la función coordinada del antebrazo</li>
-            </ul>
-          `;
-          break;
-        default:
-          interpretacion = `
-            <p>El patrón identificado no corresponde con los patrones capsulares típicos del codo, lo que podría indicar:</p>
-            <ul>
-              <li>Disfunción combinada de múltiples componentes articulares del codo</li>
-              <li>Alteración de la biomecánica proximal o distal que influye en el codo</li>
-              <li>Adaptaciones complejas por condiciones específicas</li>
-            </ul>
-            <p>Abordaje recomendado según evidencia:</p>
-            <ul>
-              <li>Evaluación detallada de la cinemática de las tres articulaciones del codo</li>
-              <li>Valoración de la influencia de la mecánica del hombro y la muñeca</li>
-              <li>Tratamiento integrado que considere la cadena cinética completa</li>
-              <li>Reeducación funcional específica para las actividades relevantes</li>
-            </ul>
-          `;
-      }
-      break;
-
-    case "muneca":
-      switch (patronSelect.value) {
-        case "Extensión > Desviación radial > Flexión":
-          interpretacion = `
-            <p>Este patrón es consistente con <strong>restricción de la cápsula volar (anterior)</strong>, frecuente tras inmovilizaciones o traumatismos.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular radiocarpiana volar</li>
-              <li>Ligamentos radiocarpianos volares</li>
-              <li>Alteración de la cinemática de la fila proximal del carpo</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento dorsal de la fila proximal del carpo</li>
-              <li>Movilización específica de la articulación radiocarpiana</li>
-              <li>Ejercicios de extensión controlada con progresión</li>
-              <li>Reeducación de los patrones de extensión funcional</li>
-            </ul>
-          `;
-          break;
-        case "Flexión > Desviación cubital > Extensión":
-          interpretacion = `
-            <p>Este patrón sugiere <strong>restricción de la cápsula dorsal (posterior)</strong>, que limita la flexión completa de la muñeca.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular radiocarpiana dorsal</li>
-              <li>Ligamentos radiocarpianos dorsales</li>
-              <li>Alteración de la cinemática dorsal del carpo</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento volar de la fila proximal del carpo</li>
-              <li>Movilización específica de las articulaciones intercarpiana y mediocarpiana</li>
-              <li>Ejercicios de control neuromuscular en flexión progresiva</li>
-              <li>Integración con la función de prensión y manipulación</li>
-            </ul>
-          `;
-          break;
-        case "Desviación cubital > Flexión > Extensión":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>restricción de la región radiocarpiana radial</strong>, que afecta la movilidad lateral de la muñeca.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular radiocarpiana lateral</li>
-              <li>Ligamento colateral radial</li>
-              <li>Alteración de la biomecánica de la estiloides radial</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento cubital del escafoides y trapecio</li>
-              <li>Movilización específica de la articulación radiocarpiana lateral</li>
-              <li>Ejercicios de control motor con énfasis en desviación cubital controlada</li>
-              <li>Reeducación de patrones funcionales que requieren estabilidad radial</li>
-            </ul>
-          `;
-          break;
-        default:
-          interpretacion = `
-            <p>El patrón identificado no corresponde con los patrones capsulares típicos de la muñeca, lo que podría indicar:</p>
-            <ul>
-              <li>Disfunción compleja del complejo articular de la muñeca</li>
-              <li>Alteración de la biomecánica intercarpiana o mediocarpiana</li>
-              <li>Adaptaciones específicas de la mecánica carpiana</li>
-            </ul>
-            <p>Abordaje recomendado según evidencia:</p>
-            <ul>
-              <li>Evaluación detallada de las articulaciones radiocarpiana, mediocarpiana e intercarpianas</li>
-              <li>Valoración de la influencia de la función del antebrazo y mano</li>
-              <li>Tratamiento integrado de la mecánica carpiana compleja</li>
-              <li>Reeducación funcional específica según demandas del paciente</li>
-            </ul>
-          `;
-      }
-      break;
-
-    case "cadera":
-      switch (patronSelect.value) {
-        case "Rotación interna > Flexión > Abducción":
-          interpretacion = `
-            <p>Este patrón es consistente con <strong>restricción capsular anterolateral</strong>, frecuente en cambios artrósicos iniciales o pinzamiento femoroacetabular tipo CAM.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular coxofemoral anterolateral</li>
-              <li>Ligamento iliofemoral (banda lateral)</li>
-              <li>Posible alteración morfológica en unión cabeza-cuello femoral</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento posterolateral de la cabeza femoral</li>
-              <li>Ejercicios de control motor con énfasis en rotación externa controlada</li>
-              <li>Optimización de la activación de estabilizadores de cadera</li>
-              <li>Reeducación de patrones de movimiento funcionales</li>
-            </ul>
-          `;
-          break;
-        case "Rotación externa > Extensión > Abducción":
-          interpretacion = `
-            <p>Este patrón sugiere <strong>restricción capsular anteromedial</strong>, frecuente en adaptaciones posturales o pinzamiento acetabular anterior.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular coxofemoral anteromedial</li>
-              <li>Ligamento pubofemoral</li>
-              <li>Posible alteración de la congruencia articular anterior</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento posterior de la cabeza femoral</li>
-              <li>Ejercicios de control motor de rotación interna controlada</li>
-              <li>Reeducación de patrones de movimiento cadera-pelvis</li>
-              <li>Integración con la función lumbopélvica y de extremidad inferior</li>
-            </ul>
-          `;
-          break;
-        case "Extensión > Rotación interna > Aducción":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>restricción capsular anterior</strong>, que limita principalmente la extensión de cadera.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular coxofemoral anterior</li>
-              <li>Ligamento iliofemoral (porción medial y lateral)</li>
-              <li>Alteración de la cinemática anterior durante la extensión</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento posterior de la cabeza femoral</li>
-              <li>Movilización específica de la cápsula anterior</li>
-              <li>Reeducación del patrón de extensión con control lumbopélvico</li>
-              <li>Integración con la cadena cinética posterior</li>
-            </ul>
-          `;
-          break;
-        default:
-          interpretacion = `
-            <p>El patrón identificado no corresponde con los patrones capsulares típicos de cadera, lo que podría indicar:</p>
-            <ul>
-              <li>Adaptaciones complejas multidireccionales</li>
-              <li>Alteración del control motor más que restricción capsular específica</li>
-              <li>Influencia significativa de la función lumbopélvica</li>
-            </ul>
-            <p>Abordaje recomendado según evidencia:</p>
-            <ul>
-              <li>Evaluación detallada de la artrocinemática coxofemoral</li>
-              <li>Valoración integral de la función lumbopélvica y su influencia</li>
-              <li>Tratamiento que integre control motor y movilidad específica</li>
-              <li>Reeducación de patrones funcionales completos</li>
-            </ul>
-          `;
-      }
-      break;
-
-    case "rodilla":
-      switch (patronSelect.value) {
-        case "Flexión > Rotación externa":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>restricción capsular anteromedial</strong>, frecuente tras procesos inflamatorios o traumáticos.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular femorotibial anteromedial</li>
-              <li>Retináculo medial</li>
-              <li>Alteración de la cinemática patelofemoral medial</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización específica para el compartimento anteromedial</li>
-              <li>Deslizamiento lateral de rótula con control</li>
-              <li>Ejercicios de control neuromuscular con énfasis en activación de vasto medial</li>
-              <li>Reeducación del patrón de flexión con control rotacional</li>
-            </ul>
-          `;
-          break;
-        case "Extensión > Rotación interna":
-          interpretacion = `
-            <p>Este patrón sugiere <strong>restricción capsular posterolateral</strong>, frecuente en procesos de inestabilidad o tras lesiones ligamentosas.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular femorotibial posterolateral</li>
-              <li>Complejo ligamentoso posterolateral</li>
-              <li>Alteración de la cinemática rotacional lateral</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento anteromedial de la tibia</li>
-              <li>Movilización específica del compartimento posterolateral</li>
-              <li>Ejercicios de estabilización dinámica con control rotacional</li>
-              <li>Reeducación de patrones de movimiento en cadena cinética cerrada</li>
-            </ul>
-          `;
-          break;
-        case "Rotación > Flexión > Extensión":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>alteración de la cinemática rotacional femorotibial</strong>, que afecta principalmente la rotación axial.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular posterolateral o posteromedial</li>
-              <li>Meniscos (en función de la dirección de restricción)</li>
-              <li>Alteración de la congruencia articular durante movimientos rotacionales</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización rotacional específica</li>
-              <li>Ejercicios de control motor rotacional progresivo</li>
-              <li>Reeducación de patrones de movimiento con componente rotacional</li>
-              <li>Integración con estabilidad dinámica en actividades funcionales</li>
-            </ul>
-          `;
-          break;
-        default:
-          interpretacion = `
-            <p>El patrón identificado no corresponde con los patrones capsulares típicos de rodilla, lo que podría indicar:</p>
-            <ul>
-              <li>Disfunción patelofemoral primaria</li>
-              <li>Alteración compleja que involucra múltiples estructuras articulares</li>
-              <li>Adaptaciones compensatorias por disfunción proximal o distal</li>
-            </ul>
-            <p>Abordaje recomendado según evidencia:</p>
-            <ul>
-              <li>Evaluación detallada de la mecánica femorotibial y patelofemoral</li>
-              <li>Valoración de la influencia de cadera y tobillo en la función de rodilla</li>
-              <li>Tratamiento integrado que considere el control motor global de extremidad inferior</li>
-              <li>Reeducación funcional específica según demandas del paciente</li>
-            </ul>
-          `;
-      }
-      break;
-
-    case "tobillo":
-      switch (patronSelect.value) {
-        case "Dorsiflexión > Eversión > Inversión":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>restricción de la cápsula posterior del tobillo</strong>, frecuente tras esguinces laterales o inmovilizaciones.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula posterior de la articulación talocrural</li>
-              <li>Cápsula posterior de la articulación subtalar</li>
-              <li>Alteración de la cinemática posterior durante la dorsiflexión</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento anterior del astrágalo</li>
-              <li>Movilización de la articulación subtalar en inversión controlada</li>
-              <li>Ejercicios de dorsiflexión con carga progresiva</li>
-              <li>Reeducación de patrones de movimiento funcionales</li>
-            </ul>
-          `;
-          break;
-        case "Inversión > Plantiflexión > Aducción":
-          interpretacion = `
-            <p>Este patrón sugiere <strong>restricción del complejo lateral del tobillo</strong>, frecuente tras esguinces mediales o alteraciones biomecánicas.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula lateral de la articulación subtalar</li>
-              <li>Cápsula de la articulación subastragalina anterior</li>
-              <li>Alteración de la cinemática lateral durante la inversión</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización específica para el compartimento lateral</li>
-              <li>Deslizamiento medial del calcáneo</li>
-              <li>Ejercicios de control motor con énfasis en estabilidad lateral</li>
-              <li>Reeducación del apoyo y la transferencia de carga</li>
-            </ul>
-          `;
-          break;
-        case "Plantiflexión > Inversión > Eversión":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>restricción de la cápsula anterior del tobillo</strong>, que limita principalmente la plantiflexión.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula anterior de la articulación talocrural</li>
-              <li>Región anterior de la sindesmosis tibioperonea distal</li>
-              <li>Alteración de la cinemática anterior durante la plantiflexión</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento posterior del astrágalo</li>
-              <li>Movilización de la articulación tibioperonea distal</li>
-              <li>Ejercicios de control motor en plantiflexión con carga progresiva</li>
-              <li>Reeducación del patrón de propulsión durante la marcha</li>
-            </ul>
-          `;
-          break;
-        default:
-          interpretacion = `
-            <p>El patrón identificado no corresponde con los patrones capsulares típicos del tobillo, lo que podría indicar:</p>
-            <ul>
-              <li>Disfunción combinada de múltiples articulaciones del complejo del tobillo</li>
-              <li>Alteración de la biomecánica del pie que influye en el tobillo</li>
-              <li>Adaptaciones complejas por inestabilidad funcional</li>
-            </ul>
-            <p>Abordaje recomendado según evidencia:</p>
-            <ul>
-              <li>Evaluación detallada de la mecánica del tobillo, subastragalina y mediotarsiana</li>
-              <li>Valoración del control propioceptivo y estabilidad dinámica</li>
-              <li>Tratamiento integrado que considere la función del pie y tobillo como unidad</li>
-              <li>Reeducación funcional específica en actividades relevantes</li>
-            </ul>
-          `;
-      }
-      break;
-
-    case "atm":
-      switch (patronSelect.value) {
-        case "Apertura > Protrusión > Lateralización":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>restricción capsular posterior de la ATM</strong>, que limita principalmente la apertura completa.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular posterior de la articulación temporomandibular</li>
-              <li>Ligamento temporomandibular (porción posterior)</li>
-              <li>Alteración de la traslación condilar durante la apertura</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento anterior del cóndilo mandibular</li>
-              <li>Movilización específica de la articulación temporomandibular</li>
-              <li>Ejercicios de control motor para optimizar la cinemática de apertura</li>
-              <li>Reeducación de patrones funcionales masticatorios</li>
-            </ul>
-          `;
-          break;
-        case "Lateralización > Apertura > Protrusión":
-          interpretacion = `
-            <p>Este patrón sugiere <strong>restricción capsular lateral</strong>, frecuente en disfunciones unilaterales de la ATM.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Cápsula articular lateral (del lado contralateral a la restricción)</li>
-              <li>Disco articular (posible alteración de su posición)</li>
-              <li>Alteración de la cinemática de lateralización</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de movilización específica para restaurar el deslizamiento lateral</li>
-              <li>Ejercicios de control motor para movimientos de lateralización</li>
-              <li>Normalización de la activación de la musculatura masticatoria</li>
-              <li>Reeducación de patrones funcionales simétricos</li>
-            </ul>
-          `;
-          break;
-        case "Protrusión > Lateralización > Apertura":
-          interpretacion = `
-            <p>Este patrón es compatible con <strong>restricción de la región anterior articular</strong>, que limita principalmente la protrusión mandibular.</p>
-            <p>Estructuras potencialmente involucradas:</p>
-            <ul>
-              <li>Componentes capsulares anteriores</li>
-              <li>Alteración de la biomecánica discal</li>
-              <li>Restricción de la traslación anterior del cóndilo mandibular</li>
-            </ul>
-            <p>Enfoque terapéutico basado en evidencia:</p>
-            <ul>
-              <li>Técnicas de deslizamiento posterior del cóndilo mandibular</li>
-              <li>Ejercicios de control motor para optimizar la protrusión</li>
-              <li>Normalización de la activación del pterigoideo lateral</li>
-              <li>Reeducación de patrones funcionales mandibulares</li>
-            </ul>
-          `;
-          break;
-        default:
-          interpretacion = `
-            <p>El patrón identificado no corresponde con los patrones capsulares típicos de la ATM, lo que podría indicar:</p>
-            <ul>
-              <li>Alteración compleja de la dinámica disco-condilar</li>
-              <li>Disfunción neuromuscular más que restricción articular específica</li>
-              <li>Adaptaciones por alteraciones oclusales o parafunciones</li>
-            </ul>
-            <p>Abordaje recomendado según evidencia:</p>
-            <ul>
-              <li>Evaluación detallada de la cinemática mandibular y disco-condilar</li>
-              <li>Valoración de la influencia de la oclusión y función masticatoria</li>
-              <li>Tratamiento integrado que considere aspectos articulares y neuromusculares</li>
-              <li>Educación sobre manejo de hábitos parafuncionales</li>
-            </ul>
-          `;
-      }
-      break;
-
-    // Caso por defecto para regiones no contempladas específicamente
-    default:
-      interpretacion = `
-        <p>Para esta región anatómica (${region}), la interpretación de patrones capsulares requiere una evaluación detallada de:</p>
-        <ul>
-          <li>La secuencia específica de limitación en los diferentes planos de movimiento</li>
-          <li>La calidad de la sensación terminal en cada dirección</li>
-          <li>La relación entre la restricción y la función específica de esta región</li>
-        </ul>
-        <p>Abordaje recomendado según evidencia:</p>
-        <ul>
-          <li>Evaluación específica de la artrocinemática regional</li>
-          <li>Valoración del impacto funcional de las restricciones identificadas</li>
-          <li>Tratamiento basado en principios biomecánicos actualizados</li>
-          <li>Integración con reeducación sensoriomotora específica</li>
-        </ul>
-      `;
-  }
-  
-  // Actualizar elemento de interpretación
-  interpretacionElement.innerHTML = interpretacion;
-}
     }
     // Caso por defecto para otras regiones
     else {
