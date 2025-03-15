@@ -12671,6 +12671,1156 @@
   </div>
 </div>
 
+      <!-- Subacordeón para Tobillo y Pie -->
+<div class="cuestionario-item sub-acordeon">
+  <div class="cuestionario-header" onclick="toggleCuestionario('rom-tobillo-content')">
+    <h5><i class="fas fa-plus-circle"></i> Tobillo y Pie</h5>
+    <div class="resultado-badge" id="rom-tobillo-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="rom-tobillo-content" style="display: none;">
+    <h5 class="mt-4 mb-3">Rangos de Movimiento: Tobillo</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th rowspan="2">Movimiento</th>
+            <th colspan="2">Rango Activo Izquierdo</th>
+            <th colspan="2">Rango Pasivo Izquierdo</th>
+            <th rowspan="2">Diferencial<br>A/P Izq.</th>
+            <th colspan="2">Rango Activo Derecho</th>
+            <th colspan="2">Rango Pasivo Derecho</th>
+            <th rowspan="2">Diferencial<br>A/P Der.</th>
+            <th rowspan="2">Dolor</th>
+            <th rowspan="2">Funcionalidad</th>
+            <th rowspan="2">Observaciones</th>
+          </tr>
+          <tr>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dorsiflexión</td>
+            <td>
+              <input type="number" id="tobillo_dorsiflexion_izq_activo" name="tobillo_dorsiflexion_izq_activo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('tobillo_dorsiflexion_izq_activo', 0, 15, 20)">
+            </td>
+            <td id="tobillo_dorsiflexion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="tobillo_dorsiflexion_izq_pasivo" name="tobillo_dorsiflexion_izq_pasivo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('tobillo_dorsiflexion_izq_pasivo', 0, 15, 20); calcularDiferencialAP('tobillo_dorsiflexion_izq')">
+            </td>
+            <td id="tobillo_dorsiflexion_izq_pasivo_estado"></td>
+            <td id="tobillo_dorsiflexion_izq_diferencial"></td>
+            <td>
+              <input type="number" id="tobillo_dorsiflexion_der_activo" name="tobillo_dorsiflexion_der_activo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('tobillo_dorsiflexion_der_activo', 0, 15, 20)">
+            </td>
+            <td id="tobillo_dorsiflexion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="tobillo_dorsiflexion_der_pasivo" name="tobillo_dorsiflexion_der_pasivo" class="form-control rom-input" min="0" max="30" onchange="evaluarROM('tobillo_dorsiflexion_der_pasivo', 0, 15, 20); calcularDiferencialAP('tobillo_dorsiflexion_der')">
+            </td>
+            <td id="tobillo_dorsiflexion_der_pasivo_estado"></td>
+            <td id="tobillo_dorsiflexion_der_diferencial"></td>
+            <td>
+              <select id="tobillo_dorsiflexion_dolor" name="tobillo_dorsiflexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="tobillo_dorsiflexion_funcionalidad" name="tobillo_dorsiflexion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="tobillo_dorsiflexion_obs" name="tobillo_dorsiflexion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Plantiflexión</td>
+            <td>
+              <input type="number" id="tobillo_plantiflexion_izq_activo" name="tobillo_plantiflexion_izq_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('tobillo_plantiflexion_izq_activo', 0, 40, 50)">
+            </td>
+            <td id="tobillo_plantiflexion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="tobillo_plantiflexion_izq_pasivo" name="tobillo_plantiflexion_izq_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('tobillo_plantiflexion_izq_pasivo', 0, 40, 50); calcularDiferencialAP('tobillo_plantiflexion_izq')">
+            </td>
+            <td id="tobillo_plantiflexion_izq_pasivo_estado"></td>
+            <td id="tobillo_plantiflexion_izq_diferencial"></td>
+            <td>
+              <input type="number" id="tobillo_plantiflexion_der_activo" name="tobillo_plantiflexion_der_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('tobillo_plantiflexion_der_activo', 0, 40, 50)">
+            </td>
+            <td id="tobillo_plantiflexion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="tobillo_plantiflexion_der_pasivo" name="tobillo_plantiflexion_der_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('tobillo_plantiflexion_der_pasivo', 0, 40, 50); calcularDiferencialAP('tobillo_plantiflexion_der')">
+            </td>
+            <td id="tobillo_plantiflexion_der_pasivo_estado"></td>
+            <td id="tobillo_plantiflexion_der_diferencial"></td>
+            <td>
+              <select id="tobillo_plantiflexion_dolor" name="tobillo_plantiflexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="tobillo_plantiflexion_funcionalidad" name="tobillo_plantiflexion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="tobillo_plantiflexion_obs" name="tobillo_plantiflexion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Inversión</td>
+            <td>
+              <input type="number" id="tobillo_inversion_izq_activo" name="tobillo_inversion_izq_activo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('tobillo_inversion_izq_activo', 0, 20, 30)">
+            </td>
+            <td id="tobillo_inversion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="tobillo_inversion_izq_pasivo" name="tobillo_inversion_izq_pasivo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('tobillo_inversion_izq_pasivo', 0, 20, 30); calcularDiferencialAP('tobillo_inversion_izq')">
+            </td>
+            <td id="tobillo_inversion_izq_pasivo_estado"></td>
+            <td id="tobillo_inversion_izq_diferencial"></td>
+            <td>
+              <input type="number" id="tobillo_inversion_der_activo" name="tobillo_inversion_der_activo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('tobillo_inversion_der_activo', 0, 20, 30)">
+            </td>
+            <td id="tobillo_inversion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="tobillo_inversion_der_pasivo" name="tobillo_inversion_der_pasivo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('tobillo_inversion_der_pasivo', 0, 20, 30); calcularDiferencialAP('tobillo_inversion_der')">
+            </td>
+            <td id="tobillo_inversion_der_pasivo_estado"></td>
+            <td id="tobillo_inversion_der_diferencial"></td>
+            <td>
+              <select id="tobillo_inversion_dolor" name="tobillo_inversion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="tobillo_inversion_funcionalidad" name="tobillo_inversion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="tobillo_inversion_obs" name="tobillo_inversion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Eversión</td>
+            <td>
+              <input type="number" id="tobillo_eversion_izq_activo" name="tobillo_eversion_izq_activo" class="form-control rom-input" min="0" max="25" onchange="evaluarROM('tobillo_eversion_izq_activo', 0, 12, 20)">
+            </td>
+            <td id="tobillo_eversion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="tobillo_eversion_izq_pasivo" name="tobillo_eversion_izq_pasivo" class="form-control rom-input" min="0" max="25" onchange="evaluarROM('tobillo_eversion_izq_pasivo', 0, 12, 20); calcularDiferencialAP('tobillo_eversion_izq')">
+            </td>
+            <td id="tobillo_eversion_izq_pasivo_estado"></td>
+            <td id="tobillo_eversion_izq_diferencial"></td>
+            <td>
+              <input type="number" id="tobillo_eversion_der_activo" name="tobillo_eversion_der_activo" class="form-control rom-input" min="0" max="25" onchange="evaluarROM('tobillo_eversion_der_activo', 0, 12, 20)">
+            </td>
+            <td id="tobillo_eversion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="tobillo_eversion_der_pasivo" name="tobillo_eversion_der_pasivo" class="form-control rom-input" min="0" max="25" onchange="evaluarROM('tobillo_eversion_der_pasivo', 0, 12, 20); calcularDiferencialAP('tobillo_eversion_der')">
+            </td>
+            <td id="tobillo_eversion_der_pasivo_estado"></td>
+            <td id="tobillo_eversion_der_diferencial"></td>
+            <td>
+              <select id="tobillo_eversion_dolor" name="tobillo_eversion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="tobillo_eversion_funcionalidad" name="tobillo_eversion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="tobillo_eversion_obs" name="tobillo_eversion_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Rangos de Movimiento: Pie -->
+    <h5 class="mt-4 mb-3">Rangos de Movimiento: Pie</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th rowspan="2">Movimiento</th>
+            <th colspan="2">Pie Izquierdo</th>
+            <th colspan="2">Pie Derecho</th>
+            <th rowspan="2">Dolor</th>
+            <th rowspan="2">Funcionalidad</th>
+            <th rowspan="2">Observaciones</th>
+          </tr>
+          <tr>
+            <th>Rango</th>
+            <th>Estado</th>
+            <th>Rango</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Flexión MTF 1er dedo</td>
+            <td>
+              <select id="pie_mtf1_flex_izq" name="pie_mtf1_flex_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal (>70°)" data-color="success">Normal (>70°)</option>
+                <option value="Limitación leve (50-70°)" data-color="info">Limitación leve (50-70°)</option>
+                <option value="Limitación moderada (30-49°)" data-color="warning">Limitación moderada (30-49°)</option>
+                <option value="Limitación severa (<30°)" data-color="danger">Limitación severa (<30°)</option>
+              </select>
+            </td>
+            <td id="pie_mtf1_flex_izq_estado"></td>
+            <td>
+              <select id="pie_mtf1_flex_der" name="pie_mtf1_flex_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal (>70°)" data-color="success">Normal (>70°)</option>
+                <option value="Limitación leve (50-70°)" data-color="info">Limitación leve (50-70°)</option>
+                <option value="Limitación moderada (30-49°)" data-color="warning">Limitación moderada (30-49°)</option>
+                <option value="Limitación severa (<30°)" data-color="danger">Limitación severa (<30°)</option>
+              </select>
+            </td>
+            <td id="pie_mtf1_flex_der_estado"></td>
+            <td>
+              <select id="pie_mtf1_flex_dolor" name="pie_mtf1_flex_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_mtf1_flex_funcionalidad" name="pie_mtf1_flex_funcionalidad" class="form-select funcionalidad-selector" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_mtf1_flex_obs" name="pie_mtf1_flex_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Extensión MTF 1er dedo</td>
+            <td>
+              <select id="pie_mtf1_ext_izq" name="pie_mtf1_ext_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal (>50°)" data-color="success">Normal (>50°)</option>
+                <option value="Limitación leve (30-50°)" data-color="info">Limitación leve (30-50°)</option>
+                <option value="Limitación moderada (15-29°)" data-color="warning">Limitación moderada (15-29°)</option>
+                <option value="Limitación severa (<15°)" data-color="danger">Limitación severa (<15°)</option>
+              </select>
+            </td>
+            <td id="pie_mtf1_ext_izq_estado"></td>
+            <td>
+              <select id="pie_mtf1_ext_der" name="pie_mtf1_ext_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal (>50°)" data-color="success">Normal (>50°)</option>
+                <option value="Limitación leve (30-50°)" data-color="info">Limitación leve (30-50°)</option>
+                <option value="Limitación moderada (15-29°)" data-color="warning">Limitación moderada (15-29°)</option>
+                <option value="Limitación severa (<15°)" data-color="danger">Limitación severa (<15°)</option>
+              </select>
+            </td>
+            <td id="pie_mtf1_ext_der_estado"></td>
+            <td>
+              <select id="pie_mtf1_ext_dolor" name="pie_mtf1_ext_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_mtf1_ext_funcionalidad" name="pie_mtf1_ext_funcionalidad" class="form-select funcionalidad-selector" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_mtf1_ext_obs" name="pie_mtf1_ext_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Flexión MTF dedos 2-5</td>
+            <td>
+              <select id="pie_mtf2_5_flex_izq" name="pie_mtf2_5_flex_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td id="pie_mtf2_5_flex_izq_estado"></td>
+            <td>
+              <select id="pie_mtf2_5_flex_der" name="pie_mtf2_5_flex_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td id="pie_mtf2_5_flex_der_estado"></td>
+            <td>
+              <select id="pie_mtf2_5_flex_dolor" name="pie_mtf2_5_flex_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_mtf2_5_flex_funcionalidad" name="pie_mtf2_5_flex_funcionalidad" class="form-select funcionalidad-selector" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_mtf2_5_flex_obs" name="pie_mtf2_5_flex_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Extensión MTF dedos 2-5</td>
+            <td>
+              <select id="pie_mtf2_5_ext_izq" name="pie_mtf2_5_ext_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td id="pie_mtf2_5_ext_izq_estado"></td>
+            <td>
+              <select id="pie_mtf2_5_ext_der" name="pie_mtf2_5_ext_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td id="pie_mtf2_5_ext_der_estado"></td>
+            <td>
+              <select id="pie_mtf2_5_ext_dolor" name="pie_mtf2_5_ext_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_mtf2_5_ext_funcionalidad" name="pie_mtf2_5_ext_funcionalidad" class="form-select funcionalidad-selector" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_mtf2_5_ext_obs" name="pie_mtf2_5_ext_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Evaluación de la Movilidad del Pie en Carga -->
+    <h5 class="mt-4 mb-3">Movilidad del Pie en Carga</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Movimiento</th>
+            <th>Pie Izquierdo</th>
+            <th>Pie Derecho</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dorsiflexión en carga (rodilla extendida)</td>
+            <td>
+              <select id="pie_carga_df_ext_izq" name="pie_carga_df_ext_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal (>10°)" data-color="success">Normal (>10°)</option>
+                <option value="Limitación leve (5-10°)" data-color="info">Limitación leve (5-10°)</option>
+                <option value="Limitación moderada (0-5°)" data-color="warning">Limitación moderada (0-5°)</option>
+                <option value="Limitación severa (<0°)" data-color="danger">Limitación severa (<0°)</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_carga_df_ext_der" name="pie_carga_df_ext_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal (>10°)" data-color="success">Normal (>10°)</option>
+                <option value="Limitación leve (5-10°)" data-color="info">Limitación leve (5-10°)</option>
+                <option value="Limitación moderada (0-5°)" data-color="warning">Limitación moderada (0-5°)</option>
+                <option value="Limitación severa (<0°)" data-color="danger">Limitación severa (<0°)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_carga_df_ext_obs" name="pie_carga_df_ext_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Dorsiflexión en carga (rodilla flexionada)</td>
+            <td>
+              <select id="pie_carga_df_flex_izq" name="pie_carga_df_flex_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal (>15°)" data-color="success">Normal (>15°)</option>
+                <option value="Limitación leve (10-15°)" data-color="info">Limitación leve (10-15°)</option>
+                <option value="Limitación moderada (5-10°)" data-color="warning">Limitación moderada (5-10°)</option>
+                <option value="Limitación severa (<5°)" data-color="danger">Limitación severa (<5°)</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_carga_df_flex_der" name="pie_carga_df_flex_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal (>15°)" data-color="success">Normal (>15°)</option>
+                <option value="Limitación leve (10-15°)" data-color="info">Limitación leve (10-15°)</option>
+                <option value="Limitación moderada (5-10°)" data-color="warning">Limitación moderada (5-10°)</option>
+                <option value="Limitación severa (<5°)" data-color="danger">Limitación severa (<5°)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_carga_df_flex_obs" name="pie_carga_df_flex_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Flexibilidad del arco longitudinal medial</td>
+            <td>
+              <select id="pie_carga_arco_izq" name="pie_carga_arco_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Rígido" data-color="warning">Rígido</option>
+                <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                <option value="Completamente aplanado" data-color="danger">Completamente aplanado</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_carga_arco_der" name="pie_carga_arco_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Rígido" data-color="warning">Rígido</option>
+                <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                <option value="Completamente aplanado" data-color="danger">Completamente aplanado</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_carga_arco_obs" name="pie_carga_arco_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Movilidad articulación subtalar</td>
+            <td>
+              <select id="pie_carga_subtalar_izq" name="pie_carga_subtalar_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                <option value="Bloqueada" data-color="danger">Bloqueada</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_carga_subtalar_der" name="pie_carga_subtalar_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                <option value="Bloqueada" data-color="danger">Bloqueada</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_carga_subtalar_obs" name="pie_carga_subtalar_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Evaluación de la Movilidad del Primer Radio -->
+    <h5 class="mt-4 mb-3">Evaluación de la Movilidad del Primer Radio</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Movimiento</th>
+            <th>Pie Izquierdo</th>
+            <th>Pie Derecho</th>
+            <th>Dolor</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Movilidad dorsal</td>
+            <td>
+              <select id="pie_1radio_dorsal_izq" name="pie_1radio_dorsal_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                <option value="Bloqueado" data-color="danger">Bloqueado</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_1radio_dorsal_der" name="pie_1radio_dorsal_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                <option value="Bloqueado" data-color="danger">Bloqueado</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_1radio_dorsal_dolor" name="pie_1radio_dorsal_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_1radio_dorsal_obs" name="pie_1radio_dorsal_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Movilidad plantar</td>
+            <td>
+              <select id="pie_1radio_plantar_izq" name="pie_1radio_plantar_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                <option value="Bloqueado" data-color="danger">Bloqueado</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_1radio_plantar_der" name="pie_1radio_plantar_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                <option value="Bloqueado" data-color="danger">Bloqueado</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_1radio_plantar_dolor" name="pie_1radio_plantar_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_1radio_plantar_obs" name="pie_1radio_plantar_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Estabilidad bajo carga</td>
+            <td>
+              <select id="pie_1radio_estabilidad_izq" name="pie_1radio_estabilidad_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Estable" data-color="success">Estable</option>
+                <option value="Inestabilidad leve" data-color="info">Inestabilidad leve</option>
+                <option value="Inestabilidad moderada" data-color="warning">Inestabilidad moderada</option>
+                <option value="Inestabilidad severa" data-color="danger">Inestabilidad severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_1radio_estabilidad_der" name="pie_1radio_estabilidad_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Estable" data-color="success">Estable</option>
+                <option value="Inestabilidad leve" data-color="info">Inestabilidad leve</option>
+                <option value="Inestabilidad moderada" data-color="warning">Inestabilidad moderada</option>
+                <option value="Inestabilidad severa" data-color="danger">Inestabilidad severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="pie_1radio_estabilidad_dolor" name="pie_1radio_estabilidad_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="pie_1radio_estabilidad_obs" name="pie_1radio_estabilidad_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Calculadora de déficit funcional tobillo y pie -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Calculadora de Déficit Funcional Tobillo y Pie</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="tobillo_deficit_total" class="form-label">Déficit Total (%)</label>
+              <input type="text" id="tobillo_deficit_total" name="tobillo_deficit_total" class="form-control" readonly>
+            </div>
+            <div id="tobillo_deficit_visual" class="mt-2 progress">
+              <div class="progress-bar bg-info" role="progressbar" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="tobillo_deficit_interpretacion" class="form-label">Interpretación Clínica</label>
+              <select id="tobillo_deficit_interpretacion" name="tobillo_deficit_interpretacion" class="form-select" disabled>
+                <option value="">Pendiente de cálculo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <h6>Impacto en Actividades Diarias</h6>
+            <ul id="tobillo_impacto_actividades" class="list-group">
+              <!-- Se generará dinámicamente -->
+              <li class="list-group-item list-group-item-info">Complete la evaluación para ver el impacto en actividades.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Evaluación de articulaciones asociadas -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Evaluación de Articulaciones Asociadas</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Articulación</th>
+                <th>Movilidad</th>
+                <th>Dolor</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tibioperónea distal</td>
+                <td>
+                  <select id="tobillo_art_tibioperonea_movilidad" name="tobillo_art_tibioperonea_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_art_tibioperonea_dolor" name="tobillo_art_tibioperonea_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_art_tibioperonea_obs" name="tobillo_art_tibioperonea_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Talocrural (Tibioastragalina)</td>
+                <td>
+                  <select id="tobillo_art_talocrural_movilidad" name="tobillo_art_talocrural_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_art_talocrural_dolor" name="tobillo_art_talocrural_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_art_talocrural_obs" name="tobillo_art_talocrural_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Subtalar</td>
+                <td>
+                  <select id="tobillo_art_subtalar_movilidad" name="tobillo_art_subtalar_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_art_subtalar_dolor" name="tobillo_art_subtalar_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_art_subtalar_obs" name="tobillo_art_subtalar_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Mediotarsiana (Chopart)</td>
+                <td>
+                  <select id="tobillo_art_mediotarsiana_movilidad" name="tobillo_art_mediotarsiana_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_art_mediotarsiana_dolor" name="tobillo_art_mediotarsiana_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_art_mediotarsiana_obs" name="tobillo_art_mediotarsiana_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Tarsometatarsiana (Lisfranc)</td>
+                <td>
+                  <select id="tobillo_art_tarsometatarsiana_movilidad" name="tobillo_art_tarsometatarsiana_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_art_tarsometatarsiana_dolor" name="tobillo_art_tarsometatarsiana_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_art_tarsometatarsiana_obs" name="tobillo_art_tarsometatarsiana_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>1ª Metatarsofalángica</td>
+                <td>
+                  <select id="tobillo_art_mtf1_movilidad" name="tobillo_art_mtf1_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_art_mtf1_dolor" name="tobillo_art_mtf1_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_art_mtf1_obs" name="tobillo_art_mtf1_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Movimientos accesorios de tobillo y pie -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Movimientos Accesorios de Tobillo y Pie</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Movimiento</th>
+                <th>Calidad Izquierdo</th>
+                <th>Dolor Izquierdo</th>
+                <th>Calidad Derecho</th>
+                <th>Dolor Derecho</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tracción tibioastragalina</td>
+                <td>
+                  <select id="tobillo_acc_traccion_ta_izq_calidad" name="tobillo_acc_traccion_ta_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_traccion_ta_izq_dolor" name="tobillo_acc_traccion_ta_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_traccion_ta_der_calidad" name="tobillo_acc_traccion_ta_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_traccion_ta_der_dolor" name="tobillo_acc_traccion_ta_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_acc_traccion_ta_obs" name="tobillo_acc_traccion_ta_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento anterior del astrágalo</td>
+                <td>
+                  <select id="tobillo_acc_desliz_ant_izq_calidad" name="tobillo_acc_desliz_ant_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_desliz_ant_izq_dolor" name="tobillo_acc_desliz_ant_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_desliz_ant_der_calidad" name="tobillo_acc_desliz_ant_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_desliz_ant_der_dolor" name="tobillo_acc_desliz_ant_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_acc_desliz_ant_obs" name="tobillo_acc_desliz_ant_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento posterior del astrágalo</td>
+                <td>
+                  <select id="tobillo_acc_desliz_post_izq_calidad" name="tobillo_acc_desliz_post_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_desliz_post_izq_dolor" name="tobillo_acc_desliz_post_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_desliz_post_der_calidad" name="tobillo_acc_desliz_post_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_desliz_post_der_dolor" name="tobillo_acc_desliz_post_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_acc_desliz_post_obs" name="tobillo_acc_desliz_post_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento navicular</td>
+                <td>
+                  <select id="tobillo_acc_navicular_izq_calidad" name="tobillo_acc_navicular_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_navicular_izq_dolor" name="tobillo_acc_navicular_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_navicular_der_calidad" name="tobillo_acc_navicular_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_navicular_der_dolor" name="tobillo_acc_navicular_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_acc_navicular_obs" name="tobillo_acc_navicular_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento cuboides</td>
+                <td>
+                  <select id="tobillo_acc_cuboides_izq_calidad" name="tobillo_acc_cuboides_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_cuboides_izq_dolor" name="tobillo_acc_cuboides_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_cuboides_der_calidad" name="tobillo_acc_cuboides_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="tobillo_acc_cuboides_der_dolor" name="tobillo_acc_cuboides_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="tobillo_acc_cuboides_obs" name="tobillo_acc_cuboides_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Patrones de restricción capsular -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Patrón de Restricción Capsular del Tobillo</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="tobillo_patron_capsular" class="form-label">Patrón de restricción (ordenado por limitación)</label>
+              <select id="tobillo_patron_capsular" name="tobillo_patron_capsular" class="form-select" onchange="mostrarInterpretacionCapsular('tobillo')">
+                <option value="">Seleccionar</option>
+                <option value="No presenta">No presenta patrón capsular</option>
+                <option value="Plantiflexión > Inversión > Dorsiflexión">Plantiflexión > Inversión > Dorsiflexión</option>
+                <option value="Dorsiflexión > Eversión > Plantiflexión">Dorsiflexión > Eversión > Plantiflexión</option>
+                <option value="Inversión > Dorsiflexión > Eversión">Inversión > Dorsiflexión > Eversión</option>
+                <option value="Eversión > Plantiflexión > Inversión">Eversión > Plantiflexión > Inversión</option>
+                <option value="Otro">Otro (especificar)</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6" id="tobillo_patron_otro_container" style="display: none;">
+            <div class="form-group">
+              <label for="tobillo_patron_otro" class="form-label">Especifique otro patrón</label>
+              <input type="text" id="tobillo_patron_otro" name="tobillo_patron_otro" class="form-control">
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header bg-info text-white">
+                <h6 class="mb-0">Interpretación Clínica del Patrón</h6>
+              </div>
+              <div class="card-body">
+                <div id="tobillo_interpretacion_capsular">
+                  <p>Seleccione un patrón de restricción para obtener la interpretación clínica.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación clínica del tobillo y pie -->
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Interpretación Clínica y Recomendaciones: Tobillo y Pie</h5>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion_tobillo" class="mb-3">
+          <h6>Interpretación Clínica:</h6>
+          <div id="interpretacion-tobillo-texto" class="p-3 border rounded">
+            Complete la evaluación de rangos de movimiento para obtener la interpretación clínica.
+          </div>
+        </div>
+        
+        <div id="recomendaciones_tobillo" class="mb-3">
+          <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+          <div id="recomendaciones-tobillo-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener recomendaciones específicas.
+          </div>
+        </div>
+        
+        <div id="consideraciones_tobillo" class="mb-3">
+          <h6>Consideraciones Adicionales:</h6>
+          <div id="consideraciones-tobillo-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener consideraciones adicionales específicas.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
       
       <!-- Continúa con los demás subacordeones para cada región anatómica... -->
       
