@@ -3187,77 +3187,85 @@ if (regionBadge && hayDatosReales) {
   }
 }
 
-// Añade este código al final de tu archivo rangos-movimiento-13 SIRVE.js
+// Agrega este código al final de tu archivo rangos-movimiento-13 SIRVE.js
 
-// Prevenir comportamiento por defecto de la tecla Enter
+// Prevenir comportamiento por defecto de la tecla Enter a nivel global
 document.addEventListener('keydown', function(event) {
+  // Solo actuar en la tecla Enter
   if (event.key === 'Enter') {
-    // Prevenir comportamiento por defecto sólo si no está en un textarea o en un campo de texto específico
-    const target = event.target;
-    const isTextInput = target.tagName === 'TEXTAREA' || 
-                        (target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'number'));
+    // Permitir Enter normal solo en textareas y algunos inputs específicos
+    const tagName = event.target.tagName.toLowerCase();
+    const inputType = event.target.type ? event.target.type.toLowerCase() : '';
+    const isTextArea = tagName === 'textarea';
+    const isInputField = tagName === 'input' && 
+                         (inputType === 'text' || 
+                          inputType === 'search' || 
+                          inputType === 'password' || 
+                          inputType === 'email' ||
+                          inputType === 'url');
     
-    // Permitir Enter en áreas de texto, pero prevenir en otros elementos
-    if (!isTextInput) {
+    // Si NO estamos en un campo de texto o textarea, prevenir el comportamiento por defecto
+    if (!(isTextArea || isInputField)) {
       event.preventDefault();
-      return false;
+      event.stopPropagation();
     }
   }
 });
 
-// Modificar las funciones que generan alertas para evitar llamadas duplicadas
-// 1. Modificar actualizarCalculosRegion para evitar múltiples alertas
-const originalActualizarCalculosRegion = window.actualizarCalculosRegion;
-if (typeof originalActualizarCalculosRegion === 'function') {
-  window.actualizarCalculosRegion = function(region) {
-    // Bandera para evitar múltiples alertas durante una actualización
-    if (window.isUpdatingRegion) return;
+// Desactivar comportamiento de submit automático en formularios
+document.querySelectorAll('form').forEach(form => {
+  form.setAttribute('onkeydown', 'return event.key != "Enter";');
+  form.addEventListener('submit', function(event) {
+    // Prevenir envío accidental de formularios
+    if (!event.submitter || !event.submitter.hasAttribute('formnovalidate')) {
+      event.preventDefault();
+    }
+  });
+});
+
+// Eliminar los event listeners problemáticos de los botones de actualización
+document.querySelectorAll('[id^="btn_actualizar_"]').forEach(boton => {
+  const nuevoBoton = boton.cloneNode(true);
+  boton.parentNode.replaceChild(nuevoBoton, boton);
+  
+  // Agregar el event listener corregido que evita múltiples alertas
+  nuevoBoton.addEventListener('click', function(event) {
+    event.preventDefault();
     
-    window.isUpdatingRegion = true;
-    const resultado = originalActualizarCalculosRegion(region);
-    window.isUpdatingRegion = false;
+    // Extraer la región del id
+    const region = this.id.replace('btn_actualizar_', '');
     
-    return resultado;
-  };
+    // Solo mostrar una alerta
+    alert(`Actualizando cálculos para región ${region}...`);
+    
+    // Llamar a la función de actualización una sola vez
+    if (typeof forzarActualizacionRegion === 'function') {
+      forzarActualizacionRegion(region);
+      alert(`Cálculos e interpretaciones de ${region} actualizados correctamente`);
+    }
+    
+    return false;
+  });
+});
+
+// Prevenir múltiples alertas del botón de actualización global
+const botonGlobal = document.getElementById('btn_actualizar_global');
+if (botonGlobal) {
+  const nuevoBotonGlobal = botonGlobal.cloneNode(true);
+  botonGlobal.parentNode.replaceChild(nuevoBotonGlobal, botonGlobal);
+  
+  nuevoBotonGlobal.addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    // Llamar a la función de actualización una sola vez
+    if (typeof actualizarTodosLosCalculos === 'function') {
+      actualizarTodosLosCalculos();
+    } else {
+      alert("La función de actualización no está disponible");
+    }
+    
+    return false;
+  });
 }
 
-// 2. Modificar actualizarTodosLosCalculos para usar una sola alerta
-const originalActualizarTodosLosCalculos = window.actualizarTodosLosCalculos;
-if (typeof originalActualizarTodosLosCalculos === 'function') {
-  window.actualizarTodosLosCalculos = function() {
-    // Bandera para evitar alertas múltiples
-    if (window.isUpdatingAllCalculations) return;
-    
-    window.isUpdatingAllCalculations = true;
-    const resultado = originalActualizarTodosLosCalculos();
-    window.isUpdatingAllCalculations = false;
-    
-    return resultado;
-  };
-}
-
-// 3. Sobrescribir la función de alerta para evitar múltiples alertas en un corto período
-// Guardar la función original alert
-const originalAlert = window.alert;
-// Variable para guardar el último mensaje mostrado
-let lastAlertMessage = '';
-// Variable para guardar el tiempo del último alert
-let lastAlertTime = 0;
-
-// Sobrescribir la función alert
-window.alert = function(message) {
-  const currentTime = new Date().getTime();
-  // Evitar alertas duplicadas en un intervalo de 2 segundos
-  if (message === lastAlertMessage && currentTime - lastAlertTime < 2000) {
-    return; // No mostrar alerta duplicada
-  }
-  
-  // Actualizar último mensaje y tiempo
-  lastAlertMessage = message;
-  lastAlertTime = currentTime;
-  
-  // Llamar a la alerta original
-  originalAlert(message);
-};
-
-console.log("🔧 Solución anti-alertas múltiples instalada correctamente");
+console.log("Sistema anti-alertas de Enter instalado correctamente");
