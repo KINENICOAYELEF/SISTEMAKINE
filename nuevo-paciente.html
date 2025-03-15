@@ -10777,7 +10777,994 @@
     </div>
   </div>
 </div>
-              
+
+
+      <!-- Subacordeón para Cadera -->
+<div class="cuestionario-item sub-acordeon">
+  <div class="cuestionario-header" onclick="toggleCuestionario('rom-cadera-content')">
+    <h5><i class="fas fa-plus-circle"></i> Cadera</h5>
+    <div class="resultado-badge" id="rom-cadera-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="rom-cadera-content" style="display: none;">
+    <h5 class="mt-4 mb-3">Rangos de Movimiento: Cadera</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th rowspan="2">Movimiento</th>
+            <th colspan="2">Rango Activo Izquierdo</th>
+            <th colspan="2">Rango Pasivo Izquierdo</th>
+            <th rowspan="2">Diferencial<br>A/P Izq.</th>
+            <th colspan="2">Rango Activo Derecho</th>
+            <th colspan="2">Rango Pasivo Derecho</th>
+            <th rowspan="2">Diferencial<br>A/P Der.</th>
+            <th rowspan="2">Dolor</th>
+            <th rowspan="2">Funcionalidad</th>
+            <th rowspan="2">Observaciones</th>
+          </tr>
+          <tr>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+            <th>Grados</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Flexión</td>
+            <td>
+              <input type="number" id="cadera_flexion_izq_activo" name="cadera_flexion_izq_activo" class="form-control rom-input" min="0" max="140" onchange="evaluarROM('cadera_flexion_izq_activo', 0, 100, 120)">
+            </td>
+            <td id="cadera_flexion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_flexion_izq_pasivo" name="cadera_flexion_izq_pasivo" class="form-control rom-input" min="0" max="140" onchange="evaluarROM('cadera_flexion_izq_pasivo', 0, 100, 120); calcularDiferencialAP('cadera_flexion_izq')">
+            </td>
+            <td id="cadera_flexion_izq_pasivo_estado"></td>
+            <td id="cadera_flexion_izq_diferencial"></td>
+            <td>
+              <input type="number" id="cadera_flexion_der_activo" name="cadera_flexion_der_activo" class="form-control rom-input" min="0" max="140" onchange="evaluarROM('cadera_flexion_der_activo', 0, 100, 120)">
+            </td>
+            <td id="cadera_flexion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_flexion_der_pasivo" name="cadera_flexion_der_pasivo" class="form-control rom-input" min="0" max="140" onchange="evaluarROM('cadera_flexion_der_pasivo', 0, 100, 120); calcularDiferencialAP('cadera_flexion_der')">
+            </td>
+            <td id="cadera_flexion_der_pasivo_estado"></td>
+            <td id="cadera_flexion_der_diferencial"></td>
+            <td>
+              <select id="cadera_flexion_dolor" name="cadera_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_flexion_funcionalidad" name="cadera_flexion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_flexion_obs" name="cadera_flexion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Extensión</td>
+            <td>
+              <input type="number" id="cadera_extension_izq_activo" name="cadera_extension_izq_activo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('cadera_extension_izq_activo', 0, 20, 30)">
+            </td>
+            <td id="cadera_extension_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_extension_izq_pasivo" name="cadera_extension_izq_pasivo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('cadera_extension_izq_pasivo', 0, 20, 30); calcularDiferencialAP('cadera_extension_izq')">
+            </td>
+            <td id="cadera_extension_izq_pasivo_estado"></td>
+            <td id="cadera_extension_izq_diferencial"></td>
+            <td>
+              <input type="number" id="cadera_extension_der_activo" name="cadera_extension_der_activo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('cadera_extension_der_activo', 0, 20, 30)">
+            </td>
+            <td id="cadera_extension_der_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_extension_der_pasivo" name="cadera_extension_der_pasivo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('cadera_extension_der_pasivo', 0, 20, 30); calcularDiferencialAP('cadera_extension_der')">
+            </td>
+            <td id="cadera_extension_der_pasivo_estado"></td>
+            <td id="cadera_extension_der_diferencial"></td>
+            <td>
+              <select id="cadera_extension_dolor" name="cadera_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_extension_funcionalidad" name="cadera_extension_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_extension_obs" name="cadera_extension_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Abducción</td>
+            <td>
+              <input type="number" id="cadera_abduccion_izq_activo" name="cadera_abduccion_izq_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_abduccion_izq_activo', 0, 30, 45)">
+            </td>
+            <td id="cadera_abduccion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_abduccion_izq_pasivo" name="cadera_abduccion_izq_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_abduccion_izq_pasivo', 0, 30, 45); calcularDiferencialAP('cadera_abduccion_izq')">
+            </td>
+            <td id="cadera_abduccion_izq_pasivo_estado"></td>
+            <td id="cadera_abduccion_izq_diferencial"></td>
+            <td>
+              <input type="number" id="cadera_abduccion_der_activo" name="cadera_abduccion_der_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_abduccion_der_activo', 0, 30, 45)">
+            </td>
+            <td id="cadera_abduccion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_abduccion_der_pasivo" name="cadera_abduccion_der_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_abduccion_der_pasivo', 0, 30, 45); calcularDiferencialAP('cadera_abduccion_der')">
+            </td>
+            <td id="cadera_abduccion_der_pasivo_estado"></td>
+            <td id="cadera_abduccion_der_diferencial"></td>
+            <td>
+              <select id="cadera_abduccion_dolor" name="cadera_abduccion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_abduccion_funcionalidad" name="cadera_abduccion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_abduccion_obs" name="cadera_abduccion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Aducción</td>
+            <td>
+              <input type="number" id="cadera_aduccion_izq_activo" name="cadera_aduccion_izq_activo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('cadera_aduccion_izq_activo', 0, 15, 30)">
+            </td>
+            <td id="cadera_aduccion_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_aduccion_izq_pasivo" name="cadera_aduccion_izq_pasivo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('cadera_aduccion_izq_pasivo', 0, 15, 30); calcularDiferencialAP('cadera_aduccion_izq')">
+            </td>
+            <td id="cadera_aduccion_izq_pasivo_estado"></td>
+            <td id="cadera_aduccion_izq_diferencial"></td>
+            <td>
+              <input type="number" id="cadera_aduccion_der_activo" name="cadera_aduccion_der_activo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('cadera_aduccion_der_activo', 0, 15, 30)">
+            </td>
+            <td id="cadera_aduccion_der_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_aduccion_der_pasivo" name="cadera_aduccion_der_pasivo" class="form-control rom-input" min="0" max="40" onchange="evaluarROM('cadera_aduccion_der_pasivo', 0, 15, 30); calcularDiferencialAP('cadera_aduccion_der')">
+            </td>
+            <td id="cadera_aduccion_der_pasivo_estado"></td>
+            <td id="cadera_aduccion_der_diferencial"></td>
+            <td>
+              <select id="cadera_aduccion_dolor" name="cadera_aduccion_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_aduccion_funcionalidad" name="cadera_aduccion_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_aduccion_obs" name="cadera_aduccion_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Rotación Interna</td>
+            <td>
+              <input type="number" id="cadera_rot_int_izq_activo" name="cadera_rot_int_izq_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_rot_int_izq_activo', 0, 30, 45)">
+            </td>
+            <td id="cadera_rot_int_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_rot_int_izq_pasivo" name="cadera_rot_int_izq_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_rot_int_izq_pasivo', 0, 30, 45); calcularDiferencialAP('cadera_rot_int_izq')">
+            </td>
+            <td id="cadera_rot_int_izq_pasivo_estado"></td>
+            <td id="cadera_rot_int_izq_diferencial"></td>
+            <td>
+              <input type="number" id="cadera_rot_int_der_activo" name="cadera_rot_int_der_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_rot_int_der_activo', 0, 30, 45)">
+            </td>
+            <td id="cadera_rot_int_der_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_rot_int_der_pasivo" name="cadera_rot_int_der_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_rot_int_der_pasivo', 0, 30, 45); calcularDiferencialAP('cadera_rot_int_der')">
+            </td>
+            <td id="cadera_rot_int_der_pasivo_estado"></td>
+            <td id="cadera_rot_int_der_diferencial"></td>
+            <td>
+              <select id="cadera_rot_int_dolor" name="cadera_rot_int_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_rot_int_funcionalidad" name="cadera_rot_int_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_rot_int_obs" name="cadera_rot_int_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Rotación Externa</td>
+            <td>
+              <input type="number" id="cadera_rot_ext_izq_activo" name="cadera_rot_ext_izq_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_rot_ext_izq_activo', 0, 30, 45)">
+            </td>
+            <td id="cadera_rot_ext_izq_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_rot_ext_izq_pasivo" name="cadera_rot_ext_izq_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_rot_ext_izq_pasivo', 0, 30, 45); calcularDiferencialAP('cadera_rot_ext_izq')">
+            </td>
+            <td id="cadera_rot_ext_izq_pasivo_estado"></td>
+            <td id="cadera_rot_ext_izq_diferencial"></td>
+            <td>
+              <input type="number" id="cadera_rot_ext_der_activo" name="cadera_rot_ext_der_activo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_rot_ext_der_activo', 0, 30, 45)">
+            </td>
+            <td id="cadera_rot_ext_der_activo_estado"></td>
+            <td>
+              <input type="number" id="cadera_rot_ext_der_pasivo" name="cadera_rot_ext_der_pasivo" class="form-control rom-input" min="0" max="60" onchange="evaluarROM('cadera_rot_ext_der_pasivo', 0, 30, 45); calcularDiferencialAP('cadera_rot_ext_der')">
+            </td>
+            <td id="cadera_rot_ext_der_pasivo_estado"></td>
+            <td id="cadera_rot_ext_der_diferencial"></td>
+            <td>
+              <select id="cadera_rot_ext_dolor" name="cadera_rot_ext_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Inicio" data-color="info">Inicio</option>
+                <option value="Medio" data-color="warning">Medio</option>
+                <option value="Final" data-color="warning">Final</option>
+                <option value="Todo" data-color="danger">Todo el rango</option>
+                <option value="Después" data-color="danger">Después</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_rot_ext_funcionalidad" name="cadera_rot_ext_funcionalidad" class="form-select funcionalidad-selector" onchange="evaluarFuncionalidadROM(this); colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_rot_ext_obs" name="cadera_rot_ext_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Evaluación del Ritmo Lumbopélvico -->
+    <h5 class="mt-4 mb-3">Evaluación del Ritmo Lumbopélvico</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Movimiento</th>
+            <th>Calidad del Ritmo</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Flexión de cadera (0-60°)</td>
+            <td>
+              <select id="cadera_rlp_flexion_60" name="cadera_rlp_flexion_60" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (predominio cadera)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (inicio lumbar)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (predominio lumbar)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_rlp_flexion_60_obs" name="cadera_rlp_flexion_60_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Flexión de cadera (61-120°)</td>
+            <td>
+              <select id="cadera_rlp_flexion_120" name="cadera_rlp_flexion_120" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (rotación pélvica)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (hiperlordosis)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (compensación excesiva)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_rlp_flexion_120_obs" name="cadera_rlp_flexion_120_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Extensión de cadera</td>
+            <td>
+              <select id="cadera_rlp_extension" name="cadera_rlp_extension" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal (predominio cadera)</option>
+                <option value="Alteración leve" data-color="info">Alteración leve</option>
+                <option value="Alteración moderada" data-color="warning">Alteración moderada (hiperlordosis)</option>
+                <option value="Alteración severa" data-color="danger">Alteración severa (predominio lumbar)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_rlp_extension_obs" name="cadera_rlp_extension_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Control de disociación lumbopélvica</td>
+            <td>
+              <select id="cadera_rlp_disociacion" name="cadera_rlp_disociacion" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Óptimo" data-color="success">Óptimo (control completo)</option>
+                <option value="Bueno" data-color="info">Bueno (control con esfuerzo)</option>
+                <option value="Regular" data-color="warning">Regular (control limitado)</option>
+                <option value="Deficiente" data-color="danger">Deficiente (sin control)</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_rlp_disociacion_obs" name="cadera_rlp_disociacion_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Evaluación de Rotaciones Funcionales -->
+    <h5 class="mt-4 mb-3">Rotaciones Funcionales y Combinaciones de Movimiento</h5>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Movimiento Funcional</th>
+            <th>Lado Izquierdo</th>
+            <th>Lado Derecho</th>
+            <th>Dolor</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Rotación en sedestación</td>
+            <td>
+              <select id="cadera_rot_sed_izq" name="cadera_rot_sed_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_rot_sed_der" name="cadera_rot_sed_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_rot_sed_dolor" name="cadera_rot_sed_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_rot_sed_obs" name="cadera_rot_sed_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Rotación en decúbito (90° flexión)</td>
+            <td>
+              <select id="cadera_rot_dec_izq" name="cadera_rot_dec_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_rot_dec_der" name="cadera_rot_dec_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_rot_dec_dolor" name="cadera_rot_dec_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_rot_dec_obs" name="cadera_rot_dec_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Flexión con rotación interna</td>
+            <td>
+              <select id="cadera_flex_rot_int_izq" name="cadera_flex_rot_int_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_flex_rot_int_der" name="cadera_flex_rot_int_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_flex_rot_int_dolor" name="cadera_flex_rot_int_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_flex_rot_int_obs" name="cadera_flex_rot_int_obs" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td>Extensión con rotación externa</td>
+            <td>
+              <select id="cadera_ext_rot_ext_izq" name="cadera_ext_rot_ext_izq" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_ext_rot_ext_der" name="cadera_ext_rot_ext_der" class="form-select" onchange="colorearSelector(this)">
+                <option value="" data-color="secondary">Seleccionar</option>
+                <option value="Normal" data-color="success">Normal</option>
+                <option value="Limitación leve" data-color="info">Limitación leve</option>
+                <option value="Limitación moderada" data-color="warning">Limitación moderada</option>
+                <option value="Limitación severa" data-color="danger">Limitación severa</option>
+              </select>
+            </td>
+            <td>
+              <select id="cadera_ext_rot_ext_dolor" name="cadera_ext_rot_ext_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                <option value="No" data-color="success">No</option>
+                <option value="Leve" data-color="info">Leve</option>
+                <option value="Moderado" data-color="warning">Moderado</option>
+                <option value="Severo" data-color="danger">Severo</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="cadera_ext_rot_ext_obs" name="cadera_ext_rot_ext_obs" class="form-control">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Calculadora de déficit funcional cadera -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Calculadora de Déficit Funcional Cadera</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="cadera_deficit_total" class="form-label">Déficit Total (%)</label>
+              <input type="text" id="cadera_deficit_total" name="cadera_deficit_total" class="form-control" readonly>
+            </div>
+            <div id="cadera_deficit_visual" class="mt-2 progress">
+              <div class="progress-bar bg-info" role="progressbar" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="cadera_deficit_interpretacion" class="form-label">Interpretación Clínica</label>
+              <select id="cadera_deficit_interpretacion" name="cadera_deficit_interpretacion" class="form-select" disabled>
+                <option value="">Pendiente de cálculo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <h6>Impacto en Actividades Diarias</h6>
+            <ul id="cadera_impacto_actividades" class="list-group">
+              <!-- Se generará dinámicamente -->
+              <li class="list-group-item list-group-item-info">Complete la evaluación para ver el impacto en actividades.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Evaluación de articulaciones asociadas -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Evaluación de Articulaciones Asociadas</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Articulación</th>
+                <th>Movilidad</th>
+                <th>Dolor</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Coxofemoral</td>
+                <td>
+                  <select id="cadera_art_coxofemoral_movilidad" name="cadera_art_coxofemoral_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_art_coxofemoral_dolor" name="cadera_art_coxofemoral_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="cadera_art_coxofemoral_obs" name="cadera_art_coxofemoral_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Sacroilíaca</td>
+                <td>
+                  <select id="cadera_art_sacroiliaca_movilidad" name="cadera_art_sacroiliaca_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_art_sacroiliaca_dolor" name="cadera_art_sacroiliaca_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="cadera_art_sacroiliaca_obs" name="cadera_art_sacroiliaca_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Sínfisis pubiana</td>
+                <td>
+                  <select id="cadera_art_pubis_movilidad" name="cadera_art_pubis_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_art_pubis_dolor" name="cadera_art_pubis_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="cadera_art_pubis_obs" name="cadera_art_pubis_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Articulación lumbosacra</td>
+                <td>
+                  <select id="cadera_art_lumbosacra_movilidad" name="cadera_art_lumbosacra_movilidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueada" data-color="danger">Bloqueada</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_art_lumbosacra_dolor" name="cadera_art_lumbosacra_dolor" class="form-select dolor-selector" onchange="evaluarDolorROM(this); colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="cadera_art_lumbosacra_obs" name="cadera_art_lumbosacra_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Movimientos accesorios de la cadera -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Movimientos Accesorios de la Cadera</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Movimiento</th>
+                <th>Calidad Izquierdo</th>
+                <th>Dolor Izquierdo</th>
+                <th>Calidad Derecho</th>
+                <th>Dolor Derecho</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tracción coxofemoral</td>
+                <td>
+                  <select id="cadera_acc_traccion_cf_izq_calidad" name="cadera_acc_traccion_cf_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_traccion_cf_izq_dolor" name="cadera_acc_traccion_cf_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_traccion_cf_der_calidad" name="cadera_acc_traccion_cf_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_traccion_cf_der_dolor" name="cadera_acc_traccion_cf_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="cadera_acc_traccion_cf_obs" name="cadera_acc_traccion_cf_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento caudal</td>
+                <td>
+                  <select id="cadera_acc_desliz_caudal_izq_calidad" name="cadera_acc_desliz_caudal_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_desliz_caudal_izq_dolor" name="cadera_acc_desliz_caudal_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_desliz_caudal_der_calidad" name="cadera_acc_desliz_caudal_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_desliz_caudal_der_dolor" name="cadera_acc_desliz_caudal_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="cadera_acc_desliz_caudal_obs" name="cadera_acc_desliz_caudal_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento ventral</td>
+                <td>
+                  <select id="cadera_acc_desliz_ventral_izq_calidad" name="cadera_acc_desliz_ventral_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_desliz_ventral_izq_dolor" name="cadera_acc_desliz_ventral_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_desliz_ventral_der_calidad" name="cadera_acc_desliz_ventral_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_desliz_ventral_der_dolor" name="cadera_acc_desliz_ventral_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="cadera_acc_desliz_ventral_obs" name="cadera_acc_desliz_ventral_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Deslizamiento dorsal</td>
+                <td>
+                  <select id="cadera_acc_desliz_dorsal_izq_calidad" name="cadera_acc_desliz_dorsal_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_desliz_dorsal_izq_dolor" name="cadera_acc_desliz_dorsal_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_desliz_dorsal_der_calidad" name="cadera_acc_desliz_dorsal_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_desliz_dorsal_der_dolor" name="cadera_acc_desliz_dorsal_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="cadera_acc_desliz_dorsal_obs" name="cadera_acc_desliz_dorsal_obs" class="form-control">
+                </td>
+              </tr>
+              <tr>
+                <td>Rotación accesoria</td>
+                <td>
+                  <select id="cadera_acc_rotacion_izq_calidad" name="cadera_acc_rotacion_izq_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_rotacion_izq_dolor" name="cadera_acc_rotacion_izq_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_rotacion_der_calidad" name="cadera_acc_rotacion_der_calidad" class="form-select" onchange="colorearSelector(this)">
+                    <option value="" data-color="secondary">Seleccionar</option>
+                    <option value="Normal" data-color="success">Normal</option>
+                    <option value="Hipomóvil" data-color="warning">Hipomóvil</option>
+                    <option value="Hipermóvil" data-color="info">Hipermóvil</option>
+                    <option value="Bloqueado" data-color="danger">Bloqueado</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="cadera_acc_rotacion_der_dolor" name="cadera_acc_rotacion_der_dolor" class="form-select dolor-selector" onchange="colorearSelector(this)">
+                    <option value="No" data-color="success">No</option>
+                    <option value="Leve" data-color="info">Leve</option>
+                    <option value="Moderado" data-color="warning">Moderado</option>
+                    <option value="Severo" data-color="danger">Severo</option>
+                    <option value="Reproduce síntomas" data-color="danger">Reproduce síntomas</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="text" id="cadera_acc_rotacion_obs" name="cadera_acc_rotacion_obs" class="form-control">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Patrones de restricción capsular -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Patrón de Restricción Capsular de la Cadera</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="cadera_patron_capsular" class="form-label">Patrón de restricción (ordenado por limitación)</label>
+              <select id="cadera_patron_capsular" name="cadera_patron_capsular" class="form-select" onchange="mostrarInterpretacionCapsular('cadera')">
+                <option value="">Seleccionar</option>
+                <option value="No presenta">No presenta patrón capsular</option>
+                <option value="Rotación interna > Flexión > Rotación externa">Rotación interna > Flexión > Rotación externa</option>
+                <option value="Rotación externa > Abducción > Rotación interna">Rotación externa > Abducción > Rotación interna</option>
+                <option value="Extensión > Rotación interna > Abducción">Extensión > Rotación interna > Abducción</option>
+                <option value="Flexión > Rotación externa > Aducción">Flexión > Rotación externa > Aducción</option>
+                <option value="Otro">Otro (especificar)</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6" id="cadera_patron_otro_container" style="display: none;">
+            <div class="form-group">
+              <label for="cadera_patron_otro" class="form-label">Especifique otro patrón</label>
+              <input type="text" id="cadera_patron_otro" name="cadera_patron_otro" class="form-control">
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header bg-info text-white">
+                <h6 class="mb-0">Interpretación Clínica del Patrón</h6>
+              </div>
+              <div class="card-body">
+                <div id="cadera_interpretacion_capsular">
+                  <p>Seleccione un patrón de restricción para obtener la interpretación clínica.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación clínica de la cadera -->
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Interpretación Clínica y Recomendaciones: Cadera</h5>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion_cadera" class="mb-3">
+          <h6>Interpretación Clínica:</h6>
+          <div id="interpretacion-cadera-texto" class="p-3 border rounded">
+            Complete la evaluación de rangos de movimiento para obtener la interpretación clínica.
+          </div>
+        </div>
+        
+        <div id="recomendaciones_cadera" class="mb-3">
+          <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+          <div id="recomendaciones-cadera-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener recomendaciones específicas.
+          </div>
+        </div>
+        
+        <div id="consideraciones_cadera" class="mb-3">
+          <h6>Consideraciones Adicionales:</h6>
+          <div id="consideraciones-cadera-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener consideraciones adicionales específicas.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
       
       <!-- Continúa con los demás subacordeones para cada región anatómica... -->
       
