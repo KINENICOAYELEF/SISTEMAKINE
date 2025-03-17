@@ -1161,4 +1161,108 @@ a:hover {
 .form-control.fuerza-input.input-deficit:focus {
   box-shadow: 0 0 0 0.25rem rgba(253, 13, 13, 0.25);
 }
+
+/* Estilos para los dashboards */
+.dashboard-card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card .card-header {
+  background-color: #1e293b !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-card .card-body {
+  background-color: #111827 !important;
+  padding: 1.5rem;
+}
+
+/* Contenedor de gráficos */
+.grafico-container {
+  position: relative;
+  height: 250px;
+  background-color: #1e293b;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+/* Estilos para las barras horizontales */
+.detalle-movimientos {
+  padding: 0.5rem;
+  background-color: #1e293b;
+  border-radius: 8px;
+  height: 250px;
+  overflow-y: auto;
+}
+
+.movimiento-item {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.movimiento-nombre {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.lado-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 3px;
+}
+
+.barra-background {
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.barra {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.barra-der {
+  background: linear-gradient(90deg, rgba(110, 231, 183, 1), rgba(52, 211, 153, 1));
+}
+
+.barra-izq {
+  background: linear-gradient(90deg, rgba(96, 165, 250, 1), rgba(59, 130, 246, 1));
+}
+
+.valor-porcentaje {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  font-size: 14px;
+  text-align: right;
+}
+
+/* Estilo especial para el círculo grande con porcentaje global */
+.score-circle {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 15px auto;
+}
+
+.score-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
 </style>
