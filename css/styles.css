@@ -1135,4 +1135,30 @@ a:hover {
 .form-select.bg-warning, .form-select.bg-danger, .form-select.bg-primary, .form-select.bg-secondary {
   color: #fff;
 }
+
+/* Estilos para la evaluación de fuerza muscular */
+.input-deficit {
+  background-color: #ffeeee !important;
+}
+
+.accordion-button::after {
+  margin-left: 0.5rem;
+}
+
+.accordion-button .badge {
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.form-control.fuerza-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.form-control.fuerza-input.input-deficit:focus {
+  box-shadow: 0 0 0 0.25rem rgba(253, 13, 13, 0.25);
+}
 </style>
