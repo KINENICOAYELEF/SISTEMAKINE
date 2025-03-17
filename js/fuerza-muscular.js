@@ -513,7 +513,7 @@ function actualizarDashboard(region) {
   }
 }
 
-// Crear gráfico comparativo moderno y futurista
+// Función para crear el gráfico de radar moderno
 function crearGrafico(canvas, datos) {
   // Verificar si ya existe un gráfico para este canvas
   if (canvas.chart) {
@@ -521,7 +521,7 @@ function crearGrafico(canvas, datos) {
   }
   
   // Determinar la escala (mirando el primer input de la región)
-  const regionNombre = canvas.id.replace('grafico-', '');
+  const regionNombre = canvas.id.replace('grafico-radar-', '');
   const primerMovimiento = datos.movimientos[0] ? convertirAIdMovimiento(datos.movimientos[0]) : '';
   const primerInputId = regionNombre + '_' + primerMovimiento + '_der';
   const primerInput = document.getElementById(primerInputId);
@@ -534,7 +534,11 @@ function crearGrafico(canvas, datos) {
     maxValue = 5;
   }
   
-  // Crear gráfico con estilo moderno
+  // Color theme moderno
+  const derColor = 'rgba(110, 231, 183, 1)';   // Verde turquesa
+  const izqColor = 'rgba(96, 165, 250, 1)';    // Azul claro
+  
+  // Crear gráfico tipo radar moderno
   const ctx = canvas.getContext('2d');
   canvas.chart = new Chart(ctx, {
     type: 'radar',
@@ -543,23 +547,27 @@ function crearGrafico(canvas, datos) {
       datasets: [{
         label: 'Derecha',
         data: datos.derecha,
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 0.8)',
-        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+        backgroundColor: 'rgba(110, 231, 183, 0.3)',
+        borderColor: derColor,
+        pointBackgroundColor: derColor,
         pointBorderColor: '#fff',
         pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 2
+        pointHoverBorderColor: derColor,
+        borderWidth: 2,
+        pointRadius: 3,
+        pointHoverRadius: 5
       }, {
         label: 'Izquierda',
         data: datos.izquierda,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 0.8)',
-        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+        backgroundColor: 'rgba(96, 165, 250, 0.3)',
+        borderColor: izqColor,
+        pointBackgroundColor: izqColor,
         pointBorderColor: '#fff',
         pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 2
+        pointHoverBorderColor: izqColor,
+        borderWidth: 2,
+        pointRadius: 3,
+        pointHoverRadius: 5
       }]
     },
     options: {
@@ -567,55 +575,275 @@ function crearGrafico(canvas, datos) {
       maintainAspectRatio: false,
       scales: {
         r: {
-          angleLines: {
-            display: true,
-            color: 'rgba(0, 0, 0, 0.1)'
-          },
+          min: 0,
+          max: maxValue,
           ticks: {
-            beginAtZero: true,
-            max: maxValue,
             stepSize: 1,
-            backdropColor: 'rgba(255, 255, 255, 0.8)'
-          },
-          pointLabels: {
+            display: true,
+            backdropColor: 'transparent',
+            color: 'rgba(255, 255, 255, 0.7)',
             font: {
-              size: 12,
-              weight: 'bold'
+              size: 10
             }
           },
           grid: {
-            circular: true,
-            color: 'rgba(0, 0, 0, 0.1)'
+            color: 'rgba(255, 255, 255, 0.1)'
+          },
+          angleLines: {
+            color: 'rgba(255, 255, 255, 0.2)'
+          },
+          pointLabels: {
+            font: {
+              size: 11,
+              family: "'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+            },
+            color: 'rgba(255, 255, 255, 0.9)'
           }
         }
       },
       plugins: {
         legend: {
           position: 'top',
+          align: 'start',
           labels: {
-            boxWidth: 15,
-            padding: 15,
+            boxWidth: 10,
+            padding: 10,
+            usePointStyle: true,
+            pointStyle: 'circle',
+            color: 'rgba(255, 255, 255, 0.9)',
             font: {
-              family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-              size: 12
+              family: "'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+              size: 11
             }
           }
         },
         tooltip: {
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          backgroundColor: 'rgba(15, 23, 42, 0.9)',
           titleFont: {
-            size: 14
+            size: 12
           },
           bodyFont: {
-            size: 13
+            size: 11
           },
-          displayColors: false
+          padding: 10,
+          cornerRadius: 4,
+          displayColors: true
         }
       }
     }
   });
+  
+  // Crear también gráfico de barras horizontales moderno
+  crearBarrasHorizontales(regionNombre, datos, escala);
 }
 
+// Función para crear barras horizontales estilo moderno
+function crearBarrasHorizontales(region, datos, escala) {
+  const contenedor = document.getElementById(`grafico-barras-${region}`);
+  if (!contenedor) return;
+  
+  // Limpiar contenedor
+  contenedor.innerHTML = '';
+  
+  // Valor máximo según escala
+  const valorMaximo = escala === 'daniels' ? 5 : 5;
+  
+  // Crear elementos para cada movimiento
+  datos.movimientos.forEach((movimiento, index) => {
+    const valorDer = datos.derecha[index] || 0;
+    const valorIzq = datos.izquierda[index] || 0;
+    
+    // Calcular porcentajes
+    const porcentajeDer = (valorDer / valorMaximo) * 100;
+    const porcentajeIzq = (valorIzq / valorMaximo) * 100;
+    
+    // Crear elemento para este movimiento
+    const movimientoItem = document.createElement('div');
+    movimientoItem.className = 'movimiento-item';
+    
+    // Nombre del movimiento
+    const nombre = document.createElement('div');
+    nombre.className = 'movimiento-nombre';
+    nombre.textContent = movimiento;
+    movimientoItem.appendChild(nombre);
+    
+    // Barra derecha
+    const labelDer = document.createElement('div');
+    labelDer.className = 'lado-label';
+    labelDer.innerHTML = `
+      <span>Derecha</span>
+      <span>${valorDer}/${valorMaximo}</span>
+    `;
+    movimientoItem.appendChild(labelDer);
+    
+    const barraBackDer = document.createElement('div');
+    barraBackDer.className = 'barra-background';
+    
+    const barraDer = document.createElement('div');
+    barraDer.className = 'barra barra-der';
+    barraDer.style.width = `${porcentajeDer}%`;
+    
+    barraBackDer.appendChild(barraDer);
+    movimientoItem.appendChild(barraBackDer);
+    
+    // Barra izquierda
+    const labelIzq = document.createElement('div');
+    labelIzq.className = 'lado-label';
+    labelIzq.innerHTML = `
+      <span>Izquierda</span>
+      <span>${valorIzq}/${valorMaximo}</span>
+    `;
+    movimientoItem.appendChild(labelIzq);
+    
+    const barraBackIzq = document.createElement('div');
+    barraBackIzq.className = 'barra-background';
+    
+    const barraIzq = document.createElement('div');
+    barraIzq.className = 'barra barra-izq';
+    barraIzq.style.width = `${porcentajeIzq}%`;
+    
+    barraBackIzq.appendChild(barraIzq);
+    movimientoItem.appendChild(barraBackIzq);
+    
+    // Añadir a contenedor
+    contenedor.appendChild(movimientoItem);
+  });
+  
+  // Calcular y mostrar promedio global para la región
+  const promedioDer = datos.derecha.length > 0 ? 
+    datos.derecha.reduce((a, b) => a + b, 0) / datos.derecha.length : 0;
+  
+  const promedioIzq = datos.izquierda.length > 0 ? 
+    datos.izquierda.reduce((a, b) => a + b, 0) / datos.izquierda.length : 0;
+  
+  const promedioGlobal = (promedioDer + promedioIzq) / 2;
+  const porcentajeGlobal = Math.round((promedioGlobal / valorMaximo) * 100);
+  
+  // Si hay espacio, mostrar también el promedio global
+  if (datos.movimientos.length <= 5) {
+    const dividerEl = document.createElement('hr');
+    dividerEl.className = 'my-3 border-secondary';
+    contenedor.appendChild(dividerEl);
+    
+    const scoreContainer = document.createElement('div');
+    scoreContainer.className = 'text-center';
+    
+    const scoreTitle = document.createElement('div');
+    scoreTitle.className = 'text-white-50 mb-2';
+    scoreTitle.textContent = 'Puntuación global';
+    
+    const scoreCircle = document.createElement('div');
+    scoreCircle.className = 'score-circle';
+    
+    // Crear círculo con progreso SVG
+    const circleSvg = `
+      <svg viewBox="0 0 36 36" class="w-100 h-100">
+        <path class="circle-bg"
+          d="M18 2.0845
+            a 15.9155 15.9155 0 0 1 0 31.831
+            a 15.9155 15.9155 0 0 1 0 -31.831"
+          fill="none"
+          stroke="rgba(255, 255, 255, 0.1)"
+          stroke-width="3"
+        />
+        <path class="circle"
+          d="M18 2.0845
+            a 15.9155 15.9155 0 0 1 0 31.831
+            a 15.9155 15.9155 0 0 1 0 -31.831"
+          fill="none"
+          stroke="url(#gradient)"
+          stroke-width="3"
+          stroke-dasharray="${porcentajeGlobal}, 100"
+          stroke-linecap="round"
+        />
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#6ee7b7" />
+            <stop offset="100%" stop-color="#60a5fa" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="score-text">${porcentajeGlobal}%</div>
+    `;
+    
+    scoreCircle.innerHTML = circleSvg;
+    
+    scoreContainer.appendChild(scoreTitle);
+    scoreContainer.appendChild(scoreCircle);
+    contenedor.appendChild(scoreContainer);
+  }
+}
+
+// Función auxiliar para convertir nombre legible a ID de movimiento
+function convertirAIdMovimiento(nombreLegible) {
+  const mapa = {
+    'Flexión': 'flexion',
+    'Extensión': 'extension',
+    'Abducción': 'abduccion',
+    'Aducción': 'aduccion',
+    'Rot. Int.': 'rotint',
+    'Rotación interna': 'rotint',
+    'Rot. Ext.': 'rotext',
+    'Rotación externa': 'rotext',
+    'Inclinación': 'inclinacion',
+    'Inclinación lateral': 'inclinacion',
+    'Rotación': 'rotacion'
+  };
+  
+  return mapa[nombreLegible] || nombreLegible.toLowerCase();
+}
+
+// Modificar la función actualizarDashboard
+function actualizarDashboard(region) {
+  // Recopilar datos para el gráfico
+  const datos = {
+    movimientos: [],
+    derecha: [],
+    izquierda: []
+  };
+  
+  // Buscar todos los inputs de esta región
+  const rows = document.querySelectorAll(`input[id^="${region}_"][id$="_der"]`);
+  
+  rows.forEach(inputDer => {
+    const baseId = inputDer.id.replace('_der', '');
+    const inputIzq = document.getElementById(baseId + '_izq');
+    
+    if (inputDer && inputIzq) {
+      const movimiento = baseId.replace(region + '_', '');
+      const valDer = parseFloat(inputDer.value);
+      const valIzq = parseFloat(inputIzq.value);
+      
+      if (!isNaN(valDer) || !isNaN(valIzq)) {
+        // Traducir nombres de movimientos a formato legible
+        const movimientosNombres = {
+          'flexion': 'Flexión',
+          'extension': 'Extensión',
+          'abduccion': 'Abducción',
+          'aduccion': 'Aducción',
+          'rotint': 'Rot. Int.',
+          'rotext': 'Rot. Ext.',
+          'inclinacion': 'Inclinación',
+          'rotacion': 'Rotación'
+        };
+        
+        const movimientoNombre = movimientosNombres[movimiento] || movimiento;
+        
+        datos.movimientos.push(movimientoNombre);
+        datos.derecha.push(isNaN(valDer) ? 0 : valDer);
+        datos.izquierda.push(isNaN(valIzq) ? 0 : valIzq);
+      }
+    }
+  });
+  
+  // Si hay datos, crear el gráfico
+  if (datos.movimientos.length > 0) {
+    const canvas = document.getElementById('grafico-radar-' + region);
+    if (canvas) {
+      crearGrafico(canvas, datos);
+    }
+  }
+}
 // Función auxiliar para convertir nombre legible a ID de movimiento
 function convertirAIdMovimiento(nombreLegible) {
   const mapa = {
