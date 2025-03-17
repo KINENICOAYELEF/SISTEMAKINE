@@ -14469,89 +14469,79 @@
 
 
             
-            <h4>6.6 Evaluación de Fuerza Muscular</h4>
-<div class="cuestionarios-acordeon">
-  <!-- Fuerza Analítica -->
-<div class="cuestionario-item">
-  <div class="cuestionario-header" onclick="toggleCuestionario('fuerza-analitica-content')">
-    <h4><i class="fas fa-plus-circle"></i> Evaluación de Fuerza Muscular Analítica</h4>
-    <div class="resultado-badge" id="fuerza-analitica-badge">No completado</div>
-  </div>
-  <div class="cuestionario-content" id="fuerza-analitica-content" style="display: none;">
-    <p class="mb-3">Evalúe la fuerza muscular utilizando la escala de Daniels (0-5) o la escala de Oxford modificada (0-10).</p>
-    
-    <!-- Escalas de medición -->
-    <div class="form-row mb-4">
-      <div class="form-col form-col-md-12">
-        <div class="card">
-          <div class="card-header bg-info text-white">
-            <h5 class="mb-0">Escalas de Medición de Fuerza Muscular</h5>
+            <!-- 6.6 Evaluación de Fuerza Muscular Analítica -->
+<div class="evaluacion-seccion">
+  <h3 class="seccion-titulo">
+    <span class="numero-seccion">6.6</span> Evaluación de Fuerza Muscular Analítica
+  </h3>
+
+  <!-- Evaluación de Fuerza Muscular Analítica - Acordeón Principal -->
+  <div class="acordeon-principal">
+    <!-- Escalas de Fuerza Muscular -->
+    <div class="card mt-3 mb-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Escala de Daniels (0-5)</h5>
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-danger">0: Ausencia de contracción</li>
+              <li class="list-group-item list-group-item-danger">1: Contracción visible o palpable sin movimiento</li>
+              <li class="list-group-item list-group-item-warning">2: Movimiento completo eliminando gravedad</li>
+              <li class="list-group-item list-group-item-warning">3: Movimiento completo contra gravedad</li>
+              <li class="list-group-item list-group-item-success">4: Movimiento completo contra gravedad y resistencia moderada</li>
+              <li class="list-group-item list-group-item-success">5: Fuerza normal contra resistencia completa</li>
+            </ul>
           </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <h6>Escala de Daniels (0-5)</h6>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-danger">0: Ausencia de contracción</li>
-                  <li class="list-group-item list-group-item-danger">1: Contracción visible o palpable sin movimiento</li>
-                  <li class="list-group-item list-group-item-warning">2: Movimiento completo eliminando gravedad</li>
-                  <li class="list-group-item list-group-item-warning">3: Movimiento completo contra gravedad</li>
-                  <li class="list-group-item list-group-item-success">4: Movimiento completo contra gravedad y resistencia moderada</li>
-                  <li class="list-group-item list-group-item-success">5: Fuerza normal contra resistencia completa</li>
-                </ul>
-              </div>
-              <div class="col-md-6">
-                <h6>Escala Oxford Modificada (0-10)</h6>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-danger">0: Sin contracción</li>
-                  <li class="list-group-item list-group-item-danger">1: Contracción muscular visible sin movimiento</li>
-                  <li class="list-group-item list-group-item-danger">2: Movimiento eliminando gravedad</li>
-                  <li class="list-group-item list-group-item-warning">3: Movimiento contra gravedad (25% fuerza)</li>
-                  <li class="list-group-item list-group-item-warning">4: Movimiento contra gravedad (50% fuerza)</li>
-                  <li class="list-group-item list-group-item-warning">5: Movimiento contra gravedad (75% fuerza)</li>
-                  <li class="list-group-item list-group-item-success">6: Movimiento contra gravedad y resistencia mínima</li>
-                  <li class="list-group-item list-group-item-success">7: Movimiento contra gravedad y resistencia leve</li>
-                  <li class="list-group-item list-group-item-success">8: Movimiento contra gravedad y resistencia moderada</li>
-                  <li class="list-group-item list-group-item-success">9: Movimiento contra gravedad y resistencia considerable</li>
-                  <li class="list-group-item list-group-item-success">10: Movimiento contra gravedad y resistencia máxima (normal)</li>
-                </ul>
-              </div>
-            </div>
+          <div class="col-md-6">
+            <h5>Escala MRC Modificada (0-5)</h5>
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-danger">0: Sin contracción</li>
+              <li class="list-group-item list-group-item-danger">1: Contracción muscular visible sin movimiento</li>
+              <li class="list-group-item list-group-item-warning">2-: Movimiento activo incompleto sin gravedad</li>
+              <li class="list-group-item list-group-item-warning">2: Movimiento activo completo sin gravedad</li>
+              <li class="list-group-item list-group-item-warning">2+: Movimiento activo parcial contra gravedad</li>
+              <li class="list-group-item list-group-item-warning">3-: Movimiento activo contra gravedad (menos del 50%)</li>
+              <li class="list-group-item list-group-item-warning">3: Movimiento activo completo contra gravedad</li>
+              <li class="list-group-item list-group-item-warning">3+: Movimiento contra gravedad con mínima resistencia</li>
+              <li class="list-group-item list-group-item-success">4-: Movimiento contra gravedad y resistencia leve</li>
+              <li class="list-group-item list-group-item-success">4: Movimiento contra gravedad y resistencia moderada</li>
+              <li class="list-group-item list-group-item-success">4+: Movimiento contra gravedad y fuerte resistencia</li>
+              <li class="list-group-item list-group-item-success">5: Fuerza normal contra resistencia completa</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Acordeón de regiones anatómicas -->
-    <div class="accordion" id="acordeon-fuerza">
+    <!-- Nota informativa -->
+    <div class="alert alert-info mb-4">
+      <i class="fas fa-info-circle"></i> <strong>Nota:</strong> Seleccione el segmento anatómico a evaluar en los acordeones a continuación.
+    </div>
+
+    <!-- Acordeón de Evaluación de Fuerza -->
+    <div class="accordion" id="acordeonFuerzaMuscular">
       
       <!-- Subacordeón: Cabeza y Cuello -->
       <div class="accordion-item">
         <h2 class="accordion-header" id="heading-cuello">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-cuello" aria-expanded="false" aria-controls="collapse-cuello">
-            Cabeza y Cuello
-            <span class="ms-auto badge rounded-pill bg-secondary" id="cuello-badge">No evaluado</span>
+            <i class="fas fa-circle me-2"></i> Cabeza y Cuello
+            <span class="badge bg-secondary ms-auto" id="cuello-badge">No completado</span>
           </button>
         </h2>
-        <div id="collapse-cuello" class="accordion-collapse collapse" aria-labelledby="heading-cuello" data-bs-parent="#acordeon-fuerza">
+        <div id="collapse-cuello" class="accordion-collapse collapse" aria-labelledby="heading-cuello" data-bs-parent="#acordeonFuerzaMuscular">
           <div class="accordion-body">
             <div class="table-responsive">
-              <table class="table table-bordered">
-                <thead>
+              <table class="table table-bordered table-hover">
+                <thead class="table-light">
                   <tr>
-                    <th rowspan="2">Movimiento</th>
-                    <th rowspan="2">Escala</th>
+                    <th>Movimiento</th>
+                    <th>Escala</th>
                     <th colspan="2">Derecha</th>
                     <th colspan="2">Izquierda</th>
-                    <th rowspan="2">Diferencial</th>
-                    <th rowspan="2">Dolor</th>
-                    <th rowspan="2">Observaciones</th>
-                  </tr>
-                  <tr>
-                    <th>Valor</th>
-                    <th>Estado</th>
-                    <th>Valor</th>
-                    <th>Estado</th>
+                    <th>Diferencial</th>
+                    <th>Dolor</th>
+                    <th>Observaciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -14560,20 +14550,20 @@
                     <td>
                       <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cuello_flexion')">
                         <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
+                        <option value="mrc">MRC Modificada</option>
                       </select>
                     </td>
                     <td>
-                      <input type="number" id="cuello_flexion_der" name="cuello_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="cuello_flexion_der" name="cuello_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="cuello_flexion_der_estado"></td>
+                    <td id="cuello_flexion_der_estado" class="estado-celda"></td>
                     <td>
-                      <input type="number" id="cuello_flexion_izq" name="cuello_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="cuello_flexion_izq" name="cuello_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="cuello_flexion_izq_estado"></td>
-                    <td id="cuello_flexion_dif"></td>
+                    <td id="cuello_flexion_izq_estado" class="estado-celda"></td>
+                    <td id="cuello_flexion_dif" class="diferencial-celda"></td>
                     <td>
-                      <select id="cuello_flexion_dolor" name="cuello_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <select id="cuello_flexion_dolor" name="cuello_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                         <option value="No">No</option>
                         <option value="Al inicio">Al inicio</option>
                         <option value="Durante">Durante</option>
@@ -14591,20 +14581,20 @@
                     <td>
                       <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cuello_extension')">
                         <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
+                        <option value="mrc">MRC Modificada</option>
                       </select>
                     </td>
                     <td>
-                      <input type="number" id="cuello_extension_der" name="cuello_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="cuello_extension_der" name="cuello_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="cuello_extension_der_estado"></td>
+                    <td id="cuello_extension_der_estado" class="estado-celda"></td>
                     <td>
-                      <input type="number" id="cuello_extension_izq" name="cuello_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="cuello_extension_izq" name="cuello_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="cuello_extension_izq_estado"></td>
-                    <td id="cuello_extension_dif"></td>
+                    <td id="cuello_extension_izq_estado" class="estado-celda"></td>
+                    <td id="cuello_extension_dif" class="diferencial-celda"></td>
                     <td>
-                      <select id="cuello_extension_dolor" name="cuello_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <select id="cuello_extension_dolor" name="cuello_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                         <option value="No">No</option>
                         <option value="Al inicio">Al inicio</option>
                         <option value="Durante">Durante</option>
@@ -14622,20 +14612,20 @@
                     <td>
                       <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cuello_inclinacion')">
                         <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
+                        <option value="mrc">MRC Modificada</option>
                       </select>
                     </td>
                     <td>
-                      <input type="number" id="cuello_inclinacion_der" name="cuello_inclinacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="cuello_inclinacion_der" name="cuello_inclinacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="cuello_inclinacion_der_estado"></td>
+                    <td id="cuello_inclinacion_der_estado" class="estado-celda"></td>
                     <td>
-                      <input type="number" id="cuello_inclinacion_izq" name="cuello_inclinacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="cuello_inclinacion_izq" name="cuello_inclinacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="cuello_inclinacion_izq_estado"></td>
-                    <td id="cuello_inclinacion_dif"></td>
+                    <td id="cuello_inclinacion_izq_estado" class="estado-celda"></td>
+                    <td id="cuello_inclinacion_dif" class="diferencial-celda"></td>
                     <td>
-                      <select id="cuello_inclinacion_dolor" name="cuello_inclinacion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <select id="cuello_inclinacion_dolor" name="cuello_inclinacion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                         <option value="No">No</option>
                         <option value="Al inicio">Al inicio</option>
                         <option value="Durante">Durante</option>
@@ -14653,20 +14643,20 @@
                     <td>
                       <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cuello_rotacion')">
                         <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
+                        <option value="mrc">MRC Modificada</option>
                       </select>
                     </td>
                     <td>
-                      <input type="number" id="cuello_rotacion_der" name="cuello_rotacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="cuello_rotacion_der" name="cuello_rotacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="cuello_rotacion_der_estado"></td>
+                    <td id="cuello_rotacion_der_estado" class="estado-celda"></td>
                     <td>
-                      <input type="number" id="cuello_rotacion_izq" name="cuello_rotacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="cuello_rotacion_izq" name="cuello_rotacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="cuello_rotacion_izq_estado"></td>
-                    <td id="cuello_rotacion_dif"></td>
+                    <td id="cuello_rotacion_izq_estado" class="estado-celda"></td>
+                    <td id="cuello_rotacion_dif" class="diferencial-celda"></td>
                     <td>
-                      <select id="cuello_rotacion_dolor" name="cuello_rotacion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <select id="cuello_rotacion_dolor" name="cuello_rotacion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                         <option value="No">No</option>
                         <option value="Al inicio">Al inicio</option>
                         <option value="Durante">Durante</option>
@@ -14683,24 +14673,32 @@
               </table>
             </div>
             
+            <!-- Botón para añadir músculos específicos -->
+            <div class="mt-3 mb-4">
+              <button type="button" class="btn btn-outline-primary" onclick="agregarMusculoEspecifico('cuello')">
+                <i class="fas fa-plus-circle"></i> Añadir músculo específico
+              </button>
+            </div>
+            
+            <!-- Contenedor para músculos específicos adicionales -->
+            <div id="cuello_musculos_adicionales" class="musculos-adicionales"></div>
+            
             <!-- Dashboard para Cuello -->
-            <div class="row mt-4">
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Dashboard - Fuerza Muscular Cuello</h5>
+            <div class="card mt-4">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Dashboard - Fuerza Muscular Cuello</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="grafico-container">
+                      <canvas id="grafico-cuello" width="100%" height="250"></canvas>
+                    </div>
                   </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <canvas id="grafico-cuello" width="100%" height="200"></canvas>
-                      </div>
-                      <div class="col-md-6">
-                        <h6>Interpretación Clínica:</h6>
-                        <div id="interpretacion-cuello" class="alert alert-info">
-                          Complete la evaluación para obtener interpretación clínica.
-                        </div>
-                      </div>
+                  <div class="col-md-6">
+                    <h6>Interpretación Clínica:</h6>
+                    <div id="interpretacion-cuello" class="alert alert-info">
+                      Complete la evaluación para obtener interpretación clínica.
                     </div>
                   </div>
                 </div>
@@ -14710,33 +14708,27 @@
         </div>
       </div>
       
-      <!-- Subacordeón: Hombro -->
+      <!-- Subacordeón: Complejo del Hombro -->
       <div class="accordion-item">
         <h2 class="accordion-header" id="heading-hombro">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-hombro" aria-expanded="false" aria-controls="collapse-hombro">
-            Hombro
-            <span class="ms-auto badge rounded-pill bg-secondary" id="hombro-badge">No evaluado</span>
+            <i class="fas fa-circle me-2"></i> Complejo del Hombro
+            <span class="badge bg-secondary ms-auto" id="hombro-badge">No completado</span>
           </button>
         </h2>
-        <div id="collapse-hombro" class="accordion-collapse collapse" aria-labelledby="heading-hombro" data-bs-parent="#acordeon-fuerza">
+        <div id="collapse-hombro" class="accordion-collapse collapse" aria-labelledby="heading-hombro" data-bs-parent="#acordeonFuerzaMuscular">
           <div class="accordion-body">
             <div class="table-responsive">
-              <table class="table table-bordered">
-                <thead>
+              <table class="table table-bordered table-hover">
+                <thead class="table-light">
                   <tr>
-                    <th rowspan="2">Movimiento</th>
-                    <th rowspan="2">Escala</th>
+                    <th>Movimiento</th>
+                    <th>Escala</th>
                     <th colspan="2">Derecha</th>
                     <th colspan="2">Izquierda</th>
-                    <th rowspan="2">Diferencial</th>
-                    <th rowspan="2">Dolor</th>
-                    <th rowspan="2">Observaciones</th>
-                  </tr>
-                  <tr>
-                    <th>Valor</th>
-                    <th>Estado</th>
-                    <th>Valor</th>
-                    <th>Estado</th>
+                    <th>Diferencial</th>
+                    <th>Dolor</th>
+                    <th>Observaciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -14745,20 +14737,20 @@
                     <td>
                       <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_flexion')">
                         <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
+                        <option value="mrc">MRC Modificada</option>
                       </select>
                     </td>
                     <td>
-                      <input type="number" id="hombro_flexion_der" name="hombro_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_flexion_der" name="hombro_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_flexion_der_estado"></td>
+                    <td id="hombro_flexion_der_estado" class="estado-celda"></td>
                     <td>
-                      <input type="number" id="hombro_flexion_izq" name="hombro_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_flexion_izq" name="hombro_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_flexion_izq_estado"></td>
-                    <td id="hombro_flexion_dif"></td>
+                    <td id="hombro_flexion_izq_estado" class="estado-celda"></td>
+                    <td id="hombro_flexion_dif" class="diferencial-celda"></td>
                     <td>
-                      <select id="hombro_flexion_dolor" name="hombro_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <select id="hombro_flexion_dolor" name="hombro_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                         <option value="No">No</option>
                         <option value="Al inicio">Al inicio</option>
                         <option value="Durante">Durante</option>
@@ -14776,20 +14768,20 @@
                     <td>
                       <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_extension')">
                         <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
+                        <option value="mrc">MRC Modificada</option>
                       </select>
                     </td>
                     <td>
-                      <input type="number" id="hombro_extension_der" name="hombro_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_extension_der" name="hombro_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_extension_der_estado"></td>
+                    <td id="hombro_extension_der_estado" class="estado-celda"></td>
                     <td>
-                      <input type="number" id="hombro_extension_izq" name="hombro_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_extension_izq" name="hombro_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_extension_izq_estado"></td>
-                    <td id="hombro_extension_dif"></td>
+                    <td id="hombro_extension_izq_estado" class="estado-celda"></td>
+                    <td id="hombro_extension_dif" class="diferencial-celda"></td>
                     <td>
-                      <select id="hombro_extension_dolor" name="hombro_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <select id="hombro_extension_dolor" name="hombro_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                         <option value="No">No</option>
                         <option value="Al inicio">Al inicio</option>
                         <option value="Durante">Durante</option>
@@ -14807,20 +14799,20 @@
                     <td>
                       <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_abduccion')">
                         <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
+                        <option value="mrc">MRC Modificada</option>
                       </select>
                     </td>
                     <td>
-                      <input type="number" id="hombro_abduccion_der" name="hombro_abduccion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_abduccion_der" name="hombro_abduccion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_abduccion_der_estado"></td>
+                    <td id="hombro_abduccion_der_estado" class="estado-celda"></td>
                     <td>
-                      <input type="number" id="hombro_abduccion_izq" name="hombro_abduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_abduccion_izq" name="hombro_abduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_abduccion_izq_estado"></td>
-                    <td id="hombro_abduccion_dif"></td>
+                    <td id="hombro_abduccion_izq_estado" class="estado-celda"></td>
+                    <td id="hombro_abduccion_dif" class="diferencial-celda"></td>
                     <td>
-                      <select id="hombro_abduccion_dolor" name="hombro_abduccion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <select id="hombro_abduccion_dolor" name="hombro_abduccion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                         <option value="No">No</option>
                         <option value="Al inicio">Al inicio</option>
                         <option value="Durante">Durante</option>
@@ -14838,20 +14830,20 @@
                     <td>
                       <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_aduccion')">
                         <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
+                        <option value="mrc">MRC Modificada</option>
                       </select>
                     </td>
                     <td>
-                      <input type="number" id="hombro_aduccion_der" name="hombro_aduccion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_aduccion_der" name="hombro_aduccion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_aduccion_der_estado"></td>
+                    <td id="hombro_aduccion_der_estado" class="estado-celda"></td>
                     <td>
-                      <input type="number" id="hombro_aduccion_izq" name="hombro_aduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_aduccion_izq" name="hombro_aduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_aduccion_izq_estado"></td>
-                    <td id="hombro_aduccion_dif"></td>
+                    <td id="hombro_aduccion_izq_estado" class="estado-celda"></td>
+                    <td id="hombro_aduccion_dif" class="diferencial-celda"></td>
                     <td>
-                      <select id="hombro_aduccion_dolor" name="hombro_aduccion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <select id="hombro_aduccion_dolor" name="hombro_aduccion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                         <option value="No">No</option>
                         <option value="Al inicio">Al inicio</option>
                         <option value="Durante">Durante</option>
@@ -14869,20 +14861,20 @@
                     <td>
                       <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_rotint')">
                         <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
+                        <option value="mrc">MRC Modificada</option>
                       </select>
                     </td>
                     <td>
-                      <input type="number" id="hombro_rotint_der" name="hombro_rotint_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_rotint_der" name="hombro_rotint_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_rotint_der_estado"></td>
+                    <td id="hombro_rotint_der_estado" class="estado-celda"></td>
                     <td>
-                      <input type="number" id="hombro_rotint_izq" name="hombro_rotint_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_rotint_izq" name="hombro_rotint_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_rotint_izq_estado"></td>
-                    <td id="hombro_rotint_dif"></td>
+                    <td id="hombro_rotint_izq_estado" class="estado-celda"></td>
+                    <td id="hombro_rotint_dif" class="diferencial-celda"></td>
                     <td>
-                      <select id="hombro_rotint_dolor" name="hombro_rotint_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <select id="hombro_rotint_dolor" name="hombro_rotint_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                         <option value="No">No</option>
                         <option value="Al inicio">Al inicio</option>
                         <option value="Durante">Durante</option>
@@ -14900,20 +14892,20 @@
                     <td>
                       <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_rotext')">
                         <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
+                        <option value="mrc">MRC Modificada</option>
                       </select>
                     </td>
                     <td>
-                      <input type="number" id="hombro_rotext_der" name="hombro_rotext_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_rotext_der" name="hombro_rotext_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_rotext_der_estado"></td>
+                    <td id="hombro_rotext_der_estado" class="estado-celda"></td>
                     <td>
-                      <input type="number" id="hombro_rotext_izq" name="hombro_rotext_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                      <input type="number" id="hombro_rotext_izq" name="hombro_rotext_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
                     </td>
-                    <td id="hombro_rotext_izq_estado"></td>
-                    <td id="hombro_rotext_dif"></td>
+                    <td id="hombro_rotext_izq_estado" class="estado-celda"></td>
+                    <td id="hombro_rotext_dif" class="diferencial-celda"></td>
                     <td>
-                      <select id="hombro_rotext_dolor" name="hombro_rotext_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                      <select id="hombro_rotext_dolor" name="hombro_rotext_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                         <option value="No">No</option>
                         <option value="Al inicio">Al inicio</option>
                         <option value="Durante">Durante</option>
@@ -14926,90 +14918,36 @@
                       <input type="text" id="hombro_rotext_obs" name="hombro_rotext_obs" class="form-control">
                     </td>
                   </tr>
-                  <tr>
-                    <td>Elevación escapular</td>
-                    <td>
-                      <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_elevesc')">
-                        <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="number" id="hombro_elevesc_der" name="hombro_elevesc_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="hombro_elevesc_der_estado"></td>
-                    <td>
-                      <input type="number" id="hombro_elevesc_izq" name="hombro_elevesc_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="hombro_elevesc_izq_estado"></td>
-                    <td id="hombro_elevesc_dif"></td>
-                    <td>
-                      <select id="hombro_elevesc_dolor" name="hombro_elevesc_dolor" class="form-select" onchange="evaluarDolorFuerza()">
-                        <option value="No">No</option>
-                        <option value="Al inicio">Al inicio</option>
-                        <option value="Durante">Durante</option>
-                        <option value="Al final">Al final</option>
-                        <option value="Después">Después</option>
-                        <option value="Todo el tiempo">Todo el tiempo</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="text" id="hombro_elevesc_obs" name="hombro_elevesc_obs" class="form-control">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Retracción escapular</td>
-                    <td>
-                      <select class="form-select escala-selector" onchange="actualizarEscala(this, 'hombro_retesc')">
-                        <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="number" id="hombro_retesc_der" name="hombro_retesc_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="hombro_retesc_der_estado"></td>
-                    <td>
-                      <input type="number" id="hombro_retesc_izq" name="hombro_retesc_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="hombro_retesc_izq_estado"></td>
-                    <td id="hombro_retesc_dif"></td>
-                    <td>
-                      <select id="hombro_retesc_dolor" name="hombro_retesc_dolor" class="form-select" onchange="evaluarDolorFuerza()">
-                        <option value="No">No</option>
-                        <option value="Al inicio">Al inicio</option>
-                        <option value="Durante">Durante</option>
-                        <option value="Al final">Al final</option>
-                        <option value="Después">Después</option>
-                        <option value="Todo el tiempo">Todo el tiempo</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="text" id="hombro_retesc_obs" name="hombro_retesc_obs" class="form-control">
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>
             
+            <!-- Botón para añadir músculos específicos -->
+            <div class="mt-3 mb-4">
+              <button type="button" class="btn btn-outline-primary" onclick="agregarMusculoEspecifico('hombro')">
+                <i class="fas fa-plus-circle"></i> Añadir músculo específico
+              </button>
+            </div>
+            
+            <!-- Contenedor para músculos específicos adicionales -->
+            <div id="hombro_musculos_adicionales" class="musculos-adicionales"></div>
+            
             <!-- Dashboard para Hombro -->
-            <div class="row mt-4">
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Dashboard - Fuerza Muscular Hombro</h5>
+            <div class="card mt-4">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Dashboard - Fuerza Muscular Hombro</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="grafico-container">
+                      <canvas id="grafico-hombro" width="100%" height="250"></canvas>
+                    </div>
                   </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <canvas id="grafico-hombro" width="100%" height="200"></canvas>
-                      </div>
-                      <div class="col-md-6">
-                        <h6>Interpretación Clínica:</h6>
-                        <div id="interpretacion-hombro" class="alert alert-info">
-                          Complete la evaluación para obtener interpretación clínica.
-                        </div>
-                      </div>
+                  <div class="col-md-6">
+                    <h6>Interpretación Clínica:</h6>
+                    <div id="interpretacion-hombro" class="alert alert-info">
+                      Complete la evaluación para obtener interpretación clínica.
                     </div>
                   </div>
                 </div>
@@ -15018,219 +14956,234 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Subacordeón: Codo y Antebrazo -->
       <div class="accordion-item">
         <h2 class="accordion-header" id="heading-codo">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-codo" aria-expanded="false" aria-controls="collapse-codo">
-            Codo y Antebrazo
-            <span class="ms-auto badge rounded-pill bg-secondary" id="codo-badge">No evaluado</span>
+            <i class="fas fa-circle me-2"></i> Codo y Antebrazo
+            <span class="badge bg-secondary ms-auto" id="codo-badge">No completado</span>
           </button>
         </h2>
-        <div id="collapse-codo" class="accordion-collapse collapse" aria-labelledby="heading-codo" data-bs-parent="#acordeon-fuerza">
+        <div id="collapse-codo" class="accordion-collapse collapse" aria-labelledby="heading-codo" data-bs-parent="#acordeonFuerzaMuscular">
+          <!-- Contenido similar al del hombro pero para codo -->
           <div class="accordion-body">
+            <!-- Tabla de evaluación, botón para añadir músculos y dashboard -->
             <div class="table-responsive">
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th rowspan="2">Movimiento</th>
-                    <th rowspan="2">Escala</th>
-                    <th colspan="2">Derecha</th>
-                    <th colspan="2">Izquierda</th>
-                    <th rowspan="2">Diferencial</th>
-                    <th rowspan="2">Dolor</th>
-                    <th rowspan="2">Observaciones</th>
-                  </tr>
-                  <tr>
-                    <th>Valor</th>
-                    <th>Estado</th>
-                    <th>Valor</th>
-                    <th>Estado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Flexión</td>
-                    <td>
-                      <select class="form-select escala-selector" onchange="actualizarEscala(this, 'codo_flexion')">
-                        <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="number" id="codo_flexion_der" name="codo_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="codo_flexion_der_estado"></td>
-                    <td>
-                      <input type="number" id="codo_flexion_izq" name="codo_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="codo_flexion_izq_estado"></td>
-                    <td id="codo_flexion_dif"></td>
-                    <td>
-                      <select id="codo_flexion_dolor" name="codo_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
-                        <option value="No">No</option>
-                        <option value="Al inicio">Al inicio</option>
-                        <option value="Durante">Durante</option>
-                        <option value="Al final">Al final</option>
-                        <option value="Después">Después</option>
-                        <option value="Todo el tiempo">Todo el tiempo</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="text" id="codo_flexion_obs" name="codo_flexion_obs" class="form-control">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Extensión</td>
-                    <td>
-                      <select class="form-select escala-selector" onchange="actualizarEscala(this, 'codo_extension')">
-                        <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="number" id="codo_extension_der" name="codo_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="codo_extension_der_estado"></td>
-                    <td>
-                      <input type="number" id="codo_extension_izq" name="codo_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="codo_extension_izq_estado"></td>
-                    <td id="codo_extension_dif"></td>
-                    <td>
-                      <select id="codo_extension_dolor" name="codo_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
-                        <option value="No">No</option>
-                        <option value="Al inicio">Al inicio</option>
-                        <option value="Durante">Durante</option>
-                        <option value="Al final">Al final</option>
-                        <option value="Después">Después</option>
-                        <option value="Todo el tiempo">Todo el tiempo</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="text" id="codo_extension_obs" name="codo_extension_obs" class="form-control">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Supinación</td>
-                    <td>
-                      <select class="form-select escala-selector" onchange="actualizarEscala(this, 'codo_supinacion')">
-                        <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="number" id="codo_supinacion_der" name="codo_supinacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="codo_supinacion_der_estado"></td>
-                    <td>
-                      <input type="number" id="codo_supinacion_izq" name="codo_supinacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="codo_supinacion_izq_estado"></td>
-                    <td id="codo_supinacion_dif"></td>
-                    <td>
-                      <select id="codo_supinacion_dolor" name="codo_supinacion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
-                        <option value="No">No</option>
-                        <option value="Al inicio">Al inicio</option>
-                        <option value="Durante">Durante</option>
-                        <option value="Al final">Al final</option>
-                        <option value="Después">Después</option>
-                        <option value="Todo el tiempo">Todo el tiempo</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="text" id="codo_supinacion_obs" name="codo_supinacion_obs" class="form-control">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Pronación</td>
-                    <td>
-                      <select class="form-select escala-selector" onchange="actualizarEscala(this, 'codo_pronacion')">
-                        <option value="daniels">Daniels (0-5)</option>
-                        <option value="oxford">Oxford (0-10)</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="number" id="codo_pronacion_der" name="codo_pronacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="codo_pronacion_der_estado"></td>
-                    <td>
-                      <input type="number" id="codo_pronacion_izq" name="codo_pronacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
-                    </td>
-                    <td id="codo_pronacion_izq_estado"></td>
-                    <td id="codo_pronacion_dif"></td>
-                    <td>
-                      <select id="codo_pronacion_dolor" name="codo_pronacion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
-                        <option value="No">No</option>
-                        <option value="Al inicio">Al inicio</option>
-                        <option value="Durante">Durante</option>
-                        <option value="Al final">Al final</option>
-                        <option value="Después">Después</option>
-                        <option value="Todo el tiempo">Todo el tiempo</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="text" id="codo_pronacion_obs" name="codo_pronacion_obs" class="form-control">
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <!-- Tabla de evaluación... -->
             </div>
-            
-            <!-- Dashboard para Codo -->
-            <div class="row mt-4">
-              <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Dashboard - Fuerza Muscular Codo y Antebrazo</h5>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <canvas id="grafico-codo" width="100%" height="200"></canvas>
-                      </div>
-                      <div class="col-md-6">
-                        <h6>Interpretación Clínica:</h6>
-                        <div id="interpretacion-codo" class="alert alert-info">
-                          Complete la evaluación para obtener interpretación clínica.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          </div>
+        </div>
+      </div>
+
+<!-- Subacordeón: Codo y Antebrazo -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-codo">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-codo" aria-expanded="false" aria-controls="collapse-codo">
+      <i class="fas fa-circle me-2"></i> Codo y Antebrazo
+      <span class="badge bg-secondary ms-auto" id="codo-badge">No completado</span>
+    </button>
+  </h2>
+  <div id="collapse-codo" class="accordion-collapse collapse" aria-labelledby="heading-codo" data-bs-parent="#acordeonFuerzaMuscular">
+    <div class="accordion-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Movimiento</th>
+              <th>Escala</th>
+              <th colspan="2">Derecha</th>
+              <th colspan="2">Izquierda</th>
+              <th>Diferencial</th>
+              <th>Dolor</th>
+              <th>Observaciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Flexión</td>
+              <td>
+                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'codo_flexion')">
+                  <option value="daniels">Daniels (0-5)</option>
+                  <option value="mrc">MRC Modificada</option>
+                </select>
+              </td>
+              <td>
+                <input type="number" id="codo_flexion_der" name="codo_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
+              </td>
+              <td id="codo_flexion_der_estado" class="estado-celda"></td>
+              <td>
+                <input type="number" id="codo_flexion_izq" name="codo_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
+              </td>
+              <td id="codo_flexion_izq_estado" class="estado-celda"></td>
+              <td id="codo_flexion_dif" class="diferencial-celda"></td>
+              <td>
+                <select id="codo_flexion_dolor" name="codo_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
+                  <option value="No">No</option>
+                  <option value="Al inicio">Al inicio</option>
+                  <option value="Durante">Durante</option>
+                  <option value="Al final">Al final</option>
+                  <option value="Después">Después</option>
+                  <option value="Todo el tiempo">Todo el tiempo</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="codo_flexion_obs" name="codo_flexion_obs" class="form-control">
+              </td>
+            </tr>
+            <tr>
+              <td>Extensión</td>
+              <td>
+                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'codo_extension')">
+                  <option value="daniels">Daniels (0-5)</option>
+                  <option value="mrc">MRC Modificada</option>
+                </select>
+              </td>
+              <td>
+                <input type="number" id="codo_extension_der" name="codo_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
+              </td>
+              <td id="codo_extension_der_estado" class="estado-celda"></td>
+              <td>
+                <input type="number" id="codo_extension_izq" name="codo_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
+              </td>
+              <td id="codo_extension_izq_estado" class="estado-celda"></td>
+              <td id="codo_extension_dif" class="diferencial-celda"></td>
+              <td>
+                <select id="codo_extension_dolor" name="codo_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
+                  <option value="No">No</option>
+                  <option value="Al inicio">Al inicio</option>
+                  <option value="Durante">Durante</option>
+                  <option value="Al final">Al final</option>
+                  <option value="Después">Después</option>
+                  <option value="Todo el tiempo">Todo el tiempo</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="codo_extension_obs" name="codo_extension_obs" class="form-control">
+              </td>
+            </tr>
+            <tr>
+              <td>Supinación</td>
+              <td>
+                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'codo_supinacion')">
+                  <option value="daniels">Daniels (0-5)</option>
+                  <option value="mrc">MRC Modificada</option>
+                </select>
+              </td>
+              <td>
+                <input type="number" id="codo_supinacion_der" name="codo_supinacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
+              </td>
+              <td id="codo_supinacion_der_estado" class="estado-celda"></td>
+              <td>
+                <input type="number" id="codo_supinacion_izq" name="codo_supinacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
+              </td>
+              <td id="codo_supinacion_izq_estado" class="estado-celda"></td>
+              <td id="codo_supinacion_dif" class="diferencial-celda"></td>
+              <td>
+                <select id="codo_supinacion_dolor" name="codo_supinacion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
+                  <option value="No">No</option>
+                  <option value="Al inicio">Al inicio</option>
+                  <option value="Durante">Durante</option>
+                  <option value="Al final">Al final</option>
+                  <option value="Después">Después</option>
+                  <option value="Todo el tiempo">Todo el tiempo</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="codo_supinacion_obs" name="codo_supinacion_obs" class="form-control">
+              </td>
+            </tr>
+            <tr>
+              <td>Pronación</td>
+              <td>
+                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'codo_pronacion')">
+                  <option value="daniels">Daniels (0-5)</option>
+                  <option value="mrc">MRC Modificada</option>
+                </select>
+              </td>
+              <td>
+                <input type="number" id="codo_pronacion_der" name="codo_pronacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
+              </td>
+              <td id="codo_pronacion_der_estado" class="estado-celda"></td>
+              <td>
+                <input type="number" id="codo_pronacion_izq" name="codo_pronacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
+              </td>
+              <td id="codo_pronacion_izq_estado" class="estado-celda"></td>
+              <td id="codo_pronacion_dif" class="diferencial-celda"></td>
+              <td>
+                <select id="codo_pronacion_dolor" name="codo_pronacion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
+                  <option value="No">No</option>
+                  <option value="Al inicio">Al inicio</option>
+                  <option value="Durante">Durante</option>
+                  <option value="Al final">Al final</option>
+                  <option value="Después">Después</option>
+                  <option value="Todo el tiempo">Todo el tiempo</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="codo_pronacion_obs" name="codo_pronacion_obs" class="form-control">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Botón para añadir músculos específicos -->
+      <div class="mt-3 mb-4">
+        <button type="button" class="btn btn-outline-primary" onclick="agregarMusculoEspecifico('codo')">
+          <i class="fas fa-plus-circle"></i> Añadir músculo específico
+        </button>
+      </div>
+      
+      <!-- Contenedor para músculos específicos adicionales -->
+      <div id="codo_musculos_adicionales" class="musculos-adicionales"></div>
+      
+      <!-- Dashboard para Codo -->
+      <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Dashboard - Fuerza Muscular Codo y Antebrazo</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="grafico-container">
+                <canvas id="grafico-codo" width="100%" height="250"></canvas>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h6>Interpretación Clínica:</h6>
+              <div id="interpretacion-codo" class="alert alert-info">
+                Complete la evaluación para obtener interpretación clínica.
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- Subacordeón: Muñeca y Mano -->
+    </div>
+  </div>
+</div>
+
+<!-- Subacordeón: Muñeca y Mano -->
 <div class="accordion-item">
   <h2 class="accordion-header" id="heading-muneca">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-muneca" aria-expanded="false" aria-controls="collapse-muneca">
-      Muñeca y Mano
-      <span class="ms-auto badge rounded-pill bg-secondary" id="muneca-badge">No evaluado</span>
+      <i class="fas fa-circle me-2"></i> Muñeca y Mano
+      <span class="badge bg-secondary ms-auto" id="muneca-badge">No completado</span>
     </button>
   </h2>
-  <div id="collapse-muneca" class="accordion-collapse collapse" aria-labelledby="heading-muneca" data-bs-parent="#acordeon-fuerza">
+  <div id="collapse-muneca" class="accordion-collapse collapse" aria-labelledby="heading-muneca" data-bs-parent="#acordeonFuerzaMuscular">
     <div class="accordion-body">
       <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
             <tr>
-              <th rowspan="2">Movimiento</th>
-              <th rowspan="2">Escala</th>
+              <th>Movimiento</th>
+              <th>Escala</th>
               <th colspan="2">Derecha</th>
               <th colspan="2">Izquierda</th>
-              <th rowspan="2">Diferencial</th>
-              <th rowspan="2">Dolor</th>
-              <th rowspan="2">Observaciones</th>
-            </tr>
-            <tr>
-              <th>Valor</th>
-              <th>Estado</th>
-              <th>Valor</th>
-              <th>Estado</th>
+              <th>Diferencial</th>
+              <th>Dolor</th>
+              <th>Observaciones</th>
             </tr>
           </thead>
           <tbody>
@@ -15239,20 +15192,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'muneca_flexion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="muneca_flexion_der" name="muneca_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_flexion_der" name="muneca_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_flexion_der_estado"></td>
+              <td id="muneca_flexion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="muneca_flexion_izq" name="muneca_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_flexion_izq" name="muneca_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_flexion_izq_estado"></td>
-              <td id="muneca_flexion_dif"></td>
+              <td id="muneca_flexion_izq_estado" class="estado-celda"></td>
+              <td id="muneca_flexion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="muneca_flexion_dolor" name="muneca_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="muneca_flexion_dolor" name="muneca_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15270,20 +15223,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'muneca_extension')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="muneca_extension_der" name="muneca_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_extension_der" name="muneca_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_extension_der_estado"></td>
+              <td id="muneca_extension_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="muneca_extension_izq" name="muneca_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_extension_izq" name="muneca_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_extension_izq_estado"></td>
-              <td id="muneca_extension_dif"></td>
+              <td id="muneca_extension_izq_estado" class="estado-celda"></td>
+              <td id="muneca_extension_dif" class="diferencial-celda"></td>
               <td>
-                <select id="muneca_extension_dolor" name="muneca_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="muneca_extension_dolor" name="muneca_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15299,22 +15252,22 @@
             <tr>
               <td>Desviación radial</td>
               <td>
-                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'muneca_desviacion_radial')">
+                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'muneca_radial')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="muneca_desviacion_radial_der" name="muneca_desviacion_radial_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_radial_der" name="muneca_radial_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_desviacion_radial_der_estado"></td>
+              <td id="muneca_radial_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="muneca_desviacion_radial_izq" name="muneca_desviacion_radial_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_radial_izq" name="muneca_radial_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_desviacion_radial_izq_estado"></td>
-              <td id="muneca_desviacion_radial_dif"></td>
+              <td id="muneca_radial_izq_estado" class="estado-celda"></td>
+              <td id="muneca_radial_dif" class="diferencial-celda"></td>
               <td>
-                <select id="muneca_desviacion_radial_dolor" name="muneca_desviacion_radial_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="muneca_radial_dolor" name="muneca_radial_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15324,28 +15277,28 @@
                 </select>
               </td>
               <td>
-                <input type="text" id="muneca_desviacion_radial_obs" name="muneca_desviacion_radial_obs" class="form-control">
+                <input type="text" id="muneca_radial_obs" name="muneca_radial_obs" class="form-control">
               </td>
             </tr>
             <tr>
               <td>Desviación cubital</td>
               <td>
-                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'muneca_desviacion_cubital')">
+                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'muneca_cubital')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="muneca_desviacion_cubital_der" name="muneca_desviacion_cubital_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_cubital_der" name="muneca_cubital_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_desviacion_cubital_der_estado"></td>
+              <td id="muneca_cubital_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="muneca_desviacion_cubital_izq" name="muneca_desviacion_cubital_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_cubital_izq" name="muneca_cubital_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_desviacion_cubital_izq_estado"></td>
-              <td id="muneca_desviacion_cubital_dif"></td>
+              <td id="muneca_cubital_izq_estado" class="estado-celda"></td>
+              <td id="muneca_cubital_dif" class="diferencial-celda"></td>
               <td>
-                <select id="muneca_desviacion_cubital_dolor" name="muneca_desviacion_cubital_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="muneca_cubital_dolor" name="muneca_cubital_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15355,28 +15308,28 @@
                 </select>
               </td>
               <td>
-                <input type="text" id="muneca_desviacion_cubital_obs" name="muneca_desviacion_cubital_obs" class="form-control">
+                <input type="text" id="muneca_cubital_obs" name="muneca_cubital_obs" class="form-control">
               </td>
             </tr>
             <tr>
-              <td>Prensión de puño</td>
+              <td>Agarre</td>
               <td>
-                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'muneca_prension')">
+                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'muneca_agarre')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="muneca_prension_der" name="muneca_prension_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_agarre_der" name="muneca_agarre_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_prension_der_estado"></td>
+              <td id="muneca_agarre_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="muneca_prension_izq" name="muneca_prension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_agarre_izq" name="muneca_agarre_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_prension_izq_estado"></td>
-              <td id="muneca_prension_dif"></td>
+              <td id="muneca_agarre_izq_estado" class="estado-celda"></td>
+              <td id="muneca_agarre_dif" class="diferencial-celda"></td>
               <td>
-                <select id="muneca_prension_dolor" name="muneca_prension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="muneca_agarre_dolor" name="muneca_agarre_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15386,7 +15339,7 @@
                 </select>
               </td>
               <td>
-                <input type="text" id="muneca_prension_obs" name="muneca_prension_obs" class="form-control">
+                <input type="text" id="muneca_agarre_obs" name="muneca_agarre_obs" class="form-control">
               </td>
             </tr>
             <tr>
@@ -15394,20 +15347,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'muneca_pinza')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="muneca_pinza_der" name="muneca_pinza_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_pinza_der" name="muneca_pinza_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_pinza_der_estado"></td>
+              <td id="muneca_pinza_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="muneca_pinza_izq" name="muneca_pinza_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="muneca_pinza_izq" name="muneca_pinza_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="muneca_pinza_izq_estado"></td>
-              <td id="muneca_pinza_dif"></td>
+              <td id="muneca_pinza_izq_estado" class="estado-celda"></td>
+              <td id="muneca_pinza_dif" class="diferencial-celda"></td>
               <td>
-                <select id="muneca_pinza_dolor" name="muneca_pinza_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="muneca_pinza_dolor" name="muneca_pinza_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15424,24 +15377,32 @@
         </table>
       </div>
       
-      <!-- Dashboard para Muñeca y Mano -->
-      <div class="row mt-4">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">Dashboard - Fuerza Muscular Muñeca y Mano</h5>
+      <!-- Botón para añadir músculos específicos -->
+      <div class="mt-3 mb-4">
+        <button type="button" class="btn btn-outline-primary" onclick="agregarMusculoEspecifico('muneca')">
+          <i class="fas fa-plus-circle"></i> Añadir músculo específico
+        </button>
+      </div>
+      
+      <!-- Contenedor para músculos específicos adicionales -->
+      <div id="muneca_musculos_adicionales" class="musculos-adicionales"></div>
+      
+      <!-- Dashboard para Muñeca -->
+      <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Dashboard - Fuerza Muscular Muñeca y Mano</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="grafico-container">
+                <canvas id="grafico-muneca" width="100%" height="250"></canvas>
+              </div>
             </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <canvas id="grafico-muneca" width="100%" height="200"></canvas>
-                </div>
-                <div class="col-md-6">
-                  <h6>Interpretación Clínica:</h6>
-                  <div id="interpretacion-muneca" class="alert alert-info">
-                    Complete la evaluación para obtener interpretación clínica.
-                  </div>
-                </div>
+            <div class="col-md-6">
+              <h6>Interpretación Clínica:</h6>
+              <div id="interpretacion-muneca" class="alert alert-info">
+                Complete la evaluación para obtener interpretación clínica.
               </div>
             </div>
           </div>
@@ -15455,29 +15416,23 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="heading-tronco">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-tronco" aria-expanded="false" aria-controls="collapse-tronco">
-      Tronco/Core
-      <span class="ms-auto badge rounded-pill bg-secondary" id="tronco-badge">No evaluado</span>
+      <i class="fas fa-circle me-2"></i> Tronco/Core
+      <span class="badge bg-secondary ms-auto" id="tronco-badge">No completado</span>
     </button>
   </h2>
-  <div id="collapse-tronco" class="accordion-collapse collapse" aria-labelledby="heading-tronco" data-bs-parent="#acordeon-fuerza">
+  <div id="collapse-tronco" class="accordion-collapse collapse" aria-labelledby="heading-tronco" data-bs-parent="#acordeonFuerzaMuscular">
     <div class="accordion-body">
       <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
             <tr>
-              <th rowspan="2">Movimiento</th>
-              <th rowspan="2">Escala</th>
+              <th>Movimiento</th>
+              <th>Escala</th>
               <th colspan="2">Derecha</th>
               <th colspan="2">Izquierda</th>
-              <th rowspan="2">Diferencial</th>
-              <th rowspan="2">Dolor</th>
-              <th rowspan="2">Observaciones</th>
-            </tr>
-            <tr>
-              <th>Valor</th>
-              <th>Estado</th>
-              <th>Valor</th>
-              <th>Estado</th>
+              <th>Diferencial</th>
+              <th>Dolor</th>
+              <th>Observaciones</th>
             </tr>
           </thead>
           <tbody>
@@ -15486,20 +15441,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'tronco_flexion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="tronco_flexion_der" name="tronco_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tronco_flexion_der" name="tronco_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tronco_flexion_der_estado"></td>
+              <td id="tronco_flexion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="tronco_flexion_izq" name="tronco_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tronco_flexion_izq" name="tronco_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tronco_flexion_izq_estado"></td>
-              <td id="tronco_flexion_dif"></td>
+              <td id="tronco_flexion_izq_estado" class="estado-celda"></td>
+              <td id="tronco_flexion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="tronco_flexion_dolor" name="tronco_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="tronco_flexion_dolor" name="tronco_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15517,20 +15472,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'tronco_extension')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="tronco_extension_der" name="tronco_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tronco_extension_der" name="tronco_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tronco_extension_der_estado"></td>
+              <td id="tronco_extension_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="tronco_extension_izq" name="tronco_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tronco_extension_izq" name="tronco_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tronco_extension_izq_estado"></td>
-              <td id="tronco_extension_dif"></td>
+              <td id="tronco_extension_izq_estado" class="estado-celda"></td>
+              <td id="tronco_extension_dif" class="diferencial-celda"></td>
               <td>
-                <select id="tronco_extension_dolor" name="tronco_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="tronco_extension_dolor" name="tronco_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15548,20 +15503,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'tronco_inclinacion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="tronco_inclinacion_der" name="tronco_inclinacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tronco_inclinacion_der" name="tronco_inclinacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tronco_inclinacion_der_estado"></td>
+              <td id="tronco_inclinacion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="tronco_inclinacion_izq" name="tronco_inclinacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tronco_inclinacion_izq" name="tronco_inclinacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tronco_inclinacion_izq_estado"></td>
-              <td id="tronco_inclinacion_dif"></td>
+              <td id="tronco_inclinacion_izq_estado" class="estado-celda"></td>
+              <td id="tronco_inclinacion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="tronco_inclinacion_dolor" name="tronco_inclinacion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="tronco_inclinacion_dolor" name="tronco_inclinacion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15579,20 +15534,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'tronco_rotacion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="tronco_rotacion_der" name="tronco_rotacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tronco_rotacion_der" name="tronco_rotacion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tronco_rotacion_der_estado"></td>
+              <td id="tronco_rotacion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="tronco_rotacion_izq" name="tronco_rotacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tronco_rotacion_izq" name="tronco_rotacion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tronco_rotacion_izq_estado"></td>
-              <td id="tronco_rotacion_dif"></td>
+              <td id="tronco_rotacion_izq_estado" class="estado-celda"></td>
+              <td id="tronco_rotacion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="tronco_rotacion_dolor" name="tronco_rotacion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="tronco_rotacion_dolor" name="tronco_rotacion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15609,24 +15564,32 @@
         </table>
       </div>
       
+      <!-- Botón para añadir músculos específicos -->
+      <div class="mt-3 mb-4">
+        <button type="button" class="btn btn-outline-primary" onclick="agregarMusculoEspecifico('tronco')">
+          <i class="fas fa-plus-circle"></i> Añadir músculo específico
+        </button>
+      </div>
+      
+      <!-- Contenedor para músculos específicos adicionales -->
+      <div id="tronco_musculos_adicionales" class="musculos-adicionales"></div>
+      
       <!-- Dashboard para Tronco -->
-      <div class="row mt-4">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">Dashboard - Fuerza Muscular Tronco/Core</h5>
+      <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Dashboard - Fuerza Muscular Tronco/Core</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="grafico-container">
+                <canvas id="grafico-tronco" width="100%" height="250"></canvas>
+              </div>
             </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <canvas id="grafico-tronco" width="100%" height="200"></canvas>
-                </div>
-                <div class="col-md-6">
-                  <h6>Interpretación Clínica:</h6>
-                  <div id="interpretacion-tronco" class="alert alert-info">
-                    Complete la evaluación para obtener interpretación clínica.
-                  </div>
-                </div>
+            <div class="col-md-6">
+              <h6>Interpretación Clínica:</h6>
+              <div id="interpretacion-tronco" class="alert alert-info">
+                Complete la evaluación para obtener interpretación clínica.
               </div>
             </div>
           </div>
@@ -15640,29 +15603,23 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="heading-cadera">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-cadera" aria-expanded="false" aria-controls="collapse-cadera">
-      Cadera
-      <span class="ms-auto badge rounded-pill bg-secondary" id="cadera-badge">No evaluado</span>
+      <i class="fas fa-circle me-2"></i> Cadera
+      <span class="badge bg-secondary ms-auto" id="cadera-badge">No completado</span>
     </button>
   </h2>
-  <div id="collapse-cadera" class="accordion-collapse collapse" aria-labelledby="heading-cadera" data-bs-parent="#acordeon-fuerza">
+  <div id="collapse-cadera" class="accordion-collapse collapse" aria-labelledby="heading-cadera" data-bs-parent="#acordeonFuerzaMuscular">
     <div class="accordion-body">
       <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
             <tr>
-              <th rowspan="2">Movimiento</th>
-              <th rowspan="2">Escala</th>
+              <th>Movimiento</th>
+              <th>Escala</th>
               <th colspan="2">Derecha</th>
               <th colspan="2">Izquierda</th>
-              <th rowspan="2">Diferencial</th>
-              <th rowspan="2">Dolor</th>
-              <th rowspan="2">Observaciones</th>
-            </tr>
-            <tr>
-              <th>Valor</th>
-              <th>Estado</th>
-              <th>Valor</th>
-              <th>Estado</th>
+              <th>Diferencial</th>
+              <th>Dolor</th>
+              <th>Observaciones</th>
             </tr>
           </thead>
           <tbody>
@@ -15671,20 +15628,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_flexion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="cadera_flexion_der" name="cadera_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_flexion_der" name="cadera_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_flexion_der_estado"></td>
+              <td id="cadera_flexion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="cadera_flexion_izq" name="cadera_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_flexion_izq" name="cadera_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_flexion_izq_estado"></td>
-              <td id="cadera_flexion_dif"></td>
+              <td id="cadera_flexion_izq_estado" class="estado-celda"></td>
+              <td id="cadera_flexion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="cadera_flexion_dolor" name="cadera_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="cadera_flexion_dolor" name="cadera_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15702,20 +15659,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_extension')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="cadera_extension_der" name="cadera_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_extension_der" name="cadera_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_extension_der_estado"></td>
+              <td id="cadera_extension_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="cadera_extension_izq" name="cadera_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_extension_izq" name="cadera_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_extension_izq_estado"></td>
-              <td id="cadera_extension_dif"></td>
+              <td id="cadera_extension_izq_estado" class="estado-celda"></td>
+              <td id="cadera_extension_dif" class="diferencial-celda"></td>
               <td>
-                <select id="cadera_extension_dolor" name="cadera_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="cadera_extension_dolor" name="cadera_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15733,20 +15690,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_abduccion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="cadera_abduccion_der" name="cadera_abduccion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_abduccion_der" name="cadera_abduccion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_abduccion_der_estado"></td>
+              <td id="cadera_abduccion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="cadera_abduccion_izq" name="cadera_abduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_abduccion_izq" name="cadera_abduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_abduccion_izq_estado"></td>
-              <td id="cadera_abduccion_dif"></td>
+              <td id="cadera_abduccion_izq_estado" class="estado-celda"></td>
+              <td id="cadera_abduccion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="cadera_abduccion_dolor" name="cadera_abduccion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="cadera_abduccion_dolor" name="cadera_abduccion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15764,20 +15721,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_aduccion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="cadera_aduccion_der" name="cadera_aduccion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_aduccion_der" name="cadera_aduccion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_aduccion_der_estado"></td>
+              <td id="cadera_aduccion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="cadera_aduccion_izq" name="cadera_aduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_aduccion_izq" name="cadera_aduccion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_aduccion_izq_estado"></td>
-              <td id="cadera_aduccion_dif"></td>
+              <td id="cadera_aduccion_izq_estado" class="estado-celda"></td>
+              <td id="cadera_aduccion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="cadera_aduccion_dolor" name="cadera_aduccion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="cadera_aduccion_dolor" name="cadera_aduccion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15795,20 +15752,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_rotint')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="cadera_rotint_der" name="cadera_rotint_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_rotint_der" name="cadera_rotint_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_rotint_der_estado"></td>
+              <td id="cadera_rotint_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="cadera_rotint_izq" name="cadera_rotint_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_rotint_izq" name="cadera_rotint_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_rotint_izq_estado"></td>
-              <td id="cadera_rotint_dif"></td>
+              <td id="cadera_rotint_izq_estado" class="estado-celda"></td>
+              <td id="cadera_rotint_dif" class="diferencial-celda"></td>
               <td>
-                <select id="cadera_rotint_dolor" name="cadera_rotint_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="cadera_rotint_dolor" name="cadera_rotint_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15826,20 +15783,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'cadera_rotext')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="cadera_rotext_der" name="cadera_rotext_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_rotext_der" name="cadera_rotext_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_rotext_der_estado"></td>
+              <td id="cadera_rotext_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="cadera_rotext_izq" name="cadera_rotext_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="cadera_rotext_izq" name="cadera_rotext_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="cadera_rotext_izq_estado"></td>
-              <td id="cadera_rotext_dif"></td>
+              <td id="cadera_rotext_izq_estado" class="estado-celda"></td>
+              <td id="cadera_rotext_dif" class="diferencial-celda"></td>
               <td>
-                <select id="cadera_rotext_dolor" name="cadera_rotext_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="cadera_rotext_dolor" name="cadera_rotext_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15856,24 +15813,32 @@
         </table>
       </div>
       
+      <!-- Botón para añadir músculos específicos -->
+      <div class="mt-3 mb-4">
+        <button type="button" class="btn btn-outline-primary" onclick="agregarMusculoEspecifico('cadera')">
+          <i class="fas fa-plus-circle"></i> Añadir músculo específico
+        </button>
+      </div>
+      
+      <!-- Contenedor para músculos específicos adicionales -->
+      <div id="cadera_musculos_adicionales" class="musculos-adicionales"></div>
+      
       <!-- Dashboard para Cadera -->
-      <div class="row mt-4">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">Dashboard - Fuerza Muscular Cadera</h5>
+      <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Dashboard - Fuerza Muscular Cadera</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="grafico-container">
+                <canvas id="grafico-cadera" width="100%" height="250"></canvas>
+              </div>
             </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <canvas id="grafico-cadera" width="100%" height="200"></canvas>
-                </div>
-                <div class="col-md-6">
-                  <h6>Interpretación Clínica:</h6>
-                  <div id="interpretacion-cadera" class="alert alert-info">
-                    Complete la evaluación para obtener interpretación clínica.
-                  </div>
-                </div>
+            <div class="col-md-6">
+              <h6>Interpretación Clínica:</h6>
+              <div id="interpretacion-cadera" class="alert alert-info">
+                Complete la evaluación para obtener interpretación clínica.
               </div>
             </div>
           </div>
@@ -15887,29 +15852,23 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="heading-rodilla">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-rodilla" aria-expanded="false" aria-controls="collapse-rodilla">
-      Rodilla
-      <span class="ms-auto badge rounded-pill bg-secondary" id="rodilla-badge">No evaluado</span>
+      <i class="fas fa-circle me-2"></i> Rodilla
+      <span class="badge bg-secondary ms-auto" id="rodilla-badge">No completado</span>
     </button>
   </h2>
-  <div id="collapse-rodilla" class="accordion-collapse collapse" aria-labelledby="heading-rodilla" data-bs-parent="#acordeon-fuerza">
+  <div id="collapse-rodilla" class="accordion-collapse collapse" aria-labelledby="heading-rodilla" data-bs-parent="#acordeonFuerzaMuscular">
     <div class="accordion-body">
       <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
             <tr>
-              <th rowspan="2">Movimiento</th>
-              <th rowspan="2">Escala</th>
+              <th>Movimiento</th>
+              <th>Escala</th>
               <th colspan="2">Derecha</th>
               <th colspan="2">Izquierda</th>
-              <th rowspan="2">Diferencial</th>
-              <th rowspan="2">Dolor</th>
-              <th rowspan="2">Observaciones</th>
-            </tr>
-            <tr>
-              <th>Valor</th>
-              <th>Estado</th>
-              <th>Valor</th>
-              <th>Estado</th>
+              <th>Diferencial</th>
+              <th>Dolor</th>
+              <th>Observaciones</th>
             </tr>
           </thead>
           <tbody>
@@ -15918,20 +15877,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'rodilla_flexion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="rodilla_flexion_der" name="rodilla_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="rodilla_flexion_der" name="rodilla_flexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="rodilla_flexion_der_estado"></td>
+              <td id="rodilla_flexion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="rodilla_flexion_izq" name="rodilla_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="rodilla_flexion_izq" name="rodilla_flexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="rodilla_flexion_izq_estado"></td>
-              <td id="rodilla_flexion_dif"></td>
+              <td id="rodilla_flexion_izq_estado" class="estado-celda"></td>
+              <td id="rodilla_flexion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="rodilla_flexion_dolor" name="rodilla_flexion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="rodilla_flexion_dolor" name="rodilla_flexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15949,20 +15908,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'rodilla_extension')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="rodilla_extension_der" name="rodilla_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="rodilla_extension_der" name="rodilla_extension_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="rodilla_extension_der_estado"></td>
+              <td id="rodilla_extension_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="rodilla_extension_izq" name="rodilla_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="rodilla_extension_izq" name="rodilla_extension_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="rodilla_extension_izq_estado"></td>
-              <td id="rodilla_extension_dif"></td>
+              <td id="rodilla_extension_izq_estado" class="estado-celda"></td>
+              <td id="rodilla_extension_dif" class="diferencial-celda"></td>
               <td>
-                <select id="rodilla_extension_dolor" name="rodilla_extension_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="rodilla_extension_dolor" name="rodilla_extension_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -15979,24 +15938,32 @@
         </table>
       </div>
       
+      <!-- Botón para añadir músculos específicos -->
+      <div class="mt-3 mb-4">
+        <button type="button" class="btn btn-outline-primary" onclick="agregarMusculoEspecifico('rodilla')">
+          <i class="fas fa-plus-circle"></i> Añadir músculo específico
+        </button>
+      </div>
+      
+      <!-- Contenedor para músculos específicos adicionales -->
+      <div id="rodilla_musculos_adicionales" class="musculos-adicionales"></div>
+      
       <!-- Dashboard para Rodilla -->
-      <div class="row mt-4">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">Dashboard - Fuerza Muscular Rodilla</h5>
+      <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Dashboard - Fuerza Muscular Rodilla</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="grafico-container">
+                <canvas id="grafico-rodilla" width="100%" height="250"></canvas>
+              </div>
             </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <canvas id="grafico-rodilla" width="100%" height="200"></canvas>
-                </div>
-                <div class="col-md-6">
-                  <h6>Interpretación Clínica:</h6>
-                  <div id="interpretacion-rodilla" class="alert alert-info">
-                    Complete la evaluación para obtener interpretación clínica.
-                  </div>
-                </div>
+            <div class="col-md-6">
+              <h6>Interpretación Clínica:</h6>
+              <div id="interpretacion-rodilla" class="alert alert-info">
+                Complete la evaluación para obtener interpretación clínica.
               </div>
             </div>
           </div>
@@ -16010,51 +15977,45 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="heading-tobillo">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-tobillo" aria-expanded="false" aria-controls="collapse-tobillo">
-      Tobillo y Pie
-      <span class="ms-auto badge rounded-pill bg-secondary" id="tobillo-badge">No evaluado</span>
+      <i class="fas fa-circle me-2"></i> Tobillo y Pie
+      <span class="badge bg-secondary ms-auto" id="tobillo-badge">No completado</span>
     </button>
   </h2>
-  <div id="collapse-tobillo" class="accordion-collapse collapse" aria-labelledby="heading-tobillo" data-bs-parent="#acordeon-fuerza">
+  <div id="collapse-tobillo" class="accordion-collapse collapse" aria-labelledby="heading-tobillo" data-bs-parent="#acordeonFuerzaMuscular">
     <div class="accordion-body">
       <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
             <tr>
-              <th rowspan="2">Movimiento</th>
-              <th rowspan="2">Escala</th>
+              <th>Movimiento</th>
+              <th>Escala</th>
               <th colspan="2">Derecha</th>
               <th colspan="2">Izquierda</th>
-              <th rowspan="2">Diferencial</th>
-              <th rowspan="2">Dolor</th>
-              <th rowspan="2">Observaciones</th>
-            </tr>
-            <tr>
-              <th>Valor</th>
-              <th>Estado</th>
-              <th>Valor</th>
-              <th>Estado</th>
+              <th>Diferencial</th>
+              <th>Dolor</th>
+              <th>Observaciones</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>Flexión dorsal</td>
               <td>
-                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'tobillo_flexdorsal')">
+                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'tobillo_dorsiflexion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="tobillo_flexdorsal_der" name="tobillo_flexdorsal_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tobillo_dorsiflexion_der" name="tobillo_dorsiflexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tobillo_flexdorsal_der_estado"></td>
+              <td id="tobillo_dorsiflexion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="tobillo_flexdorsal_izq" name="tobillo_flexdorsal_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tobillo_dorsiflexion_izq" name="tobillo_dorsiflexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tobillo_flexdorsal_izq_estado"></td>
-              <td id="tobillo_flexdorsal_dif"></td>
+              <td id="tobillo_dorsiflexion_izq_estado" class="estado-celda"></td>
+              <td id="tobillo_dorsiflexion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="tobillo_flexdorsal_dolor" name="tobillo_flexdorsal_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="tobillo_dorsiflexion_dolor" name="tobillo_dorsiflexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -16064,28 +16025,28 @@
                 </select>
               </td>
               <td>
-                <input type="text" id="tobillo_flexdorsal_obs" name="tobillo_flexdorsal_obs" class="form-control">
+                <input type="text" id="tobillo_dorsiflexion_obs" name="tobillo_dorsiflexion_obs" class="form-control">
               </td>
             </tr>
             <tr>
               <td>Flexión plantar</td>
               <td>
-                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'tobillo_flexplantar')">
+                <select class="form-select escala-selector" onchange="actualizarEscala(this, 'tobillo_plantiflexion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="tobillo_flexplantar_der" name="tobillo_flexplantar_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tobillo_plantiflexion_der" name="tobillo_plantiflexion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tobillo_flexplantar_der_estado"></td>
+              <td id="tobillo_plantiflexion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="tobillo_flexplantar_izq" name="tobillo_flexplantar_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tobillo_plantiflexion_izq" name="tobillo_plantiflexion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tobillo_flexplantar_izq_estado"></td>
-              <td id="tobillo_flexplantar_dif"></td>
+              <td id="tobillo_plantiflexion_izq_estado" class="estado-celda"></td>
+              <td id="tobillo_plantiflexion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="tobillo_flexplantar_dolor" name="tobillo_flexplantar_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="tobillo_plantiflexion_dolor" name="tobillo_plantiflexion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -16095,7 +16056,7 @@
                 </select>
               </td>
               <td>
-                <input type="text" id="tobillo_flexplantar_obs" name="tobillo_flexplantar_obs" class="form-control">
+                <input type="text" id="tobillo_plantiflexion_obs" name="tobillo_plantiflexion_obs" class="form-control">
               </td>
             </tr>
             <tr>
@@ -16103,20 +16064,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'tobillo_inversion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="tobillo_inversion_der" name="tobillo_inversion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tobillo_inversion_der" name="tobillo_inversion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tobillo_inversion_der_estado"></td>
+              <td id="tobillo_inversion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="tobillo_inversion_izq" name="tobillo_inversion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tobillo_inversion_izq" name="tobillo_inversion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tobillo_inversion_izq_estado"></td>
-              <td id="tobillo_inversion_dif"></td>
+              <td id="tobillo_inversion_izq_estado" class="estado-celda"></td>
+              <td id="tobillo_inversion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="tobillo_inversion_dolor" name="tobillo_inversion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="tobillo_inversion_dolor" name="tobillo_inversion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -16134,20 +16095,20 @@
               <td>
                 <select class="form-select escala-selector" onchange="actualizarEscala(this, 'tobillo_eversion')">
                   <option value="daniels">Daniels (0-5)</option>
-                  <option value="oxford">Oxford (0-10)</option>
+                  <option value="mrc">MRC Modificada</option>
                 </select>
               </td>
               <td>
-                <input type="number" id="tobillo_eversion_der" name="tobillo_eversion_der" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tobillo_eversion_der" name="tobillo_eversion_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tobillo_eversion_der_estado"></td>
+              <td id="tobillo_eversion_der_estado" class="estado-celda"></td>
               <td>
-                <input type="number" id="tobillo_eversion_izq" name="tobillo_eversion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="0.5" onchange="evaluarFuerza(this, 'daniels')">
+                <input type="number" id="tobillo_eversion_izq" name="tobillo_eversion_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
               </td>
-              <td id="tobillo_eversion_izq_estado"></td>
-              <td id="tobillo_eversion_dif"></td>
+              <td id="tobillo_eversion_izq_estado" class="estado-celda"></td>
+              <td id="tobillo_eversion_dif" class="diferencial-celda"></td>
               <td>
-                <select id="tobillo_eversion_dolor" name="tobillo_eversion_dolor" class="form-select" onchange="evaluarDolorFuerza()">
+                <select id="tobillo_eversion_dolor" name="tobillo_eversion_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
                   <option value="No">No</option>
                   <option value="Al inicio">Al inicio</option>
                   <option value="Durante">Durante</option>
@@ -16164,24 +16125,32 @@
         </table>
       </div>
       
+      <!-- Botón para añadir músculos específicos -->
+      <div class="mt-3 mb-4">
+        <button type="button" class="btn btn-outline-primary" onclick="agregarMusculoEspecifico('tobillo')">
+          <i class="fas fa-plus-circle"></i> Añadir músculo específico
+        </button>
+      </div>
+      
+      <!-- Contenedor para músculos específicos adicionales -->
+      <div id="tobillo_musculos_adicionales" class="musculos-adicionales"></div>
+      
       <!-- Dashboard para Tobillo -->
-      <div class="row mt-4">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">Dashboard - Fuerza Muscular Tobillo y Pie</h5>
+      <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Dashboard - Fuerza Muscular Tobillo y Pie</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="grafico-container">
+                <canvas id="grafico-tobillo" width="100%" height="250"></canvas>
+              </div>
             </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <canvas id="grafico-tobillo" width="100%" height="200"></canvas>
-                </div>
-                <div class="col-md-6">
-                  <h6>Interpretación Clínica:</h6>
-                  <div id="interpretacion-tobillo" class="alert alert-info">
-                    Complete la evaluación para obtener interpretación clínica.
-                  </div>
-                </div>
+            <div class="col-md-6">
+              <h6>Interpretación Clínica:</h6>
+              <div id="interpretacion-tobillo" class="alert alert-info">
+                Complete la evaluación para obtener interpretación clínica.
               </div>
             </div>
           </div>
@@ -16190,10 +16159,8 @@
     </div>
   </div>
 </div>
-      
-    </div>
 
-    <!-- Interpretación de hallazgos en fuerza analítica -->
+    <!-- Interpretación y Recomendaciones Globales -->
     <div class="card mt-4 mb-4">
       <div class="card-header bg-primary text-white">
         <h5 class="mb-0">Interpretación y Recomendaciones Globales</h5>
