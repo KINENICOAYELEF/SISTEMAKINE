@@ -14683,28 +14683,40 @@
           <div id="cuello_musculos_adicionales" class="musculos-adicionales"></div>
           
           <!-- Dashboard para Cuello -->
-          <div class="card mt-4">
-            <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">Dashboard - Fuerza Muscular Cuello</h5>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="grafico-container">
-                    <canvas id="grafico-cuello" width="100%" height="250"></canvas>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <h6>Interpretación Clínica:</h6>
-                  <div id="interpretacion-cuello" class="alert alert-info">
-                    Complete la evaluación para obtener interpretación clínica.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="card mt-4 dashboard-card">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Dashboard - Fuerza Muscular Cabeza y Cuello</h5>
+  </div>
+  <div class="card-body bg-dark text-light">
+    <div class="row">
+      <!-- Gráfico Radar - Visión general -->
+      <div class="col-md-5">
+        <div class="grafico-container mb-3">
+          <canvas id="grafico-radar-cuello" width="100%" height="250" class="grafico-radar"></canvas>
         </div>
       </div>
+      
+      <!-- Barras horizontales - Detalle por movimiento -->
+      <div class="col-md-7">
+        <div class="detalle-movimientos" id="grafico-barras-cuello">
+          <!-- Las barras horizontales se generarán por JavaScript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación Clínica -->
+    <div class="card mt-3 bg-dark border border-secondary">
+      <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0">Interpretación Clínica</h6>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion-cuello" class="text-light">
+          Complete la evaluación para obtener interpretación clínica.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
       
       <!-- Subacordeón: Complejo del Hombro -->
       <div class="cuestionario-item sub-acordeon">
@@ -14928,28 +14940,40 @@
           <div id="hombro_musculos_adicionales" class="musculos-adicionales"></div>
           
           <!-- Dashboard para Hombro -->
-          <div class="card mt-4">
-            <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">Dashboard - Fuerza Muscular Hombro</h5>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="grafico-container">
-                    <canvas id="grafico-hombro" width="100%" height="250"></canvas>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <h6>Interpretación Clínica:</h6>
-                  <div id="interpretacion-hombro" class="alert alert-info">
-                    Complete la evaluación para obtener interpretación clínica.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="card mt-4 dashboard-card">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Dashboard - Fuerza Muscular Complejo del Hombro</h5>
+  </div>
+  <div class="card-body bg-dark text-light">
+    <div class="row">
+      <!-- Gráfico Radar - Visión general -->
+      <div class="col-md-5">
+        <div class="grafico-container mb-3">
+          <canvas id="grafico-radar-hombro" width="100%" height="250" class="grafico-radar"></canvas>
         </div>
       </div>
+      
+      <!-- Barras horizontales - Detalle por movimiento -->
+      <div class="col-md-7">
+        <div class="detalle-movimientos" id="grafico-barras-hombro">
+          <!-- Las barras horizontales se generarán por JavaScript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación Clínica -->
+    <div class="card mt-3 bg-dark border border-secondary">
+      <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0">Interpretación Clínica</h6>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion-hombro" class="text-light">
+          Complete la evaluación para obtener interpretación clínica.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
       <!-- Subacordeón: Codo y Antebrazo -->
       <div class="cuestionario-item sub-acordeon">
@@ -15111,28 +15135,40 @@
           <div id="codo_musculos_adicionales" class="musculos-adicionales"></div>
           
           <!-- Dashboard para Codo -->
-          <div class="card mt-4">
-            <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">Dashboard - Fuerza Muscular Codo y Antebrazo</h5>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="grafico-container">
-                    <canvas id="grafico-codo" width="100%" height="250"></canvas>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <h6>Interpretación Clínica:</h6>
-                  <div id="interpretacion-codo" class="alert alert-info">
-                    Complete la evaluación para obtener interpretación clínica.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="card mt-4 dashboard-card">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Dashboard - Fuerza Muscular Codo y Antebrazo</h5>
+  </div>
+  <div class="card-body bg-dark text-light">
+    <div class="row">
+      <!-- Gráfico Radar - Visión general -->
+      <div class="col-md-5">
+        <div class="grafico-container mb-3">
+          <canvas id="grafico-radar-codo" width="100%" height="250" class="grafico-radar"></canvas>
         </div>
       </div>
+      
+      <!-- Barras horizontales - Detalle por movimiento -->
+      <div class="col-md-7">
+        <div class="detalle-movimientos" id="grafico-barras-codo">
+          <!-- Las barras horizontales se generarán por JavaScript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación Clínica -->
+    <div class="card mt-3 bg-dark border border-secondary">
+      <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0">Interpretación Clínica</h6>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion-codo" class="text-light">
+          Complete la evaluación para obtener interpretación clínica.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
       <!-- Subacordeón: Muñeca y Mano -->
 <div class="cuestionario-item sub-acordeon">
@@ -15356,23 +15392,35 @@
     <div id="muneca_musculos_adicionales" class="musculos-adicionales"></div>
     
     <!-- Dashboard para Muñeca -->
-    <div class="card mt-4">
-      <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Dashboard - Fuerza Muscular Muñeca y Mano</h5>
+<div class="card mt-4 dashboard-card">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Dashboard - Fuerza Muscular Muñeca y Mano</h5>
+  </div>
+  <div class="card-body bg-dark text-light">
+    <div class="row">
+      <!-- Gráfico Radar - Visión general -->
+      <div class="col-md-5">
+        <div class="grafico-container mb-3">
+          <canvas id="grafico-radar-muneca" width="100%" height="250" class="grafico-radar"></canvas>
+        </div>
+      </div>
+      
+      <!-- Barras horizontales - Detalle por movimiento -->
+      <div class="col-md-7">
+        <div class="detalle-movimientos" id="grafico-barras-muneca">
+          <!-- Las barras horizontales se generarán por JavaScript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación Clínica -->
+    <div class="card mt-3 bg-dark border border-secondary">
+      <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0">Interpretación Clínica</h6>
       </div>
       <div class="card-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="grafico-container">
-              <canvas id="grafico-muneca" width="100%" height="250"></canvas>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h6>Interpretación Clínica:</h6>
-            <div id="interpretacion-muneca" class="alert alert-info">
-              Complete la evaluación para obtener interpretación clínica.
-            </div>
-          </div>
+        <div id="interpretacion-muneca" class="text-light">
+          Complete la evaluación para obtener interpretación clínica.
         </div>
       </div>
     </div>
@@ -15538,24 +15586,36 @@
     <!-- Contenedor para músculos específicos adicionales -->
     <div id="tronco_musculos_adicionales" class="musculos-adicionales"></div>
     
-    <!-- Dashboard para Tronco -->
-    <div class="card mt-4">
-      <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Dashboard - Fuerza Muscular Tronco/Core</h5>
+   <!-- Dashboard para Tronco -->
+<div class="card mt-4 dashboard-card">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Dashboard - Fuerza Muscular Tronco/Core</h5>
+  </div>
+  <div class="card-body bg-dark text-light">
+    <div class="row">
+      <!-- Gráfico Radar - Visión general -->
+      <div class="col-md-5">
+        <div class="grafico-container mb-3">
+          <canvas id="grafico-radar-tronco" width="100%" height="250" class="grafico-radar"></canvas>
+        </div>
+      </div>
+      
+      <!-- Barras horizontales - Detalle por movimiento -->
+      <div class="col-md-7">
+        <div class="detalle-movimientos" id="grafico-barras-tronco">
+          <!-- Las barras horizontales se generarán por JavaScript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación Clínica -->
+    <div class="card mt-3 bg-dark border border-secondary">
+      <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0">Interpretación Clínica</h6>
       </div>
       <div class="card-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="grafico-container">
-              <canvas id="grafico-tronco" width="100%" height="250"></canvas>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h6>Interpretación Clínica:</h6>
-            <div id="interpretacion-tronco" class="alert alert-info">
-              Complete la evaluación para obtener interpretación clínica.
-            </div>
-          </div>
+        <div id="interpretacion-tronco" class="text-light">
+          Complete la evaluación para obtener interpretación clínica.
         </div>
       </div>
     </div>
@@ -15784,23 +15844,35 @@
     <div id="cadera_musculos_adicionales" class="musculos-adicionales"></div>
     
     <!-- Dashboard para Cadera -->
-    <div class="card mt-4">
-      <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Dashboard - Fuerza Muscular Cadera</h5>
+<div class="card mt-4 dashboard-card">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Dashboard - Fuerza Muscular Cadera</h5>
+  </div>
+  <div class="card-body bg-dark text-light">
+    <div class="row">
+      <!-- Gráfico Radar - Visión general -->
+      <div class="col-md-5">
+        <div class="grafico-container mb-3">
+          <canvas id="grafico-radar-cadera" width="100%" height="250" class="grafico-radar"></canvas>
+        </div>
+      </div>
+      
+      <!-- Barras horizontales - Detalle por movimiento -->
+      <div class="col-md-7">
+        <div class="detalle-movimientos" id="grafico-barras-cadera">
+          <!-- Las barras horizontales se generarán por JavaScript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación Clínica -->
+    <div class="card mt-3 bg-dark border border-secondary">
+      <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0">Interpretación Clínica</h6>
       </div>
       <div class="card-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="grafico-container">
-              <canvas id="grafico-cadera" width="100%" height="250"></canvas>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h6>Interpretación Clínica:</h6>
-            <div id="interpretacion-cadera" class="alert alert-info">
-              Complete la evaluación para obtener interpretación clínica.
-            </div>
-          </div>
+        <div id="interpretacion-cadera" class="text-light">
+          Complete la evaluación para obtener interpretación clínica.
         </div>
       </div>
     </div>
@@ -15905,23 +15977,35 @@
     <div id="rodilla_musculos_adicionales" class="musculos-adicionales"></div>
     
     <!-- Dashboard para Rodilla -->
-    <div class="card mt-4">
-      <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Dashboard - Fuerza Muscular Rodilla</h5>
+<div class="card mt-4 dashboard-card">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Dashboard - Fuerza Muscular Rodilla</h5>
+  </div>
+  <div class="card-body bg-dark text-light">
+    <div class="row">
+      <!-- Gráfico Radar - Visión general -->
+      <div class="col-md-5">
+        <div class="grafico-container mb-3">
+          <canvas id="grafico-radar-rodilla" width="100%" height="250" class="grafico-radar"></canvas>
+        </div>
+      </div>
+      
+      <!-- Barras horizontales - Detalle por movimiento -->
+      <div class="col-md-7">
+        <div class="detalle-movimientos" id="grafico-barras-rodilla">
+          <!-- Las barras horizontales se generarán por JavaScript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación Clínica -->
+    <div class="card mt-3 bg-dark border border-secondary">
+      <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0">Interpretación Clínica</h6>
       </div>
       <div class="card-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="grafico-container">
-              <canvas id="grafico-rodilla" width="100%" height="250"></canvas>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h6>Interpretación Clínica:</h6>
-            <div id="interpretacion-rodilla" class="alert alert-info">
-              Complete la evaluación para obtener interpretación clínica.
-            </div>
-          </div>
+        <div id="interpretacion-rodilla" class="text-light">
+          Complete la evaluación para obtener interpretación clínica.
         </div>
       </div>
     </div>
@@ -16088,28 +16172,41 @@
     <div id="tobillo_musculos_adicionales" class="musculos-adicionales"></div>
     
     <!-- Dashboard para Tobillo -->
-    <div class="card mt-4">
-      <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Dashboard - Fuerza Muscular Tobillo y Pie</h5>
+<div class="card mt-4 dashboard-card">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Dashboard - Fuerza Muscular Tobillo y Pie</h5>
+  </div>
+  <div class="card-body bg-dark text-light">
+    <div class="row">
+      <!-- Gráfico Radar - Visión general -->
+      <div class="col-md-5">
+        <div class="grafico-container mb-3">
+          <canvas id="grafico-radar-tobillo" width="100%" height="250" class="grafico-radar"></canvas>
+        </div>
+      </div>
+      
+      <!-- Barras horizontales - Detalle por movimiento -->
+      <div class="col-md-7">
+        <div class="detalle-movimientos" id="grafico-barras-tobillo">
+          <!-- Las barras horizontales se generarán por JavaScript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación Clínica -->
+    <div class="card mt-3 bg-dark border border-secondary">
+      <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0">Interpretación Clínica</h6>
       </div>
       <div class="card-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="grafico-container">
-              <canvas id="grafico-tobillo" width="100%" height="250"></canvas>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h6>Interpretación Clínica:</h6>
-            <div id="interpretacion-tobillo" class="alert alert-info">
-              Complete la evaluación para obtener interpretación clínica.
-            </div>
-          </div>
+        <div id="interpretacion-tobillo" class="text-light">
+          Complete la evaluación para obtener interpretación clínica.
         </div>
       </div>
     </div>
   </div>
 </div>
+    
       <!-- Interpretación y Recomendaciones Globales -->
       <div class="card mt-4 mb-4">
         <div class="card-header bg-primary text-white">
