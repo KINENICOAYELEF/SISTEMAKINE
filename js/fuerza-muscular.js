@@ -1,6 +1,6 @@
 /**
  * fuerza-muscular.js
- * Funcionalidades para la evaluación de fuerza muscular
+ * Funcionalidades para la evaluación de fuerza muscular analítica
  */
 
 // Objeto con información de patrones musculares para interpretación clínica
@@ -15,11 +15,6 @@ const patronesMusculares = {
       patron: ['hombro_rotext', 'hombro_abduccion'],
       descripcion: 'Patrón compatible con inestabilidad glenohumeral anterior',
       recomendacion: 'Evaluar estabilidad anterior de hombro y considerar fortalecimiento selectivo'
-    },
-    disquinesia: {
-      patron: ['hombro_retesc', 'hombro_elevesc'],
-      descripcion: 'Posible disquinesia escapular',
-      recomendacion: 'Evaluar control motor escapular en movimientos funcionales'
     }
   },
   cuello: {
@@ -50,23 +45,21 @@ const patronesMusculares = {
   }
 };
 
-// Valores normales esperados para comparación en Escala Daniels
-const valoresReferencia = {
-  daniels: 5,
-  oxford: 10
-};
-
-// Función para mostrar la tabla de fuerza según la región seleccionada
-function toggleRegionFuerza(regionId) {
-  // Ocultar todos los paneles de región
-  document.querySelectorAll('.accordion-collapse').forEach(panel => {
-    panel.classList.remove('show');
-  });
-  
-  // Mostrar el panel seleccionado
-  const panelSeleccionado = document.getElementById(regionId);
-  if (panelSeleccionado) {
-    panelSeleccionado.classList.add('show');
+// Función para desplegar/colapsar el contenido del cuestionario
+function toggleCuestionario(contentId) {
+  const content = document.getElementById(contentId);
+  if (content) {
+    content.style.display = content.style.display === 'none' ? 'block' : 'none';
+    
+    // Cambiar el ícono
+    const header = content.previousElementSibling;
+    if (header) {
+      const icon = header.querySelector('i');
+      if (icon) {
+        icon.classList.toggle('fa-plus-circle');
+        icon.classList.toggle('fa-minus-circle');
+      }
+    }
   }
 }
 
@@ -82,55 +75,62 @@ function evaluarFuerza(input, escala) {
   
   if (isNaN(valor)) {
     estado.textContent = '';
-    estado.className = '';
+    estado.className = 'estado-celda';
     return;
   }
   
   // Determinar el estado según la escala
   let texto = '';
   let clase = '';
+  let bg = '';
   
   if (escala === 'daniels') {
     // Escala Daniels (0-5)
     if (valor <= 1) {
       texto = 'Déficit severo';
       clase = 'badge bg-danger text-white';
+      bg = '#f8d7da'; // Rojo claro para fondo
     } else if (valor <= 2) {
       texto = 'Déficit moderado';
       clase = 'badge bg-warning text-dark';
+      bg = '#fff3cd'; // Amarillo claro para fondo
     } else if (valor <= 3) {
       texto = 'Déficit leve';
       clase = 'badge bg-warning text-dark';
+      bg = '#fff3cd'; // Amarillo claro para fondo
     } else if (valor <= 4) {
       texto = 'Déficit mínimo';
       clase = 'badge bg-info text-white';
+      bg = '#d1ecf1'; // Azul claro para fondo
     } else {
       texto = 'Normal';
       clase = 'badge bg-success text-white';
+      bg = '#d4edda'; // Verde claro para fondo
     }
-  } else if (escala === 'oxford') {
-    // Escala Oxford (0-10)
-    if (valor <= 2) {
+  } else if (escala === 'mrc') {
+    // Escala MRC Modificada
+    if (valor <= 1) {
       texto = 'Déficit severo';
       clase = 'badge bg-danger text-white';
-    } else if (valor <= 5) {
+      bg = '#f8d7da'; // Rojo claro para fondo
+    } else if (valor <= 3) {
       texto = 'Déficit moderado';
       clase = 'badge bg-warning text-dark';
-    } else if (valor <= 7) {
+      bg = '#fff3cd'; // Amarillo claro para fondo
+    } else if (valor <= 4) {
       texto = 'Déficit leve';
       clase = 'badge bg-info text-white';
-    } else if (valor <= 9) {
-      texto = 'Déficit mínimo';
-      clase = 'badge bg-info text-white';
+      bg = '#d1ecf1'; // Azul claro para fondo
     } else {
       texto = 'Normal';
       clase = 'badge bg-success text-white';
+      bg = '#d4edda'; // Verde claro para fondo
     }
   }
   
   // Actualizar estado
-  estado.textContent = texto;
-  estado.className = clase;
+  estado.innerHTML = `<span class="${clase}">${texto}</span>`;
+  estado.style.backgroundColor = bg;
   
   // Calcular y mostrar diferencial bilateral
   calcularDiferencial(id);
@@ -143,6 +143,37 @@ function evaluarFuerza(input, escala) {
   actualizarDashboard(region);
   
   // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
+}
+
+// Evaluar dolor al realizar pruebas de fuerza
+function evaluarDolorFuerza(select) {
+  const valor = select.value;
+  
+  // Aplicar color de fondo según presencia de dolor
+  if (valor === 'No') {
+    select.style.backgroundColor = '';
+    select.style.color = '';
+  } else {
+    // Colores según momento del dolor
+    const colores = {
+      'Al inicio': '#ffe6e6',
+      'Durante': '#ffcccc',
+      'Al final': '#ffb3b3',
+      'Después': '#ff9999',
+      'Todo el tiempo': '#ff8080'
+    };
+    
+    select.style.backgroundColor = colores[valor] || '#ffcccc';
+    select.style.color = '#333';
+  }
+  
+  // Recuperar el ID base para actualizar interpretaciones
+  const id = select.id.replace('_dolor', '');
+  const region = id.split('_')[0]; // Ej: "hombro", "cuello", etc.
+  
+  // Actualizar interpretaciones
+  evaluarPatronesPorRegion(region);
   actualizarInterpretacionGlobal();
 }
 
@@ -168,17 +199,24 @@ function calcularDiferencial(inputId) {
     const menor = Math.min(derValor, izqValor);
     const diferencial = mayor > 0 ? ((mayor - menor) / mayor) * 100 : 0;
     
-    // Mostrar resultado
-    difElement.textContent = diferencial.toFixed(1) + '%';
+    // Definir clase y color según magnitud del diferencial
+    let clase = '';
+    let bg = '';
     
-    // Aplicar estilo según magnitud
     if (diferencial > 15) {
-      difElement.className = 'badge bg-danger text-white';
+      clase = 'badge bg-danger text-white';
+      bg = '#f8d7da'; // Rojo claro
     } else if (diferencial > 10) {
-      difElement.className = 'badge bg-warning text-dark';
+      clase = 'badge bg-warning text-dark';
+      bg = '#fff3cd'; // Amarillo claro
     } else {
-      difElement.className = 'badge bg-success text-white';
+      clase = 'badge bg-success text-white';
+      bg = '#d4edda'; // Verde claro
     }
+    
+    // Mostrar resultado
+    difElement.innerHTML = `<span class="${clase}">${diferencial.toFixed(1)}%</span>`;
+    difElement.style.backgroundColor = bg;
     
     // Resaltar el lado más débil
     if (diferencial > 10) {
@@ -196,13 +234,13 @@ function calcularDiferencial(inputId) {
   } else {
     // Limpiar si faltan datos
     difElement.textContent = '';
-    difElement.className = '';
+    difElement.style.backgroundColor = '';
     derInput.classList.remove('input-deficit');
     izqInput.classList.remove('input-deficit');
   }
 }
 
-// Cambiar la escala de fuerza entre Daniels y Oxford
+// Cambiar la escala de fuerza entre Daniels y MRC
 function actualizarEscala(selector, baseId) {
   const escala = selector.value;
   const prefijos = ['_der', '_izq'];
@@ -216,37 +254,25 @@ function actualizarEscala(selector, baseId) {
       const valorActual = parseFloat(input.value);
       
       // Actualizar clases y atributos
-      input.classList.remove('daniels', 'oxford');
+      input.classList.remove('daniels', 'mrc');
       input.classList.add(escala);
       
-      // Actualizar rango según la escala
+      // Actualizar rango y opciones según la escala
       if (escala === 'daniels') {
         input.setAttribute('max', '5');
-        input.setAttribute('step', '0.5');
-        if (!isNaN(valorActual) && valorActual > 5) {
-          // Convertir de Oxford a Daniels (aproximado)
-          input.value = Math.min(5, Math.round(valorActual / 2));
-        }
-      } else {
-        input.setAttribute('max', '10');
         input.setAttribute('step', '1');
-        if (!isNaN(valorActual) && valorActual <= 5) {
-          // Convertir de Daniels a Oxford (aproximado)
-          input.value = Math.round(valorActual * 2);
-        }
+      } else {
+        // Para MRC Modificada mantenemos el mismo rango pero con opciones específicas
+        input.setAttribute('max', '5');
+        input.setAttribute('step', '1');
       }
       
-      // Re-evaluar con la nueva escala
-      evaluarFuerza(input, escala);
+      // Re-evaluar con la nueva escala si hay un valor
+      if (!isNaN(valorActual)) {
+        evaluarFuerza(input, escala);
+      }
     }
   });
-}
-
-// Evaluar dolor al realizar pruebas de fuerza
-function evaluarDolorFuerza() {
-  // Esta función se llamará cuando se cambie cualquier selector de dolor
-  // Actualiza la interpretación global porque el dolor puede afectar la interpretación
-  actualizarInterpretacionGlobal();
 }
 
 // Evaluar patrones de debilidad por región
@@ -256,6 +282,7 @@ function evaluarPatronesPorRegion(region) {
   
   const patrones = patronesMusculares[region];
   const patronesDetectados = [];
+  const doloresDetectados = [];
   
   // Evaluar cada patrón posible para la región
   Object.keys(patrones).forEach(patronKey => {
@@ -276,15 +303,15 @@ function evaluarPatronesPorRegion(region) {
         // Contar si hay valores y si están bajos
         if (!isNaN(derValor)) {
           valoresTotales++;
-          const escala = derInput.classList.contains('daniels') ? 'daniels' : 'oxford';
-          const umbral = escala === 'daniels' ? 4 : 8;
+          const escala = derInput.classList.contains('daniels') ? 'daniels' : 'mrc';
+          const umbral = escala === 'daniels' ? 4 : 4;
           if (derValor < umbral) valoresBajos++;
         }
         
         if (!isNaN(izqValor)) {
           valoresTotales++;
-          const escala = izqInput.classList.contains('daniels') ? 'daniels' : 'oxford';
-          const umbral = escala === 'daniels' ? 4 : 8;
+          const escala = izqInput.classList.contains('daniels') ? 'daniels' : 'mrc';
+          const umbral = escala === 'daniels' ? 4 : 4;
           if (izqValor < umbral) valoresBajos++;
         }
       }
@@ -300,10 +327,43 @@ function evaluarPatronesPorRegion(region) {
     }
   });
   
+  // Buscar si hay dolor en algún movimiento de la región
+  const selectoresDolor = document.querySelectorAll(`select[id^="${region}_"][id$="_dolor"]`);
+  selectoresDolor.forEach(select => {
+    if (select.value !== 'No') {
+      const id = select.id.replace('_dolor', '');
+      const movimiento = id.replace(`${region}_`, '');
+      
+      // Traducir nombres de movimientos a formato legible
+      const movimientosNombres = {
+        'flexion': 'Flexión',
+        'extension': 'Extensión',
+        'abduccion': 'Abducción',
+        'aduccion': 'Aducción',
+        'rotint': 'Rotación interna',
+        'rotext': 'Rotación externa',
+        'inclinacion': 'Inclinación lateral',
+        'rotacion': 'Rotación'
+      };
+      
+      const movimientoNombre = movimientosNombres[movimiento] || movimiento;
+      
+      doloresDetectados.push({
+        movimiento: movimientoNombre,
+        momento: select.value
+      });
+    }
+  });
+  
   // Actualizar la interpretación regional
   const interpretacionElement = document.getElementById('interpretacion-' + region);
-  if (interpretacionElement && patronesDetectados.length > 0) {
-    let html = '<div class="alert alert-warning">';
+  if (!interpretacionElement) return;
+  
+  let html = '';
+  
+  // Si hay patrones detectados
+  if (patronesDetectados.length > 0) {
+    html += '<div class="alert alert-warning">';
     html += '<strong>Patrones detectados:</strong><ul>';
     
     patronesDetectados.forEach(patron => {
@@ -311,17 +371,51 @@ function evaluarPatronesPorRegion(region) {
     });
     
     html += '</ul></div>';
-    interpretacionElement.innerHTML = html;
-  } else if (interpretacionElement) {
-    interpretacionElement.innerHTML = '<div class="alert alert-success">No se detectan patrones de déficit muscular significativos en esta región.</div>';
   }
   
+  // Si hay dolor
+  if (doloresDetectados.length > 0) {
+    html += '<div class="alert alert-danger">';
+    html += '<strong>Dolor durante evaluación:</strong><ul>';
+    
+    doloresDetectados.forEach(dolor => {
+      html += `<li>${dolor.movimiento}: ${dolor.momento}</li>`;
+    });
+    
+    html += '</ul>';
+    html += '<p><strong>Consideración:</strong> La presencia de dolor puede alterar los resultados por inhibición refleja.</p>';
+    html += '</div>';
+  }
+  
+  // Si no hay patrones ni dolor pero hay alguna evaluación
+  if (patronesDetectados.length === 0 && doloresDetectados.length === 0) {
+    // Verificar si hay al menos una evaluación
+    const inputs = document.querySelectorAll(`input[id^="${region}_"][type="number"]`);
+    let hayEvaluacion = false;
+    
+    inputs.forEach(input => {
+      if (!isNaN(parseFloat(input.value))) {
+        hayEvaluacion = true;
+      }
+    });
+    
+    if (hayEvaluacion) {
+      html += '<div class="alert alert-success">';
+      html += 'No se detectan patrones de déficit muscular significativos en esta región.';
+      html += '</div>';
+    } else {
+      html = '<div class="alert alert-info">Complete la evaluación para obtener interpretación clínica.</div>';
+    }
+  }
+  
+  interpretacionElement.innerHTML = html;
+  
   // Actualizar el badge de la región
-  actualizarBadgeRegion(region, patronesDetectados.length > 0);
+  actualizarBadgeRegion(region, patronesDetectados.length > 0 || doloresDetectados.length > 0);
 }
 
 // Actualizar el badge de una región
-function actualizarBadgeRegion(region, hayDeficit) {
+function actualizarBadgeRegion(region, hayDeficitODolor) {
   const badge = document.getElementById(region + '-badge');
   if (!badge) return;
   
@@ -336,8 +430,8 @@ function actualizarBadgeRegion(region, hayDeficit) {
   });
   
   if (!hayValores) {
-    badge.textContent = 'No evaluado';
-    badge.className = 'ms-auto badge rounded-pill bg-secondary';
+    badge.textContent = 'No completado';
+    badge.className = 'badge bg-secondary ms-auto';
     return;
   }
   
@@ -353,17 +447,17 @@ function actualizarBadgeRegion(region, hayDeficit) {
   
   if (inputsCompletados < totalInputs / 2) {
     badge.textContent = 'Incompleto';
-    badge.className = 'ms-auto badge rounded-pill bg-warning text-dark';
+    badge.className = 'badge bg-warning text-dark ms-auto';
     return;
   }
   
-  // Comprobar si hay déficit
-  if (hayDeficit) {
+  // Comprobar si hay déficit o dolor
+  if (hayDeficitODolor) {
     badge.textContent = 'Déficit detectado';
-    badge.className = 'ms-auto badge rounded-pill bg-danger text-white';
+    badge.className = 'badge bg-danger text-white ms-auto';
   } else {
     badge.textContent = 'Normal';
-    badge.className = 'ms-auto badge rounded-pill bg-success text-white';
+    badge.className = 'badge bg-success text-white ms-auto';
   }
 }
 
@@ -392,7 +486,21 @@ function actualizarDashboard(region) {
       const valIzq = parseFloat(inputIzq.value);
       
       if (!isNaN(valDer) || !isNaN(valIzq)) {
-        datos.movimientos.push(movimiento.charAt(0).toUpperCase() + movimiento.slice(1));
+        // Traducir nombres de movimientos a formato legible
+        const movimientosNombres = {
+          'flexion': 'Flexión',
+          'extension': 'Extensión',
+          'abduccion': 'Abducción',
+          'aduccion': 'Aducción',
+          'rotint': 'Rot. Int.',
+          'rotext': 'Rot. Ext.',
+          'inclinacion': 'Inclinación',
+          'rotacion': 'Rotación'
+        };
+        
+        const movimientoNombre = movimientosNombres[movimiento] || movimiento;
+        
+        datos.movimientos.push(movimientoNombre);
         datos.derecha.push(isNaN(valDer) ? 0 : valDer);
         datos.izquierda.push(isNaN(valIzq) ? 0 : valIzq);
       }
@@ -405,7 +513,7 @@ function actualizarDashboard(region) {
   }
 }
 
-// Crear gráfico comparativo
+// Crear gráfico comparativo moderno y futurista
 function crearGrafico(canvas, datos) {
   // Verificar si ya existe un gráfico para este canvas
   if (canvas.chart) {
@@ -413,57 +521,118 @@ function crearGrafico(canvas, datos) {
   }
   
   // Determinar la escala (mirando el primer input de la región)
-  const primerInputId = canvas.id.replace('grafico-', '') + '_' + datos.movimientos[0].toLowerCase() + '_der';
+  const regionNombre = canvas.id.replace('grafico-', '');
+  const primerMovimiento = datos.movimientos[0] ? convertirAIdMovimiento(datos.movimientos[0]) : '';
+  const primerInputId = regionNombre + '_' + primerMovimiento + '_der';
   const primerInput = document.getElementById(primerInputId);
   
   let escala = 'daniels';
   let maxValue = 5;
   
-  if (primerInput && primerInput.classList.contains('oxford')) {
-    escala = 'oxford';
-    maxValue = 10;
+  if (primerInput && primerInput.classList.contains('mrc')) {
+    escala = 'mrc';
+    maxValue = 5;
   }
   
-  // Crear gráfico
+  // Crear gráfico con estilo moderno
   const ctx = canvas.getContext('2d');
   canvas.chart = new Chart(ctx, {
-    type: 'bar',
+    type: 'radar',
     data: {
       labels: datos.movimientos,
       datasets: [{
         label: 'Derecha',
         data: datos.derecha,
-        backgroundColor: 'rgba(54, 162, 235, 0.7)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 0.8)',
+        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 2
       }, {
         label: 'Izquierda',
         data: datos.izquierda,
-        backgroundColor: 'rgba(255, 99, 132, 0.7)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 0.8)',
+        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 2
       }]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       scales: {
-        y: {
-          min: 0,
-          max: maxValue,
-          title: {
+        r: {
+          angleLines: {
             display: true,
-            text: escala === 'daniels' ? 'Escala Daniels (0-5)' : 'Escala Oxford (0-10)'
+            color: 'rgba(0, 0, 0, 0.1)'
+          },
+          ticks: {
+            beginAtZero: true,
+            max: maxValue,
+            stepSize: 1,
+            backdropColor: 'rgba(255, 255, 255, 0.8)'
+          },
+          pointLabels: {
+            font: {
+              size: 12,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            circular: true,
+            color: 'rgba(0, 0, 0, 0.1)'
           }
         }
       },
       plugins: {
-        title: {
-          display: true,
-          text: 'Comparativa Bilateral'
+        legend: {
+          position: 'top',
+          labels: {
+            boxWidth: 15,
+            padding: 15,
+            font: {
+              family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+              size: 12
+            }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          titleFont: {
+            size: 14
+          },
+          bodyFont: {
+            size: 13
+          },
+          displayColors: false
         }
       }
     }
   });
+}
+
+// Función auxiliar para convertir nombre legible a ID de movimiento
+function convertirAIdMovimiento(nombreLegible) {
+  const mapa = {
+    'Flexión': 'flexion',
+    'Extensión': 'extension',
+    'Abducción': 'abduccion',
+    'Aducción': 'aduccion',
+    'Rot. Int.': 'rotint',
+    'Rotación interna': 'rotint',
+    'Rot. Ext.': 'rotext',
+    'Rotación externa': 'rotext',
+    'Inclinación': 'inclinacion',
+    'Inclinación lateral': 'inclinacion',
+    'Rotación': 'rotacion'
+  };
+  
+  return mapa[nombreLegible] || nombreLegible.toLowerCase();
 }
 
 // Actualizar interpretación global
@@ -507,14 +676,14 @@ function actualizarInterpretacionGlobal() {
     
     // Traducir los nombres para mejor legibilidad
     const regionesNombres = {
-      'cuello': 'Cuello',
-      'hombro': 'Hombro',
-      'codo': 'Codo y antebrazo',
-      'muneca': 'Muñeca y mano',
+      'cuello': 'Cabeza y Cuello',
+      'hombro': 'Complejo del Hombro',
+      'codo': 'Codo y Antebrazo',
+      'muneca': 'Muñeca y Mano',
       'tronco': 'Tronco/Core',
       'cadera': 'Cadera',
       'rodilla': 'Rodilla',
-      'tobillo': 'Tobillo y pie'
+      'tobillo': 'Tobillo y Pie'
     };
     
     const movimientosNombres = {
@@ -524,10 +693,6 @@ function actualizarInterpretacionGlobal() {
       'aduccion': 'aducción',
       'rotint': 'rotación interna',
       'rotext': 'rotación externa',
-      'elevesc': 'elevación escapular',
-      'retesc': 'retracción escapular',
-      'pronacion': 'pronación',
-      'supinacion': 'supinación',
       'inclinacion': 'inclinación lateral',
       'rotacion': 'rotación'
     };
@@ -539,8 +704,8 @@ function actualizarInterpretacionGlobal() {
     
     // Verificar debilidad
     const valor = parseFloat(input.value);
-    const escala = input.classList.contains('daniels') ? 'daniels' : 'oxford';
-    const umbralDebilidad = escala === 'daniels' ? 4 : 8;
+    const escala = input.classList.contains('daniels') ? 'daniels' : 'mrc';
+    const umbralDebilidad = escala === 'daniels' ? 4 : 4;
     
     if (valor < umbralDebilidad) {
       const regionNombre = regionesNombres[region] || region;
@@ -595,14 +760,14 @@ function actualizarInterpretacionGlobal() {
       const movimiento = partes[1];
       
       const regionesNombres = {
-        'cuello': 'Cuello',
-        'hombro': 'Hombro',
-        'codo': 'Codo y antebrazo',
-        'muneca': 'Muñeca y mano',
+        'cuello': 'Cabeza y Cuello',
+        'hombro': 'Complejo del Hombro',
+        'codo': 'Codo y Antebrazo',
+        'muneca': 'Muñeca y Mano',
         'tronco': 'Tronco/Core',
         'cadera': 'Cadera',
         'rodilla': 'Rodilla',
-        'tobillo': 'Tobillo y pie'
+        'tobillo': 'Tobillo y Pie'
       };
       
       const movimientosNombres = {
@@ -612,10 +777,6 @@ function actualizarInterpretacionGlobal() {
         'aduccion': 'aducción',
         'rotint': 'rotación interna',
         'rotext': 'rotación externa',
-        'elevesc': 'elevación escapular',
-        'retesc': 'retracción escapular',
-        'pronacion': 'pronación',
-        'supinacion': 'supinación',
         'inclinacion': 'inclinación lateral',
         'rotacion': 'rotación'
       };
@@ -653,15 +814,15 @@ function actualizarInterpretacionGlobal() {
           // Contar si hay valores y si están bajos
           if (!isNaN(derValor)) {
             valoresTotales++;
-            const escala = derInput.classList.contains('daniels') ? 'daniels' : 'oxford';
-            const umbral = escala === 'daniels' ? 4 : 8;
+            const escala = derInput.classList.contains('daniels') ? 'daniels' : 'mrc';
+            const umbral = escala === 'daniels' ? 4 : 4;
             if (derValor < umbral) valoresBajos++;
           }
           
           if (!isNaN(izqValor)) {
             valoresTotales++;
-            const escala = izqInput.classList.contains('daniels') ? 'daniels' : 'oxford';
-            const umbral = escala === 'daniels' ? 4 : 8;
+            const escala = izqInput.classList.contains('daniels') ? 'daniels' : 'mrc';
+            const umbral = escala === 'daniels' ? 4 : 4;
             if (izqValor < umbral) valoresBajos++;
           }
         }
@@ -669,11 +830,22 @@ function actualizarInterpretacionGlobal() {
       
       // Determinar si hay coincidencia (más del 50% de los valores están bajos)
       if (valoresTotales > 0 && (valoresBajos / valoresTotales) > 0.5) {
+        const regionesNombres = {
+          'cuello': 'Cabeza y Cuello',
+          'hombro': 'Complejo del Hombro',
+          'codo': 'Codo y Antebrazo',
+          'muneca': 'Muñeca y Mano',
+          'tronco': 'Tronco/Core',
+          'cadera': 'Cadera',
+          'rodilla': 'Rodilla',
+          'tobillo': 'Tobillo y Pie'
+        };
+        
         patrones.push({
           nombre: patronKey,
+          region: regionesNombres[region] || region,
           descripcion: patron.descripcion,
-          recomendacion: patron.recomendacion,
-          region: region
+          recomendacion: patron.recomendacion
         });
       }
     });
@@ -690,24 +862,26 @@ function actualizarInterpretacionGlobal() {
     // Agrupar por región
     const regionesDebilidad = {};
     debilidades.forEach(debilidad => {
-      if (!regionesDebilidad[debilidad.region]) {
-        regionesDebilidad[debilidad.region] = [];
-      }
-      regionesDebilidad[debilidad.region].push(debilidad);
-    });
-    
-    Object.keys(regionesDebilidad).forEach(region => {
-      const debilidadesRegion = regionesDebilidad[region];
+      const region = debilidad.region;
       const regionNombre = {
-        'cuello': 'Cuello',
-        'hombro': 'Hombro',
-        'codo': 'Codo y antebrazo',
-        'muneca': 'Muñeca y mano',
+        'cuello': 'Cabeza y Cuello',
+        'hombro': 'Complejo del Hombro',
+        'codo': 'Codo y Antebrazo',
+        'muneca': 'Muñeca y Mano',
         'tronco': 'Tronco/Core',
         'cadera': 'Cadera',
         'rodilla': 'Rodilla',
-        'tobillo': 'Tobillo y pie'
+        'tobillo': 'Tobillo y Pie'
       }[region] || region;
+      
+      if (!regionesDebilidad[regionNombre]) {
+        regionesDebilidad[regionNombre] = [];
+      }
+      regionesDebilidad[regionNombre].push(debilidad);
+    });
+    
+    Object.keys(regionesDebilidad).forEach(regionNombre => {
+      const debilidadesRegion = regionesDebilidad[regionNombre];
       
       interpretacionTexto += `<li><strong>${regionNombre}:</strong> `;
       interpretacionTexto += debilidadesRegion.map(d => d.texto).join(', ');
@@ -717,19 +891,8 @@ function actualizarInterpretacionGlobal() {
     interpretacionTexto += '</ul>';
     
     recomendacionesTexto += '<p><strong>Recomendaciones por debilidad:</strong></p><ul>';
-    Object.keys(regionesDebilidad).forEach(region => {
-      const regionNombre = {
-        'cuello': 'Cuello',
-        'hombro': 'Hombro',
-        'codo': 'Codo y antebrazo',
-        'muneca': 'Muñeca y mano',
-        'tronco': 'Tronco/Core',
-        'cadera': 'Cadera',
-        'rodilla': 'Rodilla',
-        'tobillo': 'Tobillo y pie'
-      }[region] || region;
-      
-      recomendacionesTexto += `<li><strong>${regionNombre}:</strong> Considerar programa de fortalecimiento progresivo específico.</li>`;
+    Object.keys(regionesDebilidad).forEach(regionNombre => {
+      recomendacionesTexto += `<li><strong>${regionNombre}:</strong> Considerar programa de fortalecimiento progresivo específico para los déficits identificados.</li>`;
     });
     recomendacionesTexto += '</ul>';
   } else {
@@ -738,37 +901,45 @@ function actualizarInterpretacionGlobal() {
   
   // Interpretación de asimetrías
   if (asimetrias.length > 0) {
-    interpretacionTexto += '<p><strong>Asimetrías bilaterales significativas:</strong></p><ul>';
+    interpretacionTexto += '<p><strong>Asimetrías bilaterales significativas (>15%):</strong></p><ul>';
     asimetrias.forEach(asimetria => {
-      interpretacionTexto += `<li>${asimetria.texto}: ${asimetria.diferencia}% de déficit en lado ${asimetria.ladoDebil}</li>`;
+      interpretacionTexto += `<li>${asimetria.texto}: <span class="text-danger">${asimetria.diferencia}%</span> de déficit en lado ${asimetria.ladoDebil}</li>`;
     });
     interpretacionTexto += '</ul>';
     
-    recomendacionesTexto += '<p><strong>Abordaje de asimetrías:</strong> Trabajar en la corrección de desequilibrios bilaterales, enfatizando el lado más débil.</p>';
+    recomendacionesTexto += '<p><strong>Abordaje de asimetrías:</strong> Trabajar en la corrección de desequilibrios bilaterales, enfatizando el lado más débil y considerando:</p>';
+    recomendacionesTexto += '<ul>';
+    recomendacionesTexto += '<li>Progresión desde ejercicios isométricos a dinámicos concéntricos/excéntricos.</li>';
+    recomendacionesTexto += '<li>Monitorización regular de la evolución de las asimetrías.</li>';
+    recomendacionesTexto += '</ul>';
   }
   
   // Interpretación de dolor
   if (dolores.length > 0) {
     interpretacionTexto += '<p><strong>Dolor durante el test:</strong></p><ul>';
     dolores.forEach(dolor => {
-      interpretacionTexto += `<li>${dolor.texto}: ${dolor.momento}</li>`;
+      interpretacionTexto += `<li>${dolor.texto}: <span class="text-danger">${dolor.momento}</span></li>`;
     });
     interpretacionTexto += '</ul>';
     
-    recomendacionesTexto += '<p><strong>Consideraciones por dolor:</strong> Trabajar inicialmente con cargas submáximas y rangos no dolorosos. Considerar abordaje complementario del dolor.</p>';
+    recomendacionesTexto += '<p><strong>Consideraciones por dolor:</strong></p><ul>';
+    recomendacionesTexto += '<li>Trabajar inicialmente con cargas submáximas y rangos no dolorosos.</li>';
+    recomendacionesTexto += '<li>Considerar técnicas de modulación del dolor previo al trabajo de fuerza.</li>';
+    recomendacionesTexto += '<li>Monitorizar sistemáticamente la respuesta al dolor durante la progresión de ejercicios.</li>';
+    recomendacionesTexto += '</ul>';
   }
   
   // Interpretación de patrones
   if (patrones.length > 0) {
     interpretacionTexto += '<p><strong>Patrones clínicos identificados:</strong></p><ul>';
     patrones.forEach(patron => {
-      interpretacionTexto += `<li><strong>${patron.descripcion}</strong></li>`;
+      interpretacionTexto += `<li><strong>${patron.region}:</strong> ${patron.descripcion}</li>`;
     });
     interpretacionTexto += '</ul>';
     
     recomendacionesTexto += '<p><strong>Recomendaciones específicas por patrón:</strong></p><ul>';
     patrones.forEach(patron => {
-      recomendacionesTexto += `<li>${patron.recomendacion}</li>`;
+      recomendacionesTexto += `<li><strong>${patron.region}:</strong> ${patron.recomendacion}</li>`;
     });
     recomendacionesTexto += '</ul>';
   }
@@ -785,7 +956,7 @@ function actualizarInterpretacionGlobal() {
   // Actualizar el badge global
   const badge = document.getElementById('fuerza-analitica-badge');
   if (badge) {
-    if (debilidades.length > 0 || asimetrias.length > 0 || patrones.length > 0) {
+    if (debilidades.length > 0 || asimetrias.length > 0 || patrones.length > 0 || dolores.length > 0) {
       badge.textContent = 'Déficit detectado';
       badge.className = 'resultado-badge bg-warning';
     } else if (hayEvaluacion) {
@@ -798,41 +969,96 @@ function actualizarInterpretacionGlobal() {
   }
 }
 
-// Función para desplegar/colapsar el contenido del cuestionario
-function toggleCuestionario(contentId) {
-  const content = document.getElementById(contentId);
-  if (content) {
-    content.style.display = content.style.display === 'none' ? 'block' : 'none';
-    
-    // Cambiar el ícono
-    const header = content.previousElementSibling;
-    if (header) {
-      const icon = header.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('fa-plus-circle');
-        icon.classList.toggle('fa-minus-circle');
-      }
-    }
-  }
+// Función para añadir un músculo específico a evaluar
+function agregarMusculoEspecifico(region) {
+  const contenedor = document.getElementById(`${region}_musculos_adicionales`);
+  if (!contenedor) return;
+  
+  // Generar un ID único para el nuevo músculo
+  const timestamp = Date.now();
+  const musculoId = `${region}_musculo_${timestamp}`;
+  
+  // Crear HTML para la fila de evaluación
+  const html = `
+    <div class="musculo-adicional-item mb-4" id="${musculoId}_container">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <input type="text" class="form-control" id="${musculoId}_nombre" placeholder="Nombre del músculo específico" style="width: 70%;">
+          <button type="button" class="btn btn-sm btn-danger" onclick="eliminarMusculoEspecifico('${musculoId}_container')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Escala</th>
+                  <th colspan="2">Derecha</th>
+                  <th colspan="2">Izquierda</th>
+                  <th>Diferencial</th>
+                  <th>Dolor</th>
+                  <th>Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <select class="form-select escala-selector" onchange="actualizarEscala(this, '${musculoId}')">
+                      <option value="daniels">Daniels (0-5)</option>
+                      <option value="mrc">MRC Modificada</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" id="${musculoId}_der" name="${musculoId}_der" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="${musculoId}_der_estado" class="estado-celda"></td>
+                  <td>
+                    <input type="number" id="${musculoId}_izq" name="${musculoId}_izq" class="form-control fuerza-input daniels" min="0" max="5" step="1" onchange="evaluarFuerza(this, 'daniels')">
+                  </td>
+                  <td id="${musculoId}_izq_estado" class="estado-celda"></td>
+                  <td id="${musculoId}_dif" class="diferencial-celda"></td>
+                  <td>
+                    <select id="${musculoId}_dolor" name="${musculoId}_dolor" class="form-select dolor-selector" onchange="evaluarDolorFuerza(this)">
+                      <option value="No">No</option>
+                      <option value="Al inicio">Al inicio</option>
+                      <option value="Durante">Durante</option>
+                      <option value="Al final">Al final</option>
+                      <option value="Después">Después</option>
+                      <option value="Todo el tiempo">Todo el tiempo</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" id="${musculoId}_obs" name="${musculoId}_obs" class="form-control">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Añadir el HTML al contenedor
+  contenedor.insertAdjacentHTML('beforeend', html);
+  
+  // Actualizar los valores para que se muestre en el dashboard
+  document.getElementById(`${region}-badge`).textContent = 'Pendiente';
+  document.getElementById(`${region}-badge`).className = 'badge bg-warning text-dark ms-auto';
 }
 
-// Aplicar sugerencia bilateral (copiar valor al lado opuesto)
-function sugerirBilateral(input) {
-  const id = input.id;
-  const baseId = id.replace('_der', '').replace('_izq', '');
-  const esIzquierdo = id.endsWith('_izq');
-  
-  const targetId = baseId + (esIzquierdo ? '_der' : '_izq');
-  const targetInput = document.getElementById(targetId);
-  
-  if (targetInput && !targetInput.value) {
-    targetInput.value = input.value;
+// Función para eliminar un músculo específico
+function eliminarMusculoEspecifico(contenedorId) {
+  const contenedor = document.getElementById(contenedorId);
+  if (contenedor) {
+    const region = contenedorId.split('_')[0];
+    contenedor.remove();
     
-    // Determinar la escala
-    const escala = input.classList.contains('daniels') ? 'daniels' : 'oxford';
-    
-    // Re-evaluar con la nueva escala
-    evaluarFuerza(targetInput, escala);
+    // Actualizar dashboard e interpretación
+    actualizarDashboard(region);
+    evaluarPatronesPorRegion(region);
+    actualizarInterpretacionGlobal();
   }
 }
 
@@ -855,7 +1081,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inputs de fuerza
   document.querySelectorAll('.fuerza-input').forEach(input => {
     input.addEventListener('change', function() {
-      const escala = this.classList.contains('daniels') ? 'daniels' : 'oxford';
+      const escala = this.classList.contains('daniels') ? 'daniels' : 'mrc';
       evaluarFuerza(this, escala);
       
       // Sugerir el mismo valor para el lado contralateral si está vacío
@@ -863,14 +1089,97 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Agregar CSS para inputs con déficit
-  const style = document.createElement('style');
-  style.textContent = `
-    .input-deficit {
-      background-color: #ffeeee !important;
-    }
-  `;
-  document.head.appendChild(style);
+  // Selectores de dolor
+  document.querySelectorAll('.dolor-selector').forEach(select => {
+    select.addEventListener('change', function() {
+      evaluarDolorFuerza(this);
+    });
+  });
   
   console.log('Módulo de fuerza muscular inicializado correctamente.');
 });
+
+// Aplicar sugerencia bilateral (copiar valor al lado opuesto)
+function sugerirBilateral(input) {
+  const id = input.id;
+  const baseId = id.replace('_der', '').replace('_izq', '');
+  const esIzquierdo = id.endsWith('_izq');
+  
+  const targetId = baseId + (esIzquierdo ? '_der' : '_izq');
+  const targetInput = document.getElementById(targetId);
+  
+  if (targetInput && targetInput.value === '') {
+    targetInput.value = input.value;
+    
+    // Determinar la escala
+    const escala = input.classList.contains('daniels') ? 'daniels' : 'mrc';
+    
+    // Re-evaluar con la nueva escala
+    evaluarFuerza(targetInput, escala);
+  }
+}
+
+// Agregar CSS dinámico para los estilos
+(function() {
+  const style = document.createElement('style');
+  style.textContent = `
+    /* Estilos para evaluación de fuerza muscular */
+    .input-deficit {
+      background-color: #ffeeee !important;
+      border-color: #ff8080 !important;
+    }
+    
+    .estado-celda {
+      vertical-align: middle;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+    
+    .diferencial-celda {
+      vertical-align: middle;
+      text-align: center;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .dolor-selector {
+      transition: background-color 0.3s ease;
+    }
+    
+    .grafico-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+      max-width: 100%;
+    }
+    
+    .accordion-button .fas.fa-circle {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+    
+    .accordion-header .badge {
+      margin-left: auto;
+      margin-right: 15px;
+    }
+    
+    .musculo-adicional-item .card-header {
+      background-color: #f8f9fa;
+    }
+    
+    /* Animación para las transiciones */
+    .accordion-collapse {
+      transition: all 0.3s ease-out;
+    }
+    
+    .card {
+      transition: all 0.2s ease-out;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    
+    .card:hover {
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+  `;
+  document.head.appendChild(style);
+})();
