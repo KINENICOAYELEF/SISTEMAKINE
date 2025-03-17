@@ -1411,3 +1411,456 @@ function sugerirBilateral(input) {
   `;
   document.head.appendChild(style);
 })();
+
+// Datos normativos para handgrip según edad y sexo (basados en estudios actualizados)
+const valoresNormativosHandgrip = {
+  masculino: {
+    "18-29": 46.2,
+    "30-39": 45.5,
+    "40-49": 43.9,
+    "50-59": 40.5,
+    "60-69": 36.2,
+    "70-79": 32.8,
+    "80+": 26.5
+  },
+  femenino: {
+    "18-29": 29.5,
+    "30-39": 28.8,
+    "40-49": 27.5,
+    "50-59": 25.8,
+    "60-69": 22.5,
+    "70-79": 19.5,
+    "80+": 16.8
+  }
+};
+
+// Valores percentiles para ambos sexos (simplificados para este ejemplo)
+const percentilesHandgrip = {
+  masculino: {
+    "p10": 0.68, // 68% del valor normativo
+    "p25": 0.80,
+    "p50": 1.00,
+    "p75": 1.15,
+    "p90": 1.30
+  },
+  femenino: {
+    "p10": 0.66,
+    "p25": 0.78,
+    "p50": 1.00,
+    "p75": 1.18,
+    "p90": 1.32
+  }
+};
+
+// Puntos de corte para sarcopenia según EWGSOP2 (European Working Group on Sarcopenia in Older People 2)
+const puntosCorteSarcopenia = {
+  masculino: 27, // kg
+  femenino: 16 // kg
+};
+
+/**
+ * Actualiza los valores normativos basados en los datos del paciente
+ */
+function actualizarValoresNormativos() {
+  const edad = parseInt(document.getElementById('dinamometria_edad').value) || 0;
+  const sexo = document.getElementById('dinamometria_sexo').value;
+  
+  if (!edad || !sexo) return;
+  
+  // Determinar el grupo de edad
+  let grupoEdad = "";
+  if (edad >= 18 && edad <= 29) grupoEdad = "18-29";
+  else if (edad >= 30 && edad <= 39) grupoEdad = "30-39";
+  else if (edad >= 40 && edad <= 49) grupoEdad = "40-49";
+  else if (edad >= 50 && edad <= 59) grupoEdad = "50-59";
+  else if (edad >= 60 && edad <= 69) grupoEdad = "60-69";
+  else if (edad >= 70 && edad <= 79) grupoEdad = "70-79";
+  else if (edad >= 80) grupoEdad = "80+";
+  
+  // Actualizar el valor normativo
+  const valorNormativo = valoresNormativosHandgrip[sexo][grupoEdad];
+  if (valorNormativo) {
+    document.getElementById('handgrip_valor_normativo').textContent = valorNormativo.toFixed(1);
+  }
+  
+  // Recalcular los resultados si ya hay datos
+  calcularHandgrip();
+}
+
+/**
+ * Calcula todos los valores y actualiza la interfaz para el handgrip
+ */
+function calcularHandgrip(forzarActualizacion = false) {
+  // Obtener valores de los intentos
+  const der1 = parseFloat(document.getElementById('handgrip_der_1').value) || 0;
+  const der2 = parseFloat(document.getElementById('handgrip_der_2').value) || 0;
+  const der3 = parseFloat(document.getElementById('handgrip_der_3').value) || 0;
+  const izq1 = parseFloat(document.getElementById('handgrip_izq_1').value) || 0;
+  const izq2 = parseFloat(document.getElementById('handgrip_izq_2').value) || 0;
+  const izq3 = parseFloat(document.getElementById('handgrip_izq_3').value) || 0;
+  
+  // Verificar si hay datos para calcular
+  if (!forzarActualizacion && der1 === 0 && der2 === 0 && der3 === 0 && izq1 === 0 && izq2 === 0 && izq3 === 0) {
+    return;
+  }
+  
+  // Calcular promedio (ignorando valores de 0)
+  let promedioDer = 0;
+  let contadorDer = 0;
+  [der1, der2, der3].forEach(val => {
+    if (val > 0) {
+      promedioDer += val;
+      contadorDer++;
+    }
+  });
+  promedioDer = contadorDer > 0 ? promedioDer / contadorDer : 0;
+  
+  let promedioIzq = 0;
+  let contadorIzq = 0;
+  [izq1, izq2, izq3].forEach(val => {
+    if (val > 0) {
+      promedioIzq += val;
+      contadorIzq++;
+    }
+  });
+  promedioIzq = contadorIzq > 0 ? promedioIzq / contadorIzq : 0;
+  
+  // Calcular mejor intento
+  const mejorDer = Math.max(der1 || 0, der2 || 0, der3 || 0);
+  const mejorIzq = Math.max(izq1 || 0, izq2 || 0, izq3 || 0);
+  
+  // Actualizar campos de resultado
+  document.getElementById('handgrip_der_promedio').value = promedioDer.toFixed(1);
+  document.getElementById('handgrip_izq_promedio').value = promedioIzq.toFixed(1);
+  document.getElementById('handgrip_der_mejor').value = mejorDer.toFixed(1);
+  document.getElementById('handgrip_izq_mejor').value = mejorIzq.toFixed(1);
+  
+  // Determinar qué valor usar para el análisis
+  const tipoValor = document.getElementById('handgrip_valor_analisis').value;
+  const valorDer = tipoValor === 'mejor' ? mejorDer : promedioDer;
+  const valorIzq = tipoValor === 'mejor' ? mejorIzq : promedioIzq;
+  
+  // Calcular asimetría bilateral
+  let asimetria = 0;
+  if (valorDer > 0 && valorIzq > 0) {
+    const mayor = Math.max(valorDer, valorIzq);
+    const menor = Math.min(valorDer, valorIzq);
+    asimetria = ((mayor - menor) / mayor) * 100;
+  }
+  document.getElementById('handgrip_asimetria').textContent = asimetria.toFixed(1);
+  
+  // Calcular fuerza normalizada por peso
+  const peso = parseFloat(document.getElementById('dinamometria_peso').value) || 0;
+  let fuerzaNormalizada = 0;
+  if (peso > 0) {
+    // Usar el valor de la mano dominante o el mayor si no se especifica
+    const manoDominante = document.getElementById('mano_dominante').value;
+    let valorDominante = 0;
+    
+    if (manoDominante === 'derecha') {
+      valorDominante = valorDer;
+    } else if (manoDominante === 'izquierda') {
+      valorDominante = valorIzq;
+    } else {
+      // Si es ambidiestro o no especificado, usar el mayor valor
+      valorDominante = Math.max(valorDer, valorIzq);
+    }
+    
+    fuerzaNormalizada = valorDominante / peso;
+  }
+  document.getElementById('handgrip_normalizado').textContent = fuerzaNormalizada.toFixed(2);
+  
+  // Comparar con valor normativo
+  const sexo = document.getElementById('dinamometria_sexo').value;
+  const valorNormativo = parseFloat(document.getElementById('handgrip_valor_normativo').textContent) || 0;
+  
+  let percentil = '-';
+  let colorPercentil = 'secondary';
+  
+  if (valorNormativo > 0 && (valorDer > 0 || valorIzq > 0)) {
+    // Usar el mejor valor de cualquier mano para la comparación con los normativos
+    const mejorValor = Math.max(valorDer, valorIzq);
+    const proporcionNormativo = mejorValor / valorNormativo;
+    
+    // Determinar percentil
+    if (sexo && percentilesHandgrip[sexo]) {
+      if (proporcionNormativo < percentilesHandgrip[sexo].p10) {
+        percentil = "< P10 (Muy bajo)";
+        colorPercentil = "danger";
+      } else if (proporcionNormativo < percentilesHandgrip[sexo].p25) {
+        percentil = "P10-P25 (Bajo)";
+        colorPercentil = "warning";
+      } else if (proporcionNormativo < percentilesHandgrip[sexo].p75) {
+        percentil = "P25-P75 (Normal)";
+        colorPercentil = "success";
+      } else if (proporcionNormativo < percentilesHandgrip[sexo].p90) {
+        percentil = "P75-P90 (Alto)";
+        colorPercentil = "primary";
+      } else {
+        percentil = "> P90 (Muy alto)";
+        colorPercentil = "info";
+      }
+    }
+    
+    document.getElementById('handgrip_percentil').innerHTML = `<span class="badge bg-${colorPercentil}">${percentil}</span>`;
+    
+    // Evaluar riesgo de sarcopenia
+    if (sexo && puntosCorteSarcopenia[sexo]) {
+      const puntoDiagnostico = puntosCorteSarcopenia[sexo];
+      const mejorValor = Math.max(valorDer, valorIzq);
+      
+      let riesgoSarcopenia = '';
+      let colorRiesgo = '';
+      
+      if (mejorValor < puntoDiagnostico) {
+        riesgoSarcopenia = "Elevado";
+        colorRiesgo = "danger";
+      } else {
+        riesgoSarcopenia = "Normal";
+        colorRiesgo = "success";
+      }
+      
+      document.getElementById('handgrip_sarcopenia').innerHTML = 
+        `<span class="badge bg-${colorRiesgo}">${riesgoSarcopenia}</span>`;
+    }
+    
+    // Generar interpretación clínica
+    generarInterpretacionHandgrip(valorDer, valorIzq, valorNormativo, asimetria, percentil, fuerzaNormalizada);
+    
+    // Crear gráfico comparativo
+    crearGraficoHandgrip(valorDer, valorIzq, valorNormativo);
+  }
+}
+
+/**
+ * Genera la interpretación clínica y recomendaciones para handgrip
+ */
+function generarInterpretacionHandgrip(valorDer, valorIzq, valorNormativo, asimetria, percentil, fuerzaNormalizada) {
+  const sexo = document.getElementById('dinamometria_sexo').value;
+  const edad = parseInt(document.getElementById('dinamometria_edad').value) || 0;
+  const mejorValor = Math.max(valorDer, valorIzq);
+  const manoDominante = document.getElementById('mano_dominante').value;
+  
+  let interpretacion = '';
+  let recomendaciones = '';
+  
+  // Determinar el estado general según la comparación con el valor normativo
+  let estadoGeneral = '';
+  let colorEstado = '';
+  
+  if (valorNormativo > 0) {
+    const proporcion = mejorValor / valorNormativo;
+    
+    if (proporcion >= 0.85) {
+      estadoGeneral = "normal";
+      colorEstado = "success";
+    } else if (proporcion >= 0.70) {
+      estadoGeneral = "ligeramente disminuida";
+      colorEstado = "warning";
+    } else {
+      estadoGeneral = "significativamente disminuida";
+      colorEstado = "danger";
+    }
+  }
+  
+  // Construir la interpretación clínica
+  if (mejorValor > 0 && estadoGeneral) {
+    interpretacion = `
+      <div class="alert alert-${colorEstado}">
+        <p><strong>La fuerza de prensión manual es ${estadoGeneral}</strong> en comparación con valores normativos para su edad y sexo.</p>
+    `;
+    
+    // Agregar información sobre asimetría si es relevante
+    if (valorDer > 0 && valorIzq > 0) {
+      interpretacion += `<p>`;
+      
+      if (asimetria > 10) {
+        interpretacion += `Existe una <strong>asimetría significativa</strong> (${asimetria.toFixed(1)}%) entre la fuerza de ambas manos. `;
+        
+        if (manoDominante) {
+          const ladoMasFuerte = valorDer > valorIzq ? "derecha" : "izquierda";
+          if (ladoMasFuerte !== manoDominante) {
+            interpretacion += `Curiosamente, la mano no dominante (${ladoMasFuerte}) presenta mayor fuerza que la dominante, lo que podría indicar una patología o compensación funcional. `;
+          }
+        }
+      } else {
+        interpretacion += `No existe asimetría significativa entre ambas manos (${asimetria.toFixed(1)}%), lo que indica un patrón de fuerza bilateral equilibrado. `;
+      }
+      
+      interpretacion += `</p>`;
+    }
+    
+    // Agregar información sobre el riesgo de sarcopenia si corresponde
+    if (sexo && puntosCorteSarcopenia[sexo]) {
+      if (mejorValor < puntosCorteSarcopenia[sexo]) {
+        interpretacion += `
+          <p>Los valores se encuentran por debajo del punto de corte para diagnóstico de sarcopenia 
+          (${puntosCorteSarcopenia[sexo]} kg) según los criterios EWGSOP2, lo que sugiere <strong>probable
+          sarcopenia</strong> que debería confirmarse con evaluación adicional de la masa muscular.</p>
+        `;
+      }
+    }
+    
+    // Consideraciones especiales según la edad
+    if (edad >= 60) {
+      interpretacion += `
+        <p>Considerando la edad del paciente, estos valores tienen importancia pronóstica para la 
+        funcionalidad, independencia en actividades de la vida diaria y riesgo de fragilidad.</p>
+      `;
+    }
+    
+    interpretacion += `</div>`;
+    
+    // Construir recomendaciones basadas en los hallazgos
+    recomendaciones = `<ul class="list-group">`;
+    
+    if (estadoGeneral === "significativamente disminuida" || estadoGeneral === "ligeramente disminuida") {
+      recomendaciones += `
+        <li class="list-group-item list-group-item-warning">
+          <strong>Entrenamiento de fuerza progresivo</strong>: Se recomienda programa de entrenamiento 
+          de fuerza con resistencia progresiva, 2-3 sesiones semanales, enfocado en grandes grupos musculares.
+        </li>
+        <li class="list-group-item">
+          <strong>Evaluación nutricional</strong>: Considerar evaluación del estado nutricional y 
+          consumo adecuado de proteínas (1.2-1.5g/kg/día).
+        </li>
+      `;
+      
+      if (edad >= 60) {
+        recomendaciones += `
+          <li class="list-group-item">
+            <strong>Evaluación completa de sarcopenia</strong>: Considerar evaluación complementaria de 
+            masa muscular y rendimiento físico (SPPB, velocidad de marcha).
+          </li>
+        `;
+      }
+    }
+    
+    if (asimetria > 10) {
+      recomendaciones += `
+        <li class="list-group-item list-group-item-info">
+          <strong>Entrenamiento bilateral equilibrado</strong>: Implementar ejercicios específicos para 
+          corregir la asimetría, con mayor énfasis en el lado más débil.
+        </li>
+      `;
+    }
+    
+    // Recomendaciones generales
+    recomendaciones += `
+      <li class="list-group-item">
+        <strong>Seguimiento periódico</strong>: Evaluar la fuerza de prensión cada 3-6 meses para 
+        monitorear cambios y respuesta al tratamiento.
+      </li>
+    `;
+    
+    recomendaciones += `</ul>`;
+  } else {
+    interpretacion = `<div class="alert alert-secondary">Complete la evaluación con dinamometría para obtener interpretación clínica.</div>`;
+    recomendaciones = `<div class="alert alert-secondary">Complete la evaluación para obtener recomendaciones específicas.</div>`;
+  }
+  
+  // Actualizar la interfaz
+  document.getElementById('interpretacion-dinamometria-texto').innerHTML = interpretacion;
+  document.getElementById('recomendaciones-dinamometria-texto').innerHTML = recomendaciones;
+  
+  // Actualizar el badge general
+  const dinamometriaBadge = document.getElementById('dinamometria-badge');
+  if (mejorValor > 0) {
+    dinamometriaBadge.textContent = `${estadoGeneral.charAt(0).toUpperCase() + estadoGeneral.slice(1)}`;
+    dinamometriaBadge.className = `resultado-badge badge bg-${colorEstado}`;
+  }
+}
+
+/**
+ * Crea un gráfico comparativo para los valores de handgrip
+ */
+function crearGraficoHandgrip(valorDer, valorIzq, valorNormativo) {
+  const contenedor = document.getElementById('handgrip_grafico');
+  
+  // Limpiar contenedor
+  contenedor.innerHTML = '';
+  
+  // Si no hay valores suficientes, mostrar mensaje
+  if (valorDer <= 0 && valorIzq <= 0 || valorNormativo <= 0) {
+    contenedor.innerHTML = '<div class="text-center text-muted">Complete los datos para generar el gráfico comparativo</div>';
+    return;
+  }
+  
+  // Crear el gráfico simple usando divs con altura proporcional
+  const maxValor = Math.max(valorDer, valorIzq, valorNormativo);
+  const escala = 180 / maxValor; // 180px es la altura máxima que queremos para las barras
+  
+  const html = `
+    <div class="d-flex justify-content-around align-items-end h-100">
+      <div class="d-flex flex-column align-items-center">
+        <div class="bg-primary" style="width: 40px; height: ${valorDer * escala}px;"></div>
+        <div class="mt-2">Der: ${valorDer.toFixed(1)}</div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <div class="bg-info" style="width: 40px; height: ${valorIzq * escala}px;"></div>
+        <div class="mt-2">Izq: ${valorIzq.toFixed(1)}</div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <div class="bg-secondary" style="width: 40px; height: ${valorNormativo * escala}px;"></div>
+        <div class="mt-2">Ref: ${valorNormativo.toFixed(1)}</div>
+      </div>
+    </div>
+  `;
+  
+  contenedor.innerHTML = html;
+}
+
+/**
+ * Función para agregar otra dinamometría personalizada
+ */
+function agregarDinamometria() {
+  const container = document.getElementById('otras_dinamometrias_container');
+  const numDinamometria = container.children.length + 1;
+  
+  const nuevaDinamometria = document.createElement('div');
+  nuevaDinamometria.className = 'form-row mb-4 border-bottom pb-4';
+  nuevaDinamometria.innerHTML = `
+    <div class="form-col form-col-md-12 mb-3">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Nombre de la dinamometría" 
+               id="otra_dinamometria_nombre_${numDinamometria}">
+        <div class="input-group-append">
+          <button class="btn btn-outline-danger" type="button" 
+                  onclick="eliminarDinamometria(this.parentNode.parentNode.parentNode.parentNode)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-col form-col-md-3">
+      <div class="form-group">
+        <label>Lado derecho (kg)</label>
+        <input type="number" class="form-control" min="0" max="200" step="0.1" 
+               id="otra_dinamometria_der_${numDinamometria}">
+      </div>
+    </div>
+    <div class="form-col form-col-md-3">
+      <div class="form-group">
+        <label>Lado izquierdo (kg)</label>
+        <input type="number" class="form-control" min="0" max="200" step="0.1" 
+               id="otra_dinamometria_izq_${numDinamometria}">
+      </div>
+    </div>
+    <div class="form-col form-col-md-6">
+      <div class="form-group">
+        <label>Observaciones</label>
+        <textarea class="form-control" rows="1" id="otra_dinamometria_obs_${numDinamometria}"></textarea>
+      </div>
+    </div>
+  `;
+  
+  container.appendChild(nuevaDinamometria);
+}
+
+/**
+ * Función para eliminar una dinamometría personalizada
+ */
+function eliminarDinamometria(elemento) {
+  elemento.remove();
+}
