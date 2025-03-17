@@ -16247,145 +16247,221 @@
 <!-- Tercer acordeón -->
 <!-- Cuarto acordeón -->
   <!-- Evaluación con Dinamometría -->
-  <div class="cuestionario-item">
-    <div class="cuestionario-header" onclick="toggleCuestionario('dinamometria-content')">
-      <h4><i class="fas fa-plus-circle"></i> Evaluación con Dinamometría</h4>
-      <div class="resultado-badge" id="dinamometria-badge">No completado</div>
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('dinamometria-content')">
+    <h4><i class="fas fa-plus-circle"></i> Evaluación con Dinamometría</h4>
+    <div class="resultado-badge" id="dinamometria-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="dinamometria-content" style="display: none;">
+    <p class="mb-3">Registre los resultados de la evaluación objetiva con dinamómetro. Compare los resultados con valores normativos y entre lados.</p>
+    
+    <!-- Datos demográficos para normativos -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Datos para interpretación</h5>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-col form-col-md-3">
+            <div class="form-group">
+              <label for="dinamometria_edad" class="form-label">Edad (años)</label>
+              <input type="number" id="dinamometria_edad" name="dinamometria_edad" class="form-control" min="18" max="100" onchange="actualizarValoresNormativos()">
+            </div>
+          </div>
+          <div class="form-col form-col-md-3">
+            <div class="form-group">
+              <label for="dinamometria_sexo" class="form-label">Sexo</label>
+              <select id="dinamometria_sexo" name="dinamometria_sexo" class="form-control" onchange="actualizarValoresNormativos()">
+                <option value="">Seleccionar...</option>
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-col form-col-md-3">
+            <div class="form-group">
+              <label for="dinamometria_peso" class="form-label">Peso (kg)</label>
+              <input type="number" id="dinamometria_peso" name="dinamometria_peso" class="form-control" min="30" max="200" step="0.1" onchange="actualizarValoresNormativos()">
+            </div>
+          </div>
+          <div class="form-col form-col-md-3">
+            <div class="form-group">
+              <label for="mano_dominante" class="form-label">Mano dominante</label>
+              <select id="mano_dominante" name="mano_dominante" class="form-control" onchange="actualizarValoresNormativos()">
+                <option value="">Seleccionar...</option>
+                <option value="derecha">Derecha</option>
+                <option value="izquierda">Izquierda</option>
+                <option value="ambidiestro">Ambidiestro</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="cuestionario-content" id="dinamometria-content" style="display: none;">
-      <p class="mb-3">Registre los resultados de la evaluación objetiva con dinamómetro. Compare los resultados con valores normativos y entre lados.</p>
-      
-      <!-- Dinamometría de Prensión Manual -->
-      <div class="card mb-4">
-        <div class="card-header bg-light">
-          <h5 class="mb-0">Dinamometría de Prensión Manual (Handgrip)</h5>
-        </div>
-        <div class="card-body">
-          <div class="form-row mb-4">
-            <div class="form-col form-col-md-3">
-              <div class="form-group">
-                <label for="dinamometria_mano_der" class="form-label">Mano derecha (kg)</label>
-                <input type="number" id="dinamometria_mano_der" name="dinamometria_mano_der" class="form-control" min="0" max="150" step="0.1" onchange="evaluarDinamometria('mano')">
-              </div>
-            </div>
-            <div class="form-col form-col-md-3">
-              <div class="form-group">
-                <label for="dinamometria_mano_izq" class="form-label">Mano izquierda (kg)</label>
-                <input type="number" id="dinamometria_mano_izq" name="dinamometria_mano_izq" class="form-control" min="0" max="150" step="0.1" onchange="evaluarDinamometria('mano')">
-              </div>
-            </div>
-            <div class="form-col form-col-md-3">
-              <div class="form-group">
-                <label for="dinamometria_mano_dif" class="form-label">Diferencia (%)</label>
-                <input type="text" id="dinamometria_mano_dif" class="form-control" readonly>
-              </div>
-            </div>
-            <div class="form-col form-col-md-3">
-              <div class="form-group">
-                <label for="dinamometria_mano_estado" class="form-label">Estado</label>
-                <div id="dinamometria_mano_estado" class="alert alert-secondary">Pendiente</div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="form-col form-col-md-12">
-              <div class="form-group">
-                <label for="dinamometria_mano_obs" class="form-label">Observaciones</label>
-                <textarea id="dinamometria_mano_obs" name="dinamometria_mano_obs" class="form-control" rows="2"></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
+    
+    <!-- Dinamometría de Prensión Manual -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Dinamometría de Prensión Manual (Handgrip)</h5>
       </div>
-      
-      <!-- Dinamometría de Pinza -->
-      <div class="card mb-4">
-        <div class="card-header bg-light">
-          <h5 class="mb-0">Dinamometría de Pinza</h5>
+      <div class="card-body">
+        <!-- Tabla de intentos -->
+        <div class="table-responsive mb-4">
+          <table class="table table-bordered">
+            <thead class="bg-light">
+              <tr>
+                <th>Intento</th>
+                <th>Mano derecha (kg)</th>
+                <th>Mano izquierda (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td><input type="number" id="handgrip_der_1" class="form-control" min="0" max="150" step="0.1" onchange="calcularHandgrip()"></td>
+                <td><input type="number" id="handgrip_izq_1" class="form-control" min="0" max="150" step="0.1" onchange="calcularHandgrip()"></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td><input type="number" id="handgrip_der_2" class="form-control" min="0" max="150" step="0.1" onchange="calcularHandgrip()"></td>
+                <td><input type="number" id="handgrip_izq_2" class="form-control" min="0" max="150" step="0.1" onchange="calcularHandgrip()"></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td><input type="number" id="handgrip_der_3" class="form-control" min="0" max="150" step="0.1" onchange="calcularHandgrip()"></td>
+                <td><input type="number" id="handgrip_izq_3" class="form-control" min="0" max="150" step="0.1" onchange="calcularHandgrip()"></td>
+              </tr>
+              <tr class="bg-light">
+                <td><strong>Promedio</strong></td>
+                <td><input type="text" id="handgrip_der_promedio" class="form-control" readonly></td>
+                <td><input type="text" id="handgrip_izq_promedio" class="form-control" readonly></td>
+              </tr>
+              <tr class="bg-light">
+                <td><strong>Mejor intento</strong></td>
+                <td><input type="text" id="handgrip_der_mejor" class="form-control" readonly></td>
+                <td><input type="text" id="handgrip_izq_mejor" class="form-control" readonly></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="card-body">
-          <div class="form-row mb-4">
-            <div class="form-col form-col-md-3">
-              <div class="form-group">
-                <label for="dinamometria_pinza_der" class="form-label">Mano derecha (kg)</label>
-                <input type="number" id="dinamometria_pinza_der" name="dinamometria_pinza_der" class="form-control" min="0" max="50" step="0.1" onchange="evaluarDinamometria('pinza')">
-              </div>
-            </div>
-            <div class="form-col form-col-md-3">
-              <div class="form-group">
-                <label for="dinamometria_pinza_izq" class="form-label">Mano izquierda (kg)</label>
-                <input type="number" id="dinamometria_pinza_izq" name="dinamometria_pinza_izq" class="form-control" min="0" max="50" step="0.1" onchange="evaluarDinamometria('pinza')">
-              </div>
-            </div>
-            <div class="form-col form-col-md-3">
-              <div class="form-group">
-                <label for="dinamometria_pinza_dif" class="form-label">Diferencia (%)</label>
-                <input type="text" id="dinamometria_pinza_dif" class="form-control" readonly>
-              </div>
-            </div>
-            <div class="form-col form-col-md-3">
-              <div class="form-group">
-                <label for="dinamometria_pinza_estado" class="form-label">Estado</label>
-                <div id="dinamometria_pinza_estado" class="alert alert-secondary">Pendiente</div>
-              </div>
+        
+        <!-- Configuración de análisis -->
+        <div class="form-row mb-4">
+          <div class="form-col form-col-md-6">
+            <div class="form-group">
+              <label for="handgrip_valor_analisis" class="form-label">Valor para análisis</label>
+              <select id="handgrip_valor_analisis" class="form-control" onchange="calcularHandgrip()">
+                <option value="mejor">Mejor intento</option>
+                <option value="promedio">Promedio de intentos</option>
+              </select>
             </div>
           </div>
-          
-          <div class="form-row">
-            <div class="form-col form-col-md-12">
-              <div class="form-group">
-                <label for="dinamometria_pinza_obs" class="form-label">Observaciones</label>
-                <textarea id="dinamometria_pinza_obs" name="dinamometria_pinza_obs" class="form-control" rows="2"></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Otras Dinamometrías -->
-      <div class="card mb-4">
-        <div class="card-header bg-light">
-          <h5 class="mb-0">Otras Dinamometrías</h5>
-        </div>
-        <div class="card-body">
-          <div id="otras_dinamometrias_container">
-            <!-- Las dinamometrías adicionales se agregarán aquí -->
-          </div>
-          
-          <div class="form-row mt-3">
-            <div class="form-col form-col-md-12">
-              <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarDinamometria()">
-                <i class="fas fa-plus"></i> Agregar Otra Dinamometría
+          <div class="form-col form-col-md-6">
+            <div class="form-group mt-4">
+              <button type="button" class="btn btn-primary" onclick="calcularHandgrip(true)">
+                <i class="fas fa-calculator"></i> Recalcular
               </button>
             </div>
           </div>
         </div>
-      </div>
-      
-      <!-- Interpretación de hallazgos en dinamometría -->
-      <div class="card mt-4 mb-4">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0">Interpretación y Recomendaciones</h5>
-        </div>
-        <div class="card-body">
-          <div id="interpretacion_dinamometria" class="mb-3">
-            <h6>Interpretación Clínica:</h6>
-            <div id="interpretacion-dinamometria-texto">
-              Complete la evaluación con dinamometría para obtener recomendaciones clínicas.
+        
+        <!-- Resultados del análisis -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header bg-light">
+                <h6 class="mb-0">Resultados del análisis</h6>
+              </div>
+              <div class="card-body">
+                <table class="table table-sm">
+                  <tbody>
+                    <tr>
+                      <td>Valor normativo (edad/sexo)</td>
+                      <td><span id="handgrip_valor_normativo">-</span> kg</td>
+                    </tr>
+                    <tr>
+                      <td>Índice de asimetría bilateral</td>
+                      <td><span id="handgrip_asimetria">-</span>%</td>
+                    </tr>
+                    <tr>
+                      <td>Fuerza normalizada por peso</td>
+                      <td><span id="handgrip_normalizado">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>Percentil poblacional</td>
+                      <td><span id="handgrip_percentil">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>Riesgo de sarcopenia</td>
+                      <td><span id="handgrip_sarcopenia" class="badge">-</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-          
-          <div id="recomendaciones_dinamometria" class="mb-3">
-            <h6>Recomendaciones para el Plan de Tratamiento:</h6>
-            <div id="recomendaciones-dinamometria-texto">
-              Complete la evaluación para obtener recomendaciones específicas.
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-header bg-light">
+                <h6 class="mb-0">Comparación con valores normativos</h6>
+              </div>
+              <div class="card-body d-flex align-items-center justify-content-center">
+                <div id="handgrip_grafico" style="width: 100%; height: 200px;">
+                  <!-- Aquí se generará el gráfico con JavaScript -->
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+        
+        <!-- Observaciones -->
+        <div class="form-row">
+          <div class="form-col form-col-md-12">
+            <div class="form-group">
+              <label for="handgrip_observaciones" class="form-label">Observaciones</label>
+              <textarea id="handgrip_observaciones" name="handgrip_observaciones" class="form-control" rows="2"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- El resto de tu código para pinza y otras dinamometrías puede mantenerse igual -->
+    
+    <!-- Interpretación clínica mejorada -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Interpretación y Recomendaciones</h5>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion_dinamometria" class="mb-4">
+          <h6>Interpretación Clínica:</h6>
+          <div id="interpretacion-dinamometria-texto" class="p-3 border rounded">
+            Complete la evaluación con dinamometría para obtener interpretación clínica.
+          </div>
+        </div>
+        
+        <div id="recomendaciones_dinamometria" class="mb-3">
+          <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+          <div id="recomendaciones-dinamometria-texto" class="p-3 border rounded">
+            Complete la evaluación para obtener recomendaciones específicas.
+          </div>
+        </div>
+        
+        <div id="referencias_dinamometria" class="mb-3">
+          <h6>Referencias científicas:</h6>
+          <div id="referencias-dinamometria-texto" class="p-3 border rounded text-muted small">
+            <ul>
+              <li>Dodds RM, et al. Grip strength across the life course: normative data from twelve British studies. PLoS One. 2014;9(12):e113637.</li>
+              <li>Bohannon RW. Muscle strength: clinical and prognostic value of hand-grip dynamometry. Curr Opin Clin Nutr Metab Care. 2015;18(5):465-70.</li>
+              <li>Cruz-Jentoft AJ, et al. Sarcopenia: revised European consensus on definition and diagnosis. Age Ageing. 2019;48(1):16-31.</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
   <!-- Calculadora de RM y Prescripción -->
   <div class="cuestionario-item">
