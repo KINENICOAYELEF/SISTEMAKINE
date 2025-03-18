@@ -16649,33 +16649,19 @@
   <div class="cuestionario-content" id="fuerza-funcional-content" style="display: none;">
     <p class="mb-3">Evalúe la fuerza en contextos funcionales relacionados con actividades de la vida diaria, laborales o deportivas.</p>
     
-    <!-- Navegación de pestañas -->
-    <ul class="nav nav-tabs mb-3" id="fuerzaFuncionalTabs" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="tests-estandar-tab" data-toggle="tab" href="#tests-estandar" role="tab">Tests Estándar</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="tests-resistencia-tab" data-toggle="tab" href="#tests-resistencia" role="tab">Resistencia Muscular</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="tests-deportivos-tab" data-toggle="tab" href="#tests-deportivos" role="tab">Reintegro Deportivo</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="tests-adulto-mayor-tab" data-toggle="tab" href="#tests-adulto-mayor" role="tab">Adulto Mayor</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="riesgo-lesion-tab" data-toggle="tab" href="#riesgo-lesion" role="tab">Riesgo de Lesión</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="tareas-especificas-tab" data-toggle="tab" href="#tareas-especificas" role="tab">Tareas Específicas</a>
-      </li>
-    </ul>
-    
-    <!-- Contenido de pestañas -->
-    <div class="tab-content" id="fuerzaFuncionalTabContent">
+    <!-- Sistema de Pestañas Personalizado -->
+    <div class="custom-tabs">
+      <div class="tab-buttons">
+        <button class="tab-button active" onclick="openFuerzaTab(event, 'tab-tests-estandar')">Tests Estándar</button>
+        <button class="tab-button" onclick="openFuerzaTab(event, 'tab-resistencia-muscular')">Resistencia Muscular</button>
+        <button class="tab-button" onclick="openFuerzaTab(event, 'tab-reintegro-deportivo')">Reintegro Deportivo</button>
+        <button class="tab-button" onclick="openFuerzaTab(event, 'tab-adulto-mayor')">Adulto Mayor</button>
+        <button class="tab-button" onclick="openFuerzaTab(event, 'tab-riesgo-lesion')">Riesgo de Lesión</button>
+        <button class="tab-button" onclick="openFuerzaTab(event, 'tab-tareas-especificas')">Tareas Específicas</button>
+      </div>
       
       <!-- 1. Tests Funcionales Estándar -->
-      <div class="tab-pane fade show active" id="tests-estandar" role="tabpanel">
+      <div id="tab-tests-estandar" class="tab-content" style="display: block;">
         <div class="card mb-4">
           <div class="card-header bg-light">
             <h5 class="mb-0">Tests Funcionales Estándar</h5>
@@ -16787,7 +16773,7 @@
       </div>
       
       <!-- 2. Tests de Resistencia Muscular -->
-      <div class="tab-pane fade" id="tests-resistencia" role="tabpanel">
+      <div id="tab-resistencia-muscular" class="tab-content">
         <div class="card mb-4">
           <div class="card-header bg-light">
             <h5 class="mb-0">Tests de Resistencia Muscular</h5>
@@ -16957,7 +16943,7 @@
       </div>
       
       <!-- 3. Tests Reintegro Deportivo -->
-      <div class="tab-pane fade" id="tests-deportivos" role="tabpanel">
+      <div id="tab-reintegro-deportivo" class="tab-content">
         <div class="card mb-4">
           <div class="card-header bg-light">
             <h5 class="mb-0">Tests para Reintegro Deportivo</h5>
@@ -17099,7 +17085,7 @@
       </div>
       
       <!-- 4. Tests Adulto Mayor -->
-      <div class="tab-pane fade" id="tests-adulto-mayor" role="tabpanel">
+      <div id="tab-adulto-mayor" class="tab-content">
         <div class="card mb-4">
           <div class="card-header bg-light">
             <h5 class="mb-0">Tests para Adulto Mayor</h5>
@@ -17236,7 +17222,7 @@
       </div>
       
       <!-- 5. Tests de Riesgo de Lesión -->
-      <div class="tab-pane fade" id="riesgo-lesion" role="tabpanel">
+      <div id="tab-riesgo-lesion" class="tab-content">
         <div class="card mb-4">
           <div class="card-header bg-light">
             <h5 class="mb-0">Evaluación de Riesgo de Lesión</h5>
@@ -17417,7 +17403,7 @@
       </div>
       
       <!-- 6. Tareas Específicas del Paciente -->
-      <div class="tab-pane fade" id="tareas-especificas" role="tabpanel">
+      <div id="tab-tareas-especificas" class="tab-content">
         <div class="card mb-4">
           <div class="card-header bg-light">
             <h5 class="mb-0">Tareas Específicas del Paciente</h5>
@@ -17500,6 +17486,42 @@
     <button type="button" class="btn btn-primary next-tab" data-next="escalas">Siguiente <i class="fas fa-arrow-right"></i></button>
   </div>
 </div>
+
+<!-- Estilos específicos para la navegación por pestañas personalizada -->
+<style>
+.custom-tabs .tab-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-tabs .tab-button {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 5px 5px 0 0;
+  transition: all 0.3s ease;
+}
+
+.custom-tabs .tab-button:hover {
+  background-color: #e9ecef;
+}
+
+.custom-tabs .tab-button.active {
+  background-color: #7E3FF2;
+  color: white;
+  border-color: #7E3FF2;
+}
+
+.custom-tabs .tab-content {
+  display: none;
+  padding: 0;
+}
+</style>
 
 <!-- 7. Escalas -->
 <div class="tab-content" id="escalas">
