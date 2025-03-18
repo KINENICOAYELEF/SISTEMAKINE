@@ -677,11 +677,10 @@ function guardarRM() {
   // Determinar qué método está siendo utilizado
   let ejercicioNombre, peso, valor, metodo, valor1RM;
   
-  // Pestaña activa
-  const pestanaActiva = document.querySelector('.tab-pane.active');
-  const idPestana = pestanaActiva.id;
+  // Pestaña activa - usamos Bootstrap
+  const pestanaActivaId = document.querySelector('.tab-pane.show.active').id;
   
-  if (idPestana === 'reps-content') {
+  if (pestanaActivaId === 'reps-content') {
     const ejercicio = document.getElementById('rm_ejercicio').value;
     const ejercicioOtro = document.getElementById('rm_ejercicio_otro').value;
     ejercicioNombre = ejercicio === 'Otro' ? ejercicioOtro : ejercicio;
@@ -706,7 +705,7 @@ function guardarRM() {
       valor1RM = formulas1RM[formula](peso, repeticiones);
     }
   } 
-  else if (idPestana === 'rpe-content') {
+  else if (pestanaActivaId === 'rpe-content') {
     const ejercicio = document.getElementById('rpe_ejercicio').value;
     const ejercicioOtro = document.getElementById('rpe_ejercicio_otro') ? document.getElementById('rpe_ejercicio_otro').value : '';
     ejercicioNombre = ejercicio === 'Otro' ? ejercicioOtro : ejercicio;
@@ -728,7 +727,7 @@ function guardarRM() {
     const rmText = document.getElementById('valor_1rm').textContent;
     valor1RM = parseFloat(rmText.replace(' kg', ''));
   }
-  else if (idPestana === 'rir-content') {
+  else if (pestanaActivaId === 'rir-content') {
     const ejercicio = document.getElementById('rir_ejercicio').value;
     const ejercicioOtro = document.getElementById('rir_ejercicio_otro') ? document.getElementById('rir_ejercicio_otro').value : '';
     ejercicioNombre = ejercicio === 'Otro' ? ejercicioOtro : ejercicio;
@@ -855,52 +854,144 @@ function eliminarRegistroRM(id) {
 }
 
 /**
- * Manejador para mostrar/ocultar el campo de "otro ejercicio"
- */
-function manejarCambioEjercicio(selectId, otroId) {
-  const ejercicio = document.getElementById(selectId);
-  const otroEjercicio = document.getElementById(otroId);
-  
-  if (ejercicio && otroEjercicio) {
-    if (ejercicio.value === 'Otro') {
-      otroEjercicio.style.display = 'block';
-    } else {
-      otroEjercicio.style.display = 'none';
-    }
-  }
-}
-
-/**
- * Inicialización de la calculadora
+ * Inicialización de la calculadora y manejo de eventos para los selectores de ejercicio
  */
 document.addEventListener('DOMContentLoaded', function() {
   console.log('Inicializando calculadora RM...');
   
-  // Configurar eventos para campos de ejercicio
-  document.getElementById('rm_ejercicio').addEventListener('change', function() {
-    manejarCambioEjercicio('rm_ejercicio', 'rm_ejercicio_otro');
-  });
+  // Configurar eventos para los selectores de ejercicio
+  inicializarSelectorEjercicio('rm_ejercicio', 'rm_ejercicio_otro');
+  inicializarSelectorEjercicio('rpe_ejercicio', 'rpe_ejercicio_otro');
+  inicializarSelectorEjercicio('rir_ejercicio', 'rir_ejercicio_otro');
   
-  if (document.getElementById('rpe_ejercicio')) {
-    document.getElementById('rpe_ejercicio').addEventListener('change', function() {
-      manejarCambioEjercicio('rpe_ejercicio', 'rpe_ejercicio_otro');
+  // Inicializar eventos de las pestañas Tab usando el Bootstrap JS
+  // Esto está incluido en caso de que Bootstrap no maneje correctamente las pestañas
+
+  // Verificar si jQuery está disponible para inicializar las pestañas
+  if (typeof $ !== 'undefined') {
+    $('#rm-tabs a').on('click', function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+  } else {
+    // Inicialización manual si jQuery no está disponible
+    document.querySelectorAll('#rm-tabs .nav-link').forEach(tab => {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        activarPestana(this.getAttribute('data-bs-target'));
+      });
     });
   }
-  
-  if (document.getElementById('rir_ejercicio')) {
-    document.getElementById('rir_ejercicio').addEventListener('change', function() {
-      manejarCambioEjercicio('rir_ejercicio', 'rir_ejercicio_otro');
-    });
-  }
-  
-  // Inicializar estados
-  manejarCambioEjercicio('rm_ejercicio', 'rm_ejercicio_otro');
-  if (document.getElementById('rpe_ejercicio')) {
-    manejarCambioEjercicio('rpe_ejercicio', 'rpe_ejercicio_otro');
-  }
-  if (document.getElementById('rir_ejercicio')) {
-    manejarCambioEjercicio('rir_ejercicio', 'rir_ejercicio_otro');
-  }
-  
+
   console.log('Calculadora RM inicializada correctamente.');
 });
+
+/**
+ * Inicializa los eventos para el selector de ejercicio y su campo "otro"
+ */
+function inicializarSelectorEjercicio(selectorId, otroId) {
+  const selector = document.getElementById(selectorId);
+  const otroInput = document.getElementById(otroId);
+  
+  if (selector && otroInput) {
+    // Configurar estado inicial
+    if (selector.value === 'Otro') {
+      otroInput.style.display = 'block';
+    } else {
+      otroInput.style.display = 'none';
+    }
+    
+    // Configurar evento de cambio
+    selector.addEventListener('change', function() {
+      if (this.value === 'Otro') {
+        otroInput.style.display = 'block';
+      } else {
+        otroInput.style.display = 'none';
+      }
+    });
+  }
+}
+
+/**
+ * Manejo manual de pestañas si Bootstrap no está funcionando correctamente
+ */
+function activarPestana(targetId) {
+  // Quitar las clases activas de todas las pestañas
+  document.querySelectorAll('#rm-tabs .nav-link').forEach(tab => {
+    tab.classList.remove('active');
+    tab.setAttribute('aria-selected', 'false');
+  });
+  
+  // Quitar las clases activas de todos los paneles de contenido
+  document.querySelectorAll('.tab-pane').forEach(pane => {
+    pane.classList.remove('show');
+    pane.classList.remove('active');
+  });
+  
+  // Activar la pestaña seleccionada
+  const selectedTab = document.querySelector(`[data-bs-target="${targetId}"]`);
+  if (selectedTab) {
+    selectedTab.classList.add('active');
+    selectedTab.setAttribute('aria-selected', 'true');
+  }
+  
+  // Mostrar el panel de contenido seleccionado
+  const contentPane = document.querySelector(targetId);
+  if (contentPane) {
+    contentPane.classList.add('show');
+    contentPane.classList.add('active');
+  }
+}
+
+/**
+ * Añadir algunos estilos CSS para mejorar el contraste y la legibilidad
+ */
+(function() {
+  const style = document.createElement('style');
+  style.textContent = `
+    /* Mejorar el contraste y la legibilidad */
+    .cuestionario-header {
+      background-color: #6f42c1 !important;
+      color: white !important;
+    }
+    
+    .nav-tabs .nav-link {
+      color: #495057 !important;
+      font-weight: 500 !important;
+    }
+    
+    .nav-tabs .nav-link.active {
+      color: #6f42c1 !important;
+      font-weight: 600 !important;
+      border-bottom: 2px solid #6f42c1 !important;
+    }
+    
+    .btn-primary {
+      background-color: #6f42c1 !important;
+      border-color: #6f42c1 !important;
+    }
+    
+    .btn-primary:hover {
+      background-color: #5e35b1 !important;
+      border-color: #5e35b1 !important;
+    }
+    
+    .resultado-badge {
+      padding: 6px 10px !important;
+      border-radius: 20px !important;
+      font-weight: 500 !important;
+    }
+    
+    .form-label {
+      font-weight: 500 !important;
+      color: #333 !important;
+    }
+    
+    /* Resaltar las tablas de objetivos */
+    .table-danger { background-color: #f8d7da !important; }
+    .table-warning { background-color: #fff3cd !important; }
+    .table-success { background-color: #d4edda !important; }
+    .table-primary { background-color: #cce5ff !important; }
+  `;
+  document.head.appendChild(style);
+})();
