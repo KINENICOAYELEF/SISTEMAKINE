@@ -173,77 +173,6 @@ const frecuenciaEntrenamiento = {
   "Avanzado": "3-6 sesiones por semana"
 };
 
-// Recomendaciones de progresión según nivel (adaptado directamente de NSCA, capítulo 15)
-const recomendacionesProgresion = {
-  "Principiante": {
-    // Datos basados en la clasificación NSCA (pág. 396, tabla 15.1)
-    experiencia: "Menos de 2 meses de entrenamiento regular",
-    frecuencia: "2-3 días por semana (cuerpo completo)",
-    // Datos de incremento de cargas basados en pág. 410, tabla 15.7
-    incrementoAbsoluto: {
-      upper: {
-        core: "2.5-5 lb (1-2 kg)",
-        assistance: "1.25-2.5 lb (0.5-1 kg)"
-      },
-      lower: {
-        core: "10-15 lb (4-7 kg)",
-        assistance: "5-10 lb (2-4 kg)"
-      }
-    },
-    incrementoRelativo: {
-      upper: {
-        core: "2.5%",
-        assistance: "1-2%"
-      },
-      lower: {
-        core: "5%",
-        assistance: "2.5-5%"
-      }
-    },
-    consideraciones: "Enfoque en la técnica correcta, aprender patrones básicos de movimiento. Use la regla 2-for-2 para progresión."
-  },
-  "Intermedio": {
-    // Datos basados en la clasificación NSCA (pág. 396, tabla 15.1)
-    experiencia: "De 2 meses a 1 año de entrenamiento regular",
-    frecuencia: "3-4 días por semana (cuerpo completo o rutina dividida)",
-    // Datos de incremento de cargas basados en pág. 410, tabla 15.7
-    incrementoAbsoluto: {
-      upper: {
-        core: "5-10+ lb (2-4+ kg)",
-        assistance: "5-10 lb (2-4 kg)"
-      },
-      lower: {
-        core: "15-20+ lb (7-9+ kg)",
-        assistance: "10-15 lb (4-7 kg)"
-      }
-    },
-    incrementoRelativo: {
-      upper: {
-        core: "2.5-5+%",
-        assistance: "2.5-5%"
-      },
-      lower: {
-        core: "5-10+%",
-        assistance: "5-10%"
-      }
-    },
-    consideraciones: "Implementar rutinas divididas, variar volumen e intensidad. Seguir la regla 2-for-2 para progresión."
-  },
-  "Avanzado": {
-    // Datos basados en la clasificación NSCA (pág. 396, tabla 15.1)
-    experiencia: "Más de 1 año de entrenamiento regular",
-    frecuencia: "3-6 días por semana (generalmente rutina dividida)",
-    // El PDF no especifica incrementos absolutos para avanzados, pero menciona menores incrementos
-    consideraciones: "Usar periodización compleja, variación planificada, mayor especificidad. Implementar ciclos de carga-descarga con ratio 3:1 o 2:1."
-  }
-};
-
-// Ajustes de cargas usando la regla 2-for-2 (pág. 411, tabla 15.8)
-const regla2For2 = {
-  descripcion: "Incrementar el peso cuando el cliente pueda realizar 2 repeticiones más que el objetivo en 2 sesiones consecutivas",
-  ejemplo: "Si el objetivo es 10 repeticiones y el cliente realiza 12 repeticiones en dos sesiones consecutivas, incrementar el peso para la siguiente sesión"
-};
-
 // Historial de RM
 let historialRM = [];
 
@@ -534,22 +463,15 @@ function generarRecomendaciones(rm, ejercicio, pesoActual, repeticionesActuales,
     nivelNormalizado = "Avanzado";
   }
   
-  // Si se usó RPE o RIR, estimar nivel basado en eso también
-  if (metodo === 'rpe' || metodo === 'rir') {
-    // Los usuarios de RPE/RIR suelen ser al menos de nivel intermedio
-    if (nivelNormalizado === 'Principiante') {
-      nivelNormalizado = 'Intermedio';
-    }
-  }
-  
   // Recomendaciones específicas de incremento basadas en NSCA (tabla 15.7, pág. 410)
-  const recomendacionIncremento = recomendacionesProgresion[nivelNormalizado].incrementoAbsoluto ?
-    recomendacionesProgresion[nivelNormalizado].incrementoAbsoluto[grupoMuscular][tipoEjercicio] :
-    "Incrementos personalizados basados en adaptación";
-  
-  const recomendacionIncrementoPorcentaje = recomendacionesProgresion[nivelNormalizado].incrementoRelativo ?
-    recomendacionesProgresion[nivelNormalizado].incrementoRelativo[grupoMuscular][tipoEjercicio] :
-    "Incrementos pequeños (1-2.5%)";
+  const recomendacionIncremento = 
+    nivelNormalizado === "Avanzado" ? 
+    "Incrementos personalizados basados en adaptación" :
+    (recomendacionesProgresion[nivelNormalizado] && 
+     recomendacionesProgresion[nivelNormalizado].incrementoAbsoluto && 
+     recomendacionesProgresion[nivelNormalizado].incrementoAbsoluto[grupoMuscular] && 
+     recomendacionesProgresion[nivelNormalizado].incrementoAbsoluto[grupoMuscular][tipoEjercicio]) || 
+    "Siga la regla 2-for-2";
   
   // Generar HTML con recomendaciones
   let recomendacionesHTML = `
@@ -569,16 +491,13 @@ function generarRecomendaciones(rm, ejercicio, pesoActual, repeticionesActuales,
         <h6>Recomendaciones de Entrenamiento (NSCA)</h6>
         <ul class="list-group mb-3">
           <li class="list-group-item">
-            <strong>Frecuencia:</strong> ${frecuenciaEntrenamiento[nivel === "Principiante" ? "Novato o principiante" : nivelNormalizado]}
+            <strong>Frecuencia:</strong> ${frecuenciaEntrenamiento[nivel === "Principiante" ? "Novato o principiante" : nivelNormalizado] || "2-3 sesiones por semana"}
           </li>
           <li class="list-group-item">
-            <strong>Incremento de Carga Recomendado:</strong> ${recomendacionIncremento} (${recomendacionIncrementoPorcentaje} del peso actual)
+            <strong>Incremento de Carga Recomendado:</strong> ${recomendacionIncremento}
           </li>
           <li class="list-group-item">
             <strong>Progresión:</strong> Siga la regla 2-for-2: Aumente el peso cuando pueda realizar 2 repeticiones más que el objetivo en 2 sesiones consecutivas.
-          </li>
-          <li class="list-group-item">
-            <strong>Consideraciones:</strong> ${recomendacionesProgresion[nivelNormalizado].consideraciones}
           </li>
         </ul>
   `;
@@ -591,11 +510,9 @@ function generarRecomendaciones(rm, ejercicio, pesoActual, repeticionesActuales,
         <p>Este es un ejercicio multiarticular principal. Según la NSCA, estos ejercicios son más efectivos para el desarrollo general porque reclutan grandes músculos mientras activan sinergistas.</p>
         <p>Para seguir las recomendaciones de la NSCA:</p>
         <ul>
-          <li>Coloque este ejercicio al inicio de su rutina cuando hay menos fatiga (pág. 402)</li>
+          <li>Coloque este ejercicio al inicio de su rutina cuando hay menos fatiga</li>
           <li>Utilice un volumen adecuado: ${objetivosEntrenamiento["Fuerza máxima"].series} series para desarrollo de fuerza</li>
           <li>Descanso entre series: ${objetivosEntrenamiento["Fuerza máxima"].descanso} para ejercicios de fuerza máxima</li>
-          <li>Orden de ejercicios recomendado: Potencia → Core → Asistencia (pág. 402, Tabla 15.3)</li>
-          ${grupoMuscular === "lower" ? '<li>Para entrenamiento dividido (split), coordine los días de entrenamiento para permitir recuperación adecuada</li>' : '<li>Permita al menos 48 horas de recuperación antes de entrenar el mismo grupo muscular nuevamente</li>'}
         </ul>
       </div>
     `;
@@ -603,14 +520,12 @@ function generarRecomendaciones(rm, ejercicio, pesoActual, repeticionesActuales,
     recomendacionesHTML += `
       <div class="alert alert-warning">
         <h6><i class="fas fa-info-circle"></i> Recomendaciones Específicas (NSCA):</h6>
-        <p>Este es un ejercicio de asistencia. Según la NSCA, estos ejercicios son suplementarios y generalmente involucran un solo grupo muscular o articulación (pág. 401).</p>
+        <p>Este es un ejercicio de asistencia. Según la NSCA, estos ejercicios son suplementarios y generalmente involucran un solo grupo muscular o articulación.</p>
         <p>Para seguir las recomendaciones de la NSCA:</p>
         <ul>
-          <li>Realice este ejercicio después de los ejercicios principales multiarticulares (pág. 402)</li>
+          <li>Realice este ejercicio después de los ejercicios principales multiarticulares</li>
           <li>Considere un volumen moderado: ${objetivosEntrenamiento["Hipertrofia"].series} series para desarrollo de hipertrofia</li>
           <li>Descanso entre series: ${objetivosEntrenamiento["Hipertrofia"].descanso} para ejercicios de hipertrofia</li>
-          <li>Para ejercicios de asistencia, considere cargas menores: aproximadamente 8RM para ejercicios de asistencia (pág. 409)</li>
-          <li>Utilice este ejercicio para corregir desequilibrios o reforzar músculos específicos</li>
         </ul>
       </div>
     `;
@@ -621,25 +536,23 @@ function generarRecomendaciones(rm, ejercicio, pesoActual, repeticionesActuales,
     recomendacionesHTML += `
       <div class="alert alert-info">
         <h6><i class="fas fa-tachometer-alt"></i> Sobre el uso de RPE:</h6>
-        <p>El uso de RPE (Rating of Perceived Exertion) no está explícitamente descrito en el capítulo 15 de NSCA, pero es compatible con el método de Repeticiones en Reserva (RIR) mencionado en la pág. 407:</p>
+        <p>El uso de RPE (Rating of Perceived Exertion) es compatible con el método de Repeticiones en Reserva (RIR):</p>
         <ul>
           <li>RPE 10 corresponde a 0 RIR (fallo muscular)</li>
           <li>RPE 9 corresponde a 1 RIR</li>
           <li>RPE 8 corresponde a 2 RIR</li>
           <li>RPE 7 corresponde a 3 RIR</li>
         </ul>
-        <p>Esto puede utilizarse junto con el método de RM para prescripción de cargas.</p>
       </div>
     `;
   } else if (metodo === 'rir') {
     recomendacionesHTML += `
       <div class="alert alert-info">
         <h6><i class="fas fa-battery-three-quarters"></i> Sobre el uso de RIR:</h6>
-        <p>La NSCA describe el método de Repeticiones en Reserva (RIR) en la pág. 407 como "repeticiones en reserva" o "entrenamiento sin fallo":</p>
+        <p>La NSCA describe el método de Repeticiones en Reserva (RIR) como "repeticiones en reserva" o "entrenamiento sin fallo":</p>
         <ul>
           <li>0 RIR significa entrenamiento hasta el fallo muscular</li>
           <li>1-3 RIR es ideal para desarrollo de fuerza e hipertrofia</li>
-          <li>Según la pág. 407, "entrenar a pocas repeticiones del fallo produce menores niveles de fatiga o dolor muscular"</li>
           <li>Para principiantes, la NSCA recomienda no entrenar hasta el fallo frecuentemente</li>
         </ul>
       </div>
@@ -652,10 +565,8 @@ function generarRecomendaciones(rm, ejercicio, pesoActual, repeticionesActuales,
       <h6><i class="fas fa-exclamation-triangle"></i> Consideraciones de Seguridad (NSCA):</h6>
       <ul>
         <li>Las estimaciones de 1RM varían en precisión según el tipo de ejercicio, población y nivel de entrenamiento.</li>
-        <li>Estas estimaciones son menos precisas cuando las repeticiones superan las 10 (pág. 406).</li>
-        <li>"Si el cliente no puede realizar correctamente un ejercicio, las regresiones, máquinas asistidas o mecánica adecuada deben ser prioridad" (pág. 405).</li>
-        <li>La NSCA enfatiza en la pág. 409: "Aunque puede haber beneficios de entrenar hasta el fallo, es prudente secuenciar el entrenamiento del cliente."</li>
-        <li>Según la pág. 405: "El esfuerzo individual del cliente debe ser monitorizado para asegurar que las últimas repeticiones sean desafiantes pero no comprometan la técnica adecuada."</li>
+        <li>Estas estimaciones son menos precisas cuando las repeticiones superan las 10.</li>
+        <li>Si el cliente no puede realizar correctamente un ejercicio, las regresiones, máquinas asistidas o mecánica adecuada deben ser prioridad.</li>
       </ul>
     </div>
   `;
@@ -677,10 +588,32 @@ function guardarRM() {
   // Determinar qué método está siendo utilizado
   let ejercicioNombre, peso, valor, metodo, valor1RM;
   
-  // Pestaña activa - usamos Bootstrap
-  const pestanaActivaId = document.querySelector('.tab-pane.show.active').id;
+  // Obtener la pestaña activa
+  let pestanaActiva = '';
   
-  if (pestanaActivaId === 'reps-content') {
+  // Verificar qué pestaña está activa mirando las clases
+  if (document.getElementById('reps-content').classList.contains('show') &&
+      document.getElementById('reps-content').classList.contains('active')) {
+    pestanaActiva = 'reps';
+  } else if (document.getElementById('rpe-content').classList.contains('show') &&
+             document.getElementById('rpe-content').classList.contains('active')) {
+    pestanaActiva = 'rpe';
+  } else if (document.getElementById('rir-content').classList.contains('show') &&
+             document.getElementById('rir-content').classList.contains('active')) {
+    pestanaActiva = 'rir';
+  }
+  
+  // Verificar el valor 1RM
+  const valor1RMTexto = document.getElementById('valor_1rm').textContent;
+  if (valor1RMTexto === '0 kg') {
+    alert('Primero debe calcular el 1RM antes de guardar.');
+    return;
+  }
+  
+  valor1RM = parseFloat(valor1RMTexto.replace(' kg', ''));
+  
+  // Obtener datos según la pestaña activa
+  if (pestanaActiva === 'reps') {
     const ejercicio = document.getElementById('rm_ejercicio').value;
     const ejercicioOtro = document.getElementById('rm_ejercicio_otro').value;
     ejercicioNombre = ejercicio === 'Otro' ? ejercicioOtro : ejercicio;
@@ -692,22 +625,14 @@ function guardarRM() {
     valor = `${repeticiones} reps`;
     metodo = `Fórmula: ${formula}`;
     
-    // Validar datos
-    if (!ejercicioNombre || isNaN(peso) || isNaN(repeticiones) || peso <= 0 || repeticiones <= 0) {
-      alert('Complete todos los campos antes de guardar la evaluación.');
+    if (!ejercicioNombre || isNaN(peso) || isNaN(repeticiones)) {
+      alert('Complete todos los campos antes de guardar.');
       return;
     }
-    
-    // Calcular 1RM
-    if (formula === 'promedio') {
-      valor1RM = formulas1RM.promedio(peso, repeticiones);
-    } else {
-      valor1RM = formulas1RM[formula](peso, repeticiones);
-    }
   } 
-  else if (pestanaActivaId === 'rpe-content') {
+  else if (pestanaActiva === 'rpe') {
     const ejercicio = document.getElementById('rpe_ejercicio').value;
-    const ejercicioOtro = document.getElementById('rpe_ejercicio_otro') ? document.getElementById('rpe_ejercicio_otro').value : '';
+    const ejercicioOtro = document.getElementById('rpe_ejercicio_otro').value || '';
     ejercicioNombre = ejercicio === 'Otro' ? ejercicioOtro : ejercicio;
     
     peso = parseFloat(document.getElementById('rpe_peso').value);
@@ -717,19 +642,14 @@ function guardarRM() {
     valor = `${repeticiones} reps, RPE ${rpeValor}`;
     metodo = 'RPE';
     
-    // Validar datos
-    if (!ejercicioNombre || isNaN(peso) || isNaN(repeticiones) || isNaN(rpeValor) || peso <= 0 || repeticiones <= 0) {
-      alert('Complete todos los campos antes de guardar la evaluación.');
+    if (!ejercicioNombre || isNaN(peso) || isNaN(repeticiones) || isNaN(rpeValor)) {
+      alert('Complete todos los campos antes de guardar.');
       return;
     }
-    
-    // Usar el valor 1RM ya calculado (si existe)
-    const rmText = document.getElementById('valor_1rm').textContent;
-    valor1RM = parseFloat(rmText.replace(' kg', ''));
   }
-  else if (pestanaActivaId === 'rir-content') {
+  else if (pestanaActiva === 'rir') {
     const ejercicio = document.getElementById('rir_ejercicio').value;
-    const ejercicioOtro = document.getElementById('rir_ejercicio_otro') ? document.getElementById('rir_ejercicio_otro').value : '';
+    const ejercicioOtro = document.getElementById('rir_ejercicio_otro').value || '';
     ejercicioNombre = ejercicio === 'Otro' ? ejercicioOtro : ejercicio;
     
     peso = parseFloat(document.getElementById('rir_peso').value);
@@ -739,50 +659,37 @@ function guardarRM() {
     valor = `${repeticiones} reps, RIR ${rirValor}`;
     metodo = 'RIR';
     
-    // Validar datos
-    if (!ejercicioNombre || isNaN(peso) || isNaN(repeticiones) || isNaN(rirValor) || peso <= 0 || repeticiones <= 0) {
-      alert('Complete todos los campos antes de guardar la evaluación.');
+    if (!ejercicioNombre || isNaN(peso) || isNaN(repeticiones) || isNaN(rirValor)) {
+      alert('Complete todos los campos antes de guardar.');
       return;
     }
-    
-    // Usar el valor 1RM ya calculado (si existe)
-    const rmText = document.getElementById('valor_1rm').textContent;
-    valor1RM = parseFloat(rmText.replace(' kg', ''));
   }
   else {
     alert('No se pudo determinar el método de cálculo activo.');
     return;
   }
   
-  // Si aún no tenemos un valor 1RM válido, salir
-  if (isNaN(valor1RM) || valor1RM <= 0) {
-    alert('Primero debe calcular el 1RM antes de guardar.');
-    return;
-  }
-  
-  valor1RM = Math.round(valor1RM * 10) / 10;
-  
   // Fecha actual
   const fechaActual = new Date().toLocaleDateString();
   
   // Crear objeto para el historial
   const nuevoRegistro = {
+    id: Date.now(),
     ejercicio: ejercicioNombre,
     fecha: fechaActual,
     peso: peso,
     valor: valor,
     rm1: valor1RM,
-    metodo: metodo,
-    id: Date.now() // Para tener un identificador único
+    metodo: metodo
   };
   
   // Agregar al historial
   historialRM.push(nuevoRegistro);
   
-  // Actualizar la tabla de historial
+  // Actualizar la tabla del historial
   actualizarTablaHistorial();
   
-  // Actualizar el badge global
+  // Actualizar el badge
   const badge = document.getElementById('rm-calculator-badge');
   if (badge) {
     badge.textContent = 'Completado';
@@ -793,26 +700,26 @@ function guardarRM() {
 }
 
 /**
- * Actualiza la tabla de historial con los registros guardados
+ * Actualiza la tabla de historial
  */
 function actualizarTablaHistorial() {
-  const historialContainer = document.getElementById('historial_rm');
+  const historialTabla = document.getElementById('historial_rm');
+  if (!historialTabla) return;
   
-  // Limpiar tabla
-  historialContainer.innerHTML = '';
+  // Limpiar la tabla
+  historialTabla.innerHTML = '';
   
+  // Verificar si hay registros
   if (historialRM.length === 0) {
-    // Mostrar mensaje si no hay registros
     const emptyRow = document.createElement('tr');
     emptyRow.innerHTML = '<td colspan="7" class="text-center">No hay evaluaciones guardadas</td>';
-    historialContainer.appendChild(emptyRow);
+    historialTabla.appendChild(emptyRow);
     return;
   }
   
-  // Agregar cada registro a la tabla
+  // Añadir cada registro
   historialRM.forEach(registro => {
     const row = document.createElement('tr');
-    
     row.innerHTML = `
       <td>${registro.ejercicio}</td>
       <td>${registro.fecha}</td>
@@ -826,23 +733,22 @@ function actualizarTablaHistorial() {
         </button>
       </td>
     `;
-    
-    historialContainer.appendChild(row);
+    historialTabla.appendChild(row);
   });
 }
 
 /**
- * Elimina un registro del historial de RM
+ * Elimina un registro del historial
  */
 function eliminarRegistroRM(id) {
   if (confirm('¿Está seguro de que desea eliminar este registro?')) {
-    // Filtrar el registro con el ID correspondiente
+    // Filtrar el registro
     historialRM = historialRM.filter(registro => registro.id !== id);
     
-    // Actualizar la tabla
+    // Actualizar tabla
     actualizarTablaHistorial();
     
-    // Actualizar el badge si ya no hay registros
+    // Actualizar badge si es necesario
     if (historialRM.length === 0) {
       const badge = document.getElementById('rm-calculator-badge');
       if (badge) {
@@ -853,119 +759,139 @@ function eliminarRegistroRM(id) {
   }
 }
 
-/**
- * Inicialización de la calculadora y manejo de eventos para los selectores de ejercicio
- */
+// Inicializar
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('Inicializando calculadora RM...');
+  console.log('Inicializando Calculadora RM...');
   
-  // Configurar eventos para los selectores de ejercicio
-  inicializarSelectorEjercicio('rm_ejercicio', 'rm_ejercicio_otro');
-  inicializarSelectorEjercicio('rpe_ejercicio', 'rpe_ejercicio_otro');
-  inicializarSelectorEjercicio('rir_ejercicio', 'rir_ejercicio_otro');
+  // Vincular eventos a selectores de ejercicio
+  inicializarSelectoresEjercicio();
   
-  // Inicializar eventos de las pestañas Tab usando el Bootstrap JS
-  // Esto está incluido en caso de que Bootstrap no maneje correctamente las pestañas
-
-  // Verificar si jQuery está disponible para inicializar las pestañas
-  if (typeof $ !== 'undefined') {
-    $('#rm-tabs a').on('click', function (e) {
-      e.preventDefault();
-      $(this).tab('show');
-    });
-  } else {
-    // Inicialización manual si jQuery no está disponible
-    document.querySelectorAll('#rm-tabs .nav-link').forEach(tab => {
-      tab.addEventListener('click', function(e) {
-        e.preventDefault();
-        activarPestana(this.getAttribute('data-bs-target'));
-      });
-    });
-  }
-
+  // Asegurar que las pestañas funcionen correctamente
+  inicializarPestanas();
+  
+  // Cargar el historial
+  actualizarTablaHistorial();
+  
+  // Añadir estilos para mejor contraste y visualización
+  mejorarContraste();
+  
   console.log('Calculadora RM inicializada correctamente.');
 });
 
 /**
- * Inicializa los eventos para el selector de ejercicio y su campo "otro"
+ * Inicializa los selectores de ejercicio
  */
-function inicializarSelectorEjercicio(selectorId, otroId) {
-  const selector = document.getElementById(selectorId);
-  const otroInput = document.getElementById(otroId);
+function inicializarSelectoresEjercicio() {
+  // Para pestaña de repeticiones
+  const selectorRM = document.getElementById('rm_ejercicio');
+  const otroRM = document.getElementById('rm_ejercicio_otro');
   
-  if (selector && otroInput) {
-    // Configurar estado inicial
-    if (selector.value === 'Otro') {
-      otroInput.style.display = 'block';
-    } else {
-      otroInput.style.display = 'none';
-    }
-    
-    // Configurar evento de cambio
-    selector.addEventListener('change', function() {
-      if (this.value === 'Otro') {
-        otroInput.style.display = 'block';
-      } else {
-        otroInput.style.display = 'none';
-      }
+  if (selectorRM && otroRM) {
+    selectorRM.addEventListener('change', function() {
+      otroRM.style.display = this.value === 'Otro' ? 'block' : 'none';
+    });
+  }
+  
+  // Para pestaña RPE
+  const selectorRPE = document.getElementById('rpe_ejercicio');
+  const otroRPE = document.getElementById('rpe_ejercicio_otro');
+  
+  if (selectorRPE && otroRPE) {
+    selectorRPE.addEventListener('change', function() {
+      otroRPE.style.display = this.value === 'Otro' ? 'block' : 'none';
+    });
+  }
+  
+  // Para pestaña RIR
+  const selectorRIR = document.getElementById('rir_ejercicio');
+  const otroRIR = document.getElementById('rir_ejercicio_otro');
+  
+  if (selectorRIR && otroRIR) {
+    selectorRIR.addEventListener('change', function() {
+      otroRIR.style.display = this.value === 'Otro' ? 'block' : 'none';
     });
   }
 }
 
 /**
- * Manejo manual de pestañas si Bootstrap no está funcionando correctamente
+ * Inicializa las pestañas para asegurar que funcionen
+ * Compatible con Bootstrap 5
  */
-function activarPestana(targetId) {
-  // Quitar las clases activas de todas las pestañas
-  document.querySelectorAll('#rm-tabs .nav-link').forEach(tab => {
-    tab.classList.remove('active');
-    tab.setAttribute('aria-selected', 'false');
-  });
-  
-  // Quitar las clases activas de todos los paneles de contenido
-  document.querySelectorAll('.tab-pane').forEach(pane => {
-    pane.classList.remove('show');
-    pane.classList.remove('active');
-  });
-  
-  // Activar la pestaña seleccionada
-  const selectedTab = document.querySelector(`[data-bs-target="${targetId}"]`);
-  if (selectedTab) {
-    selectedTab.classList.add('active');
-    selectedTab.setAttribute('aria-selected', 'true');
+function inicializarPestanas() {
+  // Método 1: Usar Bootstrap nativo si está disponible
+  if (typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+    document.querySelectorAll('#rm-tabs [data-bs-toggle="tab"]').forEach(tab => {
+      new bootstrap.Tab(tab);
+    });
+    return;
   }
   
-  // Mostrar el panel de contenido seleccionado
-  const contentPane = document.querySelector(targetId);
-  if (contentPane) {
-    contentPane.classList.add('show');
-    contentPane.classList.add('active');
-  }
+  // Método 2: Implementación manual si Bootstrap no está disponible
+  const tabs = document.querySelectorAll('#rm-tabs [data-bs-toggle="tab"]');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Desactivar todas las pestañas
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      
+      // Activar la pestaña actual
+      this.classList.add('active');
+      this.setAttribute('aria-selected', 'true');
+      
+      // Ocultar todos los paneles
+      document.querySelectorAll('.tab-pane').forEach(pane => {
+        pane.classList.remove('show');
+        pane.classList.remove('active');
+      });
+      
+      // Mostrar el panel correspondiente
+      const targetId = this.getAttribute('data-bs-target');
+      const targetPane = document.querySelector(targetId);
+      if (targetPane) {
+        targetPane.classList.add('show');
+        targetPane.classList.add('active');
+      }
+    });
+  });
 }
 
 /**
- * Añadir algunos estilos CSS para mejorar el contraste y la legibilidad
+ * Mejora el contraste visual de elementos importantes
  */
-(function() {
+function mejorarContraste() {
   const style = document.createElement('style');
   style.textContent = `
-    /* Mejorar el contraste y la legibilidad */
-    .cuestionario-header {
-      background-color: #6f42c1 !important;
-      color: white !important;
-    }
-    
+    /* Mejorar contraste para pestañas */
     .nav-tabs .nav-link {
-      color: #495057 !important;
+      color: #333 !important;
       font-weight: 500 !important;
+      background-color: #f8f9fa !important;
+      border: 1px solid #dee2e6 !important;
+      margin-right: 5px !important;
+      padding: 10px 15px !important;
     }
     
     .nav-tabs .nav-link.active {
       color: #6f42c1 !important;
+      background-color: #fff !important;
+      border-bottom-color: #fff !important;
       font-weight: 600 !important;
-      border-bottom: 2px solid #6f42c1 !important;
     }
     
+    /* Mejorar encabezado de calculadora */
+    .cuestionario-header {
+      background-color: #6f42c1 !important;
+      color: white !important;
+      padding: 15px !important;
+      border-radius: 5px 5px 0 0 !important;
+    }
+    
+    /* Mejorar botones */
     .btn-primary {
       background-color: #6f42c1 !important;
       border-color: #6f42c1 !important;
@@ -976,22 +902,52 @@ function activarPestana(targetId) {
       border-color: #5e35b1 !important;
     }
     
+    /* Mejorar badge */
     .resultado-badge {
-      padding: 6px 10px !important;
+      padding: 6px 12px !important;
       border-radius: 20px !important;
       font-weight: 500 !important;
     }
     
-    .form-label {
-      font-weight: 500 !important;
-      color: #333 !important;
+    /* Mejorar tablas */
+    .table th {
+      background-color: #f0f0f0 !important;
     }
     
-    /* Resaltar las tablas de objetivos */
+    /* Colores para las tablas de objetivo */
     .table-danger { background-color: #f8d7da !important; }
     .table-warning { background-color: #fff3cd !important; }
     .table-success { background-color: #d4edda !important; }
     .table-primary { background-color: #cce5ff !important; }
   `;
+  
   document.head.appendChild(style);
-})();
+}
+
+// Recomendaciones de progresión
+const recomendacionesProgresion = {
+  "Principiante": {
+    incrementoAbsoluto: {
+      upper: {
+        core: "2.5-5 lb (1-2 kg)",
+        assistance: "1.25-2.5 lb (0.5-1 kg)"
+      },
+      lower: {
+        core: "10-15 lb (4-7 kg)",
+        assistance: "5-10 lb (2-4 kg)"
+      }
+    }
+  },
+  "Intermedio": {
+    incrementoAbsoluto: {
+      upper: {
+        core: "5-10+ lb (2-4+ kg)",
+        assistance: "5-10 lb (2-4 kg)"
+      },
+      lower: {
+        core: "15-20+ lb (7-9+ kg)",
+        assistance: "10-15 lb (4-7 kg)"
+      }
+    }
+  }
+};
