@@ -16649,783 +16649,766 @@
   <div class="cuestionario-content" id="fuerza-funcional-content" style="display: none;">
     <p class="mb-3">Evalúe la fuerza en contextos funcionales relacionados con actividades de la vida diaria, laborales o deportivas.</p>
     
-    <!-- Sistema de Pestañas Personalizado -->
-    <div class="custom-tabs">
-      <div class="tab-buttons">
-        <button class="tab-button active" onclick="openFuerzaTab(event, 'tab-tests-estandar')">Tests Estándar</button>
-        <button class="tab-button" onclick="openFuerzaTab(event, 'tab-resistencia-muscular')">Resistencia Muscular</button>
-        <button class="tab-button" onclick="openFuerzaTab(event, 'tab-reintegro-deportivo')">Reintegro Deportivo</button>
-        <button class="tab-button" onclick="openFuerzaTab(event, 'tab-adulto-mayor')">Adulto Mayor</button>
-        <button class="tab-button" onclick="openFuerzaTab(event, 'tab-riesgo-lesion')">Riesgo de Lesión</button>
-        <button class="tab-button" onclick="openFuerzaTab(event, 'tab-tareas-especificas')">Tareas Específicas</button>
+    <!-- 1. Tests Funcionales Estándar (subacordeón) -->
+    <div class="subcuestionario-item">
+      <div class="subcuestionario-header" onclick="toggleSubcuestionario('tests-estandar-content')">
+        <h5><i class="fas fa-plus-circle"></i> Tests Funcionales Estándar</h5>
       </div>
-      
-      <!-- 1. Tests Funcionales Estándar -->
-      <div id="tab-tests-estandar" class="tab-content" style="display: block;">
-        <div class="card mb-4">
-          <div class="card-header bg-light">
-            <h5 class="mb-0">Tests Funcionales Estándar</h5>
+      <div class="subcuestionario-content" id="tests-estandar-content" style="display: none;">
+        <div class="card-body">
+          <!-- 30-second Sit-to-Stand Test -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>30-second Sit-to-Stand Test</h6>
+              <p class="text-muted small">Mide la fuerza funcional de miembros inferiores contando cuántas veces el paciente puede levantarse y sentarse de una silla en 30 segundos.</p>
+            </div>
           </div>
-          <div class="card-body">
-            
-            <!-- 30-second Sit-to-Stand Test -->
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-12">
-                <h6>30-second Sit-to-Stand Test</h6>
-                <p class="text-muted small">Mide la fuerza funcional de miembros inferiores contando cuántas veces el paciente puede levantarse y sentarse de una silla en 30 segundos.</p>
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="sit_to_stand_repeticiones" class="form-label">Repeticiones</label>
+                <input type="number" id="sit_to_stand_repeticiones" name="sit_to_stand_repeticiones" class="form-control" min="0" max="50" onchange="evaluarTestFuncional('sit_to_stand')">
               </div>
             </div>
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="sit_to_stand_repeticiones" class="form-label">Repeticiones</label>
-                  <input type="number" id="sit_to_stand_repeticiones" name="sit_to_stand_repeticiones" class="form-control" min="0" max="50" onchange="evaluarTestFuncional('sit_to_stand')">
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="sit_to_stand_edad" class="form-label">Edad del paciente</label>
-                  <input type="number" id="sit_to_stand_edad" name="sit_to_stand_edad" class="form-control" min="18" max="100" onchange="evaluarTestFuncional('sit_to_stand')">
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="sit_to_stand_genero" class="form-label">Género</label>
-                  <select id="sit_to_stand_genero" name="sit_to_stand_genero" class="form-select" onchange="evaluarTestFuncional('sit_to_stand')">
-                    <option value="">Seleccionar</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="sit_to_stand_rpe" class="form-label">RPE (0-10)</label>
-                  <input type="number" id="sit_to_stand_rpe" name="sit_to_stand_rpe" class="form-control" min="0" max="10" step="1">
-                </div>
-              </div>
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="sit_to_stand_resultado" class="form-label">Resultado</label>
-                  <div id="sit_to_stand_resultado" class="alert alert-secondary">Pendiente</div>
-                </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="sit_to_stand_edad" class="form-label">Edad del paciente</label>
+                <input type="number" id="sit_to_stand_edad" name="sit_to_stand_edad" class="form-control" min="18" max="100" onchange="evaluarTestFuncional('sit_to_stand')">
               </div>
             </div>
-            
-            <!-- Push-up Test -->
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-12">
-                <h6>Push-up Test</h6>
-                <p class="text-muted small">Evalúa la fuerza-resistencia de miembros superiores contando el número máximo de flexiones de brazos.</p>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="sit_to_stand_genero" class="form-label">Género</label>
+                <select id="sit_to_stand_genero" name="sit_to_stand_genero" class="form-select" onchange="evaluarTestFuncional('sit_to_stand')">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
               </div>
             </div>
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="push_up_repeticiones" class="form-label">Repeticiones</label>
-                  <input type="number" id="push_up_repeticiones" name="push_up_repeticiones" class="form-control" min="0" max="100" onchange="evaluarTestFuncional('push_up')">
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="push_up_edad" class="form-label">Edad del paciente</label>
-                  <input type="number" id="push_up_edad" name="push_up_edad" class="form-control" min="18" max="100" onchange="evaluarTestFuncional('push_up')">
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="push_up_genero" class="form-label">Género</label>
-                  <select id="push_up_genero" name="push_up_genero" class="form-select" onchange="evaluarTestFuncional('push_up')">
-                    <option value="">Seleccionar</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="push_up_rpe" class="form-label">RPE (0-10)</label>
-                  <input type="number" id="push_up_rpe" name="push_up_rpe" class="form-control" min="0" max="10" step="1">
-                </div>
-              </div>
-              <div class="form-col form-col-md-4">
-                <div class="form-group">
-                  <label for="push_up_resultado" class="form-label">Resultado</label>
-                  <div id="push_up_resultado" class="alert alert-secondary">Pendiente</div>
-                </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="sit_to_stand_rpe" class="form-label">RPE (0-10)</label>
+                <input type="number" id="sit_to_stand_rpe" name="sit_to_stand_rpe" class="form-control" min="0" max="10" step="1">
               </div>
             </div>
-            
-            <!-- Otros Tests Funcionales -->
-            <div id="otros_tests_funcionales_container">
-              <!-- Los tests funcionales adicionales se agregarán aquí -->
+            <div class="form-col form-col-md-4">
+              <div class="form-group">
+                <label for="sit_to_stand_resultado" class="form-label">Resultado</label>
+                <div id="sit_to_stand_resultado" class="alert alert-secondary">Pendiente</div>
+              </div>
             </div>
-            
-            <div class="form-row mt-3">
-              <div class="form-col form-col-md-12">
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarTestFuncional()">
-                  <i class="fas fa-plus"></i> Agregar Otro Test Funcional
-                </button>
+          </div>
+          
+          <!-- Push-up Test -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>Push-up Test</h6>
+              <p class="text-muted small">Evalúa la fuerza-resistencia de miembros superiores contando el número máximo de flexiones de brazos.</p>
+            </div>
+          </div>
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="push_up_repeticiones" class="form-label">Repeticiones</label>
+                <input type="number" id="push_up_repeticiones" name="push_up_repeticiones" class="form-control" min="0" max="100" onchange="evaluarTestFuncional('push_up')">
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="push_up_edad" class="form-label">Edad del paciente</label>
+                <input type="number" id="push_up_edad" name="push_up_edad" class="form-control" min="18" max="100" onchange="evaluarTestFuncional('push_up')">
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="push_up_genero" class="form-label">Género</label>
+                <select id="push_up_genero" name="push_up_genero" class="form-select" onchange="evaluarTestFuncional('push_up')">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="push_up_rpe" class="form-label">RPE (0-10)</label>
+                <input type="number" id="push_up_rpe" name="push_up_rpe" class="form-control" min="0" max="10" step="1">
+              </div>
+            </div>
+            <div class="form-col form-col-md-4">
+              <div class="form-group">
+                <label for="push_up_resultado" class="form-label">Resultado</label>
+                <div id="push_up_resultado" class="alert alert-secondary">Pendiente</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Otros Tests Funcionales -->
+          <div id="otros_tests_funcionales_container">
+            <!-- Los tests funcionales adicionales se agregarán aquí -->
+          </div>
+          
+          <div class="form-row mt-3">
+            <div class="form-col form-col-md-12">
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarTestFuncional()">
+                <i class="fas fa-plus"></i> Agregar Otro Test Funcional
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 2. Tests de Resistencia Muscular (subacordeón) -->
+    <div class="subcuestionario-item">
+      <div class="subcuestionario-header" onclick="toggleSubcuestionario('resistencia-muscular-content')">
+        <h5><i class="fas fa-plus-circle"></i> Tests de Resistencia Muscular</h5>
+      </div>
+      <div class="subcuestionario-content" id="resistencia-muscular-content" style="display: none;">
+        <div class="card-body">
+          <!-- McGill Core Endurance Tests -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>McGill Core Endurance Tests</h6>
+              <p class="text-muted small">Evalúa la resistencia de la musculatura del core a través de diferentes posiciones isométricas.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="mcgill_plancha_frontal" class="form-label">Plancha Frontal (seg)</label>
+                <input type="number" id="mcgill_plancha_frontal" name="mcgill_plancha_frontal" class="form-control" min="0" max="600" onchange="evaluarMcGillTests()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="mcgill_plancha_lateral_derecha" class="form-label">Plancha Lateral Derecha (seg)</label>
+                <input type="number" id="mcgill_plancha_lateral_derecha" name="mcgill_plancha_lateral_derecha" class="form-control" min="0" max="600" onchange="evaluarMcGillTests()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="mcgill_plancha_lateral_izquierda" class="form-label">Plancha Lateral Izquierda (seg)</label>
+                <input type="number" id="mcgill_plancha_lateral_izquierda" name="mcgill_plancha_lateral_izquierda" class="form-control" min="0" max="600" onchange="evaluarMcGillTests()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="mcgill_extension_lumbar" class="form-label">Extensión Lumbar (seg)</label>
+                <input type="number" id="mcgill_extension_lumbar" name="mcgill_extension_lumbar" class="form-control" min="0" max="600" onchange="evaluarMcGillTests()">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="mcgill_genero" class="form-label">Género</label>
+                <select id="mcgill_genero" name="mcgill_genero" class="form-select" onchange="evaluarMcGillTests()">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="mcgill_rpe" class="form-label">RPE (0-10)</label>
+                <input type="number" id="mcgill_rpe" name="mcgill_rpe" class="form-control" min="0" max="10" step="1">
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="mcgill_resultado" class="form-label">Resultado</label>
+                <div id="mcgill_resultado" class="alert alert-secondary">Pendiente</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Wall Sit Test -->
+          <div class="form-row mb-3 mt-4">
+            <div class="form-col form-col-md-12">
+              <h6>Wall Sit Test</h6>
+              <p class="text-muted small">Evalúa la resistencia de la musculatura de cuádriceps en posición de sentadilla isométrica contra la pared.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="wall_sit_tiempo" class="form-label">Tiempo (seg)</label>
+                <input type="number" id="wall_sit_tiempo" name="wall_sit_tiempo" class="form-control" min="0" max="600" onchange="evaluarWallSitTest()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="wall_sit_edad" class="form-label">Edad</label>
+                <input type="number" id="wall_sit_edad" name="wall_sit_edad" class="form-control" min="18" max="100" onchange="evaluarWallSitTest()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="wall_sit_genero" class="form-label">Género</label>
+                <select id="wall_sit_genero" name="wall_sit_genero" class="form-select" onchange="evaluarWallSitTest()">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="wall_sit_rpe" class="form-label">RPE (0-10)</label>
+                <input type="number" id="wall_sit_rpe" name="wall_sit_rpe" class="form-control" min="0" max="10" step="1">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="wall_sit_resultado" class="form-label">Resultado</label>
+                <div id="wall_sit_resultado" class="alert alert-secondary">Pendiente</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Pull-up Test -->
+          <div class="form-row mb-3 mt-4">
+            <div class="form-col form-col-md-12">
+              <h6>Pull-up/Chin-up Test</h6>
+              <p class="text-muted small">Evalúa la fuerza-resistencia de la musculatura de la espalda y brazos a través de repeticiones máximas.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="pullup_tipo" class="form-label">Tipo</label>
+                <select id="pullup_tipo" name="pullup_tipo" class="form-select" onchange="evaluarPullUpTest()">
+                  <option value="Pull-up">Pull-up (agarre prono)</option>
+                  <option value="Chin-up">Chin-up (agarre supino)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="pullup_repeticiones" class="form-label">Repeticiones</label>
+                <input type="number" id="pullup_repeticiones" name="pullup_repeticiones" class="form-control" min="0" max="100" onchange="evaluarPullUpTest()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="pullup_edad" class="form-label">Edad</label>
+                <input type="number" id="pullup_edad" name="pullup_edad" class="form-control" min="18" max="100" onchange="evaluarPullUpTest()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="pullup_genero" class="form-label">Género</label>
+                <select id="pullup_genero" name="pullup_genero" class="form-select" onchange="evaluarPullUpTest()">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-1">
+              <div class="form-group">
+                <label for="pullup_rpe" class="form-label">RPE</label>
+                <input type="number" id="pullup_rpe" name="pullup_rpe" class="form-control" min="0" max="10" step="1">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="pullup_resultado" class="form-label">Resultado</label>
+                <div id="pullup_resultado" class="alert alert-secondary">Pendiente</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- 2. Tests de Resistencia Muscular -->
-      <div id="tab-resistencia-muscular" class="tab-content">
-        <div class="card mb-4">
-          <div class="card-header bg-light">
-            <h5 class="mb-0">Tests de Resistencia Muscular</h5>
+    </div>
+    
+    <!-- 3. Tests Reintegro Deportivo (subacordeón) -->
+    <div class="subcuestionario-item">
+      <div class="subcuestionario-header" onclick="toggleSubcuestionario('reintegro-deportivo-content')">
+        <h5><i class="fas fa-plus-circle"></i> Tests para Reintegro Deportivo</h5>
+      </div>
+      <div class="subcuestionario-content" id="reintegro-deportivo-content" style="display: none;">
+        <div class="card-body">
+          <!-- Tests de salto unilateral -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>Tests de Salto Unilateral</h6>
+              <p class="text-muted small">Compare el rendimiento entre el miembro afectado y el sano para calcular el Índice de Simetría (LSI).</p>
+            </div>
           </div>
-          <div class="card-body">
-            
-            <!-- McGill Core Endurance Tests -->
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-12">
-                <h6>McGill Core Endurance Tests</h6>
-                <p class="text-muted small">Evalúa la resistencia de la musculatura del core a través de diferentes posiciones isométricas.</p>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="hop_test_tipo" class="form-label">Tipo de Test</label>
+                <select id="hop_test_tipo" name="hop_test_tipo" class="form-select" onchange="cambiarTipoHopTest()">
+                  <option value="single">Single Hop Test</option>
+                  <option value="triple">Triple Hop Test</option>
+                  <option value="crossover">Crossover Hop Test</option>
+                  <option value="timed">6-meter Timed Hop</option>
+                </select>
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="mcgill_plancha_frontal" class="form-label">Plancha Frontal (seg)</label>
-                  <input type="number" id="mcgill_plancha_frontal" name="mcgill_plancha_frontal" class="form-control" min="0" max="600" onchange="evaluarMcGillTests()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="mcgill_plancha_lateral_derecha" class="form-label">Plancha Lateral Derecha (seg)</label>
-                  <input type="number" id="mcgill_plancha_lateral_derecha" name="mcgill_plancha_lateral_derecha" class="form-control" min="0" max="600" onchange="evaluarMcGillTests()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="mcgill_plancha_lateral_izquierda" class="form-label">Plancha Lateral Izquierda (seg)</label>
-                  <input type="number" id="mcgill_plancha_lateral_izquierda" name="mcgill_plancha_lateral_izquierda" class="form-control" min="0" max="600" onchange="evaluarMcGillTests()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="mcgill_extension_lumbar" class="form-label">Extensión Lumbar (seg)</label>
-                  <input type="number" id="mcgill_extension_lumbar" name="mcgill_extension_lumbar" class="form-control" min="0" max="600" onchange="evaluarMcGillTests()">
-                </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label id="hop_label_lado_sano" for="hop_lado_sano" class="form-label">Lado Sano (cm)</label>
+                <input type="number" id="hop_lado_sano" name="hop_lado_sano" class="form-control" min="0" max="1000" step="0.1" onchange="evaluarHopTest()">
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="mcgill_genero" class="form-label">Género</label>
-                  <select id="mcgill_genero" name="mcgill_genero" class="form-select" onchange="evaluarMcGillTests()">
-                    <option value="">Seleccionar</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="mcgill_rpe" class="form-label">RPE (0-10)</label>
-                  <input type="number" id="mcgill_rpe" name="mcgill_rpe" class="form-control" min="0" max="10" step="1">
-                </div>
-              </div>
-              <div class="form-col form-col-md-6">
-                <div class="form-group">
-                  <label for="mcgill_resultado" class="form-label">Resultado</label>
-                  <div id="mcgill_resultado" class="alert alert-secondary">Pendiente</div>
-                </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label id="hop_label_lado_afectado" for="hop_lado_afectado" class="form-label">Lado Afectado (cm)</label>
+                <input type="number" id="hop_lado_afectado" name="hop_lado_afectado" class="form-control" min="0" max="1000" step="0.1" onchange="evaluarHopTest()">
               </div>
             </div>
-            
-            <!-- Wall Sit Test -->
-            <div class="form-row mb-3 mt-4">
-              <div class="form-col form-col-md-12">
-                <h6>Wall Sit Test</h6>
-                <p class="text-muted small">Evalúa la resistencia de la musculatura de cuádriceps en posición de sentadilla isométrica contra la pared.</p>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="hop_rpe" class="form-label">RPE (0-10)</label>
+                <input type="number" id="hop_rpe" name="hop_rpe" class="form-control" min="0" max="10" step="1">
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="wall_sit_tiempo" class="form-label">Tiempo (seg)</label>
-                  <input type="number" id="wall_sit_tiempo" name="wall_sit_tiempo" class="form-control" min="0" max="600" onchange="evaluarWallSitTest()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="wall_sit_edad" class="form-label">Edad</label>
-                  <input type="number" id="wall_sit_edad" name="wall_sit_edad" class="form-control" min="18" max="100" onchange="evaluarWallSitTest()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="wall_sit_genero" class="form-label">Género</label>
-                  <select id="wall_sit_genero" name="wall_sit_genero" class="form-select" onchange="evaluarWallSitTest()">
-                    <option value="">Seleccionar</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="wall_sit_rpe" class="form-label">RPE (0-10)</label>
-                  <input type="number" id="wall_sit_rpe" name="wall_sit_rpe" class="form-control" min="0" max="10" step="1">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="wall_sit_resultado" class="form-label">Resultado</label>
-                  <div id="wall_sit_resultado" class="alert alert-secondary">Pendiente</div>
-                </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="hop_resultado" class="form-label">Resultado - Índice de Simetría (LSI)</label>
+                <div id="hop_resultado" class="alert alert-secondary">Pendiente</div>
               </div>
             </div>
-            
-            <!-- Pull-up Test -->
-            <div class="form-row mb-3 mt-4">
-              <div class="form-col form-col-md-12">
-                <h6>Pull-up/Chin-up Test</h6>
-                <p class="text-muted small">Evalúa la fuerza-resistencia de la musculatura de la espalda y brazos a través de repeticiones máximas.</p>
+          </div>
+          
+          <!-- Batería de saltos (potencia) -->
+          <div class="form-row mb-3 mt-4">
+            <div class="form-col form-col-md-12">
+              <h6>Batería de Saltos (Potencia)</h6>
+              <p class="text-muted small">Evalúe diferentes tipos de salto para determinar el perfil de potencia del deportista.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="salto_sj" class="form-label">Squat Jump - SJ (cm)</label>
+                <input type="number" id="salto_sj" name="salto_sj" class="form-control" min="0" max="100" step="0.1" onchange="evaluarBateriaSaltos()">
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="pullup_tipo" class="form-label">Tipo</label>
-                  <select id="pullup_tipo" name="pullup_tipo" class="form-select" onchange="evaluarPullUpTest()">
-                    <option value="Pull-up">Pull-up (agarre prono)</option>
-                    <option value="Chin-up">Chin-up (agarre supino)</option>
-                  </select>
-                </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="salto_cmj" class="form-label">Counter Movement Jump - CMJ (cm)</label>
+                <input type="number" id="salto_cmj" name="salto_cmj" class="form-control" min="0" max="100" step="0.1" onchange="evaluarBateriaSaltos()">
               </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="pullup_repeticiones" class="form-label">Repeticiones</label>
-                  <input type="number" id="pullup_repeticiones" name="pullup_repeticiones" class="form-control" min="0" max="100" onchange="evaluarPullUpTest()">
-                </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="salto_dj_altura" class="form-label">Drop Jump - Altura (cm)</label>
+                <input type="number" id="salto_dj_altura" name="salto_dj_altura" class="form-control" min="0" max="100" step="0.1" onchange="evaluarBateriaSaltos()">
               </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="pullup_edad" class="form-label">Edad</label>
-                  <input type="number" id="pullup_edad" name="pullup_edad" class="form-control" min="18" max="100" onchange="evaluarPullUpTest()">
-                </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="salto_dj_contacto" class="form-label">Drop Jump - Tiempo Contacto (ms)</label>
+                <input type="number" id="salto_dj_contacto" name="salto_dj_contacto" class="form-control" min="0" max="1000" onchange="evaluarBateriaSaltos()">
               </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="pullup_genero" class="form-label">Género</label>
-                  <select id="pullup_genero" name="pullup_genero" class="form-select" onchange="evaluarPullUpTest()">
-                    <option value="">Seleccionar</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="salto_abalakov" class="form-label">Abalakov (cm)</label>
+                <input type="number" id="salto_abalakov" name="salto_abalakov" class="form-control" min="0" max="100" step="0.1" onchange="evaluarBateriaSaltos()">
               </div>
-              <div class="form-col form-col-md-1">
-                <div class="form-group">
-                  <label for="pullup_rpe" class="form-label">RPE</label>
-                  <input type="number" id="pullup_rpe" name="pullup_rpe" class="form-control" min="0" max="10" step="1">
-                </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="salto_genero" class="form-label">Género</label>
+                <select id="salto_genero" name="salto_genero" class="form-select" onchange="evaluarBateriaSaltos()">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
               </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="pullup_resultado" class="form-label">Resultado</label>
-                  <div id="pullup_resultado" class="alert alert-secondary">Pendiente</div>
-                </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="salto_deporte" class="form-label">Deporte</label>
+                <select id="salto_deporte" name="salto_deporte" class="form-select" onchange="evaluarBateriaSaltos()">
+                  <option value="">Seleccionar</option>
+                  <option value="fútbol">Fútbol</option>
+                  <option value="baloncesto">Baloncesto</option>
+                  <option value="voleibol">Voleibol</option>
+                  <option value="atletismo">Atletismo</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="salto_rpe" class="form-label">RPE (0-10)</label>
+                <input type="number" id="salto_rpe" name="salto_rpe" class="form-control" min="0" max="10" step="1">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="salto_resultado" class="form-label">Resultados e Índices</label>
+                <div id="salto_resultado" class="alert alert-secondary">Pendiente</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- 3. Tests Reintegro Deportivo -->
-      <div id="tab-reintegro-deportivo" class="tab-content">
-        <div class="card mb-4">
-          <div class="card-header bg-light">
-            <h5 class="mb-0">Tests para Reintegro Deportivo</h5>
+    </div>
+    
+    <!-- 4. Tests Adulto Mayor (subacordeón) -->
+    <div class="subcuestionario-item">
+      <div class="subcuestionario-header" onclick="toggleSubcuestionario('adulto-mayor-content')">
+        <h5><i class="fas fa-plus-circle"></i> Tests para Adulto Mayor</h5>
+      </div>
+      <div class="subcuestionario-content" id="adulto-mayor-content" style="display: none;">
+        <div class="card-body">
+          <!-- Timed Up & Go (TUG) -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>Timed Up & Go (TUG)</h6>
+              <p class="text-muted small">Evalúa el riesgo de caídas midiendo el tiempo que tarda el paciente en levantarse de una silla, caminar 3 metros, dar la vuelta y volver a sentarse.</p>
+            </div>
           </div>
-          <div class="card-body">
-            
-            <!-- Tests de salto unilateral -->
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-12">
-                <h6>Tests de Salto Unilateral</h6>
-                <p class="text-muted small">Compare el rendimiento entre el miembro afectado y el sano para calcular el Índice de Simetría (LSI).</p>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="tug_tiempo" class="form-label">Tiempo (segundos)</label>
+                <input type="number" id="tug_tiempo" name="tug_tiempo" class="form-control" min="0" max="100" step="0.1" onchange="evaluarTUG()">
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="hop_test_tipo" class="form-label">Tipo de Test</label>
-                  <select id="hop_test_tipo" name="hop_test_tipo" class="form-select" onchange="cambiarTipoHopTest()">
-                    <option value="single">Single Hop Test</option>
-                    <option value="triple">Triple Hop Test</option>
-                    <option value="crossover">Crossover Hop Test</option>
-                    <option value="timed">6-meter Timed Hop</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label id="hop_label_lado_sano" for="hop_lado_sano" class="form-label">Lado Sano (cm)</label>
-                  <input type="number" id="hop_lado_sano" name="hop_lado_sano" class="form-control" min="0" max="1000" step="0.1" onchange="evaluarHopTest()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label id="hop_label_lado_afectado" for="hop_lado_afectado" class="form-label">Lado Afectado (cm)</label>
-                  <input type="number" id="hop_lado_afectado" name="hop_lado_afectado" class="form-control" min="0" max="1000" step="0.1" onchange="evaluarHopTest()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="hop_rpe" class="form-label">RPE (0-10)</label>
-                  <input type="number" id="hop_rpe" name="hop_rpe" class="form-control" min="0" max="10" step="1">
-                </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="tug_edad" class="form-label">Edad</label>
+                <input type="number" id="tug_edad" name="tug_edad" class="form-control" min="60" max="120" onchange="evaluarTUG()">
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="hop_resultado" class="form-label">Resultado - Índice de Simetría (LSI)</label>
-                  <div id="hop_resultado" class="alert alert-secondary">Pendiente</div>
-                </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="tug_genero" class="form-label">Género</label>
+                <select id="tug_genero" name="tug_genero" class="form-select" onchange="evaluarTUG()">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
               </div>
             </div>
-            
-            <!-- Batería de saltos (potencia) -->
-            <div class="form-row mb-3 mt-4">
-              <div class="form-col form-col-md-12">
-                <h6>Batería de Saltos (Potencia)</h6>
-                <p class="text-muted small">Evalúe diferentes tipos de salto para determinar el perfil de potencia del deportista.</p>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="tug_rpe" class="form-label">RPE (0-10)</label>
+                <input type="number" id="tug_rpe" name="tug_rpe" class="form-control" min="0" max="10" step="1">
               </div>
             </div>
-            
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="salto_sj" class="form-label">Squat Jump - SJ (cm)</label>
-                  <input type="number" id="salto_sj" name="salto_sj" class="form-control" min="0" max="100" step="0.1" onchange="evaluarBateriaSaltos()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="salto_cmj" class="form-label">Counter Movement Jump - CMJ (cm)</label>
-                  <input type="number" id="salto_cmj" name="salto_cmj" class="form-control" min="0" max="100" step="0.1" onchange="evaluarBateriaSaltos()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="salto_dj_altura" class="form-label">Drop Jump - Altura (cm)</label>
-                  <input type="number" id="salto_dj_altura" name="salto_dj_altura" class="form-control" min="0" max="100" step="0.1" onchange="evaluarBateriaSaltos()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="salto_dj_contacto" class="form-label">Drop Jump - Tiempo Contacto (ms)</label>
-                  <input type="number" id="salto_dj_contacto" name="salto_dj_contacto" class="form-control" min="0" max="1000" onchange="evaluarBateriaSaltos()">
-                </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="tug_resultado" class="form-label">Resultado</label>
+                <div id="tug_resultado" class="alert alert-secondary">Pendiente</div>
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="salto_abalakov" class="form-label">Abalakov (cm)</label>
-                  <input type="number" id="salto_abalakov" name="salto_abalakov" class="form-control" min="0" max="100" step="0.1" onchange="evaluarBateriaSaltos()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="salto_genero" class="form-label">Género</label>
-                  <select id="salto_genero" name="salto_genero" class="form-select" onchange="evaluarBateriaSaltos()">
-                    <option value="">Seleccionar</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="salto_deporte" class="form-label">Deporte</label>
-                  <select id="salto_deporte" name="salto_deporte" class="form-select" onchange="evaluarBateriaSaltos()">
-                    <option value="">Seleccionar</option>
-                    <option value="fútbol">Fútbol</option>
-                    <option value="baloncesto">Baloncesto</option>
-                    <option value="voleibol">Voleibol</option>
-                    <option value="atletismo">Atletismo</option>
-                    <option value="otro">Otro</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="salto_rpe" class="form-label">RPE (0-10)</label>
-                  <input type="number" id="salto_rpe" name="salto_rpe" class="form-control" min="0" max="10" step="1">
-                </div>
+          </div>
+          
+          <!-- Senior Fitness Test -->
+          <div class="form-row mb-3 mt-4">
+            <div class="form-col form-col-md-12">
+              <h6>Senior Fitness Test</h6>
+              <p class="text-muted small">Batería de tests para evaluar la capacidad funcional en adultos mayores.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="sft_chair_stand" class="form-label">Chair Stand (rep/30s)</label>
+                <input type="number" id="sft_chair_stand" name="sft_chair_stand" class="form-control" min="0" max="50" onchange="evaluarSeniorFitnessTest()">
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="salto_resultado" class="form-label">Resultados e Índices</label>
-                  <div id="salto_resultado" class="alert alert-secondary">Pendiente</div>
-                </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="sft_arm_curl" class="form-label">Arm Curl (rep/30s)</label>
+                <input type="number" id="sft_arm_curl" name="sft_arm_curl" class="form-control" min="0" max="50" onchange="evaluarSeniorFitnessTest()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="sft_2min_step" class="form-label">2-Min Step (pasos)</label>
+                <input type="number" id="sft_2min_step" name="sft_2min_step" class="form-control" min="0" max="200" onchange="evaluarSeniorFitnessTest()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="sft_chair_sit_reach" class="form-label">Chair Sit & Reach (cm)</label>
+                <input type="number" id="sft_chair_sit_reach" name="sft_chair_sit_reach" class="form-control" min="-50" max="50" step="0.1" onchange="evaluarSeniorFitnessTest()">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="sft_back_scratch" class="form-label">Back Scratch (cm)</label>
+                <input type="number" id="sft_back_scratch" name="sft_back_scratch" class="form-control" min="-50" max="50" step="0.1" onchange="evaluarSeniorFitnessTest()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="sft_8foot_up_go" class="form-label">8-Foot Up & Go (seg)</label>
+                <input type="number" id="sft_8foot_up_go" name="sft_8foot_up_go" class="form-control" min="0" max="100" step="0.1" onchange="evaluarSeniorFitnessTest()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="sft_edad" class="form-label">Edad</label>
+                <input type="number" id="sft_edad" name="sft_edad" class="form-control" min="60" max="120" onchange="evaluarSeniorFitnessTest()">
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="sft_genero" class="form-label">Género</label>
+                <select id="sft_genero" name="sft_genero" class="form-select" onchange="evaluarSeniorFitnessTest()">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-2">
+              <div class="form-group">
+                <label for="sft_rpe" class="form-label">RPE (0-10)</label>
+                <input type="number" id="sft_rpe" name="sft_rpe" class="form-control" min="0" max="10" step="1">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="sft_resultado" class="form-label">Resultados</label>
+                <div id="sft_resultado" class="alert alert-secondary">Pendiente</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- 4. Tests Adulto Mayor -->
-      <div id="tab-adulto-mayor" class="tab-content">
-        <div class="card mb-4">
-          <div class="card-header bg-light">
-            <h5 class="mb-0">Tests para Adulto Mayor</h5>
+    </div>
+    
+    <!-- 5. Tests de Riesgo de Lesión (subacordeón) -->
+    <div class="subcuestionario-item">
+      <div class="subcuestionario-header" onclick="toggleSubcuestionario('riesgo-lesion-content')">
+        <h5><i class="fas fa-plus-circle"></i> Evaluación de Riesgo de Lesión</h5>
+      </div>
+      <div class="subcuestionario-content" id="riesgo-lesion-content" style="display: none;">
+        <div class="card-body">
+          <!-- LESS (Landing Error Scoring System) -->
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6>LESS (Landing Error Scoring System)</h6>
+              <p class="text-muted small">Evalúa el riesgo de lesión de LCA a través del análisis de la técnica de aterrizaje de un salto.</p>
+            </div>
           </div>
-          <div class="card-body">
-            
-            <!-- Timed Up & Go (TUG) -->
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-12">
-                <h6>Timed Up & Go (TUG)</h6>
-                <p class="text-muted small">Evalúa el riesgo de caídas midiendo el tiempo que tarda el paciente en levantarse de una silla, caminar 3 metros, dar la vuelta y volver a sentarse.</p>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_item1" class="form-label">1. Flexión de rodilla inicial</label>
+                <select id="less_item1" name="less_item1" class="form-select" onchange="evaluarLESS()">
+                  <option value="0">No (0)</option>
+                  <option value="1">Sí (1)</option>
+                </select>
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="tug_tiempo" class="form-label">Tiempo (segundos)</label>
-                  <input type="number" id="tug_tiempo" name="tug_tiempo" class="form-control" min="0" max="100" step="0.1" onchange="evaluarTUG()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="tug_edad" class="form-label">Edad</label>
-                  <input type="number" id="tug_edad" name="tug_edad" class="form-control" min="60" max="120" onchange="evaluarTUG()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="tug_genero" class="form-label">Género</label>
-                  <select id="tug_genero" name="tug_genero" class="form-select" onchange="evaluarTUG()">
-                    <option value="">Seleccionar</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="tug_rpe" class="form-label">RPE (0-10)</label>
-                  <input type="number" id="tug_rpe" name="tug_rpe" class="form-control" min="0" max="10" step="1">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="tug_resultado" class="form-label">Resultado</label>
-                  <div id="tug_resultado" class="alert alert-secondary">Pendiente</div>
-                </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_item2" class="form-label">2. Flexión de cadera inicial</label>
+                <select id="less_item2" name="less_item2" class="form-select" onchange="evaluarLESS()">
+                  <option value="0">No (0)</option>
+                  <option value="1">Sí (1)</option>
+                </select>
               </div>
             </div>
-            
-            <!-- Senior Fitness Test -->
-            <div class="form-row mb-3 mt-4">
-              <div class="form-col form-col-md-12">
-                <h6>Senior Fitness Test</h6>
-                <p class="text-muted small">Batería de tests para evaluar la capacidad funcional en adultos mayores.</p>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_item3" class="form-label">3. Flexión de tronco inicial</label>
+                <select id="less_item3" name="less_item3" class="form-select" onchange="evaluarLESS()">
+                  <option value="0">No (0)</option>
+                  <option value="1">Sí (1)</option>
+                </select>
               </div>
             </div>
-            
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="sft_chair_stand" class="form-label">Chair Stand (rep/30s)</label>
-                  <input type="number" id="sft_chair_stand" name="sft_chair_stand" class="form-control" min="0" max="50" onchange="evaluarSeniorFitnessTest()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="sft_arm_curl" class="form-label">Arm Curl (rep/30s)</label>
-                  <input type="number" id="sft_arm_curl" name="sft_arm_curl" class="form-control" min="0" max="50" onchange="evaluarSeniorFitnessTest()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="sft_2min_step" class="form-label">2-Min Step (pasos)</label>
-                  <input type="number" id="sft_2min_step" name="sft_2min_step" class="form-control" min="0" max="200" onchange="evaluarSeniorFitnessTest()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="sft_chair_sit_reach" class="form-label">Chair Sit & Reach (cm)</label>
-                  <input type="number" id="sft_chair_sit_reach" name="sft_chair_sit_reach" class="form-control" min="-50" max="50" step="0.1" onchange="evaluarSeniorFitnessTest()">
-                </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_item4" class="form-label">4. Plantarflexión inicial</label>
+                <select id="less_item4" name="less_item4" class="form-select" onchange="evaluarLESS()">
+                  <option value="0">No (0)</option>
+                  <option value="1">Sí (1)</option>
+                </select>
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="sft_back_scratch" class="form-label">Back Scratch (cm)</label>
-                  <input type="number" id="sft_back_scratch" name="sft_back_scratch" class="form-control" min="-50" max="50" step="0.1" onchange="evaluarSeniorFitnessTest()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="sft_8foot_up_go" class="form-label">8-Foot Up & Go (seg)</label>
-                  <input type="number" id="sft_8foot_up_go" name="sft_8foot_up_go" class="form-control" min="0" max="100" step="0.1" onchange="evaluarSeniorFitnessTest()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="sft_edad" class="form-label">Edad</label>
-                  <input type="number" id="sft_edad" name="sft_edad" class="form-control" min="60" max="120" onchange="evaluarSeniorFitnessTest()">
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="sft_genero" class="form-label">Género</label>
-                  <select id="sft_genero" name="sft_genero" class="form-select" onchange="evaluarSeniorFitnessTest()">
-                    <option value="">Seleccionar</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-2">
-                <div class="form-group">
-                  <label for="sft_rpe" class="form-label">RPE (0-10)</label>
-                  <input type="number" id="sft_rpe" name="sft_rpe" class="form-control" min="0" max="10" step="1">
-                </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_item5" class="form-label">5. Valgo de rodilla dinámico</label>
+                <select id="less_item5" name="less_item5" class="form-select" onchange="evaluarLESS()">
+                  <option value="0">No (0)</option>
+                  <option value="1">Pequeño (1)</option>
+                  <option value="2">Obvio (2)</option>
+                </select>
               </div>
             </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="sft_resultado" class="form-label">Resultados</label>
-                  <div id="sft_resultado" class="alert alert-secondary">Pendiente</div>
-                </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_item6" class="form-label">6. Ancho de apoyo lateral</label>
+                <select id="less_item6" name="less_item6" class="form-select" onchange="evaluarLESS()">
+                  <option value="0">Normal (0)</option>
+                  <option value="1">Amplio (1)</option>
+                  <option value="2">Estrecho (2)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_item7" class="form-label">7. Posición del pie (rotación)</label>
+                <select id="less_item7" name="less_item7" class="form-select" onchange="evaluarLESS()">
+                  <option value="0">Normal (0)</option>
+                  <option value="1">Rotación externa (1)</option>
+                  <option value="2">Rotación interna (2)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_item8" class="form-label">8. Impresión general</label>
+                <select id="less_item8" name="less_item8" class="form-select" onchange="evaluarLESS()">
+                  <option value="0">Excelente (0)</option>
+                  <option value="1">Promedio (1)</option>
+                  <option value="2">Pobre (2)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_item9" class="form-label">9. Desplazamiento lateral</label>
+                <select id="less_item9" name="less_item9" class="form-select" onchange="evaluarLESS()">
+                  <option value="0">No (0)</option>
+                  <option value="1">Sí (1)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_item10" class="form-label">10. Asimetría de rodillas</label>
+                <select id="less_item10" name="less_item10" class="form-select" onchange="evaluarLESS()">
+                  <option value="0">No (0)</option>
+                  <option value="1">Sí (1)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_rpe" class="form-label">RPE (0-10)</label>
+                <input type="number" id="less_rpe" name="less_rpe" class="form-control" min="0" max="10" step="1">
+              </div>
+            </div>
+            <div class="form-col form-col-md-3">
+              <div class="form-group">
+                <label for="less_genero" class="form-label">Género</label>
+                <select id="less_genero" name="less_genero" class="form-select" onchange="evaluarLESS()">
+                  <option value="">Seleccionar</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="less_resultado" class="form-label">Resultado e Interpretación</label>
+                <div id="less_resultado" class="alert alert-secondary">Pendiente</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Panel de Estratificación de Riesgo -->
+          <div class="form-row mb-3 mt-4">
+            <div class="form-col form-col-md-12">
+              <h6>Estratificación de Riesgo Global</h6>
+              <p class="text-muted small">Análisis integral de factores de riesgo basado en todos los tests realizados.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="estratificacion_riesgo" class="form-label">Resultados</label>
+                <div id="estratificacion_riesgo" class="alert alert-secondary">Complete al menos 3 test para obtener una estratificación de riesgo global.</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sistema de Decisión Clínica -->
+          <div class="form-row mb-3 mt-4">
+            <div class="form-col form-col-md-12">
+              <h6>Sistema de Decisión Clínica</h6>
+              <p class="text-muted small">Recomendaciones para progresión de ejercicios y criterios de retorno deportivo.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="decision_clinica" class="form-label">Recomendaciones</label>
+                <div id="decision_clinica" class="alert alert-secondary">Complete los test relevantes para obtener recomendaciones específicas.</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- 5. Tests de Riesgo de Lesión -->
-      <div id="tab-riesgo-lesion" class="tab-content">
-        <div class="card mb-4">
-          <div class="card-header bg-light">
-            <h5 class="mb-0">Evaluación de Riesgo de Lesión</h5>
-          </div>
-          <div class="card-body">
-            
-            <!-- LESS (Landing Error Scoring System) -->
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-12">
-                <h6>LESS (Landing Error Scoring System)</h6>
-                <p class="text-muted small">Evalúa el riesgo de lesión de LCA a través del análisis de la técnica de aterrizaje de un salto.</p>
-              </div>
-            </div>
-            
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_item1" class="form-label">1. Flexión de rodilla inicial</label>
-                  <select id="less_item1" name="less_item1" class="form-select" onchange="evaluarLESS()">
-                    <option value="0">No (0)</option>
-                    <option value="1">Sí (1)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_item2" class="form-label">2. Flexión de cadera inicial</label>
-                  <select id="less_item2" name="less_item2" class="form-select" onchange="evaluarLESS()">
-                    <option value="0">No (0)</option>
-                    <option value="1">Sí (1)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_item3" class="form-label">3. Flexión de tronco inicial</label>
-                  <select id="less_item3" name="less_item3" class="form-select" onchange="evaluarLESS()">
-                    <option value="0">No (0)</option>
-                    <option value="1">Sí (1)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_item4" class="form-label">4. Plantarflexión inicial</label>
-                  <select id="less_item4" name="less_item4" class="form-select" onchange="evaluarLESS()">
-                    <option value="0">No (0)</option>
-                    <option value="1">Sí (1)</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_item5" class="form-label">5. Valgo de rodilla dinámico</label>
-                  <select id="less_item5" name="less_item5" class="form-select" onchange="evaluarLESS()">
-                    <option value="0">No (0)</option>
-                    <option value="1">Pequeño (1)</option>
-                    <option value="2">Obvio (2)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_item6" class="form-label">6. Ancho de apoyo lateral</label>
-                  <select id="less_item6" name="less_item6" class="form-select" onchange="evaluarLESS()">
-                    <option value="0">Normal (0)</option>
-                    <option value="1">Amplio (1)</option>
-                    <option value="2">Estrecho (2)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_item7" class="form-label">7. Posición del pie (rotación)</label>
-                  <select id="less_item7" name="less_item7" class="form-select" onchange="evaluarLESS()">
-                    <option value="0">Normal (0)</option>
-                    <option value="1">Rotación externa (1)</option>
-                    <option value="2">Rotación interna (2)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_item8" class="form-label">8. Impresión general</label>
-                  <select id="less_item8" name="less_item8" class="form-select" onchange="evaluarLESS()">
-                    <option value="0">Excelente (0)</option>
-                    <option value="1">Promedio (1)</option>
-                    <option value="2">Pobre (2)</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-row mb-3">
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_item9" class="form-label">9. Desplazamiento lateral</label>
-                  <select id="less_item9" name="less_item9" class="form-select" onchange="evaluarLESS()">
-                    <option value="0">No (0)</option>
-                    <option value="1">Sí (1)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_item10" class="form-label">10. Asimetría de rodillas</label>
-                  <select id="less_item10" name="less_item10" class="form-select" onchange="evaluarLESS()">
-                    <option value="0">No (0)</option>
-                    <option value="1">Sí (1)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_rpe" class="form-label">RPE (0-10)</label>
-                  <input type="number" id="less_rpe" name="less_rpe" class="form-control" min="0" max="10" step="1">
-                </div>
-              </div>
-              <div class="form-col form-col-md-3">
-                <div class="form-group">
-                  <label for="less_genero" class="form-label">Género</label>
-                  <select id="less_genero" name="less_genero" class="form-select" onchange="evaluarLESS()">
-                    <option value="">Seleccionar</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="less_resultado" class="form-label">Resultado e Interpretación</label>
-                  <div id="less_resultado" class="alert alert-secondary">Pendiente</div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Panel de Estratificación de Riesgo -->
-            <div class="form-row mb-3 mt-4">
-              <div class="form-col form-col-md-12">
-                <h6>Estratificación de Riesgo Global</h6>
-                <p class="text-muted small">Análisis integral de factores de riesgo basado en todos los tests realizados.</p>
-              </div>
-            </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="estratificacion_riesgo" class="form-label">Resultados</label>
-                  <div id="estratificacion_riesgo" class="alert alert-secondary">Complete al menos 3 test para obtener una estratificación de riesgo global.</div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Sistema de Decisión Clínica -->
-            <div class="form-row mb-3 mt-4">
-              <div class="form-col form-col-md-12">
-                <h6>Sistema de Decisión Clínica</h6>
-                <p class="text-muted small">Recomendaciones para progresión de ejercicios y criterios de retorno deportivo.</p>
-              </div>
-            </div>
-            
-            <div class="form-row mb-4">
-              <div class="form-col form-col-md-12">
-                <div class="form-group">
-                  <label for="decision_clinica" class="form-label">Recomendaciones</label>
-                  <div id="decision_clinica" class="alert alert-secondary">Complete los test relevantes para obtener recomendaciones específicas.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    </div>
+    
+    <!-- 6. Tareas Específicas del Paciente (subacordeón) -->
+    <div class="subcuestionario-item">
+      <div class="subcuestionario-header" onclick="toggleSubcuestionario('tareas-especificas-content')">
+        <h5><i class="fas fa-plus-circle"></i> Tareas Específicas del Paciente</h5>
       </div>
-      
-      <!-- 6. Tareas Específicas del Paciente -->
-      <div id="tab-tareas-especificas" class="tab-content">
-        <div class="card mb-4">
-          <div class="card-header bg-light">
-            <h5 class="mb-0">Tareas Específicas del Paciente</h5>
-          </div>
-          <div class="card-body">
-            <p class="text-muted mb-3">Evalúe la capacidad del paciente para realizar tareas específicas relevantes para su contexto personal, laboral o deportivo.</p>
-            
-            <div id="tareas_especificas_container">
-              <!-- Las tareas específicas se agregarán aquí -->
-              <div class="form-row mb-3">
-                <div class="form-col form-col-md-12">
-                  <p class="text-muted">Utilice el botón "Agregar Tarea Específica" para añadir tareas funcionales relevantes para este paciente.</p>
-                </div>
+      <div class="subcuestionario-content" id="tareas-especificas-content" style="display: none;">
+        <div class="card-body">
+          <p class="text-muted mb-3">Evalúe la capacidad del paciente para realizar tareas específicas relevantes para su contexto personal, laboral o deportivo.</p>
+          
+          <div id="tareas_especificas_container">
+            <!-- Las tareas específicas se agregarán aquí -->
+            <div class="form-row mb-3">
+              <div class="form-col form-col-md-12">
+                <p class="text-muted">Utilice el botón "Agregar Tarea Específica" para añadir tareas funcionales relevantes para este paciente.</p>
               </div>
             </div>
-            
-            <div class="form-row mt-3">
-              <div class="form-col form-col-md-12">
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarTareaEspecifica()">
-                  <i class="fas fa-plus"></i> Agregar Tarea Específica
-                </button>
-              </div>
+          </div>
+          
+          <div class="form-row mt-3">
+            <div class="form-col form-col-md-12">
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarTareaEspecifica()">
+                <i class="fas fa-plus"></i> Agregar Tarea Específica
+              </button>
             </div>
           </div>
         </div>
@@ -17487,39 +17470,37 @@
   </div>
 </div>
 
-<!-- Estilos específicos para la navegación por pestañas personalizada -->
+<!-- Estilos específicos para los subacordeones -->
 <style>
-.custom-tabs .tab-buttons {
-  display: flex;
-  flex-wrap: wrap;
+.subcuestionario-item {
   margin-bottom: 15px;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #e9ecef;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
-.custom-tabs .tab-button {
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  border-bottom: none;
+.subcuestionario-header {
   padding: 10px 15px;
+  background-color: #f8f9fa;
   cursor: pointer;
-  margin-right: 5px;
-  border-radius: 5px 5px 0 0;
-  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.custom-tabs .tab-button:hover {
-  background-color: #e9ecef;
+.subcuestionario-header h5 {
+  margin: 0;
+  font-size: 1.1rem;
 }
 
-.custom-tabs .tab-button.active {
-  background-color: #7E3FF2;
-  color: white;
-  border-color: #7E3FF2;
-}
-
-.custom-tabs .tab-content {
+.subcuestionario-content {
+  padding: 15px;
+  border-top: 1px solid #e9ecef;
   display: none;
-  padding: 0;
+}
+
+.subcuestionario-header:hover {
+  background-color: #e9ecef;
 }
 </style>
 
