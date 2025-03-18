@@ -465,3 +465,56 @@
 [data-calculadora-rm] .mb-0 {
   margin-bottom: 0;
 }
+
+/* Agrega estos estilos al final de tu CSS actual */
+
+/* Estilos para asegurar que las pestañas funcionen correctamente */
+.cuestionario-item .nav-tabs {
+  display: flex;
+  list-style: none;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 15px;
+  padding-left: 0;
+}
+
+.cuestionario-item .nav-item {
+  margin-bottom: -1px;
+}
+
+.cuestionario-item .nav-link {
+  display: block;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  margin-right: 5px;
+  color: #333;
+  background-color: #f8f9fa;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cuestionario-item .nav-link.active {
+  color: #fff;
+  background-color: #6f42c1;
+  border-color: #6f42c1;
+  font-weight: 600;
+}
+
+.cuestionario-item .nav-link i {
+  margin-right: 5px;
+}
+
+/* Estilos para el contenido de las pestañas */
+.cuestionario-item .tab-content {
+  padding-top: 15px;
+}
+
+.cuestionario-item .tab-pane {
+  display: none;
+}
+
+.cuestionario-item .tab-pane.show.active {
+  display: block;
+}
