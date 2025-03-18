@@ -16304,17 +16304,17 @@
     <!-- Actualiza esta parte en tu HTML -->
 <ul class="nav-tabs" id="rm-tabs" role="tablist">
   <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="reps-tab" data-target="#reps-content" type="button" role="tab" aria-controls="reps-content" aria-selected="true">
+    <button class="nav-link active" id="reps-tab" onclick="cambiarPestana('reps-content', this)" type="button" role="tab">
       <i class="fas fa-sort-numeric-up"></i> Por Repeticiones
     </button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="rpe-tab" data-target="#rpe-content" type="button" role="tab" aria-controls="rpe-content" aria-selected="false">
+    <button class="nav-link" id="rpe-tab" onclick="cambiarPestana('rpe-content', this)" type="button" role="tab">
       <i class="fas fa-tachometer-alt"></i> Por RPE
     </button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="rir-tab" data-target="#rir-content" type="button" role="tab" aria-controls="rir-content" aria-selected="false">
+    <button class="nav-link" id="rir-tab" onclick="cambiarPestana('rir-content', this)" type="button" role="tab">
       <i class="fas fa-battery-three-quarters"></i> Por RIR
     </button>
   </li>
@@ -16322,7 +16322,7 @@
     
     <div class="tab-content" id="rm-tabs-content">
       <!-- Método 1: Cálculo por Repeticiones (NSCA pág. 405-406) -->
-      <div class="tab-pane fade show active" id="reps-content" role="tabpanel" aria-labelledby="reps-tab">
+      <div class="tab-pane fade show active" id="reps-content" role="tabpanel">
         <div class="card">
           <div class="card-header">
             <h5>Calculadora de 1RM por Repeticiones Máximas</h5>
@@ -16395,7 +16395,7 @@
       </div>
       
       <!-- Método 2: Cálculo por RPE (complementa NSCA pág. 407 sobre RIR) -->
-      <div class="tab-pane fade" id="rpe-content" role="tabpanel" aria-labelledby="rpe-tab">
+      <div class="tab-pane fade" id="rpe-content" role="tabpanel">
         <div class="card">
           <div class="card-header">
             <h5>Calculadora de 1RM por RPE (Valoración de Esfuerzo Percibido)</h5>
@@ -16496,7 +16496,7 @@
       </div>
       
       <!-- Método 3: Cálculo por RIR (NSCA pág. 407 - "repeticiones en reserva") -->
-      <div class="tab-pane fade" id="rir-content" role="tabpanel" aria-labelledby="rir-tab">
+      <div class="tab-pane fade" id="rir-content" role="tabpanel">
         <div class="card">
           <div class="card-header">
             <h5>Calculadora de 1RM por RIR (Repeticiones en Reserva)</h5>
