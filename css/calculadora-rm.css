@@ -1,5 +1,12 @@
-/* CSS con alcance limitado SOLO para la calculadora RM */
-.cuestionario-item .cuestionario-header {
+/* CSS totalmente aislado usando atributo data como namespace */
+[data-calculadora-rm] {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Solo estos estilos afectarán al acordeón de calculadora RM */
+[data-calculadora-rm] .cuestionario-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,13 +17,7 @@
   cursor: pointer;
 }
 
-.cuestionario-item .cuestionario-header h4 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.cuestionario-item .cuestionario-content {
+[data-calculadora-rm] .cuestionario-content {
   background-color: #fff;
   padding: 20px;
   border-radius: 0 0 8px 8px;
@@ -24,21 +25,28 @@
   border-top: none;
 }
 
-/* Estilo para los textos dentro de la calculadora */
-.cuestionario-item p {
+/* Resto de estilos específicos para la calculadora */
+[data-calculadora-rm] h4,
+[data-calculadora-rm] h5,
+[data-calculadora-rm] h6 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+[data-calculadora-rm] p {
   margin-bottom: 15px;
 }
 
-.cuestionario-item .text-muted {
+[data-calculadora-rm] .text-muted {
   color: #6c757d;
 }
 
-.cuestionario-item .small {
+[data-calculadora-rm] .small {
   font-size: 85%;
 }
 
-/* Pestañas personalizadas */
-.cuestionario-item .nav-tabs {
+/* Pestañas */
+[data-calculadora-rm] .nav-tabs {
   display: flex;
   list-style: none;
   border-bottom: 1px solid #dee2e6;
@@ -46,11 +54,11 @@
   padding-left: 0;
 }
 
-.cuestionario-item .nav-item {
+[data-calculadora-rm] .nav-item {
   margin-bottom: -1px;
 }
 
-.cuestionario-item .nav-link {
+[data-calculadora-rm] .nav-link {
   display: block;
   padding: 10px 15px;
   border: 1px solid transparent;
@@ -64,85 +72,85 @@
   font-weight: 500;
 }
 
-.cuestionario-item .nav-link.active {
+[data-calculadora-rm] .nav-link.active {
   color: #6f42c1;
   background-color: #fff;
   border-color: #dee2e6 #dee2e6 #fff;
   font-weight: 600;
 }
 
-.cuestionario-item .nav-link i {
+[data-calculadora-rm] .nav-link i {
   margin-right: 5px;
 }
 
 /* Contenido de pestañas */
-.cuestionario-item .tab-content {
+[data-calculadora-rm] .tab-content {
   padding-top: 15px;
 }
 
-.cuestionario-item .tab-pane {
+[data-calculadora-rm] .tab-pane {
   display: none;
 }
 
-.cuestionario-item .tab-pane.show.active {
+[data-calculadora-rm] .tab-pane.show.active {
   display: block;
 }
 
-/* Estilos para las tarjetas */
-.cuestionario-item .card {
+/* Tarjetas */
+[data-calculadora-rm] .card {
   margin-bottom: 20px;
   border: 1px solid #e0e0e0;
   border-radius: 5px;
 }
 
-.cuestionario-item .card-header {
+[data-calculadora-rm] .card-header {
   padding: 15px;
   background-color: #f8f9fa;
   border-bottom: 1px solid #e0e0e0;
 }
 
-.cuestionario-item .card-header h5 {
+[data-calculadora-rm] .card-header h5 {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
 }
 
-.cuestionario-item .card-body {
+[data-calculadora-rm] .card-body {
   padding: 15px;
 }
 
 /* Formularios */
-.cuestionario-item .form-row {
+[data-calculadora-rm] .form-row {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 15px;
 }
 
-.cuestionario-item .form-group {
+[data-calculadora-rm] .form-group {
   margin-bottom: 15px;
   width: 100%;
   padding-right: 15px;
 }
 
 @media (min-width: 768px) {
-  .cuestionario-item .form-group {
+  [data-calculadora-rm] .form-group {
     width: 33.33%;
   }
   
-  .cuestionario-item .full-width {
+  [data-calculadora-rm] .full-width {
     width: 100%;
   }
 }
 
-.cuestionario-item .form-group label {
+[data-calculadora-rm] .form-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: 500;
   color: #333;
 }
 
-.cuestionario-item .form-control, 
-.cuestionario-item .form-select {
+[data-calculadora-rm] .form-control, 
+[data-calculadora-rm] .form-select {
   display: block;
   width: 100%;
   padding: 8px 12px;
@@ -155,26 +163,19 @@
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.cuestionario-item .form-control:focus, 
-.cuestionario-item .form-select:focus {
-  border-color: #6f42c1;
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
-}
-
-.cuestionario-item .form-text {
+[data-calculadora-rm] .form-text {
   display: block;
   margin-top: 5px;
   font-size: 12px;
   color: #6c757d;
 }
 
-.cuestionario-item .mt-3 {
+[data-calculadora-rm] .mt-3 {
   margin-top: 15px;
 }
 
 /* Botones */
-.cuestionario-item .btn {
+[data-calculadora-rm] .btn {
   display: inline-block;
   font-weight: 400;
   text-align: center;
@@ -190,35 +191,20 @@
   cursor: pointer;
 }
 
-.cuestionario-item .btn-primary {
+[data-calculadora-rm] .btn-primary {
   color: #fff;
   background-color: #6f42c1;
   border-color: #6f42c1;
 }
 
-.cuestionario-item .btn-primary:hover {
-  background-color: #5e35b1;
-  border-color: #5e35b1;
-}
-
-.cuestionario-item .btn-outline-primary {
+[data-calculadora-rm] .btn-outline-primary {
   color: #6f42c1;
   background-color: transparent;
   border-color: #6f42c1;
 }
 
-.cuestionario-item .btn-outline-primary:hover {
-  color: #fff;
-  background-color: #6f42c1;
-  border-color: #6f42c1;
-}
-
-.cuestionario-item .btn i {
-  margin-right: 5px;
-}
-
-/* Insignias */
-.cuestionario-item .resultado-badge {
+/* Badges */
+[data-calculadora-rm] .resultado-badge {
   display: inline-block;
   padding: 6px 12px;
   font-size: 12px;
@@ -232,7 +218,7 @@
   color: white;
 }
 
-.cuestionario-item .badge {
+[data-calculadora-rm] .badge {
   display: inline-block;
   padding: 4px 8px;
   font-size: 12px;
@@ -247,224 +233,207 @@
 }
 
 /* Tablas */
-.cuestionario-item .table-responsive {
+[data-calculadora-rm] .table-responsive {
   display: block;
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-.cuestionario-item .table-bordered {
+[data-calculadora-rm] .table-bordered {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 15px;
 }
 
-.cuestionario-item .table-bordered th,
-.cuestionario-item .table-bordered td {
+[data-calculadora-rm] .table-bordered th,
+[data-calculadora-rm] .table-bordered td {
   padding: 8px;
   border: 1px solid #dee2e6;
   text-align: left;
 }
 
-.cuestionario-item .table-bordered th {
+[data-calculadora-rm] .table-bordered th {
   background-color: #f0f0f0;
   font-weight: 600;
 }
 
-.cuestionario-item .table-bordered tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-/* Layout de dos columnas */
-.cuestionario-item .two-columns {
+/* Columnas */
+[data-calculadora-rm] .two-columns {
   display: flex;
   flex-wrap: wrap;
 }
 
-.cuestionario-item .column-left {
+[data-calculadora-rm] .column-left {
   width: 100%;
 }
 
-.cuestionario-item .column-right {
+[data-calculadora-rm] .column-right {
   width: 100%;
   margin-top: 15px;
 }
 
 @media (min-width: 768px) {
-  .cuestionario-item .column-left {
+  [data-calculadora-rm] .column-left {
     width: 60%;
     padding-right: 15px;
   }
   
-  .cuestionario-item .column-right {
+  [data-calculadora-rm] .column-right {
     width: 40%;
     margin-top: 0;
   }
 }
 
 /* Tarjetas de información */
-.cuestionario-item .info-card {
+[data-calculadora-rm] .info-card {
   background-color: #f8f9fa;
   border: 1px solid #e0e0e0;
   border-radius: 5px;
   padding: 15px;
 }
 
-.cuestionario-item .info-card h6 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-weight: 600;
-}
-
 /* Alertas */
-.cuestionario-item .alert-info, 
-.cuestionario-item .alert-primary, 
-.cuestionario-item .alert-secondary, 
-.cuestionario-item .alert-danger {
+[data-calculadora-rm] .alert-info, 
+[data-calculadora-rm] .alert-primary, 
+[data-calculadora-rm] .alert-secondary, 
+[data-calculadora-rm] .alert-danger,
+[data-calculadora-rm] .alert-success,
+[data-calculadora-rm] .alert-warning {
   padding: 15px;
   margin-bottom: 15px;
   border: 1px solid transparent;
   border-radius: 4px;
 }
 
-.cuestionario-item .alert-info {
+[data-calculadora-rm] .alert-info {
   color: #0c5460;
   background-color: #d1ecf1;
   border-color: #bee5eb;
 }
 
-.cuestionario-item .alert-primary {
+[data-calculadora-rm] .alert-primary {
   color: #004085;
   background-color: #cce5ff;
   border-color: #b8daff;
 }
 
-.cuestionario-item .alert-secondary {
+[data-calculadora-rm] .alert-secondary {
   color: #383d41;
   background-color: #e2e3e5;
   border-color: #d6d8db;
 }
 
-.cuestionario-item .alert-danger {
+[data-calculadora-rm] .alert-danger {
   color: #721c24;
   background-color: #f8d7da;
   border-color: #f5c6cb;
 }
 
-.cuestionario-item .alert-info h6, 
-.cuestionario-item .alert-primary h6, 
-.cuestionario-item .alert-secondary h6, 
-.cuestionario-item .alert-danger h6 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-weight: 600;
+[data-calculadora-rm] .alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+[data-calculadora-rm] .alert-warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
 }
 
 /* Resultado 1RM */
-.cuestionario-item .result-card {
+[data-calculadora-rm] .result-card {
   border: 1px solid #e0e0e0;
   border-radius: 5px;
 }
 
-.cuestionario-item .result-header {
+[data-calculadora-rm] .result-header {
   padding: 15px;
   background-color: #28a745;
   color: white;
   border-radius: 5px 5px 0 0;
 }
 
-.cuestionario-item .result-header h5 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.cuestionario-item .result-body {
+[data-calculadora-rm] .result-body {
   padding: 15px;
 }
 
-.cuestionario-item .result-columns {
+[data-calculadora-rm] .result-columns {
   display: flex;
   flex-wrap: wrap;
 }
 
-.cuestionario-item .result-value {
+[data-calculadora-rm] .result-value {
   width: 100%;
   text-align: center;
   margin-bottom: 20px;
 }
 
-.cuestionario-item .result-table {
+[data-calculadora-rm] .result-table {
   width: 100%;
 }
 
 @media (min-width: 768px) {
-  .cuestionario-item .result-value {
+  [data-calculadora-rm] .result-value {
     width: 25%;
     margin-bottom: 0;
   }
   
-  .cuestionario-item .result-table {
+  [data-calculadora-rm] .result-table {
     width: 75%;
   }
 }
 
-.cuestionario-item .result-value h2 {
+[data-calculadora-rm] .result-value h2 {
   font-size: 2.5rem;
   color: #28a745;
   margin: 10px 0;
 }
 
 /* Guía de prescripción */
-.cuestionario-item .prescription-card {
+[data-calculadora-rm] .prescription-card {
   margin-top: 20px;
   border: 1px solid #e0e0e0;
   border-radius: 5px;
 }
 
-.cuestionario-item .prescription-header {
+[data-calculadora-rm] .prescription-header {
   padding: 15px;
   background-color: #007bff;
   color: white;
   border-radius: 5px 5px 0 0;
 }
 
-.cuestionario-item .prescription-header h5 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.cuestionario-item .prescription-body {
+[data-calculadora-rm] .prescription-body {
   padding: 15px;
 }
 
-.cuestionario-item .prescription-grid {
+[data-calculadora-rm] .prescription-grid {
   display: flex;
   flex-wrap: wrap;
   margin: -10px;
   margin-bottom: 15px;
 }
 
-.cuestionario-item .prescription-item {
+[data-calculadora-rm] .prescription-item {
   width: 100%;
   padding: 10px;
 }
 
 @media (min-width: 768px) {
-  .cuestionario-item .prescription-item {
+  [data-calculadora-rm] .prescription-item {
     width: 50%;
   }
 }
 
-.cuestionario-item .prescription-item-header {
+[data-calculadora-rm] .prescription-item-header {
   padding: 10px;
   border-radius: 5px 5px 0 0;
   font-weight: 600;
 }
 
-.cuestionario-item .prescription-item-body {
+[data-calculadora-rm] .prescription-item-body {
   padding: 15px;
   background-color: #fff;
   border: 1px solid;
@@ -472,92 +441,27 @@
   border-radius: 0 0 5px 5px;
 }
 
-.cuestionario-item .strength-card .prescription-item-header {
-  background-color: #dc3545;
-  color: white;
-  border: 1px solid #dc3545;
-}
+/* Estilos de tabla específicos */
+[data-calculadora-rm] .table-danger { background-color: #f8d7da; }
+[data-calculadora-rm] .table-warning { background-color: #fff3cd; }
+[data-calculadora-rm] .table-success { background-color: #d4edda; }
+[data-calculadora-rm] .table-primary { background-color: #cce5ff; }
 
-.cuestionario-item .strength-card .prescription-item-body {
-  border-color: #dc3545;
-}
-
-.cuestionario-item .hypertrophy-card .prescription-item-header {
-  background-color: #ffc107;
-  color: #333;
-  border: 1px solid #ffc107;
-}
-
-.cuestionario-item .hypertrophy-card .prescription-item-body {
-  border-color: #ffc107;
-}
-
-.cuestionario-item .endurance-card .prescription-item-header {
-  background-color: #28a745;
-  color: white;
-  border: 1px solid #28a745;
-}
-
-.cuestionario-item .endurance-card .prescription-item-body {
-  border-color: #28a745;
-}
-
-.cuestionario-item .power-card .prescription-item-header {
-  background-color: #007bff;
-  color: white;
-  border: 1px solid #007bff;
-}
-
-.cuestionario-item .power-card .prescription-item-body {
-  border-color: #007bff;
-}
-
-.cuestionario-item .list-unstyled {
+/* Listas */
+[data-calculadora-rm] .list-unstyled {
   list-style: none;
   padding-left: 0;
 }
 
-.cuestionario-item .list-unstyled li {
+[data-calculadora-rm] .list-unstyled li {
   margin-bottom: 5px;
 }
 
-/* Incrementos grid */
-.cuestionario-item .increment-grid {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -10px;
-}
-
-.cuestionario-item .increment-column {
-  width: 100%;
-  padding: 0 10px;
-  margin-bottom: 10px;
-}
-
-@media (min-width: 768px) {
-  .cuestionario-item .increment-column {
-    width: 33.33%;
-    margin-bottom: 0;
-  }
-}
-
-.cuestionario-item .increment-column ul {
-  padding-left: 20px;
-  margin-top: 5px;
-  margin-bottom: 0;
-}
-
-/* Estilos específicos para celdas de la tabla */
-.cuestionario-item .table-danger { background-color: #f8d7da; }
-.cuestionario-item .table-warning { background-color: #fff3cd; }
-.cuestionario-item .table-success { background-color: #d4edda; }
-.cuestionario-item .table-primary { background-color: #cce5ff; }
-
-/* Fixes adicionales */
-.cuestionario-item .mb-3 {
+/* Margins */
+[data-calculadora-rm] .mb-3 {
   margin-bottom: 15px;
 }
 
-.cuestionario-item .mb-0 {
+[data-calculadora-rm] .mb-0 {
   margin-bottom: 0;
 }
