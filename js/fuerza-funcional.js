@@ -15,6 +15,25 @@ function toggleCuestionario(id) {
   verificarEstadoCuestionarios();
 }
 
+// Función para manejar las pestañas personalizadas
+function openFuerzaTab(evt, tabId) {
+  // Ocultar todos los contenidos de pestañas
+  const tabContents = document.getElementsByClassName("tab-content");
+  for (let i = 0; i < tabContents.length; i++) {
+    tabContents[i].style.display = "none";
+  }
+  
+  // Desactivar todos los botones de pestañas
+  const tabButtons = document.getElementsByClassName("tab-button");
+  for (let i = 0; i < tabButtons.length; i++) {
+    tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+  }
+  
+  // Mostrar el contenido de la pestaña actual y activar el botón
+  document.getElementById(tabId).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
 // ============= TESTS FUNCIONALES ESTÁNDAR =============
 
 /**
@@ -263,530 +282,6 @@ function evaluarMcGillTests() {
   
   // Actualizar interpretación global
   actualizarInterpretacionGlobal();
-}
-
-/**
- * Actualiza el resultado de una tarea específica
- */
-function actualizarTareaEspecifica(numTarea) {
-  const capacidad = document.getElementById(`tarea_capacidad_${numTarea}`).value;
-  const dolor = document.getElementById(`tarea_dolor_${numTarea}`).value;
-  const nombre = document.getElementById(`tarea_nombre_${numTarea}`).value;
-  
-  if (!capacidad && !dolor) {
-    document.getElementById(`tarea_resumen_${numTarea}`).innerHTML = "Complete los campos para obtener una evaluación.";
-    document.getElementById(`tarea_resumen_${numTarea}`).className = "alert alert-secondary";
-    return;
-  }
-  
-  let resumen = "";
-  let color = "";
-  
-  // Evaluación según capacidad funcional
-  if (capacidad) {
-    switch (capacidad) {
-      case "Normal":
-        resumen = "Capacidad funcional normal. ";
-        color = "success";
-        break;
-      case "Levemente limitada":
-        resumen = "Capacidad funcional levemente limitada. ";
-        color = "success";
-        break;
-      case "Moderadamente limitada":
-        resumen = "Capacidad funcional moderadamente limitada. ";
-        color = "warning";
-        break;
-      case "Severamente limitada":
-        resumen = "Capacidad funcional severamente limitada. ";
-        color = "danger";
-        break;
-      case "Incapaz":
-        resumen = "Incapaz de realizar la tarea. ";
-        color = "danger";
-        break;
-    }
-  }
-  
-  // Añadir información sobre dolor
-  if (dolor) {
-    const dolorNum = parseInt(dolor);
-    if (dolorNum >= 7) {
-      resumen += `Dolor severo (${dolor}/10) durante la ejecución.`;
-      color = "danger";
-    } else if (dolorNum >= 4) {
-      resumen += `Dolor moderado (${dolor}/10) durante la ejecución.`;
-      color = color === "success" ? "warning" : color;
-    } else if (dolorNum >= 1) {
-      resumen += `Dolor leve (${dolor}/10) durante la ejecución.`;
-    } else {
-      resumen += "Sin dolor durante la ejecución.";
-    }
-  }
-  
-  document.getElementById(`tarea_resumen_${numTarea}`).innerHTML = resumen;
-  document.getElementById(`tarea_resumen_${numTarea}`).className = `alert alert-${color}`;
-  
-  // Actualizar interpretación global
-  actualizarInterpretacionGlobal();
-}
-
-/**
- * Elimina una tarea específica
- */
-function eliminarTareaEspecifica(numTarea) {
-  const tarea = document.getElementById(`tarea_${numTarea}`);
-  if (tarea) {
-    tarea.remove();
-  }
-  
-  // Verificar si no quedan tareas y mostrar mensaje inicial
-  const container = document.getElementById('tareas_especificas_container');
-  const tareas = container.querySelectorAll('.tarea-especifica');
-  
-  if (tareas.length === 0) {
-    const mensajeInicial = document.createElement('div');
-    mensajeInicial.className = 'form-row mb-3';
-    mensajeInicial.innerHTML = `
-      <div class="form-col form-col-md-12">
-        <p class="text-muted">Utilice el botón "Agregar Tarea Específica" para añadir tareas funcionales relevantes para este paciente.</p>
-      </div>
-    `;
-    container.appendChild(mensajeInicial);
-  }
-  
-  // Actualizar interpretación global
-  actualizarInterpretacionGlobal();
-}
-
-/**
- * Agrega un test funcional personalizado
- */
-function agregarTestFuncional() {
-  const container = document.getElementById('otros_tests_funcionales_container');
-  const numTest = document.querySelectorAll('.otro-test-funcional').length + 1;
-  
-  const nuevoTest = document.createElement('div');
-  nuevoTest.className = 'otro-test-funcional mb-4';
-  nuevoTest.id = `otro_test_${numTest}`;
-  
-  nuevoTest.innerHTML = `
-    <hr class="my-3">
-    <div class="form-row mb-4">
-      <div class="form-col form-col-md-12">
-        <div class="form-group">
-          <label for="otro_test_nombre_${numTest}" class="form-label">Nombre del Test</label>
-          <div class="input-group">
-            <input type="text" id="otro_test_nombre_${numTest}" name="otro_test_nombre_${numTest}" class="form-control" placeholder="Ej: Single-leg Bridge Test, Y-Balance Test, etc.">
-            <button type="button" class="btn btn-outline-danger" onclick="eliminarTestFuncional(${numTest})">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-row mb-4">
-      <div class="form-col form-col-md-3">
-        <div class="form-group">
-          <label for="otro_test_resultado_${numTest}" class="form-label">Resultado</label>
-          <input type="text" id="otro_test_resultado_${numTest}" name="otro_test_resultado_${numTest}" class="form-control" placeholder="Ej: 10 seg, 15 cm, etc.">
-        </div>
-      </div>
-      <div class="form-col form-col-md-3">
-        <div class="form-group">
-          <label for="otro_test_referencia_${numTest}" class="form-label">Valor de Referencia</label>
-          <input type="text" id="otro_test_referencia_${numTest}" name="otro_test_referencia_${numTest}" class="form-control" placeholder="Ej: >15 seg, 80-90%, etc.">
-        </div>
-      </div>
-      <div class="form-col form-col-md-2">
-        <div class="form-group">
-          <label for="otro_test_rpe_${numTest}" class="form-label">RPE (0-10)</label>
-          <input type="number" id="otro_test_rpe_${numTest}" name="otro_test_rpe_${numTest}" class="form-control" min="0" max="10" step="1">
-        </div>
-      </div>
-      <div class="form-col form-col-md-4">
-        <div class="form-group">
-          <label for="otro_test_evaluacion_${numTest}" class="form-label">Evaluación</label>
-          <select id="otro_test_evaluacion_${numTest}" name="otro_test_evaluacion_${numTest}" class="form-select" onchange="actualizarOtroTest(${numTest})">
-            <option value="">Seleccionar</option>
-            <option value="Excelente">Excelente</option>
-            <option value="Bueno">Bueno</option>
-            <option value="Promedio">Promedio</option>
-            <option value="Por debajo del promedio">Por debajo del promedio</option>
-            <option value="Deficiente">Deficiente</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-row mb-4">
-      <div class="form-col form-col-md-12">
-        <div class="form-group">
-          <label for="otro_test_observacion_${numTest}" class="form-label">Observaciones</label>
-          <textarea id="otro_test_observacion_${numTest}" name="otro_test_observacion_${numTest}" class="form-control" rows="2" placeholder="Observaciones clínicas, calidad del movimiento, compensaciones, etc."></textarea>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  container.appendChild(nuevoTest);
-  
-  // Actualizar interpretación global
-  actualizarInterpretacionGlobal();
-}
-
-/**
- * Elimina un test funcional personalizado
- */
-function eliminarTestFuncional(numTest) {
-  const test = document.getElementById(`otro_test_${numTest}`);
-  if (test) {
-    test.remove();
-  }
-  
-  // Actualizar interpretación global
-  actualizarInterpretacionGlobal();
-}
-
-/**
- * Actualiza la evaluación de un test funcional personalizado
- */
-function actualizarOtroTest(numTest) {
-  const evaluacion = document.getElementById(`otro_test_evaluacion_${numTest}`).value;
-  if (!evaluacion) return;
-  
-  // Actualizar interpretación global
-  actualizarInterpretacionGlobal();
-}
-
-/**
- * Actualiza la interpretación global y recomendaciones basadas en todos los tests realizados
- */
-function actualizarInterpretacionGlobal() {
-  const testsRealizados = [];
-  const hallazgos = [];
-  
-  // Verificar Sit-to-Stand
-  const sitToStandResultado = document.getElementById('sit_to_stand_resultado');
-  if (sitToStandResultado && !sitToStandResultado.textContent.includes("Complete")) {
-    testsRealizados.push("Sit-to-Stand");
-    
-    if (sitToStandResultado.className.includes("alert-danger")) {
-      hallazgos.push("Fuerza funcional de miembros inferiores significativamente disminuida");
-    } else if (sitToStandResultado.className.includes("alert-warning")) {
-      hallazgos.push("Fuerza funcional de miembros inferiores por debajo del promedio");
-    }
-  }
-  
-  // Verificar Push-up Test
-  const pushUpResultado = document.getElementById('push_up_resultado');
-  if (pushUpResultado && !pushUpResultado.textContent.includes("Complete")) {
-    testsRealizados.push("Push-up Test");
-    
-    if (pushUpResultado.className.includes("alert-danger")) {
-      hallazgos.push("Fuerza-resistencia de miembros superiores significativamente disminuida");
-    } else if (pushUpResultado.className.includes("alert-warning")) {
-      hallazgos.push("Fuerza-resistencia de miembros superiores por debajo del promedio");
-    }
-  }
-  
-  // Verificar McGill Tests
-  const mcgillResultado = document.getElementById('mcgill_resultado');
-  if (mcgillResultado && !mcgillResultado.textContent.includes("Complete")) {
-    testsRealizados.push("McGill Core Tests");
-    
-    if (mcgillResultado.textContent.includes("bg-danger")) {
-      if (mcgillResultado.textContent.includes("Ratio Flexores/Extensores") && mcgillResultado.textContent.includes("bg-danger")) {
-        hallazgos.push("Desequilibrio crítico entre flexores y extensores del tronco");
-      }
-      if (mcgillResultado.textContent.includes("Ratio Simetría Lateral") && mcgillResultado.textContent.includes("bg-danger")) {
-        hallazgos.push("Asimetría severa en la musculatura lateral del core");
-      }
-      if (mcgillResultado.textContent.includes("Plancha Frontal") && mcgillResultado.textContent.includes("bg-danger")) {
-        hallazgos.push("Resistencia deficiente de la musculatura flexora del tronco");
-      }
-      if (mcgillResultado.textContent.includes("Extensión Lumbar") && mcgillResultado.textContent.includes("bg-danger")) {
-        hallazgos.push("Resistencia deficiente de la musculatura extensora del tronco");
-      }
-    }
-  }
-  
-  // Verificar Wall Sit Test
-  const wallSitResultado = document.getElementById('wall_sit_resultado');
-  if (wallSitResultado && !wallSitResultado.textContent.includes("Complete")) {
-    testsRealizados.push("Wall Sit Test");
-    
-    if (wallSitResultado.className.includes("alert-danger")) {
-      hallazgos.push("Resistencia de cuádriceps deficiente");
-    } else if (wallSitResultado.className.includes("alert-warning")) {
-      hallazgos.push("Resistencia de cuádriceps por debajo del promedio");
-    }
-  }
-  
-  // Verificar Pull-up Test
-  const pullupResultado = document.getElementById('pullup_resultado');
-  if (pullupResultado && !pullupResultado.textContent.includes("Complete")) {
-    testsRealizados.push("Pull-up/Chin-up Test");
-    
-    if (pullupResultado.className.includes("alert-danger")) {
-      hallazgos.push("Fuerza-resistencia de espalda y brazos deficiente");
-    } else if (pullupResultado.className.includes("alert-warning")) {
-      hallazgos.push("Fuerza-resistencia de espalda y brazos por debajo del promedio");
-    }
-  }
-  
-  // Verificar Hop Tests
-  const hopResultado = document.getElementById('hop_resultado');
-  if (hopResultado && !hopResultado.textContent.includes("Complete")) {
-    testsRealizados.push("Hop Test");
-    
-    if (hopResultado.className.includes("alert-danger") || hopResultado.className.includes("alert-warning")) {
-      const tipoTest = document.getElementById('hop_test_tipo').value;
-      let tipoTexto = "";
-      
-      switch (tipoTest) {
-        case 'single': tipoTexto = "salto único"; break;
-        case 'triple': tipoTexto = "triple salto"; break;
-        case 'crossover': tipoTexto = "salto con cambio de dirección"; break;
-        case 'timed': tipoTexto = "agilidad"; break;
-      }
-      
-      hallazgos.push(`Asimetría en la capacidad de ${tipoTexto} entre miembros inferiores`);
-    }
-  }
-  
-  // Verificar Batería de Saltos
-  const saltoResultado = document.getElementById('salto_resultado');
-  if (saltoResultado && !saltoResultado.textContent.includes("Complete")) {
-    testsRealizados.push("Batería de Saltos");
-    
-    if (saltoResultado.textContent.includes("baja elasticidad")) {
-      hallazgos.push("Capacidad elástica reducida en miembros inferiores");
-    }
-    if (saltoResultado.textContent.includes("reactividad deficiente") || saltoResultado.textContent.includes("baja reactividad")) {
-      hallazgos.push("Capacidad reactiva reducida en miembros inferiores");
-    }
-    if (saltoResultado.textContent.includes("deficiente coordinación")) {
-      hallazgos.push("Coordinación deficiente en la utilización de brazos durante el salto");
-    }
-  }
-  
-  // Verificar TUG
-  const tugResultado = document.getElementById('tug_resultado');
-  if (tugResultado && !tugResultado.textContent.includes("Complete")) {
-    testsRealizados.push("TUG");
-    
-    if (tugResultado.className.includes("alert-danger")) {
-      hallazgos.push("Alto riesgo de caídas y movilidad reducida");
-    } else if (tugResultado.className.includes("alert-warning")) {
-      hallazgos.push("Riesgo moderado de caídas y movilidad limitada");
-    }
-  }
-  
-  // Verificar Senior Fitness Test
-  const sftResultado = document.getElementById('sft_resultado');
-  if (sftResultado && !sftResultado.textContent.includes("Complete")) {
-    testsRealizados.push("Senior Fitness Test");
-    
-    if (sftResultado.textContent.includes("por debajo del promedio")) {
-      if (sftResultado.textContent.includes("Chair Stand") && sftResultado.textContent.includes("por debajo del promedio")) {
-        hallazgos.push("Fuerza de miembros inferiores por debajo del promedio para la edad");
-      }
-      if (sftResultado.textContent.includes("Arm Curl") && sftResultado.textContent.includes("por debajo del promedio")) {
-        hallazgos.push("Fuerza de miembros superiores por debajo del promedio para la edad");
-      }
-      if (sftResultado.textContent.includes("2-Min Step") && sftResultado.textContent.includes("por debajo del promedio")) {
-        hallazgos.push("Resistencia cardiorrespiratoria por debajo del promedio para la edad");
-      }
-      if (sftResultado.textContent.includes("Chair Sit & Reach") && sftResultado.textContent.includes("por debajo del promedio")) {
-        hallazgos.push("Flexibilidad de miembros inferiores por debajo del promedio para la edad");
-      }
-      if (sftResultado.textContent.includes("Back Scratch") && sftResultado.textContent.includes("por debajo del promedio")) {
-        hallazgos.push("Flexibilidad de miembros superiores por debajo del promedio para la edad");
-      }
-      if (sftResultado.textContent.includes("8-Foot Up & Go") && sftResultado.textContent.includes("por debajo del promedio")) {
-        hallazgos.push("Agilidad y equilibrio dinámico por debajo del promedio para la edad");
-      }
-    }
-  }
-  
-  // Verificar LESS
-  const lessResultado = document.getElementById('less_resultado');
-  if (lessResultado && !lessResultado.textContent.includes("Seleccione")) {
-    testsRealizados.push("LESS");
-    
-    if (lessResultado.className.includes("alert-danger")) {
-      hallazgos.push("Alto riesgo de lesión de LCA por técnica de aterrizaje deficiente");
-    } else if (lessResultado.className.includes("alert-warning")) {
-      hallazgos.push("Riesgo moderado de lesión de LCA por técnica de aterrizaje");
-    }
-  }
-  
-  // Generar la interpretación clínica
-  let interpretacion = "";
-  let recomendaciones = "";
-  
-  if (testsRealizados.length === 0) {
-    interpretacion = "Complete la evaluación de fuerza funcional para obtener recomendaciones clínicas.";
-    recomendaciones = "Complete la evaluación para obtener recomendaciones específicas.";
-  } else {
-    interpretacion = `Basado en los resultados de ${testsRealizados.length} test${testsRealizados.length > 1 ? 's' : ''} de fuerza funcional (${testsRealizados.join(", ")}), se identifican los siguientes hallazgos clínicos:<br><br>`;
-    
-    if (hallazgos.length === 0) {
-      interpretacion += "✅ No se identifican déficits significativos en la fuerza funcional evaluada.<br>";
-      interpretacion += "✅ Los resultados sugieren una buena capacidad funcional en las áreas evaluadas.<br>";
-      
-      recomendaciones = "Basado en los resultados obtenidos, se recomienda:<br><br>";
-      recomendaciones += "✅ Continuar con programa de mantenimiento de fuerza funcional.<br>";
-      recomendaciones += "✅ Progresión gradual en demandas funcionales según objetivos específicos del paciente.<br>";
-      
-      if (testsRealizados.includes("Batería de Saltos") || testsRealizados.includes("Hop Test")) {
-        recomendaciones += "✅ Optimización de patrones de movimiento en actividades deportivas.<br>";
-      }
-      
-      if (testsRealizados.includes("McGill Core Tests")) {
-        recomendaciones += "✅ Mantenimiento de la estabilidad del core en actividades cotidianas y deportivas.<br>";
-      }
-      
-      if (testsRealizados.includes("TUG") || testsRealizados.includes("Senior Fitness Test")) {
-        recomendaciones += "✅ Mantenimiento de actividad física regular para preservar la funcionalidad en el adulto mayor.<br>";
-      }
-    } else {
-      // Ordenar hallazgos por frecuencia de palabras clave para agrupar los relacionados
-      hallazgos.sort();
-      
-      interpretacion += `<ul class="mb-0">`;
-      hallazgos.forEach(hallazgo => {
-        interpretacion += `<li>${hallazgo}.</li>`;
-      });
-      interpretacion += `</ul>`;
-      
-      // Recomendaciones basadas en los hallazgos
-      recomendaciones = "Basado en los hallazgos clínicos, se recomienda:<br><br>";
-      
-      // Recomendaciones para miembros inferiores
-      if (hallazgos.some(h => h.includes("miembros inferiores") || h.includes("cuádriceps"))) {
-        recomendaciones += "• <strong>Fortalecimiento de miembros inferiores</strong>:<br>";
-        recomendaciones += "  - Ejercicios funcionales progresivos (sentadillas, estocadas, puentes).<br>";
-        recomendaciones += "  - Entrenamiento de cadena cinética cerrada con énfasis en calidad de movimiento.<br>";
-        if (hallazgos.some(h => h.includes("asimetría"))) {
-          recomendaciones += "  - Trabajo unilateral con énfasis en equilibrar asimetrías.<br>";
-        }
-      }
-      
-      // Recomendaciones para miembros superiores
-      if (hallazgos.some(h => h.includes("miembros superiores") || h.includes("espalda y brazos"))) {
-        recomendaciones += "• <strong>Fortalecimiento de miembros superiores</strong>:<br>";
-        recomendaciones += "  - Ejercicios progresivos de empuje y tracción.<br>";
-        recomendaciones += "  - Integración de patrones funcionales multidireccionales.<br>";
-      }
-      
-      // Recomendaciones para core
-      if (hallazgos.some(h => h.includes("core") || h.includes("tronco"))) {
-        recomendaciones += "• <strong>Estabilización del core</strong>:<br>";
-        recomendaciones += "  - Programa progresivo de estabilización según principios de McGill.<br>";
-        recomendaciones += "  - Énfasis en corrección de desequilibrios identificados.<br>";
-        if (hallazgos.some(h => h.includes("asimetría"))) {
-          recomendaciones += "  - Trabajo específico para corregir asimetrías laterales.<br>";
-        }
-      }
-      
-      // Recomendaciones para capacidad de salto
-      if (hallazgos.some(h => h.includes("elasticidad") || h.includes("reactiva") || h.includes("salto"))) {
-        recomendaciones += "• <strong>Entrenamiento neuromuscular y pliométrico</strong>:<br>";
-        recomendaciones += "  - Programa progresivo de pliometría adaptado al nivel del paciente.<br>";
-        if (hallazgos.some(h => h.includes("elasticidad"))) {
-          recomendaciones += "  - Ejercicios de ciclo estiramiento-acortamiento enfocados en mejorar elasticidad.<br>";
-        }
-        if (hallazgos.some(h => h.includes("reactividad"))) {
-          recomendaciones += "  - Ejercicios de tiempo de contacto reducido para mejorar reactividad.<br>";
-        }
-        if (hallazgos.some(h => h.includes("coordinación"))) {
-          recomendaciones += "  - Ejercicios de coordinación de miembros superiores durante saltos.<br>";
-        }
-      }
-      
-      // Recomendaciones para riesgo de lesión
-      if (hallazgos.some(h => h.includes("lesión"))) {
-        recomendaciones += "• <strong>Prevención de lesiones</strong>:<br>";
-        recomendaciones += "  - Programa de control neuromuscular específico.<br>";
-        recomendaciones += "  - Entrenamiento de la técnica de aterrizaje y cambios de dirección.<br>";
-        recomendaciones += "  - Corrección de patrones de movimiento disfuncionales.<br>";
-      }
-      
-      // Recomendaciones para adulto mayor / riesgo de caídas
-      if (hallazgos.some(h => h.includes("caídas") || h.includes("edad"))) {
-        recomendaciones += "• <strong>Prevención de caídas y mantenimiento funcional</strong>:<br>";
-        recomendaciones += "  - Programa multifactorial de prevención de caídas.<br>";
-        recomendaciones += "  - Entrenamiento de equilibrio estático y dinámico.<br>";
-        recomendaciones += "  - Fortalecimiento específico para mantener independencia funcional.<br>";
-      }
-      
-      // Recomendación general de monitoreo
-      recomendaciones += "<br>• <strong>Seguimiento</strong>: Reevaluación periódica para monitorizar progreso y ajustar intervenciones según resultados.";
-    }
-  }
-  
-  // Actualizar los contenedores de interpretación y recomendaciones
-  document.getElementById('interpretacion-fuerza-funcional-texto').innerHTML = interpretacion;
-  document.getElementById('recomendaciones-fuerza-funcional-texto').innerHTML = recomendaciones;
-  
-  // Actualizar el estado del cuestionario
-  verificarEstadoCuestionarios();
-}
-
-/**
- * Verifica el estado general de los cuestionarios y actualiza el badge
- */
-function verificarEstadoCuestionarios() {
-  const testsRealizados = [];
-  
-  // Verificar los principales tests
-  if (document.getElementById('sit_to_stand_resultado') && !document.getElementById('sit_to_stand_resultado').textContent.includes("Complete")) {
-    testsRealizados.push("sit_to_stand");
-  }
-  if (document.getElementById('push_up_resultado') && !document.getElementById('push_up_resultado').textContent.includes("Complete")) {
-    testsRealizados.push("push_up");
-  }
-  if (document.getElementById('mcgill_resultado') && !document.getElementById('mcgill_resultado').textContent.includes("Complete")) {
-    testsRealizados.push("mcgill");
-  }
-  if (document.getElementById('wall_sit_resultado') && !document.getElementById('wall_sit_resultado').textContent.includes("Complete")) {
-    testsRealizados.push("wall_sit");
-  }
-  if (document.getElementById('pullup_resultado') && !document.getElementById('pullup_resultado').textContent.includes("Complete")) {
-    testsRealizados.push("pullup");
-  }
-  if (document.getElementById('hop_resultado') && !document.getElementById('hop_resultado').textContent.includes("Complete")) {
-    testsRealizados.push("hop");
-  }
-  if (document.getElementById('salto_resultado') && !document.getElementById('salto_resultado').textContent.includes("Complete")) {
-    testsRealizados.push("salto");
-  }
-  if (document.getElementById('tug_resultado') && !document.getElementById('tug_resultado').textContent.includes("Complete")) {
-    testsRealizados.push("tug");
-  }
-  if (document.getElementById('sft_resultado') && !document.getElementById('sft_resultado').textContent.includes("Complete")) {
-    testsRealizados.push("sft");
-  }
-  if (document.getElementById('less_resultado') && !document.getElementById('less_resultado').textContent.includes("Seleccione")) {
-    testsRealizados.push("less");
-  }
-  
-  // Actualizar el badge según la cantidad de tests realizados
-  const badge = document.getElementById('fuerza-funcional-badge');
-  
-  if (testsRealizados.length === 0) {
-    badge.textContent = "No completado";
-    badge.className = "resultado-badge no-completado";
-  } else if (testsRealizados.length <= 2) {
-    badge.textContent = "Parcial";
-    badge.className = "resultado-badge parcial";
-  } else {
-    badge.textContent = "Completado";
-    badge.className = "resultado-badge completado";
-  }
 }
 
 /**
@@ -2170,4 +1665,528 @@ function agregarTareaEspecifica() {
   
   // Actualizar interpretación global
   actualizarInterpretacionGlobal();
+}
+
+/**
+ * Actualiza el resultado de una tarea específica
+ */
+function actualizarTareaEspecifica(numTarea) {
+  const capacidad = document.getElementById(`tarea_capacidad_${numTarea}`).value;
+  const dolor = document.getElementById(`tarea_dolor_${numTarea}`).value;
+  const nombre = document.getElementById(`tarea_nombre_${numTarea}`).value;
+  
+  if (!capacidad && !dolor) {
+    document.getElementById(`tarea_resumen_${numTarea}`).innerHTML = "Complete los campos para obtener una evaluación.";
+    document.getElementById(`tarea_resumen_${numTarea}`).className = "alert alert-secondary";
+    return;
+  }
+  
+  let resumen = "";
+  let color = "";
+  
+  // Evaluación según capacidad funcional
+  if (capacidad) {
+    switch (capacidad) {
+      case "Normal":
+        resumen = "Capacidad funcional normal. ";
+        color = "success";
+        break;
+      case "Levemente limitada":
+        resumen = "Capacidad funcional levemente limitada. ";
+        color = "success";
+        break;
+      case "Moderadamente limitada":
+        resumen = "Capacidad funcional moderadamente limitada. ";
+        color = "warning";
+        break;
+      case "Severamente limitada":
+        resumen = "Capacidad funcional severamente limitada. ";
+        color = "danger";
+        break;
+      case "Incapaz":
+        resumen = "Incapaz de realizar la tarea. ";
+        color = "danger";
+        break;
+    }
+  }
+  
+  // Añadir información sobre dolor
+  if (dolor) {
+    const dolorNum = parseInt(dolor);
+    if (dolorNum >= 7) {
+      resumen += `Dolor severo (${dolor}/10) durante la ejecución.`;
+      color = "danger";
+    } else if (dolorNum >= 4) {
+      resumen += `Dolor moderado (${dolor}/10) durante la ejecución.`;
+      color = color === "success" ? "warning" : color;
+    } else if (dolorNum >= 1) {
+      resumen += `Dolor leve (${dolor}/10) durante la ejecución.`;
+    } else {
+      resumen += "Sin dolor durante la ejecución.";
+    }
+  }
+  
+  document.getElementById(`tarea_resumen_${numTarea}`).innerHTML = resumen;
+  document.getElementById(`tarea_resumen_${numTarea}`).className = `alert alert-${color}`;
+  
+  // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
+}
+
+/**
+ * Elimina una tarea específica
+ */
+function eliminarTareaEspecifica(numTarea) {
+  const tarea = document.getElementById(`tarea_${numTarea}`);
+  if (tarea) {
+    tarea.remove();
+  }
+  
+  // Verificar si no quedan tareas y mostrar mensaje inicial
+  const container = document.getElementById('tareas_especificas_container');
+  const tareas = container.querySelectorAll('.tarea-especifica');
+  
+  if (tareas.length === 0) {
+    const mensajeInicial = document.createElement('div');
+    mensajeInicial.className = 'form-row mb-3';
+    mensajeInicial.innerHTML = `
+      <div class="form-col form-col-md-12">
+        <p class="text-muted">Utilice el botón "Agregar Tarea Específica" para añadir tareas funcionales relevantes para este paciente.</p>
+      </div>
+    `;
+    container.appendChild(mensajeInicial);
+  }
+  
+  // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
+}
+
+/**
+ * Agrega un test funcional personalizado
+ */
+function agregarTestFuncional() {
+  const container = document.getElementById('otros_tests_funcionales_container');
+  const numTest = document.querySelectorAll('.otro-test-funcional').length + 1;
+  
+  const nuevoTest = document.createElement('div');
+  nuevoTest.className = 'otro-test-funcional mb-4';
+  nuevoTest.id = `otro_test_${numTest}`;
+  
+  nuevoTest.innerHTML = `
+    <hr class="my-3">
+    <div class="form-row mb-4">
+      <div class="form-col form-col-md-12">
+        <div class="form-group">
+          <label for="otro_test_nombre_${numTest}" class="form-label">Nombre del Test</label>
+          <div class="input-group">
+            <input type="text" id="otro_test_nombre_${numTest}" name="otro_test_nombre_${numTest}" class="form-control" placeholder="Ej: Single-leg Bridge Test, Y-Balance Test, etc.">
+            <button type="button" class="btn btn-outline-danger" onclick="eliminarTestFuncional(${numTest})">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-row mb-4">
+      <div class="form-col form-col-md-3">
+        <div class="form-group">
+          <label for="otro_test_resultado_${numTest}" class="form-label">Resultado</label>
+          <input type="text" id="otro_test_resultado_${numTest}" name="otro_test_resultado_${numTest}" class="form-control" placeholder="Ej: 10 seg, 15 cm, etc.">
+        </div>
+      </div>
+      <div class="form-col form-col-md-3">
+        <div class="form-group">
+          <label for="otro_test_referencia_${numTest}" class="form-label">Valor de Referencia</label>
+          <input type="text" id="otro_test_referencia_${numTest}" name="otro_test_referencia_${numTest}" class="form-control" placeholder="Ej: >15 seg, 80-90%, etc.">
+        </div>
+      </div>
+      <div class="form-col form-col-md-2">
+        <div class="form-group">
+          <label for="otro_test_rpe_${numTest}" class="form-label">RPE (0-10)</label>
+          <input type="number" id="otro_test_rpe_${numTest}" name="otro_test_rpe_${numTest}" class="form-control" min="0" max="10" step="1">
+        </div>
+      </div>
+      <div class="form-col form-col-md-4">
+        <div class="form-group">
+          <label for="otro_test_evaluacion_${numTest}" class="form-label">Evaluación</label>
+          <select id="otro_test_evaluacion_${numTest}" name="otro_test_evaluacion_${numTest}" class="form-select" onchange="actualizarOtroTest(${numTest})">
+            <option value="">Seleccionar</option>
+            <option value="Excelente">Excelente</option>
+            <option value="Bueno">Bueno</option>
+            <option value="Promedio">Promedio</option>
+            <option value="Por debajo del promedio">Por debajo del promedio</option>
+            <option value="Deficiente">Deficiente</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-row mb-4">
+      <div class="form-col form-col-md-12">
+        <div class="form-group">
+          <label for="otro_test_observacion_${numTest}" class="form-label">Observaciones</label>
+          <textarea id="otro_test_observacion_${numTest}" name="otro_test_observacion_${numTest}" class="form-control" rows="2" placeholder="Observaciones clínicas, calidad del movimiento, compensaciones, etc."></textarea>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  container.appendChild(nuevoTest);
+  
+  // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
+}
+
+/**
+ * Elimina un test funcional personalizado
+ */
+function eliminarTestFuncional(numTest) {
+  const test = document.getElementById(`otro_test_${numTest}`);
+  if (test) {
+    test.remove();
+  }
+  
+  // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
+}
+
+/**
+ * Actualiza la evaluación de un test funcional personalizado
+ */
+function actualizarOtroTest(numTest) {
+  const evaluacion = document.getElementById(`otro_test_evaluacion_${numTest}`).value;
+  if (!evaluacion) return;
+  
+  // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
+}
+
+/**
+ * Actualiza la interpretación global y recomendaciones basadas en todos los tests realizados
+ */
+function actualizarInterpretacionGlobal() {
+  const testsRealizados = [];
+  const hallazgos = [];
+  
+  // Verificar Sit-to-Stand
+  const sitToStandResultado = document.getElementById('sit_to_stand_resultado');
+  if (sitToStandResultado && !sitToStandResultado.textContent.includes("Complete")) {
+    testsRealizados.push("Sit-to-Stand");
+    
+    if (sitToStandResultado.className.includes("alert-danger")) {
+      hallazgos.push("Fuerza funcional de miembros inferiores significativamente disminuida");
+    } else if (sitToStandResultado.className.includes("alert-warning")) {
+      hallazgos.push("Fuerza funcional de miembros inferiores por debajo del promedio");
+    }
+  }
+  
+  // Verificar Push-up Test
+  const pushUpResultado = document.getElementById('push_up_resultado');
+  if (pushUpResultado && !pushUpResultado.textContent.includes("Complete")) {
+    testsRealizados.push("Push-up Test");
+    
+    if (pushUpResultado.className.includes("alert-danger")) {
+      hallazgos.push("Fuerza-resistencia de miembros superiores significativamente disminuida");
+    } else if (pushUpResultado.className.includes("alert-warning")) {
+      hallazgos.push("Fuerza-resistencia de miembros superiores por debajo del promedio");
+    }
+  }
+  
+  // Verificar McGill Tests
+  const mcgillResultado = document.getElementById('mcgill_resultado');
+  if (mcgillResultado && !mcgillResultado.textContent.includes("Complete")) {
+    testsRealizados.push("McGill Core Tests");
+    
+    if (mcgillResultado.textContent.includes("bg-danger")) {
+      if (mcgillResultado.textContent.includes("Ratio Flexores/Extensores") && mcgillResultado.textContent.includes("bg-danger")) {
+        hallazgos.push("Desequilibrio crítico entre flexores y extensores del tronco");
+      }
+      if (mcgillResultado.textContent.includes("Ratio Simetría Lateral") && mcgillResultado.textContent.includes("bg-danger")) {
+        hallazgos.push("Asimetría severa en la musculatura lateral del core");
+      }
+      if (mcgillResultado.textContent.includes("Plancha Frontal") && mcgillResultado.textContent.includes("bg-danger")) {
+        hallazgos.push("Resistencia deficiente de la musculatura flexora del tronco");
+      }
+      if (mcgillResultado.textContent.includes("Extensión Lumbar") && mcgillResultado.textContent.includes("bg-danger")) {
+        hallazgos.push("Resistencia deficiente de la musculatura extensora del tronco");
+      }
+    }
+  }
+  
+  // Verificar Wall Sit Test
+  const wallSitResultado = document.getElementById('wall_sit_resultado');
+  if (wallSitResultado && !wallSitResultado.textContent.includes("Complete")) {
+    testsRealizados.push("Wall Sit Test");
+    
+    if (wallSitResultado.className.includes("alert-danger")) {
+      hallazgos.push("Resistencia de cuádriceps deficiente");
+    } else if (wallSitResultado.className.includes("alert-warning")) {
+      hallazgos.push("Resistencia de cuádriceps por debajo del promedio");
+    }
+  }
+  
+  // Verificar Pull-up Test
+  const pullupResultado = document.getElementById('pullup_resultado');
+  if (pullupResultado && !pullupResultado.textContent.includes("Complete")) {
+    testsRealizados.push("Pull-up/Chin-up Test");
+    
+    if (pullupResultado.className.includes("alert-danger")) {
+      hallazgos.push("Fuerza-resistencia de espalda y brazos deficiente");
+    } else if (pullupResultado.className.includes("alert-warning")) {
+      hallazgos.push("Fuerza-resistencia de espalda y brazos por debajo del promedio");
+    }
+  }
+  
+  // Verificar Hop Tests
+  const hopResultado = document.getElementById('hop_resultado');
+  if (hopResultado && !hopResultado.textContent.includes("Complete")) {
+    testsRealizados.push("Hop Test");
+    
+    if (hopResultado.className.includes("alert-danger") || hopResultado.className.includes("alert-warning")) {
+      const tipoTest = document.getElementById('hop_test_tipo').value;
+      let tipoTexto = "";
+      
+      switch (tipoTest) {
+        case 'single': tipoTexto = "salto único"; break;
+        case 'triple': tipoTexto = "triple salto"; break;
+        case 'crossover': tipoTexto = "salto con cambio de dirección"; break;
+        case 'timed': tipoTexto = "agilidad"; break;
+      }
+      
+      hallazgos.push(`Asimetría en la capacidad de ${tipoTexto} entre miembros inferiores`);
+    }
+  }
+  
+  // Verificar Batería de Saltos
+  const saltoResultado = document.getElementById('salto_resultado');
+  if (saltoResultado && !saltoResultado.textContent.includes("Complete")) {
+    testsRealizados.push("Batería de Saltos");
+    
+    if (saltoResultado.textContent.includes("baja elasticidad")) {
+      hallazgos.push("Capacidad elástica reducida en miembros inferiores");
+    }
+    if (saltoResultado.textContent.includes("reactividad deficiente") || saltoResultado.textContent.includes("baja reactividad")) {
+      hallazgos.push("Capacidad reactiva reducida en miembros inferiores");
+    }
+    if (saltoResultado.textContent.includes("deficiente coordinación")) {
+      hallazgos.push("Coordinación deficiente en la utilización de brazos durante el salto");
+    }
+  }
+  
+  // Verificar TUG
+  const tugResultado = document.getElementById('tug_resultado');
+  if (tugResultado && !tugResultado.textContent.includes("Complete")) {
+    testsRealizados.push("TUG");
+    
+    if (tugResultado.className.includes("alert-danger")) {
+      hallazgos.push("Alto riesgo de caídas y movilidad reducida");
+    } else if (tugResultado.className.includes("alert-warning")) {
+      hallazgos.push("Riesgo moderado de caídas y movilidad limitada");
+    }
+  }
+  
+  // Verificar Senior Fitness Test
+  const sftResultado = document.getElementById('sft_resultado');
+  if (sftResultado && !sftResultado.textContent.includes("Complete")) {
+    testsRealizados.push("Senior Fitness Test");
+    
+    if (sftResultado.textContent.includes("por debajo del promedio")) {
+      if (sftResultado.textContent.includes("Chair Stand") && sftResultado.textContent.includes("por debajo del promedio")) {
+        hallazgos.push("Fuerza de miembros inferiores por debajo del promedio para la edad");
+      }
+      if (sftResultado.textContent.includes("Arm Curl") && sftResultado.textContent.includes("por debajo del promedio")) {
+        hallazgos.push("Fuerza de miembros superiores por debajo del promedio para la edad");
+      }
+      if (sftResultado.textContent.includes("2-Min Step") && sftResultado.textContent.includes("por debajo del promedio")) {
+        hallazgos.push("Resistencia cardiorrespiratoria por debajo del promedio para la edad");
+      }
+      if (sftResultado.textContent.includes("Chair Sit & Reach") && sftResultado.textContent.includes("por debajo del promedio")) {
+        hallazgos.push("Flexibilidad de miembros inferiores por debajo del promedio para la edad");
+      }
+      if (sftResultado.textContent.includes("Back Scratch") && sftResultado.textContent.includes("por debajo del promedio")) {
+        hallazgos.push("Flexibilidad de miembros superiores por debajo del promedio para la edad");
+      }
+      if (sftResultado.textContent.includes("8-Foot Up & Go") && sftResultado.textContent.includes("por debajo del promedio")) {
+        hallazgos.push("Agilidad y equilibrio dinámico por debajo del promedio para la edad");
+      }
+    }
+  }
+  
+  // Verificar LESS
+  const lessResultado = document.getElementById('less_resultado');
+  if (lessResultado && !lessResultado.textContent.includes("Seleccione")) {
+    testsRealizados.push("LESS");
+    
+    if (lessResultado.className.includes("alert-danger")) {
+      hallazgos.push("Alto riesgo de lesión de LCA por técnica de aterrizaje deficiente");
+    } else if (lessResultado.className.includes("alert-warning")) {
+      hallazgos.push("Riesgo moderado de lesión de LCA por técnica de aterrizaje");
+    }
+  }
+  
+  // Generar la interpretación clínica
+  let interpretacion = "";
+  let recomendaciones = "";
+  
+  if (testsRealizados.length === 0) {
+    interpretacion = "Complete la evaluación de fuerza funcional para obtener recomendaciones clínicas.";
+    recomendaciones = "Complete la evaluación para obtener recomendaciones específicas.";
+  } else {
+    interpretacion = `Basado en los resultados de ${testsRealizados.length} test${testsRealizados.length > 1 ? 's' : ''} de fuerza funcional (${testsRealizados.join(", ")}), se identifican los siguientes hallazgos clínicos:<br><br>`;
+    
+    if (hallazgos.length === 0) {
+      interpretacion += "✅ No se identifican déficits significativos en la fuerza funcional evaluada.<br>";
+      interpretacion += "✅ Los resultados sugieren una buena capacidad funcional en las áreas evaluadas.<br>";
+      
+      recomendaciones = "Basado en los resultados obtenidos, se recomienda:<br><br>";
+      recomendaciones += "✅ Continuar con programa de mantenimiento de fuerza funcional.<br>";
+      recomendaciones += "✅ Progresión gradual en demandas funcionales según objetivos específicos del paciente.<br>";
+      
+      if (testsRealizados.includes("Batería de Saltos") || testsRealizados.includes("Hop Test")) {
+        recomendaciones += "✅ Optimización de patrones de movimiento en actividades deportivas.<br>";
+      }
+      
+      if (testsRealizados.includes("McGill Core Tests")) {
+        recomendaciones += "✅ Mantenimiento de la estabilidad del core en actividades cotidianas y deportivas.<br>";
+      }
+      
+      if (testsRealizados.includes("TUG") || testsRealizados.includes("Senior Fitness Test")) {
+        recomendaciones += "✅ Mantenimiento de actividad física regular para preservar la funcionalidad en el adulto mayor.<br>";
+      }
+    } else {
+      // Ordenar hallazgos por frecuencia de palabras clave para agrupar los relacionados
+      hallazgos.sort();
+      
+      interpretacion += `<ul class="mb-0">`;
+      hallazgos.forEach(hallazgo => {
+        interpretacion += `<li>${hallazgo}.</li>`;
+      });
+      interpretacion += `</ul>`;
+      
+      // Recomendaciones basadas en los hallazgos
+      recomendaciones = "Basado en los hallazgos clínicos, se recomienda:<br><br>";
+      
+      // Recomendaciones para miembros inferiores
+      if (hallazgos.some(h => h.includes("miembros inferiores") || h.includes("cuádriceps"))) {
+        recomendaciones += "• <strong>Fortalecimiento de miembros inferiores</strong>:<br>";
+        recomendaciones += "  - Ejercicios funcionales progresivos (sentadillas, estocadas, puentes).<br>";
+        recomendaciones += "  - Entrenamiento de cadena cinética cerrada con énfasis en calidad de movimiento.<br>";
+        if (hallazgos.some(h => h.includes("asimetría"))) {
+          recomendaciones += "  - Trabajo unilateral con énfasis en equilibrar asimetrías.<br>";
+        }
+      }
+      
+      // Recomendaciones para miembros superiores
+      if (hallazgos.some(h => h.includes("miembros superiores") || h.includes("espalda y brazos"))) {
+        recomendaciones += "• <strong>Fortalecimiento de miembros superiores</strong>:<br>";
+        recomendaciones += "  - Ejercicios progresivos de empuje y tracción.<br>";
+        recomendaciones += "  - Integración de patrones funcionales multidireccionales.<br>";
+      }
+      
+      // Recomendaciones para core
+      if (hallazgos.some(h => h.includes("core") || h.includes("tronco"))) {
+        recomendaciones += "• <strong>Estabilización del core</strong>:<br>";
+        recomendaciones += "  - Programa progresivo de estabilización según principios de McGill.<br>";
+        recomendaciones += "  - Énfasis en corrección de desequilibrios identificados.<br>";
+        if (hallazgos.some(h => h.includes("asimetría"))) {
+          recomendaciones += "  - Trabajo específico para corregir asimetrías laterales.<br>";
+        }
+      }
+      
+      // Recomendaciones para capacidad de salto
+      if (hallazgos.some(h => h.includes("elasticidad") || h.includes("reactiva") || h.includes("salto"))) {
+        recomendaciones += "• <strong>Entrenamiento neuromuscular y pliométrico</strong>:<br>";
+        recomendaciones += "  - Programa progresivo de pliometría adaptado al nivel del paciente.<br>";
+        if (hallazgos.some(h => h.includes("elasticidad"))) {
+          recomendaciones += "  - Ejercicios de ciclo estiramiento-acortamiento enfocados en mejorar elasticidad.<br>";
+        }
+        if (hallazgos.some(h => h.includes("reactividad"))) {
+          recomendaciones += "  - Ejercicios de tiempo de contacto reducido para mejorar reactividad.<br>";
+        }
+        if (hallazgos.some(h => h.includes("coordinación"))) {
+          recomendaciones += "  - Ejercicios de coordinación de miembros superiores durante saltos.<br>";
+        }
+      }
+      
+      // Recomendaciones para riesgo de lesión
+      if (hallazgos.some(h => h.includes("lesión"))) {
+        recomendaciones += "• <strong>Prevención de lesiones</strong>:<br>";
+        recomendaciones += "  - Programa de control neuromuscular específico.<br>";
+        recomendaciones += "  - Entrenamiento de la técnica de aterrizaje y cambios de dirección.<br>";
+        recomendaciones += "  - Corrección de patrones de movimiento disfuncionales.<br>";
+      }
+      
+      // Recomendaciones para adulto mayor / riesgo de caídas
+      if (hallazgos.some(h => h.includes("caídas") || h.includes("edad"))) {
+        recomendaciones += "• <strong>Prevención de caídas y mantenimiento funcional</strong>:<br>";
+        recomendaciones += "  - Programa multifactorial de prevención de caídas.<br>";
+        recomendaciones += "  - Entrenamiento de equilibrio estático y dinámico.<br>";
+        recomendaciones += "  - Fortalecimiento específico para mantener independencia funcional.<br>";
+      }
+      
+      // Recomendación general de monitoreo
+      recomendaciones += "<br>• <strong>Seguimiento</strong>: Reevaluación periódica para monitorizar progreso y ajustar intervenciones según resultados.";
+    }
+  }
+  
+  // Actualizar los contenedores de interpretación y recomendaciones
+  document.getElementById('interpretacion-fuerza-funcional-texto').innerHTML = interpretacion;
+  document.getElementById('recomendaciones-fuerza-funcional-texto').innerHTML = recomendaciones;
+  
+  // Actualizar el estado del cuestionario
+  verificarEstadoCuestionarios();
+}
+
+/**
+ * Verifica el estado general de los cuestionarios y actualiza el badge
+ */
+function verificarEstadoCuestionarios() {
+  const testsRealizados = [];
+  
+  // Verificar los principales tests
+  if (document.getElementById('sit_to_stand_resultado') && !document.getElementById('sit_to_stand_resultado').textContent.includes("Complete")) {
+    testsRealizados.push("sit_to_stand");
+  }
+  if (document.getElementById('push_up_resultado') && !document.getElementById('push_up_resultado').textContent.includes("Complete")) {
+    testsRealizados.push("push_up");
+  }
+  if (document.getElementById('mcgill_resultado') && !document.getElementById('mcgill_resultado').textContent.includes("Complete")) {
+    testsRealizados.push("mcgill");
+  }
+  if (document.getElementById('wall_sit_resultado') && !document.getElementById('wall_sit_resultado').textContent.includes("Complete")) {
+    testsRealizados.push("wall_sit");
+  }
+  if (document.getElementById('pullup_resultado') && !document.getElementById('pullup_resultado').textContent.includes("Complete")) {
+    testsRealizados.push("pullup");
+  }
+  if (document.getElementById('hop_resultado') && !document.getElementById('hop_resultado').textContent.includes("Complete")) {
+    testsRealizados.push("hop");
+  }
+  if (document.getElementById('salto_resultado') && !document.getElementById('salto_resultado').textContent.includes("Complete")) {
+    testsRealizados.push("salto");
+  }
+  if (document.getElementById('tug_resultado') && !document.getElementById('tug_resultado').textContent.includes("Complete")) {
+    testsRealizados.push("tug");
+  }
+  if (document.getElementById('sft_resultado') && !document.getElementById('sft_resultado').textContent.includes("Complete")) {
+    testsRealizados.push("sft");
+  }
+  if (document.getElementById('less_resultado') && !document.getElementById('less_resultado').textContent.includes("Seleccione")) {
+    testsRealizados.push("less");
+  }
+  
+  // Actualizar el badge según la cantidad de tests realizados
+  const badge = document.getElementById('fuerza-funcional-badge');
+  
+  if (testsRealizados.length === 0) {
+    badge.textContent = "No completado";
+    badge.className = "resultado-badge no-completado";
+  } else if (testsRealizados.length <= 2) {
+    badge.textContent = "Parcial";
+    badge.className = "resultado-badge parcial";
+  } else {
+    badge.textContent = "Completado";
+    badge.className = "resultado-badge completado";
+  }
 }
