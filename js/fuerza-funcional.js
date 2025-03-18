@@ -7,31 +7,39 @@
 // ============= FUNCIONES DE NAVEGACIÓN =============
 function toggleCuestionario(id) {
   const content = document.getElementById(id);
+  const header = content.previousElementSibling;
+  const icon = header.querySelector('i.fas');
+  
   if (content.style.display === "none") {
     content.style.display = "block";
+    if (icon) {
+      icon.className = icon.className.replace("fa-plus-circle", "fa-minus-circle");
+    }
   } else {
     content.style.display = "none";
+    if (icon) {
+      icon.className = icon.className.replace("fa-minus-circle", "fa-plus-circle");
+    }
   }
   verificarEstadoCuestionarios();
 }
 
-// Función para manejar las pestañas personalizadas
-function openFuerzaTab(evt, tabId) {
-  // Ocultar todos los contenidos de pestañas
-  const tabContents = document.getElementsByClassName("tab-content");
-  for (let i = 0; i < tabContents.length; i++) {
-    tabContents[i].style.display = "none";
-  }
+function toggleSubcuestionario(id) {
+  const content = document.getElementById(id);
+  const header = content.previousElementSibling;
+  const icon = header.querySelector('i.fas');
   
-  // Desactivar todos los botones de pestañas
-  const tabButtons = document.getElementsByClassName("tab-button");
-  for (let i = 0; i < tabButtons.length; i++) {
-    tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+  if (content.style.display === "none") {
+    content.style.display = "block";
+    if (icon) {
+      icon.className = icon.className.replace("fa-plus-circle", "fa-minus-circle");
+    }
+  } else {
+    content.style.display = "none";
+    if (icon) {
+      icon.className = icon.className.replace("fa-minus-circle", "fa-plus-circle");
+    }
   }
-  
-  // Mostrar el contenido de la pestaña actual y activar el botón
-  document.getElementById(tabId).style.display = "block";
-  evt.currentTarget.className += " active";
 }
 
 // ============= TESTS FUNCIONALES ESTÁNDAR =============
@@ -2190,3 +2198,15 @@ function verificarEstadoCuestionarios() {
     badge.className = "resultado-badge completado";
   }
 }
+
+// Añadir event listeners para inicializar los acordeones cuando se carga la página
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar todos los acordeones con display none
+  const subcuestionarios = document.querySelectorAll('.subcuestionario-content');
+  subcuestionarios.forEach(function(content) {
+    content.style.display = 'none';
+  });
+  
+  // Verificar el estado del cuestionario principal
+  verificarEstadoCuestionarios();
+});
