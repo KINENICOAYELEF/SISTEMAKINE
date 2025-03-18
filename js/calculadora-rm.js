@@ -1,7 +1,6 @@
 /**
  * Calculadora de Repetición Máxima (RM)
  * Implementación basada en las recomendaciones exactas de la NSCA
- * NSCA's Essentials of Personal Training, Capítulo 15
  */
 
 // Fórmulas para calcular 1RM a partir de submáximos
@@ -51,7 +50,6 @@ const formulas1RM = {
 };
 
 // Tablas relacionadas con RPE/RIR para calcular 1RM
-// Estas son herramientas modernas, compatibles con NSCA pero no explícitamente descritas en el capítulo 15
 const tablaRPEaRIR = {
   10: 0,     // RPE 10 = 0 repeticiones en reserva (fallo muscular)
   9.5: 0.5,  // RPE 9.5 = 0.5 repeticiones en reserva
@@ -100,7 +98,7 @@ const tablaRIRaPorcentaje1RM = {
   15: {0: 68, 1: 64, 2: 60, 3: 56, 4: 53, 5: 50, 6: 48}
 };
 
-// Clasificación de ejercicios según NSCA (pág. 400-401)
+// Clasificación de ejercicios según NSCA
 const clasificacionEjercicios = {
   // Ejercicios principales (core exercises)
   "Press banca": { tipo: "core", grupoMuscular: "upper", multiarticular: true },
@@ -121,7 +119,7 @@ const clasificacionEjercicios = {
   "Curl de piernas": { tipo: "assistance", grupoMuscular: "lower", multiarticular: false }
 };
 
-// Objetivos de entrenamiento según NSCA con rangos porcentuales exactos (Tabla 15.6, pág. 409)
+// Objetivos de entrenamiento según NSCA
 const objetivosEntrenamiento = {
   "Fuerza máxima": {
     rangoMin: 85,
@@ -131,7 +129,7 @@ const objetivosEntrenamiento = {
     descanso: "2-5 minutos",
     frecuencia: "2-3 veces/semana",
     descripcion: "Desarrollo de la capacidad para generar máxima tensión muscular",
-    color: "danger" // Rojo en sistema de semáforo (alta intensidad)
+    color: "danger"
   },
   "Hipertrofia": {
     rangoMin: 67,
@@ -141,7 +139,7 @@ const objetivosEntrenamiento = {
     descanso: "≥2-3 min (ejercicios multiarticulares), 60-90 segundos (ejercicios monoarticulares)",
     frecuencia: "2-3 veces/semana por grupo muscular",
     descripcion: "Aumento del tamaño muscular y tono",
-    color: "warning" // Amarillo en sistema de semáforo (intensidad media)
+    color: "warning"
   },
   "Resistencia muscular": {
     rangoMin: 50,
@@ -151,7 +149,7 @@ const objetivosEntrenamiento = {
     descanso: "≤30 segundos",
     frecuencia: "2-3 veces/semana por grupo muscular",
     descripcion: "Mejora de la capacidad para realizar esfuerzos repetidos",
-    color: "success" // Verde en sistema de semáforo (baja intensidad)
+    color: "success"
   },
   "Potencia": {
     rangoMin: 30,
@@ -162,11 +160,11 @@ const objetivosEntrenamiento = {
     frecuencia: "2-3 veces/semana",
     caracteristica: "Máxima velocidad de ejecución",
     descripcion: "Desarrollo de la velocidad y capacidad explosiva",
-    color: "primary" // Azul (diferenciado, enfoque en velocidad de ejecución)
+    color: "primary"
   }
 };
 
-// Recomendaciones de frecuencia según nivel exactamente como en NSCA (Tabla 15.2, pág. 399)
+// Recomendaciones de frecuencia según nivel
 const frecuenciaEntrenamiento = {
   "Novato o principiante": "2-3 sesiones por semana (cuerpo completo)",
   "Intermedio": "3 sesiones si usa entrenamiento de cuerpo completo, 4 sesiones si usa rutina dividida",
@@ -225,36 +223,53 @@ function toggleCuestionario(contentId) {
 }
 
 /**
- * Sistema de pestañas personalizado
+ * Sistema de pestañas mejorado - VERSIÓN CORREGIDA
  */
-function activateTab(tabId) {
-  // Ocultar todos los paneles de contenido
-  const tabPanes = document.querySelectorAll('.tab-pane');
-  tabPanes.forEach(pane => {
-    pane.classList.remove('show');
-    pane.classList.remove('active');
+function setupTabs() {
+  console.log("Configurando sistema de pestañas...");
+  
+  // Seleccionar todos los botones de pestaña
+  const tabButtons = document.querySelectorAll('.cuestionario-item .nav-link');
+  
+  // Añadir eventos de clic a cada botón
+  tabButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Obtener el ID del contenido de la pestaña a mostrar
+      const targetId = this.getAttribute('data-target');
+      console.log("Clic en pestaña, mostrando:", targetId);
+      
+      // Desactivar todas las pestañas
+      tabButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+      
+      // Activar la pestaña actual
+      this.classList.add('active');
+      this.setAttribute('aria-selected', 'true');
+      
+      // Ocultar todos los paneles de contenido
+      const tabPanes = document.querySelectorAll('.cuestionario-item .tab-pane');
+      tabPanes.forEach(pane => {
+        pane.classList.remove('show');
+        pane.classList.remove('active');
+      });
+      
+      // Mostrar el panel correspondiente
+      const targetPane = document.querySelector(targetId);
+      if (targetPane) {
+        targetPane.classList.add('show');
+        targetPane.classList.add('active');
+      }
+    });
   });
   
-  // Desactivar todas las pestañas
-  const tabLinks = document.querySelectorAll('.nav-link');
-  tabLinks.forEach(link => {
-    link.classList.remove('active');
-    link.setAttribute('aria-selected', 'false');
-  });
-  
-  // Activar la pestaña seleccionada
-  const selectedTab = document.getElementById(tabId);
-  if (selectedTab) {
-    selectedTab.classList.add('active');
-    selectedTab.setAttribute('aria-selected', 'true');
-    
-    // Mostrar el panel correspondiente
-    const targetId = selectedTab.getAttribute('data-target');
-    const targetPane = document.querySelector(targetId);
-    if (targetPane) {
-      targetPane.classList.add('show');
-      targetPane.classList.add('active');
-    }
+  // Activar la primera pestaña por defecto
+  const firstTab = document.querySelector('.cuestionario-item .nav-link');
+  if (firstTab) {
+    firstTab.click();
   }
 }
 
@@ -463,7 +478,6 @@ function calcular1RMporRIR() {
 
 /**
  * Genera la tabla de cargas de entrenamiento basada en el 1RM calculado
- * Siguiendo exactamente los rangos de la NSCA (tabla 15.6, pág. 409)
  */
 function generarTablaCargas(rm, ejercicio) {
   const tablaCargas = document.getElementById('tabla_cargas');
@@ -565,7 +579,7 @@ function generarRecomendaciones(rm, ejercicio, pesoActual, repeticionesActuales,
         </ul>
   `;
   
-  // Añadir recomendaciones específicas basadas en el tipo de ejercicio (NSCA, pág. 400-401)
+  // Añadir recomendaciones específicas basadas en el tipo de ejercicio
   if (tipoEjercicio === "core" && esMultiarticular) {
     recomendacionesHTML += `
       <div class="alert-success">
@@ -622,7 +636,7 @@ function generarRecomendaciones(rm, ejercicio, pesoActual, repeticionesActuales,
     `;
   }
   
-  // Añadir recomendaciones de seguridad de NSCA (pág. 405)
+  // Añadir recomendaciones de seguridad de NSCA
   recomendacionesHTML += `
     <div class="alert-danger">
       <h6><i class="fas fa-exclamation-triangle"></i> Consideraciones de Seguridad (NSCA):</h6>
@@ -651,20 +665,17 @@ function guardarRM() {
   // Determinar qué método está siendo utilizado
   let ejercicioNombre, peso, valor, metodo, valor1RM;
   
-  // Obtener la pestaña activa
+  // Obtener la pestaña activa - CORREGIDO
   let pestanaActiva = '';
-  
-  // Verificar qué pestaña está activa mirando las clases
-  if (document.getElementById('reps-content').classList.contains('show') &&
-      document.getElementById('reps-content').classList.contains('active')) {
+  if (document.querySelector('#reps-content.active')) {
     pestanaActiva = 'reps';
-  } else if (document.getElementById('rpe-content').classList.contains('show') &&
-             document.getElementById('rpe-content').classList.contains('active')) {
+  } else if (document.querySelector('#rpe-content.active')) {
     pestanaActiva = 'rpe';
-  } else if (document.getElementById('rir-content').classList.contains('show') &&
-             document.getElementById('rir-content').classList.contains('active')) {
+  } else if (document.querySelector('#rir-content.active')) {
     pestanaActiva = 'rir';
   }
+  
+  console.log("Pestaña activa:", pestanaActiva);
   
   // Verificar el valor 1RM
   const valor1RMTexto = document.getElementById('valor_1rm').textContent;
@@ -828,6 +839,8 @@ function eliminarRegistroRM(id) {
  * Inicializa los selectores de ejercicio
  */
 function inicializarSelectoresEjercicio() {
+  console.log("Inicializando selectores de ejercicio...");
+  
   // Para pestaña de repeticiones
   const selectorRM = document.getElementById('rm_ejercicio');
   const otroRM = document.getElementById('rm_ejercicio_otro');
@@ -863,14 +876,8 @@ function inicializarSelectoresEjercicio() {
 document.addEventListener('DOMContentLoaded', function() {
   console.log('Inicializando Calculadora RM...');
   
-  // Configurar pestañas
-  const tabs = document.querySelectorAll('.nav-link');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      const tabId = this.id;
-      activateTab(tabId);
-    });
-  });
+  // Configurar pestañas - VERSIÓN MEJORADA
+  setupTabs();
   
   // Vincular eventos a selectores de ejercicio
   inicializarSelectoresEjercicio();
