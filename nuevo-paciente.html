@@ -16463,1025 +16463,546 @@
   </div>
 </div>
 
- import React, { useState, useEffect } from 'react';
-
-const CalculadoraRM = () => {
-  // Estados para manejar los valores de la calculadora
-  const [tabActiva, setTabActiva] = useState('reps');
-  const [ejercicio, setEjercicio] = useState('');
-  const [otroEjercicio, setOtroEjercicio] = useState('');
-  const [peso, setPeso] = useState('');
-  const [repeticiones, setRepeticiones] = useState('');
-  const [formula, setFormula] = useState('brzycki');
-  const [nivel, setNivel] = useState('Principiante');
-  const [rpeValor, setRpeValor] = useState('');
-  const [rirValor, setRirValor] = useState('');
-  
-  // Estados para los resultados
-  const [mostrarResultados, setMostrarResultados] = useState(false);
-  const [rm1Valor, setRm1Valor] = useState(0);
-  const [metodoCalculo, setMetodoCalculo] = useState('');
-  const [tablaCargasData, setTablaCargasData] = useState([]);
-  const [historialRM, setHistorialRM] = useState([]);
-  
-  // Fórmulas para calcular 1RM
-  const formulas1RM = {
-    brzycki: function(peso, reps) {
-      return peso / (1.0278 - 0.0278 * reps);
-    },
-    epley: function(peso, reps) {
-      return peso * (1 + 0.0333 * reps);
-    },
-    lander: function(peso, reps) {
-      return 100 * peso / (101.3 - 2.67123 * reps);
-    },
-    lombardi: function(peso, reps) {
-      return peso * Math.pow(reps, 0.1);
-    },
-    oconner: function(peso, reps) {
-      return peso * (1 + 0.025 * reps);
-    },
-    wathen: function(peso, reps) {
-      return 100 * peso / (48.8 + 53.8 * Math.exp(-0.075 * reps));
-    },
-    promedio: function(peso, reps) {
-      const valores = [
-        this.brzycki(peso, reps),
-        this.epley(peso, reps),
-        this.lander(peso, reps),
-        this.lombardi(peso, reps),
-        this.oconner(peso, reps),
-        this.wathen(peso, reps)
-      ];
-      return valores.reduce((sum, value) => sum + value, 0) / valores.length;
-    }
-  };
-  
-  // Tablas de RPE y RIR
-  const tablaRPEaPorcentaje1RM = {
-    1: {10: 100, 9.5: 98, 9: 96, 8.5: 94, 8: 92, 7.5: 90, 7: 88},
-    2: {10: 95, 9.5: 93, 9: 91, 8.5: 89, 8: 87, 7.5: 85, 7: 83},
-    3: {10: 92, 9.5: 90, 9: 88, 8.5: 86, 8: 84, 7.5: 82, 7: 80},
-    4: {10: 89, 9.5: 87, 9: 85, 8.5: 83, 8: 81, 7.5: 79, 7: 77},
-    5: {10: 86, 9.5: 84, 9: 82, 8.5: 80, 8: 78, 7.5: 76, 7: 74},
-    6: {10: 84, 9.5: 82, 9: 80, 8.5: 78, 8: 76, 7.5: 74, 7: 72},
-    7: {10: 82, 9.5: 80, 9: 78, 8.5: 76, 8: 74, 7.5: 72, 7: 70},
-    8: {10: 80, 9.5: 78, 9: 76, 8.5: 74, 8: 72, 7.5: 70, 7: 68},
-    9: {10: 78, 9.5: 76, 9: 74, 8.5: 72, 8: 70, 7.5: 68, 7: 66},
-    10: {10: 76, 9.5: 74, 9: 72, 8.5: 70, 8: 68, 7.5: 66, 7: 64},
-    12: {10: 72, 9.5: 70, 9: 68, 8.5: 66, 8: 64, 7.5: 62, 7: 60},
-    15: {10: 68, 9.5: 66, 9: 64, 8.5: 62, 8: 60, 7.5: 58, 7: 56}
-  };
-  
-  const tablaRIRaPorcentaje1RM = {
-    1: {0: 100, 1: 96, 2: 92, 3: 88, 4: 85, 5: 82, 6: 80},
-    2: {0: 95, 1: 91, 2: 87, 3: 83, 4: 80, 5: 77, 6: 75},
-    3: {0: 92, 1: 88, 2: 84, 3: 80, 4: 77, 5: 74, 6: 72},
-    4: {0: 89, 1: 85, 2: 81, 3: 77, 4: 74, 5: 71, 6: 69},
-    5: {0: 86, 1: 82, 2: 78, 3: 74, 4: 71, 5: 68, 6: 66},
-    6: {0: 84, 1: 80, 2: 76, 3: 72, 4: 69, 5: 66, 6: 64},
-    7: {0: 82, 1: 78, 2: 74, 3: 70, 4: 67, 5: 64, 6: 62},
-    8: {0: 80, 1: 76, 2: 72, 3: 68, 4: 65, 5: 62, 6: 60},
-    9: {0: 78, 1: 74, 2: 70, 3: 66, 4: 63, 5: 60, 6: 58},
-    10: {0: 76, 1: 72, 2: 68, 3: 64, 4: 61, 5: 58, 6: 56},
-    12: {0: 72, 1: 68, 2: 64, 3: 60, 4: 57, 5: 54, 6: 52},
-    15: {0: 68, 1: 64, 2: 60, 3: 56, 4: 53, 5: 50, 6: 48}
-  };
-  
-  // Objetivos de entrenamiento según NSCA
-  const objetivosEntrenamiento = {
-    "Fuerza máxima": {
-      rangoMin: 85,
-      rangoMax: 100,
-      repeticiones: "1-6",
-      series: "1-3 (novato), 3+ (intermedio/avanzado)",
-      descanso: "2-5 minutos",
-      frecuencia: "2-3 veces/semana",
-      descripcion: "Desarrollo de la capacidad para generar máxima tensión muscular",
-      color: "danger"
-    },
-    "Hipertrofia": {
-      rangoMin: 67,
-      rangoMax: 85,
-      repeticiones: "6-12",
-      series: "1-3 (novato), 3+ (intermedio/avanzado)",
-      descanso: "≥2-3 min (ejercicios multiarticulares), 60-90 segundos (ejercicios monoarticulares)",
-      frecuencia: "2-3 veces/semana por grupo muscular",
-      descripcion: "Aumento del tamaño muscular y tono",
-      color: "warning"
-    },
-    "Resistencia muscular": {
-      rangoMin: 50,
-      rangoMax: 67,
-      repeticiones: "12-20+",
-      series: "1-3 (novato), 3+ (intermedio/avanzado)",
-      descanso: "≤30 segundos",
-      frecuencia: "2-3 veces/semana por grupo muscular",
-      descripcion: "Mejora de la capacidad para realizar esfuerzos repetidos",
-      color: "success"
-    },
-    "Potencia": {
-      rangoMin: 30,
-      rangoMax: 60,
-      repeticiones: "3-6",
-      series: "1-3 (novato), 3-6 (intermedio/avanzado)",
-      descanso: "2-5 minutos",
-      frecuencia: "2-3 veces/semana",
-      caracteristica: "Máxima velocidad de ejecución",
-      descripcion: "Desarrollo de la velocidad y capacidad explosiva",
-      color: "primary"
-    }
-  };
-  
-  // Validación general
-  const validarEntrada = (ejercicioVal, pesoVal, repeticionesVal) => {
-    const ejercicioNombre = ejercicioVal === 'Otro' ? otroEjercicio : ejercicioVal;
-    const pesoNumero = parseFloat(pesoVal);
-    const repeticionesNumero = parseInt(repeticionesVal);
+<!-- Calculadora de Repetición Máxima (RM) según NSCA -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('rm-calculator-content')">
+    <h4><i class="fas fa-plus-circle"></i> Calculadora de Repetición Máxima (RM)</h4>
+    <div class="resultado-badge" id="rm-calculator-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="rm-calculator-content" style="display: none;">
+    <p class="mb-3">Estime la fuerza máxima (1RM) utilizando diferentes métodos y obtenga recomendaciones para prescripción de ejercicio terapéutico basadas en la evidencia de la NSCA.</p>
     
-    if (!ejercicioNombre || ejercicioNombre === '') {
-      alert('Por favor, seleccione un ejercicio.');
-      return false;
-    }
+    <!-- Tabs para los diferentes métodos de cálculo -->
+    <ul class="nav nav-tabs mb-3" id="rm-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="reps-tab" data-bs-toggle="tab" data-bs-target="#reps-content" type="button" role="tab" aria-controls="reps-content" aria-selected="true">
+          <i class="fas fa-sort-numeric-up"></i> Por Repeticiones
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="rpe-tab" data-bs-toggle="tab" data-bs-target="#rpe-content" type="button" role="tab" aria-controls="rpe-content" aria-selected="false">
+          <i class="fas fa-tachometer-alt"></i> Por RPE
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="rir-tab" data-bs-toggle="tab" data-bs-target="#rir-content" type="button" role="tab" aria-controls="rir-content" aria-selected="false">
+          <i class="fas fa-battery-three-quarters"></i> Por RIR
+        </button>
+      </li>
+    </ul>
     
-    if (isNaN(pesoNumero) || pesoNumero <= 0) {
-      alert('Por favor, ingrese un peso válido mayor que cero.');
-      return false;
-    }
-    
-    if (isNaN(repeticionesNumero) || repeticionesNumero <= 0) {
-      alert('Por favor, ingrese un número de repeticiones válido mayor que cero.');
-      return false;
-    }
-    
-    if (repeticionesNumero > 15) {
-      alert('Para mayor precisión, ingrese un número de repeticiones entre 1 y 15.');
-      return false;
-    }
-    
-    return true;
-  };
-  
-  // Validación específica para RPE
-  const validarRPE = (rpeVal) => {
-    const rpeNumero = parseFloat(rpeVal);
-    
-    if (isNaN(rpeNumero) || rpeNumero < 1 || rpeNumero > 10) {
-      alert('Por favor, ingrese un valor de RPE válido entre 1 y 10.');
-      return false;
-    }
-    
-    return true;
-  };
-  
-  // Validación específica para RIR
-  const validarRIR = (rirVal) => {
-    const rirNumero = parseInt(rirVal);
-    
-    if (isNaN(rirNumero) || rirNumero < 0 || rirNumero > 6) {
-      alert('Por favor, ingrese un valor de RIR válido entre 0 y 6.');
-      return false;
-    }
-    
-    return true;
-  };
-  
-  // Cálculo de 1RM usando fórmulas
-  const calcular1RM = () => {
-    if (!validarEntrada(ejercicio, peso, repeticiones)) {
-      return;
-    }
-    
-    const pesoNumero = parseFloat(peso);
-    const repeticionesNumero = parseInt(repeticiones);
-    
-    let valorRM = 0;
-    
-    if (formula === 'promedio') {
-      valorRM = formulas1RM.promedio(pesoNumero, repeticionesNumero);
-    } else {
-      valorRM = formulas1RM[formula](pesoNumero, repeticionesNumero);
-    }
-    
-    // Redondear a 1 decimal
-    valorRM = Math.round(valorRM * 10) / 10;
-    
-    setRm1Valor(valorRM);
-    setMetodoCalculo(`Basado en la fórmula: ${formula}`);
-    setMostrarResultados(true);
-    
-    // Generar tabla de cargas
-    generarTablaCargas(valorRM);
-  };
-  
-  // Cálculo de 1RM usando RPE
-  const calcular1RMporRPE = () => {
-    if (!validarEntrada(ejercicio, peso, repeticiones) || !validarRPE(rpeValor)) {
-      return;
-    }
-    
-    const pesoNumero = parseFloat(peso);
-    const repeticionesNumero = parseInt(repeticiones);
-    const rpeNumero = parseFloat(rpeValor);
-    
-    // Ajustar repeticiones a las disponibles en la tabla
-    let repsAjustadas = repeticionesNumero;
-    if (repeticionesNumero > 10 && repeticionesNumero < 15) {
-      repsAjustadas = 12;
-    } else if (repeticionesNumero > 12) {
-      repsAjustadas = 15;
-    } else if (repsAjustadas > 10) {
-      repsAjustadas = 10;
-    } else if (repsAjustadas < 1) {
-      repsAjustadas = 1;
-    }
-    
-    // Ajustar RPE a los valores disponibles
-    let rpeAjustado = Math.floor(rpeNumero * 2) / 2; // Redondear a 0.5 más cercano
-    if (rpeAjustado < 7) rpeAjustado = 7; // Valor mínimo en tabla
-    if (rpeAjustado > 10) rpeAjustado = 10; // Valor máximo en tabla
-    
-    // Obtener porcentaje de la tabla
-    let porcentaje = 0;
-    if (tablaRPEaPorcentaje1RM[repsAjustadas] && tablaRPEaPorcentaje1RM[repsAjustadas][rpeAjustado]) {
-      porcentaje = tablaRPEaPorcentaje1RM[repsAjustadas][rpeAjustado];
-    } else {
-      // Usar valor aproximado
-      const repsDisponibles = Object.keys(tablaRPEaPorcentaje1RM).map(Number);
-      const repCercana = repsDisponibles.reduce((prev, curr) => 
-        (Math.abs(curr - repeticionesNumero) < Math.abs(prev - repeticionesNumero) ? curr : prev)
-      );
-      
-      const rpesDisponibles = Object.keys(tablaRPEaPorcentaje1RM[repCercana]).map(Number);
-      const rpeCercano = rpesDisponibles.reduce((prev, curr) => 
-        (Math.abs(curr - rpeNumero) < Math.abs(prev - rpeNumero) ? curr : prev)
-      );
-      
-      porcentaje = tablaRPEaPorcentaje1RM[repCercana][rpeCercano];
-    }
-    
-    // Calcular 1RM basado en el porcentaje
-    const valorRM = Math.round((pesoNumero / (porcentaje / 100)) * 10) / 10;
-    
-    setRm1Valor(valorRM);
-    setMetodoCalculo(`Basado en RPE: ${rpeNumero} con ${repeticionesNumero} repeticiones`);
-    setMostrarResultados(true);
-    
-    // Generar tabla de cargas
-    generarTablaCargas(valorRM);
-  };
-  
-  // Cálculo de 1RM usando RIR
-  const calcular1RMporRIR = () => {
-    if (!validarEntrada(ejercicio, peso, repeticiones) || !validarRIR(rirValor)) {
-      return;
-    }
-    
-    const pesoNumero = parseFloat(peso);
-    const repeticionesNumero = parseInt(repeticiones);
-    const rirNumero = parseInt(rirValor);
-    
-    // Ajustar repeticiones a las disponibles en la tabla
-    let repsAjustadas = repeticionesNumero;
-    if (repeticionesNumero > 10 && repeticionesNumero < 15) {
-      repsAjustadas = 12;
-    } else if (repeticionesNumero > 12) {
-      repsAjustadas = 15;
-    } else if (repsAjustadas > 10) {
-      repsAjustadas = 10;
-    } else if (repsAjustadas < 1) {
-      repsAjustadas = 1;
-    }
-    
-    // Obtener porcentaje de la tabla
-    let porcentaje = 0;
-    if (tablaRIRaPorcentaje1RM[repsAjustadas] && tablaRIRaPorcentaje1RM[repsAjustadas][rirNumero]) {
-      porcentaje = tablaRIRaPorcentaje1RM[repsAjustadas][rirNumero];
-    } else {
-      // Usar valor aproximado
-      const repsDisponibles = Object.keys(tablaRIRaPorcentaje1RM).map(Number);
-      const repCercana = repsDisponibles.reduce((prev, curr) => 
-        (Math.abs(curr - repeticionesNumero) < Math.abs(prev - repeticionesNumero) ? curr : prev)
-      );
-      
-      const rirsDisponibles = Object.keys(tablaRIRaPorcentaje1RM[repCercana]).map(Number);
-      const rirCercano = rirsDisponibles.reduce((prev, curr) => 
-        (Math.abs(curr - rirNumero) < Math.abs(prev - rirNumero) ? curr : prev)
-      );
-      
-      porcentaje = tablaRIRaPorcentaje1RM[repCercana][rirCercano];
-    }
-    
-    // Calcular 1RM basado en el porcentaje
-    const valorRM = Math.round((pesoNumero / (porcentaje / 100)) * 10) / 10;
-    
-    setRm1Valor(valorRM);
-    setMetodoCalculo(`Basado en RIR: ${rirNumero} con ${repeticionesNumero} repeticiones`);
-    setMostrarResultados(true);
-    
-    // Generar tabla de cargas
-    generarTablaCargas(valorRM);
-  };
-  
-  // Generar tabla de cargas
-  const generarTablaCargas = (rm) => {
-    const tablaCargas = [];
-    
-    for (const [objetivo, datos] of Object.entries(objetivosEntrenamiento)) {
-      // Calcular el punto medio del rango
-      const porcentajeMedio = (datos.rangoMin + datos.rangoMax) / 2;
-      const cargaMedia = Math.round(rm * porcentajeMedio / 100);
-      
-      tablaCargas.push({
-        objetivo,
-        rango: `${datos.rangoMin}-${datos.rangoMax}%`,
-        carga: cargaMedia,
-        repeticiones: datos.repeticiones,
-        descripcion: datos.descripcion,
-        color: datos.color
-      });
-    }
-    
-    setTablaCargasData(tablaCargas);
-  };
-  
-  // Guardar evaluación en el historial
-  const guardarRM = () => {
-    if (!mostrarResultados) {
-      alert('Primero debe calcular el 1RM antes de guardar.');
-      return;
-    }
-    
-    // Determinar qué método está siendo utilizado
-    let ejercicioNombre, pesoValor, valor, metodo;
-    
-    if (tabActiva === 'reps') {
-      ejercicioNombre = ejercicio === 'Otro' ? otroEjercicio : ejercicio;
-      pesoValor = peso;
-      valor = `${repeticiones} reps`;
-      metodo = `Fórmula: ${formula}`;
-    } 
-    else if (tabActiva === 'rpe') {
-      ejercicioNombre = ejercicio === 'Otro' ? otroEjercicio : ejercicio;
-      pesoValor = peso;
-      valor = `${repeticiones} reps, RPE ${rpeValor}`;
-      metodo = 'RPE';
-    }
-    else if (tabActiva === 'rir') {
-      ejercicioNombre = ejercicio === 'Otro' ? otroEjercicio : ejercicio;
-      pesoValor = peso;
-      valor = `${repeticiones} reps, RIR ${rirValor}`;
-      metodo = 'RIR';
-    }
-    
-    // Fecha actual
-    const fechaActual = new Date().toLocaleDateString();
-    
-    // Crear nuevo registro
-    const nuevoRegistro = {
-      ejercicio: ejercicioNombre,
-      fecha: fechaActual,
-      peso: pesoValor,
-      valor,
-      rm1: rm1Valor,
-      metodo,
-      id: Date.now() // Para tener un identificador único
-    };
-    
-    // Actualizar el historial
-    setHistorialRM([...historialRM, nuevoRegistro]);
-    
-    alert('Evaluación guardada correctamente.');
-  };
-  
-  // Eliminar registro del historial
-  const eliminarRegistroRM = (id) => {
-    if (confirm('¿Está seguro de que desea eliminar este registro?')) {
-      setHistorialRM(historialRM.filter(item => item.id !== id));
-    }
-  };
-  
-  return (
-    <div className="bg-white rounded-lg shadow-lg p-4">
-      <div className="cuestionario-item">
-        <div className="cuestionario-header bg-gradient-to-r from-purple-600 to-indigo-600 rounded-t-lg text-white p-4 flex justify-between items-center">
-          <h4 className="text-xl font-bold mb-0">Calculadora de Repetición Máxima (RM)</h4>
-          <div className="resultado-badge bg-gray-500 text-white px-3 py-1 rounded-full text-sm" id="rm-calculator-badge">
-            {historialRM.length > 0 ? 'Completado' : 'No completado'}
+    <div class="tab-content" id="rm-tabs-content">
+      <!-- Método 1: Cálculo por Repeticiones (NSCA pág. 405-406) -->
+      <div class="tab-pane fade show active" id="reps-content" role="tabpanel" aria-labelledby="reps-tab">
+        <div class="card mb-4">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">Calculadora de 1RM por Repeticiones Máximas</h5>
           </div>
-        </div>
-        
-        <div className="cuestionario-content p-4 bg-gray-50 rounded-b-lg">
-          <p className="mb-3 text-gray-700">
-            Estime la fuerza máxima (1RM) utilizando diferentes métodos y obtenga recomendaciones para prescripción de ejercicio terapéutico basadas en la evidencia de la NSCA.
-          </p>
-          
-          {/* Tabs para los diferentes métodos de cálculo */}
-          <div className="mb-6">
-            <div className="flex border-b border-gray-200">
-              <button 
-                className={`py-2 px-4 font-medium text-sm ${tabActiva === 'reps' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600 hover:text-purple-500'}`}
-                onClick={() => setTabActiva('reps')}
-              >
-                <i className="fas fa-sort-numeric-up mr-1"></i> Por Repeticiones
-              </button>
-              <button 
-                className={`py-2 px-4 font-medium text-sm ${tabActiva === 'rpe' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600 hover:text-purple-500'}`}
-                onClick={() => setTabActiva('rpe')}
-              >
-                <i className="fas fa-tachometer-alt mr-1"></i> Por RPE
-              </button>
-              <button 
-                className={`py-2 px-4 font-medium text-sm ${tabActiva === 'rir' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600 hover:text-purple-500'}`}
-                onClick={() => setTabActiva('rir')}
-              >
-                <i className="fas fa-battery-three-quarters mr-1"></i> Por RIR
-              </button>
+          <div class="card-body">
+            <div class="form-row mb-4">
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label for="rm_ejercicio" class="form-label">Ejercicio</label>
+                  <select id="rm_ejercicio" name="rm_ejercicio" class="form-select">
+                    <option value="">Seleccionar</option>
+                    <option value="Press banca">Press banca</option>
+                    <option value="Sentadilla">Sentadilla</option>
+                    <option value="Peso muerto">Peso muerto</option>
+                    <option value="Press hombro">Press hombro</option>
+                    <option value="Curl bíceps">Curl bíceps</option>
+                    <option value="Extensión tríceps">Extensión tríceps</option>
+                    <option value="Leg press">Leg press</option>
+                    <option value="Extensión rodilla">Extensión rodilla</option>
+                    <option value="Flexión rodilla">Flexión rodilla</option>
+                    <option value="Remo con barra">Remo con barra</option>
+                    <option value="Dominadas">Dominadas</option>
+                    <option value="Press de banca inclinado">Press de banca inclinado</option>
+                    <option value="Hip thrust">Hip thrust</option>
+                    <option value="Curl de piernas">Curl de piernas</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                  <input type="text" id="rm_ejercicio_otro" name="rm_ejercicio_otro" class="form-control mt-2" placeholder="Especifique otro ejercicio" style="display: none;">
+                </div>
+              </div>
+              <div class="form-col form-col-md-2">
+                <div class="form-group">
+                  <label for="rm_peso" class="form-label">Peso levantado (kg)</label>
+                  <input type="number" id="rm_peso" name="rm_peso" class="form-control" min="0" max="500" step="0.5">
+                </div>
+              </div>
+              <div class="form-col form-col-md-2">
+                <div class="form-group">
+                  <label for="rm_repeticiones" class="form-label">Repeticiones realizadas</label>
+                  <input type="number" id="rm_repeticiones" name="rm_repeticiones" class="form-control" min="1" max="15">
+                  <small class="form-text text-muted">Máximo 15 rep. para mayor precisión</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-2">
+                <div class="form-group">
+                  <label for="rm_formula" class="form-label">Fórmula a utilizar</label>
+                  <select id="rm_formula" name="rm_formula" class="form-select">
+                    <option value="brzycki">Brzycki</option>
+                    <option value="epley">Epley</option>
+                    <option value="lander">Lander</option>
+                    <option value="lombardi">Lombardi</option>
+                    <option value="oconner">O'Conner</option>
+                    <option value="wathen">Wathen</option>
+                    <option value="promedio">Promedio de todas</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label for="rm_nivel" class="form-label">Nivel de entrenamiento</label>
+                  <select id="rm_nivel" name="rm_nivel" class="form-select">
+                    <option value="Principiante">Principiante</option>
+                    <option value="Intermedio">Intermedio</option>
+                    <option value="Avanzado">Avanzado</option>
+                  </select>
+                  <small class="form-text text-muted">Según clasificación NSCA</small>
+                </div>
+              </div>
             </div>
             
-            <div className="pt-4">
-              {/* Método 1: Cálculo por Repeticiones */}
-              {tabActiva === 'reps' && (
-                <div className="bg-white p-4 rounded-lg shadow-sm">
-                  <h5 className="text-lg font-semibold mb-4 text-gray-800">Calculadora de 1RM por Repeticiones Máximas</h5>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Ejercicio</label>
-                      <select 
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        value={ejercicio}
-                        onChange={(e) => setEjercicio(e.target.value)}
-                      >
-                        <option value="">Seleccionar</option>
-                        <option value="Press banca">Press banca</option>
-                        <option value="Sentadilla">Sentadilla</option>
-                        <option value="Peso muerto">Peso muerto</option>
-                        <option value="Press hombro">Press hombro</option>
-                        <option value="Curl bíceps">Curl bíceps</option>
-                        <option value="Extensión tríceps">Extensión tríceps</option>
-                        <option value="Leg press">Leg press</option>
-                        <option value="Extensión rodilla">Extensión rodilla</option>
-                        <option value="Flexión rodilla">Flexión rodilla</option>
-                        <option value="Remo con barra">Remo con barra</option>
-                        <option value="Dominadas">Dominadas</option>
-                        <option value="Press de banca inclinado">Press de banca inclinado</option>
-                        <option value="Hip thrust">Hip thrust</option>
-                        <option value="Curl de piernas">Curl de piernas</option>
-                        <option value="Otro">Otro</option>
-                      </select>
-                      
-                      {ejercicio === 'Otro' && (
-                        <input
-                          type="text"
-                          className="w-full mt-2 rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                          placeholder="Especifique otro ejercicio"
-                          value={otroEjercicio}
-                          onChange={(e) => setOtroEjercicio(e.target.value)}
-                        />
-                      )}
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Peso levantado (kg)</label>
-                      <input
-                        type="number"
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        min="0"
-                        max="500"
-                        step="0.5"
-                        value={peso}
-                        onChange={(e) => setPeso(e.target.value)}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Repeticiones realizadas</label>
-                      <input
-                        type="number"
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        min="1"
-                        max="15"
-                        value={repeticiones}
-                        onChange={(e) => setRepeticiones(e.target.value)}
-                      />
-                      <small className="text-gray-500 text-xs">Máximo 15 rep. para mayor precisión</small>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Fórmula a utilizar</label>
-                      <select
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        value={formula}
-                        onChange={(e) => setFormula(e.target.value)}
-                      >
-                        <option value="brzycki">Brzycki</option>
-                        <option value="epley">Epley</option>
-                        <option value="lander">Lander</option>
-                        <option value="lombardi">Lombardi</option>
-                        <option value="oconner">O'Conner</option>
-                        <option value="wathen">Wathen</option>
-                        <option value="promedio">Promedio de todas</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Nivel de entrenamiento</label>
-                      <select
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        value={nivel}
-                        onChange={(e) => setNivel(e.target.value)}
-                      >
-                        <option value="Principiante">Principiante</option>
-                        <option value="Intermedio">Intermedio</option>
-                        <option value="Avanzado">Avanzado</option>
-                      </select>
-                      <small className="text-gray-500 text-xs">Según clasificación NSCA</small>
-                    </div>
-                  </div>
-                  
-                  <button
-                    onClick={calcular1RM}
-                    className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-md transition duration-300"
-                  >
-                    <i className="fas fa-calculator mr-1"></i> Calcular 1RM
-                  </button>
-                </div>
-              )}
-              
-              {/* Método 2: Cálculo por RPE */}
-              {tabActiva === 'rpe' && (
-                <div className="bg-white p-4 rounded-lg shadow-sm">
-                  <h5 className="text-lg font-semibold mb-2 text-gray-800">Calculadora de 1RM por RPE (Valoración de Esfuerzo Percibido)</h5>
-                  <p className="text-gray-500 text-sm mb-4">RPE = Rating of Perceived Exertion (Escala 1-10)</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-4">
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Ejercicio</label>
-                      <select 
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        value={ejercicio}
-                        onChange={(e) => setEjercicio(e.target.value)}
-                      >
-                        <option value="">Seleccionar</option>
-                        <option value="Press banca">Press banca</option>
-                        <option value="Sentadilla">Sentadilla</option>
-                        <option value="Peso muerto">Peso muerto</option>
-                        <option value="Press hombro">Press hombro</option>
-                        <option value="Curl bíceps">Curl bíceps</option>
-                        <option value="Extensión tríceps">Extensión tríceps</option>
-                        <option value="Leg press">Leg press</option>
-                        <option value="Extensión rodilla">Extensión rodilla</option>
-                        <option value="Flexión rodilla">Flexión rodilla</option>
-                        <option value="Otro">Otro</option>
-                      </select>
-                      
-                      {ejercicio === 'Otro' && (
-                        <input
-                          type="text"
-                          className="w-full mt-2 rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                          placeholder="Especifique otro ejercicio"
-                          value={otroEjercicio}
-                          onChange={(e) => setOtroEjercicio(e.target.value)}
-                        />
-                      )}
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Peso levantado (kg)</label>
-                      <input
-                        type="number"
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        min="0"
-                        max="500"
-                        step="0.5"
-                        value={peso}
-                        onChange={(e) => setPeso(e.target.value)}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Repeticiones</label>
-                      <input
-                        type="number"
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        min="1"
-                        max="15"
-                        value={repeticiones}
-                        onChange={(e) => setRepeticiones(e.target.value)}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Valor RPE (1-10)</label>
-                      <input
-                        type="number"
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        min="1"
-                        max="10"
-                        step="0.5"
-                        value={rpeValor}
-                        onChange={(e) => setRpeValor(e.target.value)}
-                      />
-                      <small className="text-gray-500 text-xs">10 = máximo esfuerzo</small>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <button
-                        onClick={calcular1RMporRPE}
-                        className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-md transition duration-300"
-                      >
-                        <i className="fas fa-calculator mr-1"></i> Calcular 1RM por RPE
-                      </button>
-                    </div>
-                    
-                    <div className="bg-gray-100 p-3 rounded-lg">
-                      <h6 className="text-sm font-semibold mb-2">Guía de RPE</h6>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-sm border-collapse">
-                          <thead>
-                            <tr className="bg-gray-200">
-                              <th className="py-1 px-2 border border-gray-300">RPE</th>
-                              <th className="py-1 px-2 border border-gray-300">Descripción</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td className="py-1 px-2 border border-gray-300">10</td>
-                              <td className="py-1 px-2 border border-gray-300">Máximo esfuerzo, no más repeticiones posibles</td>
-                            </tr>
-                            <tr>
-                              <td className="py-1 px-2 border border-gray-300">9</td>
-                              <td className="py-1 px-2 border border-gray-300">Podría hacer 1 repetición más</td>
-                            </tr>
-                            <tr>
-                              <td className="py-1 px-2 border border-gray-300">8</td>
-                              <td className="py-1 px-2 border border-gray-300">Podría hacer 2 repeticiones más</td>
-                            </tr>
-                            <tr>
-                              <td className="py-1 px-2 border border-gray-300">7</td>
-                              <td className="py-1 px-2 border border-gray-300">Podría hacer 3 repeticiones más</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div className="mt-2 text-xs text-blue-600">
-                        El RPE es compatible con el concepto de RIR (Repeticiones en Reserva) mencionado en NSCA pág. 407.
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {/* Método 3: Cálculo por RIR */}
-              {tabActiva === 'rir' && (
-                <div className="bg-white p-4 rounded-lg shadow-sm">
-                  <h5 className="text-lg font-semibold mb-2 text-gray-800">Calculadora de 1RM por RIR (Repeticiones en Reserva)</h5>
-                  <p className="text-gray-500 text-sm mb-4">RIR = Repetitions in Reserve (NSCA pág. 407)</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-4">
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Ejercicio</label>
-                      <select 
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        value={ejercicio}
-                        onChange={(e) => setEjercicio(e.target.value)}
-                      >
-                        <option value="">Seleccionar</option>
-                        <option value="Press banca">Press banca</option>
-                        <option value="Sentadilla">Sentadilla</option>
-                        <option value="Peso muerto">Peso muerto</option>
-                        <option value="Press hombro">Press hombro</option>
-                        <option value="Curl bíceps">Curl bíceps</option>
-                        <option value="Extensión tríceps">Extensión tríceps</option>
-                        <option value="Leg press">Leg press</option>
-                        <option value="Extensión rodilla">Extensión rodilla</option>
-                        <option value="Flexión rodilla">Flexión rodilla</option>
-                        <option value="Otro">Otro</option>
-                      </select>
-                      
-                      {ejercicio === 'Otro' && (
-                        <input
-                          type="text"
-                          className="w-full mt-2 rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                          placeholder="Especifique otro ejercicio"
-                          value={otroEjercicio}
-                          onChange={(e) => setOtroEjercicio(e.target.value)}
-                        />
-                      )}
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Peso levantado (kg)</label>
-                      <input
-                        type="number"
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        min="0"
-                        max="500"
-                        step="0.5"
-                        value={peso}
-                        onChange={(e) => setPeso(e.target.value)}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Repeticiones</label>
-                      <input
-                        type="number"
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        min="1"
-                        max="15"
-                        value={repeticiones}
-                        onChange={(e) => setRepeticiones(e.target.value)}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">RIR (0-6)</label>
-                      <input
-                        type="number"
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        min="0"
-                        max="6"
-                        step="1"
-                        value={rirValor}
-                        onChange={(e) => setRirValor(e.target.value)}
-                      />
-                      <small className="text-gray-500 text-xs">0 = fallo muscular (no más reps)</small>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <button
-                        onClick={calcular1RMporRIR}
-                        className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-md transition duration-300"
-                      >
-                        <i className="fas fa-calculator mr-1"></i> Calcular 1RM por RIR
-                      </button>
-                    </div>
-                    
-                    <div className="bg-gray-100 p-3 rounded-lg">
-                      <h6 className="text-sm font-semibold mb-2">Guía de RIR (NSCA pág. 407)</h6>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-sm border-collapse">
-                          <thead>
-                            <tr className="bg-gray-200">
-                              <th className="py-1 px-2 border border-gray-300">RIR</th>
-                              <th className="py-1 px-2 border border-gray-300">Descripción</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td className="py-1 px-2 border border-gray-300">0</td>
-                              <td className="py-1 px-2 border border-gray-300">Fallo muscular, no quedan repeticiones en reserva</td>
-                            </tr>
-                            <tr>
-                              <td className="py-1 px-2 border border-gray-300">1</td>
-                              <td className="py-1 px-2 border border-gray-300">Podría hacer 1 repetición más</td>
-                            </tr>
-                            <tr>
-                              <td className="py-1 px-2 border border-gray-300">2</td>
-                              <td className="py-1 px-2 border border-gray-300">Podría hacer 2 repeticiones más</td>
-                            </tr>
-                            <tr>
-                              <td className="py-1 px-2 border border-gray-300">3</td>
-                              <td className="py-1 px-2 border border-gray-300">Podría hacer 3 repeticiones más</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div className="mt-2 text-xs text-blue-600">
-                        La NSCA menciona el "entrenamiento sin fallo" o "RIR" en pág. 407: "Un método alternativo es repeticiones en reserva (RIR) o entrenamiento sin fallo."
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+            <div class="form-row mb-4">
+              <div class="form-col form-col-md-12">
+                <button type="button" class="btn btn-primary" onclick="calcular1RM()">
+                  <i class="fas fa-calculator"></i> Calcular 1RM
+                </button>
+              </div>
             </div>
           </div>
-          
-          {/* Resultados */}
-          {mostrarResultados && (
-            <div className="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-green-600 text-white p-3">
-                <h5 className="text-lg font-semibold mb-0">Resultados de 1RM</h5>
-              </div>
-              <div className="p-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="text-center">
-                    <h6 className="text-gray-600 mb-2">1RM estimado:</h6>
-                    <div className="text-4xl font-bold text-green-600">{rm1Valor} kg</div>
-                    <p className="text-gray-500 text-sm mt-2">{metodoCalculo}</p>
+        </div>
+      </div>
+      
+      <!-- Método 2: Cálculo por RPE (complementa NSCA pág. 407 sobre RIR) -->
+      <div class="tab-pane fade" id="rpe-content" role="tabpanel" aria-labelledby="rpe-tab">
+        <div class="card mb-4">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">Calculadora de 1RM por RPE (Valoración de Esfuerzo Percibido)</h5>
+            <p class="text-muted mb-0 small">RPE = Rating of Perceived Exertion (Escala 1-10)</p>
+          </div>
+          <div class="card-body">
+            <div class="row mb-4">
+              <div class="col-md-8">
+                <div class="form-row mb-4">
+                  <div class="form-col form-col-md-4">
+                    <div class="form-group">
+                      <label for="rpe_ejercicio" class="form-label">Ejercicio</label>
+                      <select id="rpe_ejercicio" name="rpe_ejercicio" class="form-select">
+                        <option value="">Seleccionar</option>
+                        <option value="Press banca">Press banca</option>
+                        <option value="Sentadilla">Sentadilla</option>
+                        <option value="Peso muerto">Peso muerto</option>
+                        <option value="Press hombro">Press hombro</option>
+                        <option value="Curl bíceps">Curl bíceps</option>
+                        <option value="Extensión tríceps">Extensión tríceps</option>
+                        <option value="Leg press">Leg press</option>
+                        <option value="Extensión rodilla">Extensión rodilla</option>
+                        <option value="Flexión rodilla">Flexión rodilla</option>
+                        <option value="Otro">Otro</option>
+                      </select>
+                      <input type="text" id="rpe_ejercicio_otro" name="rpe_ejercicio_otro" class="form-control mt-2" placeholder="Especifique otro ejercicio" style="display: none;">
+                    </div>
                   </div>
-                  
-                  <div className="md:col-span-2">
-                    <h6 className="text-gray-600 mb-2">Tabla de cargas de entrenamiento (NSCA Tabla 15.6):</h6>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm border-collapse">
-                        <thead className="bg-gray-100">
+                  <div class="form-col form-col-md-3">
+                    <div class="form-group">
+                      <label for="rpe_peso" class="form-label">Peso levantado (kg)</label>
+                      <input type="number" id="rpe_peso" name="rpe_peso" class="form-control" min="0" max="500" step="0.5">
+                    </div>
+                  </div>
+                  <div class="form-col form-col-md-2">
+                    <div class="form-group">
+                      <label for="rpe_repeticiones" class="form-label">Repeticiones</label>
+                      <input type="number" id="rpe_repeticiones" name="rpe_repeticiones" class="form-control" min="1" max="15">
+                    </div>
+                  </div>
+                  <div class="form-col form-col-md-3">
+                    <div class="form-group">
+                      <label for="rpe_valor" class="form-label">Valor RPE (1-10)</label>
+                      <input type="number" id="rpe_valor" name="rpe_valor" class="form-control" min="1" max="10" step="0.5">
+                      <small class="form-text text-muted">10 = máximo esfuerzo</small>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-row mb-3">
+                  <div class="form-col form-col-md-12">
+                    <button type="button" class="btn btn-primary" onclick="calcular1RMporRPE()">
+                      <i class="fas fa-calculator"></i> Calcular 1RM por RPE
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-4">
+                <div class="card bg-light">
+                  <div class="card-body p-2">
+                    <h6 class="mb-2">Guía de RPE</h6>
+                    <div class="table-responsive">
+                      <table class="table table-sm table-bordered">
+                        <thead>
                           <tr>
-                            <th className="py-2 px-3 border border-gray-300 text-left">Objetivo</th>
-                            <th className="py-2 px-3 border border-gray-300 text-left">% 1RM</th>
-                            <th className="py-2 px-3 border border-gray-300 text-left">Peso (kg)</th>
-                            <th className="py-2 px-3 border border-gray-300 text-left">Rep. recomendadas</th>
-                            <th className="py-2 px-3 border border-gray-300 text-left">Aplicación</th>
+                            <th>RPE</th>
+                            <th>Descripción</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {tablaCargasData.map((fila, index) => (
-                            <tr key={index} className={`bg-${fila.color}-50`}>
-                              <td className="py-2 px-3 border border-gray-300 font-medium">{fila.objetivo}</td>
-                              <td className="py-2 px-3 border border-gray-300">{fila.rango}</td>
-                              <td className="py-2 px-3 border border-gray-300 font-bold">{fila.carga} kg</td>
-                              <td className="py-2 px-3 border border-gray-300">{fila.repeticiones}</td>
-                              <td className="py-2 px-3 border border-gray-300">{fila.descripcion}</td>
-                            </tr>
-                          ))}
+                          <tr>
+                            <td>10</td>
+                            <td>Máximo esfuerzo, no más repeticiones posibles</td>
+                          </tr>
+                          <tr>
+                            <td>9.5</td>
+                            <td>Podría hacer más peso pero no más repeticiones</td>
+                          </tr>
+                          <tr>
+                            <td>9</td>
+                            <td>Podría hacer 1 repetición más</td>
+                          </tr>
+                          <tr>
+                            <td>8</td>
+                            <td>Podría hacer 2 repeticiones más</td>
+                          </tr>
+                          <tr>
+                            <td>7</td>
+                            <td>Podría hacer 3 repeticiones más</td>
+                          </tr>
+                          <tr>
+                            <td>5-6</td>
+                            <td>Podría hacer 4-6 repeticiones más</td>
+                          </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          )}
-          
-          {/* Historial de RMs */}
-          <div className="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="bg-gray-100 p-3">
-              <h5 className="text-lg font-semibold mb-0">Historial de Evaluaciones</h5>
-            </div>
-            <div className="p-4">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm border-collapse">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="py-2 px-3 border border-gray-300 text-left">Ejercicio</th>
-                      <th className="py-2 px-3 border border-gray-300 text-left">Fecha</th>
-                      <th className="py-2 px-3 border border-gray-300 text-left">Peso (kg)</th>
-                      <th className="py-2 px-3 border border-gray-300 text-left">Reps/RPE/RIR</th>
-                      <th className="py-2 px-3 border border-gray-300 text-left">1RM (kg)</th>
-                      <th className="py-2 px-3 border border-gray-300 text-left">Método</th>
-                      <th className="py-2 px-3 border border-gray-300 text-left">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {historialRM.length === 0 ? (
-                      <tr>
-                        <td colSpan="7" className="py-4 text-center text-gray-500">No hay evaluaciones guardadas</td>
-                      </tr>
-                    ) : (
-                      historialRM.map((registro) => (
-                        <tr key={registro.id}>
-                          <td className="py-2 px-3 border border-gray-300">{registro.ejercicio}</td>
-                          <td className="py-2 px-3 border border-gray-300">{registro.fecha}</td>
-                          <td className="py-2 px-3 border border-gray-300">{registro.peso} kg</td>
-                          <td className="py-2 px-3 border border-gray-300">{registro.valor}</td>
-                          <td className="py-2 px-3 border border-gray-300 font-bold">{registro.rm1} kg</td>
-                          <td className="py-2 px-3 border border-gray-300">{registro.metodo}</td>
-                          <td className="py-2 px-3 border border-gray-300">
-                            <button
-                              onClick={() => eliminarRegistroRM(registro.id)}
-                              className="text-red-600 hover:text-red-800"
-                            >
-                              <i className="fas fa-trash"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-              
-              <div className="mt-4">
-                <button
-                  onClick={guardarRM}
-                  className="border border-purple-600 text-purple-600 hover:bg-purple-50 px-3 py-1 rounded-md text-sm transition duration-300"
-                >
-                  <i className="fas fa-save mr-1"></i> Guardar Evaluación Actual
-                </button>
+                <div class="alert alert-info mt-3">
+                  <small>El RPE es compatible con el concepto de RIR (Repeticiones en Reserva) mencionado en NSCA pág. 407.</small>
+                </div>
               </div>
             </div>
           </div>
-          
-          {/* Guía de Prescripción */}
-          <div className="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="bg-blue-600 text-white p-3">
-              <h5 className="text-lg font-semibold mb-0">Guía de Prescripción según NSCA</h5>
-            </div>
-            <div className="p-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="border border-red-500 rounded-lg overflow-hidden">
-                  <div className="bg-red-500 text-white p-2">
-                    <strong>Fuerza máxima</strong> <span className="bg-white text-red-500 text-xs font-medium px-2 py-1 rounded ml-2">85-100% 1RM</span>
+        </div>
+      </div>
+      
+      <!-- Método 3: Cálculo por RIR (NSCA pág. 407 - "repeticiones en reserva") -->
+      <div class="tab-pane fade" id="rir-content" role="tabpanel" aria-labelledby="rir-tab">
+        <div class="card mb-4">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">Calculadora de 1RM por RIR (Repeticiones en Reserva)</h5>
+            <p class="text-muted mb-0 small">RIR = Repetitions in Reserve (NSCA pág. 407)</p>
+          </div>
+          <div class="card-body">
+            <div class="row mb-4">
+              <div class="col-md-8">
+                <div class="form-row mb-4">
+                  <div class="form-col form-col-md-4">
+                    <div class="form-group">
+                      <label for="rir_ejercicio" class="form-label">Ejercicio</label>
+                      <select id="rir_ejercicio" name="rir_ejercicio" class="form-select">
+                        <option value="">Seleccionar</option>
+                        <option value="Press banca">Press banca</option>
+                        <option value="Sentadilla">Sentadilla</option>
+                        <option value="Peso muerto">Peso muerto</option>
+                        <option value="Press hombro">Press hombro</option>
+                        <option value="Curl bíceps">Curl bíceps</option>
+                        <option value="Extensión tríceps">Extensión tríceps</option>
+                        <option value="Leg press">Leg press</option>
+                        <option value="Extensión rodilla">Extensión rodilla</option>
+                        <option value="Flexión rodilla">Flexión rodilla</option>
+                        <option value="Otro">Otro</option>
+                      </select>
+                      <input type="text" id="rir_ejercicio_otro" name="rir_ejercicio_otro" class="form-control mt-2" placeholder="Especifique otro ejercicio" style="display: none;">
+                    </div>
                   </div>
-                  <div className="p-3">
-                    <ul className="list-none text-sm space-y-1">
-                      <li><strong>Repeticiones:</strong> 1-6</li>
-                      <li><strong>Series:</strong> 1-3 (novato), ≥3 (intermedio/avanzado)</li>
-                      <li><strong>Descanso:</strong> 2-5 minutos</li>
-                      <li><strong>Frecuencia:</strong> 2-3 veces/semana</li>
-                      <li><strong>Aplicación:</strong> Desarrollo de fuerza máxima</li>
-                    </ul>
+                  <div class="form-col form-col-md-3">
+                    <div class="form-group">
+                      <label for="rir_peso" class="form-label">Peso levantado (kg)</label>
+                      <input type="number" id="rir_peso" name="rir_peso" class="form-control" min="0" max="500" step="0.5">
+                    </div>
+                  </div>
+                  <div class="form-col form-col-md-2">
+                    <div class="form-group">
+                      <label for="rir_repeticiones" class="form-label">Repeticiones</label>
+                      <input type="number" id="rir_repeticiones" name="rir_repeticiones" class="form-control" min="1" max="15">
+                    </div>
+                  </div>
+                  <div class="form-col form-col-md-3">
+                    <div class="form-group">
+                      <label for="rir_valor" class="form-label">RIR (0-6)</label>
+                      <input type="number" id="rir_valor" name="rir_valor" class="form-control" min="0" max="6" step="1">
+                      <small class="form-text text-muted">0 = fallo muscular (no más reps)</small>
+                    </div>
                   </div>
                 </div>
                 
-                <div className="border border-yellow-500 rounded-lg overflow-hidden">
-                  <div className="bg-yellow-500 text-white p-2">
-                    <strong>Hipertrofia</strong> <span className="bg-white text-yellow-500 text-xs font-medium px-2 py-1 rounded ml-2">67-85% 1RM</span>
-                  </div>
-                  <div className="p-3">
-                    <ul className="list-none text-sm space-y-1">
-                      <li><strong>Repeticiones:</strong> 6-12</li>
-                      <li><strong>Series:</strong> 1-3 (novato), ≥3 (intermedio/avanzado)</li>
-                      <li><strong>Descanso:</strong> ≥2-3 min (multiarticulares), 60-90s (monoarticulares)</li>
-                      <li><strong>Frecuencia:</strong> 2-3 veces/semana por grupo muscular</li>
-                      <li><strong>Aplicación:</strong> Aumento de masa muscular</li>
-                    </ul>
+                <div class="form-row mb-3">
+                  <div class="form-col form-col-md-12">
+                    <button type="button" class="btn btn-primary" onclick="calcular1RMporRIR()">
+                      <i class="fas fa-calculator"></i> Calcular 1RM por RIR
+                    </button>
                   </div>
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="border border-green-500 rounded-lg overflow-hidden">
-                  <div className="bg-green-500 text-white p-2">
-                    <strong>Resistencia muscular</strong> <span className="bg-white text-green-500 text-xs font-medium px-2 py-1 rounded ml-2">50-67% 1RM</span>
-                  </div>
-                  <div className="p-3">
-                    <ul className="list-none text-sm space-y-1">
-                      <li><strong>Repeticiones:</strong> 12-20+</li>
-                      <li><strong>Series:</strong> 1-3 (novato), ≥3 (intermedio/avanzado)</li>
-                      <li><strong>Descanso:</strong> ≤30 segundos</li>
-                      <li><strong>Frecuencia:</strong> 2-3 veces/semana</li>
-                      <li><strong>Aplicación:</strong> Mejora de la capacidad funcional</li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div className="border border-blue-500 rounded-lg overflow-hidden">
-                  <div className="bg-blue-500 text-white p-2">
-                    <strong>Potencia</strong> <span className="bg-white text-blue-500 text-xs font-medium px-2 py-1 rounded ml-2">30-60% 1RM</span>
-                  </div>
-                  <div className="p-3">
-                    <ul className="list-none text-sm space-y-1">
-                      <li><strong>Repeticiones:</strong> 3-6</li>
-                      <li><strong>Series:</strong> 1-3 (novato), 3-6 (intermedio/avanzado)</li>
-                      <li><strong>Descanso:</strong> 2-5 minutos</li>
-                      <li><strong>Frecuencia:</strong> 2-3 veces/semana</li>
-                      <li><strong>Característica:</strong> Máxima velocidad de ejecución</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-blue-50 p-3 rounded-lg mb-4">
-                <h6 className="font-semibold flex items-center text-blue-800"><i className="fas fa-arrow-up mr-2"></i> Regla 2-for-2 para Progresión (NSCA pág. 411):</h6>
-                <p className="text-sm text-blue-700 mb-0">Incrementar el peso cuando el cliente puede realizar 2 repeticiones más que el objetivo en 2 sesiones consecutivas.</p>
-              </div>
-              
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <h6 className="font-semibold flex items-center text-blue-800"><i className="fas fa-info-circle mr-2"></i> Incrementos de carga recomendados (NSCA):</h6>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-2">
-                  <div>
-                    <strong className="text-blue-700">Principiante:</strong>
-                    <ul className="text-sm space-y-1 list-inside list-disc text-blue-600">
-                      <li>Tren superior, ejercicios principales: 1-2 kg</li>
-                      <li>Tren inferior, ejercicios principales: 4-7 kg</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <strong className="text-blue-700">Intermedio:</strong>
-                    <ul className="text-sm space-y-1 list-inside list-disc text-blue-600">
-                      <li>Tren superior, ejercicios principales: 2-4+ kg</li>
-                      <li>Tren inferior, ejercicios principales: 7-9+ kg</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <strong className="text-blue-700">Avanzado:</strong>
-                    <ul className="text-sm space-y-1 list-inside list-disc text-blue-600">
-                      <li>Incrementos menores y más específicos</li>
-                      <li>Periodización más compleja</li>
-                    </ul>
+              <div class="col-md-4">
+                <div class="card bg-light">
+                  <div class="card-body p-2">
+                    <h6 class="mb-2">Guía de RIR (NSCA pág. 407)</h6>
+                    <div class="table-responsive">
+                      <table class="table table-sm table-bordered">
+                        <thead>
+                          <tr>
+                            <th>RIR</th>
+                            <th>Descripción</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>0</td>
+                            <td>Fallo muscular, no quedan repeticiones en reserva</td>
+                          </tr>
+                          <tr>
+                            <td>1</td>
+                            <td>Podría hacer 1 repetición más</td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>Podría hacer 2 repeticiones más</td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>Podría hacer 3 repeticiones más</td>
+                          </tr>
+                          <tr>
+                            <td>4-6</td>
+                            <td>Podría hacer 4-6 repeticiones más (intensidad baja)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              <div className="text-gray-500 text-xs mt-3">
-                <p><strong>Referencias:</strong> Basado en National Strength and Conditioning Association (NSCA), Essentials of Personal Training, 2nd Edition. Schoenfeld, B.J., & Snarr, R.L. (2020). Resistance Training Program Design. Capítulo 15.</p>
+                <div class="alert alert-info mt-3">
+                  <small>La NSCA menciona el "entrenamiento sin fallo" o "RIR" en pág. 407: "Un método alternativo es repeticiones en reserva (RIR) o entrenamiento sin fallo."</small>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
-
-export default CalculadoraRM;
+    
+    <!-- Contenedor de resultados (común para todos los métodos) -->
+    <div id="resultado_1rm_container" style="display: none;">
+      <div class="form-row">
+        <div class="form-col form-col-md-12">
+          <div class="card">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0">Resultados de 1RM</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="text-center mb-4">
+                    <h6>1RM estimado:</h6>
+                    <h2 id="valor_1rm" class="display-4">0 kg</h2>
+                    <p class="text-muted small" id="metodo_calculo">Basado en la fórmula seleccionada</p>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <h6>Tabla de cargas de entrenamiento (NSCA Tabla 15.6):</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                      <thead class="bg-light">
+                        <tr>
+                          <th>Objetivo</th>
+                          <th>% 1RM</th>
+                          <th>Peso (kg)</th>
+                          <th>Rep. recomendadas</th>
+                          <th>Aplicación</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tabla_cargas">
+                        <!-- Se llenará dinámicamente -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Historial de RMs -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Historial de Evaluaciones</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="bg-light">
+              <tr>
+                <th>Ejercicio</th>
+                <th>Fecha</th>
+                <th>Peso (kg)</th>
+                <th>Reps/RPE/RIR</th>
+                <th>1RM (kg)</th>
+                <th>Método</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="historial_rm">
+              <!-- Se llenará dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="form-row mt-3">
+          <div class="form-col form-col-md-12">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="guardarRM()">
+              <i class="fas fa-save"></i> Guardar Evaluación Actual
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recomendaciones para prescripción (se llena dinámicamente) -->
+    <div id="recomendaciones_rm" style="display: none;">
+      <!-- Contenido generado dinámicamente -->
+    </div>
+    
+    <!-- Guía de interpretación basada en NSCA, Tabla 15.6 (pág. 409) -->
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Guía de Prescripción según NSCA</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-3 border-danger">
+              <div class="card-header bg-danger text-white">
+                <strong>Fuerza máxima</strong> <span class="badge bg-light text-dark">85-100% 1RM</span>
+              </div>
+              <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                  <li><strong>Repeticiones:</strong> 1-6</li>
+                  <li><strong>Series:</strong> 1-3 (novato), ≥3 (intermedio/avanzado)</li>
+                  <li><strong>Descanso:</strong> 2-5 minutos</li>
+                  <li><strong>Frecuencia:</strong> 2-3 veces/semana</li>
+                  <li><strong>Aplicación:</strong> Desarrollo de fuerza máxima</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-3 border-warning">
+              <div class="card-header bg-warning text-dark">
+                <strong>Hipertrofia</strong> <span class="badge bg-light text-dark">67-85% 1RM</span>
+              </div>
+              <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                  <li><strong>Repeticiones:</strong> 6-12</li>
+                  <li><strong>Series:</strong> 1-3 (novato), ≥3 (intermedio/avanzado)</li>
+                  <li><strong>Descanso:</strong> ≥2-3 min (multiarticulares), 60-90s (monoarticulares)</li>
+                  <li><strong>Frecuencia:</strong> 2-3 veces/semana por grupo muscular</li>
+                  <li><strong>Aplicación:</strong> Aumento de masa muscular</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-3 border-success">
+              <div class="card-header bg-success text-white">
+                <strong>Resistencia muscular</strong> <span class="badge bg-light text-dark">50-67% 1RM</span>
+              </div>
+              <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                  <li><strong>Repeticiones:</strong> 12-20+</li>
+                  <li><strong>Series:</strong> 1-3 (novato), ≥3 (intermedio/avanzado)</li>
+                  <li><strong>Descanso:</strong> ≤30 segundos</li>
+                  <li><strong>Frecuencia:</strong> 2-3 veces/semana</li>
+                  <li><strong>Aplicación:</strong> Mejora de la capacidad funcional</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-3 border-primary">
+              <div class="card-header bg-primary text-white">
+                <strong>Potencia</strong> <span class="badge bg-light text-dark">30-60% 1RM</span>
+              </div>
+              <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                  <li><strong>Repeticiones:</strong> 3-6</li>
+                  <li><strong>Series:</strong> 1-3 (novato), 3-6 (intermedio/avanzado)</li>
+                  <li><strong>Descanso:</strong> 2-5 minutos</li>
+                  <li><strong>Frecuencia:</strong> 2-3 veces/semana</li>
+                  <li><strong>Característica:</strong> Máxima velocidad de ejecución</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Regla 2-for-2 para progresión (pág. 411, tabla 15.8) -->
+        <div class="alert alert-primary mt-3">
+          <h6 class="alert-heading"><i class="fas fa-arrow-up"></i> Regla 2-for-2 para Progresión (NSCA pág. 411):</h6>
+          <p class="mb-0">Incrementar el peso cuando el cliente puede realizar 2 repeticiones más que el objetivo en 2 sesiones consecutivas.</p>
+        </div>
+        
+        <!-- Recomendaciones de incremento según nivel y tipo de ejercicio (pág. 410, tabla 15.7) -->
+        <div class="alert alert-info mt-3">
+          <h6 class="alert-heading"><i class="fas fa-info-circle"></i> Incrementos de carga recomendados (NSCA):</h6>
+          <div class="row">
+            <div class="col-md-4">
+              <strong>Principiante:</strong>
+              <ul class="mb-0">
+                <li>Tren superior, ejercicios principales: 2.5-5 lb (1-2 kg)</li>
+                <li>Tren inferior, ejercicios principales: 10-15 lb (4-7 kg)</li>
+              </ul>
+            </div>
+            <div class="col-md-4">
+              <strong>Intermedio:</strong>
+              <ul class="mb-0">
+                <li>Tren superior, ejercicios principales: 5-10+ lb (2-4+ kg)</li>
+                <li>Tren inferior, ejercicios principales: 15-20+ lb (7-9+ kg)</li>
+              </ul>
+            </div>
+            <div class="col-md-4">
+              <strong>Avanzado:</strong>
+              <ul class="mb-0">
+                <li>Incrementos menores y más específicos</li>
+                <li>Periodización más compleja</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Frecuencia recomendada según nivel (tabla 15.2, pág. 399) -->
+        <div class="alert alert-secondary mt-3">
+          <h6 class="alert-heading"><i class="fas fa-calendar-alt"></i> Frecuencia recomendada (NSCA):</h6>
+          <ul class="mb-0">
+            <li><strong>Novato:</strong> 2-3 sesiones por semana (entrenamiento de cuerpo completo)</li>
+            <li><strong>Intermedio:</strong> 3 sesiones usando cuerpo completo; 4 sesiones usando rutina dividida</li>
+            <li><strong>Avanzado:</strong> 3-6 sesiones por semana</li>
+          </ul>
+        </div>
+        
+        <div class="alert alert-secondary mt-3 small">
+          <p class="mb-0"><strong>Referencias:</strong> Basado en National Strength and Conditioning Association (NSCA), Essentials of Personal Training, 2nd Edition. Schoenfeld, B.J., & Snarr, R.L. (2020). Resistance Training Program Design. Capítulo 15.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
                     <!-- Evaluación de Fuerza Funcional -->
                     <div class="cuestionario-item">
                       <div class="cuestionario-header" onclick="toggleCuestionario('fuerza-funcional-content')">
