@@ -454,9 +454,454 @@ function evaluarPullUpTest() {
   
   document.getElementById('pullup_resultado').innerHTML = resultado;
   document.getElementById('pullup_resultado').className = `alert alert-${color}`;
+
+  /**
+ * Evalúa el Test de Cadena Cinética Cerrada para Hombro (CKCUES)
+ * Basado en: Goldbeck y Davies (2000)
+ */
+function evaluarCKCUES() {
+  const toques = parseInt(document.getElementById('ckcues_toques').value);
+  const edad = parseInt(document.getElementById('ckcues_edad').value);
+  const genero = document.getElementById('ckcues_genero').value;
+  const nivel = document.getElementById('ckcues_nivel').value;
+  
+  if (!toques || !edad || !genero || !nivel) {
+    document.getElementById('ckcues_resultado').innerHTML = "Complete todos los campos para obtener una evaluación.";
+    document.getElementById('ckcues_resultado').className = "alert alert-secondary";
+    return;
+  }
+  
+  // Valores normativos (toques en 15 segundos)
+  const normativosMasculino = {
+    'Recreativo': {excelente: 25, bueno: 21, promedio: 18, bajo: 15},
+    'Deportista': {excelente: 30, bueno: 26, promedio: 22, bajo: 19},
+    'Élite': {excelente: 36, bueno: 32, promedio: 28, bajo: 24}
+  };
+  
+  const normativosFemenino = {
+    'Recreativo': {excelente: 20, bueno: 18, promedio: 15, bajo: 12},
+    'Deportista': {excelente: 25, bueno: 22, promedio: 19, bajo: 16},
+    'Élite': {excelente: 30, bueno: 27, promedio: 24, bajo: 20}
+  };
+  
+  const normativos = genero === 'Masculino' ? normativosMasculino : normativosFemenino;
+  let resultado = "";
+  let color = "";
+  
+  if (toques >= normativos[nivel].excelente) {
+    resultado = "Excelente: Estabilidad y funcionalidad superior del hombro.";
+    color = "success";
+  } else if (toques >= normativos[nivel].bueno) {
+    resultado = "Bueno: Estabilidad y funcionalidad por encima del promedio.";
+    color = "success";
+  } else if (toques >= normativos[nivel].promedio) {
+    resultado = "Promedio: Estabilidad y funcionalidad adecuada del hombro.";
+    color = "warning";
+  } else if (toques >= normativos[nivel].bajo) {
+    resultado = "Por debajo del promedio: Estabilidad y funcionalidad reducida.";
+    color = "warning";
+  } else {
+    resultado = "Bajo: Deficiencia en la estabilidad y funcionalidad del hombro.";
+    color = "danger";
+  }
+  
+  // Añadir índice normalizado para comparar independientemente del nivel
+  const normalizacion = (toques / normativos[nivel].promedio) * 100;
+  resultado += `<br>Índice normalizado: ${normalizacion.toFixed(1)}% del valor esperado para su nivel.`;
+  
+  document.getElementById('ckcues_resultado').innerHTML = resultado;
+  document.getElementById('ckcues_resultado').className = `alert alert-${color}`;
+
+  
   
   // Actualizar interpretación global
   actualizarInterpretacionGlobal();
+}
+  
+  // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
+}
+
+/**
+ * Evalúa el test de Side Bridge con Abducción de Cadera
+ */
+function evaluarSideBridgeAbduccion() {
+  const tiempoDerecha = parseInt(document.getElementById('side_bridge_abduccion_derecha').value) || 0;
+  const tiempoIzquierda = parseInt(document.getElementById('side_bridge_abduccion_izquierda').value) || 0;
+  const genero = document.getElementById('side_bridge_abduccion_genero').value;
+  
+  if (!genero || (tiempoDerecha === 0 && tiempoIzquierda === 0)) {
+    document.getElementById('side_bridge_abduccion_resultado').innerHTML = "Complete al menos un lado y seleccione el género para obtener una evaluación.";
+    document.getElementById('side_bridge_abduccion_resultado').className = "alert alert-secondary";
+    return;
+  }
+  
+  // Valores normativos aproximados (en segundos)
+  const referenciasMasculino = 45; // 45 segundos como referencia promedio
+  const referenciasFemenino = 35; // 35 segundos como referencia promedio
+  
+  const referencia = genero === 'Masculino' ? referenciasMasculino : referenciasFemenino;
+  
+  let resultado = "<strong>Resultados del test de Side Bridge con Abducción:</strong><br>";
+  
+  // Evaluación lado derecho
+  if (tiempoDerecha > 0) {
+    const porcentajeDerecha = (tiempoDerecha / referencia) * 100;
+    let nivelDerecha = "";
+    let colorDerecha = "";
+    
+    if (porcentajeDerecha >= 120) {
+      nivelDerecha = "Excelente";
+      colorDerecha = "bg-success";
+    } else if (porcentajeDerecha >= 90) {
+      nivelDerecha = "Bueno";
+      colorDerecha = "bg-success";
+    } else if (porcentajeDerecha >= 70) {
+      nivelDerecha = "Promedio";
+      colorDerecha = "bg-warning";
+    } else if (porcentajeDerecha >= 50) {
+      nivelDerecha = "Por debajo del promedio";
+      colorDerecha = "bg-warning";
+    } else {
+      nivelDerecha = "Deficiente";
+      colorDerecha = "bg-danger";
+    }
+    
+    resultado += `<span class="badge ${colorDerecha}">Lado Derecho: ${tiempoDerecha} seg (${porcentajeDerecha.toFixed(0)}% del valor de referencia) - ${nivelDerecha}</span><br>`;
+  }
+  
+  // Evaluación lado izquierdo
+  if (tiempoIzquierda > 0) {
+    const porcentajeIzquierda = (tiempoIzquierda / referencia) * 100;
+    let nivelIzquierda = "";
+    let colorIzquierda = "";
+    
+    if (porcentajeIzquierda >= 120) {
+      nivelIzquierda = "Excelente";
+      colorIzquierda = "bg-success";
+    } else if (porcentajeIzquierda >= 90) {
+      nivelIzquierda = "Bueno";
+      colorIzquierda = "bg-success";
+    } else if (porcentajeIzquierda >= 70) {
+      nivelIzquierda = "Promedio";
+      colorIzquierda = "bg-warning";
+    } else if (porcentajeIzquierda >= 50) {
+      nivelIzquierda = "Por debajo del promedio";
+      colorIzquierda = "bg-warning";
+    } else {
+      nivelIzquierda = "Deficiente";
+      colorIzquierda = "bg-danger";
+    }
+    
+    resultado += `<span class="badge ${colorIzquierda}">Lado Izquierdo: ${tiempoIzquierda} seg (${porcentajeIzquierda.toFixed(0)}% del valor de referencia) - ${nivelIzquierda}</span><br>`;
+  }
+  
+  // Evaluación de asimetría si se evaluaron ambos lados
+  if (tiempoDerecha > 0 && tiempoIzquierda > 0) {
+    const ratio = Math.min(tiempoDerecha, tiempoIzquierda) / Math.max(tiempoDerecha, tiempoIzquierda);
+    const asimetria = (1 - ratio) * 100;
+    let evaluacionAsimetria = "";
+    let colorAsimetria = "";
+    
+    if (asimetria <= 10) {
+      evaluacionAsimetria = "Simetría adecuada";
+      colorAsimetria = "bg-success";
+    } else if (asimetria <= 15) {
+      evaluacionAsimetria = "Asimetría leve";
+      colorAsimetria = "bg-warning";
+    } else {
+      evaluacionAsimetria = "Asimetría significativa";
+      colorAsimetria = "bg-danger";
+    }
+    
+    resultado += `<span class="badge ${colorAsimetria}">Asimetría: ${asimetria.toFixed(1)}% (${evaluacionAsimetria})</span><br>`;
+    
+    // Interpretación del riesgo
+    if (asimetria > 15) {
+      resultado += "<br><strong>Interpretación:</strong> La asimetría significativa en la fuerza-resistencia de los abductores de cadera puede predisponer a alteraciones en la alineación de miembros inferiores durante actividades funcionales, aumentando el riesgo de lesiones de rodilla, particularmente el síndrome patelofemoral y lesiones de LCA.";
+    }
+  }
+  
+  document.getElementById('side_bridge_abduccion_resultado').innerHTML = resultado;
+  document.getElementById('side_bridge_abduccion_resultado').className = "alert alert-info";
+  
+  // Actualizar interpretación específica de cadera
+  actualizarInterpretacionCadera();
+  
+  // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
+}
+
+/**
+ * Evalúa el Bridge Test para glúteo mayor
+ */
+function evaluarBridgeTest() {
+  const tiempo = parseInt(document.getElementById('bridge_tiempo').value) || 0;
+  const genero = document.getElementById('bridge_genero').value;
+  
+  if (!tiempo || !genero) {
+    document.getElementById('bridge_resultado').innerHTML = "Complete todos los campos para obtener una evaluación.";
+    document.getElementById('bridge_resultado').className = "alert alert-secondary";
+    return;
+  }
+  
+  // Valores normativos aproximados (en segundos)
+  const referenciasMasculino = 60; // 60 segundos como referencia promedio
+  const referenciasFemenino = 60; // Mismo valor para ambos géneros en este test
+  
+  const referencia = genero === 'Masculino' ? referenciasMasculino : referenciasFemenino;
+  
+  const porcentaje = (tiempo / referencia) * 100;
+  let nivel = "";
+  let color = "";
+  
+  if (porcentaje >= 120) {
+    nivel = "Excelente resistencia de glúteo mayor";
+    color = "success";
+  } else if (porcentaje >= 100) {
+    nivel = "Buena resistencia de glúteo mayor";
+    color = "success";
+  } else if (porcentaje >= 80) {
+    nivel = "Resistencia adecuada de glúteo mayor";
+    color = "warning";
+  } else if (porcentaje >= 60) {
+    nivel = "Resistencia por debajo del promedio de glúteo mayor";
+    color = "warning";
+  } else {
+    nivel = "Resistencia deficiente de glúteo mayor";
+    color = "danger";
+  }
+  
+  let resultado = `<strong>${nivel}</strong><br>`;
+  resultado += `Tiempo: ${tiempo} segundos (${porcentaje.toFixed(0)}% del valor de referencia)`;
+  
+  // Añadir interpretación funcional
+  if (porcentaje < 80) {
+    resultado += "<br><br><strong>Implicaciones funcionales:</strong> La debilidad en extensores de cadera puede asociarse con compensaciones durante patrones de carrera, aumento de carga en columna lumbar y mayor riesgo de lesiones de isquiotibiales.";
+  }
+  
+  document.getElementById('bridge_resultado').innerHTML = resultado;
+  document.getElementById('bridge_resultado').className = `alert alert-${color}`;
+  
+  // Actualizar interpretación específica de cadera
+  actualizarInterpretacionCadera();
+  
+  // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
+}
+
+/**
+ * Evalúa el Single-Leg Bridge Test
+ */
+function evaluarSingleBridgeTest() {
+  const tiempoDerecha = parseInt(document.getElementById('single_bridge_derecha').value) || 0;
+  const tiempoIzquierda = parseInt(document.getElementById('single_bridge_izquierda').value) || 0;
+  const genero = document.getElementById('single_bridge_genero').value;
+  
+  if (!genero || (tiempoDerecha === 0 && tiempoIzquierda === 0)) {
+    document.getElementById('single_bridge_resultado').innerHTML = "Complete al menos un lado y seleccione el género para obtener una evaluación.";
+    document.getElementById('single_bridge_resultado').className = "alert alert-secondary";
+    return;
+  }
+  
+  // Valores normativos aproximados (en segundos)
+  const referenciasMasculino = 30; // 30 segundos como referencia promedio
+  const referenciasFemenino = 30; // Mismo valor para ambos géneros en este test
+  
+  const referencia = genero === 'Masculino' ? referenciasMasculino : referenciasFemenino;
+  
+  let resultado = "<strong>Resultados del Single-Leg Bridge Test:</strong><br>";
+  
+  // Evaluación lado derecho
+  if (tiempoDerecha > 0) {
+    const porcentajeDerecha = (tiempoDerecha / referencia) * 100;
+    let nivelDerecha = "";
+    let colorDerecha = "";
+    
+    if (porcentajeDerecha >= 120) {
+      nivelDerecha = "Excelente";
+      colorDerecha = "bg-success";
+    } else if (porcentajeDerecha >= 90) {
+      nivelDerecha = "Bueno";
+      colorDerecha = "bg-success";
+    } else if (porcentajeDerecha >= 70) {
+      nivelDerecha = "Promedio";
+      colorDerecha = "bg-warning";
+    } else if (porcentajeDerecha >= 50) {
+      nivelDerecha = "Por debajo del promedio";
+      colorDerecha = "bg-warning";
+    } else {
+      nivelDerecha = "Deficiente";
+      colorDerecha = "bg-danger";
+    }
+    
+    resultado += `<span class="badge ${colorDerecha}">Pierna Derecha: ${tiempoDerecha} seg (${porcentajeDerecha.toFixed(0)}% del valor de referencia) - ${nivelDerecha}</span><br>`;
+  }
+  
+  // Evaluación lado izquierdo
+  if (tiempoIzquierda > 0) {
+    const porcentajeIzquierda = (tiempoIzquierda / referencia) * 100;
+    let nivelIzquierda = "";
+    let colorIzquierda = "";
+    
+    if (porcentajeIzquierda >= 120) {
+      nivelIzquierda = "Excelente";
+      colorIzquierda = "bg-success";
+    } else if (porcentajeIzquierda >= 90) {
+      nivelIzquierda = "Bueno";
+      colorIzquierda = "bg-success";
+    } else if (porcentajeIzquierda >= 70) {
+      nivelIzquierda = "Promedio";
+      colorIzquierda = "bg-warning";
+    } else if (porcentajeIzquierda >= 50) {
+      nivelIzquierda = "Por debajo del promedio";
+      colorIzquierda = "bg-warning";
+    } else {
+      nivelIzquierda = "Deficiente";
+      colorIzquierda = "bg-danger";
+    }
+    
+    resultado += `<span class="badge ${colorIzquierda}">Pierna Izquierda: ${tiempoIzquierda} seg (${porcentajeIzquierda.toFixed(0)}% del valor de referencia) - ${nivelIzquierda}</span><br>`;
+  }
+  
+  // Evaluación de asimetría si se evaluaron ambos lados
+  if (tiempoDerecha > 0 && tiempoIzquierda > 0) {
+    const ratio = Math.min(tiempoDerecha, tiempoIzquierda) / Math.max(tiempoDerecha, tiempoIzquierda);
+    const asimetria = (1 - ratio) * 100;
+    let evaluacionAsimetria = "";
+    let colorAsimetria = "";
+    
+    if (asimetria <= 10) {
+      evaluacionAsimetria = "Simetría adecuada";
+      colorAsimetria = "bg-success";
+    } else if (asimetria <= 15) {
+      evaluacionAsimetria = "Asimetría leve";
+      colorAsimetria = "bg-warning";
+    } else {
+      evaluacionAsimetria = "Asimetría significativa";
+      colorAsimetria = "bg-danger";
+    }
+    
+    resultado += `<span class="badge ${colorAsimetria}">Asimetría: ${asimetria.toFixed(1)}% (${evaluacionAsimetria})</span><br>`;
+    
+    // Interpretación del patrón de carrera
+    resultado += "<br><strong>Implicaciones para el patrón de carrera:</strong><br>";
+    if (asimetria > 15) {
+      resultado += "La asimetría significativa puede alterar la biomecánica de carrera, generando compensaciones y aumentando el riesgo de lesiones por sobreuso.";
+    } else if (Math.min(porcentajeDerecha, porcentajeIzquierda) < 70) {
+      resultado += "La resistencia reducida puede comprometer la estabilidad pélvica durante actividades de carrera prolongada, especialmente en terrenos irregulares o cambios de dirección.";
+    } else {
+      resultado += "El perfil de resistencia actual favorece un patrón de carrera estable y simétrico.";
+    }
+  }
+  
+  document.getElementById('single_bridge_resultado').innerHTML = resultado;
+  document.getElementById('single_bridge_resultado').className = "alert alert-info";
+  
+  // Actualizar interpretación específica de cadera
+  actualizarInterpretacionCadera();
+  
+  // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
+}
+
+/**
+ * Actualiza la interpretación específica de los tests de cadera y pelvis
+ */
+function actualizarInterpretacionCadera() {
+  const testsRealizados = [];
+  const hallazgos = [];
+  
+  // Verificar Side Bridge con Abducción
+  const sideBridgeResultado = document.getElementById('side_bridge_abduccion_resultado');
+  if (sideBridgeResultado && !sideBridgeResultado.textContent.includes("Complete")) {
+    testsRealizados.push("Side Bridge con Abducción");
+    
+    if (sideBridgeResultado.textContent.includes("Asimetría significativa")) {
+      hallazgos.push("Asimetría significativa en los abductores de cadera");
+    } else if (sideBridgeResultado.textContent.includes("Deficiente")) {
+      hallazgos.push("Debilidad bilateral en los abductores de cadera");
+    }
+  }
+  
+  // Verificar Bridge Test
+  const bridgeResultado = document.getElementById('bridge_resultado');
+  if (bridgeResultado && !bridgeResultado.textContent.includes("Complete")) {
+    testsRealizados.push("Bridge Test");
+    
+    if (bridgeResultado.textContent.includes("Resistencia deficiente")) {
+      hallazgos.push("Deficiencia severa en la resistencia del glúteo mayor");
+    } else if (bridgeResultado.textContent.includes("por debajo del promedio")) {
+      hallazgos.push("Resistencia reducida del glúteo mayor");
+    }
+  }
+  
+  // Verificar Single-Leg Bridge Test
+  const singleBridgeResultado = document.getElementById('single_bridge_resultado');
+  if (singleBridgeResultado && !singleBridgeResultado.textContent.includes("Complete")) {
+    testsRealizados.push("Single-Leg Bridge Test");
+    
+    if (singleBridgeResultado.textContent.includes("Asimetría significativa")) {
+      hallazgos.push("Asimetría significativa en la resistencia unilateral de extensores de cadera");
+    } else if (singleBridgeResultado.textContent.includes("Deficiente")) {
+      hallazgos.push("Resistencia deficiente unilateral en extensores de cadera");
+    }
+  }
+  
+  // Generar interpretación
+  let interpretacion = "";
+  
+  if (testsRealizados.length === 0) {
+    interpretacion = "Complete al menos un test para obtener una interpretación específica.";
+    document.getElementById('cadera_pelvis_interpretacion').innerHTML = interpretacion;
+    document.getElementById('cadera_pelvis_interpretacion').className = "alert alert-secondary";
+    return;
+  }
+  
+  interpretacion = `<strong>Interpretación específica basada en ${testsRealizados.length} test${testsRealizados.length > 1 ? 's' : ''}:</strong><br><br>`;
+  
+  if (hallazgos.length === 0) {
+    interpretacion += "✅ <strong>Perfil funcional adecuado del complejo cadera-pelvis</strong><br>";
+    interpretacion += "Los resultados sugieren una función adecuada de la musculatura estabilizadora de cadera y pelvis, lo cual favorece patrones de movimiento eficientes en actividades como caminar, correr y cambios de dirección.<br><br>";
+    interpretacion += "<strong>Recomendaciones:</strong> Continuar con trabajo de mantenimiento de fuerza y resistencia de la musculatura estabilizadora del complejo lumbopélvico.";
+  } else {
+    interpretacion += "<strong>Hallazgos relevantes:</strong><br><ul>";
+    hallazgos.forEach(hallazgo => {
+      interpretacion += `<li>${hallazgo}</li>`;
+    });
+    interpretacion += "</ul>";
+    
+    interpretacion += "<strong>Implicaciones funcionales:</strong><br>";
+    
+    if (hallazgos.some(h => h.includes("abductores"))) {
+      interpretacion += "• La debilidad o asimetría en abductores de cadera puede provocar incremento del valgo dinámico de rodilla durante actividades funcionales, especialmente en desaceleraciones, aterrizajes y cambios de dirección.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("glúteo mayor") || h.includes("extensores de cadera"))) {
+      interpretacion += "• La deficiencia en glúteo mayor se asocia con compensaciones lumbares, aumento de tensión en isquiotibiales y alteraciones en el patrón de carrera con mayor riesgo de lesiones por sobreuso.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("Asimetría"))) {
+      interpretacion += "• Las asimetrías significativas pueden generar distribuciones desiguales de carga, predisponiendo a sobrecargas unilaterales y lesiones específicas en el lado más débil o compensaciones en el lado más fuerte.<br>";
+    }
+    
+    interpretacion += "<br><strong>Recomendaciones específicas:</strong><br>";
+    
+    if (hallazgos.some(h => h.includes("abductores"))) {
+      interpretacion += "• Programa progresivo de fortalecimiento de abductores con énfasis en control neuromuscular y resistencia (side plank con abducción, clamshells, band walks).<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("glúteo mayor") || h.includes("extensores de cadera"))) {
+      interpretacion += "• Fortalecimiento específico de glúteos con progressive hip thrusts, deadlifts, single-leg RDLs y hip bridges con progresión controlada.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("Asimetría"))) {
+      interpretacion += "• Trabajo unilateral prioritario en el lado más débil con progresión controlada.<br>";
+    }
+  }
+  
+  document.getElementById('cadera_pelvis_interpretacion').innerHTML = interpretacion;
+  document.getElementById('cadera_pelvis_interpretacion').className = "alert alert-info";
 }
 
 // ============= TESTS PARA REINTEGRO DEPORTIVO =============
@@ -874,6 +1319,87 @@ function evaluarTUG() {
   
   // Actualizar estratificación de riesgo
   actualizarEstrategiaRiesgo();
+}
+
+/**
+ * Evalúa el SPPB (Short Physical Performance Battery)
+ * Basado en: Guralnik et al. (1994)
+ */
+function evaluarSPPB() {
+  const equilibrio = parseInt(document.getElementById('sppb_equilibrio').value);
+  const marcha = parseInt(document.getElementById('sppb_marcha').value);
+  const silla = parseInt(document.getElementById('sppb_silla').value);
+  const edad = parseInt(document.getElementById('sppb_edad').value);
+  const genero = document.getElementById('sppb_genero').value;
+  
+  if (isNaN(equilibrio) || isNaN(marcha) || isNaN(silla) || !edad || !genero) {
+    document.getElementById('sppb_resultado').innerHTML = "Complete todos los campos para obtener una evaluación.";
+    document.getElementById('sppb_resultado').className = "alert alert-secondary";
+    return;
+  }
+  
+  // Cálculo de puntuación total SPPB (0-12)
+  const puntuacionTotal = equilibrio + marcha + silla;
+  
+  let resultado = `<strong>Puntuación total SPPB: ${puntuacionTotal}/12</strong><br>`;
+  let color = "";
+  
+  // Interpretación según puntuación total
+  if (puntuacionTotal >= 10) {
+    resultado += "Función física excelente. Bajo riesgo de discapacidad.";
+    color = "success";
+  } else if (puntuacionTotal >= 7) {
+    resultado += "Función física aceptable. Riesgo moderado de discapacidad.";
+    color = "warning";
+  } else if (puntuacionTotal >= 4) {
+    resultado += "Función física reducida. Alto riesgo de discapacidad.";
+    color = "warning";
+  } else {
+    resultado += "Función física severamente limitada. Muy alto riesgo de discapacidad.";
+    color = "danger";
+  }
+  
+  // Interpretación por componentes
+  resultado += "<br><br><strong>Análisis por componentes:</strong><br>";
+  
+  // Equilibrio
+  resultado += `<u>Equilibrio (${equilibrio}/4):</u> `;
+  if (equilibrio <= 1) {
+    resultado += "Déficit de equilibrio significativo. Alto riesgo de caídas.<br>";
+  } else if (equilibrio <= 2) {
+    resultado += "Limitación moderada del equilibrio. Considere trabajo específico.<br>";
+  } else {
+    resultado += "Equilibrio adecuado para su edad.<br>";
+  }
+  
+  // Marcha
+  resultado += `<u>Marcha (${marcha}/4):</u> `;
+  if (marcha <= 1) {
+    resultado += "Velocidad de marcha muy lenta. Indicador de fragilidad.<br>";
+  } else if (marcha <= 2) {
+    resultado += "Velocidad de marcha reducida. Limitación funcional moderada.<br>";
+  } else {
+    resultado += "Velocidad de marcha adecuada para su edad.<br>";
+  }
+  
+  // Fuerza
+  resultado += `<u>Fuerza MMII (${silla}/4):</u> `;
+  if (silla <= 1) {
+    resultado += "Fuerza de miembros inferiores muy reducida. Alta limitación funcional.<br>";
+  } else if (silla <= 2) {
+    resultado += "Fuerza de miembros inferiores moderadamente reducida.<br>";
+  } else {
+    resultado += "Fuerza de miembros inferiores adecuada para su edad.";
+  }
+  
+  document.getElementById('sppb_resultado').innerHTML = resultado;
+  document.getElementById('sppb_resultado').className = `alert alert-${color}`;
+  
+  // Actualizar interpretación específica
+  actualizarInterpretacionAdultoMayor();
+  
+  // Actualizar interpretación global
+  actualizarInterpretacionGlobal();
 }
 
 /**
@@ -1879,7 +2405,7 @@ function actualizarInterpretacionGlobal() {
   
   // Verificar Sit-to-Stand
   const sitToStandResultado = document.getElementById('sit_to_stand_resultado');
-  if (sitToStandResultado && !sitToStandResultado.textContent.includes("Complete")) {
+  if (sitToStandResultado && !sitToStandResultado.textContent.includes("Complete") && !sitToStandResultado.textContent.includes("Pendiente")) {
     testsRealizados.push("Sit-to-Stand");
     
     if (sitToStandResultado.className.includes("alert-danger")) {
@@ -1891,7 +2417,7 @@ function actualizarInterpretacionGlobal() {
   
   // Verificar Push-up Test
   const pushUpResultado = document.getElementById('push_up_resultado');
-  if (pushUpResultado && !pushUpResultado.textContent.includes("Complete")) {
+  if (pushUpResultado && !pushUpResultado.textContent.includes("Complete") && !pushUpResultado.textContent.includes("Pendiente")) {
     testsRealizados.push("Push-up Test");
     
     if (pushUpResultado.className.includes("alert-danger")) {
@@ -1901,9 +2427,21 @@ function actualizarInterpretacionGlobal() {
     }
   }
   
+  // Verificar CKCUES Test
+  const ckcuesResultado = document.getElementById('ckcues_resultado');
+  if (ckcuesResultado && !ckcuesResultado.textContent.includes("Complete") && !ckcuesResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("CKCUES para hombro");
+    
+    if (ckcuesResultado.className.includes("alert-danger")) {
+      hallazgos.push("Deficiencia en la estabilidad y funcionalidad del hombro");
+    } else if (ckcuesResultado.className.includes("alert-warning")) {
+      hallazgos.push("Estabilidad y funcionalidad del hombro por debajo del promedio");
+    }
+  }
+  
   // Verificar McGill Tests
   const mcgillResultado = document.getElementById('mcgill_resultado');
-  if (mcgillResultado && !mcgillResultado.textContent.includes("Complete")) {
+  if (mcgillResultado && !mcgillResultado.textContent.includes("Complete") && !mcgillResultado.textContent.includes("Pendiente")) {
     testsRealizados.push("McGill Core Tests");
     
     if (mcgillResultado.textContent.includes("bg-danger")) {
@@ -1924,7 +2462,7 @@ function actualizarInterpretacionGlobal() {
   
   // Verificar Wall Sit Test
   const wallSitResultado = document.getElementById('wall_sit_resultado');
-  if (wallSitResultado && !wallSitResultado.textContent.includes("Complete")) {
+  if (wallSitResultado && !wallSitResultado.textContent.includes("Complete") && !wallSitResultado.textContent.includes("Pendiente")) {
     testsRealizados.push("Wall Sit Test");
     
     if (wallSitResultado.className.includes("alert-danger")) {
@@ -1936,7 +2474,7 @@ function actualizarInterpretacionGlobal() {
   
   // Verificar Pull-up Test
   const pullupResultado = document.getElementById('pullup_resultado');
-  if (pullupResultado && !pullupResultado.textContent.includes("Complete")) {
+  if (pullupResultado && !pullupResultado.textContent.includes("Complete") && !pullupResultado.textContent.includes("Pendiente")) {
     testsRealizados.push("Pull-up/Chin-up Test");
     
     if (pullupResultado.className.includes("alert-danger")) {
@@ -1946,9 +2484,46 @@ function actualizarInterpretacionGlobal() {
     }
   }
   
+  // Verificar tests de cadera y pelvis
+  // Side Bridge con Abducción
+  const sideBridgeResultado = document.getElementById('side_bridge_abduccion_resultado');
+  if (sideBridgeResultado && !sideBridgeResultado.textContent.includes("Complete") && !sideBridgeResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Side Bridge con Abducción");
+    
+    if (sideBridgeResultado.textContent.includes("Asimetría significativa")) {
+      hallazgos.push("Asimetría significativa en los abductores de cadera");
+    } else if (sideBridgeResultado.textContent.includes("Deficiente")) {
+      hallazgos.push("Debilidad bilateral en los abductores de cadera");
+    }
+  }
+  
+  // Bridge Test
+  const bridgeResultado = document.getElementById('bridge_resultado');
+  if (bridgeResultado && !bridgeResultado.textContent.includes("Complete") && !bridgeResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Bridge Test");
+    
+    if (bridgeResultado.textContent.includes("Resistencia deficiente")) {
+      hallazgos.push("Deficiencia severa en la resistencia del glúteo mayor");
+    } else if (bridgeResultado.textContent.includes("por debajo del promedio")) {
+      hallazgos.push("Resistencia reducida del glúteo mayor");
+    }
+  }
+  
+  // Single-Leg Bridge Test
+  const singleBridgeResultado = document.getElementById('single_bridge_resultado');
+  if (singleBridgeResultado && !singleBridgeResultado.textContent.includes("Complete") && !singleBridgeResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Single-Leg Bridge Test");
+    
+    if (singleBridgeResultado.textContent.includes("Asimetría significativa")) {
+      hallazgos.push("Asimetría significativa en la resistencia unilateral de extensores de cadera");
+    } else if (singleBridgeResultado.textContent.includes("Deficiente")) {
+      hallazgos.push("Resistencia deficiente unilateral en extensores de cadera");
+    }
+  }
+  
   // Verificar Hop Tests
   const hopResultado = document.getElementById('hop_resultado');
-  if (hopResultado && !hopResultado.textContent.includes("Complete")) {
+  if (hopResultado && !hopResultado.textContent.includes("Complete") && !hopResultado.textContent.includes("Pendiente")) {
     testsRealizados.push("Hop Test");
     
     if (hopResultado.className.includes("alert-danger") || hopResultado.className.includes("alert-warning")) {
@@ -1968,7 +2543,7 @@ function actualizarInterpretacionGlobal() {
   
   // Verificar Batería de Saltos
   const saltoResultado = document.getElementById('salto_resultado');
-  if (saltoResultado && !saltoResultado.textContent.includes("Complete")) {
+  if (saltoResultado && !saltoResultado.textContent.includes("Complete") && !saltoResultado.textContent.includes("Pendiente")) {
     testsRealizados.push("Batería de Saltos");
     
     if (saltoResultado.textContent.includes("baja elasticidad")) {
@@ -1984,7 +2559,7 @@ function actualizarInterpretacionGlobal() {
   
   // Verificar TUG
   const tugResultado = document.getElementById('tug_resultado');
-  if (tugResultado && !tugResultado.textContent.includes("Complete")) {
+  if (tugResultado && !tugResultado.textContent.includes("Complete") && !tugResultado.textContent.includes("Pendiente")) {
     testsRealizados.push("TUG");
     
     if (tugResultado.className.includes("alert-danger")) {
@@ -1996,7 +2571,7 @@ function actualizarInterpretacionGlobal() {
   
   // Verificar Senior Fitness Test
   const sftResultado = document.getElementById('sft_resultado');
-  if (sftResultado && !sftResultado.textContent.includes("Complete")) {
+  if (sftResultado && !sftResultado.textContent.includes("Complete") && !sftResultado.textContent.includes("Pendiente")) {
     testsRealizados.push("Senior Fitness Test");
     
     if (sftResultado.textContent.includes("por debajo del promedio")) {
@@ -2023,7 +2598,7 @@ function actualizarInterpretacionGlobal() {
   
   // Verificar LESS
   const lessResultado = document.getElementById('less_resultado');
-  if (lessResultado && !lessResultado.textContent.includes("Seleccione")) {
+  if (lessResultado && !lessResultado.textContent.includes("Seleccione") && !lessResultado.textContent.includes("Pendiente")) {
     testsRealizados.push("LESS");
     
     if (lessResultado.className.includes("alert-danger")) {
@@ -2055,12 +2630,16 @@ function actualizarInterpretacionGlobal() {
         recomendaciones += "✅ Optimización de patrones de movimiento en actividades deportivas.<br>";
       }
       
-      if (testsRealizados.includes("McGill Core Tests")) {
+      if (testsRealizados.includes("McGill Core Tests") || testsRealizados.includes("Bridge Test")) {
         recomendaciones += "✅ Mantenimiento de la estabilidad del core en actividades cotidianas y deportivas.<br>";
       }
       
       if (testsRealizados.includes("TUG") || testsRealizados.includes("Senior Fitness Test")) {
         recomendaciones += "✅ Mantenimiento de actividad física regular para preservar la funcionalidad en el adulto mayor.<br>";
+      }
+      
+      if (testsRealizados.includes("CKCUES para hombro")) {
+        recomendaciones += "✅ Mantenimiento de la estabilidad escapular y control glenohumeral durante actividades funcionales.<br>";
       }
     } else {
       // Ordenar hallazgos por frecuencia de palabras clave para agrupar los relacionados
@@ -2086,10 +2665,13 @@ function actualizarInterpretacionGlobal() {
       }
       
       // Recomendaciones para miembros superiores
-      if (hallazgos.some(h => h.includes("miembros superiores") || h.includes("espalda y brazos"))) {
+      if (hallazgos.some(h => h.includes("miembros superiores") || h.includes("espalda y brazos") || h.includes("hombro"))) {
         recomendaciones += "• <strong>Fortalecimiento de miembros superiores</strong>:<br>";
         recomendaciones += "  - Ejercicios progresivos de empuje y tracción.<br>";
         recomendaciones += "  - Integración de patrones funcionales multidireccionales.<br>";
+        if (hallazgos.some(h => h.includes("hombro"))) {
+          recomendaciones += "  - Énfasis en estabilidad escapular y control glenohumeral.<br>";
+        }
       }
       
       // Recomendaciones para core
@@ -2099,6 +2681,16 @@ function actualizarInterpretacionGlobal() {
         recomendaciones += "  - Énfasis en corrección de desequilibrios identificados.<br>";
         if (hallazgos.some(h => h.includes("asimetría"))) {
           recomendaciones += "  - Trabajo específico para corregir asimetrías laterales.<br>";
+        }
+      }
+      
+      // Recomendaciones para cadera
+      if (hallazgos.some(h => h.includes("glúteo") || h.includes("cadera") || h.includes("extensores"))) {
+        recomendaciones += "• <strong>Fortalecimiento del complejo lumbopélvico</strong>:<br>";
+        recomendaciones += "  - Programa específico para glúteos y estabilizadores de cadera.<br>";
+        recomendaciones += "  - Integración de patrones funcionales de cadena posterior.<br>";
+        if (hallazgos.some(h => h.includes("abductores"))) {
+          recomendaciones += "  - Énfasis en control del valgo dinámico mediante fortalecimiento de abductores.<br>";
         }
       }
       
@@ -2141,9 +2733,414 @@ function actualizarInterpretacionGlobal() {
   // Actualizar los contenedores de interpretación y recomendaciones
   document.getElementById('interpretacion-fuerza-funcional-texto').innerHTML = interpretacion;
   document.getElementById('recomendaciones-fuerza-funcional-texto').innerHTML = recomendaciones;
+  // Añadir al final de la función actualizarInterpretacionGlobal()
+// Justo antes de cerrar la llave final
+
+// Actualizar interpretaciones específicas de cada sección
+actualizarInterpretacionTestsFuncionales();
+actualizarInterpretacionResistenciaMuscular();
+actualizarInterpretacionAdultoMayor();
   
   // Actualizar el estado del cuestionario
   verificarEstadoCuestionarios();
+}
+
+/**
+ * Actualiza la interpretación específica de Tests Funcionales Estándar
+ */
+function actualizarInterpretacionTestsFuncionales() {
+  const testsRealizados = [];
+  const hallazgos = [];
+  
+  // Verificar Sit-to-Stand
+  const sitToStandResultado = document.getElementById('sit_to_stand_resultado');
+  if (sitToStandResultado && !sitToStandResultado.textContent.includes("Complete") && !sitToStandResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Sit-to-Stand");
+    
+    if (sitToStandResultado.className.includes("alert-danger")) {
+      hallazgos.push("Fuerza funcional de miembros inferiores significativamente disminuida");
+    } else if (sitToStandResultado.className.includes("alert-warning")) {
+      hallazgos.push("Fuerza funcional de miembros inferiores por debajo del promedio");
+    }
+  }
+  
+  // Verificar Push-up Test
+  const pushUpResultado = document.getElementById('push_up_resultado');
+  if (pushUpResultado && !pushUpResultado.textContent.includes("Complete") && !pushUpResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Push-up Test");
+    
+    if (pushUpResultado.className.includes("alert-danger")) {
+      hallazgos.push("Fuerza-resistencia de miembros superiores significativamente disminuida");
+    } else if (pushUpResultado.className.includes("alert-warning")) {
+      hallazgos.push("Fuerza-resistencia de miembros superiores por debajo del promedio");
+    }
+  }
+  
+  // Verificar CKCUES Test
+  const ckcuesResultado = document.getElementById('ckcues_resultado');
+  if (ckcuesResultado && !ckcuesResultado.textContent.includes("Complete") && !ckcuesResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("CKCUES para hombro");
+    
+    if (ckcuesResultado.className.includes("alert-danger")) {
+      hallazgos.push("Deficiencia en la estabilidad y funcionalidad del hombro");
+    } else if (ckcuesResultado.className.includes("alert-warning")) {
+      hallazgos.push("Estabilidad y funcionalidad del hombro por debajo del promedio");
+    }
+  }
+  
+  // Generar interpretación
+  let interpretacion = "";
+  
+  if (testsRealizados.length === 0) {
+    interpretacion = "Complete al menos un test para obtener una interpretación específica.";
+    document.getElementById('tests_funcionales_interpretacion').innerHTML = interpretacion;
+    document.getElementById('tests_funcionales_interpretacion').className = "alert alert-secondary";
+    return;
+  }
+  
+  interpretacion = `<strong>Interpretación específica de Tests Funcionales Estándar (${testsRealizados.join(", ")}):</strong><br><br>`;
+  
+  if (hallazgos.length === 0) {
+    interpretacion += "✅ <strong>Los tests funcionales indican un adecuado nivel de fuerza funcional</strong><br>";
+    interpretacion += "La capacidad para realizar actividades funcionales como levantarse/sentarse y flexiones de brazos se encuentra dentro de los parámetros esperados para edad y género.<br><br>";
+    interpretacion += "<strong>Recomendaciones:</strong> Mantener el nivel actual de fuerza funcional mediante ejercicios funcionales regulares.";
+  } else {
+    interpretacion += "<strong>Hallazgos relevantes:</strong><br><ul>";
+    hallazgos.forEach(hallazgo => {
+      interpretacion += `<li>${hallazgo}</li>`;
+    });
+    interpretacion += "</ul>";
+    
+    interpretacion += "<strong>Implicaciones funcionales:</strong><br>";
+    
+    if (hallazgos.some(h => h.includes("miembros inferiores"))) {
+      interpretacion += "• La limitación en fuerza funcional de miembros inferiores puede afectar la capacidad para levantarse/sentarse, subir escaleras y otras actividades cotidianas.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("miembros superiores"))) {
+      interpretacion += "• La reducción en fuerza-resistencia de miembros superiores puede impactar actividades que involucran empujar, levantar objetos o mantener posturas con los brazos.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("hombro"))) {
+      interpretacion += "• Las limitaciones en la estabilidad del hombro pueden comprometer la capacidad para realizar actividades por encima de la cabeza y movimientos coordinados de miembros superiores.<br>";
+    }
+    
+    interpretacion += "<br><strong>Recomendaciones específicas:</strong><br>";
+    
+    if (hallazgos.some(h => h.includes("miembros inferiores"))) {
+      interpretacion += "• Fortalecimiento progresivo de miembros inferiores mediante sentadillas, estocadas y ejercicios funcionales.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("miembros superiores"))) {
+      interpretacion += "• Programa específico de fortalecimiento de empuje (push-ups modificados con progresión gradual).<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("hombro"))) {
+      interpretacion += "• Ejercicios de estabilidad escapular y control glenohumeral en cadena cinética cerrada.<br>";
+    }
+  }
+  
+  document.getElementById('tests_funcionales_interpretacion').innerHTML = interpretacion;
+  document.getElementById('tests_funcionales_interpretacion').className = "alert alert-info";
+}
+
+/**
+ * Actualiza la interpretación específica de Tests de Resistencia Muscular
+ */
+function actualizarInterpretacionResistenciaMuscular() {
+  const testsRealizados = [];
+  const hallazgos = [];
+  
+  // Verificar McGill Tests
+  const mcgillResultado = document.getElementById('mcgill_resultado');
+  if (mcgillResultado && !mcgillResultado.textContent.includes("Complete") && !mcgillResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("McGill Core Tests");
+    
+    if (mcgillResultado.textContent.includes("bg-danger")) {
+      if (mcgillResultado.textContent.includes("Ratio Flexores/Extensores") && mcgillResultado.textContent.includes("bg-danger")) {
+        hallazgos.push("Desequilibrio crítico entre flexores y extensores del tronco");
+      }
+      if (mcgillResultado.textContent.includes("Ratio Simetría Lateral") && mcgillResultado.textContent.includes("bg-danger")) {
+        hallazgos.push("Asimetría severa en la musculatura lateral del core");
+      }
+      if (mcgillResultado.textContent.includes("Plancha Frontal") && mcgillResultado.textContent.includes("bg-danger")) {
+        hallazgos.push("Resistencia deficiente de la musculatura flexora del tronco");
+      }
+      if (mcgillResultado.textContent.includes("Extensión Lumbar") && mcgillResultado.textContent.includes("bg-danger")) {
+        hallazgos.push("Resistencia deficiente de la musculatura extensora del tronco");
+      }
+    }
+  }
+  
+  // Verificar Wall Sit Test
+  const wallSitResultado = document.getElementById('wall_sit_resultado');
+  if (wallSitResultado && !wallSitResultado.textContent.includes("Complete") && !wallSitResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Wall Sit Test");
+    
+    if (wallSitResultado.className.includes("alert-danger")) {
+      hallazgos.push("Resistencia de cuádriceps deficiente");
+    } else if (wallSitResultado.className.includes("alert-warning")) {
+      hallazgos.push("Resistencia de cuádriceps por debajo del promedio");
+    }
+  }
+  
+  // Verificar Pull-up Test
+  const pullupResultado = document.getElementById('pullup_resultado');
+  if (pullupResultado && !pullupResultado.textContent.includes("Complete") && !pullupResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Pull-up/Chin-up Test");
+    
+    if (pullupResultado.className.includes("alert-danger")) {
+      hallazgos.push("Fuerza-resistencia de espalda y brazos deficiente");
+    } else if (pullupResultado.className.includes("alert-warning")) {
+      hallazgos.push("Fuerza-resistencia de espalda y brazos por debajo del promedio");
+    }
+  }
+  
+  // Verificar tests de cadera y pelvis
+  // Side Bridge con Abducción
+  const sideBridgeResultado = document.getElementById('side_bridge_abduccion_resultado');
+  if (sideBridgeResultado && !sideBridgeResultado.textContent.includes("Complete") && !sideBridgeResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Side Bridge con Abducción");
+    
+    if (sideBridgeResultado.textContent.includes("Asimetría significativa")) {
+      hallazgos.push("Asimetría significativa en los abductores de cadera");
+    } else if (sideBridgeResultado.textContent.includes("Deficiente")) {
+      hallazgos.push("Debilidad bilateral en los abductores de cadera");
+    }
+  }
+  
+  // Bridge Test
+  const bridgeResultado = document.getElementById('bridge_resultado');
+  if (bridgeResultado && !bridgeResultado.textContent.includes("Complete") && !bridgeResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Bridge Test");
+    
+    if (bridgeResultado.textContent.includes("Resistencia deficiente")) {
+      hallazgos.push("Deficiencia severa en la resistencia del glúteo mayor");
+    } else if (bridgeResultado.textContent.includes("por debajo del promedio")) {
+      hallazgos.push("Resistencia reducida del glúteo mayor");
+    }
+  }
+  
+  // Single-Leg Bridge Test
+  const singleBridgeResultado = document.getElementById('single_bridge_resultado');
+  if (singleBridgeResultado && !singleBridgeResultado.textContent.includes("Complete") && !singleBridgeResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Single-Leg Bridge Test");
+    
+    if (singleBridgeResultado.textContent.includes("Asimetría significativa")) {
+      hallazgos.push("Asimetría significativa en la resistencia unilateral de extensores de cadera");
+    } else if (singleBridgeResultado.textContent.includes("Deficiente")) {
+      hallazgos.push("Resistencia deficiente unilateral en extensores de cadera");
+    }
+  }
+  
+  // Generar interpretación
+  let interpretacion = "";
+  
+  if (testsRealizados.length === 0) {
+    interpretacion = "Complete al menos un test para obtener una interpretación específica.";
+    document.getElementById('resistencia_muscular_interpretacion').innerHTML = interpretacion;
+    document.getElementById('resistencia_muscular_interpretacion').className = "alert alert-secondary";
+    return;
+  }
+  
+  interpretacion = `<strong>Interpretación específica de Tests de Resistencia Muscular (${testsRealizados.join(", ")}):</strong><br><br>`;
+  
+  if (hallazgos.length === 0) {
+    interpretacion += "✅ <strong>Perfil de resistencia muscular adecuado</strong><br>";
+    interpretacion += "Los resultados indican una buena capacidad de resistencia en los grupos musculares evaluados, lo que favorece la estabilidad postural y la eficiencia en actividades funcionales prolongadas.<br><br>";
+    interpretacion += "<strong>Recomendaciones:</strong> Mantener el nivel actual de resistencia muscular mediante entrenamiento regular que combine estabilidad del core y resistencia de los principales grupos musculares.";
+  } else {
+    interpretacion += "<strong>Hallazgos relevantes:</strong><br><ul>";
+    hallazgos.forEach(hallazgo => {
+      interpretacion += `<li>${hallazgo}</li>`;
+    });
+    interpretacion += "</ul>";
+    
+    interpretacion += "<strong>Implicaciones funcionales:</strong><br>";
+    
+    if (hallazgos.some(h => h.includes("core") || h.includes("tronco"))) {
+      interpretacion += "• Las deficiencias en la resistencia del core pueden comprometer la estabilidad postural, aumentar el riesgo de dolor lumbar y reducir la eficiencia en la transferencia de fuerzas.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("cuádriceps"))) {
+      interpretacion += "• La resistencia reducida de cuádriceps puede limitar la capacidad para mantener posturas en semiflexión, afectando actividades como caminar distancias largas, subir/bajar escaleras y sentarse/levantarse repetidamente.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("espalda y brazos"))) {
+      interpretacion += "• La deficiencia en resistencia de espalda y brazos puede impactar actividades que requieren tracción sostenida y soporte del peso corporal con miembros superiores.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("abductores") || h.includes("glúteo") || h.includes("cadera"))) {
+      interpretacion += "• Los desequilibrios o debilidades en la musculatura de cadera pueden afectar la alineación de miembros inferiores durante actividades funcionales, así como comprometer la estabilidad pélvica en actividades de soporte unilateral.<br>";
+    }
+    
+    interpretacion += "<br><strong>Recomendaciones específicas:</strong><br>";
+    
+    if (hallazgos.some(h => h.includes("core") || h.includes("tronco"))) {
+      interpretacion += "• Programa progresivo de estabilización del core siguiendo principios de McGill, con énfasis en corregir los desequilibrios identificados.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("cuádriceps"))) {
+      interpretacion += "• Ejercicios de resistencia isométrica y dinámica de cuádriceps con progresión gradual en tiempo y carga.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("espalda y brazos"))) {
+      interpretacion += "• Entrenamiento progresivo de tracción con asistencia variable según nivel actual.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("abductores") || h.includes("glúteo") || h.includes("cadera"))) {
+      interpretacion += "• Fortalecimiento específico de la musculatura de cadera con énfasis en estabilidad pélvica y control motor.<br>";
+      
+      if (hallazgos.some(h => h.includes("Asimetría"))) {
+        interpretacion += "• Trabajo prioritario en el lado más débil para equilibrar las asimetrías identificadas.<br>";
+      }
+    }
+  }
+  
+  document.getElementById('resistencia_muscular_interpretacion').innerHTML = interpretacion;
+  document.getElementById('resistencia_muscular_interpretacion').className = "alert alert-info";
+}
+
+/**
+ * Actualiza la interpretación específica de Tests para Adulto Mayor
+ */
+function actualizarInterpretacionAdultoMayor() {
+  const testsRealizados = [];
+  const hallazgos = [];
+  
+  // Verificar TUG
+  const tugResultado = document.getElementById('tug_resultado');
+  if (tugResultado && !tugResultado.textContent.includes("Complete") && !tugResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("TUG");
+    
+    if (tugResultado.className.includes("alert-danger")) {
+      hallazgos.push("Alto riesgo de caídas y movilidad reducida");
+    } else if (tugResultado.className.includes("alert-warning")) {
+      hallazgos.push("Riesgo moderado de caídas y movilidad limitada");
+    }
+  }
+  
+  // Verificar SPPB
+  const sppbResultado = document.getElementById('sppb_resultado');
+  if (sppbResultado && !sppbResultado.textContent.includes("Complete") && !sppbResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("SPPB");
+    
+    if (sppbResultado.textContent.includes("severamente limitada")) {
+      hallazgos.push("Función física severamente limitada, alto riesgo de discapacidad");
+    } else if (sppbResultado.textContent.includes("reducida")) {
+      hallazgos.push("Función física reducida, riesgo moderado-alto de discapacidad");
+    } else if (sppbResultado.textContent.includes("aceptable")) {
+      hallazgos.push("Función física aceptable, seguimiento recomendado");
+    }
+    
+    if (sppbResultado.textContent.includes("Déficit de equilibrio significativo")) {
+      hallazgos.push("Déficit de equilibrio significativo");
+    }
+    
+    if (sppbResultado.textContent.includes("Velocidad de marcha muy lenta")) {
+      hallazgos.push("Velocidad de marcha muy reducida, indicador de fragilidad");
+    }
+    
+    if (sppbResultado.textContent.includes("Fuerza de miembros inferiores muy reducida")) {
+      hallazgos.push("Fuerza de miembros inferiores muy reducida");
+    }
+  }
+  
+  // Verificar Senior Fitness Test
+  const sftResultado = document.getElementById('sft_resultado');
+  if (sftResultado && !sftResultado.textContent.includes("Complete") && !sftResultado.textContent.includes("Pendiente")) {
+    testsRealizados.push("Senior Fitness Test");
+    
+    if (sftResultado.textContent.includes("por debajo del promedio. Riesgo de pérdida de independencia")) {
+      hallazgos.push("Condición física funcional por debajo del promedio, riesgo de pérdida de independencia");
+    } else if (sftResultado.textContent.includes("Condición física funcional moderada")) {
+      hallazgos.push("Condición física funcional moderada, áreas específicas requieren mejora");
+    }
+    
+    if (sftResultado.textContent.includes("Chair Stand") && sftResultado.textContent.includes("por debajo del promedio")) {
+      hallazgos.push("Fuerza de miembros inferiores por debajo del promedio para la edad");
+    }
+    if (sftResultado.textContent.includes("Arm Curl") && sftResultado.textContent.includes("por debajo del promedio")) {
+      hallazgos.push("Fuerza de miembros superiores por debajo del promedio para la edad");
+    }
+    if (sftResultado.textContent.includes("2-Min Step") && sftResultado.textContent.includes("por debajo del promedio")) {
+      hallazgos.push("Resistencia cardiorrespiratoria por debajo del promedio para la edad");
+    }
+    if (sftResultado.textContent.includes("Chair Sit & Reach") && sftResultado.textContent.includes("por debajo del promedio")) {
+      hallazgos.push("Flexibilidad de miembros inferiores por debajo del promedio para la edad");
+    }
+    if (sftResultado.textContent.includes("Back Scratch") && sftResultado.textContent.includes("por debajo del promedio")) {
+      hallazgos.push("Flexibilidad de miembros superiores por debajo del promedio para la edad");
+    }
+    if (sftResultado.textContent.includes("8-Foot Up & Go") && sftResultado.textContent.includes("por debajo del promedio")) {
+      hallazgos.push("Agilidad y equilibrio dinámico por debajo del promedio para la edad");
+    }
+  }
+  
+  // Generar interpretación
+  let interpretacion = "";
+  
+  if (testsRealizados.length === 0) {
+    interpretacion = "Complete al menos un test para obtener una interpretación específica.";
+    document.getElementById('adulto_mayor_interpretacion').innerHTML = interpretacion;
+    document.getElementById('adulto_mayor_interpretacion').className = "alert alert-secondary";
+    return;
+  }
+  
+  interpretacion = `<strong>Interpretación específica de Tests para Adulto Mayor (${testsRealizados.join(", ")}):</strong><br><br>`;
+  
+  if (hallazgos.length === 0) {
+    interpretacion += "✅ <strong>Perfil funcional adecuado para el adulto mayor</strong><br>";
+    interpretacion += "Los resultados indican un buen nivel de funcionamiento físico con baja probabilidad de dependencia funcional a corto-medio plazo.<br><br>";
+    interpretacion += "<strong>Recomendaciones:</strong> Mantener el nivel de actividad física actual, con énfasis en ejercicios multicomponente que incluyan fuerza, resistencia, equilibrio y flexibilidad.";
+  } else {
+    interpretacion += "<strong>Hallazgos relevantes:</strong><br><ul>";
+    hallazgos.forEach(hallazgo => {
+      interpretacion += `<li>${hallazgo}</li>`;
+    });
+    interpretacion += "</ul>";
+    
+    interpretacion += "<strong>Implicaciones funcionales:</strong><br>";
+    
+    if (hallazgos.some(h => h.includes("caídas") || h.includes("equilibrio"))) {
+      interpretacion += "• El riesgo aumentado de caídas puede comprometer la independencia y calidad de vida, incrementando la probabilidad de hospitalización y discapacidad.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("marcha") || h.includes("movilidad"))) {
+      interpretacion += "• La limitación en velocidad de marcha es un potente predictor de eventos adversos de salud, incluyendo mortalidad, hospitalizaciones y deterioro funcional.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("fuerza") || h.includes("miembros inferiores"))) {
+      interpretacion += "• La reducción de fuerza en miembros inferiores limita la capacidad para transferencias, subir escaleras y actividades básicas de la vida diaria.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("discapacidad") || h.includes("pérdida de independencia"))) {
+      interpretacion += "• El perfil actual sugiere un riesgo incrementado de deterioro funcional progresivo, afectando la independencia en actividades básicas e instrumentales de la vida diaria.<br>";
+    }
+    
+    interpretacion += "<br><strong>Recomendaciones específicas:</strong><br>";
+    
+    if (hallazgos.some(h => h.includes("caídas") || h.includes("equilibrio"))) {
+      interpretacion += "• Programa multicomponente de prevención de caídas que incluya entrenamiento de equilibrio, fortalecimiento y adaptación del entorno.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("marcha") || h.includes("movilidad"))) {
+      interpretacion += "• Ejercicios de marcha con variaciones de velocidad, dirección y superación de obstáculos.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("fuerza") || h.includes("miembros inferiores"))) {
+      interpretacion += "• Fortalecimiento progresivo de miembros inferiores con énfasis en los grupos musculares funcionales para transferencias y marcha.<br>";
+    }
+    
+    if (hallazgos.some(h => h.includes("flexibilidad"))) {
+      interpretacion += "• Programa regular de flexibilidad para mantener rangos funcionales de movimiento.<br>";
+    }
+    
+    interpretacion += "• Seguimiento regular con reevaluación cada 3-6 meses para monitorizar cambios y ajustar intervenciones.";
+  }
+  
+  document.getElementById('adulto_mayor_interpretacion').innerHTML = interpretacion;
+  document.getElementById('adulto_mayor_interpretacion').className = "alert alert-info";
 }
 
 /**
@@ -2153,37 +3150,53 @@ function verificarEstadoCuestionarios() {
   const testsRealizados = [];
   
   // Verificar los principales tests
-  if (document.getElementById('sit_to_stand_resultado') && !document.getElementById('sit_to_stand_resultado').textContent.includes("Complete")) {
+  if (document.getElementById('sit_to_stand_resultado') && !document.getElementById('sit_to_stand_resultado').textContent.includes("Complete") && !document.getElementById('sit_to_stand_resultado').textContent.includes("Pendiente")) {
     testsRealizados.push("sit_to_stand");
   }
-  if (document.getElementById('push_up_resultado') && !document.getElementById('push_up_resultado').textContent.includes("Complete")) {
+  if (document.getElementById('push_up_resultado') && !document.getElementById('push_up_resultado').textContent.includes("Complete") && !document.getElementById('push_up_resultado').textContent.includes("Pendiente")) {
     testsRealizados.push("push_up");
   }
-  if (document.getElementById('mcgill_resultado') && !document.getElementById('mcgill_resultado').textContent.includes("Complete")) {
+  if (document.getElementById('ckcues_resultado') && !document.getElementById('ckcues_resultado').textContent.includes("Complete") && !document.getElementById('ckcues_resultado').textContent.includes("Pendiente")) {
+    testsRealizados.push("ckcues");
+  }
+  if (document.getElementById('mcgill_resultado') && !document.getElementById('mcgill_resultado').textContent.includes("Complete") && !document.getElementById('mcgill_resultado').textContent.includes("Pendiente")) {
     testsRealizados.push("mcgill");
   }
-  if (document.getElementById('wall_sit_resultado') && !document.getElementById('wall_sit_resultado').textContent.includes("Complete")) {
+  if (document.getElementById('wall_sit_resultado') && !document.getElementById('wall_sit_resultado').textContent.includes("Complete") && !document.getElementById('wall_sit_resultado').textContent.includes("Pendiente")) {
     testsRealizados.push("wall_sit");
   }
-  if (document.getElementById('pullup_resultado') && !document.getElementById('pullup_resultado').textContent.includes("Complete")) {
+  if (document.getElementById('pullup_resultado') && !document.getElementById('pullup_resultado').textContent.includes("Complete") && !document.getElementById('pullup_resultado').textContent.includes("Pendiente")) {
     testsRealizados.push("pullup");
   }
-  if (document.getElementById('hop_resultado') && !document.getElementById('hop_resultado').textContent.includes("Complete")) {
+  if (document.getElementById('side_bridge_abduccion_resultado') && !document.getElementById('side_bridge_abduccion_resultado').textContent.includes("Complete") && !document.getElementById('side_bridge_abduccion_resultado').textContent.includes("Pendiente")) {
+    testsRealizados.push("side_bridge");
+  }
+  if (document.getElementById('bridge_resultado') && !document.getElementById('bridge_resultado').textContent.includes("Complete") && !document.getElementById('bridge_resultado').textContent.includes("Pendiente")) {
+    testsRealizados.push("bridge");
+  }
+  if (document.getElementById('single_bridge_resultado') && !document.getElementById('single_bridge_resultado').textContent.includes("Complete") && !document.getElementById('single_bridge_resultado').textContent.includes("Pendiente")) {
+    testsRealizados.push("single_bridge");
+  }
+  if (document.getElementById('hop_resultado') && !document.getElementById('hop_resultado').textContent.includes("Complete") && !document.getElementById('hop_resultado').textContent.includes("Pendiente")) {
     testsRealizados.push("hop");
   }
-  if (document.getElementById('salto_resultado') && !document.getElementById('salto_resultado').textContent.includes("Complete")) {
+  if (document.getElementById('salto_resultado') && !document.getElementById('salto_resultado').textContent.includes("Complete") && !document.getElementById('salto_resultado').textContent.includes("Pendiente")) {
     testsRealizados.push("salto");
   }
-  if (document.getElementById('tug_resultado') && !document.getElementById('tug_resultado').textContent.includes("Complete")) {
+  if (document.getElementById('tug_resultado') && !document.getElementById('tug_resultado').textContent.includes("Complete") && !document.getElementById('tug_resultado').textContent.includes("Pendiente")) {
     testsRealizados.push("tug");
   }
-  if (document.getElementById('sft_resultado') && !document.getElementById('sft_resultado').textContent.includes("Complete")) {
+  if (document.getElementById('sft_resultado') && !document.getElementById('sft_resultado').textContent.includes("Complete") && !document.getElementById('sft_resultado').textContent.includes("Pendiente")) {
     testsRealizados.push("sft");
   }
-  if (document.getElementById('less_resultado') && !document.getElementById('less_resultado').textContent.includes("Seleccione")) {
+  if (document.getElementById('less_resultado') && !document.getElementById('less_resultado').textContent.includes("Seleccione") && !document.getElementById('less_resultado').textContent.includes("Pendiente")) {
     testsRealizados.push("less");
   }
-  
+
+  // Dentro de la función verificarEstadoCuestionarios() añade:
+if (document.getElementById('sppb_resultado') && !document.getElementById('sppb_resultado').textContent.includes("Complete") && !document.getElementById('sppb_resultado').textContent.includes("Pendiente")) {
+  testsRealizados.push("sppb");
+}
   // Actualizar el badge según la cantidad de tests realizados
   const badge = document.getElementById('fuerza-funcional-badge');
   
