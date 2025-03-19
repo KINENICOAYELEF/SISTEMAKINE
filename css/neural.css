@@ -1,0 +1,183 @@
+/* Estilos para la evaluación neural */
+.dermatoma-title, .miotoma-title, .reflejo-title {
+  background-color: #f0f8ff;
+  padding: 8px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  color: #2c3e50;
+  border-left: 4px solid #3498db;
+}
+
+.dermatoma-item, .miotoma-item, .reflejo-item, .tension-neural-item, .sensibilizacion-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border: 1px solid #e9ecef;
+}
+
+.dermatoma-options, .miotoma-options, .reflejo-options, .tension-neural-options, .sensibilizacion-options {
+  margin-top: 5px;
+}
+
+.dermatoma-select, .miotoma-select, .reflejo-select, .tension-neural-select, .sensibilizacion-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  appearance: auto;
+}
+
+/* Sistema de semáforo para resultados */
+.resultado-normal {
+  color: #28a745;
+  font-weight: 500;
+}
+
+.resultado-alteracion-moderada {
+  color: #ffc107;
+  font-weight: 500;
+}
+
+.resultado-alteracion-significativa {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+/* Estilos para interpretaciones */
+.interpretacion-titulo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.hallazgo-normal {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+  display: inline-block;
+  margin: 2px 0;
+}
+
+.hallazgo-alterado {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+  display: inline-block;
+  margin: 2px 0;
+}
+
+.hallazgo-significativo {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+  display: inline-block;
+  margin: 2px 0;
+}
+
+.bandera-roja {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin: 10px 0;
+  font-weight: 500;
+}
+
+/* Mejoras visuales para acordeones */
+.subcuestionario-item {
+  margin-bottom: 15px;
+  border: 1px solid #e9ecef;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.subcuestionario-header {
+  padding: 12px 15px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+.subcuestionario-header:hover {
+  background-color: #e9ecef;
+}
+
+.subcuestionario-header h5 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.subcuestionario-content {
+  padding: 0;
+  border-top: 1px solid #e9ecef;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+h6 {
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  border-left: 4px solid #6c757d;
+}
+
+.alert {
+  margin-top: 10px;
+}
+
+/* Separación entre tests */
+.mb-4 {
+  margin-bottom: 25px !important;
+}
+
+/* Input groups */
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+}
+
+.form-check {
+  position: relative;
+  display: block;
+  padding-left: 1.25rem;
+}
+
+.form-check-input {
+  position: absolute;
+  margin-top: 0.3rem;
+  margin-left: -1.25rem;
+}
+
+.form-check-label {
+  margin-bottom: 0;
+}
