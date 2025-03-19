@@ -16640,6 +16640,963 @@
       </div>
     </div>
   </div>
+
+            <!-- Evaluación Neural -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('evaluacion-neural-content')">
+    <h4><i class="fas fa-plus-circle"></i> Evaluación Neural</h4>
+    <div class="resultado-badge" id="evaluacion-neural-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="evaluacion-neural-content" style="display: none;">
+    <p class="mb-3">Evaluación detallada del sistema nervioso periférico, incluyendo dermatomas, miotomas, reflejos y pruebas neurodinámicas.</p>
+    
+    <!-- 1. Examen Neurosensitivo (subacordeón) -->
+    <div class="subcuestionario-item">
+      <div class="subcuestionario-header" onclick="toggleSubcuestionario('neurosensitivo-content')">
+        <h5><i class="fas fa-plus-circle"></i> Examen Neurosensitivo</h5>
+      </div>
+      <div class="subcuestionario-content" id="neurosensitivo-content" style="display: none;">
+        <div class="card-body">
+          <!-- Evaluación de Dermatomas -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>Evaluación de Dermatomas</h6>
+              <p class="text-muted small">Evalúe la sensibilidad en las áreas correspondientes a cada dermatoma. Utilice un estímulo ligero y consistente.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <h6 class="dermatoma-title">Dermatomas Cervicales</h6>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">C3: Área supraclavicular y lateral del cuello</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_c3" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">C4: Superior del hombro y parte superior del tórax</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_c4" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">C5: Cara lateral del brazo hasta el codo</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_c5" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">C6: Cara lateral del antebrazo y pulgar</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_c6" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">C7: Dedo medio y cara posterior del antebrazo</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_c7" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">C8: Dedo meñique y cara medial del antebrazo</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_c8" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">T1: Cara medial del brazo hasta la axila</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_t1" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-col form-col-md-6">
+              <h6 class="dermatoma-title">Dermatomas Lumbosacros</h6>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">L1: Región inguinal</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_l1" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">L2: Cara anterior del muslo</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_l2" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">L3: Cara anteromedial de la rodilla</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_l3" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">L4: Cara medial de la pierna hasta el maléolo medial</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_l4" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">L5: Cara lateral de la pierna y dorso del pie, 1er dedo</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_l5" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">S1: Borde lateral del pie y planta</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_s1" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="dermatoma-item">
+                <label class="form-label">S2-S4: Región genital y perianal</label>
+                <div class="dermatoma-options">
+                  <select id="dermatoma_s2_s4" class="form-select dermatoma-select" onchange="evaluarDermatomas()">
+                    <option value="normal">Normal</option>
+                    <option value="hipoestesia">Hipoestesia</option>
+                    <option value="hiperestesia">Hiperestesia</option>
+                    <option value="anestesia">Anestesia</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="dermatomas_resultado" class="form-label">Interpretación de Dermatomas</label>
+                <div id="dermatomas_resultado" class="alert alert-secondary">Complete la evaluación para obtener una interpretación.</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Evaluación Motora (Miotomas) -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>Evaluación Motora (Miotomas)</h6>
+              <p class="text-muted small">Evalúe la fuerza muscular según la escala MRC: 0 (Sin contracción), 1 (Contracción visible sin movimiento), 2 (Movimiento a favor de gravedad), 3 (Contra gravedad), 4 (Contra resistencia moderada), 5 (Fuerza normal).</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <h6 class="miotoma-title">Miotomas Miembro Superior</h6>
+              
+              <div class="miotoma-item">
+                <label class="form-label">C5: Abducción de hombro (Deltoides)</label>
+                <div class="miotoma-options">
+                  <select id="miotoma_c5" class="form-select miotoma-select" onchange="evaluarMiotomas()">
+                    <option value="5">5 - Normal</option>
+                    <option value="4">4 - Contra resistencia</option>
+                    <option value="3">3 - Contra gravedad</option>
+                    <option value="2">2 - A favor de gravedad</option>
+                    <option value="1">1 - Contracción visible</option>
+                    <option value="0">0 - Sin contracción</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="miotoma-item">
+                <label class="form-label">C6: Flexión de codo (Bíceps, Braquiorradial)</label>
+                <div class="miotoma-options">
+                  <select id="miotoma_c6" class="form-select miotoma-select" onchange="evaluarMiotomas()">
+                    <option value="5">5 - Normal</option>
+                    <option value="4">4 - Contra resistencia</option>
+                    <option value="3">3 - Contra gravedad</option>
+                    <option value="2">2 - A favor de gravedad</option>
+                    <option value="1">1 - Contracción visible</option>
+                    <option value="0">0 - Sin contracción</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="miotoma-item">
+                <label class="form-label">C7: Extensión de codo (Tríceps)</label>
+                <div class="miotoma-options">
+                  <select id="miotoma_c7" class="form-select miotoma-select" onchange="evaluarMiotomas()">
+                    <option value="5">5 - Normal</option>
+                    <option value="4">4 - Contra resistencia</option>
+                    <option value="3">3 - Contra gravedad</option>
+                    <option value="2">2 - A favor de gravedad</option>
+                    <option value="1">1 - Contracción visible</option>
+                    <option value="0">0 - Sin contracción</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="miotoma-item">
+                <label class="form-label">C8: Flexión de dedos (Flexor profundo)</label>
+                <div class="miotoma-options">
+                  <select id="miotoma_c8" class="form-select miotoma-select" onchange="evaluarMiotomas()">
+                    <option value="5">5 - Normal</option>
+                    <option value="4">4 - Contra resistencia</option>
+                    <option value="3">3 - Contra gravedad</option>
+                    <option value="2">2 - A favor de gravedad</option>
+                    <option value="1">1 - Contracción visible</option>
+                    <option value="0">0 - Sin contracción</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="miotoma-item">
+                <label class="form-label">T1: Abducción de dedos (Interóseos)</label>
+                <div class="miotoma-options">
+                  <select id="miotoma_t1" class="form-select miotoma-select" onchange="evaluarMiotomas()">
+                    <option value="5">5 - Normal</option>
+                    <option value="4">4 - Contra resistencia</option>
+                    <option value="3">3 - Contra gravedad</option>
+                    <option value="2">2 - A favor de gravedad</option>
+                    <option value="1">1 - Contracción visible</option>
+                    <option value="0">0 - Sin contracción</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-col form-col-md-6">
+              <h6 class="miotoma-title">Miotomas Miembro Inferior</h6>
+              
+              <div class="miotoma-item">
+                <label class="form-label">L2: Flexión de cadera (Iliopsoas)</label>
+                <div class="miotoma-options">
+                  <select id="miotoma_l2" class="form-select miotoma-select" onchange="evaluarMiotomas()">
+                    <option value="5">5 - Normal</option>
+                    <option value="4">4 - Contra resistencia</option>
+                    <option value="3">3 - Contra gravedad</option>
+                    <option value="2">2 - A favor de gravedad</option>
+                    <option value="1">1 - Contracción visible</option>
+                    <option value="0">0 - Sin contracción</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="miotoma-item">
+                <label class="form-label">L3: Extensión de rodilla (Cuádriceps)</label>
+                <div class="miotoma-options">
+                  <select id="miotoma_l3" class="form-select miotoma-select" onchange="evaluarMiotomas()">
+                    <option value="5">5 - Normal</option>
+                    <option value="4">4 - Contra resistencia</option>
+                    <option value="3">3 - Contra gravedad</option>
+                    <option value="2">2 - A favor de gravedad</option>
+                    <option value="1">1 - Contracción visible</option>
+                    <option value="0">0 - Sin contracción</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="miotoma-item">
+                <label class="form-label">L4: Dorsiflexión de tobillo (Tibial anterior)</label>
+                <div class="miotoma-options">
+                  <select id="miotoma_l4" class="form-select miotoma-select" onchange="evaluarMiotomas()">
+                    <option value="5">5 - Normal</option>
+                    <option value="4">4 - Contra resistencia</option>
+                    <option value="3">3 - Contra gravedad</option>
+                    <option value="2">2 - A favor de gravedad</option>
+                    <option value="1">1 - Contracción visible</option>
+                    <option value="0">0 - Sin contracción</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="miotoma-item">
+                <label class="form-label">L5: Extensión del hallux (Extensor del 1er dedo)</label>
+                <div class="miotoma-options">
+                  <select id="miotoma_l5" class="form-select miotoma-select" onchange="evaluarMiotomas()">
+                    <option value="5">5 - Normal</option>
+                    <option value="4">4 - Contra resistencia</option>
+                    <option value="3">3 - Contra gravedad</option>
+                    <option value="2">2 - A favor de gravedad</option>
+                    <option value="1">1 - Contracción visible</option>
+                    <option value="0">0 - Sin contracción</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="miotoma-item">
+                <label class="form-label">S1: Flexión plantar (Gastrocnemios, Sóleo)</label>
+                <div class="miotoma-options">
+                  <select id="miotoma_s1" class="form-select miotoma-select" onchange="evaluarMiotomas()">
+                    <option value="5">5 - Normal</option>
+                    <option value="4">4 - Contra resistencia</option>
+                    <option value="3">3 - Contra gravedad</option>
+                    <option value="2">2 - A favor de gravedad</option>
+                    <option value="1">1 - Contracción visible</option>
+                    <option value="0">0 - Sin contracción</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="miotomas_resultado" class="form-label">Interpretación de Miotomas</label>
+                <div id="miotomas_resultado" class="alert alert-secondary">Complete la evaluación para obtener una interpretación.</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Reflejos Osteotendinosos -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>Reflejos Osteotendinosos</h6>
+              <p class="text-muted small">Evalúe los reflejos usando la escala: 0 (Ausente), 1+ (Disminuido), 2+ (Normal), 3+ (Aumentado), 4+ (Hiperreflexia con clonus). Utilice un martillo de reflejos adecuado y técnica precisa.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <h6 class="reflejo-title">Reflejos Miembro Superior</h6>
+              
+              <div class="reflejo-item">
+                <label class="form-label">Reflejo Bicipital (C5-C6)</label>
+                <div class="reflejo-options">
+                  <select id="reflejo_bicipital" class="form-select reflejo-select" onchange="evaluarReflejos()">
+                    <option value="2">2+ - Normal</option>
+                    <option value="0">0 - Ausente</option>
+                    <option value="1">1+ - Disminuido</option>
+                    <option value="3">3+ - Aumentado</option>
+                    <option value="4">4+ - Hiperreflexia con clonus</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="reflejo-item">
+                <label class="form-label">Reflejo Estilorradial (C6)</label>
+                <div class="reflejo-options">
+                  <select id="reflejo_estilorradial" class="form-select reflejo-select" onchange="evaluarReflejos()">
+                    <option value="2">2+ - Normal</option>
+                    <option value="0">0 - Ausente</option>
+                    <option value="1">1+ - Disminuido</option>
+                    <option value="3">3+ - Aumentado</option>
+                    <option value="4">4+ - Hiperreflexia con clonus</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="reflejo-item">
+                <label class="form-label">Reflejo Tricipital (C7)</label>
+                <div class="reflejo-options">
+                  <select id="reflejo_tricipital" class="form-select reflejo-select" onchange="evaluarReflejos()">
+                    <option value="2">2+ - Normal</option>
+                    <option value="0">0 - Ausente</option>
+                    <option value="1">1+ - Disminuido</option>
+                    <option value="3">3+ - Aumentado</option>
+                    <option value="4">4+ - Hiperreflexia con clonus</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-col form-col-md-6">
+              <h6 class="reflejo-title">Reflejos Miembro Inferior</h6>
+              
+              <div class="reflejo-item">
+                <label class="form-label">Reflejo Rotuliano (L3-L4)</label>
+                <div class="reflejo-options">
+                  <select id="reflejo_rotuliano" class="form-select reflejo-select" onchange="evaluarReflejos()">
+                    <option value="2">2+ - Normal</option>
+                    <option value="0">0 - Ausente</option>
+                    <option value="1">1+ - Disminuido</option>
+                    <option value="3">3+ - Aumentado</option>
+                    <option value="4">4+ - Hiperreflexia con clonus</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="reflejo-item">
+                <label class="form-label">Reflejo Aquíleo (S1-S2)</label>
+                <div class="reflejo-options">
+                  <select id="reflejo_aquileo" class="form-select reflejo-select" onchange="evaluarReflejos()">
+                    <option value="2">2+ - Normal</option>
+                    <option value="0">0 - Ausente</option>
+                    <option value="1">1+ - Disminuido</option>
+                    <option value="3">3+ - Aumentado</option>
+                    <option value="4">4+ - Hiperreflexia con clonus</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-12">
+              <h6 class="reflejo-title">Reflejos Patológicos</h6>
+              
+              <div class="reflejo-item">
+                <label class="form-label">Signo de Babinski (Reflejo cutáneo plantar patológico)</label>
+                <div class="reflejo-options">
+                  <select id="reflejo_babinski" class="form-select reflejo-select" onchange="evaluarReflejos()">
+                    <option value="negativo">Negativo (normal)</option>
+                    <option value="positivo">Positivo (patológico)</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="reflejo-item">
+                <label class="form-label">Signo de Hoffman (Reflejo patológico de miembro superior)</label>
+                <div class="reflejo-options">
+                  <select id="reflejo_hoffman" class="form-select reflejo-select" onchange="evaluarReflejos()">
+                    <option value="negativo">Negativo (normal)</option>
+                    <option value="positivo">Positivo (patológico)</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="reflejo-item">
+                <label class="form-label">Clonus (Oscilaciones musculares involuntarias)</label>
+                <div class="reflejo-options">
+                  <select id="reflejo_clonus" class="form-select reflejo-select" onchange="evaluarReflejos()">
+                    <option value="negativo">Ausente</option>
+                    <option value="sostenido">Sostenido (patológico)</option>
+                    <option value="agotable">Agotable (algunos batidos)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="reflejos_resultado" class="form-label">Interpretación de Reflejos</label>
+                <div id="reflejos_resultado" class="alert alert-secondary">Complete la evaluación para obtener una interpretación.</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Interpretación del Examen Neurosensitivo -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="neurosensitivo_interpretacion" class="form-label">Interpretación del Examen Neurosensitivo</label>
+                <div id="neurosensitivo_interpretacion" class="alert alert-info">Complete al menos una evaluación para obtener una interpretación integrada.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 2. Tests de Tensión Neural (subacordeón) -->
+    <div class="subcuestionario-item">
+      <div class="subcuestionario-header" onclick="toggleSubcuestionario('tension-neural-content')">
+        <h5><i class="fas fa-plus-circle"></i> Tests de Tensión Neural</h5>
+      </div>
+      <div class="subcuestionario-content" id="tension-neural-content" style="display: none;">
+        <div class="card-body">
+          <!-- Miembro Superior -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>Tests Neurodinámicos de Miembro Superior</h6>
+              <p class="text-muted small">Evalúe la respuesta a las maniobras de tensión neural y registre si la respuesta es normal o si reproduce los síntomas del paciente.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="tension-neural-item">
+                <label class="form-label">ULNT1 (Nervio Mediano)<br><small>Abducción hombro 110°, extensión codo, supinación antebrazo, extensión muñeca y dedos</small></label>
+                <div class="tension-neural-options">
+                  <select id="ulnt1_respuesta" class="form-select tension-neural-select" onchange="evaluarULNT()">
+                    <option value="normal">Respuesta normal (tensión)</option>
+                    <option value="sintomatica">Reproduce síntomas</option>
+                    <option value="limitada">Limitación significativa</option>
+                  </select>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="ulnt1_diferenciacion" onchange="evaluarULNT()">
+                  <label class="form-check-label" for="ulnt1_diferenciacion">
+                    Diferenciación estructural positiva
+                  </label>
+                </div>
+              </div>
+              
+              <div class="tension-neural-item mt-3">
+                <label class="form-label">ULNT2a (Variante Nervio Mediano)<br><small>Depresión escapular, extensión codo, rotación externa de hombro, extensión muñeca y dedos</small></label>
+                <div class="tension-neural-options">
+                  <select id="ulnt2a_respuesta" class="form-select tension-neural-select" onchange="evaluarULNT()">
+                    <option value="normal">Respuesta normal (tensión)</option>
+                    <option value="sintomatica">Reproduce síntomas</option>
+                    <option value="limitada">Limitación significativa</option>
+                  </select>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="ulnt2a_diferenciacion" onchange="evaluarULNT()">
+                  <label class="form-check-label" for="ulnt2a_diferenciacion">
+                    Diferenciación estructural positiva
+                  </label>
+                </div>
+              </div>
+              
+              <div class="tension-neural-item mt-3">
+                <label class="form-label">ULNT2b (Nervio Radial)<br><small>Depresión escapular, extensión codo, rotación interna hombro, pronación antebrazo, flexión muñeca y dedos</small></label>
+                <div class="tension-neural-options">
+                  <select id="ulnt2b_respuesta" class="form-select tension-neural-select" onchange="evaluarULNT()">
+                    <option value="normal">Respuesta normal (tensión)</option>
+                    <option value="sintomatica">Reproduce síntomas</option>
+                    <option value="limitada">Limitación significativa</option>
+                  </select>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="ulnt2b_diferenciacion" onchange="evaluarULNT()">
+                  <label class="form-check-label" for="ulnt2b_diferenciacion">
+                    Diferenciación estructural positiva
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-col form-col-md-6">
+              <div class="tension-neural-item">
+                <label class="form-label">ULNT3 (Nervio Ulnar)<br><small>Abducción hombro 90°, flexión codo 90°, extensión muñeca, supinación antebrazo, depresión hombro</small></label>
+                <div class="tension-neural-options">
+                  <select id="ulnt3_respuesta" class="form-select tension-neural-select" onchange="evaluarULNT()">
+                    <option value="normal">Respuesta normal (tensión)</option>
+                    <option value="sintomatica">Reproduce síntomas</option>
+                    <option value="limitada">Limitación significativa</option>
+                  </select>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="ulnt3_diferenciacion" onchange="evaluarULNT()">
+                  <label class="form-check-label" for="ulnt3_diferenciacion">
+                    Diferenciación estructural positiva
+                  </label>
+                </div>
+              </div>
+              
+              <div class="tension-neural-item mt-3">
+                <label class="form-label">Test adicional de miembro superior</label>
+                <div class="form-group">
+                  <input type="text" id="ulnt_adicional_nombre" class="form-control" placeholder="Nombre del test">
+                </div>
+                <div class="tension-neural-options mt-2">
+                  <select id="ulnt_adicional_respuesta" class="form-select tension-neural-select" onchange="evaluarULNT()">
+                    <option value="normal">Respuesta normal (tensión)</option>
+                    <option value="sintomatica">Reproduce síntomas</option>
+                    <option value="limitada">Limitación significativa</option>
+                  </select>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="ulnt_adicional_diferenciacion" onchange="evaluarULNT()">
+                  <label class="form-check-label" for="ulnt_adicional_diferenciacion">
+                    Diferenciación estructural positiva
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="ulnt_resultado" class="form-label">Interpretación de Tests Neurodinámicos de Miembro Superior</label>
+                <div id="ulnt_resultado" class="alert alert-secondary">Complete la evaluación para obtener una interpretación.</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Miembro Inferior -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>Tests Neurodinámicos de Miembro Inferior</h6>
+              <p class="text-muted small">Evalúe la respuesta a las maniobras de tensión neural y registre si reproduce síntomas y el ángulo de limitación.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="tension-neural-item">
+                <label class="form-label">SLR (Straight Leg Raise)<br><small>Elevación de la pierna recta, evalúa principalmente raíces L5-S1</small></label>
+                <div class="input-group mb-2">
+                  <span class="input-group-text">Ángulo de limitación</span>
+                  <input type="number" id="slr_angulo" class="form-control" min="0" max="90" onchange="evaluarSLR()">
+                  <span class="input-group-text">°</span>
+                </div>
+                <div class="tension-neural-options">
+                  <select id="slr_respuesta" class="form-select tension-neural-select" onchange="evaluarSLR()">
+                    <option value="normal">Respuesta normal (tensión)</option>
+                    <option value="sintomatica_local">Síntomas locales (lumbar/isquiotibial)</option>
+                    <option value="sintomatica_radiante">Síntomas radiantes (ciática)</option>
+                  </select>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="slr_diferenciacion" onchange="evaluarSLR()">
+                  <label class="form-check-label" for="slr_diferenciacion">
+                    Diferenciación estructural positiva (flexión dorsal)
+                  </label>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="slr_cruzado" onchange="evaluarSLR()">
+                  <label class="form-check-label" for="slr_cruzado">
+                    SLR cruzado positivo
+                  </label>
+                </div>
+              </div>
+              
+              <div class="tension-neural-item mt-3">
+                <label class="form-label">Slump Test<br><small>Evalúa tensión general del neuroeje y canal vertebral</small></label>
+                <div class="tension-neural-options">
+                  <select id="slump_respuesta" class="form-select tension-neural-select" onchange="evaluarSLR()">
+                    <option value="normal">Respuesta normal (tensión)</option>
+                    <option value="sintomatica_local">Síntomas locales</option>
+                    <option value="sintomatica_radiante">Síntomas radiantes</option>
+                  </select>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="slump_diferenciacion" onchange="evaluarSLR()">
+                  <label class="form-check-label" for="slump_diferenciacion">
+                    Diferenciación estructural positiva (extensión cervical)
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-col form-col-md-6">
+              <div class="tension-neural-item">
+                <label class="form-label">Prueba de Tensión Femoral<br><small>Evalúa principalmente raíces L2-L4 (cuadriceps)</small></label>
+                <div class="input-group mb-2">
+                  <span class="input-group-text">Ángulo de limitación</span>
+                  <input type="number" id="pkb_angulo" class="form-control" min="0" max="135" onchange="evaluarSLR()">
+                  <span class="input-group-text">°</span>
+                </div>
+                <div class="tension-neural-options">
+                  <select id="pkb_respuesta" class="form-select tension-neural-select" onchange="evaluarSLR()">
+                    <option value="normal">Respuesta normal (tensión)</option>
+                    <option value="sintomatica_local">Síntomas locales (cuadriceps)</option>
+                    <option value="sintomatica_radiante">Síntomas radiantes (anterior)</option>
+                  </select>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="pkb_diferenciacion" onchange="evaluarSLR()">
+                  <label class="form-check-label" for="pkb_diferenciacion">
+                    Diferenciación estructural positiva
+                  </label>
+                </div>
+              </div>
+              
+              <div class="tension-neural-item mt-3">
+                <label class="form-label">Test adicional de miembro inferior</label>
+                <div class="form-group">
+                  <input type="text" id="llnt_adicional_nombre" class="form-control" placeholder="Nombre del test">
+                </div>
+                <div class="tension-neural-options mt-2">
+                  <select id="llnt_adicional_respuesta" class="form-select tension-neural-select" onchange="evaluarSLR()">
+                    <option value="normal">Respuesta normal (tensión)</option>
+                    <option value="sintomatica_local">Síntomas locales</option>
+                    <option value="sintomatica_radiante">Síntomas radiantes</option>
+                  </select>
+                </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="llnt_adicional_diferenciacion" onchange="evaluarSLR()">
+                  <label class="form-check-label" for="llnt_adicional_diferenciacion">
+                    Diferenciación estructural positiva
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="slr_resultado" class="form-label">Interpretación de Tests Neurodinámicos de Miembro Inferior</label>
+                <div id="slr_resultado" class="alert alert-secondary">Complete la evaluación para obtener una interpretación.</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Interpretación de Tests de Tensión Neural -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="tension_neural_interpretacion" class="form-label">Interpretación de Tests de Tensión Neural</label>
+                <div id="tension_neural_interpretacion" class="alert alert-info">Complete al menos una evaluación para obtener una interpretación integrada.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 3. Evaluación de Sensibilización Neural (subacordeón) -->
+    <div class="subcuestionario-item">
+      <div class="subcuestionario-header" onclick="toggleSubcuestionario('sensibilizacion-neural-content')">
+        <h5><i class="fas fa-plus-circle"></i> Evaluación de Sensibilización Neural</h5>
+      </div>
+      <div class="subcuestionario-content" id="sensibilizacion-neural-content" style="display: none;">
+        <div class="card-body">
+          <!-- Umbrales de Dolor -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>Umbrales de Dolor Mecánico</h6>
+              <p class="text-muted small">Evalúe la respuesta al estímulo de presión en áreas clave utilizando algometría o presión digital calibrada.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="sensibilizacion-item">
+                <label class="form-label">Umbral de dolor a la presión en zona sintomática</label>
+                <div class="sensibilizacion-options">
+                  <select id="umbral_dolor_sintomatica" class="form-select sensibilizacion-select" onchange="evaluarSensibilizacion()">
+                    <option value="normal">Normal</option>
+                    <option value="disminuido">Disminuido (hiperalgesia)</option>
+                    <option value="muy_disminuido">Muy disminuido (hiperalgesia severa)</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="sensibilizacion-item mt-3">
+                <label class="form-label">Umbral de dolor a la presión en zona control (segmento no afectado)</label>
+                <div class="sensibilizacion-options">
+                  <select id="umbral_dolor_control" class="form-select sensibilizacion-select" onchange="evaluarSensibilizacion()">
+                    <option value="normal">Normal</option>
+                    <option value="disminuido">Disminuido (hiperalgesia)</option>
+                    <option value="muy_disminuido">Muy disminuido (hiperalgesia severa)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-col form-col-md-6">
+              <div class="sensibilizacion-item">
+                <label class="form-label">Alodinia táctil (dolor ante estímulo no doloroso)</label>
+                <div class="sensibilizacion-options">
+                  <select id="alodinia" class="form-select sensibilizacion-select" onchange="evaluarSensibilizacion()">
+                    <option value="ausente">Ausente</option>
+                    <option value="presente_local">Presente localmente</option>
+                    <option value="presente_extendida">Presente en zonas extendidas</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="sensibilizacion-item mt-3">
+                <label class="form-label">Sumación temporal (aumento progresivo del dolor ante estímulo repetido)</label>
+                <div class="sensibilizacion-options">
+                  <select id="sumacion_temporal" class="form-select sensibilizacion-select" onchange="evaluarSensibilizacion()">
+                    <option value="ausente">Ausente (normal)</option>
+                    <option value="presente_moderada">Presente moderada</option>
+                    <option value="presente_severa">Presente severa</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="sensibilizacion_resultado" class="form-label">Interpretación de Umbrales de Dolor</label>
+                <div id="sensibilizacion_resultado" class="alert alert-secondary">Complete la evaluación para obtener una interpretación.</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sensibilidad Profunda -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <h6>Evaluación de Sensibilidad Profunda</h6>
+              <p class="text-muted small">Evalúe la integridad de vías de sensibilidad propioceptiva y discriminativa.</p>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="sensibilizacion-item">
+                <label class="form-label">Sensibilidad vibratoria (diapasón 128Hz)</label>
+                <div class="sensibilizacion-options">
+                  <select id="sensibilidad_vibratoria" class="form-select sensibilizacion-select" onchange="evaluarSensibilidadProfunda()">
+                    <option value="normal">Normal</option>
+                    <option value="disminuida">Disminuida</option>
+                    <option value="ausente">Ausente</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="sensibilizacion-item mt-3">
+                <label class="form-label">Propiocepción articular</label>
+                <div class="sensibilizacion-options">
+                  <select id="propiocepcion" class="form-select sensibilizacion-select" onchange="evaluarSensibilidadProfunda()">
+                    <option value="normal">Normal</option>
+                    <option value="alterada">Alterada</option>
+                    <option value="muy_alterada">Muy alterada</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-col form-col-md-6">
+              <div class="sensibilizacion-item">
+                <label class="form-label">Discriminación entre dos puntos</label>
+                <div class="sensibilizacion-options">
+                  <select id="discriminacion_dos_puntos" class="form-select sensibilizacion-select" onchange="evaluarSensibilidadProfunda()">
+                    <option value="normal">Normal</option>
+                    <option value="disminuida">Disminuida</option>
+                    <option value="ausente">Ausente</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="sensibilizacion-item mt-3">
+                <label class="form-label">Estereognosia (reconocimiento táctil de objetos)</label>
+                <div class="sensibilizacion-options">
+                  <select id="estereognosia" class="form-select sensibilizacion-select" onchange="evaluarSensibilidadProfunda()">
+                    <option value="normal">Normal</option>
+                    <option value="alterada">Alterada</option>
+                    <option value="ausente">Ausente</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="sensibilidad_profunda_resultado" class="form-label">Interpretación de Sensibilidad Profunda</label>
+                <div id="sensibilidad_profunda_resultado" class="alert alert-secondary">Complete la evaluación para obtener una interpretación.</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Interpretación de Sensibilización Neural -->
+          <div class="form-row mb-4">
+            <div class="form-col form-col-md-12">
+              <div class="form-group">
+                <label for="sensibilizacion_interpretacion" class="form-label">Interpretación de Sensibilización Neural</label>
+                <div id="sensibilizacion_interpretacion" class="alert alert-info">Complete al menos una evaluación para obtener una interpretación integrada.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interpretación global y recomendaciones -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Interpretación y Recomendaciones Neurales</h5>
+      </div>
+      <div class="card-body">
+        <div id="interpretacion_neural" class="mb-3">
+          <h6>Interpretación Clínica:</h6>
+          <div id="interpretacion-neural-texto">
+            Complete la evaluación neural para obtener una interpretación clínica integral.
+          </div>
+        </div>
+        
+        <div id="recomendaciones_neural" class="mb-3">
+          <h6>Recomendaciones Terapéuticas:</h6>
+          <div id="recomendaciones-neural-texto">
+            Complete la evaluación para obtener recomendaciones específicas basadas en evidencia.
+          </div>
+        </div>
+        
+        <div id="banderas_rojas_neural" class="mb-3">
+          <h6>Banderas Rojas Neurológicas:</h6>
+          <div id="banderas-rojas-neural-texto">
+            Se mostrarán aquí si se detectan.
+          </div>
+        </div>
+        
+        <div class="alert alert-info">
+          <h6><i class="fas fa-info-circle"></i> Consideraciones clínicas:</h6>
+          <ul>
+            <li>La <strong>evaluación neural completa</strong> debe interpretarse en conjunto con los hallazgos musculoesqueléticos para un abordaje integral.</li>
+            <li>Los <strong>patrones de disfunción neural</strong> pueden manifestarse como alteraciones sensitivas, motoras, reflejas y/o neurodinámicas.</li>
+            <li>La <strong>diferenciación estructural</strong> es esencial para determinar si los síntomas son de origen neural o no neural.</li>
+            <li>La presencia de <strong>banderas rojas neurológicas</strong> pueden requerir derivación urgente a especialista.</li>
+            <li>El <strong>tratamiento neurodinámico</strong> debe ser gradual y respetar la tolerancia del tejido neural.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
                   <!-- Evaluación de Fuerza Funcional -->
 <div class="cuestionario-item">
   <div class="cuestionario-header" onclick="toggleCuestionario('fuerza-funcional-content')">
