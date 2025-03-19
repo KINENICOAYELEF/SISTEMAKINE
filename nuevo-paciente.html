@@ -16743,6 +16743,63 @@
               </div>
             </div>
           </div>
+
+<!-- CKCUES Test -->
+<hr class="my-4">
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-12">
+    <h6>CKCUES (Test de Cadena Cinética Cerrada para Hombro)</h6>
+    <p class="text-muted small">Evalúa la estabilidad y funcionalidad del hombro midiendo el número de toques alternados en 15 segundos.</p>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-2">
+    <div class="form-group">
+      <label for="ckcues_toques" class="form-label">Toques en 15 seg</label>
+      <input type="number" id="ckcues_toques" name="ckcues_toques" class="form-control" min="0" max="100" onchange="evaluarCKCUES()">
+    </div>
+  </div>
+  <div class="form-col form-col-md-2">
+    <div class="form-group">
+      <label for="ckcues_edad" class="form-label">Edad</label>
+      <input type="number" id="ckcues_edad" name="ckcues_edad" class="form-control" min="18" max="100" onchange="evaluarCKCUES()">
+    </div>
+  </div>
+  <div class="form-col form-col-md-2">
+    <div class="form-group">
+      <label for="ckcues_genero" class="form-label">Género</label>
+      <select id="ckcues_genero" name="ckcues_genero" class="form-select" onchange="evaluarCKCUES()">
+        <option value="">Seleccionar</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Femenino">Femenino</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-2">
+    <div class="form-group">
+      <label for="ckcues_nivel" class="form-label">Nivel de actividad</label>
+      <select id="ckcues_nivel" name="ckcues_nivel" class="form-select" onchange="evaluarCKCUES()">
+        <option value="">Seleccionar</option>
+        <option value="Recreativo">Recreativo</option>
+        <option value="Deportista">Deportista</option>
+        <option value="Élite">Élite</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-2">
+    <div class="form-group">
+      <label for="ckcues_rpe" class="form-label">RPE (0-10)</label>
+      <input type="number" id="ckcues_rpe" name="ckcues_rpe" class="form-control" min="0" max="10" step="1">
+    </div>
+  </div>
+  <div class="form-col form-col-md-2">
+    <div class="form-group">
+      <label for="ckcues_resultado" class="form-label">Resultado</label>
+      <div id="ckcues_resultado" class="alert alert-secondary">Pendiente</div>
+    </div>
+  </div>
+</div>
           
           <!-- Otros Tests Funcionales -->
           <div id="otros_tests_funcionales_container">
@@ -16928,6 +16985,155 @@
         </div>
       </div>
     </div>
+
+    <!-- 3.5 Tests para Complejo de Cadera y Pelvis (subacordeón) -->
+<div class="subcuestionario-item">
+  <div class="subcuestionario-header" onclick="toggleSubcuestionario('cadera-pelvis-content')">
+    <h5><i class="fas fa-plus-circle"></i> Tests para Complejo de Cadera y Pelvis</h5>
+  </div>
+  <div class="subcuestionario-content" id="cadera-pelvis-content" style="display: none;">
+    <div class="card-body">
+      <!-- Side Bridge con Abducción -->
+      <div class="form-row mb-3">
+        <div class="form-col form-col-md-12">
+          <h6>Side Bridge con Abducción de Cadera</h6>
+          <p class="text-muted small">Evalúa la fuerza-resistencia de los abductores de cadera manteniendo la posición de side bridge con abducción.</p>
+        </div>
+      </div>
+      
+      <div class="form-row mb-4">
+        <div class="form-col form-col-md-3">
+          <div class="form-group">
+            <label for="side_bridge_abduccion_derecha" class="form-label">Lado Derecho (seg)</label>
+            <input type="number" id="side_bridge_abduccion_derecha" name="side_bridge_abduccion_derecha" class="form-control" min="0" max="300" onchange="evaluarSideBridgeAbduccion()">
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-group">
+            <label for="side_bridge_abduccion_izquierda" class="form-label">Lado Izquierdo (seg)</label>
+            <input type="number" id="side_bridge_abduccion_izquierda" name="side_bridge_abduccion_izquierda" class="form-control" min="0" max="300" onchange="evaluarSideBridgeAbduccion()">
+          </div>
+        </div>
+        <div class="form-col form-col-md-2">
+          <div class="form-group">
+            <label for="side_bridge_abduccion_genero" class="form-label">Género</label>
+            <select id="side_bridge_abduccion_genero" name="side_bridge_abduccion_genero" class="form-select" onchange="evaluarSideBridgeAbduccion()">
+              <option value="">Seleccionar</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-col form-col-md-1">
+          <div class="form-group">
+            <label for="side_bridge_abduccion_rpe" class="form-label">RPE</label>
+            <input type="number" id="side_bridge_abduccion_rpe" name="side_bridge_abduccion_rpe" class="form-control" min="0" max="10" step="1">
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-group">
+            <label for="side_bridge_abduccion_resultado" class="form-label">Resultado</label>
+            <div id="side_bridge_abduccion_resultado" class="alert alert-secondary">Pendiente</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bridge Test (Glúteo Mayor) -->
+      <div class="form-row mb-3 mt-4">
+        <div class="form-col form-col-md-12">
+          <h6>Bridge Test (Glúteo Mayor)</h6>
+          <p class="text-muted small">Evalúa la fuerza-resistencia de los extensores de cadera (principalmente glúteo mayor) en posición de puente.</p>
+        </div>
+      </div>
+      
+      <div class="form-row mb-4">
+        <div class="form-col form-col-md-3">
+          <div class="form-group">
+            <label for="bridge_tiempo" class="form-label">Tiempo (seg)</label>
+            <input type="number" id="bridge_tiempo" name="bridge_tiempo" class="form-control" min="0" max="300" onchange="evaluarBridgeTest()">
+          </div>
+        </div>
+        <div class="form-col form-col-md-2">
+          <div class="form-group">
+            <label for="bridge_genero" class="form-label">Género</label>
+            <select id="bridge_genero" name="bridge_genero" class="form-select" onchange="evaluarBridgeTest()">
+              <option value="">Seleccionar</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-col form-col-md-1">
+          <div class="form-group">
+            <label for="bridge_rpe" class="form-label">RPE</label>
+            <input type="number" id="bridge_rpe" name="bridge_rpe" class="form-control" min="0" max="10" step="1">
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-group">
+            <label for="bridge_resultado" class="form-label">Resultado</label>
+            <div id="bridge_resultado" class="alert alert-secondary">Pendiente</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Single-Leg Bridge Test -->
+      <div class="form-row mb-3 mt-4">
+        <div class="form-col form-col-md-12">
+          <h6>Single-Leg Bridge Test</h6>
+          <p class="text-muted small">Evalúa la fuerza-resistencia unilateral de los extensores de cadera y la simetría entre ambos lados.</p>
+        </div>
+      </div>
+      
+      <div class="form-row mb-4">
+        <div class="form-col form-col-md-3">
+          <div class="form-group">
+            <label for="single_bridge_derecha" class="form-label">Pierna Derecha (seg)</label>
+            <input type="number" id="single_bridge_derecha" name="single_bridge_derecha" class="form-control" min="0" max="300" onchange="evaluarSingleBridgeTest()">
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-group">
+            <label for="single_bridge_izquierda" class="form-label">Pierna Izquierda (seg)</label>
+            <input type="number" id="single_bridge_izquierda" name="single_bridge_izquierda" class="form-control" min="0" max="300" onchange="evaluarSingleBridgeTest()">
+          </div>
+        </div>
+        <div class="form-col form-col-md-2">
+          <div class="form-group">
+            <label for="single_bridge_genero" class="form-label">Género</label>
+            <select id="single_bridge_genero" name="single_bridge_genero" class="form-select" onchange="evaluarSingleBridgeTest()">
+              <option value="">Seleccionar</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-col form-col-md-1">
+          <div class="form-group">
+            <label for="single_bridge_rpe" class="form-label">RPE</label>
+            <input type="number" id="single_bridge_rpe" name="single_bridge_rpe" class="form-control" min="0" max="10" step="1">
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-group">
+            <label for="single_bridge_resultado" class="form-label">Resultado</label>
+            <div id="single_bridge_resultado" class="alert alert-secondary">Pendiente</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Interpretación de Tests de Cadera -->
+      <div class="form-row mb-4">
+        <div class="form-col form-col-md-12">
+          <div class="form-group">
+            <label for="cadera_pelvis_interpretacion" class="form-label">Interpretación Específica</label>
+            <div id="cadera_pelvis_interpretacion" class="alert alert-info">Complete al menos un test para obtener una interpretación específica.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
     
     <!-- 3. Tests Reintegro Deportivo (subacordeón) -->
     <div class="subcuestionario-item">
@@ -17121,6 +17327,81 @@
               </div>
             </div>
           </div>
+
+          <!-- SPPB (Short Physical Performance Battery) -->
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-12">
+    <h6>SPPB (Short Physical Performance Battery)</h6>
+    <p class="text-muted small">Batería de pruebas para evaluar la capacidad funcional en adultos mayores, incluyendo equilibrio, velocidad de marcha y fuerza de miembros inferiores.</p>
+  </div>
+</div>
+
+<div class="form-row mb-3">
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="sppb_equilibrio" class="form-label">Prueba de Equilibrio (0-4)</label>
+      <select id="sppb_equilibrio" name="sppb_equilibrio" class="form-select" onchange="evaluarSPPB()">
+        <option value="">Seleccionar</option>
+        <option value="0">0 - Incapaz de mantener posición de pies juntos</option>
+        <option value="1">1 - Mantiene posición de pies juntos < 10 seg</option>
+        <option value="2">2 - Mantiene pies juntos, pero no semi-tándem</option>
+        <option value="3">3 - Mantiene semi-tándem pero no tándem completo</option>
+        <option value="4">4 - Mantiene posición tándem ≥ 10 seg</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="sppb_marcha" class="form-label">Velocidad de Marcha (0-4)</label>
+      <select id="sppb_marcha" name="sppb_marcha" class="form-select" onchange="evaluarSPPB()">
+        <option value="">Seleccionar</option>
+        <option value="0">0 - No puede realizar 4m</option>
+        <option value="1">1 - > 8.70 segundos (< 0.46 m/s)</option>
+        <option value="2">2 - 6.21-8.70 segundos (0.46-0.64 m/s)</option>
+        <option value="3">3 - 4.82-6.20 segundos (0.65-0.83 m/s)</option>
+        <option value="4">4 - < 4.82 segundos (> 0.83 m/s)</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="sppb_silla" class="form-label">Levantarse de Silla (0-4)</label>
+      <select id="sppb_silla" name="sppb_silla" class="form-select" onchange="evaluarSPPB()">
+        <option value="">Seleccionar</option>
+        <option value="0">0 - No puede completar 5 repeticiones</option>
+        <option value="1">1 - ≥ 16.7 segundos</option>
+        <option value="2">2 - 13.7-16.6 segundos</option>
+        <option value="3">3 - 11.2-13.6 segundos</option>
+        <option value="4">4 - ≤ 11.1 segundos</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="form-row mb-4">
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="sppb_edad" class="form-label">Edad</label>
+      <input type="number" id="sppb_edad" name="sppb_edad" class="form-control" min="65" max="120" onchange="evaluarSPPB()">
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="sppb_genero" class="form-label">Género</label>
+      <select id="sppb_genero" name="sppb_genero" class="form-select" onchange="evaluarSPPB()">
+        <option value="">Seleccionar</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Femenino">Femenino</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-col form-col-md-4">
+    <div class="form-group">
+      <label for="sppb_resultado" class="form-label">Resultado</label>
+      <div id="sppb_resultado" class="alert alert-secondary">Pendiente</div>
+    </div>
+  </div>
+</div>
           
           <!-- Senior Fitness Test -->
           <div class="form-row mb-3 mt-4">
