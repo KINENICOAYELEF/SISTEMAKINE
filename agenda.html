@@ -833,30 +833,34 @@
         setupEventListeners();
     });
     
-    // Verificar el rol del usuario (admin o estudiante)
-   function checkUserRole(userId) {
-        db.collection('usuarios').doc(userId).get()
-            .then((doc) => {
-                if (doc.exists && doc.data().role === 'admin') {
-                    isAdmin = true;
-                    document.body.classList.remove('student-view');
-                } else {
-                    isAdmin = false;
-                    document.body.classList.add('student-view');
-                }
-                
-                // Inicializar la agenda
-                initializeApp();
-            })
-            .catch((error) => {
-                console.error("Error al verificar rol de usuario:", error);
+    function checkUserRole(userId) {
+    console.log("Verificando rol para userId:", userId);
+    
+    db.collection('usuarios').doc(userId).get()
+        .then((doc) => {
+            console.log("Documento obtenido:", doc.exists ? "Existe" : "No existe");
+            if (doc.exists) {
+                console.log("Datos del documento:", doc.data());
+            }
+            
+            if (doc.exists && (doc.data().role === 'admin' || doc.data().rol === 'admin')) {
+                console.log("¡Usuario reconocido como admin!");
+                isAdmin = true;
+                document.body.classList.remove('student-view');
+            } else {
+                console.log("Usuario NO reconocido como admin");
                 isAdmin = false;
                 document.body.classList.add('student-view');
-                
-                // Inicializar la agenda de todos modos
-                initializeApp();
-            });
-    }
+            }
+            
+            // Inicializar la agenda
+            initializeApp();
+        })
+        .catch((error) => {
+            console.error("Error al verificar rol:", error);
+            initializeApp();
+        });
+}
     
     // Inicializar la aplicación
     function initializeApp() {
