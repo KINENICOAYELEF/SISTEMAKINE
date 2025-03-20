@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMAKINE - Agenda</title>
     <style>
-        /* Estilos básicos incorporados para evitar problemas de carga */
+        /* Estilos básicos */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -96,6 +96,7 @@
             font-size: 0.9rem;
             height: 100%;
             overflow: hidden;
+            position: relative;
         }
         
         .appointment.consulta-general { background-color: #ffb6c1; }
@@ -197,6 +198,7 @@
             font-size: 0.9rem;
         }
         
+        /* Estilos para los modales y formularios */
         .modal {
             display: none;
             position: fixed;
@@ -205,6 +207,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
         }
         
         .modal-content {
@@ -212,23 +215,251 @@
             width: 90%;
             max-width: 500px;
             margin: 10% auto;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            overflow: hidden;
         }
         
-        .button {
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
+        .modal-header {
+            padding: 15px 20px;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        
+        .close {
+            font-size: 1.5rem;
             cursor: pointer;
+            line-height: 1;
+        }
+        
+        form {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="time"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             font-size: 0.9rem;
         }
         
-        .button:hover {
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+        
+        .save-btn {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .save-btn:hover {
             background-color: #388e3c;
+        }
+        
+        .cancel-btn {
+            background-color: #777;
+            color: white;
+        }
+        
+        .cancel-btn:hover {
+            background-color: #555;
+        }
+        
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+        
+        /* Estilos para el modal de asistencia */
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #ddd;
+            text-align: right;
+        }
+        
+        .attendance-options {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        
+        .attendance-btn {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1;
+            margin: 0 5px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .attendance-btn[data-status="attended"] {
+            border-color: #4caf50;
+            color: #4caf50;
+        }
+        
+        .attendance-btn[data-status="attended"].selected {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .attendance-btn[data-status="missed"] {
+            border-color: #f44336;
+            color: #f44336;
+        }
+        
+        .attendance-btn[data-status="missed"].selected {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .attendance-btn[data-status="rescheduled"] {
+            border-color: #ff9800;
+            color: #ff9800;
+        }
+        
+        .attendance-btn[data-status="rescheduled"].selected {
+            background-color: #ff9800;
+            color: white;
+        }
+        
+        /* Estilos para arrastrar y soltar */
+        .schedule-cell.drag-over {
+            background-color: rgba(76, 175, 80, 0.2);
+        }
+        
+        .appointment {
+            cursor: grab;
+        }
+        
+        .appointment:active {
+            cursor: grabbing;
+        }
+        
+        /* Estado de asistencia para las citas */
+        .appointment-status {
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .appointment-status.attended {
+            background-color: #4caf50;
+        }
+        
+        .appointment-status.missed {
+            background-color: #f44336;
+        }
+        
+        .appointment-status.rescheduled {
+            background-color: #ff9800;
+        }
+        
+        /* Indicador de cita web */
+        .web-indicator {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .week-navigation {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .therapist-header, .schedule-grid {
+                grid-template-columns: 60px 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-container {
+                flex-direction: column;
+                height: auto;
+                align-items: center;
+            }
+            
+            .chart-bar {
+                width: 100%;
+                height: 40px !important;
+                margin: 10px 0;
+                border-radius: 0 5px 5px 0;
+            }
+            
+            .chart-value {
+                top: 10px;
+                right: -25px;
+                left: auto;
+            }
+            
+            .chart-labels {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -262,88 +493,44 @@
         <div class="schedule-grid">
             <!-- Horas -->
             <div class="time-cell">09:00</div>
+            <div class="schedule-cell" data-hour="9" data-therapist="nicolas"></div>
+            <div class="schedule-cell" data-hour="9" data-therapist="ana-maria"></div>
+            <div class="schedule-cell" data-hour="9" data-therapist="gustavo"></div>
+            
             <div class="time-cell">10:00</div>
+            <div class="schedule-cell" data-hour="10" data-therapist="nicolas"></div>
+            <div class="schedule-cell" data-hour="10" data-therapist="ana-maria"></div>
+            <div class="schedule-cell" data-hour="10" data-therapist="gustavo"></div>
+            
             <div class="time-cell">11:00</div>
+            <div class="schedule-cell" data-hour="11" data-therapist="nicolas"></div>
+            <div class="schedule-cell" data-hour="11" data-therapist="ana-maria"></div>
+            <div class="schedule-cell" data-hour="11" data-therapist="gustavo"></div>
+            
             <div class="time-cell">12:00</div>
+            <div class="schedule-cell" data-hour="12" data-therapist="nicolas"></div>
+            <div class="schedule-cell" data-hour="12" data-therapist="ana-maria"></div>
+            <div class="schedule-cell" data-hour="12" data-therapist="gustavo"></div>
+            
             <div class="time-cell">13:00</div>
+            <div class="schedule-cell" data-hour="13" data-therapist="nicolas"></div>
+            <div class="schedule-cell" data-hour="13" data-therapist="ana-maria"></div>
+            <div class="schedule-cell" data-hour="13" data-therapist="gustavo"></div>
+            
             <div class="time-cell">14:00</div>
+            <div class="schedule-cell" data-hour="14" data-therapist="nicolas"></div>
+            <div class="schedule-cell" data-hour="14" data-therapist="ana-maria"></div>
+            <div class="schedule-cell" data-hour="14" data-therapist="gustavo"></div>
+            
             <div class="time-cell">15:00</div>
+            <div class="schedule-cell" data-hour="15" data-therapist="nicolas"></div>
+            <div class="schedule-cell" data-hour="15" data-therapist="ana-maria"></div>
+            <div class="schedule-cell" data-hour="15" data-therapist="gustavo"></div>
+            
             <div class="time-cell">16:00</div>
-            
-            <!-- Nicolás -->
-            <div class="schedule-cell">
-                <div class="appointment consulta-especializada">
-                    <div class="appointment-title">María González</div>
-                    <div class="appointment-type">Consulta especializada</div>
-                </div>
-            </div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell">
-                <div class="appointment consulta-general">
-                    <div class="appointment-title">Ana Martínez</div>
-                    <div class="appointment-type">Consulta general</div>
-                </div>
-            </div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell">
-                <div class="appointment examen-cardiologico">
-                    <div class="appointment-title">Laura Pérez</div>
-                    <div class="appointment-type">Examen cardiológico</div>
-                </div>
-            </div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell"></div>
-            
-            <!-- Ana María -->
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell">
-                <div class="appointment consulta-general">
-                    <div class="appointment-title">Isabel Rodríguez</div>
-                    <div class="appointment-type">Consulta general</div>
-                </div>
-            </div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell">
-                <div class="appointment consulta-dermatologia">
-                    <div class="appointment-title">Carolina García</div>
-                    <div class="appointment-type">Consulta dermatología</div>
-                </div>
-            </div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell">
-                <div class="appointment consulta-general">
-                    <div class="appointment-title">Julia López</div>
-                    <div class="appointment-type">Consulta general</div>
-                </div>
-            </div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell"></div>
-            
-            <!-- Gustavo -->
-            <div class="schedule-cell">
-                <div class="appointment evaluacion-fisica">
-                    <div class="appointment-title">Elena Castro</div>
-                    <div class="appointment-type">Evaluación física</div>
-                </div>
-            </div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell">
-                <div class="appointment evaluacion-fisica">
-                    <div class="appointment-title">Sandra Díaz</div>
-                    <div class="appointment-type">Evaluación física</div>
-                </div>
-            </div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell"></div>
-            <div class="schedule-cell">
-                <div class="appointment consulta-general">
-                    <div class="appointment-title">Beatriz Sánchez</div>
-                    <div class="appointment-type">Consulta general</div>
-                </div>
-            </div>
-            <div class="schedule-cell"></div>
+            <div class="schedule-cell" data-hour="16" data-therapist="nicolas"></div>
+            <div class="schedule-cell" data-hour="16" data-therapist="ana-maria"></div>
+            <div class="schedule-cell" data-hour="16" data-therapist="gustavo"></div>
         </div>
         
         <div class="stats-panel">
@@ -386,38 +573,694 @@
         </div>
     </div>
     
-    <!-- Modal para agregar/editar citas (oculto por defecto) -->
+    <!-- Modal para agregar/editar citas -->
     <div class="modal" id="appointment-modal">
         <div class="modal-content">
-            <h3>Agregar Nueva Cita</h3>
-            <!-- Aquí iría el formulario de citas -->
-            <div style="text-align: right; margin-top: 20px;">
-                <button class="button" id="save-appointment">Guardar</button>
-                <button class="button" id="cancel-appointment" style="background-color: #777;">Cancelar</button>
+            <div class="modal-header">
+                <h3 id="modal-title">Agregar Nueva Cita</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="appointment-form">
+                <div class="form-group">
+                    <label for="patient-name">Paciente:</label>
+                    <input type="text" id="patient-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="appointment-type">Tipo de consulta:</label>
+                    <select id="appointment-type" required>
+                        <option value="consulta-general">Consulta general</option>
+                        <option value="consulta-especializada">Consulta especializada</option>
+                        <option value="consulta-dermatologia">Consulta dermatología</option>
+                        <option value="examen-cardiologico">Examen cardiológico</option>
+                        <option value="evaluacion-fisica">Evaluación física</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="appointment-date">Fecha:</label>
+                    <input type="date" id="appointment-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="appointment-time">Hora inicio:</label>
+                    <input type="time" id="appointment-time" required>
+                </div>
+                <div class="form-group">
+                    <label for="appointment-duration">Duración:</label>
+                    <select id="appointment-duration" required>
+                        <option value="60">1 hora</option>
+                        <option value="120">2 horas</option>
+                        <option value="30">30 minutos</option>
+                        <option value="90">1 hora 30 minutos</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="therapist">Kinesiólogo:</label>
+                    <select id="therapist" required>
+                        <option value="nicolas">Nicolás</option>
+                        <option value="ana-maria">Ana María</option>
+                        <option value="gustavo">Gustavo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="appointment-notes">Notas:</label>
+                    <textarea id="appointment-notes"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="is-web"> Vía web
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="button save-btn">Guardar</button>
+                    <button type="button" class="button cancel-btn" id="cancel-appointment">Cancelar</button>
+                    <button type="button" class="button delete-btn" id="delete-appointment" style="display: none;">Eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal para confirmar asistencia -->
+    <div class="modal" id="attendance-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmar Asistencia</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Paciente: <span id="attendance-patient"></span></p>
+                <p>Fecha: <span id="attendance-date"></span></p>
+                <p>Hora: <span id="attendance-time"></span></p>
+                <div class="attendance-options">
+                    <button class="attendance-btn" data-status="attended">Asistió</button>
+                    <button class="attendance-btn" data-status="missed">No asistió</button>
+                    <button class="attendance-btn" data-status="rescheduled">Reprogramada</button>
+                </div>
+                <div class="form-group">
+                    <label for="attendance-notes">Notas:</label>
+                    <textarea id="attendance-notes"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button save-btn" id="save-attendance">Guardar</button>
+                <button class="button cancel-btn" id="cancel-attendance">Cancelar</button>
             </div>
         </div>
     </div>
     
     <script>
-        // Script básico para mostrar y ocultar el modal
-        document.addEventListener('DOMContentLoaded', function() {
-            // Simulamos datos dinámicos por ahora
-            document.querySelectorAll('.schedule-cell').forEach(cell => {
-                cell.addEventListener('click', function() {
-                    // Solo para demostrar que funciona el clic
-                    alert('Has hecho clic en una celda de la agenda.\n\nEn la versión completa, aquí se abriría el formulario para agendar una cita.');
+    // Variables globales
+    let appointments = []; // Aquí almacenaremos todas las citas
+    let editingAppointmentId = null; // ID de la cita que se está editando
+    let holidays = []; // Días festivos chilenos
+    let isAdmin = true; // Por defecto, eres administrador
+
+    // Elementos DOM
+    const appointmentModal = document.getElementById('appointment-modal');
+    const appointmentForm = document.getElementById('appointment-form');
+    const attendanceModal = document.getElementById('attendance-modal');
+    const currentWeekDisplay = document.getElementById('current-week');
+
+    // Inicializar la agenda al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        loadHolidays();
+        loadSampleAppointments();
+        renderAppointments();
+        setupEventListeners();
+    });
+
+    // Cargar los feriados chilenos de 2025
+    function loadHolidays() {
+        holidays = [
+            { date: '2025-01-01', name: 'Año Nuevo' },
+            { date: '2025-04-18', name: 'Viernes Santo' },
+            { date: '2025-04-19', name: 'Sábado Santo' },
+            { date: '2025-05-01', name: 'Día del Trabajo' },
+            { date: '2025-05-21', name: 'Día de las Glorias Navales' },
+            { date: '2025-06-29', name: 'San Pedro y San Pablo' },
+            { date: '2025-07-16', name: 'Virgen del Carmen' },
+            { date: '2025-08-15', name: 'Asunción de la Virgen' },
+            { date: '2025-09-18', name: 'Independencia Nacional' },
+            { date: '2025-09-19', name: 'Día de las Glorias del Ejército' },
+            { date: '2025-10-12', name: 'Encuentro de Dos Mundos' },
+            { date: '2025-10-31', name: 'Día de las Iglesias Evangélicas' },
+            { date: '2025-11-01', name: 'Día de Todos los Santos' },
+            { date: '2025-12-08', name: 'Inmaculada Concepción' },
+            { date: '2025-12-25', name: 'Navidad' }
+        ];
+    }
+
+    // Cargar citas de ejemplo
+    function loadSampleAppointments() {
+        // Intentar cargar del localStorage primero
+        const savedAppointments = localStorage.getItem('sistemakine_appointments');
+        if (savedAppointments) {
+            try {
+                const parsed = JSON.parse(savedAppointments);
+                // Convertir strings de fecha a objetos Date
+                appointments = parsed.map(app => {
+                    return {
+                        ...app,
+                        fecha: new Date(app.fecha)
+                    };
                 });
+                return;
+            } catch (e) {
+                console.error('Error al cargar citas del localStorage:', e);
+            }
+        }
+
+        // Si no hay citas guardadas o hay un error, cargar ejemplos
+        appointments = [
+            {
+                id: '1',
+                paciente: 'María González',
+                tipo: 'Consulta especializada',
+                tipoClase: 'consulta-especializada',
+                fecha: new Date(2025, 2, 17, 9, 0), // 17 de marzo de 2025, 9:00
+                duracion: 60,
+                terapeuta: 'nicolas'
+            },
+            {
+                id: '2',
+                paciente: 'Ana Martínez',
+                tipo: 'Consulta general',
+                tipoClase: 'consulta-general',
+                fecha: new Date(2025, 2, 17, 11, 0),
+                duracion: 60,
+                terapeuta: 'ana-maria'
+            },
+            {
+                id: '3',
+                paciente: 'Laura Pérez',
+                tipo: 'Examen cardiológico',
+                tipoClase: 'examen-cardiologico',
+                fecha: new Date(2025, 2, 17, 13, 0),
+                duracion: 60,
+                terapeuta: 'nicolas'
+            },
+            {
+                id: '4',
+                paciente: 'Isabel Rodríguez',
+                tipo: 'Consulta general',
+                tipoClase: 'consulta-general',
+                fecha: new Date(2025, 2, 17, 10, 0),
+                duracion: 60,
+                terapeuta: 'ana-maria'
+            },
+            {
+                id: '5',
+                paciente: 'Julia López',
+                tipo: 'Consulta general',
+                tipoClase: 'consulta-general',
+                fecha: new Date(2025, 2, 17, 14, 0),
+                duracion: 60,
+                terapeuta: 'ana-maria'
+            },
+            {
+                id: '6',
+                paciente: 'Elena Castro',
+                tipo: 'Evaluación física',
+                tipoClase: 'evaluacion-fisica',
+                fecha: new Date(2025, 2, 17, 9, 0),
+                duracion: 60,
+                terapeuta: 'gustavo'
+            },
+            {
+                id: '7',
+                paciente: 'Sandra Díaz',
+                tipo: 'Evaluación física',
+                tipoClase: 'evaluacion-fisica',
+                fecha: new Date(2025, 2, 17, 15, 0),
+                duracion: 60,
+                terapeuta: 'ana-maria'
+            },
+            {
+                id: '8',
+                paciente: 'Beatriz Sánchez',
+                tipo: 'Consulta general',
+                tipoClase: 'consulta-general',
+                fecha: new Date(2025, 2, 17, 15, 0),
+                duracion: 60,
+                terapeuta: 'ana-maria'
+            },
+            {
+                id: '9',
+                paciente: 'Carolina García',
+                tipo: 'Consulta dermatología',
+                tipoClase: 'consulta-dermatologia',
+                fecha: new Date(2025, 2, 17, 12, 0),
+                duracion: 60,
+                terapeuta: 'gustavo'
+            }
+        ];
+
+        // Guardar en localStorage
+        saveAppointmentsToLocalStorage();
+    }
+
+    // Guardar citas en localStorage
+    function saveAppointmentsToLocalStorage() {
+        localStorage.setItem('sistemakine_appointments', JSON.stringify(appointments));
+    }
+
+    // Renderizar las citas en la cuadrícula
+    function renderAppointments() {
+        // Limpiar citas existentes
+        document.querySelectorAll('.appointment').forEach(el => el.remove());
+
+        // Fecha actual (usamos la semana mostrada)
+        const currentDate = new Date(2025, 2, 17); // 17 de marzo de 2025
+
+        // Renderizar cada cita
+        appointments.forEach(appointment => {
+            // Solo mostrar citas de la fecha actual
+            if (appointment.fecha.getDate() === currentDate.getDate() &&
+                appointment.fecha.getMonth() === currentDate.getMonth() &&
+                appointment.fecha.getFullYear() === currentDate.getFullYear()) {
+                
+                const hour = appointment.fecha.getHours();
+                const therapist = appointment.terapeuta;
+                
+                // Encontrar la celda correcta
+                const cell = document.querySelector(`.schedule-cell[data-hour="${hour}"][data-therapist="${therapist}"]`);
+                
+                if (cell) {
+                    // Crear elemento de cita
+                    const appointmentEl = document.createElement('div');
+                    appointmentEl.className = `appointment ${appointment.tipoClase}`;
+                    appointmentEl.dataset.id = appointment.id;
+                    
+                    // Contenido de la cita
+                    appointmentEl.innerHTML = `
+                        <div class="appointment-title">${appointment.paciente}</div>
+                        <div class="appointment-type">${appointment.tipo}</div>
+                    `;
+                    
+                    // Indicador de estado si existe
+                    if (appointment.estado) {
+                        const statusEl = document.createElement('div');
+                        statusEl.className = `appointment-status ${appointment.estado}`;
+                        appointmentEl.appendChild(statusEl);
+                    }
+                    
+                    // Indicador web si aplica
+                    if (appointment.web) {
+                        const webEl = document.createElement('div');
+                        webEl.className = 'web-indicator';
+                        webEl.innerHTML = '🌐';
+                        appointmentEl.appendChild(webEl);
+                    }
+                    
+                    // Agregar a la celda
+                    cell.appendChild(appointmentEl);
+                    
+                    // Eventos para la cita
+                    appointmentEl.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const app = appointments.find(a => a.id === this.dataset.id);
+                        if (app) {
+                            // Si la cita ya pasó, mostrar modal de asistencia
+                            const today = new Date();
+                            if (app.fecha < today) {
+                                openAttendanceModal(app);
+                            } else {
+                                // Si es una cita futura, abrir modal de edición
+                                openAppointmentModal(app);
+                            }
+                        }
+                    });
+                    
+                    // Hacer que las citas sean arrastrables
+                    appointmentEl.setAttribute('draggable', 'true');
+                    appointmentEl.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', this.dataset.id);
+                    });
+                }
+            }
+        });
+    }
+
+    // Configurar event listeners
+    function setupEventListeners() {
+        // Eventos para la navegación de semanas
+        document.getElementById('prev-week').addEventListener('click', function() {
+            navigateWeek(-1);
+        });
+        
+        document.getElementById('next-week').addEventListener('click', function() {
+            navigateWeek(1);
+        });
+        
+        // Evento para clic en celdas de la agenda
+        document.querySelectorAll('.schedule-cell').forEach(cell => {
+            cell.addEventListener('click', function() {
+                if (isAdmin) {
+                    // Extraer información de la celda para pre-llenar el formulario
+                    const hour = parseInt(this.dataset.hour);
+                    const therapist = this.dataset.therapist;
+                    
+                    openAppointmentModal(null, hour, therapist);
+                }
             });
             
-            // Navegación entre semanas
-            document.getElementById('prev-week').addEventListener('click', function() {
-                alert('Semana anterior (funcionalidad en desarrollo)');
+            // Hacer que las celdas puedan recibir elementos arrastrados
+            cell.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
             });
             
-            document.getElementById('next-week').addEventListener('click', function() {
-                alert('Semana siguiente (funcionalidad en desarrollo)');
+            cell.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+            
+            cell.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                
+                const appointmentId = e.dataTransfer.getData('text/plain');
+                const hour = parseInt(this.dataset.hour);
+                const therapist = this.dataset.therapist;
+                
+                moveAppointment(appointmentId, hour, therapist);
             });
         });
+        
+        // Eventos para el formulario de citas
+        appointmentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveAppointment();
+        });
+        
+        document.getElementById('cancel-appointment').addEventListener('click', function() {
+            closeAppointmentModal();
+        });
+        
+        document.getElementById('delete-appointment').addEventListener('click', function() {
+            deleteAppointment();
+        });
+        
+        // Cerrar modales con la X
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+        
+        // Eventos para el modal de asistencia
+        document.querySelectorAll('.attendance-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Deseleccionar todos los botones
+                document.querySelectorAll('.attendance-btn').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                // Seleccionar el botón actual
+                this.classList.add('selected');
+            });
+        });
+        
+        document.getElementById('save-attendance').addEventListener('click', function() {
+            saveAttendance();
+        });
+        
+        document.getElementById('cancel-attendance').addEventListener('click', function() {
+            closeAttendanceModal();
+        });
+    }
+
+    // Navegar entre semanas
+    function navigateWeek(direction) {
+        const currentDate = new Date(2025, 2, 17); // 17 de marzo de 2025
+        currentDate.setDate(currentDate.getDate() + (direction * 7));
+        
+        // Actualizar el título de la semana
+        const startOfWeek = getStartOfWeek(currentDate);
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        
+        const startDay = startOfWeek.getDate();
+        const endDay = endOfWeek.getDate();
+        const startMonthName = getMonthName(startOfWeek.getMonth());
+        const endMonthName = getMonthName(endOfWeek.getMonth());
+        const year = startOfWeek.getFullYear();
+        
+        currentWeekDisplay.textContent = `Semana del ${startDay} al ${endDay} de ${endMonthName} de ${year}`;
+        
+        // Alerta para indicar que esta funcionalidad está en desarrollo
+        alert(`Navegación de semanas. Esta funcionalidad se completará en la siguiente versión.
+En una implementación completa, aquí se cargarían las citas de la semana ${direction > 0 ? 'siguiente' : 'anterior'}.`);
+    }
+
+    // Obtener el primer día de la semana (lunes)
+    function getStartOfWeek(date) {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Ajusta cuando el día es domingo
+        const monday = new Date(d.setDate(diff));
+        monday.setHours(0, 0, 0, 0);
+        return monday;
+    }
+
+    // Obtener nombre del mes en español
+    function getMonthName(month) {
+        const months = [
+            'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
+            'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+        ];
+        return months[month];
+    }
+
+    // Formatear fecha como YYYY-MM-DD
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // Abrir modal para agregar/editar cita
+    function openAppointmentModal(appointment, hour, therapist) {
+        const modalTitle = document.getElementById('modal-title');
+        const dateInput = document.getElementById('appointment-date');
+        const timeInput = document.getElementById('appointment-time');
+        const therapistInput = document.getElementById('therapist');
+        const deleteBtn = document.getElementById('delete-appointment');
+        
+        if (appointment) {
+            // Editar cita existente
+            modalTitle.textContent = 'Editar Cita';
+            
+            document.getElementById('patient-name').value = appointment.paciente;
+            document.getElementById('appointment-type').value = appointment.tipoClase;
+            
+            const fecha = appointment.fecha;
+            dateInput.value = formatDate(fecha);
+            timeInput.value = `${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
+            
+            document.getElementById('appointment-duration').value = appointment.duracion;
+            therapistInput.value = appointment.terapeuta;
+            document.getElementById('appointment-notes').value = appointment.notas || '';
+            document.getElementById('is-web').checked = appointment.web || false;
+            
+            editingAppointmentId = appointment.id;
+            deleteBtn.style.display = 'block';
+        } else {
+            // Nueva cita
+            modalTitle.textContent = 'Agregar Nueva Cita';
+            appointmentForm.reset();
+            
+            // Pre-llenar con la fecha actual
+            const today = new Date(2025, 2, 17); // 17 de marzo de 2025
+            dateInput.value = formatDate(today);
+            
+            // Pre-llenar hora y terapeuta si se proporcionan
+            if (hour) {
+                timeInput.value = `${hour.toString().padStart(2, '0')}:00`;
+            }
+            if (therapist) {
+                therapistInput.value = therapist;
+            }
+            
+            editingAppointmentId = null;
+            deleteBtn.style.display = 'none';
+        }
+        
+        appointmentModal.style.display = 'block';
+    }
+
+    // Cerrar modal de citas
+    function closeAppointmentModal() {
+        appointmentModal.style.display = 'none';
+        appointmentForm.reset();
+        editingAppointmentId = null;
+    }
+
+    // Guardar cita (nueva o editada)
+    function saveAppointment() {
+        const patientName = document.getElementById('patient-name').value;
+        const appointmentTypeSelect = document.getElementById('appointment-type');
+        const appointmentType = appointmentTypeSelect.options[appointmentTypeSelect.selectedIndex].text;
+        const appointmentTypeClass = appointmentTypeSelect.value;
+        const appointmentDate = document.getElementById('appointment-date').value;
+        const appointmentTime = document.getElementById('appointment-time').value;
+        const appointmentDuration = parseInt(document.getElementById('appointment-duration').value);
+        const therapist = document.getElementById('therapist').value;
+        const notes = document.getElementById('appointment-notes').value;
+        const isWeb = document.getElementById('is-web').checked;
+        
+        // Crear objeto de fecha
+        const [year, month, day] = appointmentDate.split('-');
+        const [hours, minutes] = appointmentTime.split(':');
+        const fecha = new Date(year, month - 1, day, hours, minutes);
+        
+        // Verificar si es feriado
+        const dateStr = formatDate(fecha);
+        if (holidays.some(h => h.date === dateStr)) {
+            alert('No se pueden agendar citas en días feriados.');
+            return;
+        }
+        
+        // Datos de la cita
+        const appointmentData = {
+            paciente: patientName,
+            tipo: appointmentType,
+            tipoClase: appointmentTypeClass,
+            fecha: fecha,
+            duracion: appointmentDuration,
+            terapeuta: therapist,
+            notas: notes,
+            web: isWeb,
+            creado: new Date()
+        };
+        
+        if (editingAppointmentId) {
+            // Actualizar cita existente
+            const index = appointments.findIndex(a => a.id === editingAppointmentId);
+            if (index !== -1) {
+                appointmentData.id = editingAppointmentId;
+                appointmentData.estado = appointments[index].estado; // Mantener estado si existe
+                appointments[index] = appointmentData;
+            }
+        } else {
+            // Crear nueva cita
+            appointmentData.id = 'cita_' + Date.now();
+            appointments.push(appointmentData);
+        }
+        
+        // Guardar cambios
+        saveAppointmentsToLocalStorage();
+        
+        // Cerrar modal y actualizar vista
+        closeAppointmentModal();
+        
+        // Renderizar nuevamente
+        renderAppointments();
+    }
+
+    // Eliminar cita
+    function deleteAppointment() {
+        if (!editingAppointmentId) return;
+        
+        if (confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
+            const index = appointments.findIndex(a => a.id === editingAppointmentId);
+            if (index !== -1) {
+                appointments.splice(index, 1);
+                saveAppointmentsToLocalStorage();
+                
+                closeAppointmentModal();
+                renderAppointments();
+            }
+        }
+    }
+
+    // Mover una cita (arrastrar y soltar)
+    function moveAppointment(appointmentId, hour, therapist) {
+        const appointment = appointments.find(a => a.id === appointmentId);
+        if (!appointment) return;
+        
+        // Conservar la fecha pero cambiar la hora y el terapeuta
+        const newDate = new Date(appointment.fecha);
+        newDate.setHours(hour, 0, 0, 0);
+        
+        // Actualizar la cita
+        appointment.fecha = newDate;
+        appointment.terapeuta = therapist;
+        
+        // Guardar cambios
+        saveAppointmentsToLocalStorage();
+        renderAppointments();
+    }
+
+    // Abrir modal de asistencia
+    function openAttendanceModal(appointment) {
+        const patientEl = document.getElementById('attendance-patient');
+        const dateEl = document.getElementById('attendance-date');
+        const timeEl = document.getElementById('attendance-time');
+        
+        patientEl.textContent = appointment.paciente;
+        
+        const fecha = appointment.fecha;
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        dateEl.textContent = fecha.toLocaleDateString('es-ES', options);
+        
+        const horaInicio = `${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
+        const fechaFin = new Date(fecha);
+        fechaFin.setMinutes(fecha.getMinutes() + appointment.duracion);
+        const horaFin = `${fechaFin.getHours().toString().padStart(2, '0')}:${fechaFin.getMinutes().toString().padStart(2, '0')}`;
+        timeEl.textContent = `${horaInicio} - ${horaFin}`;
+        
+        // Resetear selección de estado
+        document.querySelectorAll('.attendance-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // Seleccionar el estado actual si existe
+        if (appointment.estado) {
+            const currentStatusBtn = document.querySelector(`.attendance-btn[data-status="${appointment.estado}"]`);
+            if (currentStatusBtn) {
+                currentStatusBtn.classList.add('selected');
+            }
+        }
+        
+        // Notas de asistencia
+        document.getElementById('attendance-notes').value = appointment.notasAsistencia || '';
+        
+        // Guardar referencia a la cita actual
+        attendanceModal.dataset.appointmentId = appointment.id;
+        
+        // Mostrar modal
+        attendanceModal.style.display = 'block';
+    }
+
+    // Cerrar modal de asistencia
+    function closeAttendanceModal() {
+        attendanceModal.style.display = 'none';
+    }
+
+    // Guardar asistencia
+    function saveAttendance() {
+        const appointmentId = attendanceModal.dataset.appointmentId;
+        const selectedBtn = document.querySelector('.attendance-btn.selected');
+        
+        if (!selectedBtn) {
+            alert('Por favor selecciona un estado de asistencia.');
+            return;
+        }
+        
+        const status = selectedBtn.dataset.status;
+        const notes = document.getElementById('attendance-notes').value;
+        
+        // Actualizar cita
+        const appointment = appointments.find(a => a.id === appointmentId);
+        if (appointment) {
+            appointment.estado = status;
+            appointment.notasAsistencia = notes;
+            
+            // Guardar cambios
+            saveAppointmentsToLocalStorage();
+            
+            closeAttendanceModal();
+            renderAppointments();
+        }
+    }
     </script>
 </body>
 </html>
