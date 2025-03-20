@@ -485,48 +485,127 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .week-navigation {
-                margin-top: 10px;
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .therapist-header, .schedule-grid {
-                grid-template-columns: 60px 1fr;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .charts-container {
-                flex-direction: column;
-                height: auto;
-                align-items: center;
-            }
-            
-            .chart-bar {
-                width: 100%;
-                height: 40px !important;
-                margin: 10px 0;
-                border-radius: 0 5px 5px 0;
-            }
-            
-            .chart-value {
-                top: 10px;
-                right: -25px;
-                left: auto;
-            }
-            
-            .chart-labels {
-                flex-direction: column;
-            }
-        }
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .week-navigation {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .days-header, .dates-header, .schedule-grid {
+        grid-template-columns: 60px repeat(4, 1fr);
+        overflow-x: auto;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .charts-container {
+        flex-direction: column;
+        height: auto;
+        align-items: center;
+    }
+    
+    .chart-bar {
+        width: 100%;
+        height: 40px !important;
+        margin: 10px 0;
+        border-radius: 0 5px 5px 0;
+    }
+    
+    .chart-value {
+        top: 10px;
+        right: -25px;
+        left: auto;
+    }
+    
+    .chart-labels {
+        flex-direction: column;
+    }
+}
+
+    /* Estilos para la nueva estructura de agenda */
+.days-header, .dates-header {
+    display: grid;
+    grid-template-columns: 60px repeat(4, 1fr);
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+.day-header, .date-header {
+    padding: 10px;
+    border-right: 1px solid #ddd;
+    background-color: #f5f5f5;
+}
+
+.date-header {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.time-column-header {
+    border-right: 1px solid #ddd;
+}
+
+/* Estilos para múltiples citas en una celda */
+.schedule-cell {
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 5px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-height: 60px;
+    max-height: none; /* Permitir que crezca según el contenido */
+    overflow-y: auto; /* Permitir scroll si hay muchas citas */
+}
+
+/* Estilos para los tipos de cita */
+.appointment.evaluacion-msk { background-color: #ffb6c1; }
+.appointment.evaluacion-deportiva { background-color: #90ee90; }
+.appointment.sesion-msk { background-color: #ffa500; }
+.appointment.sesion-deportiva { background-color: #87cefa; }
+
+/* Estilos para el selector de días de la semana */
+.weekday-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.weekday-selector label {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+/* Estilos para citas recurrentes */
+.appointment.recurring {
+    border-left: 3px solid #4caf50;
+}
+
+/* Estilos para indicar el estudiante asignado */
+.student-indicator {
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Día actual resaltado */
+.current-day {
+    background-color: #e0f7fa !important;
+}    
     </style>
 </head>
 <body>
@@ -574,64 +653,75 @@
             </div>
         </header>
         
-        <div class="therapist-header">
-            <div></div>
-            <div>
-                <div class="therapist-photo">N</div>
-                <div>Nicolás</div>
-            </div>
-            <div>
-                <div class="therapist-photo">A</div>
-                <div>Ana María</div>
-            </div>
-            <div>
-                <div class="therapist-photo">G</div>
-                <div>Gustavo</div>
-            </div>
-        </div>
-        
-        <div class="schedule-grid">
-            <!-- Horas -->
-            <div class="time-cell">09:00</div>
-            <div class="schedule-cell" data-hour="9" data-therapist="nicolas"></div>
-            <div class="schedule-cell" data-hour="9" data-therapist="ana-maria"></div>
-            <div class="schedule-cell" data-hour="9" data-therapist="gustavo"></div>
-            
-            <div class="time-cell">10:00</div>
-            <div class="schedule-cell" data-hour="10" data-therapist="nicolas"></div>
-            <div class="schedule-cell" data-hour="10" data-therapist="ana-maria"></div>
-            <div class="schedule-cell" data-hour="10" data-therapist="gustavo"></div>
-            
-            <div class="time-cell">11:00</div>
-            <div class="schedule-cell" data-hour="11" data-therapist="nicolas"></div>
-            <div class="schedule-cell" data-hour="11" data-therapist="ana-maria"></div>
-            <div class="schedule-cell" data-hour="11" data-therapist="gustavo"></div>
-            
-            <div class="time-cell">12:00</div>
-            <div class="schedule-cell" data-hour="12" data-therapist="nicolas"></div>
-            <div class="schedule-cell" data-hour="12" data-therapist="ana-maria"></div>
-            <div class="schedule-cell" data-hour="12" data-therapist="gustavo"></div>
-            
-            <div class="time-cell">13:00</div>
-            <div class="schedule-cell" data-hour="13" data-therapist="nicolas"></div>
-            <div class="schedule-cell" data-hour="13" data-therapist="ana-maria"></div>
-            <div class="schedule-cell" data-hour="13" data-therapist="gustavo"></div>
-            
-            <div class="time-cell">14:00</div>
-            <div class="schedule-cell" data-hour="14" data-therapist="nicolas"></div>
-            <div class="schedule-cell" data-hour="14" data-therapist="ana-maria"></div>
-            <div class="schedule-cell" data-hour="14" data-therapist="gustavo"></div>
-            
-            <div class="time-cell">15:00</div>
-            <div class="schedule-cell" data-hour="15" data-therapist="nicolas"></div>
-            <div class="schedule-cell" data-hour="15" data-therapist="ana-maria"></div>
-            <div class="schedule-cell" data-hour="15" data-therapist="gustavo"></div>
-            
-            <div class="time-cell">16:00</div>
-            <div class="schedule-cell" data-hour="16" data-therapist="nicolas"></div>
-            <div class="schedule-cell" data-hour="16" data-therapist="ana-maria"></div>
-            <div class="schedule-cell" data-hour="16" data-therapist="gustavo"></div>
-        </div>
+        <!-- Encabezado de la semana con días -->
+<div class="days-header">
+    <div class="time-column-header"></div>
+    <div class="day-header" id="day-header-1">Lunes</div>
+    <div class="day-header" id="day-header-2">Martes</div>
+    <div class="day-header" id="day-header-3">Miércoles</div>
+    <div class="day-header" id="day-header-4">Jueves</div>
+</div>
+
+<!-- Encabezado con fechas -->
+<div class="dates-header">
+    <div class="time-column-header"></div>
+    <div class="date-header" id="date-header-1">18/03</div>
+    <div class="date-header" id="date-header-2">19/03</div>
+    <div class="date-header" id="date-header-3">20/03</div>
+    <div class="date-header" id="date-header-4">21/03</div>
+</div>
+
+<!-- Cuadrícula de la agenda -->
+<div class="schedule-grid">
+    <!-- Horas -->
+    <div class="time-cell">09:00</div>
+    <div class="schedule-cell" data-hour="9" data-day="1"></div>
+    <div class="schedule-cell" data-hour="9" data-day="2"></div>
+    <div class="schedule-cell" data-hour="9" data-day="3"></div>
+    <div class="schedule-cell" data-hour="9" data-day="4"></div>
+    
+    <div class="time-cell">10:00</div>
+    <div class="schedule-cell" data-hour="10" data-day="1"></div>
+    <div class="schedule-cell" data-hour="10" data-day="2"></div>
+    <div class="schedule-cell" data-hour="10" data-day="3"></div>
+    <div class="schedule-cell" data-hour="10" data-day="4"></div>
+    
+    <div class="time-cell">11:00</div>
+    <div class="schedule-cell" data-hour="11" data-day="1"></div>
+    <div class="schedule-cell" data-hour="11" data-day="2"></div>
+    <div class="schedule-cell" data-hour="11" data-day="3"></div>
+    <div class="schedule-cell" data-hour="11" data-day="4"></div>
+    
+    <div class="time-cell">12:00</div>
+    <div class="schedule-cell" data-hour="12" data-day="1"></div>
+    <div class="schedule-cell" data-hour="12" data-day="2"></div>
+    <div class="schedule-cell" data-hour="12" data-day="3"></div>
+    <div class="schedule-cell" data-hour="12" data-day="4"></div>
+    
+    <div class="time-cell">13:00</div>
+    <div class="schedule-cell" data-hour="13" data-day="1"></div>
+    <div class="schedule-cell" data-hour="13" data-day="2"></div>
+    <div class="schedule-cell" data-hour="13" data-day="3"></div>
+    <div class="schedule-cell" data-hour="13" data-day="4"></div>
+    
+    <div class="time-cell">14:00</div>
+    <div class="schedule-cell" data-hour="14" data-day="1"></div>
+    <div class="schedule-cell" data-hour="14" data-day="2"></div>
+    <div class="schedule-cell" data-hour="14" data-day="3"></div>
+    <div class="schedule-cell" data-hour="14" data-day="4"></div>
+    
+    <div class="time-cell">15:00</div>
+    <div class="schedule-cell" data-hour="15" data-day="1"></div>
+    <div class="schedule-cell" data-hour="15" data-day="2"></div>
+    <div class="schedule-cell" data-hour="15" data-day="3"></div>
+    <div class="schedule-cell" data-hour="15" data-day="4"></div>
+    
+    <div class="time-cell">16:00</div>
+    <div class="schedule-cell" data-hour="16" data-day="1"></div>
+    <div class="schedule-cell" data-hour="16" data-day="2"></div>
+    <div class="schedule-cell" data-hour="16" data-day="3"></div>
+    <div class="schedule-cell" data-hour="16" data-day="4"></div>
+</div>
         
         <div class="stats-panel">
             <h3 class="stats-title">Estadísticas</h3>
@@ -680,63 +770,96 @@
                 <h3 id="modal-title">Agregar Nueva Cita</h3>
                 <span class="close">&times;</span>
             </div>
-            <form id="appointment-form">
-                <div class="form-group">
-                    <label for="patient-name">Paciente:</label>
-                    <input type="text" id="patient-name" required>
-                </div>
-                <div class="form-group">
-                    <label for="appointment-type">Tipo de consulta:</label>
-                    <select id="appointment-type" required>
-                        <option value="consulta-general">Consulta general</option>
-                        <option value="consulta-especializada">Consulta especializada</option>
-                        <option value="consulta-dermatologia">Consulta dermatología</option>
-                        <option value="examen-cardiologico">Examen cardiológico</option>
-                        <option value="evaluacion-fisica">Evaluación física</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="appointment-date">Fecha:</label>
-                    <input type="date" id="appointment-date" required>
-                </div>
-                <div class="form-group">
-                    <label for="appointment-time">Hora inicio:</label>
-                    <input type="time" id="appointment-time" required>
-                </div>
-                <div class="form-group">
-                    <label for="appointment-duration">Duración:</label>
-                    <select id="appointment-duration" required>
-                        <option value="60">1 hora</option>
-                        <option value="120">2 horas</option>
-                        <option value="30">30 minutos</option>
-                        <option value="90">1 hora 30 minutos</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="therapist">Kinesiólogo:</label>
-                    <select id="therapist" required>
-                        <option value="nicolas">Nicolás</option>
-                        <option value="ana-maria">Ana María</option>
-                        <option value="gustavo">Gustavo</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="appointment-notes">Notas:</label>
-                    <textarea id="appointment-notes"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="is-web"> Vía web
-                    </label>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="button save-btn">Guardar</button>
-                    <button type="button" class="button cancel-btn" id="cancel-appointment">Cancelar</button>
-                    <button type="button" class="button delete-btn" id="delete-appointment" style="display: none;">Eliminar</button>
-                </div>
-            </form>
+            <div class="form-group">
+    <label for="patient-name">Paciente:</label>
+    <input type="text" id="patient-name" required>
+</div>
+<div class="form-group">
+    <label for="appointment-type">Tipo de consulta:</label>
+    <select id="appointment-type" required onchange="handleAppointmentTypeChange()">
+        <option value="evaluacion-msk">Evaluación kinesiología msk</option>
+        <option value="evaluacion-deportiva">Evaluación kinesiología deportiva</option>
+        <option value="sesion-msk">Sesión kinesiología msk</option>
+        <option value="sesion-deportiva">Sesión kinesiología deportiva</option>
+    </select>
+</div>
+<div class="form-group">
+    <label for="therapist">Kinesiólogo:</label>
+    <select id="therapist" required>
+        <option value="nicolas">Nicolás</option>
+        <option value="ana-maria">Ana María</option>
+        <option value="gustavo">Gustavo</option>
+    </select>
+</div>
+<div class="form-group">
+    <label for="student">Estudiante asignado:</label>
+    <select id="student" required>
+        <option value="estudiante1">Estudiante 1</option>
+        <option value="estudiante2">Estudiante 2</option>
+        <option value="estudiante3">Estudiante 3</option>
+        <option value="estudiante4">Estudiante 4</option>
+        <option value="estudiante5">Estudiante 5</option>
+        <option value="estudiante6">Estudiante 6</option>
+        <option value="estudiante7">Estudiante 7</option>
+        <option value="estudiante8">Estudiante 8</option>
+    </select>
+</div>
+<div class="form-group">
+    <label for="appointment-date">Fecha:</label>
+    <input type="date" id="appointment-date" required>
+</div>
+<div class="form-group">
+    <label for="appointment-time">Hora inicio:</label>
+    <input type="time" id="appointment-time" required>
+</div>
+<div class="form-group">
+    <label for="appointment-duration">Duración:</label>
+    <select id="appointment-duration" required>
+        <option value="60">1 hora</option>
+        <option value="120">2 horas</option>
+        <option value="30">30 minutos</option>
+        <option value="90">1 hora 30 minutos</option>
+    </select>
+</div>
+
+<!-- Sección para citas recurrentes -->
+<div id="recurrence-options" style="display: none;">
+    <div class="form-group">
+        <label>
+            <input type="checkbox" id="is-recurring"> Cita recurrente
+        </label>
+    </div>
+    <div id="recurring-details" style="display: none; padding-left: 20px;">
+        <div class="form-group">
+            <label>Días de la semana:</label>
+            <div class="weekday-selector">
+                <label><input type="checkbox" name="weekday" value="1"> Lunes</label>
+                <label><input type="checkbox" name="weekday" value="2"> Martes</label>
+                <label><input type="checkbox" name="weekday" value="3"> Miércoles</label>
+                <label><input type="checkbox" name="weekday" value="4"> Jueves</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="recurrence-end">Fecha fin:</label>
+            <input type="date" id="recurrence-end">
         </div>
     </div>
+</div>
+
+<div class="form-group">
+    <label for="appointment-notes">Notas:</label>
+    <textarea id="appointment-notes"></textarea>
+</div>
+<div class="form-group">
+    <label>
+        <input type="checkbox" id="is-web"> Vía web
+    </label>
+</div>
+<div class="form-actions">
+    <button type="submit" class="button save-btn">Guardar</button>
+    <button type="button" class="button cancel-btn" id="cancel-appointment">Cancelar</button>
+    <button type="button" class="button delete-btn" id="delete-appointment" style="display: none;">Eliminar</button>
+</div>
     
     <!-- Modal para confirmar asistencia -->
     <div class="modal" id="attendance-modal">
@@ -937,19 +1060,51 @@ auth.onAuthStateChanged(function(user) {
     }
     
     // Actualizar la visualización de la semana actual
-    function updateWeekDisplay() {
-        const startOfWeek = getStartOfWeek(currentWeekDate);
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
+function updateWeekDisplay() {
+    const startOfWeek = getStartOfWeek(currentWeekDate);
+    
+    // Actualizar el texto principal de la semana
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 3); // Solo hasta jueves (4 días)
+    
+    const startDay = startOfWeek.getDate();
+    const endDay = endOfWeek.getDate();
+    const startMonthName = getMonthName(startOfWeek.getMonth());
+    const endMonthName = getMonthName(endOfWeek.getMonth());
+    const year = startOfWeek.getFullYear();
+    
+    currentWeekDisplay.textContent = `Semana del ${startDay} al ${endDay} de ${endMonthName} de ${year}`;
+    
+    // Actualizar los encabezados de días con las fechas correspondientes
+    for (let i = 1; i <= 4; i++) {
+        const dayDate = new Date(startOfWeek);
+        dayDate.setDate(startOfWeek.getDate() + (i - 1));
         
-        const startDay = startOfWeek.getDate();
-        const endDay = endOfWeek.getDate();
-        const startMonthName = getMonthName(startOfWeek.getMonth());
-        const endMonthName = getMonthName(endOfWeek.getMonth());
-        const year = startOfWeek.getFullYear();
+        const dayHeader = document.getElementById(`day-header-${i}`);
+        const dateHeader = document.getElementById(`date-header-${i}`);
         
-        currentWeekDisplay.textContent = `Semana del ${startDay} al ${endDay} de ${endMonthName} de ${year}`;
+        const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        dayHeader.textContent = dayNames[dayDate.getDay()];
+        dateHeader.textContent = `${dayDate.getDate()}/${dayDate.getMonth() + 1}`;
+        
+        // Resaltar el día actual si está en la semana mostrada
+        const today = new Date();
+        if (dayDate.toDateString() === today.toDateString()) {
+            dayHeader.classList.add('current-day');
+            dateHeader.classList.add('current-day');
+            // También resaltar las celdas del día actual
+            document.querySelectorAll(`.schedule-cell[data-day="${i}"]`).forEach(cell => {
+                cell.classList.add('current-day');
+            });
+        } else {
+            dayHeader.classList.remove('current-day');
+            dateHeader.classList.remove('current-day');
+            document.querySelectorAll(`.schedule-cell[data-day="${i}"]`).forEach(cell => {
+                cell.classList.remove('current-day');
+            });
+        }
     }
+}
     
     // Obtener el primer día de la semana (lunes)
     function getStartOfWeek(date) {
@@ -971,50 +1126,49 @@ auth.onAuthStateChanged(function(user) {
     }
     
     // Cargar citas desde Firestore
-    function loadAppointments() {
-        showSpinner();
-        
-        // Obtener fecha de inicio y fin de la semana
-        const startOfWeek = getStartOfWeek(currentWeekDate);
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 7); // Un día después del fin para incluir todo el último día
-        
-        // Convertir a Timestamp para consulta
-        const startTimestamp = firebase.firestore.Timestamp.fromDate(startOfWeek);
-        const endTimestamp = firebase.firestore.Timestamp.fromDate(endOfWeek);
-        
-        // Consulta a Firestore
-        db.collection('citas')
-            .where('fecha', '>=', startTimestamp)
-            .where('fecha', '<', endTimestamp)
-            .get()
-            .then((querySnapshot) => {
-                appointments = [];
+   function loadAppointments() {
+    showSpinner();
+    
+    // Obtener fecha de inicio y fin de la semana
+    const startOfWeek = getStartOfWeek(currentWeekDate);
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 4); // Un día después del jueves
+    
+    // Convertir a Timestamp para consulta
+    const startTimestamp = firebase.firestore.Timestamp.fromDate(startOfWeek);
+    const endTimestamp = firebase.firestore.Timestamp.fromDate(endOfWeek);
+    
+    // Consulta a Firestore
+    db.collection('citas')
+        .where('fecha', '>=', startTimestamp)
+        .where('fecha', '<', endTimestamp)
+        .get()
+        .then((querySnapshot) => {
+            appointments = [];
+            
+            querySnapshot.forEach((doc) => {
+                // Convertir Timestamp a Date
+                const data = doc.data();
+                const appointment = {
+                    id: doc.id,
+                    ...data,
+                    fecha: data.fecha.toDate()
+                };
                 
-                querySnapshot.forEach((doc) => {
-                    // Convertir Timestamp a Date
-                    const data = doc.data();
-                    const appointment = {
-                        id: doc.id,
-                        ...data,
-                        fecha: data.fecha.toDate()
-                    };
-                    
-                    appointments.push(appointment);
-                });
-                
-                // Renderizar citas y actualizar estadísticas
-                renderAppointments();
-                updateStatistics();
-                hideSpinner();
-            })
-            .catch((error) => {
-                console.error("Error al cargar citas:", error);
-                showStatusMessage("Error al cargar citas. Intenta nuevamente.", "error");
-                loadSampleAppointments(); // Cargar datos de ejemplo en caso de error
-                hideSpinner();
+                appointments.push(appointment);
             });
-    }
+            
+            // Renderizar citas y actualizar estadísticas
+            renderAppointments();
+            updateStatistics();
+            hideSpinner();
+        })
+        .catch((error) => {
+            console.error("Error al cargar citas:", error);
+            showStatusMessage("Error al cargar citas. Intenta nuevamente.", "error");
+            hideSpinner();
+        });
+}
     
     // Cargar citas de ejemplo (en caso de error o para la primera vez)
     function loadSampleAppointments() {
@@ -1110,91 +1264,97 @@ auth.onAuthStateChanged(function(user) {
     }
     
     // Renderizar las citas en la cuadrícula
-    function renderAppointments() {
-        // Limpiar citas existentes
-        document.querySelectorAll('.appointment').forEach(el => el.remove());
+function renderAppointments() {
+    // Limpiar citas existentes
+    document.querySelectorAll('.appointment').forEach(el => el.remove());
+    
+    // Fecha de referencia (lunes de la semana actual)
+    const startOfWeek = getStartOfWeek(currentWeekDate);
+    
+    // Renderizar cada cita de la semana actual
+    appointments.forEach(appointment => {
+        const appointmentDate = appointment.fecha;
+        const dayDiff = Math.floor((appointmentDate - startOfWeek) / (24 * 60 * 60 * 1000));
         
-        // Fecha de referencia (lunes de la semana actual)
-        const startOfWeek = getStartOfWeek(currentWeekDate);
-        
-        // Renderizar cada cita de la semana actual
-        appointments.forEach(appointment => {
-            const appointmentDate = appointment.fecha;
-            const dayDiff = Math.floor((appointmentDate - startOfWeek) / (24 * 60 * 60 * 1000));
+        // Solo mostrar citas de lunes a jueves (0-3)
+        if (dayDiff >= 0 && dayDiff < 4) {
+            const hour = appointmentDate.getHours();
+            const dayIndex = dayDiff + 1; // 1 para lunes, 2 para martes, etc.
             
-            // Solo mostrar citas de lunes a viernes (0-4)
-            if (dayDiff >= 0 && dayDiff < 5) {
-                const hour = appointmentDate.getHours();
-                const therapist = appointment.terapeuta;
+            // Encontrar la celda correcta
+            const cell = document.querySelector(`.schedule-cell[data-hour="${hour}"][data-day="${dayIndex}"]`);
+            
+            if (cell) {
+                // Crear elemento de cita
+                const appointmentEl = document.createElement('div');
+                appointmentEl.className = `appointment ${appointment.tipoClase}`;
+                appointmentEl.dataset.id = appointment.id;
                 
-                // Encontrar la celda correcta
-                const cell = document.querySelector(`.schedule-cell[data-hour="${hour}"][data-therapist="${therapist}"]`);
+                // Añadir clase si es recurrente
+                if (appointment.esRecurrente) {
+                    appointmentEl.classList.add('recurring');
+                }
                 
-                if (cell) {
-                    // Crear elemento de cita
-                    const appointmentEl = document.createElement('div');
-                    appointmentEl.className = `appointment ${appointment.tipoClase}`;
-                    appointmentEl.dataset.id = appointment.id;
-                    
-                    // Contenido de la cita
-                    appointmentEl.innerHTML = `
-                        <div class="appointment-title">${appointment.paciente}</div>
-                        <div class="appointment-type">${appointment.tipo}</div>
-                    `;
-                    
-                    // Indicador de estado si existe
-                    if (appointment.estado) {
-                        const statusEl = document.createElement('div');
-                        statusEl.className = `appointment-status ${appointment.estado}`;
-                        appointmentEl.appendChild(statusEl);
-                    }
-                    
-                    // Indicador web si aplica
-                    if (appointment.web) {
-                        const webEl = document.createElement('div');
-                        webEl.className = 'web-indicator';
-                        webEl.innerHTML = '🌐';
-                        appointmentEl.appendChild(webEl);
-                    }
-                    
-                    // Agregar a la celda
-                    cell.appendChild(appointmentEl);
-                    
-                    // Eventos para la cita
-                    appointmentEl.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const app = appointments.find(a => a.id === this.dataset.id);
-                        if (app) {
-                            // Si la cita ya pasó, mostrar modal de asistencia
-                            const today = new Date();
-                            if (app.fecha < today) {
-                                if (isAdmin) {
-                                    openAttendanceModal(app);
-                                } else {
-                                    viewAppointmentDetails(app);
-                                }
+                // Contenido de la cita
+                appointmentEl.innerHTML = `
+                    <div class="appointment-title">${appointment.paciente}</div>
+                    <div class="appointment-type">${appointment.tipo}</div>
+                    <div class="student-indicator">${appointment.estudiante || 'Sin asignar'}</div>
+                `;
+                
+                // Indicador de estado si existe
+                if (appointment.estado) {
+                    const statusEl = document.createElement('div');
+                    statusEl.className = `appointment-status ${appointment.estado}`;
+                    appointmentEl.appendChild(statusEl);
+                }
+                
+                // Indicador web si aplica
+                if (appointment.web) {
+                    const webEl = document.createElement('div');
+                    webEl.className = 'web-indicator';
+                    webEl.innerHTML = '🌐';
+                    appointmentEl.appendChild(webEl);
+                }
+                
+                // Agregar a la celda
+                cell.appendChild(appointmentEl);
+                
+                // Eventos para la cita
+                appointmentEl.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const app = appointments.find(a => a.id === this.dataset.id);
+                    if (app) {
+                        // Si la cita ya pasó, mostrar modal de asistencia
+                        const today = new Date();
+                        if (app.fecha < today) {
+                            if (isAdmin) {
+                                openAttendanceModal(app);
                             } else {
-                                // Si es una cita futura
-                                if (isAdmin) {
-                                    openAppointmentModal(app);
-                                } else {
-                                    viewAppointmentDetails(app);
-                                }
+                                viewAppointmentDetails(app);
+                            }
+                        } else {
+                            // Si es una cita futura
+                            if (isAdmin) {
+                                openAppointmentModal(app);
+                            } else {
+                                viewAppointmentDetails(app);
                             }
                         }
-                    });
-                    
-                    // Hacer que las citas sean arrastrables para administradores
-                    if (isAdmin) {
-                        appointmentEl.setAttribute('draggable', 'true');
-                        appointmentEl.addEventListener('dragstart', function(e) {
-                            e.dataTransfer.setData('text/plain', this.dataset.id);
-                        });
                     }
+                });
+                
+                // Hacer que las citas sean arrastrables para administradores
+                if (isAdmin) {
+                    appointmentEl.setAttribute('draggable', 'true');
+                    appointmentEl.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', this.dataset.id);
+                    });
                 }
             }
-        });
-    }
+        }
+    });
+}
     
     // Mostrar detalles de la cita (para estudiantes)
     function viewAppointmentDetails(appointment) {
@@ -1316,7 +1476,79 @@ auth.onAuthStateChanged(function(user) {
             chartContainer.appendChild(barEl);
         });
     }
+
+    // Función para eliminar citas recurrentes a partir de una fecha
+function deleteRecurringAppointments(appointmentId, fromDate) {
+    return new Promise((resolve, reject) => {
+        // Primero obtener los datos de la cita para encontrar la serie
+        db.collection('citas').doc(appointmentId).get()
+            .then((doc) => {
+                if (!doc.exists) {
+                    reject(new Error("Cita no encontrada"));
+                    return;
+                }
+                
+                const appointmentData = doc.data();
+                if (!appointmentData.esRecurrente || !appointmentData.serieRecurrenteId) {
+                    resolve(); // No es recurrente, nada que eliminar
+                    return;
+                }
+                
+                // Buscar todas las citas futuras de la misma serie
+                return db.collection('citas')
+                    .where('serieRecurrenteId', '==', appointmentData.serieRecurrenteId)
+                    .where('fecha', '>=', firebase.firestore.Timestamp.fromDate(fromDate))
+                    .get();
+            })
+            .then((querySnapshot) => {
+                if (!querySnapshot) return;
+                
+                const deletePromises = [];
+                
+                querySnapshot.forEach((doc) => {
+                    // Registrar la eliminación en el historial
+                    const deletePromise = db.collection('historial_citas').add({
+                        citaId: doc.id,
+                        accion: 'eliminacion_recurrente',
+                        usuario: currentUser.email,
+                        usuarioId: currentUser.uid,
+                        fecha: firebase.firestore.FieldValue.serverTimestamp(),
+                        datosCita: doc.data()
+                    }).then(() => {
+                        // Luego eliminar la cita
+                        return db.collection('citas').doc(doc.id).delete();
+                    });
+                    
+                    deletePromises.push(deletePromise);
+                });
+                
+                return Promise.all(deletePromises);
+            })
+            .then(() => {
+                resolve();
+            })
+            .catch((error) => {
+                console.error("Error al eliminar citas recurrentes:", error);
+                reject(error);
+            });
+    });
+}
+        
+    // Función para manejar cambios en el tipo de cita (mostrar opciones de recurrencia)
+function handleAppointmentTypeChange() {
+    const appointmentType = document.getElementById('appointment-type').value;
+    const recurrenceOptions = document.getElementById('recurrence-options');
     
+    // Solo mostrar opciones de recurrencia para sesiones, no para evaluaciones
+    if (appointmentType.startsWith('sesion-')) {
+        recurrenceOptions.style.display = 'block';
+    } else {
+        recurrenceOptions.style.display = 'none';
+        document.getElementById('is-recurring').checked = false;
+        document.getElementById('recurring-details').style.display = 'none';
+    }
+}
+        
     // Configurar event listeners
     function setupEventListeners() {
         // Login
@@ -1353,6 +1585,10 @@ auth.onAuthStateChanged(function(user) {
         });
         
         // Navegación de semanas
+        // Evento para mostrar/ocultar detalles de recurrencia
+document.getElementById('is-recurring').addEventListener('change', function() {
+    document.getElementById('recurring-details').style.display = this.checked ? 'block' : 'none';
+});
         document.getElementById('prev-week').addEventListener('click', function() {
             navigateWeek(-1);
         });
@@ -1362,39 +1598,44 @@ auth.onAuthStateChanged(function(user) {
         });
         
         // Clic en celdas de la agenda (para agregar citas)
-        document.querySelectorAll('.schedule-cell').forEach(cell => {
-            cell.addEventListener('click', function() {
-                if (isAdmin) {
-                    const hour = parseInt(this.dataset.hour);
-                    const therapist = this.dataset.therapist;
-                    
-                    openAppointmentModal(null, hour, therapist);
-                }
-            });
+document.querySelectorAll('.schedule-cell').forEach(cell => {
+    cell.addEventListener('click', function() {
+        if (isAdmin) {
+            const hour = parseInt(this.dataset.hour);
+            const day = parseInt(this.dataset.day);
+            
+            openAppointmentModal(null, hour, day);
+        }
+    });
             
             // Configuración para arrastrar y soltar
-            if (isAdmin) {
-                cell.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    this.classList.add('drag-over');
-                });
-                
-                cell.addEventListener('dragleave', function() {
-                    this.classList.remove('drag-over');
-                });
-                
-                cell.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('drag-over');
-                    
-                    const appointmentId = e.dataTransfer.getData('text/plain');
-                    const hour = parseInt(this.dataset.hour);
-                    const therapist = this.dataset.therapist;
-                    
-                    moveAppointment(appointmentId, hour, therapist);
-                });
-            }
-        });
+if (isAdmin) {
+    cell.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    });
+    
+    cell.addEventListener('dragleave', function() {
+        this.classList.remove('drag-over');
+    });
+    
+    cell.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        
+        const appointmentId = e.dataTransfer.getData('text/plain');
+        const hour = parseInt(this.dataset.hour);
+        const day = parseInt(this.dataset.day);
+        
+        // Obtener fecha correspondiente a este día
+        const startOfWeek = getStartOfWeek(currentWeekDate);
+        const targetDate = new Date(startOfWeek);
+        targetDate.setDate(startOfWeek.getDate() + (day - 1));
+        
+        // Mover la cita a esta fecha y hora
+        moveAppointmentToDate(appointmentId, targetDate, hour);
+    });
+}
         
         // Formulario de citas
         appointmentForm.addEventListener('submit', function(e) {
@@ -1458,56 +1699,108 @@ auth.onAuthStateChanged(function(user) {
     }
     
     // Abrir modal para agregar/editar cita
-    function openAppointmentModal(appointment, hour, therapist) {
-        if (!isAdmin) return;
+   function openAppointmentModal(appointment, hour, day) {
+    if (!isAdmin) return;
+    
+    const modalTitle = document.getElementById('modal-title');
+    const dateInput = document.getElementById('appointment-date');
+    const timeInput = document.getElementById('appointment-time');
+    const deleteBtn = document.getElementById('delete-appointment');
+    const isRecurringCheckbox = document.getElementById('is-recurring');
+    const recurringDetails = document.getElementById('recurring-details');
+    
+    // Ocultar opciones de recurrencia por defecto
+    document.getElementById('recurrence-options').style.display = 'none';
+    
+    if (appointment) {
+        // Editar cita existente
+        modalTitle.textContent = 'Editar Cita';
         
-        const modalTitle = document.getElementById('modal-title');
-        const dateInput = document.getElementById('appointment-date');
-        const timeInput = document.getElementById('appointment-time');
-        const therapistInput = document.getElementById('therapist');
-        const deleteBtn = document.getElementById('delete-appointment');
+        document.getElementById('patient-name').value = appointment.paciente;
+        document.getElementById('appointment-type').value = appointment.tipoClase;
         
-        if (appointment) {
-            // Editar cita existente
-            modalTitle.textContent = 'Editar Cita';
-            
-            document.getElementById('patient-name').value = appointment.paciente;
-            document.getElementById('appointment-type').value = appointment.tipoClase;
-            
-            const fecha = appointment.fecha;
-            dateInput.value = formatDate(fecha);
-            timeInput.value = `${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
-            
-            document.getElementById('appointment-duration').value = appointment.duracion;
-            therapistInput.value = appointment.terapeuta;
-            document.getElementById('appointment-notes').value = appointment.notas || '';
-            document.getElementById('is-web').checked = appointment.web || false;
-            
-            editingAppointmentId = appointment.id;
-            deleteBtn.style.display = 'block';
-        } else {
-            // Nueva cita
-            modalTitle.textContent = 'Agregar Nueva Cita';
-            appointmentForm.reset();
-            
-            // Pre-llenar con la fecha actual
-            const today = new Date();
-            dateInput.value = formatDate(today);
-            
-            // Pre-llenar hora y terapeuta si se proporcionan
-            if (hour) {
-                timeInput.value = `${hour.toString().padStart(2, '0')}:00`;
-            }
-            if (therapist) {
-                therapistInput.value = therapist;
-            }
-            
-            editingAppointmentId = null;
-            deleteBtn.style.display = 'none';
+        // Mostrar opciones de recurrencia solo para sesiones
+        if (appointment.tipoClase.startsWith('sesion-')) {
+            document.getElementById('recurrence-options').style.display = 'block';
         }
         
-        appointmentModal.style.display = 'block';
+        // Si es una cita recurrente, mostrar los detalles
+        if (appointment.esRecurrente) {
+            isRecurringCheckbox.checked = true;
+            recurringDetails.style.display = 'block';
+            
+            // Marcar los días de la semana
+            if (appointment.patronRecurrencia && appointment.patronRecurrencia.diasSemana) {
+                const weekdays = appointment.patronRecurrencia.diasSemana;
+                document.querySelectorAll('input[name="weekday"]').forEach(checkbox => {
+                    checkbox.checked = weekdays.includes(parseInt(checkbox.value));
+                });
+            }
+            
+            // Establecer fecha fin
+            if (appointment.patronRecurrencia && appointment.patronRecurrencia.fechaFin) {
+                let endDate;
+                if (appointment.patronRecurrencia.fechaFin instanceof firebase.firestore.Timestamp) {
+                    endDate = appointment.patronRecurrencia.fechaFin.toDate();
+                } else if (appointment.patronRecurrencia.fechaFin instanceof Date) {
+                    endDate = appointment.patronRecurrencia.fechaFin;
+                } else if (typeof appointment.patronRecurrencia.fechaFin === 'string') {
+                    endDate = new Date(appointment.patronRecurrencia.fechaFin);
+                }
+                
+                if (endDate) {
+                    document.getElementById('recurrence-end').value = formatDate(endDate);
+                }
+            }
+        } else {
+            isRecurringCheckbox.checked = false;
+            recurringDetails.style.display = 'none';
+        }
+        
+        const fecha = appointment.fecha;
+        dateInput.value = formatDate(fecha);
+        timeInput.value = `${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
+        
+        document.getElementById('appointment-duration').value = appointment.duracion;
+        document.getElementById('therapist').value = appointment.terapeuta;
+        document.getElementById('student').value = appointment.estudiante || 'estudiante1';
+        document.getElementById('appointment-notes').value = appointment.notas || '';
+        document.getElementById('is-web').checked = appointment.web || false;
+        
+        editingAppointmentId = appointment.id;
+        deleteBtn.style.display = 'block';
+    } else {
+        // Nueva cita
+        modalTitle.textContent = 'Agregar Nueva Cita';
+        appointmentForm.reset();
+        
+        // Obtener la fecha correspondiente al día seleccionado
+        const startOfWeek = getStartOfWeek(currentWeekDate);
+        const appointmentDay = day ? day - 1 : 0; // Convertir de 1-basado a 0-basado
+        const appointmentDate = new Date(startOfWeek);
+        appointmentDate.setDate(startOfWeek.getDate() + appointmentDay);
+        
+        // Pre-llenar con la fecha del día seleccionado
+        dateInput.value = formatDate(appointmentDate);
+        
+        // Pre-llenar hora si se proporciona
+        if (hour) {
+            timeInput.value = `${hour.toString().padStart(2, '0')}:00`;
+        }
+        
+        editingAppointmentId = null;
+        deleteBtn.style.display = 'none';
+        
+        // Inicialmente ocultar detalles de recurrencia
+        isRecurringCheckbox.checked = false;
+        recurringDetails.style.display = 'none';
+        
+        // Actualizar visibilidad de opciones de recurrencia según tipo de cita seleccionado
+        handleAppointmentTypeChange();
     }
+    
+    appointmentModal.style.display = 'block';
+}
     
     // Cerrar modal de citas
     function closeAppointmentModal() {
@@ -1515,8 +1808,7 @@ auth.onAuthStateChanged(function(user) {
         appointmentForm.reset();
         editingAppointmentId = null;
     }
-    // 1. Función para guardar cita (añade más datos para el historial)
-function saveAppointment() {
+    function saveAppointment() {
     showSpinner();
     
     const patientName = document.getElementById('patient-name').value;
@@ -1527,8 +1819,41 @@ function saveAppointment() {
     const appointmentTime = document.getElementById('appointment-time').value;
     const appointmentDuration = parseInt(document.getElementById('appointment-duration').value);
     const therapist = document.getElementById('therapist').value;
+    const student = document.getElementById('student').value;
     const notes = document.getElementById('appointment-notes').value;
     const isWeb = document.getElementById('is-web').checked;
+    
+    // Datos de recurrencia
+    const isRecurring = document.getElementById('is-recurring').checked;
+    let recurrencePattern = null;
+    let recurrenceEndDate = null;
+    let selectedWeekdays = [];
+    
+    if (isRecurring) {
+        // Obtener días de la semana seleccionados
+        document.querySelectorAll('input[name="weekday"]:checked').forEach(checkbox => {
+            selectedWeekdays.push(parseInt(checkbox.value));
+        });
+        
+        // Fecha de fin de recurrencia
+        recurrenceEndDate = document.getElementById('recurrence-end').value;
+        if (!recurrenceEndDate) {
+            hideSpinner();
+            showStatusMessage('Por favor selecciona una fecha de fin para la recurrencia', 'warning');
+            return;
+        }
+        
+        if (selectedWeekdays.length === 0) {
+            hideSpinner();
+            showStatusMessage('Por favor selecciona al menos un día de la semana', 'warning');
+            return;
+        }
+        
+        recurrencePattern = {
+            diasSemana: selectedWeekdays,
+            fechaFin: recurrenceEndDate
+        };
+    }
     
     // Crear objeto de fecha
     const [year, month, day] = appointmentDate.split('-');
@@ -1543,16 +1868,36 @@ function saveAppointment() {
         return;
     }
     
-    // Datos de la cita con historial mejorado
-    const appointmentData = {
+    // Verificar límite de citas simultáneas
+    if (!editingAppointmentId) { // Solo verificar para nuevas citas
+        const dayOfWeek = date.getDay(); // 0 para domingo, 1 para lunes, etc.
+        if (dayOfWeek > 0 && dayOfWeek < 5) { // Solo lunes a jueves
+            const hourAppointments = appointments.filter(a => {
+                const appDate = a.fecha;
+                return appDate.getDay() === dayOfWeek &&
+                       appDate.getHours() === date.getHours() &&
+                       a.estudiante === student;
+            });
+            
+            if (hourAppointments.length >= 2) {
+                hideSpinner();
+                showStatusMessage('Este estudiante ya tiene 2 citas en este horario.', 'warning');
+                return;
+            }
+        }
+    }
+    
+    // Datos base de la cita
+    const baseAppointmentData = {
         paciente: patientName,
         tipo: appointmentType,
         tipoClase: appointmentTypeClass,
-        fecha: firebase.firestore.Timestamp.fromDate(date),
         duracion: appointmentDuration,
         terapeuta: therapist,
+        estudiante: student,
         notas: notes,
         web: isWeb,
+        esRecurrente: isRecurring,
         // Historial mejorado
         historial: firebase.firestore.FieldValue.arrayUnion({
             accion: editingAppointmentId ? 'modificacion' : 'creacion',
@@ -1567,33 +1912,109 @@ function saveAppointment() {
         }
     };
     
-    // Guardar en Firestore
-    if (editingAppointmentId) {
-        // Actualizar cita existente
-        db.collection('citas').doc(editingAppointmentId).update(appointmentData)
+    // Generar un ID único para la serie recurrente si es necesario
+    const serieRecurrenteId = isRecurring ? (editingAppointmentId || `serie_${Date.now()}`) : null;
+    
+    if (isRecurring && recurrencePattern) {
+        // Para citas recurrentes, crear múltiples citas
+        const endDate = new Date(recurrencePattern.fechaFin);
+        const weekdays = recurrencePattern.diasSemana;
+        
+        // Si estamos editando, primero eliminar todas las citas futuras de esta serie
+        if (editingAppointmentId) {
+            deleteRecurringAppointments(editingAppointmentId, date);
+        }
+        
+        // Array para almacenar todas las promesas de creación de citas
+        const appointmentPromises = [];
+        
+        // Crear citas para cada día seleccionado hasta la fecha de fin
+        const currentDate = new Date(date);
+        while (currentDate <= endDate) {
+            const currentDay = currentDate.getDay(); // 0 = domingo, 1 = lunes, ...
+            
+            // Si el día actual está en los días seleccionados, crear una cita
+            if (weekdays.includes(currentDay)) {
+                const appointmentData = {
+                    ...baseAppointmentData,
+                    fecha: firebase.firestore.Timestamp.fromDate(new Date(currentDate)),
+                    esRecurrente: true,
+                    serieRecurrenteId: serieRecurrenteId,
+                    patronRecurrencia: {
+                        diasSemana: weekdays,
+                        fechaFin: firebase.firestore.Timestamp.fromDate(endDate)
+                    }
+                };
+                
+                // Crear nueva cita
+                const promise = db.collection('citas').add(appointmentData);
+                appointmentPromises.push(promise);
+            }
+            
+            // Avanzar al siguiente día
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        
+        // Esperar a que todas las citas sean creadas
+        Promise.all(appointmentPromises)
             .then(() => {
                 closeAppointmentModal();
-                showStatusMessage('Cita actualizada correctamente', 'success');
+                showStatusMessage('Citas recurrentes creadas correctamente', 'success');
                 loadAppointments();
             })
             .catch((error) => {
-                console.error("Error al actualizar cita:", error);
+                console.error("Error al crear citas recurrentes:", error);
                 hideSpinner();
-                showStatusMessage('Error al actualizar la cita', 'error');
+                showStatusMessage('Error al crear las citas recurrentes', 'error');
             });
     } else {
-        // Crear nueva cita
-        db.collection('citas').add(appointmentData)
-            .then(() => {
-                closeAppointmentModal();
-                showStatusMessage('Cita creada correctamente', 'success');
-                loadAppointments();
-            })
-            .catch((error) => {
-                console.error("Error al crear cita:", error);
-                hideSpinner();
-                showStatusMessage('Error al crear la cita', 'error');
-            });
+        // Para citas no recurrentes o edición de una cita individual
+        const appointmentData = {
+            ...baseAppointmentData,
+            fecha: firebase.firestore.Timestamp.fromDate(date)
+        };
+        
+        if (editingAppointmentId) {
+            // Actualizar cita existente
+            db.collection('citas').doc(editingAppointmentId).get()
+                .then((doc) => {
+                    const currentData = doc.data();
+                    
+                    // Si la cita era parte de una serie recurrente y se está modificando individualmente
+                    if (currentData.esRecurrente && !isRecurring) {
+                        // Eliminar vinculación con la serie
+                        appointmentData.esRecurrente = false;
+                        appointmentData.serieRecurrenteId = null;
+                        appointmentData.patronRecurrencia = null;
+                    }
+                    
+                    // Actualizar la cita
+                    return db.collection('citas').doc(editingAppointmentId).update(appointmentData);
+                })
+                .then(() => {
+                    closeAppointmentModal();
+                    showStatusMessage('Cita actualizada correctamente', 'success');
+                    loadAppointments();
+                })
+                .catch((error) => {
+                    console.error("Error al actualizar cita:", error);
+                    hideSpinner();
+                    showStatusMessage('Error al actualizar la cita', 'error');
+                });
+        } else {
+            // Crear nueva cita
+            db.collection('citas').add(appointmentData)
+                .then(() => {
+                    closeAppointmentModal();
+                    showStatusMessage('Cita creada correctamente', 'success');
+                    loadAppointments();
+                })
+                .catch((error) => {
+                    console.error("Error al crear cita:", error);
+                    hideSpinner();
+                    showStatusMessage('Error al crear la cita', 'error');
+                });
+        }
     }
 }
     
@@ -1603,33 +2024,71 @@ function deleteAppointment() {
     
     showSpinner();
     
-    // Primero, registrar la eliminación en una colección de historial
-    db.collection('historial_citas').add({
-        citaId: editingAppointmentId,
-        accion: 'eliminacion',
-        usuario: currentUser.email,
-        usuarioId: currentUser.uid,
-        fecha: firebase.firestore.FieldValue.serverTimestamp(),
-        datosCita: {
-            paciente: document.getElementById('patient-name').value,
-            tipo: document.getElementById('appointment-type').options[document.getElementById('appointment-type').selectedIndex].text,
-            fecha: document.getElementById('appointment-date').value + ' ' + document.getElementById('appointment-time').value
-        }
-    })
-    .then(() => {
-        // Luego, eliminar la cita
-        return db.collection('citas').doc(editingAppointmentId).delete();
-    })
-    .then(() => {
-        closeAppointmentModal();
-        showStatusMessage('Cita eliminada correctamente', 'success');
-        loadAppointments();
-    })
-    .catch((error) => {
-        console.error("Error al eliminar cita:", error);
-        hideSpinner();
-        showStatusMessage('Error al eliminar la cita', 'error');
-    });
+    // Obtener información de la cita actual
+    db.collection('citas').doc(editingAppointmentId).get()
+        .then((doc) => {
+            if (!doc.exists) {
+                throw new Error("Cita no encontrada");
+            }
+            
+            const appointmentData = doc.data();
+            const isRecurring = appointmentData.esRecurrente;
+            const recurrenceId = appointmentData.serieRecurrenteId;
+            const appointmentDate = appointmentData.fecha.toDate();
+            
+            // Preguntar si desea eliminar solo esta cita o todas las futuras
+            let deleteMode = 'single';
+            if (isRecurring) {
+                const userChoice = confirm(
+                    'Esta es una cita recurrente. ¿Deseas eliminar solo esta cita o todas las citas futuras de esta serie?\n\n' +
+                    'Presiona "Aceptar" para eliminar todas las citas futuras.\n' +
+                    'Presiona "Cancelar" para eliminar solo esta cita.'
+                );
+                
+                deleteMode = userChoice ? 'future' : 'single';
+            }
+            
+            // Registrar la eliminación en el historial
+            return db.collection('historial_citas').add({
+                citaId: editingAppointmentId,
+                accion: 'eliminacion',
+                tipoEliminacion: deleteMode,
+                usuario: currentUser.email,
+                usuarioId: currentUser.uid,
+                fecha: firebase.firestore.FieldValue.serverTimestamp(),
+                datosCita: {
+                    paciente: appointmentData.paciente,
+                    tipo: appointmentData.tipo,
+                    fecha: appointmentData.fecha
+                }
+            }).then(() => {
+                // Eliminar según el modo seleccionado
+                if (deleteMode === 'future' && isRecurring) {
+                    // Eliminar todas las citas futuras de la serie
+                    return deleteRecurringAppointments(editingAppointmentId, appointmentDate)
+                        .then(() => {
+                            // También eliminar la cita actual si no está en el pasado
+                            const today = new Date();
+                            if (appointmentDate >= today) {
+                                return db.collection('citas').doc(editingAppointmentId).delete();
+                            }
+                        });
+                } else {
+                    // Eliminar solo esta cita
+                    return db.collection('citas').doc(editingAppointmentId).delete();
+                }
+            });
+        })
+        .then(() => {
+            closeAppointmentModal();
+            showStatusMessage('Cita(s) eliminada(s) correctamente', 'success');
+            loadAppointments();
+        })
+        .catch((error) => {
+            console.error("Error al eliminar cita:", error);
+            hideSpinner();
+            showStatusMessage('Error al eliminar la cita', 'error');
+        });
 }
     
     // Mover una cita (arrastrar y soltar)
@@ -1660,7 +2119,78 @@ function deleteAppointment() {
             showStatusMessage('Error al mover la cita', 'error');
         });
     }
+
+// Mover una cita a una fecha y hora específicas
+function moveAppointmentToDate(appointmentId, targetDate, hour) {
+    if (!isAdmin) return;
     
+    const appointment = appointments.find(a => a.id === appointmentId);
+    if (!appointment) return;
+    
+    showSpinner();
+    
+    // Conservar minutos, pero cambiar fecha y hora
+    const newDate = new Date(targetDate);
+    newDate.setHours(hour, appointment.fecha.getMinutes(), 0, 0);
+    
+    // Si es una cita recurrente, preguntar qué hacer
+    if (appointment.esRecurrente) {
+        const userChoice = confirm(
+            'Esta es una cita recurrente. ¿Cómo deseas moverla?\n\n' +
+            'Presiona "Aceptar" para mover solo esta cita.\n' +
+            'Presiona "Cancelar" para cancelar la operación.'
+        );
+        
+        if (!userChoice) {
+            hideSpinner();
+            return; // Cancelar la operación
+        }
+        
+        // Si decide mover solo esta, desvinculamos de la serie
+        db.collection('citas').doc(appointmentId).update({
+            fecha: firebase.firestore.Timestamp.fromDate(newDate),
+            esRecurrente: false,
+            serieRecurrenteId: null,
+            patronRecurrencia: null,
+            historial: firebase.firestore.FieldValue.arrayUnion({
+                accion: 'movimiento_desvinculacion',
+                usuario: currentUser.email,
+                usuarioId: currentUser.uid,
+                fecha: firebase.firestore.FieldValue.serverTimestamp()
+            })
+        })
+        .then(() => {
+            showStatusMessage('Cita movida correctamente', 'success');
+            loadAppointments();
+        })
+        .catch((error) => {
+            console.error("Error al mover cita:", error);
+            hideSpinner();
+            showStatusMessage('Error al mover la cita', 'error');
+        });
+    } else {
+        // Para citas normales, simplemente actualizar la fecha
+        db.collection('citas').doc(appointmentId).update({
+            fecha: firebase.firestore.Timestamp.fromDate(newDate),
+            historial: firebase.firestore.FieldValue.arrayUnion({
+                accion: 'movimiento',
+                usuario: currentUser.email,
+                usuarioId: currentUser.uid,
+                fecha: firebase.firestore.FieldValue.serverTimestamp()
+            })
+        })
+        .then(() => {
+            showStatusMessage('Cita movida correctamente', 'success');
+            loadAppointments();
+        })
+        .catch((error) => {
+            console.error("Error al mover cita:", error);
+            hideSpinner();
+            showStatusMessage('Error al mover la cita', 'error');
+        });
+    }
+}
+        
     // Abrir modal de asistencia
     function openAttendanceModal(appointment) {
         if (!isAdmin) return;
