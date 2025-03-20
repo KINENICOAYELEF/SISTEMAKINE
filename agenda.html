@@ -782,12 +782,22 @@
         appId: "1:265927768586:web:c7e37e6a561bd996687df3"
     };
     
-    // Inicializar Firebase
-    firebase.initializeApp(firebaseConfig);
-    
-    // Referencias a Firebase
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    // Inicializar Firebase (con manejo de errores)
+try {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+        console.log("[DEBUG] Firebase inicializado correctamente");
+    } else {
+        console.log("[DEBUG] Firebase ya estaba inicializado");
+    }
+} catch (error) {
+    console.error("[DEBUG] Error al inicializar Firebase:", error);
+}
+
+// Referencias a Firebase
+const auth = firebase.auth();
+const db = firebase.firestore();
+console.log("[DEBUG] Referencias a auth y db creadas");
     
     // Variables globales
     let currentUser = null;
@@ -816,19 +826,23 @@
         showSpinner();
         
         // Verificar estado de autenticación
-        auth.onAuthStateChanged(function(user) {
+auth.onAuthStateChanged(function(user) {
+    console.log("[DEBUG] Estado de autenticación cambiado");
+    
     if (user) {
         // Usuario autenticado
         currentUser = user;
+        console.log("[DEBUG] Usuario autenticado:", user.email);
+        console.log("[DEBUG] UID del usuario:", user.uid);
         userNameDisplay.textContent = user.email;
-        console.log("Usuario autenticado con UID:", user.uid);
         
-        // Esperar un momento para asegurarnos de que Firebase está listo
+        // Esperar un momento antes de verificar el rol (para asegurar que Firebase esté listo)
         setTimeout(() => {
             checkUserRole(user.uid);
         }, 1000);
     } else {
         // Usuario no autenticado
+        console.log("[DEBUG] No hay usuario autenticado");
         showLoginScreen();
         hideSpinner();
     }
@@ -839,21 +853,30 @@
     });
     
     function checkUserRole(userId) {
-    console.log("Verificando rol para userId:", userId);
+    console.log("[DEBUG] Verificando rol para usuario:", userId);
+    
+    // IMPORTANTE: Agregar este log para ver qué colección estamos consultando
+    console.log("[DEBUG] Consultando colección:", 'usuarios');
     
     db.collection('usuarios').doc(userId).get()
         .then((doc) => {
-            console.log("Documento obtenido:", doc.exists ? "Existe" : "No existe");
+            console.log("[DEBUG] Documento existe:", doc.exists);
             if (doc.exists) {
-                console.log("Datos del documento:", doc.data());
-            }
-            
-            if (doc.exists && (doc.data().role === 'admin' || doc.data().rol === 'admin')) {
-                console.log("¡Usuario reconocido como admin!");
-                isAdmin = true;
-                document.body.classList.remove('student-view');
+                const userData = doc.data();
+                console.log("[DEBUG] Datos del documento:", userData);
+                console.log("[DEBUG] Valor del campo role:", userData.role);
+                
+                if (userData.role === 'admin' || userData.rol === 'admin') {
+                    console.log("[DEBUG] ✅ Usuario reconocido como ADMIN");
+                    isAdmin = true;
+                    document.body.classList.remove('student-view');
+                } else {
+                    console.log("[DEBUG] ❌ Usuario NO reconocido como admin");
+                    isAdmin = false;
+                    document.body.classList.add('student-view');
+                }
             } else {
-                console.log("Usuario NO reconocido como admin");
+                console.log("[DEBUG] ❌ No se encontró documento para este usuario");
                 isAdmin = false;
                 document.body.classList.add('student-view');
             }
@@ -862,9 +885,12 @@
             initializeApp();
         })
         .catch((error) => {
-            console.error("Error al verificar rol:", error);
+            console.error("[DEBUG] ❌ Error al verificar rol:", error);
+            isAdmin = false;
+            document.body.classList.add('student-view');
             initializeApp();
         });
+}
 }
     
     // Inicializar la aplicación
