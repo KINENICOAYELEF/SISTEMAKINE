@@ -853,41 +853,45 @@ auth.onAuthStateChanged(function(user) {
     });
     
     function checkUserRole(userId) {
-    console.log("[DEBUG] Verificando rol para usuario:", userId);
+    console.log("[DEBUG] Usuario autenticado:", userId);
     
-    // IMPORTANTE: Agregar este log para ver qué colección estamos consultando
-    console.log("[DEBUG] Consultando colección:", 'usuarios');
+    // Tratar a todos los usuarios como administradores
+    isAdmin = true;
+    document.body.classList.remove('student-view');
     
+    // Obtener información del usuario para el historial
     db.collection('usuarios').doc(userId).get()
         .then((doc) => {
-            console.log("[DEBUG] Documento existe:", doc.exists);
             if (doc.exists) {
+                // Guardar información del usuario para el historial
                 const userData = doc.data();
-                console.log("[DEBUG] Datos del documento:", userData);
-                console.log("[DEBUG] Valor del campo role:", userData.role);
+                console.log("[DEBUG] Información del usuario:", userData);
                 
-                if (userData.role === 'admin' || userData.rol === 'admin') {
-                    console.log("[DEBUG] ✅ Usuario reconocido como ADMIN");
-                    isAdmin = true;
-                    document.body.classList.remove('student-view');
-                } else {
-                    console.log("[DEBUG] ❌ Usuario NO reconocido como admin");
-                    isAdmin = false;
-                    document.body.classList.add('student-view');
-                }
+                // Puedes almacenar más información del usuario si lo deseas
+                // currentUserName = userData.nombre || userData.email || currentUser.email;
             } else {
-                console.log("[DEBUG] ❌ No se encontró documento para este usuario");
-                isAdmin = false;
-                document.body.classList.add('student-view');
+                // Si no existe el documento del usuario, crearlo con timestamp
+                db.collection('usuarios').doc(userId).set({
+                    email: currentUser.email,
+                    ultimoAcceso: firebase.firestore.FieldValue.serverTimestamp()
+                })
+                .then(() => {
+                    console.log("[DEBUG] Documento de usuario creado");
+                })
+                .catch(error => {
+                    console.error("[DEBUG] Error al crear documento de usuario:", error);
+                });
             }
             
             // Inicializar la agenda
             initializeApp();
         })
         .catch((error) => {
-            console.error("[DEBUG] ❌ Error al verificar rol:", error);
-            isAdmin = false;
-            document.body.classList.add('student-view');
+            console.error("[DEBUG] Error al obtener información del usuario:", error);
+            
+            // De todos modos inicializar la aplicación
+            isAdmin = true;
+            document.body.classList.remove('student-view');
             initializeApp();
         });
 }
@@ -1511,99 +1515,122 @@ auth.onAuthStateChanged(function(user) {
         appointmentForm.reset();
         editingAppointmentId = null;
     }
+    // 1. Función para guardar cita (añade más datos para el historial)
+function saveAppointment() {
+    showSpinner();
     
-    // Guardar cita (nueva o editada)
-    function saveAppointment() {
-        if (!isAdmin) return;
-        
-        showSpinner();
-        
-        const patientName = document.getElementById('patient-name').value;
-        const appointmentTypeSelect = document.getElementById('appointment-type');
-        const appointmentType = appointmentTypeSelect.options[appointmentTypeSelect.selectedIndex].text;
-        const appointmentTypeClass = appointmentTypeSelect.value;
-        const appointmentDate = document.getElementById('appointment-date').value;
-        const appointmentTime = document.getElementById('appointment-time').value;
-        const appointmentDuration = parseInt(document.getElementById('appointment-duration').value);
-        const therapist = document.getElementById('therapist').value;
-        const notes = document.getElementById('appointment-notes').value;
-        const isWeb = document.getElementById('is-web').checked;
-        
-        // Crear objeto de fecha
-        const [year, month, day] = appointmentDate.split('-');
-        const [hours, minutes] = appointmentTime.split(':');
-        const date = new Date(year, month - 1, day, hours, minutes);
-        
-        // Verificar si es feriado
-        const dateStr = formatDate(date);
-        if (holidays.some(h => h.date === dateStr)) {
-            hideSpinner();
-            showStatusMessage('No se pueden agendar citas en días feriados.', 'warning');
-            return;
-        }
-        
-        // Datos de la cita
-        const appointmentData = {
-            paciente: patientName,
-            tipo: appointmentType,
-            tipoClase: appointmentTypeClass,
-            fecha: firebase.firestore.Timestamp.fromDate(date),
-            duracion: appointmentDuration,
-            terapeuta: therapist,
-            notas: notes,
-            web: isWeb,
-            creado: firebase.firestore.FieldValue.serverTimestamp(),
-            creadoPor: currentUser.uid
-        };
-        
-        // Guardar en Firestore
-        if (editingAppointmentId) {
-            // Actualizar cita existente
-            db.collection('citas').doc(editingAppointmentId).update(appointmentData)
-                .then(() => {
-                    closeAppointmentModal();
-                    showStatusMessage('Cita actualizada correctamente', 'success');
-                    loadAppointments();
-                })
-                .catch((error) => {
-                    console.error("Error al actualizar cita:", error);
-                    hideSpinner();
-                    showStatusMessage('Error al actualizar la cita', 'error');
-                });
-        } else {
-            // Crear nueva cita
-            db.collection('citas').add(appointmentData)
-                .then(() => {
-                    closeAppointmentModal();
-                    showStatusMessage('Cita creada correctamente', 'success');
-                    loadAppointments();
-                })
-                .catch((error) => {
-                    console.error("Error al crear cita:", error);
-                    hideSpinner();
-                    showStatusMessage('Error al crear la cita', 'error');
-                });
-        }
+    const patientName = document.getElementById('patient-name').value;
+    const appointmentTypeSelect = document.getElementById('appointment-type');
+    const appointmentType = appointmentTypeSelect.options[appointmentTypeSelect.selectedIndex].text;
+    const appointmentTypeClass = appointmentTypeSelect.value;
+    const appointmentDate = document.getElementById('appointment-date').value;
+    const appointmentTime = document.getElementById('appointment-time').value;
+    const appointmentDuration = parseInt(document.getElementById('appointment-duration').value);
+    const therapist = document.getElementById('therapist').value;
+    const notes = document.getElementById('appointment-notes').value;
+    const isWeb = document.getElementById('is-web').checked;
+    
+    // Crear objeto de fecha
+    const [year, month, day] = appointmentDate.split('-');
+    const [hours, minutes] = appointmentTime.split(':');
+    const date = new Date(year, month - 1, day, hours, minutes);
+    
+    // Verificar si es feriado
+    const dateStr = formatDate(date);
+    if (holidays.some(h => h.date === dateStr)) {
+        hideSpinner();
+        showStatusMessage('No se pueden agendar citas en días feriados.', 'warning');
+        return;
     }
     
-    // Eliminar cita
-    function deleteAppointment() {
-        if (!isAdmin || !editingAppointmentId) return;
-        
-        showSpinner();
-        
-        db.collection('citas').doc(editingAppointmentId).delete()
+    // Datos de la cita con historial mejorado
+    const appointmentData = {
+        paciente: patientName,
+        tipo: appointmentType,
+        tipoClase: appointmentTypeClass,
+        fecha: firebase.firestore.Timestamp.fromDate(date),
+        duracion: appointmentDuration,
+        terapeuta: therapist,
+        notas: notes,
+        web: isWeb,
+        // Historial mejorado
+        historial: firebase.firestore.FieldValue.arrayUnion({
+            accion: editingAppointmentId ? 'modificacion' : 'creacion',
+            usuario: currentUser.email,
+            usuarioId: currentUser.uid,
+            fecha: firebase.firestore.FieldValue.serverTimestamp()
+        }),
+        ultimaEdicion: {
+            usuario: currentUser.email,
+            usuarioId: currentUser.uid,
+            fecha: firebase.firestore.FieldValue.serverTimestamp()
+        }
+    };
+    
+    // Guardar en Firestore
+    if (editingAppointmentId) {
+        // Actualizar cita existente
+        db.collection('citas').doc(editingAppointmentId).update(appointmentData)
             .then(() => {
                 closeAppointmentModal();
-                showStatusMessage('Cita eliminada correctamente', 'success');
+                showStatusMessage('Cita actualizada correctamente', 'success');
                 loadAppointments();
             })
             .catch((error) => {
-                console.error("Error al eliminar cita:", error);
+                console.error("Error al actualizar cita:", error);
                 hideSpinner();
-                showStatusMessage('Error al eliminar la cita', 'error');
+                showStatusMessage('Error al actualizar la cita', 'error');
+            });
+    } else {
+        // Crear nueva cita
+        db.collection('citas').add(appointmentData)
+            .then(() => {
+                closeAppointmentModal();
+                showStatusMessage('Cita creada correctamente', 'success');
+                loadAppointments();
+            })
+            .catch((error) => {
+                console.error("Error al crear cita:", error);
+                hideSpinner();
+                showStatusMessage('Error al crear la cita', 'error');
             });
     }
+}
+    
+    // 2. Función para eliminar cita (registra quién la eliminó)
+function deleteAppointment() {
+    if (!editingAppointmentId) return;
+    
+    showSpinner();
+    
+    // Primero, registrar la eliminación en una colección de historial
+    db.collection('historial_citas').add({
+        citaId: editingAppointmentId,
+        accion: 'eliminacion',
+        usuario: currentUser.email,
+        usuarioId: currentUser.uid,
+        fecha: firebase.firestore.FieldValue.serverTimestamp(),
+        datosCita: {
+            paciente: document.getElementById('patient-name').value,
+            tipo: document.getElementById('appointment-type').options[document.getElementById('appointment-type').selectedIndex].text,
+            fecha: document.getElementById('appointment-date').value + ' ' + document.getElementById('appointment-time').value
+        }
+    })
+    .then(() => {
+        // Luego, eliminar la cita
+        return db.collection('citas').doc(editingAppointmentId).delete();
+    })
+    .then(() => {
+        closeAppointmentModal();
+        showStatusMessage('Cita eliminada correctamente', 'success');
+        loadAppointments();
+    })
+    .catch((error) => {
+        console.error("Error al eliminar cita:", error);
+        hideSpinner();
+        showStatusMessage('Error al eliminar la cita', 'error');
+    });
+}
     
     // Mover una cita (arrastrar y soltar)
     function moveAppointment(appointmentId, hour, therapist) {
@@ -1682,41 +1709,49 @@ auth.onAuthStateChanged(function(user) {
         attendanceModal.style.display = 'none';
     }
     
-    // Guardar asistencia
     function saveAttendance() {
-        if (!isAdmin) return;
-        
-        const appointmentId = attendanceModal.dataset.appointmentId;
-        const selectedBtn = document.querySelector('.attendance-btn.selected');
-        
-        if (!selectedBtn) {
-            showStatusMessage('Por favor selecciona un estado de asistencia', 'warning');
-            return;
-        }
-        
-        const status = selectedBtn.dataset.status;
-        const notes = document.getElementById('attendance-notes').value;
-        
-        showSpinner();
-        
-        // Actualizar en Firestore
-        db.collection('citas').doc(appointmentId).update({
-            estado: status,
-            notasAsistencia: notes,
-            actualizadoPor: currentUser.uid,
-            fechaActualizacion: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-            closeAttendanceModal();
-            showStatusMessage('Asistencia registrada correctamente', 'success');
-            loadAppointments();
-        })
-        .catch((error) => {
-            console.error("Error al registrar asistencia:", error);
-            hideSpinner();
-            showStatusMessage('Error al registrar la asistencia', 'error');
-        });
+    const appointmentId = attendanceModal.dataset.appointmentId;
+    const selectedBtn = document.querySelector('.attendance-btn.selected');
+    
+    if (!selectedBtn) {
+        showStatusMessage('Por favor selecciona un estado de asistencia', 'warning');
+        return;
     }
+    
+    const status = selectedBtn.dataset.status;
+    const notes = document.getElementById('attendance-notes').value;
+    
+    showSpinner();
+    
+    // Actualizar en Firestore con historial mejorado
+    db.collection('citas').doc(appointmentId).update({
+        estado: status,
+        notasAsistencia: notes,
+        historialAsistencia: firebase.firestore.FieldValue.arrayUnion({
+            estado: status,
+            usuario: currentUser.email,
+            usuarioId: currentUser.uid,
+            fecha: firebase.firestore.FieldValue.serverTimestamp(),
+            notas: notes
+        }),
+        ultimaActualizacion: {
+            usuario: currentUser.email,
+            usuarioId: currentUser.uid,
+            fecha: firebase.firestore.FieldValue.serverTimestamp(),
+            estado: status
+        }
+    })
+    .then(() => {
+        closeAttendanceModal();
+        showStatusMessage('Asistencia registrada correctamente', 'success');
+        loadAppointments();
+    })
+    .catch((error) => {
+        console.error("Error al registrar asistencia:", error);
+        hideSpinner();
+        showStatusMessage('Error al registrar la asistencia', 'error');
+    });
+}
     
     // Mostrar/ocultar spinner de carga
     function showSpinner() {
