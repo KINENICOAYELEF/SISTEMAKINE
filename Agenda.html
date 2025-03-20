@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMAKINE - Agenda</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/agenda.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="agenda-container">
+        <header class="agenda-header">
+            <h1>Agenda SISTEMAKINE</h1>
+            <div class="calendar-controls">
+                <button id="prev-week"><i class="fas fa-chevron-left"></i></button>
+                <h2 id="current-week">Semana del 18 al 24 de Marzo, 2025</h2>
+                <button id="next-week"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="view-controls">
+                <button id="day-view">Día</button>
+                <button id="week-view" class="active">Semana</button>
+                <button id="month-view">Mes</button>
+            </div>
+        </header>
+        
+        <div class="agenda-main">
+            <div class="schedule-header">
+                <div class="time-column"></div>
+                <div class="therapist-row">
+                    <div class="therapist">
+                        <img src="img/default-avatar.png" alt="Nicolás" class="therapist-avatar">
+                        <span>Nicolás</span>
+                    </div>
+                    <div class="therapist">
+                        <img src="img/default-avatar.png" alt="Ana María" class="therapist-avatar">
+                        <span>Ana María</span>
+                    </div>
+                    <div class="therapist">
+                        <img src="img/default-avatar.png" alt="Gustavo" class="therapist-avatar">
+                        <span>Gustavo</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="schedule-content">
+                <div class="time-slots">
+                    <div class="time-slot">09:00</div>
+                    <div class="time-slot">10:00</div>
+                    <div class="time-slot">11:00</div>
+                    <div class="time-slot">12:00</div>
+                    <div class="time-slot">13:00</div>
+                    <div class="time-slot">14:00</div>
+                    <div class="time-slot">15:00</div>
+                    <div class="time-slot">16:00</div>
+                </div>
+                
+                <div class="appointment-grid" id="appointment-grid">
+                    <!-- Las citas se generarán dinámicamente con JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="agenda-sidebar" id="agenda-sidebar">
+            <div class="sidebar-section admin-only">
+                <h3>Agregar Cita</h3>
+                <form id="appointment-form">
+                    <div class="form-group">
+                        <label for="patient-name">Paciente:</label>
+                        <input type="text" id="patient-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointment-type">Tipo de consulta:</label>
+                        <select id="appointment-type" required>
+                            <option value="consulta-general">Consulta general</option>
+                            <option value="consulta-especializada">Consulta especializada</option>
+                            <option value="consulta-dermatologia">Consulta dermatología</option>
+                            <option value="examen-cardiologico">Examen cardiológico</option>
+                            <option value="evaluacion-fisica">Evaluación física</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointment-date">Fecha:</label>
+                        <input type="date" id="appointment-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointment-time">Hora inicio:</label>
+                        <input type="time" id="appointment-time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointment-duration">Duración:</label>
+                        <select id="appointment-duration" required>
+                            <option value="60">1 hora</option>
+                            <option value="120">2 horas</option>
+                            <option value="30">30 minutos</option>
+                            <option value="90">1 hora 30 minutos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="therapist">Kinesiólogo:</label>
+                        <select id="therapist" required>
+                            <option value="nicolas">Nicolás</option>
+                            <option value="ana-maria">Ana María</option>
+                            <option value="gustavo">Gustavo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointment-notes">Notas:</label>
+                        <textarea id="appointment-notes"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="is-web">
+                            <input type="checkbox" id="is-web"> Vía web
+                        </label>
+                    </div>
+                    <button type="submit">Guardar Cita</button>
+                    <button type="button" id="cancel-edit" style="display: none;">Cancelar</button>
+                </form>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Estadísticas</h3>
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-title">Asistencia semanal</div>
+                        <div class="stat-value">85%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Citas totales</div>
+                        <div class="stat-value">32</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Hora más ocupada</div>
+                        <div class="stat-value">10:00 - 11:00</div>
+                    </div>
+                </div>
+                <div class="therapist-stats">
+                    <h4>Citas por kinesiólogo</h4>
+                    <div class="chart-container">
+                        <div class="chart-bar" style="height: 70%;" data-therapist="Nicolás">
+                            <span class="chart-value">14</span>
+                        </div>
+                        <div class="chart-bar" style="height: 45%;" data-therapist="Ana María">
+                            <span class="chart-value">9</span>
+                        </div>
+                        <div class="chart-bar" style="height: 45%;" data-therapist="Gustavo">
+                            <span class="chart-value">9</span>
+                        </div>
+                    </div>
+                    <div class="chart-labels">
+                        <span>Nicolás</span>
+                        <span>Ana María</span>
+                        <span>Gustavo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para confirmar asistencia -->
+    <div class="modal" id="attendance-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmar Asistencia</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Paciente: <span id="attendance-patient"></span></p>
+                <p>Fecha: <span id="attendance-date"></span></p>
+                <p>Hora: <span id="attendance-time"></span></p>
+                <div class="attendance-options">
+                    <button class="attendance-btn" data-status="attended">Asistió</button>
+                    <button class="attendance-btn" data-status="missed">No asistió</button>
+                    <button class="attendance-btn" data-status="rescheduled">Reprogramada</button>
+                </div>
+                <div class="form-group admin-only">
+                    <label for="attendance-notes">Notas:</label>
+                    <textarea id="attendance-notes"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-attendance">Guardar</button>
+                <button id="cancel-attendance">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/agenda.js"></script>
+</body>
+</html>
