@@ -765,100 +765,112 @@
     
     <!-- Modal para agregar/editar citas -->
     <div class="modal" id="appointment-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-title">Agregar Nueva Cita</h3>
-                <span class="close">&times;</span>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-title">Agregar Nueva Cita</h3>
+            <span class="close">&times;</span>
+        </div>
+        <form id="appointment-form">
+       <!-- Modal para agregar/editar citas -->
+<div class="modal" id="appointment-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-title">Agregar Nueva Cita</h3>
+            <span class="close">&times;</span>
+        </div>
+        <form id="appointment-form">
+            <div class="form-group">
+                <label for="patient-name">Paciente:</label>
+                <input type="text" id="patient-name" required>
             </div>
             <div class="form-group">
-    <label for="patient-name">Paciente:</label>
-    <input type="text" id="patient-name" required>
-</div>
-<div class="form-group">
-    <label for="appointment-type">Tipo de consulta:</label>
-    <select id="appointment-type" required onchange="handleAppointmentTypeChange()">
-        <option value="evaluacion-msk">Evaluación kinesiología msk</option>
-        <option value="evaluacion-deportiva">Evaluación kinesiología deportiva</option>
-        <option value="sesion-msk">Sesión kinesiología msk</option>
-        <option value="sesion-deportiva">Sesión kinesiología deportiva</option>
-    </select>
-</div>
-<div class="form-group">
-    <label for="therapist">Kinesiólogo:</label>
-    <select id="therapist" required>
-        <option value="nicolas">Nicolás</option>
-        <option value="ana-maria">Ana María</option>
-        <option value="gustavo">Gustavo</option>
-    </select>
-</div>
-<div class="form-group">
-    <label for="student">Estudiante asignado:</label>
-    <select id="student" required>
-        <option value="estudiante1">Estudiante 1</option>
-        <option value="estudiante2">Estudiante 2</option>
-        <option value="estudiante3">Estudiante 3</option>
-        <option value="estudiante4">Estudiante 4</option>
-        <option value="estudiante5">Estudiante 5</option>
-        <option value="estudiante6">Estudiante 6</option>
-        <option value="estudiante7">Estudiante 7</option>
-        <option value="estudiante8">Estudiante 8</option>
-    </select>
-</div>
-<div class="form-group">
-    <label for="appointment-date">Fecha:</label>
-    <input type="date" id="appointment-date" required>
-</div>
-<div class="form-group">
-    <label for="appointment-time">Hora inicio:</label>
-    <input type="time" id="appointment-time" required>
-</div>
-<div class="form-group">
-    <label for="appointment-duration">Duración:</label>
-    <select id="appointment-duration" required>
-        <option value="60">1 hora</option>
-        <option value="120">2 horas</option>
-        <option value="30">30 minutos</option>
-        <option value="90">1 hora 30 minutos</option>
-    </select>
-</div>
-
-<!-- Sección para citas recurrentes -->
-<div id="recurrence-options" style="display: none;">
-    <div class="form-group">
-        <label>
-            <input type="checkbox" id="is-recurring"> Cita recurrente
-        </label>
-    </div>
-    <div id="recurring-details" style="display: none; padding-left: 20px;">
-        <div class="form-group">
-            <label>Días de la semana:</label>
-            <div class="weekday-selector">
-                <label><input type="checkbox" name="weekday" value="1"> Lunes</label>
-                <label><input type="checkbox" name="weekday" value="2"> Martes</label>
-                <label><input type="checkbox" name="weekday" value="3"> Miércoles</label>
-                <label><input type="checkbox" name="weekday" value="4"> Jueves</label>
+                <label for="appointment-type">Tipo de consulta:</label>
+                <select id="appointment-type" required onchange="handleAppointmentTypeChange()">
+                    <option value="evaluacion-msk">Evaluación kinesiología msk</option>
+                    <option value="evaluacion-deportiva">Evaluación kinesiología deportiva</option>
+                    <option value="sesion-msk">Sesión kinesiología msk</option>
+                    <option value="sesion-deportiva">Sesión kinesiología deportiva</option>
+                </select>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="recurrence-end">Fecha fin:</label>
-            <input type="date" id="recurrence-end">
-        </div>
-    </div>
-</div>
+            <div class="form-group">
+                <label for="therapist">Kinesiólogo:</label>
+                <select id="therapist" required>
+                    <option value="nicolas">Nicolás</option>
+                    <option value="ana-maria">Ana María</option>
+                    <option value="gustavo">Gustavo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="student">Estudiante asignado:</label>
+                <select id="student" required>
+                    <option value="estudiante1">Estudiante 1</option>
+                    <option value="estudiante2">Estudiante 2</option>
+                    <option value="estudiante3">Estudiante 3</option>
+                    <option value="estudiante4">Estudiante 4</option>
+                    <option value="estudiante5">Estudiante 5</option>
+                    <option value="estudiante6">Estudiante 6</option>
+                    <option value="estudiante7">Estudiante 7</option>
+                    <option value="estudiante8">Estudiante 8</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="appointment-date">Fecha:</label>
+                <input type="date" id="appointment-date" required>
+            </div>
+            <div class="form-group">
+                <label for="appointment-time">Hora inicio:</label>
+                <input type="time" id="appointment-time" required>
+            </div>
+            <div class="form-group">
+                <label for="appointment-duration">Duración:</label>
+                <select id="appointment-duration" required>
+                    <option value="60">1 hora</option>
+                    <option value="120">2 horas</option>
+                    <option value="30">30 minutos</option>
+                    <option value="90">1 hora 30 minutos</option>
+                </select>
+            </div>
 
-<div class="form-group">
-    <label for="appointment-notes">Notas:</label>
-    <textarea id="appointment-notes"></textarea>
-</div>
-<div class="form-group">
-    <label>
-        <input type="checkbox" id="is-web"> Vía web
-    </label>
-</div>
-<div class="form-actions">
-    <button type="submit" class="button save-btn">Guardar</button>
-    <button type="button" class="button cancel-btn" id="cancel-appointment">Cancelar</button>
-    <button type="button" class="button delete-btn" id="delete-appointment" style="display: none;">Eliminar</button>
+            <!-- Sección para citas recurrentes -->
+            <div id="recurrence-options" style="display: none;">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="is-recurring"> Cita recurrente
+                    </label>
+                </div>
+                <div id="recurring-details" style="display: none; padding-left: 20px;">
+                    <div class="form-group">
+                        <label>Días de la semana:</label>
+                        <div class="weekday-selector">
+                            <label><input type="checkbox" name="weekday" value="1"> Lunes</label>
+                            <label><input type="checkbox" name="weekday" value="2"> Martes</label>
+                            <label><input type="checkbox" name="weekday" value="3"> Miércoles</label>
+                            <label><input type="checkbox" name="weekday" value="4"> Jueves</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recurrence-end">Fecha fin:</label>
+                        <input type="date" id="recurrence-end">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="appointment-notes">Notas:</label>
+                <textarea id="appointment-notes"></textarea>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="is-web"> Vía web
+                </label>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="button save-btn">Guardar</button>
+                <button type="button" class="button cancel-btn" id="cancel-appointment">Cancelar</button>
+                <button type="button" class="button delete-btn" id="delete-appointment" style="display: none;">Eliminar</button>
+            </div>
+        </form>
+    </div>
 </div>
     
     <!-- Modal para confirmar asistencia -->
@@ -1598,6 +1610,7 @@ document.getElementById('is-recurring').addEventListener('change', function() {
         });
         
         // Clic en celdas de la agenda (para agregar citas)
+// Clic en celdas de la agenda (para agregar citas)
 document.querySelectorAll('.schedule-cell').forEach(cell => {
     cell.addEventListener('click', function() {
         if (isAdmin) {
@@ -1608,34 +1621,35 @@ document.querySelectorAll('.schedule-cell').forEach(cell => {
         }
     });
             
-            // Configuración para arrastrar y soltar
-if (isAdmin) {
-    cell.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        this.classList.add('drag-over');
-    });
-    
-    cell.addEventListener('dragleave', function() {
-        this.classList.remove('drag-over');
-    });
-    
-    cell.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.classList.remove('drag-over');
+    // Configuración para arrastrar y soltar
+    if (isAdmin) {
+        cell.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        });
         
-        const appointmentId = e.dataTransfer.getData('text/plain');
-        const hour = parseInt(this.dataset.hour);
-        const day = parseInt(this.dataset.day);
+        cell.addEventListener('dragleave', function() {
+            this.classList.remove('drag-over');
+        });
         
-        // Obtener fecha correspondiente a este día
-        const startOfWeek = getStartOfWeek(currentWeekDate);
-        const targetDate = new Date(startOfWeek);
-        targetDate.setDate(startOfWeek.getDate() + (day - 1));
-        
-        // Mover la cita a esta fecha y hora
-        moveAppointmentToDate(appointmentId, targetDate, hour);
-    });
-}
+        cell.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            const appointmentId = e.dataTransfer.getData('text/plain');
+            const hour = parseInt(this.dataset.hour);
+            const day = parseInt(this.dataset.day);
+            
+            // Obtener fecha correspondiente a este día
+            const startOfWeek = getStartOfWeek(currentWeekDate);
+            const targetDate = new Date(startOfWeek);
+            targetDate.setDate(startOfWeek.getDate() + (day - 1));
+            
+            // Mover la cita a esta fecha y hora
+            moveAppointmentToDate(appointmentId, targetDate, hour);
+        });
+    }
+});
         
         // Formulario de citas
         appointmentForm.addEventListener('submit', function(e) {
