@@ -1,0 +1,603 @@
+/* Estilos para la agenda de SISTEMAKINE */
+:root {
+    --primary-color: #4caf50;
+    --secondary-color: #2196f3;
+    --accent-color: #ff9800;
+    --error-color: #f44336;
+    --success-color: #4CAF50;
+    --text-color: #333;
+    --light-gray: #f5f5f5;
+    --medium-gray: #e0e0e0;
+    --dark-gray: #757575;
+    --border-color: #ddd;
+    --shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
+    /* Colores para tipos de citas */
+    --color-consulta-general: #ffb6c1; /* Rosa claro */
+    --color-consulta-especializada: #90ee90; /* Verde claro */
+    --color-consulta-dermatologia: #ffa500; /* Naranja */
+    --color-examen-cardiologico: #ffd700; /* Amarillo */
+    --color-evaluacion-fisica: #87cefa; /* Azul claro */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+    background-color: #f9f9f9;
+    line-height: 1.6;
+}
+
+.agenda-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "header header"
+        "main sidebar";
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Estilos del encabezado */
+.agenda-header {
+    grid-area: header;
+    padding: 15px 20px;
+    background-color: white;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.agenda-header h1 {
+    font-size: 1.5rem;
+    margin-right: 20px;
+}
+
+.calendar-controls {
+    display: flex;
+    align-items: center;
+}
+
+.calendar-controls button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    color: var(--text-color);
+}
+
+.calendar-controls h2 {
+    margin: 0 15px;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.view-controls button {
+    background: none;
+    border: 1px solid var(--border-color);
+    padding: 5px 15px;
+    margin-left: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.view-controls button.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Estilos del área principal (calendario) */
+.agenda-main {
+    grid-area: main;
+    overflow-y: auto;
+    background-color: white;
+    border-right: 1px solid var(--border-color);
+}
+
+.schedule-header {
+    background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.therapist-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.therapist {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+}
+
+.therapist-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+    object-fit: cover;
+}
+
+.schedule-content {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+}
+
+.time-slots {
+    display: grid;
+    grid-template-rows: repeat(8, 60px);
+    background-color: white;
+    border-right: 1px solid var(--border-color);
+}
+
+.time-slot {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: center;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.appointment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(8, 60px);
+}
+
+.appointment-cell {
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.appointment-cell.holiday {
+    background-color: #ffeeee;
+    cursor: not-allowed;
+}
+
+/* Estilos para las citas */
+.appointment {
+    position: absolute;
+    width: 95%;
+    left: 2.5%;
+    border-radius: 4px;
+    padding: 5px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.2s;
+    z-index: 2;
+}
+
+.appointment:hover {
+    transform: scale(1.02);
+    z-index: 3;
+}
+
+.appointment.consulta-general {
+    background-color: var(--color-consulta-general);
+}
+
+.appointment.consulta-especializada {
+    background-color: var(--color-consulta-especializada);
+}
+
+.appointment.consulta-dermatologia {
+    background-color: var(--color-consulta-dermatologia);
+}
+
+.appointment.examen-cardiologico {
+    background-color: var(--color-examen-cardiologico);
+}
+
+.appointment.evaluacion-fisica {
+    background-color: var(--color-evaluacion-fisica);
+}
+
+.appointment .patient-name {
+    font-weight: 500;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.appointment .appointment-type {
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.appointment .appointment-time {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.appointment .appointment-status {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.appointment .appointment-status.attended {
+    background-color: var(--success-color);
+}
+
+.appointment .appointment-status.missed {
+    background-color: var(--error-color);
+}
+
+.appointment .appointment-status.rescheduled {
+    background-color: var(--accent-color);
+}
+
+.appointment .web-indicator {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+/* Estilos del sidebar */
+.agenda-sidebar {
+    grid-area: sidebar;
+    background-color: white;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: var(--shadow);
+}
+
+.sidebar-section {
+    margin-bottom: 30px;
+}
+
+.sidebar-section h3 {
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group input[type="checkbox"] {
+    display: inline;
+    width: auto;
+    margin-right: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+.form-group textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #388e3c;
+}
+
+button[type="button"] {
+    background-color: var(--dark-gray);
+}
+
+button[type="button"]:hover {
+    background-color: #616161;
+}
+
+/* Estilos para las estadísticas */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    padding: 10px;
+    background-color: var(--light-gray);
+    border-radius: 4px;
+    text-align: center;
+}
+
+.stat-title {
+    font-size: 0.8rem;
+    color: var(--dark-gray);
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.therapist-stats h4 {
+    margin: 15px 0 10px;
+    text-align: center;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 150px;
+    margin-top: 15px;
+}
+
+.chart-bar {
+    width: 50px;
+    background-color: var(--primary-color);
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    text-align: center;
+}
+
+.chart-value {
+    position: absolute;
+    top: -25px;
+    left: 0;
+    right: 0;
+    font-weight: 600;
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    font-size: 0.8rem;
+}
+
+/* Modal para confirmar asistencia */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.close {
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.attendance-options {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.attendance-btn {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+    margin: 0 5px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.attendance-btn[data-status="attended"] {
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.attendance-btn[data-status="attended"].selected {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.attendance-btn[data-status="missed"] {
+    border-color: var(--error-color);
+    color: var(--error-color);
+}
+
+.attendance-btn[data-status="missed"].selected {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.attendance-btn[data-status="rescheduled"] {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.attendance-btn[data-status="rescheduled"].selected {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-color);
+    text-align: right;
+}
+
+.modal-footer button {
+    margin-left: 10px;
+}
+
+/* Ocultar elementos para estudiantes */
+.student-view .admin-only {
+    display: none !important;
+}
+
+/* Responsive para tablets */
+@media (max-width: 1024px) {
+    .agenda-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+            "header"
+            "main"
+            "sidebar";
+    }
+    
+    .agenda-sidebar {
+        height: 300px;
+        overflow-y: auto;
+    }
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .agenda-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .agenda-header h1 {
+        margin-bottom: 10px;
+    }
+    
+    .calendar-controls {
+        margin-bottom: 10px;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .view-controls {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+    
+    .view-controls button {
+        flex: 1;
+        margin: 0 2px;
+    }
+    
+    .therapist-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .appointment-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Vista de móvil específica para imitar la imagen de referencia */
+@media (max-width: 576px) {
+    .therapist-row {
+        display: none;
+    }
+    
+    .mobile-view {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #f5f5f5;
+    }
+    
+    .mobile-therapist-selector {
+        display: flex;
+        align-items: center;
+    }
+    
+    .mobile-therapist-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    
+    .mobile-date {
+        font-size: 0.9rem;
+    }
+    
+    .mobile-appointment {
+        margin: 10px;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: var(--shadow);
+    }
+}
