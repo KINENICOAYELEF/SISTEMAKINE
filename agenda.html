@@ -817,17 +817,22 @@
         
         // Verificar estado de autenticación
         auth.onAuthStateChanged(function(user) {
-            if (user) {
-                // Usuario autenticado
-                currentUser = user;
-                userNameDisplay.textContent = user.email;
-                checkUserRole(user.uid);
-            } else {
-                // Usuario no autenticado, mostrar pantalla de login
-                showLoginScreen();
-                hideSpinner();
-            }
-        });
+    if (user) {
+        // Usuario autenticado
+        currentUser = user;
+        userNameDisplay.textContent = user.email;
+        console.log("Usuario autenticado con UID:", user.uid);
+        
+        // Esperar un momento para asegurarnos de que Firebase está listo
+        setTimeout(() => {
+            checkUserRole(user.uid);
+        }, 1000);
+    } else {
+        // Usuario no autenticado
+        showLoginScreen();
+        hideSpinner();
+    }
+});
         
         // Configurar event listeners
         setupEventListeners();
