@@ -790,6 +790,81 @@
                 max-width: calc(33.333% - 4px);
             }
         }
+
+        /* Panel de administración de estudiantes */
+.admin-panel {
+    background-color: var(--surface);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.admin-title {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.student-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.student-item {
+    background-color: var(--surface-hover);
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.student-code {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.student-name {
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.save-student-btn {
+    background-color: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.save-student-btn:hover {
+    background-color: #2235C0;
+}
+
+/* Estilos para días feriados */
+.holiday-cell {
+    background-color: rgba(255, 107, 107, 0.1);
+    position: relative;
+}
+
+.holiday-cell::after {
+    content: "Feriado";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--error);
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.7;
+}
     </style>
 </head>
 <body>
@@ -837,6 +912,14 @@
             </div>
         </header>
         
+        <!-- Panel de Administración de Estudiantes -->
+        <div class="admin-panel">
+            <h3 class="admin-title">Administración de Estudiantes</h3>
+            <div class="student-list" id="student-list">
+                <!-- Se llenará dinámicamente -->
+            </div>
+        </div>
+
         <div class="scheduler-container">
             <!-- Encabezado de la semana con días -->
             <div class="days-header">
@@ -927,24 +1010,14 @@
                 </div>
             </div>
             
-            <h4 class="therapist-stats-title">Citas por kinesiólogo</h4>
+            <h4 class="therapist-stats-title">Pacientes por estudiante</h4>
             
-            <div class="charts-container" id="therapist-chart">
-                <div class="chart-bar" style="height: 80%;">
-                    <div class="chart-value">14</div>
-                </div>
-                <div class="chart-bar" style="height: 50%;">
-                    <div class="chart-value">9</div>
-                </div>
-                <div class="chart-bar" style="height: 50%;">
-                    <div class="chart-value">9</div>
-                </div>
+            <div class="charts-container" id="student-chart">
+                <!-- Se llenará dinámicamente -->
             </div>
             
-            <div class="chart-labels">
-                <div class="chart-label">Nicolás</div>
-                <div class="chart-label">Ana María</div>
-                <div class="chart-label">Gustavo</div>
+            <div class="chart-labels" id="student-chart-labels">
+                <!-- Se llenará dinámicamente -->
             </div>
         </div>
     </div>
@@ -973,9 +1046,7 @@
                 <div class="form-group">
                     <label for="therapist">Kinesiólogo:</label>
                     <select id="therapist" required>
-                        <option value="nicolas">Nicolás</option>
-                        <option value="ana-maria">Ana María</option>
-                        <option value="gustavo">Gustavo</option>
+                        <option value="principal">Kinesiólogo Principal</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1129,6 +1200,8 @@ let appointments = [];
 let editingAppointmentId = null;
 let holidays = [];
 let currentWeekDate = new Date();
+let studentNames = {}; // Para guardar los nombres reales de los estudiantes
+let uniquePatientsByStudent = {}; // Para estadísticas
 
 // Elementos DOM
 const spinner = document.getElementById('spinner');
@@ -1241,19 +1314,148 @@ function initializeApp() {
     loadHolidays();
     updateWeekDisplay();
     
-    try {
-        loadAppointments();
-    } catch (error) {
-        console.error("Error al cargar citas:", error);
-        showStatusMessage("Error al cargar citas. Usando datos de ejemplo.", "warning");
-        loadSampleAppointments();
-    }
+    // Cargar nombres de estudiantes primero
+    loadStudentNames()
+        .then(() => {
+            try {
+                loadAppointments();
+            } catch (error) {
+                console.error("Error al cargar citas:", error);
+                showStatusMessage("Error al cargar citas. Usando datos de ejemplo.", "warning");
+                loadSampleAppointments();
+            }
+        });
     
     // Mostrar la interfaz principal
     loginContainer.style.display = 'none';
     mainContainer.style.display = 'block';
     
     hideSpinner();
+}
+
+// Cargar nombres de estudiantes
+function loadStudentNames() {
+    return new Promise((resolve) => {
+        const defaultStudents = {
+            'estudiante1': 'Estudiante 1',
+            'estudiante2': 'Estudiante 2',
+            'estudiante3': 'Estudiante 3',
+            'estudiante4': 'Estudiante 4',
+            'estudiante5': 'Estudiante 5',
+            'estudiante6': 'Estudiante 6',
+            'estudiante7': 'Estudiante 7',
+            'estudiante8': 'Estudiante 8'
+        };
+        
+        db.collection('configuracion').doc('estudiantes').get()
+            .then((doc) => {
+                if (doc.exists) {
+                    studentNames = doc.data();
+                    // Combinar con estudiantes por defecto (para asegurar que todos existan)
+                    studentNames = {...defaultStudents, ...studentNames};
+                } else {
+                    // Si no existe el documento, usar los nombres por defecto
+                    studentNames = defaultStudents;
+                    // Y crear el documento
+                    db.collection('configuracion').doc('estudiantes').set(studentNames);
+                }
+                
+                // Generar la lista de estudiantes en el panel de administración
+                generateStudentsList();
+                resolve();
+            })
+            .catch((error) => {
+                console.error("Error al cargar nombres de estudiantes:", error);
+                studentNames = defaultStudents;
+                generateStudentsList();
+                resolve();
+            });
+    });
+}
+
+// Generar la lista de estudiantes en el panel de administración
+function generateStudentsList() {
+    const studentList = document.getElementById('student-list');
+    if (!studentList) return;
+    
+    studentList.innerHTML = '';
+    
+    // Actualizar el selector de estudiantes en el formulario
+    const studentSelect = document.getElementById('student');
+    if (studentSelect) {
+        studentSelect.innerHTML = '';
+    }
+    
+    for (const code in studentNames) {
+        // Añadir al panel de administración
+        const item = document.createElement('div');
+        item.className = 'student-item';
+        item.dataset.code = code;
+        
+        item.innerHTML = `
+            <div class="student-code">${code}</div>
+            <input type="text" class="student-name" placeholder="Nombre real" value="${studentNames[code]}">
+            <button class="save-student-btn">Guardar</button>
+        `;
+        
+        studentList.appendChild(item);
+        
+        // Configurar el botón de guardar
+        const saveBtn = item.querySelector('.save-student-btn');
+        saveBtn.addEventListener('click', function() {
+            const input = item.querySelector('.student-name');
+            saveStudentName(code, input.value);
+        });
+        
+        // Actualizar el selector de estudiantes
+        if (studentSelect) {
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = studentNames[code];
+            studentSelect.appendChild(option);
+        }
+    }
+}
+
+// Guardar nombre de estudiante
+function saveStudentName(code, name) {
+    if (!name || name.trim() === '') {
+        showStatusMessage('Por favor ingresa un nombre válido', 'warning');
+        return;
+    }
+    
+    const updateData = {};
+    updateData[code] = name;
+    
+    db.collection('configuracion').doc('estudiantes').update(updateData)
+        .then(() => {
+            studentNames[code] = name; // Actualizar en memoria
+            showStatusMessage(`Nombre de ${code} actualizado a "${name}"`, 'success');
+            updateStudentReferences(code, name);
+        })
+        .catch((error) => {
+            console.error("Error al guardar nombre de estudiante:", error);
+            showStatusMessage("Error al guardar el nombre", "error");
+        });
+}
+
+// Actualizar referencias visuales del estudiante
+function updateStudentReferences(code, name) {
+    // Actualizar las tarjetas de cita
+    document.querySelectorAll(`.student-badge`).forEach(el => {
+        if (el.textContent.includes(code)) {
+            el.textContent = name;
+        }
+    });
+    
+    // Actualizar las opciones del formulario
+    const option = document.querySelector(`#student option[value="${code}"]`);
+    if (option) {
+        option.textContent = name;
+    }
+    
+    // Volver a cargar las citas y estadísticas
+    loadAppointments();
 }
 
 // Mostrar pantalla de login
@@ -1299,6 +1501,9 @@ function updateWeekDisplay() {
     
     currentWeekDisplay.textContent = `Semana del ${startDay} al ${endDay} de ${endMonthName} de ${year}`;
     
+    // Marcar feriados y días actuales
+    const holidayDates = holidays.map(h => h.date);
+    
     // Actualizar los encabezados de días con las fechas correspondientes
     for (let i = 1; i <= 4; i++) {
         const dayDate = new Date(startOfWeek);
@@ -1312,12 +1517,34 @@ function updateWeekDisplay() {
             dayHeader.textContent = dayNames[dayDate.getDay()];
             dateHeader.textContent = `${dayDate.getDate()}/${dayDate.getMonth() + 1}`;
             
+            // Verificar si es feriado
+            const dateStr = formatDate(dayDate);
+            const isHoliday = holidayDates.includes(dateStr);
+            
             // Resaltar el día actual si está en la semana mostrada
             const today = new Date();
-            if (dayDate.toDateString() === today.toDateString()) {
+            const isToday = dayDate.toDateString() === today.toDateString();
+            
+            // Aplicar clases según el caso
+            if (isHoliday) {
+                dayHeader.style.color = 'var(--error)';
+                dateHeader.style.color = 'var(--error)';
+                document.querySelectorAll(`.schedule-cell[data-day="${i}"]`).forEach(cell => {
+                    cell.classList.add('holiday-cell');
+                    cell.title = "Feriado: " + holidays.find(h => h.date === dateStr).name;
+                });
+            } else {
+                dayHeader.style.color = '';
+                dateHeader.style.color = '';
+                document.querySelectorAll(`.schedule-cell[data-day="${i}"]`).forEach(cell => {
+                    cell.classList.remove('holiday-cell');
+                    cell.title = "";
+                });
+            }
+            
+            if (isToday) {
                 dayHeader.classList.add('current-day');
                 dateHeader.classList.add('current-day');
-                // También resaltar las celdas del día actual
                 document.querySelectorAll(`.schedule-cell[data-day="${i}"]`).forEach(cell => {
                     cell.classList.add('current-day');
                 });
@@ -1635,6 +1862,7 @@ function getStatusText(status) {
 }
 
 // Actualizar estadísticas
+// Actualizar estadísticas
 function updateStatistics() {
     try {
         // Calcular asistencia semanal
@@ -1669,53 +1897,74 @@ function updateStatistics() {
             }
         }
         
-        // Citas por terapeuta
-        const appointmentsByTherapist = {
-            'nicolas': 0,
-            'ana-maria': 0,
-            'gustavo': 0
-        };
+        // NUEVO: Calcular pacientes únicos por estudiante (NO sesiones)
+        uniquePatientsByStudent = {};
+        const patientsByStudent = {};
         
         appointments.forEach(a => {
-            const therapist = a.terapeuta;
-            if (therapist && appointmentsByTherapist[therapist] !== undefined) {
-                appointmentsByTherapist[therapist]++;
+            if (!a.estudiante || !a.paciente) return;
+            
+            // Inicializar arrays si no existen
+            if (!patientsByStudent[a.estudiante]) {
+                patientsByStudent[a.estudiante] = [];
+            }
+            
+            // Añadir paciente si no está ya (para evitar duplicados)
+            if (!patientsByStudent[a.estudiante].includes(a.paciente)) {
+                patientsByStudent[a.estudiante].push(a.paciente);
             }
         });
+        
+        // Contar pacientes únicos
+        for (const student in patientsByStudent) {
+            uniquePatientsByStudent[student] = patientsByStudent[student].length;
+        }
         
         // Actualizar DOM
         document.getElementById('attendance-rate').textContent = `${attendanceRate}%`;
         document.getElementById('total-appointments').textContent = appointments.length;
         document.getElementById('busiest-hour').textContent = `${busiestHour}:00`;
         
-        // Actualizar gráfico de terapeutas
-        const chartContainer = document.getElementById('therapist-chart');
-        chartContainer.innerHTML = '';
+        // Actualizar gráfico de estudiantes
+        const chartContainer = document.getElementById('student-chart');
+        const chartLabels = document.getElementById('student-chart-labels');
         
-        const maxValue = Math.max(
-            appointmentsByTherapist['nicolas'], 
-            appointmentsByTherapist['ana-maria'], 
-            appointmentsByTherapist['gustavo'],
-            1 // Evita división por cero
-        );
-        
-        const therapists = ['nicolas', 'ana-maria', 'gustavo'];
-        
-        therapists.forEach(therapist => {
-            const value = appointmentsByTherapist[therapist];
-            const height = Math.max((value / maxValue) * 100, 5); // Al menos 5% de altura
+        if (chartContainer && chartLabels) {
+            chartContainer.innerHTML = '';
+            chartLabels.innerHTML = '';
             
-            const barEl = document.createElement('div');
-            barEl.className = 'chart-bar';
-            barEl.style.height = `${height}%`;
+            // Obtener el valor máximo para escalar el gráfico
+            const maxValue = Math.max(...Object.values(uniquePatientsByStudent), 1);
             
-            const valueEl = document.createElement('div');
-            valueEl.className = 'chart-value';
-            valueEl.textContent = value;
+            // Ordenar para mostrar primero los que tienen más pacientes
+            const sortedStudents = Object.keys(uniquePatientsByStudent).sort((a, b) => 
+                uniquePatientsByStudent[b] - uniquePatientsByStudent[a]
+            );
             
-            barEl.appendChild(valueEl);
-            chartContainer.appendChild(barEl);
-        });
+            sortedStudents.forEach(student => {
+                const value = uniquePatientsByStudent[student];
+                const height = Math.max((value / maxValue) * 100, 5); // Al menos 5% de altura
+                
+                // Crear barra
+                const barEl = document.createElement('div');
+                barEl.className = 'chart-bar';
+                barEl.style.height = `${height}%`;
+                
+                // Número de pacientes
+                const valueEl = document.createElement('div');
+                valueEl.className = 'chart-value';
+                valueEl.textContent = value;
+                barEl.appendChild(valueEl);
+                
+                chartContainer.appendChild(barEl);
+                
+                // Crear etiqueta
+                const labelEl = document.createElement('div');
+                labelEl.className = 'chart-label';
+                labelEl.textContent = studentNames[student] || student;
+                chartLabels.appendChild(labelEl);
+            });
+        }
     } catch (error) {
         console.error("Error al actualizar estadísticas:", error);
     }
@@ -2132,10 +2381,12 @@ function saveAppointment() {
         const date = new Date(year, month - 1, day, hours, minutes);
         
         // Verificar si es feriado
+        // Verificar si es feriado
         const dateStr = formatDate(date);
-        if (holidays.some(h => h.date === dateStr)) {
+        const holidayMatch = holidays.find(h => h.date === dateStr);
+        if (holidayMatch) {
             hideSpinner();
-            showStatusMessage('No se pueden agendar citas en días feriados.', 'warning');
+            showStatusMessage(`No se pueden agendar citas en días feriados. ${dateStr} es "${holidayMatch.name}".`, 'warning');
             return;
         }
         
