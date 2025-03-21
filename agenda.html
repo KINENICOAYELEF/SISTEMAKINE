@@ -1085,1578 +1085,1380 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    
-    <script>
-    // Configuración de Firebase - REEMPLAZA ESTOS VALORES CON LOS DE TU PROYECTO FIREBASE
-    const firebaseConfig = {
-        apiKey: "AIzaSyA8fY-L1r3nBq61CFPOAFRI6TlS9A5GNTA",
-        authDomain: "agendapoli-13963.firebaseapp.com",
-        projectId: "agendapoli-13963",
-        storageBucket: "agendapoli-13963.firebasestorage.app",
-        messagingSenderId: "265927768586",
-        appId: "1:265927768586:web:c7e37e6a561bd996687df3"
-    };
-    
-    // Inicializar Firebase (con manejo de errores)
-    try {
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            console.log("[DEBUG] Firebase inicializado correctamente");
-        } else {
-            console.log("[DEBUG] Firebase ya estaba inicializado");
-        }
-    } catch (error) {
-        console.error("[DEBUG] Error al inicializar Firebase:", error);
-        alert("Error al inicializar Firebase. Por favor revisa la consola para detalles.");
-    }
 
-    // Referencias a Firebase
-    let auth, db;
-    try {
-        auth = firebase.auth();
-        db = firebase.firestore();
-        console.log("[DEBUG] Referencias a auth y db creadas");
-    } catch (error) {
-        console.error("[DEBUG] Error al crear referencias:", error);
-        alert("Error al conectar con Firebase. Verifica tu conexión a internet.");
+
+    <script>
+  // Configuración de Firebase - REEMPLAZA ESTOS VALORES CON LOS DE TU PROYECTO FIREBASE
+const firebaseConfig = {
+    apiKey: "AIzaSyA8fY-L1r3nBq61CFPOAFRI6TlS9A5GNTA",
+    authDomain: "agendapoli-13963.firebaseapp.com",
+    projectId: "agendapoli-13963",
+    storageBucket: "agendapoli-13963.firebasestorage.app",
+    messagingSenderId: "265927768586",
+    appId: "1:265927768586:web:c7e37e6a561bd996687df3"
+};
+
+// Inicializar Firebase (con manejo de errores)
+try {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+        console.log("[DEBUG] Firebase inicializado correctamente");
+    } else {
+        console.log("[DEBUG] Firebase ya estaba inicializado");
     }
+} catch (error) {
+    console.error("[DEBUG] Error al inicializar Firebase:", error);
+    alert("Error al inicializar Firebase. Por favor revisa la consola para detalles.");
+}
+
+// Referencias a Firebase
+let auth, db;
+try {
+    auth = firebase.auth();
+    db = firebase.firestore();
+    console.log("[DEBUG] Referencias a auth y db creadas");
+} catch (error) {
+    console.error("[DEBUG] Error al crear referencias:", error);
+    alert("Error al conectar con Firebase. Verifica tu conexión a internet.");
+}
+
+// Variables globales
+let currentUser = null;
+let isAdmin = false;
+let appointments = [];
+let editingAppointmentId = null;
+let holidays = [];
+let currentWeekDate = new Date();
+
+// Elementos DOM
+const spinner = document.getElementById('spinner');
+const statusMessage = document.getElementById('status-message');
+const loginContainer = document.getElementById('login-container');
+const mainContainer = document.getElementById('main-container');
+const appointmentModal = document.getElementById('appointment-modal');
+const appointmentForm = document.getElementById('appointment-form');
+const attendanceModal = document.getElementById('attendance-modal');
+const currentWeekDisplay = document.getElementById('current-week');
+const loginForm = document.getElementById('login-form');
+const userNameDisplay = document.getElementById('user-name');
+const logoutBtn = document.getElementById('logout-btn');
+
+// Inicializar la aplicación
+document.addEventListener('DOMContentLoaded', function() {
+    // Mostrar spinner mientras carga
+    showSpinner();
     
-    // Variables globales
-    let currentUser = null;
-    let isAdmin = false;
-    let appointments = [];
-    let editingAppointmentId = null;
-    let holidays = [];
-    let currentWeekDate = new Date();
-    
-    // Elementos DOM
-    const spinner = document.getElementById('spinner');
-    const statusMessage = document.getElementById('status-message');
-    const loginContainer = document.getElementById('login-container');
-    const mainContainer = document.getElementById('main-container');
-    const appointmentModal = document.getElementById('appointment-modal');
-    const appointmentForm = document.getElementById('appointment-form');
-    const attendanceModal = document.getElementById('attendance-modal');
-    const currentWeekDisplay = document.getElementById('current-week');
-    const loginForm = document.getElementById('login-form');
-    const userNameDisplay = document.getElementById('user-name');
-    const logoutBtn = document.getElementById('logout-btn');
-    
-    // Inicializar la aplicación
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mostrar spinner mientras carga
-        showSpinner();
+    // Verificar estado de autenticación
+    auth.onAuthStateChanged(function(user) {
+        console.log("[DEBUG] Estado de autenticación cambiado");
         
-        // Verificar estado de autenticación
-        auth.onAuthStateChanged(function(user) {
-            console.log("[DEBUG] Estado de autenticación cambiado");
+        if (user) {
+            // Usuario autenticado
+            currentUser = user;
+            console.log("[DEBUG] Usuario autenticado:", user.email);
+            console.log("[DEBUG] UID del usuario:", user.uid);
+            userNameDisplay.textContent = user.email;
             
-            if (user) {
-                // Usuario autenticado
-                currentUser = user;
-                console.log("[DEBUG] Usuario autenticado:", user.email);
-                console.log("[DEBUG] UID del usuario:", user.uid);
-                userNameDisplay.textContent = user.email;
-                
-                // Esperar un momento antes de verificar el rol (para asegurar que Firebase esté listo)
-                setTimeout(() => {
-                    checkUserRole(user.uid);
-                }, 1000);
-            } else {
-                // Usuario no autenticado
-                console.log("[DEBUG] No hay usuario autenticado");
-                showLoginScreen();
-                hideSpinner();
-            }
-        });
-        
-        // Configurar event listeners
-        setupEventListeners();
-        
-        // Solución temporal: si después de 10 segundos sigue mostrando spinner, ocultarlo
-        setTimeout(() => {
-            if (spinner.style.display === 'flex') {
-                hideSpinner();
-                showStatusMessage('Carga completada', 'success');
-            }
-        }, 10000);
+            // Esperar un momento antes de verificar el rol (para asegurar que Firebase esté listo)
+            setTimeout(() => {
+                checkUserRole(user.uid);
+            }, 1000);
+        } else {
+            // Usuario no autenticado
+            console.log("[DEBUG] No hay usuario autenticado");
+            showLoginScreen();
+            hideSpinner();
+        }
     });
     
-    function checkUserRole(userId) {
-        console.log("[DEBUG] Usuario autenticado:", userId);
-        
-        // Tratar a todos los usuarios como administradores
-        isAdmin = true;
-        document.body.classList.remove('student-view');
-        
-        try {
-            // Obtener información del usuario para el historial
-            db.collection('usuarios').doc(userId).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        // Guardar información del usuario para el historial
-                        const userData = doc.data();
-                        console.log("[DEBUG] Información del usuario:", userData);
-                    } else {
-                        // Si no existe el documento del usuario, crearlo con timestamp
-                        db.collection('usuarios').doc(userId).set({
-                            email: currentUser.email,
-                            ultimoAcceso: firebase.firestore.FieldValue.serverTimestamp()
-                        })
-                        .then(() => {
-                            console.log("[DEBUG] Documento de usuario creado");
-                        })
-                        .catch(error => {
-                            console.error("[DEBUG] Error al crear documento de usuario:", error);
-                            showStatusMessage("Error al guardar información de usuario", "error");
-                        });
-                    }
-                    
-                    // Inicializar la agenda
-                    initializeApp();
-                })
-                .catch((error) => {
-                    console.error("[DEBUG] Error al obtener información del usuario:", error);
-                    showStatusMessage("Error al cargar datos de usuario", "error");
-                    
-                    // De todos modos inicializar la aplicación
-                    isAdmin = true;
-                    document.body.classList.remove('student-view');
-                    initializeApp();
-                });
-        } catch (error) {
-            console.error("Error crítico al acceder a la base de datos:", error);
-            showStatusMessage("Error de conexión con la base de datos", "error");
-            
-            // Fallback para permitir al usuario ver al menos algo
-            isAdmin = true;
-            document.body.classList.remove('student-view');
-            initializeApp();
+    // Configurar event listeners
+    setupEventListeners();
+    
+    // Solución temporal: si después de 10 segundos sigue mostrando spinner, ocultarlo
+    setTimeout(() => {
+        if (spinner.style.display === 'flex') {
+            hideSpinner();
+            showStatusMessage('Carga completada', 'success');
         }
-    }
+    }, 10000);
+});
+
+function checkUserRole(userId) {
+    console.log("[DEBUG] Usuario autenticado:", userId);
     
-    // Inicializar la aplicación
-    function initializeApp() {
-        loadHolidays();
-        updateWeekDisplay();
-        
-        try {
-            loadAppointments();
-        } catch (error) {
-            console.error("Error al cargar citas:", error);
-            showStatusMessage("Error al cargar citas. Usando datos de ejemplo.", "warning");
-            loadSampleAppointments();
-        }
-        
-        // Mostrar la interfaz principal
-        loginContainer.style.display = 'none';
-        mainContainer.style.display = 'block';
-        
-        hideSpinner();
-    }
+    // Tratar a todos los usuarios como administradores
+    isAdmin = true;
+    document.body.classList.remove('student-view');
     
-    // Mostrar pantalla de login
-    function showLoginScreen() {
-        loginContainer.style.display = 'block';
-        mainContainer.style.display = 'none';
-    }
-    
-    // Cargar los feriados chilenos
-    function loadHolidays() {
-        holidays = [
-            { date: '2025-01-01', name: 'Año Nuevo' },
-            { date: '2025-04-18', name: 'Viernes Santo' },
-            { date: '2025-04-19', name: 'Sábado Santo' },
-            { date: '2025-05-01', name: 'Día del Trabajo' },
-            { date: '2025-05-21', name: 'Día de las Glorias Navales' },
-            { date: '2025-06-29', name: 'San Pedro y San Pablo' },
-            { date: '2025-07-16', name: 'Virgen del Carmen' },
-            { date: '2025-08-15', name: 'Asunción de la Virgen' },
-            { date: '2025-09-18', name: 'Independencia Nacional' },
-            { date: '2025-09-19', name: 'Día de las Glorias del Ejército' },
-            { date: '2025-10-12', name: 'Encuentro de Dos Mundos' },
-            { date: '2025-10-31', name: 'Día de las Iglesias Evangélicas' },
-            { date: '2025-11-01', name: 'Día de Todos los Santos' },
-            { date: '2025-12-08', name: 'Inmaculada Concepción' },
-            { date: '2025-12-25', name: 'Navidad' }
-        ];
-    }
-    
-    // Actualizar la visualización de la semana actual
-    function updateWeekDisplay() {
-        const startOfWeek = getStartOfWeek(currentWeekDate);
-        
-        // Actualizar el texto principal de la semana
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 3); // Solo hasta jueves (4 días)
-        
-        const startDay = startOfWeek.getDate();
-        const endDay = endOfWeek.getDate();
-        const startMonthName = getMonthName(startOfWeek.getMonth());
-        const endMonthName = getMonthName(endOfWeek.getMonth());
-        const year = startOfWeek.getFullYear();
-        
-        currentWeekDisplay.textContent = `Semana del ${startDay} al ${endDay} de ${endMonthName} de ${year}`;
-        
-        // Actualizar los encabezados de días con las fechas correspondientes
-        for (let i = 1; i <= 4; i++) {
-            const dayDate = new Date(startOfWeek);
-            dayDate.setDate(startOfWeek.getDate() + (i - 1));
-            
-            const dayHeader = document.getElementById(`day-header-${i}`);
-            const dateHeader = document.getElementById(`date-header-${i}`);
-            
-            if (dayHeader && dateHeader) {
-                const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-                dayHeader.textContent = dayNames[dayDate.getDay()];
-                dateHeader.textContent = `${dayDate.getDate()}/${dayDate.getMonth() + 1}`;
-                
-                // Resaltar el día actual si está en la semana mostrada
-                const today = new Date();
-                if (dayDate.toDateString() === today.toDateString()) {
-                    dayHeader.classList.add('current-day');
-                    dateHeader.classList.add('current-day');
-                    // También resaltar las celdas del día actual
-                    document.querySelectorAll(`.schedule-cell[data-day="${i}"]`).forEach(cell => {
-                        cell.classList.add('current-day');
-                    });
+    try {
+        // Obtener información del usuario para el historial
+        db.collection('usuarios').doc(userId).get()
+            .then((doc) => {
+                if (doc.exists) {
+                    // Guardar información del usuario para el historial
+                    const userData = doc.data();
+                    console.log("[DEBUG] Información del usuario:", userData);
                 } else {
-                    dayHeader.classList.remove('current-day');
-                    dateHeader.classList.remove('current-day');
-                    document.querySelectorAll(`.schedule-cell[data-day="${i}"]`).forEach(cell => {
-                        cell.classList.remove('current-day');
+                    // Si no existe el documento del usuario, crearlo con timestamp
+                    db.collection('usuarios').doc(userId).set({
+                        email: currentUser.email,
+                        ultimoAcceso: new Date().toISOString()
+                    })
+                    .then(() => {
+                        console.log("[DEBUG] Documento de usuario creado");
+                    })
+                    .catch(error => {
+                        console.error("[DEBUG] Error al crear documento de usuario:", error);
+                        showStatusMessage("Error al guardar información de usuario", "error");
                     });
                 }
+                
+                // Inicializar la agenda
+                initializeApp();
+            })
+            .catch((error) => {
+                console.error("[DEBUG] Error al obtener información del usuario:", error);
+                showStatusMessage("Error al cargar datos de usuario", "error");
+                
+                // De todos modos inicializar la aplicación
+                isAdmin = true;
+                document.body.classList.remove('student-view');
+                initializeApp();
+            });
+    } catch (error) {
+        console.error("Error crítico al acceder a la base de datos:", error);
+        showStatusMessage("Error de conexión con la base de datos", "error");
+        
+        // Fallback para permitir al usuario ver al menos algo
+        isAdmin = true;
+        document.body.classList.remove('student-view');
+        initializeApp();
+    }
+}
+
+// Inicializar la aplicación
+function initializeApp() {
+    loadHolidays();
+    updateWeekDisplay();
+    
+    try {
+        loadAppointments();
+    } catch (error) {
+        console.error("Error al cargar citas:", error);
+        showStatusMessage("Error al cargar citas. Usando datos de ejemplo.", "warning");
+        loadSampleAppointments();
+    }
+    
+    // Mostrar la interfaz principal
+    loginContainer.style.display = 'none';
+    mainContainer.style.display = 'block';
+    
+    hideSpinner();
+}
+
+// Mostrar pantalla de login
+function showLoginScreen() {
+    loginContainer.style.display = 'block';
+    mainContainer.style.display = 'none';
+}
+
+// Cargar los feriados chilenos
+function loadHolidays() {
+    holidays = [
+        { date: '2025-01-01', name: 'Año Nuevo' },
+        { date: '2025-04-18', name: 'Viernes Santo' },
+        { date: '2025-04-19', name: 'Sábado Santo' },
+        { date: '2025-05-01', name: 'Día del Trabajo' },
+        { date: '2025-05-21', name: 'Día de las Glorias Navales' },
+        { date: '2025-06-29', name: 'San Pedro y San Pablo' },
+        { date: '2025-07-16', name: 'Virgen del Carmen' },
+        { date: '2025-08-15', name: 'Asunción de la Virgen' },
+        { date: '2025-09-18', name: 'Independencia Nacional' },
+        { date: '2025-09-19', name: 'Día de las Glorias del Ejército' },
+        { date: '2025-10-12', name: 'Encuentro de Dos Mundos' },
+        { date: '2025-10-31', name: 'Día de las Iglesias Evangélicas' },
+        { date: '2025-11-01', name: 'Día de Todos los Santos' },
+        { date: '2025-12-08', name: 'Inmaculada Concepción' },
+        { date: '2025-12-25', name: 'Navidad' }
+    ];
+}
+
+// Actualizar la visualización de la semana actual
+function updateWeekDisplay() {
+    const startOfWeek = getStartOfWeek(currentWeekDate);
+    
+    // Actualizar el texto principal de la semana
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 3); // Solo hasta jueves (4 días)
+    
+    const startDay = startOfWeek.getDate();
+    const endDay = endOfWeek.getDate();
+    const startMonthName = getMonthName(startOfWeek.getMonth());
+    const endMonthName = getMonthName(endOfWeek.getMonth());
+    const year = startOfWeek.getFullYear();
+    
+    currentWeekDisplay.textContent = `Semana del ${startDay} al ${endDay} de ${endMonthName} de ${year}`;
+    
+    // Actualizar los encabezados de días con las fechas correspondientes
+    for (let i = 1; i <= 4; i++) {
+        const dayDate = new Date(startOfWeek);
+        dayDate.setDate(startOfWeek.getDate() + (i - 1));
+        
+        const dayHeader = document.getElementById(`day-header-${i}`);
+        const dateHeader = document.getElementById(`date-header-${i}`);
+        
+        if (dayHeader && dateHeader) {
+            const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            dayHeader.textContent = dayNames[dayDate.getDay()];
+            dateHeader.textContent = `${dayDate.getDate()}/${dayDate.getMonth() + 1}`;
+            
+            // Resaltar el día actual si está en la semana mostrada
+            const today = new Date();
+            if (dayDate.toDateString() === today.toDateString()) {
+                dayHeader.classList.add('current-day');
+                dateHeader.classList.add('current-day');
+                // También resaltar las celdas del día actual
+                document.querySelectorAll(`.schedule-cell[data-day="${i}"]`).forEach(cell => {
+                    cell.classList.add('current-day');
+                });
+            } else {
+                dayHeader.classList.remove('current-day');
+                dateHeader.classList.remove('current-day');
+                document.querySelectorAll(`.schedule-cell[data-day="${i}"]`).forEach(cell => {
+                    cell.classList.remove('current-day');
+                });
             }
         }
     }
+}
+
+// Obtener el primer día de la semana (lunes)
+function getStartOfWeek(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Ajusta cuando el día es domingo
+    const monday = new Date(d.setDate(diff));
+    monday.setHours(0, 0, 0, 0);
+    return monday;
+}
+
+// Obtener nombre del mes en español
+function getMonthName(month) {
+    const months = [
+        'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
+        'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+    ];
+    return months[month];
+}
+
+// Cargar citas desde Firestore
+function loadAppointments() {
+    showSpinner();
     
-    // Obtener el primer día de la semana (lunes)
-    function getStartOfWeek(date) {
-        const d = new Date(date);
-        const day = d.getDay();
-        const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Ajusta cuando el día es domingo
-        const monday = new Date(d.setDate(diff));
-        monday.setHours(0, 0, 0, 0);
-        return monday;
-    }
+    // Obtener fecha de inicio y fin de la semana
+    const startOfWeek = getStartOfWeek(currentWeekDate);
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 4); // Un día después del jueves
     
-    // Obtener nombre del mes en español
-    function getMonthName(month) {
-        const months = [
-            'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
-            'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
-        ];
-        return months[month];
-    }
-    
-    // Cargar citas desde Firestore
-    function loadAppointments() {
-        showSpinner();
-        
-        // Obtener fecha de inicio y fin de la semana
-        const startOfWeek = getStartOfWeek(currentWeekDate);
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 4); // Un día después del jueves
-        
-        try {
-            // Convertir a Timestamp para consulta
-            const startTimestamp = firebase.firestore.Timestamp.fromDate(startOfWeek);
-            const endTimestamp = firebase.firestore.Timestamp.fromDate(endOfWeek);
-            
-            // Consulta a Firestore
-            db.collection('citas')
-                .where('fecha', '>=', startTimestamp)
-                .where('fecha', '<', endTimestamp)
-                .get()
-                .then((querySnapshot) => {
-                    appointments = [];
-                    
-                    querySnapshot.forEach((doc) => {
-                        try {
-                            // Convertir Timestamp a Date
-                            const data = doc.data();
+    try {
+        // Consulta a Firestore
+        db.collection('citas').get()
+            .then((querySnapshot) => {
+                appointments = [];
+                
+                querySnapshot.forEach((doc) => {
+                    try {
+                        // Convertir datos a formato utilizable
+                        const data = doc.data();
+                        
+                        // Convertir el campo fecha a un objeto Date
+                        let appointmentDate;
+                        if (data.fecha && data.fecha.toDate) {
+                            appointmentDate = data.fecha.toDate();
+                        } else if (data.fecha) {
+                            appointmentDate = new Date(data.fecha);
+                        } else {
+                            // Si no hay fecha, saltarse esta cita
+                            console.warn("Cita sin fecha encontrada, ID:", doc.id);
+                            return;
+                        }
+                        
+                        // Filtrar solo las citas de esta semana
+                        if (appointmentDate >= startOfWeek && appointmentDate < endOfWeek) {
                             const appointment = {
                                 id: doc.id,
                                 ...data,
-                                fecha: data.fecha ? data.fecha.toDate() : new Date()
+                                fecha: appointmentDate
                             };
                             
                             appointments.push(appointment);
-                        } catch (error) {
-                            console.error("Error procesando cita individual:", error);
                         }
-                    });
-                    
-                    // Renderizar citas y actualizar estadísticas
-                    renderAppointments();
-                    updateStatistics();
-                    hideSpinner();
-                })
-                .catch((error) => {
-                    console.error("Error al cargar citas:", error);
-                    showStatusMessage("Error al cargar citas. Cargando datos de ejemplo.", "warning");
-                    loadSampleAppointments(); // Cargar datos de ejemplo en caso de error
-                    hideSpinner();
+                    } catch (error) {
+                        console.error("Error procesando cita individual:", error);
+                    }
                 });
-        } catch (error) {
-            console.error("Error crítico al cargar citas:", error);
-            showStatusMessage("Error de conexión. Cargando datos de ejemplo.", "error");
-            loadSampleAppointments();
-            hideSpinner();
-        }
+                
+                // Renderizar citas y actualizar estadísticas
+                renderAppointments();
+                updateStatistics();
+                hideSpinner();
+            })
+            .catch((error) => {
+                console.error("Error al cargar citas:", error);
+                showStatusMessage("Error al cargar citas. Cargando datos de ejemplo.", "warning");
+                loadSampleAppointments(); // Cargar datos de ejemplo en caso de error
+                hideSpinner();
+            });
+    } catch (error) {
+        console.error("Error crítico al cargar citas:", error);
+        showStatusMessage("Error de conexión. Cargando datos de ejemplo.", "error");
+        loadSampleAppointments();
+        hideSpinner();
     }
+}
+
+// Cargar citas de ejemplo (en caso de error o para la primera vez)
+function loadSampleAppointments() {
+    // Fecha de referencia (lunes de la semana actual)
+    const startOfWeek = getStartOfWeek(currentWeekDate);
     
-    // Cargar citas de ejemplo (en caso de error o para la primera vez)
-    function loadSampleAppointments() {
+    appointments = [
+        {
+            id: '1',
+            paciente: 'María González',
+            tipo: 'Evaluación kinesiología MSK',
+            tipoClase: 'evaluacion-msk',
+            fecha: new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate(), 9, 0),
+            duracion: 60,
+            terapeuta: 'nicolas',
+            estudiante: 'estudiante1'
+        },
+        {
+            id: '2',
+            paciente: 'Ana Martínez',
+            tipo: 'Sesión kinesiología MSK',
+            tipoClase: 'sesion-msk',
+            fecha: new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate(), 11, 0),
+            duracion: 60,
+            terapeuta: 'ana-maria',
+            estudiante: 'estudiante2'
+        },
+        {
+            id: '3',
+            paciente: 'Laura Pérez',
+            tipo: 'Evaluación kinesiología deportiva',
+            tipoClase: 'evaluacion-deportiva',
+            fecha: new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate(), 13, 0),
+            duracion: 60,
+            terapeuta: 'nicolas',
+            estudiante: 'estudiante3'
+        },
+        {
+            id: '4',
+            paciente: 'Isabel Rodríguez',
+            tipo: 'Sesión kinesiología deportiva',
+            tipoClase: 'sesion-deportiva',
+            fecha: new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 1, 10, 0),
+            duracion: 60,
+            terapeuta: 'ana-maria',
+            estudiante: 'estudiante4',
+            esRecurrente: true
+        }
+    ];
+    
+    renderAppointments();
+    updateStatistics();
+}
+
+// Renderizar las citas en la cuadrícula
+function renderAppointments() {
+    try {
+        // Limpiar citas existentes
+        document.querySelectorAll('.appointment').forEach(el => el.remove());
+        
         // Fecha de referencia (lunes de la semana actual)
         const startOfWeek = getStartOfWeek(currentWeekDate);
         
-        appointments = [
-            {
-                id: '1',
-                paciente: 'María González',
-                tipo: 'Evaluación kinesiología MSK',
-                tipoClase: 'evaluacion-msk',
-                fecha: new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate(), 9, 0),
-                duracion: 60,
-                terapeuta: 'nicolas',
-                estudiante: 'estudiante1'
-            },
-            {
-                id: '2',
-                paciente: 'Ana Martínez',
-                tipo: 'Sesión kinesiología MSK',
-                tipoClase: 'sesion-msk',
-                fecha: new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate(), 11, 0),
-                duracion: 60,
-                terapeuta: 'ana-maria',
-                estudiante: 'estudiante2'
-            },
-            {
-                id: '3',
-                paciente: 'Laura Pérez',
-                tipo: 'Evaluación kinesiología deportiva',
-                tipoClase: 'evaluacion-deportiva',
-                fecha: new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate(), 13, 0),
-                duracion: 60,
-                terapeuta: 'nicolas',
-                estudiante: 'estudiante3'
-            },
-            {
-                id: '4',
-                paciente: 'Isabel Rodríguez',
-                tipo: 'Sesión kinesiología deportiva',
-                tipoClase: 'sesion-deportiva',
-                fecha: new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 1, 10, 0),
-                duracion: 60,
-                terapeuta: 'ana-maria',
-                estudiante: 'estudiante4',
-                esRecurrente: true
-            }
-        ];
-        
-        renderAppointments();
-        updateStatistics();
-    }
-    
-    // Renderizar las citas en la cuadrícula
-    function renderAppointments() {
-        try {
-            // Limpiar citas existentes
-            document.querySelectorAll('.appointment').forEach(el => el.remove());
-            
-            // Fecha de referencia (lunes de la semana actual)
-            const startOfWeek = getStartOfWeek(currentWeekDate);
-            
-            // Renderizar cada cita de la semana actual
-            appointments.forEach(appointment => {
-                try {
-                    if (!appointment.fecha) {
-                        console.error("Cita sin fecha:", appointment);
-                        return;
-                    }
+        // Renderizar cada cita de la semana actual
+        appointments.forEach(appointment => {
+            try {
+                if (!appointment.fecha) {
+                    console.error("Cita sin fecha:", appointment);
+                    return;
+                }
+                
+                const appointmentDate = appointment.fecha;
+                const dayDiff = Math.floor((appointmentDate - startOfWeek) / (24 * 60 * 60 * 1000));
+                
+                // Solo mostrar citas de lunes a jueves (0-3)
+                if (dayDiff >= 0 && dayDiff < 4) {
+                    const hour = appointmentDate.getHours();
+                    const dayIndex = dayDiff + 1; // 1 para lunes, 2 para martes, etc.
                     
-                    const appointmentDate = appointment.fecha;
-                    const dayDiff = Math.floor((appointmentDate - startOfWeek) / (24 * 60 * 60 * 1000));
+                    // Encontrar la celda correcta
+                    const cell = document.querySelector(`.schedule-cell[data-hour="${hour}"][data-day="${dayIndex}"]`);
                     
-                    // Solo mostrar citas de lunes a jueves (0-3)
-                    if (dayDiff >= 0 && dayDiff < 4) {
-                        const hour = appointmentDate.getHours();
-                        const dayIndex = dayDiff + 1; // 1 para lunes, 2 para martes, etc.
+                    if (cell) {
+                        // Crear elemento de cita
+                        const appointmentEl = document.createElement('div');
+                        appointmentEl.className = `appointment ${appointment.tipoClase || 'evaluacion-msk'}`;
+                        appointmentEl.dataset.id = appointment.id;
                         
-                        // Encontrar la celda correcta
-                        const cell = document.querySelector(`.schedule-cell[data-hour="${hour}"][data-day="${dayIndex}"]`);
+                        // Añadir clase si es recurrente
+                        if (appointment.esRecurrente) {
+                            appointmentEl.classList.add('recurring');
+                        }
                         
-                        if (cell) {
-                            // Crear elemento de cita
-                            const appointmentEl = document.createElement('div');
-                            appointmentEl.className = `appointment ${appointment.tipoClase}`;
-                            appointmentEl.dataset.id = appointment.id;
-                            
-                            // Añadir clase si es recurrente
-                            if (appointment.esRecurrente) {
-                                appointmentEl.classList.add('recurring');
-                            }
-                            
-                            // Determinar si mostrar el kinesiólogo (solo para sesiones)
-                            const showTherapist = appointment.tipoClase && appointment.tipoClase.startsWith('sesion-');
-                            
-                            // Contenido de la cita
-                            let content = `
-                                <div class="appointment-title">${appointment.paciente || 'Sin nombre'}</div>
-                                <div class="appointment-type">${appointment.tipo || 'Sin tipo'}</div>
-                            `;
-                            
-                            if (showTherapist) {
-                                content += `<div class="appointment-therapist">${getTherapistName(appointment.terapeuta)}</div>`;
-                            }
-                            
-                            // Estudiante asignado
-                            content += `<div class="student-badge">${appointment.estudiante || 'Sin asignar'}</div>`;
-                            
-                            appointmentEl.innerHTML = content;
-                            
-                            // Indicador de estado si existe
-                            if (appointment.estado) {
-                                const statusEl = document.createElement('div');
-                                statusEl.className = `appointment-status ${appointment.estado}`;
-                                appointmentEl.appendChild(statusEl);
-                            }
-                            
-                            // Indicador web si aplica
-                            if (appointment.web) {
-                                const webEl = document.createElement('div');
-                                webEl.className = 'web-indicator';
-                                webEl.innerHTML = '🌐';
-                                appointmentEl.appendChild(webEl);
-                            }
-                            
-                            // Agregar a la celda
-                            cell.appendChild(appointmentEl);
-                            
-                            // Eventos para la cita
-                            appointmentEl.addEventListener('click', function(e) {
-                                e.stopPropagation();
-                                const app = appointments.find(a => a.id === this.dataset.id);
-                                if (app) {
-                                    // Si la cita ya pasó, mostrar modal de asistencia
-                                    const today = new Date();
-                                    if (app.fecha < today) {
-                                        if (isAdmin) {
-                                            openAttendanceModal(app);
-                                        } else {
-                                            viewAppointmentDetails(app);
-                                        }
+                        // Determinar si mostrar el kinesiólogo (solo para sesiones)
+                        const showTherapist = appointment.tipoClase && appointment.tipoClase.startsWith('sesion-');
+                        
+                        // Contenido de la cita
+                        let content = `
+                            <div class="appointment-title">${appointment.paciente || 'Sin nombre'}</div>
+                            <div class="appointment-type">${appointment.tipo || 'Sin tipo'}</div>
+                        `;
+                        
+                        if (showTherapist) {
+                            content += `<div class="appointment-therapist">${getTherapistName(appointment.terapeuta)}</div>`;
+                        }
+                        
+                        // Estudiante asignado
+                        content += `<div class="student-badge">${appointment.estudiante || 'Sin asignar'}</div>`;
+                        
+                        appointmentEl.innerHTML = content;
+                        
+                        // Indicador de estado si existe
+                        if (appointment.estado) {
+                            const statusEl = document.createElement('div');
+                            statusEl.className = `appointment-status ${appointment.estado}`;
+                            appointmentEl.appendChild(statusEl);
+                        }
+                        
+                        // Indicador web si aplica
+                        if (appointment.web) {
+                            const webEl = document.createElement('div');
+                            webEl.className = 'web-indicator';
+                            webEl.innerHTML = '🌐';
+                            appointmentEl.appendChild(webEl);
+                        }
+                        
+                        // Agregar a la celda
+                        cell.appendChild(appointmentEl);
+                        
+                        // Eventos para la cita
+                        appointmentEl.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const app = appointments.find(a => a.id === this.dataset.id);
+                            if (app) {
+                                // Si la cita ya pasó, mostrar modal de asistencia
+                                const today = new Date();
+                                if (app.fecha < today) {
+                                    if (isAdmin) {
+                                        openAttendanceModal(app);
                                     } else {
-                                        // Si es una cita futura
-                                        if (isAdmin) {
-                                            openAppointmentModal(app);
-                                        } else {
-                                            viewAppointmentDetails(app);
-                                        }
+                                        viewAppointmentDetails(app);
+                                    }
+                                } else {
+                                    // Si es una cita futura
+                                    if (isAdmin) {
+                                        openAppointmentModal(app);
+                                    } else {
+                                        viewAppointmentDetails(app);
                                     }
                                 }
-                            });
-                            
-                            // Hacer que las citas sean arrastrables para administradores
-                            if (isAdmin) {
-                                appointmentEl.setAttribute('draggable', 'true');
-                                appointmentEl.addEventListener('dragstart', function(e) {
-                                    e.dataTransfer.setData('text/plain', this.dataset.id);
-                                });
                             }
-                        }
-                    }
-                } catch (error) {
-                    console.error("Error al renderizar cita individual:", error, appointment);
-                }
-            });
-        } catch (error) {
-            console.error("Error al renderizar citas:", error);
-            showStatusMessage("Error al mostrar las citas", "error");
-        }
-    }
-    
-    // Mostrar detalles de la cita (para estudiantes)
-    function viewAppointmentDetails(appointment) {
-        const options = { 
-            weekday: 'long', 
-            day: 'numeric', 
-            month: 'long', 
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        };
-        
-        let details = `
-            Paciente: ${appointment.paciente || 'Sin nombre'}
-            Tipo: ${appointment.tipo || 'Sin especificar'}
-            Fecha: ${appointment.fecha ? appointment.fecha.toLocaleDateString('es-ES', options) : 'Fecha no disponible'}
-            Kinesiólogo: ${getTherapistName(appointment.terapeuta)}
-            Estudiante: ${appointment.estudiante || 'Sin asignar'}
-        `;
-        
-        if (appointment.estado) {
-            details += `\nEstado: ${getStatusText(appointment.estado)}`;
-        }
-        
-        alert(details);
-    }
-    
-    // Obtener nombre completo del terapeuta
-    function getTherapistName(therapistId) {
-        switch(therapistId) {
-            case 'nicolas': return 'Nicolás';
-            case 'ana-maria': return 'Ana María';
-            case 'gustavo': return 'Gustavo';
-            default: return therapistId || 'Sin asignar';
-        }
-    }
-    
-    // Obtener texto del estado
-    function getStatusText(status) {
-        switch(status) {
-            case 'attended': return 'Asistió';
-            case 'missed': return 'No asistió';
-            case 'rescheduled': return 'Reprogramada';
-            default: return status;
-        }
-    }
-    
-    // Actualizar estadísticas
-    function updateStatistics() {
-        try {
-            // Calcular asistencia semanal
-            const totalPastAppointments = appointments.filter(a => {
-                const now = new Date();
-                return a.fecha && a.fecha < now;
-            }).length;
-            
-            const attendedAppointments = appointments.filter(a => a.estado === 'attended').length;
-            
-            const attendanceRate = totalPastAppointments > 0 
-                ? Math.round((attendedAppointments / totalPastAppointments) * 100) 
-                : 0;
-            
-            // Citas por hora
-            const appointmentsByHour = {};
-            appointments.forEach(a => {
-                if (a.fecha) {
-                    const hour = a.fecha.getHours();
-                    appointmentsByHour[hour] = (appointmentsByHour[hour] || 0) + 1;
-                }
-            });
-            
-            // Encontrar la hora más ocupada
-            let busiestHour = 9; // Por defecto 9:00
-            let maxAppointments = 0;
-            
-            for (const hour in appointmentsByHour) {
-                if (appointmentsByHour[hour] > maxAppointments) {
-                    busiestHour = parseInt(hour);
-                    maxAppointments = appointmentsByHour[hour];
-                }
-            }
-            
-            // Citas por terapeuta
-            const appointmentsByTherapist = {
-                'nicolas': 0,
-                'ana-maria': 0,
-                'gustavo': 0
-            };
-            
-            appointments.forEach(a => {
-                const therapist = a.terapeuta;
-                if (therapist && appointmentsByTherapist[therapist] !== undefined) {
-                    appointmentsByTherapist[therapist]++;
-                }
-            });
-            
-            // Actualizar DOM
-            document.getElementById('attendance-rate').textContent = `${attendanceRate}%`;
-            document.getElementById('total-appointments').textContent = appointments.length;
-            document.getElementById('busiest-hour').textContent = `${busiestHour}:00`;
-            
-            // Actualizar gráfico de terapeutas
-            const chartContainer = document.getElementById('therapist-chart');
-            chartContainer.innerHTML = '';
-            
-            const maxValue = Math.max(
-                appointmentsByTherapist['nicolas'], 
-                appointmentsByTherapist['ana-maria'], 
-                appointmentsByTherapist['gustavo'],
-                1 // Evita división por cero
-            );
-            
-            const therapists = ['nicolas', 'ana-maria', 'gustavo'];
-            
-            therapists.forEach(therapist => {
-                const value = appointmentsByTherapist[therapist];
-                const height = Math.max((value / maxValue) * 100, 5); // Al menos 5% de altura
-                
-                const barEl = document.createElement('div');
-                barEl.className = 'chart-bar';
-                barEl.style.height = `${height}%`;
-                
-                const valueEl = document.createElement('div');
-                valueEl.className = 'chart-value';
-                valueEl.textContent = value;
-                
-                barEl.appendChild(valueEl);
-                chartContainer.appendChild(barEl);
-            });
-        } catch (error) {
-            console.error("Error al actualizar estadísticas:", error);
-        }
-    }
-    
-    // Función para eliminar citas recurrentes a partir de una fecha
-    function deleteRecurringAppointments(appointmentId, fromDate) {
-        return new Promise((resolve, reject) => {
-            try {
-                // Primero obtener los datos de la cita para encontrar la serie
-                db.collection('citas').doc(appointmentId).get()
-                    .then((doc) => {
-                        if (!doc.exists) {
-                            showStatusMessage("No se encontró la cita", "error");
-                            reject(new Error("Cita no encontrada"));
-                            return;
-                        }
-                        
-                        const appointmentData = doc.data();
-                        if (!appointmentData.esRecurrente || !appointmentData.serieRecurrenteId) {
-                            resolve(); // No es recurrente, nada que eliminar
-                            return;
-                        }
-                        
-                        // Buscar todas las citas futuras de la misma serie
-                        return db.collection('citas')
-                            .where('serieRecurrenteId', '==', appointmentData.serieRecurrenteId)
-                            .where('fecha', '>=', firebase.firestore.Timestamp.fromDate(fromDate))
-                            .get();
-                    })
-                    .then((querySnapshot) => {
-                        if (!querySnapshot) return;
-                        
-                        const deletePromises = [];
-                        let deletedCount = 0;
-                        
-                        querySnapshot.forEach((doc) => {
-                            // Registrar la eliminación en el historial
-                            const deletePromise = db.collection('historial_citas').add({
-                                citaId: doc.id,
-                                accion: 'eliminacion_recurrente',
-                                usuario: currentUser.email,
-                                usuarioId: currentUser.uid,
-                                fecha: firebase.firestore.FieldValue.serverTimestamp(),
-                                datosCita: doc.data()
-                            }).then(() => {
-                                // Luego eliminar la cita
-                                deletedCount++;
-                                return db.collection('citas').doc(doc.id).delete();
-                            });
-                            
-                            deletePromises.push(deletePromise);
                         });
                         
-                        return Promise.all(deletePromises)
-                            .then(() => {
-                                if (deletedCount > 0) {
-                                    showStatusMessage(`Se eliminaron ${deletedCount} citas recurrentes`, "success");
-                                }
+                        // Hacer que las citas sean arrastrables para administradores
+                        if (isAdmin) {
+                            appointmentEl.setAttribute('draggable', 'true');
+                            appointmentEl.addEventListener('dragstart', function(e) {
+                                e.dataTransfer.setData('text/plain', this.dataset.id);
                             });
-                    })
-                    .then(() => {
-                        resolve();
-                    })
-                    .catch((error) => {
-                        console.error("Error al eliminar citas recurrentes:", error);
-                        showStatusMessage("Error al eliminar citas recurrentes", "error");
-                        reject(error);
-                    });
+                        }
+                    }
+                }
             } catch (error) {
-                console.error("Error crítico al eliminar citas recurrentes:", error);
-                showStatusMessage("Error crítico al eliminar citas", "error");
-                reject(error);
+                console.error("Error al renderizar cita individual:", error, appointment);
             }
         });
+    } catch (error) {
+        console.error("Error al renderizar citas:", error);
+        showStatusMessage("Error al mostrar las citas", "error");
+    }
+}
+
+// Mostrar detalles de la cita (para estudiantes)
+function viewAppointmentDetails(appointment) {
+    const options = { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    
+    let details = `
+        Paciente: ${appointment.paciente || 'Sin nombre'}
+        Tipo: ${appointment.tipo || 'Sin especificar'}
+        Fecha: ${appointment.fecha ? appointment.fecha.toLocaleDateString('es-ES', options) : 'Fecha no disponible'}
+        Kinesiólogo: ${getTherapistName(appointment.terapeuta)}
+        Estudiante: ${appointment.estudiante || 'Sin asignar'}
+    `;
+    
+    if (appointment.estado) {
+        details += `\nEstado: ${getStatusText(appointment.estado)}`;
     }
     
-    // Función para manejar cambios en el tipo de cita (mostrar opciones de recurrencia)
-    function handleAppointmentTypeChange() {
-        try {
-            const appointmentType = document.getElementById('appointment-type').value;
-            const recurrenceOptions = document.getElementById('recurrence-options');
-            
-            // Solo mostrar opciones de recurrencia para sesiones, no para evaluaciones
-            if (appointmentType && appointmentType.startsWith('sesion-')) {
-                recurrenceOptions.style.display = 'block';
-            } else {
-                recurrenceOptions.style.display = 'none';
-                document.getElementById('is-recurring').checked = false;
-                document.getElementById('recurring-details').style.display = 'none';
+    alert(details);
+}
+
+// Obtener nombre completo del terapeuta
+function getTherapistName(therapistId) {
+    switch(therapistId) {
+        case 'nicolas': return 'Nicolás';
+        case 'ana-maria': return 'Ana María';
+        case 'gustavo': return 'Gustavo';
+        default: return therapistId || 'Sin asignar';
+    }
+}
+
+// Obtener texto del estado
+function getStatusText(status) {
+    switch(status) {
+        case 'attended': return 'Asistió';
+        case 'missed': return 'No asistió';
+        case 'rescheduled': return 'Reprogramada';
+        default: return status;
+    }
+}
+
+// Actualizar estadísticas
+function updateStatistics() {
+    try {
+        // Calcular asistencia semanal
+        const totalPastAppointments = appointments.filter(a => {
+            const now = new Date();
+            return a.fecha && a.fecha < now;
+        }).length;
+        
+        const attendedAppointments = appointments.filter(a => a.estado === 'attended').length;
+        
+        const attendanceRate = totalPastAppointments > 0 
+            ? Math.round((attendedAppointments / totalPastAppointments) * 100) 
+            : 0;
+        
+        // Citas por hora
+        const appointmentsByHour = {};
+        appointments.forEach(a => {
+            if (a.fecha) {
+                const hour = a.fecha.getHours();
+                appointmentsByHour[hour] = (appointmentsByHour[hour] || 0) + 1;
             }
-        } catch (error) {
-            console.error("Error al cambiar tipo de cita:", error);
+        });
+        
+        // Encontrar la hora más ocupada
+        let busiestHour = 9; // Por defecto 9:00
+        let maxAppointments = 0;
+        
+        for (const hour in appointmentsByHour) {
+            if (appointmentsByHour[hour] > maxAppointments) {
+                busiestHour = parseInt(hour);
+                maxAppointments = appointmentsByHour[hour];
+            }
         }
+        
+        // Citas por terapeuta
+        const appointmentsByTherapist = {
+            'nicolas': 0,
+            'ana-maria': 0,
+            'gustavo': 0
+        };
+        
+        appointments.forEach(a => {
+            const therapist = a.terapeuta;
+            if (therapist && appointmentsByTherapist[therapist] !== undefined) {
+                appointmentsByTherapist[therapist]++;
+            }
+        });
+        
+        // Actualizar DOM
+        document.getElementById('attendance-rate').textContent = `${attendanceRate}%`;
+        document.getElementById('total-appointments').textContent = appointments.length;
+        document.getElementById('busiest-hour').textContent = `${busiestHour}:00`;
+        
+        // Actualizar gráfico de terapeutas
+        const chartContainer = document.getElementById('therapist-chart');
+        chartContainer.innerHTML = '';
+        
+        const maxValue = Math.max(
+            appointmentsByTherapist['nicolas'], 
+            appointmentsByTherapist['ana-maria'], 
+            appointmentsByTherapist['gustavo'],
+            1 // Evita división por cero
+        );
+        
+        const therapists = ['nicolas', 'ana-maria', 'gustavo'];
+        
+        therapists.forEach(therapist => {
+            const value = appointmentsByTherapist[therapist];
+            const height = Math.max((value / maxValue) * 100, 5); // Al menos 5% de altura
+            
+            const barEl = document.createElement('div');
+            barEl.className = 'chart-bar';
+            barEl.style.height = `${height}%`;
+            
+            const valueEl = document.createElement('div');
+            valueEl.className = 'chart-value';
+            valueEl.textContent = value;
+            
+            barEl.appendChild(valueEl);
+            chartContainer.appendChild(barEl);
+        });
+    } catch (error) {
+        console.error("Error al actualizar estadísticas:", error);
     }
-    
-    // Configurar event listeners
-    function setupEventListeners() {
-        try {
-            // Login
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
+}
+
+// Función para manejar cambios en el tipo de cita (mostrar opciones de recurrencia)
+function handleAppointmentTypeChange() {
+    try {
+        const appointmentType = document.getElementById('appointment-type').value;
+        const recurrenceOptions = document.getElementById('recurrence-options');
+        
+        // Solo mostrar opciones de recurrencia para sesiones, no para evaluaciones
+        if (appointmentType && appointmentType.startsWith('sesion-')) {
+            recurrenceOptions.style.display = 'block';
+        } else {
+            recurrenceOptions.style.display = 'none';
+            document.getElementById('is-recurring').checked = false;
+            document.getElementById('recurring-details').style.display = 'none';
+        }
+    } catch (error) {
+        console.error("Error al cambiar tipo de cita:", error);
+    }
+}
+
+// Configurar event listeners
+function setupEventListeners() {
+    try {
+        // Login
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            showSpinner();
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Login exitoso
+                    hideSpinner();
+                    showStatusMessage('Sesión iniciada correctamente', 'success');
+                })
+                .catch((error) => {
+                    console.error("Error de login:", error);
+                    hideSpinner();
+                    showStatusMessage("Error de inicio de sesión. Verifica tus credenciales.", "error");
+                });
+        });
+        
+        // Logout
+        logoutBtn.addEventListener('click', function() {
+            auth.signOut()
+                .then(() => {
+                    // Logout exitoso
+                    showLoginScreen();
+                    showStatusMessage('Sesión cerrada', 'success');
+                })
+                .catch((error) => {
+                    console.error("Error al cerrar sesión:", error);
+                    showStatusMessage("Error al cerrar sesión.", "error");
+                });
+        });
+        
+        // Navegación de semanas
+        document.getElementById('prev-week').addEventListener('click', function() {
+            navigateWeek(-1);
+        });
+        
+        document.getElementById('next-week').addEventListener('click', function() {
+            navigateWeek(1);
+        });
+        
+        // Evento para mostrar/ocultar detalles de recurrencia
+        const isRecurringCheckbox = document.getElementById('is-recurring');
+        if (isRecurringCheckbox) {
+            isRecurringCheckbox.addEventListener('change', function() {
+                document.getElementById('recurring-details').style.display = this.checked ? 'block' : 'none';
+            });
+        }
+        
+        // Clic en celdas de la agenda (para agregar citas)
+        document.querySelectorAll('.schedule-cell').forEach(cell => {
+            cell.addEventListener('click', function() {
+                if (isAdmin) {
+                    const hour = parseInt(this.dataset.hour);
+                    const day = parseInt(this.dataset.day);
+                    
+                    openAppointmentModal(null, hour, day);
+                }
+            });
+            
+            // Configuración para arrastrar y soltar
+            if (isAdmin) {
+                cell.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('drag-over');
+                });
                 
-                showSpinner();
+                cell.addEventListener('dragleave', function() {
+                    this.classList.remove('drag-over');
+                });
                 
-                auth.signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        // Login exitoso
-                        hideSpinner();
-                    })
-                    .catch((error) => {
-                        console.error("Error de login:", error);
-                        hideSpinner();
-                        showStatusMessage("Error de inicio de sesión. Verifica tus credenciales.", "error");
-                    });
-            });
-            
-            // Logout
-            logoutBtn.addEventListener('click', function() {
-                auth.signOut()
-                    .then(() => {
-                        // Logout exitoso
-                        showLoginScreen();
-                    })
-                    .catch((error) => {
-                        console.error("Error al cerrar sesión:", error);
-                        showStatusMessage("Error al cerrar sesión.", "error");
-                    });
-            });
-            
-            // Navegación de semanas
-            document.getElementById('prev-week').addEventListener('click', function() {
-                navigateWeek(-1);
-            });
-            
-            document.getElementById('next-week').addEventListener('click', function() {
-                navigateWeek(1);
-            });
-            
-            // Evento para mostrar/ocultar detalles de recurrencia
-            const isRecurringCheckbox = document.getElementById('is-recurring');
-            if (isRecurringCheckbox) {
-                isRecurringCheckbox.addEventListener('change', function() {
-                    document.getElementById('recurring-details').style.display = this.checked ? 'block' : 'none';
+                cell.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('drag-over');
+                    
+                    const appointmentId = e.dataTransfer.getData('text/plain');
+                    const hour = parseInt(this.dataset.hour);
+                    const day = parseInt(this.dataset.day);
+                    
+                    // Obtener fecha correspondiente a este día
+                    const startOfWeek = getStartOfWeek(currentWeekDate);
+                    const targetDate = new Date(startOfWeek);
+                    targetDate.setDate(startOfWeek.getDate() + (day - 1));
+                    
+                    // Mover la cita a esta fecha y hora
+                    moveAppointmentToDate(appointmentId, targetDate, hour);
                 });
             }
-            
-            // Clic en celdas de la agenda (para agregar citas)
-            document.querySelectorAll('.schedule-cell').forEach(cell => {
-                cell.addEventListener('click', function() {
-                    if (isAdmin) {
-                        const hour = parseInt(this.dataset.hour);
-                        const day = parseInt(this.dataset.day);
-                        
-                        openAppointmentModal(null, hour, day);
-                    }
-                });
-                
-                // Configuración para arrastrar y soltar
-                if (isAdmin) {
-                    cell.addEventListener('dragover', function(e) {
-                        e.preventDefault();
-                        this.classList.add('drag-over');
-                    });
-                    
-                    cell.addEventListener('dragleave', function() {
-                        this.classList.remove('drag-over');
-                    });
-                    
-                    cell.addEventListener('drop', function(e) {
-                        e.preventDefault();
-                        this.classList.remove('drag-over');
-                        
-                        const appointmentId = e.dataTransfer.getData('text/plain');
-                        const hour = parseInt(this.dataset.hour);
-                        const day = parseInt(this.dataset.day);
-                        
-                        // Obtener fecha correspondiente a este día
-                        const startOfWeek = getStartOfWeek(currentWeekDate);
-                        const targetDate = new Date(startOfWeek);
-                        targetDate.setDate(startOfWeek.getDate() + (day - 1));
-                        
-                        // Mover la cita a esta fecha y hora
-                        moveAppointmentToDate(appointmentId, targetDate, hour);
-                    });
-                }
-            });
-            
-            // Formulario de citas
-            appointmentForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                if (isAdmin) {
-                    saveAppointment();
-                }
-            });
-            
-            document.getElementById('cancel-appointment').addEventListener('click', function() {
-                closeAppointmentModal();
-            });
-            
-            document.getElementById('delete-appointment').addEventListener('click', function() {
-                if (isAdmin) {
-                    if (confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
-                        try {
-                            deleteAppointment();
-                        } catch (error) {
-                            console.error("Error al eliminar cita:", error);
-                            showStatusMessage("Error al eliminar la cita", "error");
-                        }
-                    }
-                }
-            });
-            
-            // Cerrar modales con la X
-            document.querySelectorAll('.close').forEach(closeBtn => {
-                closeBtn.addEventListener('click', function() {
-                    this.closest('.modal').style.display = 'none';
-                });
-            });
-            
-            // Eventos para asistencia
-            document.querySelectorAll('.attendance-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.attendance-btn').forEach(b => {
-                        b.classList.remove('selected');
-                    });
-                    this.classList.add('selected');
-                });
-            });
-            
-            document.getElementById('save-attendance').addEventListener('click', function() {
-                if (isAdmin) {
+        });
+        
+        // Formulario de citas
+        appointmentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (isAdmin) {
+                saveAppointment();
+            }
+        });
+        
+        document.getElementById('cancel-appointment').addEventListener('click', function() {
+            closeAppointmentModal();
+        });
+        
+        document.getElementById('delete-appointment').addEventListener('click', function() {
+            if (isAdmin) {
+                if (confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
                     try {
-                        saveAttendance();
+                        deleteAppointment();
                     } catch (error) {
-                        console.error("Error al guardar asistencia:", error);
-                        showStatusMessage("Error al guardar asistencia", "error");
+                        console.error("Error al eliminar cita:", error);
+                        showStatusMessage("Error al eliminar la cita", "error");
                     }
                 }
-            });
-            
-            document.getElementById('cancel-attendance').addEventListener('click', function() {
-                closeAttendanceModal();
-            });
-            
-            // Evitar que el modal se cierre si se hace clic en él
-            document.querySelectorAll('.modal-content').forEach(content => {
-                content.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
-            });
-            
-            // Cerrar el modal si se hace clic fuera de él
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', function() {
-                    this.style.display = 'none';
-                });
-            });
-        } catch (error) {
-            console.error("Error al configurar eventos:", error);
-            showStatusMessage("Error al inicializar la interfaz", "error");
-        }
-    }
-    
-    // Navegar entre semanas
-    function navigateWeek(direction) {
-        currentWeekDate.setDate(currentWeekDate.getDate() + (direction * 7));
-        updateWeekDisplay();
-        loadAppointments();
-    }
-    
-    // Formatear fecha como YYYY-MM-DD
-    function formatDate(date) {
-        if (!date) return '';
+            }
+        });
         
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-    
-    // Abrir modal para agregar/editar cita
-    function openAppointmentModal(appointment, hour, day) {
-        if (!isAdmin) return;
+        // Cerrar modales con la X
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
         
-        try {
-            const modalTitle = document.getElementById('modal-title');
-            const dateInput = document.getElementById('appointment-date');
-            const timeInput = document.getElementById('appointment-time');
-            const deleteBtn = document.getElementById('delete-appointment');
-            const isRecurringCheckbox = document.getElementById('is-recurring');
-            const recurringDetails = document.getElementById('recurring-details');
+        // Eventos para asistencia
+        document.querySelectorAll('.attendance-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.attendance-btn').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+        
+        document.getElementById('save-attendance').addEventListener('click', function() {
+            if (isAdmin) {
+                try {
+                    saveAttendance();
+                } catch (error) {
+                    console.error("Error al guardar asistencia:", error);
+                    showStatusMessage("Error al guardar asistencia", "error");
+                }
+            }
+        });
+        
+        document.getElementById('cancel-attendance').addEventListener('click', function() {
+            closeAttendanceModal();
+        });
+        
+        // Evitar que el modal se cierre si se hace clic en él
+        document.querySelectorAll('.modal-content').forEach(content => {
+            content.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+        
+        // Cerrar el modal si se hace clic fuera de él
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function() {
+                this.style.display = 'none';
+            });
+        });
+    } catch (error) {
+        console.error("Error al configurar eventos:", error);
+        showStatusMessage("Error al inicializar la interfaz", "error");
+    }
+}
+
+// Navegar entre semanas
+function navigateWeek(direction) {
+    currentWeekDate.setDate(currentWeekDate.getDate() + (direction * 7));
+    updateWeekDisplay();
+    loadAppointments();
+}
+
+// Formatear fecha como YYYY-MM-DD
+function formatDate(date) {
+    if (!date) return '';
+    
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+// Abrir modal para agregar/editar cita
+function openAppointmentModal(appointment, hour, day) {
+    if (!isAdmin) return;
+    
+    try {
+        const modalTitle = document.getElementById('modal-title');
+        const dateInput = document.getElementById('appointment-date');
+        const timeInput = document.getElementById('appointment-time');
+        const deleteBtn = document.getElementById('delete-appointment');
+        const isRecurringCheckbox = document.getElementById('is-recurring');
+        const recurringDetails = document.getElementById('recurring-details');
+        
+        // Ocultar opciones de recurrencia por defecto
+        document.getElementById('recurrence-options').style.display = 'none';
+        
+        if (appointment) {
+            // Editar cita existente
+            modalTitle.textContent = 'Editar Cita';
             
-            // Ocultar opciones de recurrencia por defecto
-            document.getElementById('recurrence-options').style.display = 'none';
+            document.getElementById('patient-name').value = appointment.paciente || '';
             
-            if (appointment) {
-                // Editar cita existente
-                modalTitle.textContent = 'Editar Cita';
+            const typeSelect = document.getElementById('appointment-type');
+            if (appointment.tipoClase && typeSelect) {
+                typeSelect.value = appointment.tipoClase;
                 
-                document.getElementById('patient-name').value = appointment.paciente || '';
+                // Mostrar opciones de recurrencia solo para sesiones
+                if (appointment.tipoClase.startsWith('sesion-')) {
+                    document.getElementById('recurrence-options').style.display = 'block';
+                }
+            }
+            
+            // Si es una cita recurrente, mostrar los detalles
+            if (appointment.esRecurrente) {
+                isRecurringCheckbox.checked = true;
+                recurringDetails.style.display = 'block';
                 
-                const typeSelect = document.getElementById('appointment-type');
-                if (appointment.tipoClase && typeSelect) {
-                    typeSelect.value = appointment.tipoClase;
-                    
-                    // Mostrar opciones de recurrencia solo para sesiones
-                    if (appointment.tipoClase.startsWith('sesion-')) {
-                        document.getElementById('recurrence-options').style.display = 'block';
-                    }
+                // Marcar los días de la semana
+                if (appointment.patronRecurrencia && appointment.patronRecurrencia.diasSemana) {
+                    const weekdays = appointment.patronRecurrencia.diasSemana;
+                    document.querySelectorAll('input[name="weekday"]').forEach(checkbox => {
+                        checkbox.checked = weekdays.includes(parseInt(checkbox.value));
+                    });
                 }
                 
-                // Si es una cita recurrente, mostrar los detalles
-                if (appointment.esRecurrente) {
-                    isRecurringCheckbox.checked = true;
-                    recurringDetails.style.display = 'block';
-                    
-                    // Marcar los días de la semana
-                    if (appointment.patronRecurrencia && appointment.patronRecurrencia.diasSemana) {
-                        const weekdays = appointment.patronRecurrencia.diasSemana;
-                        document.querySelectorAll('input[name="weekday"]').forEach(checkbox => {
-                            checkbox.checked = weekdays.includes(parseInt(checkbox.value));
-                        });
-                    }
-                    
-                    // Establecer fecha fin
-                    if (appointment.patronRecurrencia && appointment.patronRecurrencia.fechaFin) {
-                        let endDate;
-                        if (appointment.patronRecurrencia.fechaFin instanceof firebase.firestore.Timestamp) {
+                // Establecer fecha fin
+                if (appointment.patronRecurrencia && appointment.patronRecurrencia.fechaFin) {
+                    let endDate;
+                    try {
+                        if (typeof appointment.patronRecurrencia.fechaFin === 'object' && 
+                            appointment.patronRecurrencia.fechaFin.toDate) {
                             endDate = appointment.patronRecurrencia.fechaFin.toDate();
-                        } else if (appointment.patronRecurrencia.fechaFin instanceof Date) {
-                            endDate = appointment.patronRecurrencia.fechaFin;
                         } else if (typeof appointment.patronRecurrencia.fechaFin === 'string') {
                             endDate = new Date(appointment.patronRecurrencia.fechaFin);
                         }
-                        
-                        if (endDate) {
-                            document.getElementById('recurrence-end').value = formatDate(endDate);
-                        }
+                    } catch (error) {
+                        console.error("Error al convertir fecha fin:", error);
                     }
-                } else {
-                    isRecurringCheckbox.checked = false;
-                    recurringDetails.style.display = 'none';
+                    
+                    if (endDate) {
+                        document.getElementById('recurrence-end').value = formatDate(endDate);
+                    }
                 }
-                
-                const fecha = appointment.fecha;
-                if (fecha) {
-                    dateInput.value = formatDate(fecha);
-                    timeInput.value = `${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
-                }
-                
-                if (appointment.duracion) {
-                    document.getElementById('appointment-duration').value = appointment.duracion;
-                }
-                
-                if (appointment.terapeuta) {
-                    document.getElementById('therapist').value = appointment.terapeuta;
-                }
-                
-                document.getElementById('student').value = appointment.estudiante || 'estudiante1';
-                document.getElementById('appointment-notes').value = appointment.notas || '';
-                document.getElementById('is-web').checked = appointment.web || false;
-                
-                editingAppointmentId = appointment.id;
-                deleteBtn.style.display = 'block';
             } else {
-                // Nueva cita
-                modalTitle.textContent = 'Agregar Nueva Cita';
-                appointmentForm.reset();
-                
-                // Obtener la fecha correspondiente al día seleccionado
-                const startOfWeek = getStartOfWeek(currentWeekDate);
-                const appointmentDay = day ? day - 1 : 0; // Convertir de 1-basado a 0-basado
-                const appointmentDate = new Date(startOfWeek);
-                appointmentDate.setDate(startOfWeek.getDate() + appointmentDay);
-                
-                // Pre-llenar con la fecha del día seleccionado
-                dateInput.value = formatDate(appointmentDate);
-                
-                // Pre-llenar hora si se proporciona
-                if (hour) {
-                    timeInput.value = `${hour.toString().padStart(2, '0')}:00`;
-                }
-                
-                editingAppointmentId = null;
-                deleteBtn.style.display = 'none';
-                
-                // Inicialmente ocultar detalles de recurrencia
                 isRecurringCheckbox.checked = false;
                 recurringDetails.style.display = 'none';
-                
-                // Actualizar visibilidad de opciones de recurrencia según tipo de cita seleccionado
-                handleAppointmentTypeChange();
             }
-            
-            appointmentModal.style.display = 'block';
-        } catch (error) {
-            console.error("Error al abrir modal de cita:", error);
-            showStatusMessage("Error al abrir el formulario", "error");
-        }
-    }
-    
-    // Cerrar modal de citas
-    function closeAppointmentModal() {
-        appointmentModal.style.display = 'none';
-        appointmentForm.reset();
-        editingAppointmentId = null;
-    }
-    
-    // Guardar cita
-    function saveAppointment() {
-        try {
-            showSpinner();
-            
-            const patientName = document.getElementById('patient-name').value;
-            if (!patientName || patientName.trim() === '') {
-                hideSpinner();
-                showStatusMessage('Por favor ingresa el nombre del paciente', 'warning');
-                return;
-            }
-            
-            const appointmentTypeSelect = document.getElementById('appointment-type');
-            const appointmentType = appointmentTypeSelect.options[appointmentTypeSelect.selectedIndex].text;
-            const appointmentTypeClass = appointmentTypeSelect.value;
-            const appointmentDate = document.getElementById('appointment-date').value;
-            const appointmentTime = document.getElementById('appointment-time').value;
-            
-            if (!appointmentDate || !appointmentTime) {
-                hideSpinner();
-                showStatusMessage('Por favor ingresa fecha y hora', 'warning');
-                return;
-            }
-            
-            const appointmentDuration = parseInt(document.getElementById('appointment-duration').value);
-            const therapist = document.getElementById('therapist').value;
-            const student = document.getElementById('student').value;
-            const notes = document.getElementById('appointment-notes').value;
-            const isWeb = document.getElementById('is-web').checked;
-            
-            // Datos de recurrencia
-            const isRecurring = document.getElementById('is-recurring').checked;
-            let recurrencePattern = null;
-            let recurrenceEndDate = null;
-            let selectedWeekdays = [];
-            
-            if (isRecurring) {
-                // Obtener días de la semana seleccionados
-                document.querySelectorAll('input[name="weekday"]:checked').forEach(checkbox => {
-                    selectedWeekdays.push(parseInt(checkbox.value));
-                });
-                
-                // Fecha de fin de recurrencia
-                recurrenceEndDate = document.getElementById('recurrence-end').value;
-                if (!recurrenceEndDate) {
-                    hideSpinner();
-                    showStatusMessage('Por favor selecciona una fecha de fin para la recurrencia', 'warning');
-                    return;
-                }
-                
-                if (selectedWeekdays.length === 0) {
-                    hideSpinner();
-                    showStatusMessage('Por favor selecciona al menos un día de la semana', 'warning');
-                    return;
-                }
-                
-                recurrencePattern = {
-                    diasSemana: selectedWeekdays,
-                    fechaFin: recurrenceEndDate
-                };
-            }
-            
-            // Crear objeto de fecha
-            const [year, month, day] = appointmentDate.split('-');
-            const [hours, minutes] = appointmentTime.split(':');
-            const date = new Date(year, month - 1, day, hours, minutes);
-            
-            // Verificar si es feriado
-            const dateStr = formatDate(date);
-            if (holidays.some(h => h.date === dateStr)) {
-                hideSpinner();
-                showStatusMessage('No se pueden agendar citas en días feriados.', 'warning');
-                return;
-            }
-            
-            // Verificar límite de citas simultáneas
-            if (!editingAppointmentId) { // Solo verificar para nuevas citas
-                const dayOfWeek = date.getDay(); // 0 para domingo, 1 para lunes, etc.
-                if (dayOfWeek > 0 && dayOfWeek < 5) { // Solo lunes a jueves
-                    const hourAppointments = appointments.filter(a => {
-                        const appDate = a.fecha;
-                        return appDate && appDate.getDay() === dayOfWeek &&
-                               appDate.getHours() === date.getHours() &&
-                               a.estudiante === student;
-                    });
-                    
-                    if (hourAppointments.length >= 2) {
-                        hideSpinner();
-                        showStatusMessage('Este estudiante ya tiene 2 citas en este horario.', 'warning');
-                        return;
-                    }
-                }
-            }
-            
-            // Datos base de la cita
-            const baseAppointmentData = {
-                paciente: patientName,
-                tipo: appointmentType,
-                tipoClase: appointmentTypeClass,
-                duracion: appointmentDuration,
-                terapeuta: therapist,
-                estudiante: student,
-                notas: notes,
-                web: isWeb,
-                esRecurrente: isRecurring,
-                // Historial mejorado
-                historial: firebase.firestore.FieldValue.arrayUnion({
-                    accion: editingAppointmentId ? 'modificacion' : 'creacion',
-                    usuario: currentUser.email,
-                    usuarioId: currentUser.uid,
-                    fecha: firebase.firestore.FieldValue.serverTimestamp()
-                }),
-                ultimaEdicion: {
-                    usuario: currentUser.email,
-                    usuarioId: currentUser.uid,
-                    fecha: firebase.firestore.FieldValue.serverTimestamp()
-                }
-            };
-            
-            // Generar un ID único para la serie recurrente si es necesario
-            const serieRecurrenteId = isRecurring ? (editingAppointmentId || `serie_${Date.now()}`) : null;
-            
-            if (isRecurring && recurrencePattern) {
-                // Para citas recurrentes, crear múltiples citas
-                const endDate = new Date(recurrencePattern.fechaFin);
-                const weekdays = recurrencePattern.diasSemana;
-                
-                // Si estamos editando, primero eliminar todas las citas futuras de esta serie
-                let deletePromise = Promise.resolve();
-                if (editingAppointmentId) {
-                    deletePromise = deleteRecurringAppointments(editingAppointmentId, date);
-                }
-                
-                deletePromise.then(() => {
-                    // Array para almacenar todas las promesas de creación de citas
-                    const appointmentPromises = [];
-                    
-                    // Crear citas para cada día seleccionado hasta la fecha de fin
-                    const currentDate = new Date(date);
-                    while (currentDate <= endDate) {
-                        const currentDay = currentDate.getDay(); // 0 = domingo, 1 = lunes, ...
-                        
-                        // Si el día actual está en los días seleccionados, crear una cita
-                        if (weekdays.includes(currentDay)) {
-                            const appointmentData = {
-                                ...baseAppointmentData,
-                                fecha: firebase.firestore.Timestamp.fromDate(new Date(currentDate)),
-                                esRecurrente: true,
-                                serieRecurrenteId: serieRecurrenteId,
-                                patronRecurrencia: {
-                                    diasSemana: weekdays,
-                                    fechaFin: firebase.firestore.Timestamp.fromDate(endDate)
-                                }
-                            };
-                            
-                            // Crear nueva cita
-                            const promise = db.collection('citas').add(appointmentData);
-                            appointmentPromises.push(promise);
-                        }
-                        
-                        // Avanzar al siguiente día
-                        currentDate.setDate(currentDate.getDate() + 1);
-                    }
-                    
-                    // Esperar a que todas las citas sean creadas
-                    Promise.all(appointmentPromises)
-                        .then(() => {
-                            closeAppointmentModal();
-                            showStatusMessage('Citas recurrentes creadas correctamente', 'success');
-                            loadAppointments();
-                        })
-                        .catch((error) => {
-                            console.error("Error al crear citas recurrentes:", error);
-                            hideSpinner();
-                            showStatusMessage('Error al crear las citas recurrentes', 'error');
-                        });
-                }).catch(error => {
-                    console.error("Error al preparar citas recurrentes:", error);
-                    hideSpinner();
-                    showStatusMessage('Error al eliminar citas recurrentes anteriores', 'error');
-                });
-            } else {
-                // Para citas no recurrentes o edición de una cita individual
-                const appointmentData = {
-                    ...baseAppointmentData,
-                    fecha: firebase.firestore.Timestamp.fromDate(date)
-                };
-                
-                if (editingAppointmentId) {
-                    // Actualizar cita existente
-                    db.collection('citas').doc(editingAppointmentId).get()
-                        .then((doc) => {
-                            if (!doc.exists) {
-                                throw new Error("La cita ya no existe");
-                            }
-                            
-                            const currentData = doc.data();
-                            
-                            // Si la cita era parte de una serie recurrente y se está modificando individualmente
-                            if (currentData.esRecurrente && !isRecurring) {
-                                // Eliminar vinculación con la serie
-                                appointmentData.esRecurrente =appointmentData.esRecurrente = false;
-                                appointmentData.serieRecurrenteId = null;
-                                appointmentData.patronRecurrencia = null;
-                            }
-                            
-                            // Actualizar la cita
-                            return db.collection('citas').doc(editingAppointmentId).update(appointmentData);
-                        })
-                        .then(() => {
-                            closeAppointmentModal();
-                            showStatusMessage('Cita actualizada correctamente', 'success');
-                            loadAppointments();
-                        })
-                        .catch((error) => {
-                            console.error("Error al actualizar cita:", error);
-                            hideSpinner();
-                            showStatusMessage('Error al actualizar la cita: ' + error.message, 'error');
-                        });
-                } else {
-                    // Crear nueva cita
-                    db.collection('citas').add(appointmentData)
-                        .then((docRef) => {
-                            console.log("Cita creada con ID:", docRef.id);
-                            closeAppointmentModal();
-                            showStatusMessage('Cita creada correctamente', 'success');
-                            loadAppointments();
-                        })
-                        .catch((error) => {
-                            console.error("Error al crear cita:", error);
-                            hideSpinner();
-                            showStatusMessage('Error al crear la cita: ' + error.message, 'error');
-                        });
-                }
-            }
-        } catch (error) {
-            console.error("Error crítico al guardar cita:", error);
-            hideSpinner();
-            showStatusMessage('Error crítico al guardar: ' + error.message, 'error');
-        }
-    }
-    
-    // Eliminar cita
-    function deleteAppointment() {
-        if (!editingAppointmentId) {
-            showStatusMessage("No hay ninguna cita seleccionada para eliminar", "warning");
-            return;
-        }
-        
-        showSpinner();
-        
-        try {
-            // Obtener información de la cita actual
-            db.collection('citas').doc(editingAppointmentId).get()
-                .then((doc) => {
-                    if (!doc.exists) {
-                        hideSpinner();
-                        showStatusMessage("La cita ya no existe", "error");
-                        closeAppointmentModal();
-                        throw new Error("Cita no encontrada");
-                    }
-                    
-                    const appointmentData = doc.data();
-                    const isRecurring = appointmentData.esRecurrente;
-                    const recurrenceId = appointmentData.serieRecurrenteId;
-                    const appointmentDate = appointmentData.fecha.toDate();
-                    
-                    // Preguntar si desea eliminar solo esta cita o todas las futuras
-                    let deleteMode = 'single';
-                    if (isRecurring) {
-                        const userChoice = confirm(
-                            'Esta es una cita recurrente. ¿Deseas eliminar solo esta cita o todas las citas futuras de esta serie?\n\n' +
-                            'Presiona "Aceptar" para eliminar todas las citas futuras.\n' +
-                            'Presiona "Cancelar" para eliminar solo esta cita.'
-                        );
-                        
-                        deleteMode = userChoice ? 'future' : 'single';
-                    }
-                    
-                    // Registrar la eliminación en el historial
-                    return db.collection('historial_citas').add({
-                        citaId: editingAppointmentId,
-                        accion: 'eliminacion',
-                        tipoEliminacion: deleteMode,
-                        usuario: currentUser.email,
-                        usuarioId: currentUser.uid,
-                        fecha: firebase.firestore.FieldValue.serverTimestamp(),
-                        datosCita: {
-                            paciente: appointmentData.paciente,
-                            tipo: appointmentData.tipo,
-                            fecha: appointmentData.fecha
-                        }
-                    }).then(() => {
-                        // Eliminar según el modo seleccionado
-                        if (deleteMode === 'future' && isRecurring) {
-                            // Eliminar todas las citas futuras de la serie
-                            return deleteRecurringAppointments(editingAppointmentId, appointmentDate)
-                                .then(() => {
-                                    // También eliminar la cita actual si no está en el pasado
-                                    const today = new Date();
-                                    if (appointmentDate >= today) {
-                                        return db.collection('citas').doc(editingAppointmentId).delete();
-                                    }
-                                });
-                        } else {
-                            // Eliminar solo esta cita
-                            return db.collection('citas').doc(editingAppointmentId).delete();
-                        }
-                    });
-                })
-                .then(() => {
-                    closeAppointmentModal();
-                    showStatusMessage('Cita(s) eliminada(s) correctamente', 'success');
-                    loadAppointments();
-                })
-                .catch((error) => {
-                    console.error("Error al eliminar cita:", error);
-                    hideSpinner();
-                    showStatusMessage('Error al eliminar la cita: ' + error.message, 'error');
-                });
-        } catch (error) {
-            console.error("Error crítico al eliminar cita:", error);
-            hideSpinner();
-            showStatusMessage("Error crítico al eliminar: " + error.message, "error");
-        }
-    }
-    
-    // Mover una cita a una fecha y hora específicas
-    function moveAppointmentToDate(appointmentId, targetDate, hour) {
-        if (!isAdmin) return;
-        
-        const appointment = appointments.find(a => a.id === appointmentId);
-        if (!appointment) {
-            showStatusMessage("No se encontró la cita para mover", "error");
-            return;
-        }
-        
-        showSpinner();
-        
-        try {
-            // Conservar minutos, pero cambiar fecha y hora
-            const newDate = new Date(targetDate);
-            newDate.setHours(hour, appointment.fecha.getMinutes(), 0, 0);
-            
-            // Si es una cita recurrente, preguntar qué hacer
-            if (appointment.esRecurrente) {
-                const userChoice = confirm(
-                    'Esta es una cita recurrente. ¿Cómo deseas moverla?\n\n' +
-                    'Presiona "Aceptar" para mover solo esta cita.\n' +
-                    'Presiona "Cancelar" para cancelar la operación.'
-                );
-                
-                if (!userChoice) {
-                    hideSpinner();
-                    return; // Cancelar la operación
-                }
-                
-                // Si decide mover solo esta, desvinculamos de la serie
-                db.collection('citas').doc(appointmentId).update({
-                    fecha: firebase.firestore.Timestamp.fromDate(newDate),
-                    esRecurrente: false,
-                    serieRecurrenteId: null,
-                    patronRecurrencia: null,
-                    historial: firebase.firestore.FieldValue.arrayUnion({
-                        accion: 'movimiento_desvinculacion',
-                        usuario: currentUser.email,
-                        usuarioId: currentUser.uid,
-                        fecha: firebase.firestore.FieldValue.serverTimestamp()
-                    })
-                })
-                .then(() => {
-                    showStatusMessage('Cita movida correctamente', 'success');
-                    loadAppointments();
-                })
-                .catch((error) => {
-                    console.error("Error al mover cita:", error);
-                    hideSpinner();
-                    showStatusMessage('Error al mover la cita: ' + error.message, 'error');
-                });
-            } else {
-                // Para citas normales, simplemente actualizar la fecha
-                db.collection('citas').doc(appointmentId).update({
-                    fecha: firebase.firestore.Timestamp.fromDate(newDate),
-                    historial: firebase.firestore.FieldValue.arrayUnion({
-                        accion: 'movimiento',
-                        usuario: currentUser.email,
-                        usuarioId: currentUser.uid,
-                        fecha: firebase.firestore.FieldValue.serverTimestamp()
-                    })
-                })
-                .then(() => {
-                    showStatusMessage('Cita movida correctamente', 'success');
-                    loadAppointments();
-                })
-                .catch((error) => {
-                    console.error("Error al mover cita:", error);
-                    hideSpinner();
-                    showStatusMessage('Error al mover la cita: ' + error.message, 'error');
-                });
-            }
-        } catch (error) {
-            console.error("Error crítico al mover cita:", error);
-            hideSpinner();
-            showStatusMessage("Error crítico al mover: " + error.message, "error");
-        }
-    }
-    
-    // Abrir modal de asistencia
-    function openAttendanceModal(appointment) {
-        if (!isAdmin) return;
-        
-        try {
-            const patientEl = document.getElementById('attendance-patient');
-            const dateEl = document.getElementById('attendance-date');
-            const timeEl = document.getElementById('attendance-time');
-            
-            patientEl.textContent = appointment.paciente || 'Sin nombre';
             
             const fecha = appointment.fecha;
-            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-            dateEl.textContent = fecha ? fecha.toLocaleDateString('es-ES', options) : 'Fecha no disponible';
-            
             if (fecha) {
-                const horaInicio = `${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
-                const fechaFin = new Date(fecha);
-                fechaFin.setMinutes(fecha.getMinutes() + (appointment.duracion || 60));
-                const horaFin = `${fechaFin.getHours().toString().padStart(2, '0')}:${fechaFin.getMinutes().toString().padStart(2, '0')}`;
-                timeEl.textContent = `${horaInicio} - ${horaFin}`;
-            } else {
-                timeEl.textContent = 'Hora no disponible';
+                dateInput.value = formatDate(fecha);
+                timeInput.value = `${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
             }
             
-            // Resetear selección de estado
-            document.querySelectorAll('.attendance-btn').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            
-            // Seleccionar el estado actual si existe
-            if (appointment.estado) {
-                const currentStatusBtn = document.querySelector(`.attendance-btn[data-status="${appointment.estado}"]`);
-                if (currentStatusBtn) {
-                    currentStatusBtn.classList.add('selected');
-                }
+            if (appointment.duracion) {
+                document.getElementById('appointment-duration').value = appointment.duracion;
             }
             
-            // Notas de asistencia
-            document.getElementById('attendance-notes').value = appointment.notasAsistencia || '';
+            if (appointment.terapeuta) {
+                document.getElementById('therapist').value = appointment.terapeuta;
+            }
             
-            // Guardar referencia a la cita actual
-            attendanceModal.dataset.appointmentId = appointment.id;
+            document.getElementById('student').value = appointment.estudiante || 'estudiante1';
+            document.getElementById('appointment-notes').value = appointment.notas || '';
+            document.getElementById('is-web').checked = appointment.web || false;
             
-            // Mostrar modal
-            attendanceModal.style.display = 'block';
-        } catch (error) {
-            console.error("Error al abrir modal de asistencia:", error);
-            showStatusMessage("Error al abrir el formulario de asistencia", "error");
+            editingAppointmentId = appointment.id;
+            deleteBtn.style.display = 'block';
+        } else {
+            // Nueva cita
+            modalTitle.textContent = 'Agregar Nueva Cita';
+            
+            // Limpiar formulario
+            document.getElementById('patient-name').value = '';
+            document.getElementById('appointment-notes').value = '';
+            document.getElementById('is-web').checked = false;
+            
+            // Obtener la fecha correspondiente al día seleccionado
+            const startOfWeek = getStartOfWeek(currentWeekDate);
+            const appointmentDay = day ? day - 1 : 0; // Convertir de 1-basado a 0-basado
+            const appointmentDate = new Date(startOfWeek);
+            appointmentDate.setDate(startOfWeek.getDate() + appointmentDay);
+            
+            // Pre-llenar con la fecha del día seleccionado
+            dateInput.value = formatDate(appointmentDate);
+            
+            // Pre-llenar hora si se proporciona
+            if (hour) {
+                timeInput.value = `${hour.toString().padStart(2, '0')}:00`;
+            }
+            
+            editingAppointmentId = null;
+            deleteBtn.style.display = 'none';
+            
+            // Inicialmente ocultar detalles de recurrencia
+            isRecurringCheckbox.checked = false;
+            recurringDetails.style.display = 'none';
+            
+            // Actualizar visibilidad de opciones de recurrencia según tipo de cita seleccionado
+            handleAppointmentTypeChange();
         }
+        
+        appointmentModal.style.display = 'block';
+    } catch (error) {
+        console.error("Error al abrir modal de cita:", error);
+        showStatusMessage("Error al abrir el formulario", "error");
     }
+}
+
+// Cerrar modal de citas
+function closeAppointmentModal() {
+    appointmentModal.style.display = 'none';
+    editingAppointmentId = null;
     
-    // Cerrar modal de asistencia
-    function closeAttendanceModal() {
-        attendanceModal.style.display = 'none';
-    }
-    
-    // Guardar asistencia
-    function saveAttendance() {
-        const appointmentId = attendanceModal.dataset.appointmentId;
-        if (!appointmentId) {
-            showStatusMessage("No se encontró la cita para registrar asistencia", "error");
-            return;
-        }
-        
-        const selectedBtn = document.querySelector('.attendance-btn.selected');
-        
-        if (!selectedBtn) {
-            showStatusMessage('Por favor selecciona un estado de asistencia', 'warning');
-            return;
-        }
-        
-        const status = selectedBtn.dataset.status;
-        const notes = document.getElementById('attendance-notes').value;
-        
+    // Limpiar formulario
+    document.getElementById('patient-name').value = '';
+    document.getElementById('appointment-notes').value = '';
+    document.getElementById('is-web').checked = false;
+    document.getElementById('is-recurring').checked = false;
+    document.getElementById('recurring-details').style.display = 'none';
+}
+
+// Guardar cita
+function saveAppointment() {
+    try {
         showSpinner();
         
-        try {
-            // Actualizar en Firestore con historial mejorado
-            db.collection('citas').doc(appointmentId).update({
-                estado: status,
-                notasAsistencia: notes,
-                historialAsistencia: firebase.firestore.FieldValue.arrayUnion({
-                    estado: status,
-                    usuario: currentUser.email,
-                    usuarioId: currentUser.uid,
-                    fecha: firebase.firestore.FieldValue.serverTimestamp(),
-                    notas: notes
-                }),
-                ultimaActualizacion: {
-                    usuario: currentUser.email,
-                    usuarioId: currentUser.uid,
-                    fecha: firebase.firestore.FieldValue.serverTimestamp(),
-                    estado: status
+        const patientName = document.getElementById('patient-name').value;
+        if (!patientName || patientName.trim() === '') {
+            hideSpinner();
+            showStatusMessage('Por favor ingresa el nombre del paciente', 'warning');
+            return;
+        }
+        
+        const appointmentTypeSelect = document.getElementById('appointment-type');
+        const appointmentType = appointmentTypeSelect.options[appointmentTypeSelect.selectedIndex].text;
+        const appointmentTypeClass = appointmentTypeSelect.value;
+        const appointmentDate = document.getElementById('appointment-date').value;
+        const appointmentTime = document.getElementById('appointment-time').value;
+        
+        if (!appointmentDate || !appointmentTime) {
+            hideSpinner();
+            showStatusMessage('Por favor ingresa fecha y hora', 'warning');
+            return;
+        }
+        
+        const appointmentDuration = parseInt(document.getElementById('appointment-duration').value);
+        const therapist = document.getElementById('therapist').value;
+        const student = document.getElementById('student').value;
+        const notes = document.getElementById('appointment-notes').value;
+        const isWeb = document.getElementById('is-web').checked;
+        
+        // Datos de recurrencia
+        const isRecurring = document.getElementById('is-recurring').checked;
+        let selectedWeekdays = [];
+        let recurrenceEndDate = null;
+        
+        if (isRecurring) {
+            // Obtener días de la semana seleccionados
+            document.querySelectorAll('input[name="weekday"]:checked').forEach(checkbox => {
+                selectedWeekdays.push(parseInt(checkbox.value));
+            });
+            
+            // Fecha de fin de recurrencia
+            recurrenceEndDate = document.getElementById('recurrence-end').value;
+            if (!recurrenceEndDate) {
+                hideSpinner();
+                showStatusMessage('Por favor selecciona una fecha de fin para la recurrencia', 'warning');
+                return;
+            }
+            
+            if (selectedWeekdays.length === 0) {
+                hideSpinner();
+                showStatusMessage('Por favor selecciona al menos un día de la semana', 'warning');
+                return;
+            }
+        }
+        
+        // Crear objeto de fecha
+        const [year, month, day] = appointmentDate.split('-');
+        const [hours, minutes] = appointmentTime.split(':');
+        const date = new Date(year, month - 1, day, hours, minutes);
+        
+        // Verificar si es feriado
+        const dateStr = formatDate(date);
+        if (holidays.some(h => h.date === dateStr)) {
+            hideSpinner();
+            showStatusMessage('No se pueden agendar citas en días feriados.', 'warning');
+            return;
+        }
+        
+        // Verificar límite de citas simultáneas
+        if (!editingAppointmentId) { // Solo verificar para nuevas citas
+            const dayOfWeek = date.getDay(); // 0 para domingo, 1 para lunes, etc.
+            if (dayOfWeek > 0 && dayOfWeek < 5) { // Solo lunes a jueves
+                const hourAppointments = appointments.filter(a => {
+                    const appDate = a.fecha;
+                    return appDate && appDate.getDay() === dayOfWeek &&
+                           appDate.getHours() === date.getHours() &&
+                           a.estudiante === student;
+                });
+                
+                if (hourAppointments.length >= 2) {
+                    hideSpinner();
+                    showStatusMessage('Este estudiante ya tiene 2 citas en este horario.', 'warning');
+                    return;
                 }
-            })
+            }
+        }
+        
+        // ID único para citas recurrentes
+        const serieRecurrenteId = isRecurring ? `serie_${Date.now()}` : null;
+        
+        // Datos base de la cita
+        const baseAppointmentData = {
+            paciente: patientName,
+            tipo: appointmentType,
+            tipoClase: appointmentTypeClass,
+            duracion: appointmentDuration,
+            terapeuta: therapist,
+            estudiante: student,
+            notas: notes,
+            web: isWeb,
+            esRecurrente: isRecurring,
+            fecha: date,
+            creado: new Date(),
+            historial: [{
+                accion: editingAppointmentId ? 'modificacion' : 'creacion',
+                usuario: currentUser.email,
+                usuarioId: currentUser.uid,
+                fecha: new Date()
+            }]
+        };
+        
+        // Si es cita recurrente, agregar patrón
+        if (isRecurring) {
+            baseAppointmentData.serieRecurrenteId = serieRecurrenteId;
+            baseAppointmentData.patronRecurrencia = {
+                diasSemana: selectedWeekdays,
+                fechaFin: new Date(recurrenceEndDate)
+            };
+        }
+        
+        if (editingAppointmentId) {
+            // Actualizar cita existente
+            db.collection('citas').doc(editingAppointmentId).set(baseAppointmentData)
+                .then(() => {
+                    closeAppointmentModal();
+                    showStatusMessage('Cita actualizada correctamente', 'success');
+                    loadAppointments();
+                })
+                .catch((error) => {
+                    console.error("Error al actualizar cita:", error);
+                    hideSpinner();
+                    alert('Error al actualizar la cita: ' + error.message);
+                });
+        } else if (isRecurring) {
+            // Crear citas recurrentes usando batch
+            const batch = db.batch();
+            const endDate = new Date(recurrenceEndDate);
+            
+            // Generar todas las fechas según patrón
+            const createdDates = [];
+            const currentDate = new Date(date);
+            while (currentDate <= endDate) {
+                const currentDay = currentDate.getDay(); // 0 = domingo, 1 = lunes, ...
+                
+                // Si el día actual está en los días seleccionados
+                if (selectedWeekdays.includes(currentDay)) {
+                    const apptData = {...baseAppointmentData};
+                    apptData.fecha = new Date(currentDate); // Copia de la fecha
+                    
+                    // Crear documento con ID automático
+                    const newDocRef = db.collection('citas').doc();
+                    batch.set(newDocRef, apptData);
+                    
+                    createdDates.push(formatDate(currentDate));
+                }
+                
+                // Avanzar al siguiente día
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            // Ejecutar el batch
+            batch.commit()
+                .then(() => {
+                    closeAppointmentModal();
+                    showStatusMessage(`Creadas ${createdDates.length} citas recurrentes`, 'success');
+                    loadAppointments();
+                })
+                .catch((error) => {
+                    console.error("Error al crear citas recurrentes:", error);
+                    hideSpinner();
+                    alert('Error al crear citas recurrentes: ' + error.message);
+                });
+        } else {
+            // Crear una cita simple
+            db.collection('citas').add(baseAppointmentData)
+                .then((docRef) => {
+                    console.log("Cita creada con ID:", docRef.id);
+                    closeAppointmentModal();
+                    showStatusMessage('Cita creada correctamente', 'success');
+                    loadAppointments();
+                })
+                .catch((error) => {
+                    console.error("Error al crear cita:", error);
+                    hideSpinner();
+                    alert('Error al crear la cita: ' + error.message);
+                });
+        }
+    } catch (error) {
+        console.error("Error crítico al guardar cita:", error);
+        hideSpinner();
+        alert('Error crítico al guardar: ' + error.message);
+    }
+}
+
+// Eliminar cita
+function deleteAppointment() {
+    if (!editingAppointmentId) {
+        showStatusMessage("No hay ninguna cita seleccionada para eliminar", "warning");
+        return;
+    }
+    
+    showSpinner();
+    
+    try {
+        // Para simplificar, eliminamos directamente la cita
+        db.collection('citas').doc(editingAppointmentId).delete()
             .then(() => {
-                closeAttendanceModal();
-                showStatusMessage('Asistencia registrada correctamente', 'success');
+                closeAppointmentModal();
+                showStatusMessage('Cita eliminada correctamente', 'success');
                 loadAppointments();
             })
             .catch((error) => {
-                console.error("Error al registrar asistencia:", error);
+                console.error("Error al eliminar cita:", error);
                 hideSpinner();
-                showStatusMessage('Error al registrar la asistencia: ' + error.message, 'error');
+                alert('Error al eliminar: ' + error.message);
             });
-        } catch (error) {
-            console.error("Error crítico al guardar asistencia:", error);
-            hideSpinner();
-            showStatusMessage("Error crítico al guardar asistencia: " + error.message, "error");
-        }
+    } catch (error) {
+        console.error("Error crítico al eliminar cita:", error);
+        hideSpinner();
+        alert("Error crítico al eliminar: " + error.message);
+    }
+}
+
+// Mover una cita a una fecha y hora específicas
+function moveAppointmentToDate(appointmentId, targetDate, hour) {
+    if (!isAdmin) return;
+    
+    const appointment = appointments.find(a => a.id === appointmentId);
+    if (!appointment) {
+        showStatusMessage("No se encontró la cita para mover", "error");
+        return;
     }
     
-    // Mostrar/ocultar spinner de carga
-    function showSpinner() {
-        spinner.style.display = 'flex';
-    }
+    showSpinner();
     
-    function hideSpinner() {
-        spinner.style.display = 'none';
-    }
-    
-    // Mostrar mensaje de estado
-    function showStatusMessage(message, type = 'success') {
-        statusMessage.textContent = message;
-        statusMessage.className = 'status-message ' + type;
-        statusMessage.style.display = 'block';
+    try {
+        // Conservar minutos, pero cambiar fecha y hora
+        const newDate = new Date(targetDate);
+        newDate.setHours(hour, appointment.fecha.getMinutes(), 0, 0);
         
-        // Ocultar después de 5 segundos
-        setTimeout(() => {
-            statusMessage.style.display = 'none';
-        }, 5000);
+        // Actualizar fecha
+        db.collection('citas').doc(appointmentId).update({
+            fecha: newDate,
+            historial: firebase.firestore.FieldValue.arrayUnion({
+                accion: 'movimiento',
+                usuario: currentUser.email,
+                usuarioId: currentUser.uid,
+                fecha: new Date()
+            })
+        })
+        .then(() => {
+            showStatusMessage('Cita movida correctamente', 'success');
+            loadAppointments();
+        })
+        .catch((error) => {
+            console.error("Error al mover cita:", error);
+            hideSpinner();
+            alert('Error al mover la cita: ' + error.message);
+        });
+    } catch (error) {
+        console.error("Error crítico al mover cita:", error);
+        hideSpinner();
+        alert("Error crítico al mover: " + error.message);
     }
-    </script>
+}
+
+// Abrir modal de asistencia
+function openAttendanceModal(appointment) {
+    if (!isAdmin) return;
+    
+    try {
+        const patientEl = document.getElementById('attendance-patient');
+        const dateEl = document.getElementById('attendance-date');
+        const timeEl = document.getElementById('attendance-time');
+        
+        patientEl.textContent = appointment.paciente || 'Sin nombre';
+        
+        const fecha = appointment.fecha;
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        dateEl.textContent = fecha ? fecha.toLocaleDateString('es-ES', options) : 'Fecha no disponible';
+        
+        if (fecha) {
+            const horaInicio = `${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
+            const fechaFin = new Date(fecha);
+            fechaFin.setMinutes(fecha.getMinutes() + (appointment.duracion || 60));
+            const horaFin = `${fechaFin.getHours().toString().padStart(2, '0')}:${fechaFin.getMinutes().toString().padStart(2, '0')}`;
+            timeEl.textContent = `${horaInicio} - ${horaFin}`;
+        } else {
+            timeEl.textContent = 'Hora no disponible';
+        }
+        
+        // Resetear selección de estado
+        document.querySelectorAll('.attendance-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // Seleccionar el estado actual si existe
+        if (appointment.estado) {
+            const currentStatusBtn = document.querySelector(`.attendance-btn[data-status="${appointment.estado}"]`);
+            if (currentStatusBtn) {
+                currentStatusBtn.classList.add('selected');
+            }
+        }
+        
+        // Notas de asistencia
+        document.getElementById('attendance-notes').value = appointment.notasAsistencia || '';
+        
+        // Guardar referencia a la cita actual
+        attendanceModal.dataset.appointmentId = appointment.id;
+        
+        // Mostrar modal
+        attendanceModal.style.display = 'block';
+    } catch (error) {
+        console.error("Error al abrir modal de asistencia:", error);
+        showStatusMessage("Error al abrir el formulario de asistencia", "error");
+    }
+}
+
+// Cerrar modal de asistencia
+function closeAttendanceModal() {
+    attendanceModal.style.display = 'none';
+}
+
+// Guardar asistencia
+function saveAttendance() {
+    const appointmentId = attendanceModal.dataset.appointmentId;
+    if (!appointmentId) {
+        showStatusMessage("No se encontró la cita para registrar asistencia", "error");
+        return;
+    }
+    
+    const selectedBtn = document.querySelector('.attendance-btn.selected');
+    
+    if (!selectedBtn) {
+        showStatusMessage('Por favor selecciona un estado de asistencia', 'warning');
+        return;
+    }
+    
+    const status = selectedBtn.dataset.status;
+    const notes = document.getElementById('attendance-notes').value;
+    
+    showSpinner();
+    
+    try {
+        // Actualizar en Firestore
+        db.collection('citas').doc(appointmentId).update({
+            estado: status,
+            notasAsistencia: notes,
+            ultimaActualizacion: new Date()
+        })
+        .then(() => {
+            closeAttendanceModal();
+            showStatusMessage('Asistencia registrada correctamente', 'success');
+            loadAppointments();
+        })
+        .catch((error) => {
+            console.error("Error al registrar asistencia:", error);
+            hideSpinner();
+            alert('Error al registrar la asistencia: ' + error.message);
+        });
+    } catch (error) {
+        console.error("Error crítico al guardar asistencia:", error);
+        hideSpinner();
+        alert("Error crítico al guardar asistencia: " + error.message);
+    }
+}
+
+// Mostrar/ocultar spinner de carga
+function showSpinner() {
+    spinner.style.display = 'flex';
+}
+
+function hideSpinner() {
+    spinner.style.display = 'none';
+}
+
+// Mostrar mensaje de estado
+function showStatusMessage(message, type = 'success') {
+    statusMessage.textContent = message;
+    statusMessage.className = 'status-message ' + type;
+    statusMessage.style.display = 'block';
+    
+    // Ocultar después de 5 segundos
+    setTimeout(() => {
+        statusMessage.style.display = 'none';
+    }, 5000);
+}
+</script>
+
 </body>
 </html>
