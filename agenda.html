@@ -2204,8 +2204,7 @@ function getAppointmentTypeIcon(typeClass) {
         
 // Actualizar estadísticas
 // Actualizar estadísticas
-// Actualizar estadísticas
-// Actualizar estadísticas
+// Actualizar estadísticas con datos de asistencia
 function updateStatistics() {
     try {
         // Calcular asistencia semanal
@@ -2215,6 +2214,8 @@ function updateStatistics() {
         }).length;
         
         const attendedAppointments = appointments.filter(a => a.estado === 'attended').length;
+        const missedAppointments = appointments.filter(a => a.estado === 'missed').length;
+        const rescheduledAppointments = appointments.filter(a => a.estado === 'rescheduled').length;
         
         const attendanceRate = totalPastAppointments > 0 
             ? Math.round((attendedAppointments / totalPastAppointments) * 100) 
@@ -2245,6 +2246,10 @@ function updateStatistics() {
         const sessionsByStudent = {};
         const patientsByStudent = {};
         
+        // Estadísticas de asistencia por estudiante
+        const attendanceByStudent = {};
+        const missedByStudent = {};
+        
         // Contador de tipos de cita
         const appointmentTypes = {};
         
@@ -2265,6 +2270,13 @@ function updateStatistics() {
             // Contar sesiones totales por estudiante
             sessionsByStudent[a.estudiante] = (sessionsByStudent[a.estudiante] || 0) + 1;
             
+            // Contar asistencias y faltas por estudiante
+            if (a.estado === 'attended') {
+                attendanceByStudent[a.estudiante] = (attendanceByStudent[a.estudiante] || 0) + 1;
+            } else if (a.estado === 'missed') {
+                missedByStudent[a.estudiante] = (missedByStudent[a.estudiante] || 0) + 1;
+            }
+            
             // Inicializar arrays si no existen
             if (!patientsByStudent[a.estudiante]) {
                 patientsByStudent[a.estudiante] = [];
@@ -2281,19 +2293,30 @@ function updateStatistics() {
             uniquePatientsByStudent[student] = patientsByStudent[student].length;
         }
         
+        // Calcular tasa de asistencia por estudiante
+        const attendanceRateByStudent = {};
+        for (const student in sessionsByStudent) {
+            const attended = attendanceByStudent[student] || 0;
+            const total = (attendanceByStudent[student] || 0) + (missedByStudent[student] || 0);
+            attendanceRateByStudent[student] = total > 0 ? Math.round((attended / total) * 100) : 0;
+        }
+        
         // Actualizar DOM
         document.getElementById('attendance-rate').textContent = `${attendanceRate}%`;
         document.getElementById('total-appointments').textContent = appointments.length;
         document.getElementById('busiest-hour').textContent = `${busiestHour}:00`;
         
-        // Actualizar tabla de estudiantes
-        updateStudentStats(uniquePatientsByStudent, sessionsByStudent);
+        // Actualizar tabla de estudiantes con datos de asistencia
+        updateStudentStats(uniquePatientsByStudent, sessionsByStudent, attendanceRateByStudent);
         
         // Crear gráfico circular para tipos de cita
         createAppointmentTypeChart(appointmentTypes);
         
         // Añadir tabla de evolución de pacientes
         createPatientEvolutionTable(sessionsPerPatient);
+        
+        // Crear gráfico de asistencia vs faltas
+        createAttendanceChart(attendedAppointments, missedAppointments, rescheduledAppointments);
     } catch (error) {
         console.error("Error al actualizar estadísticas:", error);
     }
@@ -3956,6 +3979,254 @@ function setupPatientSearch() {
             searchBtn.click();
         }
     });
+}
+
+        // Crear gráfico de asistencia
+function createAttendanceChart(attended, missed, rescheduled) {
+    // Verificar si existe la sección para este gráfico, si no, crearla
+    let chartSection = document.getElementById('attendance-chart-section');
+    
+    if (!chartSection) {
+        const statsPanel = document.querySelector('.stats-panel');
+        if (!statsPanel) return;
+        
+        chartSection = document.createElement('div');
+        chartSection.id = 'attendance-chart-section';
+        chartSection.className = 'stats-section';
+        chartSection.style.marginTop = '30px';
+        
+        const sectionTitle = document.createElement('h4');
+        sectionTitle.className = 'therapist-stats-title';
+        sectionTitle.textContent = 'Distribución de Asistencia';
+        chartSection.appendChild(sectionTitle);
+        
+        const chartContainer = document.createElement('div');
+        chartContainer.id = 'attendance-chart';
+        chartContainer.style.height = '250px';
+        chartContainer.style.position = 'relative';
+        chartContainer.style.margin = '20px auto';
+        chartContainer.style.display = 'flex';
+        chartContainer.style.justifyContent = 'center';
+        chartContainer.style.gap = '30px';
+        
+        chartSection.appendChild(chartContainer);
+        statsPanel.appendChild(chartSection);
+    }
+    
+    const chartContainer = document.getElementById('attendance-chart');
+    if (!chartContainer) return;
+    
+    chartContainer.innerHTML = '';
+    
+    // Si no hay datos, mostrar mensaje
+    const total = attended + missed + rescheduled;
+    if (total === 0) {
+        const noDataMsg = document.createElement('div');
+        noDataMsg.textContent = 'No hay datos de asistencia disponibles';
+        noDataMsg.style.textAlign = 'center';
+        noDataMsg.style.padding = '20px';
+        noDataMsg.style.color = 'var(--text-secondary)';
+        chartContainer.appendChild(noDataMsg);
+        return;
+    }
+    
+    // Crear barras para el gráfico
+    const data = [
+        { label: 'Asistieron', value: attended, color: 'var(--success)' },
+        { label: 'No asistieron', value: missed, color: 'var(--error)' },
+        { label: 'Reprogramadas', value: rescheduled, color: 'var(--warning)' }
+    ];
+    
+    // Encontrar el valor máximo para escalar las barras
+    const maxValue = Math.max(attended, missed, rescheduled);
+    
+    data.forEach(item => {
+        const barContainer = document.createElement('div');
+        barContainer.style.display = 'flex';
+        barContainer.style.flexDirection = 'column';
+        barContainer.style.alignItems = 'center';
+        barContainer.style.width = '80px';
+        
+        // Valor numérico arriba de la barra
+        const valueLabel = document.createElement('div');
+        valueLabel.textContent = item.value;
+        valueLabel.style.fontWeight = 'bold';
+        valueLabel.style.fontSize = '16px';
+        valueLabel.style.marginBottom = '10px';
+        barContainer.appendChild(valueLabel);
+        
+        // Barra
+        const bar = document.createElement('div');
+        const height = maxValue > 0 ? (item.value / maxValue) * 200 : 0;
+        bar.style.height = `${height}px`;
+        bar.style.width = '60px';
+        bar.style.backgroundColor = item.color;
+        bar.style.borderRadius = '4px 4px 0 0';
+        barContainer.appendChild(bar);
+        
+        // Etiqueta debajo de la barra
+        const label = document.createElement('div');
+        label.textContent = item.label;
+        label.style.marginTop = '10px';
+        label.style.textAlign = 'center';
+        label.style.fontSize = '14px';
+        barContainer.appendChild(label);
+        
+        chartContainer.appendChild(barContainer);
+    });
+    
+    // Añadir porcentajes debajo del gráfico
+    const percentagesContainer = document.createElement('div');
+    percentagesContainer.style.display = 'flex';
+    percentagesContainer.style.justifyContent = 'center';
+    percentagesContainer.style.gap = '20px';
+    percentagesContainer.style.marginTop = '20px';
+    
+    data.forEach(item => {
+        const percent = total > 0 ? Math.round((item.value / total) * 100) : 0;
+        
+        const percentBox = document.createElement('div');
+        percentBox.style.padding = '8px 12px';
+        percentBox.style.backgroundColor = item.color;
+        percentBox.style.color = 'white';
+        percentBox.style.borderRadius = '4px';
+        percentBox.style.fontWeight = 'bold';
+        percentBox.textContent = `${percent}%`;
+        
+        percentagesContainer.appendChild(percentBox);
+    });
+    
+    chartSection.appendChild(percentagesContainer);
+}
+
+// Actualizar tabla de estudiantes con datos de asistencia
+function updateStudentStats(uniquePatients, totalSessions, attendanceRates) {
+    const chartContainer = document.getElementById('student-chart');
+    const chartLabels = document.getElementById('student-chart-labels');
+    
+    if (chartContainer && chartLabels) {
+        chartContainer.innerHTML = '';
+        chartLabels.innerHTML = '';
+        
+        // Crear tabla de estadísticas en lugar de gráfico
+        const statsTable = document.createElement('table');
+        statsTable.className = 'student-stats-table';
+        statsTable.style.width = '100%';
+        statsTable.style.borderCollapse = 'collapse';
+        statsTable.style.marginTop = '20px';
+        
+        // Crear encabezado
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        
+        ['Estudiante', 'Pacientes Únicos', 'Total Sesiones', 'Tasa de Asistencia'].forEach(text => {
+            const th = document.createElement('th');
+            th.textContent = text;
+            th.style.padding = '10px';
+            th.style.textAlign = 'left';
+            th.style.borderBottom = '2px solid var(--border)';
+            headerRow.appendChild(th);
+        });
+        
+        thead.appendChild(headerRow);
+        statsTable.appendChild(thead);
+        
+        // Crear cuerpo de tabla
+        const tbody = document.createElement('tbody');
+        
+        // Ordenar estudiantes por número de pacientes
+        const sortedStudents = Object.keys(uniquePatients || {}).sort((a, b) => 
+            (uniquePatients[b] || 0) - (uniquePatients[a] || 0)
+        );
+        
+        sortedStudents.forEach(student => {
+            const row = document.createElement('tr');
+            
+            // Nombre del estudiante
+            const nameCell = document.createElement('td');
+            nameCell.textContent = studentNames[student] || student;
+            nameCell.style.padding = '10px';
+            nameCell.style.borderBottom = '1px solid var(--border)';
+            
+            // Número de pacientes únicos
+            const patientsCell = document.createElement('td');
+            patientsCell.textContent = uniquePatients[student] || 0;
+            patientsCell.style.padding = '10px';
+            patientsCell.style.borderBottom = '1px solid var(--border)';
+            
+            // Número total de sesiones
+            const sessionsCell = document.createElement('td');
+            sessionsCell.textContent = totalSessions[student] || 0;
+            sessionsCell.style.padding = '10px';
+            sessionsCell.style.borderBottom = '1px solid var(--border)';
+            
+            // Tasa de asistencia
+            const attendanceCell = document.createElement('td');
+            const attendanceRate = attendanceRates[student] || 0;
+            
+            // Crear indicador visual de tasa de asistencia
+            const attendanceIndicator = document.createElement('div');
+            attendanceIndicator.style.display = 'flex';
+            attendanceIndicator.style.alignItems = 'center';
+            
+            const attendanceBar = document.createElement('div');
+            attendanceBar.style.height = '10px';
+            attendanceBar.style.width = `${attendanceRate}%`;
+            attendanceBar.style.backgroundColor = getAttendanceColor(attendanceRate);
+            attendanceBar.style.borderRadius = '5px';
+            attendanceBar.style.marginRight = '10px';
+            
+            const attendanceText = document.createElement('span');
+            attendanceText.textContent = `${attendanceRate}%`;
+            
+            attendanceIndicator.appendChild(attendanceBar);
+            attendanceIndicator.appendChild(attendanceText);
+            attendanceCell.appendChild(attendanceIndicator);
+            attendanceCell.style.padding = '10px';
+            attendanceCell.style.borderBottom = '1px solid var(--border)';
+            
+            row.appendChild(nameCell);
+            row.appendChild(patientsCell);
+            row.appendChild(sessionsCell);
+            row.appendChild(attendanceCell);
+            tbody.appendChild(row);
+        });
+        
+        statsTable.appendChild(tbody);
+        
+        // Reemplazar el gráfico con la tabla
+        chartContainer.appendChild(statsTable);
+        
+        // Añadir un botón para exportar estadísticas
+        const exportContainer = document.createElement('div');
+        exportContainer.className = 'export-container';
+        exportContainer.style.marginTop = '20px';
+        exportContainer.style.textAlign = 'center';
+        
+        const exportExcelBtn = document.createElement('button');
+        exportExcelBtn.className = 'button save-btn';
+        exportExcelBtn.style.marginRight = '10px';
+        exportExcelBtn.textContent = 'Exportar a Excel';
+        exportExcelBtn.onclick = function() { exportStatisticsToExcel(); };
+        
+        const exportPdfBtn = document.createElement('button');
+        exportPdfBtn.className = 'button save-btn';
+        exportPdfBtn.textContent = 'Exportar a PDF';
+        exportPdfBtn.onclick = function() { exportStatisticsToPdf(); };
+        
+        exportContainer.appendChild(exportExcelBtn);
+        exportContainer.appendChild(exportPdfBtn);
+        
+        chartContainer.appendChild(exportContainer);
+    }
+}
+
+// Obtener color según tasa de asistencia
+function getAttendanceColor(rate) {
+    if (rate >= 90) return 'var(--success)';
+    if (rate >= 70) return '#8BC34A'; // Verde-amarillo
+    if (rate >= 50) return 'var(--warning)';
+    return 'var(--error)';
 }
 </script>
 
