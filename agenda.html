@@ -2145,6 +2145,7 @@ function getAppointmentTypeIcon(typeClass) {
 // Actualizar estadísticas
 // Actualizar estadísticas
 // Actualizar estadísticas
+// Actualizar estadísticas
 function updateStatistics() {
     try {
         // Calcular asistencia semanal
@@ -2179,15 +2180,29 @@ function updateStatistics() {
             }
         }
         
-        // NUEVO: Calcular pacientes únicos por estudiante Y sesiones totales
+        // Calcular pacientes únicos por estudiante Y sesiones totales
         uniquePatientsByStudent = {};
         const sessionsByStudent = {};
         const patientsByStudent = {};
         
+        // Contador de tipos de cita
+        const appointmentTypes = {};
+        
+        // Contador de sesiones por paciente
+        const sessionsPerPatient = {};
+        
         appointments.forEach(a => {
             if (!a.estudiante || !a.paciente) return;
             
-            // Contar sesiones totales
+            // Contar tipos de cita
+            const tipoClase = a.tipoClase || 'sin-tipo';
+            appointmentTypes[tipoClase] = (appointmentTypes[tipoClase] || 0) + 1;
+            
+            // Contar sesiones por paciente
+            const patientKey = a.paciente.toLowerCase();
+            sessionsPerPatient[patientKey] = (sessionsPerPatient[patientKey] || 0) + 1;
+            
+            // Contar sesiones totales por estudiante
             sessionsByStudent[a.estudiante] = (sessionsByStudent[a.estudiante] || 0) + 1;
             
             // Inicializar arrays si no existen
@@ -2211,8 +2226,14 @@ function updateStatistics() {
         document.getElementById('total-appointments').textContent = appointments.length;
         document.getElementById('busiest-hour').textContent = `${busiestHour}:00`;
         
-        // Actualizar gráfico de estudiantes
-        updateStudentChart(uniquePatientsByStudent, sessionsByStudent);
+        // Actualizar tabla de estudiantes
+        updateStudentStats(uniquePatientsByStudent, sessionsByStudent);
+        
+        // Crear gráfico circular para tipos de cita
+        createAppointmentTypeChart(appointmentTypes);
+        
+        // Añadir tabla de evolución de pacientes
+        createPatientEvolutionTable(sessionsPerPatient);
     } catch (error) {
         console.error("Error al actualizar estadísticas:", error);
     }
@@ -2682,6 +2703,8 @@ function setupEventListeners() {
         console.error("Error al configurar eventos:", error);
         showStatusMessage("Error al inicializar la interfaz", "error");
     }
+    // Configurar búsqueda de pacientes
+    setupPatientSearch();
 }
 
 // Navegar entre semanas
@@ -3479,7 +3502,16 @@ function createPatientEvolutionTable(sessionsData) {
         tbody.appendChild(row);
     });
     
-    table.appendChil        
+    table.appendChild(tbody);
+    
+    // Reemplazar contenido anterior
+    evolutionSection.innerHTML = '';
+    const sectionTitle = document.createElement('h4');
+    sectionTitle.className = 'therapist-stats-title';
+    sectionTitle.textContent = 'Evolución de Pacientes';
+    evolutionSection.appendChild(sectionTitle);
+    evolutionSection.appendChild(table);
+    }       
         
 // Función para eliminar una cita específica
 function deleteSpecificAppointment(appointmentId) {
@@ -3662,14 +3694,69 @@ function showStatusMessage(message, type = 'success') {
         statusMessage.style.display = 'none';
     }, 5000);
 }
+
+        // Función de búsqueda de pacientes
+function setupPatientSearch() {
+    const searchInput = document.getElementById('patient-search');
+    const searchBtn = document.getElementById('search-btn');
+    const clearBtn = document.getElementById('clear-search-btn');
+    
+    if (!searchInput || !searchBtn || !clearBtn) return;
+    
+    searchBtn.addEventListener('click', function() {
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        if (!searchTerm) {
+            showStatusMessage('Por favor ingresa un nombre para buscar', 'warning');
+            return;
+        }
+        
+        // Buscar citas que coincidan
+        const matchingAppointments = appointments.filter(app => 
+            app.paciente && app.paciente.toLowerCase().includes(searchTerm)
+        );
+        
+        if (matchingAppointments.length === 0) {
+            showStatusMessage(`No se encontraron citas para "${searchTerm}"`, 'warning');
+        } else {
+            // Resaltar visualmente las citas encontradas
+            document.querySelectorAll('.appointment').forEach(el => {
+                el.classList.remove('highlighted');
+            });
+            
+            matchingAppointments.forEach(app => {
+                const appointmentEl = document.querySelector(`.appointment[data-id="${app.id}"]`);
+                if (appointmentEl) {
+                    appointmentEl.classList.add('highlighted');
+                    // Hacer scroll hacia la primera cita encontrada
+                    if (appointmentEl === document.querySelector('.appointment.highlighted')) {
+                        appointmentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
+            
+            showStatusMessage(`Se encontraron ${matchingAppointments.length} citas para "${searchTerm}"`, 'success');
+        }
+    });
+    
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        document.querySelectorAll('.appointment').forEach(el => {
+            el.classList.remove('highlighted');
+        });
+    });
+    
+    // Permitir búsqueda al presionar Enter
+    searchInput.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            searchBtn.click();
+        }
+    });
+}
 </script>
 
 <!-- Librerías para exportar -->
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
-<!-- Librerías para exportar -->
 <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-<script src="https://unpkg.com/jspdf-autotable@latest/dist/jspdf.plugin.autotable.js"></script>    
+<script src="https://unpkg.com/jspdf-autotable@latest/dist/jspdf.plugin.autotable.js"></script>  
 </body>
 </html>
