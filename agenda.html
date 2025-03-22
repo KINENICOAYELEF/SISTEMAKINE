@@ -2427,9 +2427,9 @@ function updateStatistics() {
         const sessionsPerPatient = {};
         const attendedSessionsPerPatient = {};
         
-        // NUEVO: Contador de comunas
+        // NUEVO: Contador de comunas por paciente único
         const comunaCounter = {};
-        
+        const pacientesComunas = {}; // Para rastrear pacientes ya contados
         appointments.forEach(a => {
             if (!a.estudiante || !a.paciente) return;
             
@@ -2438,8 +2438,13 @@ function updateStatistics() {
             appointmentTypes[tipoClase] = (appointmentTypes[tipoClase] || 0) + 1;
             
             // NUEVO: Contar comunas si existe
+            // NUEVO: Contar comunas solo una vez por paciente
             if (a.comuna) {
-                comunaCounter[a.comuna] = (comunaCounter[a.comuna] || 0) + 1;
+                const patientKey = a.paciente.toLowerCase();
+                if (!pacientesComunas[patientKey + a.comuna]) {
+                    pacientesComunas[patientKey + a.comuna] = true;
+                    comunaCounter[a.comuna] = (comunaCounter[a.comuna] || 0) + 1;
+                }
             }
             
             // Contar sesiones por paciente (agendadas)
@@ -3220,13 +3225,15 @@ function exportStatisticsToPdf() {
         const pacientesInfo = {};
         const comunaCounter = {};
         
+        const pacientesYaComunas = {};
         appointments.forEach(a => {
             if (!a.paciente) return;
             
             const patientKey = a.paciente.toLowerCase();
             
-            // Contabilizar comunas
-            if (a.comuna) {
+            // Contabilizar comunas solo una vez por paciente
+            if (a.comuna && !pacientesYaComunas[patientKey + a.comuna]) {
+                pacientesYaComunas[patientKey + a.comuna] = true;
                 comunaCounter[a.comuna] = (comunaCounter[a.comuna] || 0) + 1;
             }
             
@@ -3317,7 +3324,7 @@ function exportStatisticsToPdf() {
         
         // Generar tabla de comunas
         doc.autoTable({
-            head: [['Comuna', 'Pacientes', '%']],
+            head: [['Comuna', 'Pacientes Únicos', '%']],
             body: comunasTableRows,
             startY: comunasY + 5,
             styles: { 
@@ -5956,7 +5963,7 @@ function createComunasChartFixed(comunasData) {
         
         const sectionTitle = document.createElement('h4');
         sectionTitle.className = 'therapist-stats-title';
-        sectionTitle.textContent = 'Distribución de Pacientes por Comuna';
+        sectionTitle.textContent = 'Distribución de Pacientes Únicos por Comuna';
         chartSection.appendChild(sectionTitle);
         
         statsPanel.appendChild(chartSection);
@@ -6107,7 +6114,7 @@ function createComunasChartFixed(comunasData) {
     tableTitle.style.fontWeight = '600';
     tableTitle.style.marginBottom = '15px';
     tableTitle.style.textAlign = 'center';
-    tableTitle.textContent = 'Detalle por comuna';
+    tableTitle.textContent = 'Detalle por comuna (pacientes únicos)';
     tableContainer.appendChild(tableTitle);
     
     // Tabla
@@ -6119,7 +6126,7 @@ function createComunasChartFixed(comunasData) {
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
     
-    ['Comuna', 'Pacientes', '%'].forEach(text => {
+    ['Comuna', 'Pacientes Únicos', '%'].forEach(text => {
         const th = document.createElement('th');
         th.textContent = text;
         headerRow.appendChild(th);
