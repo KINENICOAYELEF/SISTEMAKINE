@@ -2230,6 +2230,8 @@ function getAppointmentTypeIcon(typeClass) {
 // Actualizar estadísticas
 // Actualizar estadísticas con datos de asistencia
 function updateStatistics() {
+    console.log("🔍 Actualizando estadísticas...");
+    
     try {
         // Calcular asistencia semanal
         const totalPastAppointments = appointments.filter(a => {
@@ -2244,6 +2246,8 @@ function updateStatistics() {
         const attendanceRate = totalPastAppointments > 0 
             ? Math.round((attendedAppointments / totalPastAppointments) * 100) 
             : 0;
+        
+        console.log(`📊 Citas pasadas: ${totalPastAppointments}, Asistidas: ${attendedAppointments}, Tasa: ${attendanceRate}%`);
         
         // Citas por hora
         const appointmentsByHour = {};
@@ -2264,6 +2268,8 @@ function updateStatistics() {
                 maxAppointments = appointmentsByHour[hour];
             }
         }
+        
+        console.log(`⏰ Hora más ocupada: ${busiestHour}:00 con ${maxAppointments} citas`);
         
         // Calcular pacientes únicos por estudiante Y sesiones totales
         uniquePatientsByStudent = {};
@@ -2325,24 +2331,28 @@ function updateStatistics() {
             attendanceRateByStudent[student] = total > 0 ? Math.round((attended / total) * 100) : 0;
         }
         
+        console.log(`👨‍🎓 Estudiantes activos: ${Object.keys(uniquePatientsByStudent).length}`);
+        
         // Actualizar DOM
         document.getElementById('attendance-rate').textContent = `${attendanceRate}%`;
         document.getElementById('total-appointments').textContent = appointments.length;
         document.getElementById('busiest-hour').textContent = `${busiestHour}:00`;
         
         // Actualizar tabla de estudiantes con datos de asistencia
-        updateStudentStats(uniquePatientsByStudent, sessionsByStudent, attendanceRateByStudent);
+        updateStudentStatsTable(uniquePatientsByStudent, sessionsByStudent, attendanceRateByStudent);
         
         // Crear gráfico circular para tipos de cita
-        createAppointmentTypeChart(appointmentTypes);
+        createAppointmentTypeChartFixed(appointmentTypes);
         
         // Añadir tabla de evolución de pacientes
-        createPatientEvolutionTable(sessionsPerPatient);
+        createPatientEvolutionTableFixed(sessionsPerPatient);
         
         // Crear gráfico de asistencia vs faltas
-        createAttendanceChart(attendedAppointments, missedAppointments, rescheduledAppointments);
+        createAttendanceChartFixed(attendedAppointments, missedAppointments, rescheduledAppointments);
+        
+        console.log("✅ Actualización de estadísticas completada");
     } catch (error) {
-        console.error("Error al actualizar estadísticas:", error);
+        console.error("❌ Error al actualizar estadísticas:", error);
     }
 }
 
@@ -3676,17 +3686,22 @@ function deleteSpecificAppointment(appointmentId) {
 }
 
 // Actualizar estadísticas de estudiantes
-function updateStudentStats(uniquePatients, totalSessions) {
-    const statsPanel = document.querySelector('.stats-panel');
-    if (!statsPanel) return;
+function updateStudentStatsTable(uniquePatients, totalSessions, attendanceRates) {
+    console.log("🔍 Actualizando tabla de estadísticas de estudiantes...");
     
-    // Eliminar gráfico anterior si existe
-    const oldChartContainer = document.getElementById('student-chart');
-    const oldChartLabels = document.getElementById('student-chart-labels');
-    if (oldChartContainer) oldChartContainer.innerHTML = '';
-    if (oldChartLabels) oldChartLabels.innerHTML = '';
+    const chartContainer = document.getElementById('student-chart');
+    const chartLabels = document.getElementById('student-chart-labels');
     
-    // Crear nueva tabla
+    if (!chartContainer || !chartLabels) {
+        console.error("❌ No se encontraron los contenedores para la tabla de estudiantes");
+        return;
+    }
+    
+    // Limpiar los contenedores
+    chartContainer.innerHTML = '';
+    chartLabels.innerHTML = '';
+    
+    // Crear tabla de estadísticas
     const statsTable = document.createElement('table');
     statsTable.className = 'student-stats-table';
     
@@ -3694,7 +3709,7 @@ function updateStudentStats(uniquePatients, totalSessions) {
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
     
-    ['Estudiante', 'Pacientes Únicos', 'Total Sesiones'].forEach(text => {
+    ['Estudiante', 'Pacientes Únicos', 'Total Sesiones', 'Tasa de Asistencia'].forEach(text => {
         const th = document.createElement('th');
         th.textContent = text;
         headerRow.appendChild(th);
@@ -3711,6 +3726,8 @@ function updateStudentStats(uniquePatients, totalSessions) {
         (uniquePatients[b] || 0) - (uniquePatients[a] || 0)
     );
     
+    console.log(`👨‍🎓 Estudiantes a mostrar: ${sortedStudents.length}`);
+    
     sortedStudents.forEach(student => {
         const row = document.createElement('tr');
         
@@ -3726,52 +3743,81 @@ function updateStudentStats(uniquePatients, totalSessions) {
         const sessionsCell = document.createElement('td');
         sessionsCell.textContent = totalSessions[student] || 0;
         
+        // Tasa de asistencia
+        const attendanceCell = document.createElement('td');
+        const attendanceRate = attendanceRates[student] || 0;
+        
+        // Crear indicador visual de tasa de asistencia
+        const attendanceIndicator = document.createElement('div');
+        attendanceIndicator.style.display = 'flex';
+        attendanceIndicator.style.alignItems = 'center';
+        
+        const attendanceBar = document.createElement('div');
+        attendanceBar.style.height = '10px';
+        attendanceBar.style.width = `${attendanceRate}%`;
+        attendanceBar.style.backgroundColor = getAttendanceColor(attendanceRate);
+        attendanceBar.style.borderRadius = '5px';
+        attendanceBar.style.marginRight = '10px';
+        
+        const attendanceText = document.createElement('span');
+        attendanceText.textContent = `${attendanceRate}%`;
+        
+        attendanceIndicator.appendChild(attendanceBar);
+        attendanceIndicator.appendChild(attendanceText);
+        attendanceCell.appendChild(attendanceIndicator);
+        
         row.appendChild(nameCell);
         row.appendChild(patientsCell);
         row.appendChild(sessionsCell);
+        row.appendChild(attendanceCell);
         tbody.appendChild(row);
     });
     
     statsTable.appendChild(tbody);
     
-    // Añadir la tabla al contenedor
-    if (oldChartContainer) {
-        oldChartContainer.appendChild(statsTable);
-        
-        // Añadir botones de exportación
-        const exportContainer = document.createElement('div');
-        exportContainer.className = 'export-container';
-        
-        const exportExcelBtn = document.createElement('button');
-        exportExcelBtn.className = 'button save-btn';
-        exportExcelBtn.textContent = 'Exportar a Excel';
-        exportExcelBtn.onclick = function() { exportStatisticsToExcel(); };
-        
-        const exportPdfBtn = document.createElement('button');
-        exportPdfBtn.className = 'button save-btn';
-        exportPdfBtn.textContent = 'Exportar a PDF';
-        exportPdfBtn.onclick = function() { exportStatisticsToPdf(); };
-        
-        exportContainer.appendChild(exportExcelBtn);
-        exportContainer.appendChild(exportPdfBtn);
-        
-        oldChartContainer.appendChild(exportContainer);
-    }
+    // Añadir tabla al contenedor
+    chartContainer.appendChild(statsTable);
+    
+    // Añadir botones de exportación
+    const exportContainer = document.createElement('div');
+    exportContainer.className = 'export-container';
+    
+    const exportExcelBtn = document.createElement('button');
+    exportExcelBtn.className = 'button save-btn';
+    exportExcelBtn.textContent = 'Exportar a Excel';
+    exportExcelBtn.onclick = function() { exportStatisticsToExcel(); };
+    
+    const exportPdfBtn = document.createElement('button');
+    exportPdfBtn.className = 'button save-btn';
+    exportPdfBtn.textContent = 'Exportar a PDF';
+    exportPdfBtn.onclick = function() { exportStatisticsToPdf(); };
+    
+    exportContainer.appendChild(exportExcelBtn);
+    exportContainer.appendChild(exportPdfBtn);
+    
+    chartContainer.appendChild(exportContainer);
+    
+    console.log("✅ Tabla de estadísticas de estudiantes actualizada");
 }
+
 
 // Crear gráfico circular para tipos de cita
 function createAppointmentTypeChart(typesData) {
+    console.log("🔍 Creando gráfico de tipos de tratamiento...");
+    
     // Verificar si existe la sección para este gráfico, si no, crearla
     let chartSection = document.getElementById('treatment-types-section');
     
     if (!chartSection) {
         const statsPanel = document.querySelector('.stats-panel');
-        if (!statsPanel) return;
+        if (!statsPanel) {
+            console.error("❌ No se encontró el panel de estadísticas");
+            return;
+        }
         
         chartSection = document.createElement('div');
         chartSection.id = 'treatment-types-section';
         chartSection.className = 'stats-section';
-        chartSection.style.marginTop = '30px';
         
         const sectionTitle = document.createElement('h4');
         sectionTitle.className = 'therapist-stats-title';
@@ -3790,7 +3836,10 @@ function createAppointmentTypeChart(typesData) {
     }
     
     const chartContainer = document.getElementById('treatment-types-chart');
-    if (!chartContainer) return;
+    if (!chartContainer) {
+        console.error("❌ No se encontró el contenedor para el gráfico de tipos");
+        return;
+    }
     
     chartContainer.innerHTML = '';
     
@@ -3798,6 +3847,8 @@ function createAppointmentTypeChart(typesData) {
     const types = Object.keys(typesData);
     const counts = Object.values(typesData);
     const total = counts.reduce((sum, count) => sum + count, 0);
+    
+    console.log(`📊 Tipos de tratamiento: ${types.length}, Total de citas: ${total}`);
     
     // Si no hay datos, mostrar mensaje
     if (total === 0) {
@@ -3875,36 +3926,12 @@ function createAppointmentTypeChart(typesData) {
         path.setAttribute('stroke', 'white');
         path.setAttribute('stroke-width', '1');
         
-        // Añadir efecto de hover
-        path.setAttribute('onmouseover', "this.style.opacity = 0.8;");
-        path.setAttribute('onmouseout', "this.style.opacity = 1;");
-        
         // Agregar título con información al pasar el mouse
         const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
         title.textContent = `${getAppointmentTypeName(type)}: ${count} (${percentage.toFixed(1)}%)`;
         path.appendChild(title);
         
         svg.appendChild(path);
-        
-        // Añadir etiqueta de porcentaje dentro del segmento si es lo suficientemente grande
-        if (percentage >= 10) {
-            const labelAngle = startAngle + (endAngle - startAngle) / 2;
-            const labelRadius = radius * 0.7; // Un poco hacia adentro del borde
-            const labelX = centerX + labelRadius * Math.cos(labelAngle);
-            const labelY = centerY + labelRadius * Math.sin(labelAngle);
-            
-            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            label.setAttribute('x', labelX);
-            label.setAttribute('y', labelY);
-            label.setAttribute('text-anchor', 'middle');
-            label.setAttribute('dominant-baseline', 'middle');
-            label.setAttribute('fill', 'white');
-            label.setAttribute('font-size', '12');
-            label.setAttribute('font-weight', 'bold');
-            label.textContent = `${Math.round(percentage)}%`;
-            
-            svg.appendChild(label);
-        }
         
         // Actualizar ángulo acumulado
         cumulativeAngle += angleSize;
@@ -3915,10 +3942,6 @@ function createAppointmentTypeChart(typesData) {
     // Crear leyenda
     const legend = document.createElement('div');
     legend.className = 'chart-legend';
-    legend.style.display = 'flex';
-    legend.style.flexWrap = 'wrap';
-    legend.style.justifyContent = 'center';
-    legend.style.marginTop = '20px';
     
     types.forEach((type, index) => {
         const count = typesData[type];
@@ -3926,9 +3949,6 @@ function createAppointmentTypeChart(typesData) {
         
         const legendItem = document.createElement('div');
         legendItem.className = 'legend-item';
-        legendItem.style.display = 'flex';
-        legendItem.style.alignItems = 'center';
-        legendItem.style.margin = '5px 10px';
         
         const colorBox = document.createElement('div');
         colorBox.style.width = '12px';
@@ -3946,6 +3966,8 @@ function createAppointmentTypeChart(typesData) {
     });
     
     chartContainer.appendChild(legend);
+    
+    console.log("✅ Gráfico de tipos de tratamiento creado");
 }
 
 // Función para obtener nombre legible del tipo de cita
@@ -3961,17 +3983,21 @@ function getAppointmentTypeName(typeClass) {
 
 // Crear tabla de evolución de pacientes
 function createPatientEvolutionTable(sessionsData) {
+   console.log("🔍 Creando tabla de evolución de pacientes...");
+    
     // Verificar si existe la sección para esta tabla, si no, crearla
     let evolutionSection = document.getElementById('patient-evolution-section');
     
     if (!evolutionSection) {
         const statsPanel = document.querySelector('.stats-panel');
-        if (!statsPanel) return;
+        if (!statsPanel) {
+            console.error("❌ No se encontró el panel de estadísticas");
+            return;
+        }
         
         evolutionSection = document.createElement('div');
         evolutionSection.id = 'patient-evolution-section';
         evolutionSection.className = 'stats-section';
-        evolutionSection.style.marginTop = '30px';
         
         const sectionTitle = document.createElement('h4');
         sectionTitle.className = 'therapist-stats-title';
@@ -3989,6 +4015,8 @@ function createPatientEvolutionTable(sessionsData) {
     
     // Ordenar por número de sesiones (descendente)
     patientsArray.sort((a, b) => b.sessions - a.sessions);
+    
+    console.log(`👨‍⚕️ Pacientes a mostrar: ${patientsArray.length}`);
     
     // Crear tabla
     const table = document.createElement('table');
@@ -4067,8 +4095,9 @@ function createPatientEvolutionTable(sessionsData) {
     sectionTitle.textContent = 'Evolución de Pacientes';
     evolutionSection.appendChild(sectionTitle);
     evolutionSection.appendChild(table);
-    }       
-        
+    
+    console.log("✅ Tabla de evolución de pacientes creada");
+}  
 // Función para eliminar una cita específica
 function deleteSpecificAppointment(appointmentId) {
     showSpinner();
@@ -4365,17 +4394,21 @@ function setupPatientSearch() {
 
         // Crear gráfico de asistencia
 function createAttendanceChart(attended, missed, rescheduled) {
+    console.log("🔍 Creando gráfico de asistencia...");
+    
     // Verificar si existe la sección para este gráfico, si no, crearla
     let chartSection = document.getElementById('attendance-chart-section');
     
     if (!chartSection) {
         const statsPanel = document.querySelector('.stats-panel');
-        if (!statsPanel) return;
+        if (!statsPanel) {
+            console.error("❌ No se encontró el panel de estadísticas");
+            return;
+        }
         
         chartSection = document.createElement('div');
         chartSection.id = 'attendance-chart-section';
         chartSection.className = 'stats-section';
-        chartSection.style.marginTop = '30px';
         
         const sectionTitle = document.createElement('h4');
         sectionTitle.className = 'therapist-stats-title';
@@ -4396,12 +4429,18 @@ function createAttendanceChart(attended, missed, rescheduled) {
     }
     
     const chartContainer = document.getElementById('attendance-chart');
-    if (!chartContainer) return;
+    if (!chartContainer) {
+        console.error("❌ No se encontró el contenedor para el gráfico de asistencia");
+        return;
+    }
     
     chartContainer.innerHTML = '';
     
     // Si no hay datos, mostrar mensaje
     const total = attended + missed + rescheduled;
+    
+    console.log(`📊 Asistencias: ${attended}, Faltas: ${missed}, Reprogramadas: ${rescheduled}`);
+    
     if (total === 0) {
         const noDataMsg = document.createElement('div');
         noDataMsg.textContent = 'No hay datos de asistencia disponibles';
@@ -4479,6 +4518,8 @@ function createAttendanceChart(attended, missed, rescheduled) {
     });
     
     chartSection.appendChild(percentagesContainer);
+    
+    console.log("✅ Gráfico de asistencia creado");
 }
 
 // Actualizar tabla de estudiantes con datos de asistencia
