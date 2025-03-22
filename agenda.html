@@ -1062,6 +1062,137 @@ h4.therapist-stats-title {
     position: relative;
     z-index: 20; /* Asegurar que los botones estén encima */
 }
+
+        /* Mejoras para dispositivos móviles */
+@media (max-width: 767px) {
+    /* Reducir espaciado y tamaños en general */
+    .container {
+        padding: 10px;
+    }
+    
+    header {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+    
+    .app-title {
+        font-size: 20px;
+    }
+    
+    /* Mejorar visualización de la agenda */
+    .days-header, .dates-header, .schedule-grid {
+        grid-template-columns: 40px repeat(4, 1fr);
+    }
+    
+    .time-cell {
+        font-size: 11px;
+        padding: 5px;
+    }
+    
+    .schedule-cell {
+        min-height: 80px;
+        padding: 3px;
+        gap: 3px;
+    }
+    
+    /* Hacer las citas más legibles */
+    .appointment {
+        padding: 5px;
+        font-size: 11px;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .appointment-title {
+        font-size: 11px;
+        margin-bottom: 2px;
+        padding-top: 12px;
+    }
+    
+    .appointment-type {
+        font-size: 9px;
+    }
+    
+    .appointment-therapist {
+        font-size: 9px;
+    }
+    
+    .student-badge {
+        font-size: 8px;
+        right: 3px;
+        top: 3px;
+        padding: 2px 4px;
+    }
+    
+    /* Mejorar la visualización de los modales */
+    .modal-content {
+        width: 95%;
+        margin: 10px auto;
+        max-height: 90vh;
+    }
+    
+    .form-group {
+        margin-bottom: 10px;
+    }
+    
+    /* Mejorar las estadísticas */
+    .stats-grid {
+        gap: 10px;
+    }
+    
+    .stat-box {
+        padding: 10px;
+    }
+    
+    .stat-value {
+        font-size: 22px;
+    }
+    
+    /* Optimizar la tabla de estudiantes */
+    .student-stats-table th,
+    .student-stats-table td {
+        padding: 8px 6px;
+        font-size: 11px;
+    }
+    
+    /* Optimizar sección de búsqueda */
+    .search-container {
+        padding: 10px;
+    }
+}
+
+        /* Estilos para filtros */
+.filters-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: var(--surface);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    flex-wrap: wrap;
+}
+
+.filter-select {
+    flex: 1;
+    min-width: 150px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+@media (max-width: 767px) {
+    .filters-container {
+        padding: 10px;
+    }
+    
+    .filter-select, 
+    .filters-container button {
+        flex: 1 1 100%;
+        margin-bottom: 5px;
+    }
+}
     </style>
 </head>
 <body>
@@ -1111,6 +1242,22 @@ h4.therapist-stats-title {
 
         <!-- Buscador de pacientes -->
         <div class="search-container">
+                        <!-- Filtros -->
+            <div class="filters-container">
+                <select id="student-filter" class="filter-select">
+                    <option value="">Todos los estudiantes</option>
+                    <!-- Se llenará dinámicamente -->
+                </select>
+                <select id="type-filter" class="filter-select">
+                    <option value="">Todos los tipos</option>
+                    <option value="evaluacion-msk">Evaluación MSK</option>
+                    <option value="evaluacion-deportiva">Evaluación Deportiva</option>
+                    <option value="sesion-msk">Sesión MSK</option>
+                    <option value="sesion-deportiva">Sesión Deportiva</option>
+                </select>
+                <button id="apply-filters-btn" class="button save-btn">Aplicar Filtros</button>
+                <button id="clear-filters-btn" class="button cancel-btn">Limpiar Filtros</button>
+            </div>
             <input type="text" id="patient-search" placeholder="Buscar paciente...">
             <button id="search-btn" class="button save-btn">Buscar</button>
             <button id="clear-search-btn" class="button cancel-btn">Limpiar</button>
@@ -1565,25 +1712,17 @@ function checkUserRole(userId) {
 }
 
 // Inicializar la aplicación
+// Inicializar la aplicación
 function initializeApp() {
     loadHolidays();
     updateWeekDisplay();
     
-    // Cargar nombres de estudiantes primero
-    loadStudentNames()
-        .then(() => {
-            try {
-                loadAppointments();
-            } catch (error) {
-                console.error("Error al cargar citas:", error);
-                showStatusMessage("Error al cargar citas. Usando datos de ejemplo.", "warning");
-                loadSampleAppointments();
-            }
-        });
-    
     // Mostrar la interfaz principal
     loginContainer.style.display = 'none';
     mainContainer.style.display = 'block';
+    
+    // Optimizar la carga de datos
+    optimizeInitialLoad();
     
     hideSpinner();
 }
@@ -2722,80 +2861,23 @@ function exportStatisticsToExcel() {
         // Crear datos para el Excel
         let data = [['Estudiante', 'Pacientes Únicos', 'Total Sesiones']];
         
-        // Calcular estadísticas
-        const uniquePatients = {};
-        const totalSessions = {};
-        const patientsByStudent = {};
+        // Resto del código...
         
-        appointments.forEach(a => {
-            if (!a.estudiante || !a.paciente) return;
-            
-            // Contar sesiones totales
-            totalSessions[a.estudiante] = (totalSessions[a.estudiante] || 0) + 1;
-            
-            // Inicializar arrays si no existen
-            if (!patientsByStudent[a.estudiante]) {
-                patientsByStudent[a.estudiante] = [];
-            }
-            
-            // Añadir paciente si no está ya (para evitar duplicados)
-            if (!patientsByStudent[a.estudiante].includes(a.paciente)) {
-                patientsByStudent[a.estudiante].push(a.paciente);
-            }
-        });
-        
-        // Contar pacientes únicos
-        for (const student in patientsByStudent) {
-            uniquePatients[student] = patientsByStudent[student].length;
+        // Modificar esta parte para asegurar que XLSX esté disponible
+        if (typeof XLSX === 'undefined') {
+            throw new Error("La biblioteca XLSX no está cargada correctamente");
         }
-        
-        // Ordenar estudiantes
-        const sortedStudents = Object.keys(uniquePatients).sort((a, b) => 
-            uniquePatients[b] - uniquePatients[a]
-        );
-        
-        // Añadir datos de cada estudiante
-        sortedStudents.forEach(student => {
-            data.push([
-                studentNames[student] || student,
-                uniquePatients[student] || 0,
-                totalSessions[student] || 0
-            ]);
-        });
         
         // Crear workbook
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.aoa_to_sheet(data);
         
-        // Obtener fechas de la semana actual
-        const startOfWeek = getStartOfWeek(currentWeekDate);
-        const endDate = new Date(startOfWeek);
-        endDate.setDate(startOfWeek.getDate() + 3); // Jueves
+        // Resto del código...
         
-        const startDateStr = startOfWeek.toLocaleDateString('es-ES');
-        const endDateStr = endDate.toLocaleDateString('es-ES');
-        
-        // Añadir información adicional
-        XLSX.utils.sheet_add_aoa(ws, [
-            [`Estadísticas SISTEMAKINE - Semana del ${startDateStr} al ${endDateStr}`],
-            [`Generado el: ${new Date().toLocaleDateString('es-ES')}`],
-            [`Total de citas: ${appointments.length}`],
-            []
-        ], { origin: 'A1' });
-        
-        // Mover los datos principales hacia abajo
-        XLSX.utils.sheet_add_aoa(ws, data, { origin: 'A6' });
-        
-        // Guardar el archivo
-        XLSX.utils.book_append_sheet(wb, ws, "Estadísticas");
-        XLSX.writeFile(wb, `Estadisticas_SISTEMAKINE_${startDateStr}_${endDateStr}.xlsx`);
-        
-        hideSpinner();
-        showStatusMessage('Estadísticas exportadas a Excel correctamente', 'success');
     } catch (error) {
         console.error("Error al exportar a Excel:", error);
         hideSpinner();
-        showStatusMessage("Error al exportar estadísticas a Excel", "error");
+        showStatusMessage("Error al exportar estadísticas a Excel: " + error.message, "error");
     }
 }
 
@@ -2817,67 +2899,109 @@ function exportStatisticsToPdf() {
         });
         
         // Crear documento PDF
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+        const doc = new jspdf.jsPDF();
         
         // Colores
         const primaryColor = [41, 63, 224]; // #2D3FE0
         const secondaryColor = [113, 128, 150]; // #718096
+        const successColor = [76, 175, 80]; // #4CAF50
+        const errorColor = [244, 67, 54]; // #F44336
+        const warningColor = [255, 152, 0]; // #FF9800
         
-        // Logo o título estilizado
+        // Encabezado con logo
         doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-        doc.rect(0, 0, doc.internal.pageSize.getWidth(), 20, 'F');
+        doc.rect(0, 0, doc.internal.pageSize.getWidth(), 25, 'F');
         doc.setTextColor(255, 255, 255);
         doc.setFont('helvetica', 'bold');
-        doc.setFontSize(16);
-        doc.text("SISTEMAKINE", 10, 13);
+        doc.setFontSize(18);
+        doc.text("SISTEMAKINE", 15, 16);
         
-        // Subtítulo estilizado
+        // Subtítulo
         doc.setTextColor(0, 0, 0);
         doc.setFont('helvetica', 'bold');
-        doc.setFontSize(14);
-        doc.text("Reporte de Estadísticas", 10, 30);
+        doc.setFontSize(16);
+        doc.text("Reporte de Estadísticas", 15, 40);
         
-        // Añadir período
+        // Información del período
         doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
-        doc.text(`Semana del ${startDateStr} al ${endDateStr}`, 10, 38);
+        doc.text(`Semana del ${startDateStr} al ${endDateStr}`, 15, 50);
         doc.text(`Generado el: ${new Date().toLocaleDateString('es-ES', {
             day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
-        })}`, 10, 44);
+        })}`, 15, 58);
         
-        // Información general con diseño visual
-        doc.setFillColor(245, 247, 250); // #F5F7FA
-        doc.roundedRect(10, 50, doc.internal.pageSize.getWidth() - 20, 25, 3, 3, 'F');
-        
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'bold');
-        doc.text("Resumen General", 15, 58);
-        
-        doc.setFont('helvetica', 'normal');
-        doc.text(`Total de citas: ${appointments.length}`, 15, 65);
+        // Resumen de asistencia (círculo dividido)
+        doc.setDrawColor(0);
+        doc.setLineWidth(0.1);
         
         // Contar citas con asistencia
         const attendedAppointments = appointments.filter(a => a.estado === 'attended').length;
         const missedAppointments = appointments.filter(a => a.estado === 'missed').length;
-        const pendingAppointments = appointments.length - (attendedAppointments + missedAppointments);
+        const rescheduledAppointments = appointments.filter(a => a.estado === 'rescheduled').length;
+        const pendingAppointments = appointments.length - (attendedAppointments + missedAppointments + rescheduledAppointments);
         
-        doc.text(`Asistieron: ${attendedAppointments}`, 90, 65);
-        doc.text(`No asistieron: ${missedAppointments}`, 140, 65);
+        // Panel de estadísticas generales
+        doc.setFillColor(245, 247, 250); // #F5F7FA
+        doc.roundedRect(15, 65, doc.internal.pageSize.getWidth() - 30, 60, 3, 3, 'F');
         
-        // Tabla de estudiantes con diseño mejorado
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
-        doc.text("Estadísticas por Estudiante", 10, 85);
+        doc.text("Resumen de Asistencia", 25, 80);
+        
+        // Números grandes para asistencia
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'normal');
+        
+        // Asistieron - verde
+        doc.setTextColor(successColor[0], successColor[1], successColor[2]);
+        doc.text(`${attendedAppointments}`, 30, 95);
+        doc.setFontSize(10);
+        doc.text("Asistieron", 30, 102);
+        
+        // No asistieron - rojo
+        doc.setFontSize(14);
+        doc.setTextColor(errorColor[0], errorColor[1], errorColor[2]);
+        doc.text(`${missedAppointments}`, 75, 95);
+        doc.setFontSize(10);
+        doc.text("No asistieron", 75, 102);
+        
+        // Reprogramadas - amarillo
+        doc.setFontSize(14);
+        doc.setTextColor(warningColor[0], warningColor[1], warningColor[2]);
+        doc.text(`${rescheduledAppointments}`, 130, 95);
+        doc.setFontSize(10);
+        doc.text("Reprogramadas", 130, 102);
+        
+        // Total - azul
+        doc.setFontSize(14);
+        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        doc.text(`${appointments.length}`, 185, 95);
+        doc.setFontSize(10);
+        doc.text("Total", 185, 102);
+        
+        // Tasa de asistencia global
+        const attendanceRate = appointments.length > 0 
+            ? Math.round((attendedAppointments / appointments.length) * 100) 
+            : 0;
+            
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Tasa de asistencia: ${attendanceRate}%`, 25, 115);
+        
+        // Tabla de estudiantes
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text("Estadísticas por Estudiante", 15, 145);
         
         // Crear datos para la tabla
         const tableColumn = ["Estudiante", "Pacientes Únicos", "Total Sesiones", "Tasa Asistencia"];
         let tableRows = [];
         
-        // Calcular estadísticas
+        // Calcular estadísticas de estudiantes
         const uniquePatients = {};
         const totalSessions = {};
         const attendanceRates = {};
@@ -2944,7 +3068,7 @@ function exportStatisticsToPdf() {
         doc.autoTable({
             head: [tableColumn],
             body: tableRows,
-            startY: 90,
+            startY: 150,
             styles: { 
                 fontSize: 9,
                 cellPadding: 3
@@ -2957,16 +3081,16 @@ function exportStatisticsToPdf() {
             alternateRowStyles: {
                 fillColor: [245, 247, 250]
             },
-            margin: { top: 90 }
+            margin: { top: 150 }
         });
         
-        // Añadir gráfico de tipos de cita (como tabla)
-        const typesY = doc.autoTable.previous.finalY + 15;
+        // Añadir gráfico de tipos de tratamiento
+        const typesY = doc.autoTable.previous.finalY + 20;
         
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
-        doc.text("Distribución por Tipo de Tratamiento", 10, typesY);
+        doc.text("Distribución por Tipo de Tratamiento", 15, typesY);
         
         // Contar tipos de cita
         const appointmentTypes = {};
@@ -3005,14 +3129,166 @@ function exportStatisticsToPdf() {
             margin: { top: typesY + 5 }
         });
         
-        // Añadir pie de página
+        // Agregar página para evolución de pacientes
+        doc.addPage();
+        
+        // Encabezado segunda página
+        doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        doc.rect(0, 0, doc.internal.pageSize.getWidth(), 25, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(18);
+        doc.text("SISTEMAKINE", 15, 16);
+        
+        // Título evolución de pacientes
+        doc.setTextColor(0, 0, 0);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.text("Evolución de Pacientes", 15, 40);
+        
+        // Calcular datos de evolución
+        const sessionsPerPatient = {};
+        appointments.forEach(a => {
+            if (!a.paciente) return;
+            const patientKey = a.paciente.toLowerCase();
+            sessionsPerPatient[patientKey] = (sessionsPerPatient[patientKey] || 0) + 1;
+        });
+        
+        // Convertir a array para procesar
+        const patientsArray = Object.keys(sessionsPerPatient).map(patient => ({
+            name: patient,
+            sessions: sessionsPerPatient[patient]
+        }));
+        
+        // Ordenar por sesiones (descendente)
+        patientsArray.sort((a, b) => b.sessions - a.sessions);
+        
+        // Contar por etapa
+        const patientStages = {
+            evaluation: 0,
+            treatment: 0,
+            advanced: 0,
+            final: 0
+        };
+        
+        patientsArray.forEach(patient => {
+            if (patient.sessions === 1) {
+                patientStages.evaluation++;
+            } else if (patient.sessions >= 2 && patient.sessions <= 4) {
+                patientStages.treatment++;
+            } else if (patient.sessions >= 5 && patient.sessions <= 8) {
+                patientStages.advanced++;
+            } else {
+                patientStages.final++;
+            }
+        });
+        
+        // Mostrar resumen de evolución
+        doc.setFillColor(245, 247, 250);
+        doc.roundedRect(15, 50, doc.internal.pageSize.getWidth() - 30, 60, 3, 3, 'F');
+        
+        doc.setTextColor(0, 0, 0);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.text("Resumen de Evolución", 25, 65);
+        
+        // Mostrar contadores por etapa
+        doc.setFont('helvetica', 'normal');
+        
+        // Evaluación inicial
+        doc.setTextColor(warningColor[0], warningColor[1], warningColor[2]);
+        doc.setFontSize(14);
+        doc.text(`${patientStages.evaluation}`, 30, 85);
+        doc.setFontSize(10);
+        doc.text("Evaluación Inicial", 30, 92);
+        
+        // En tratamiento
+        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        doc.setFontSize(14);
+        doc.text(`${patientStages.treatment}`, 80, 85);
+        doc.setFontSize(10);
+        doc.text("En Tratamiento", 80, 92);
+        
+        // Avanzado
+        doc.setTextColor(successColor[0], successColor[1], successColor[2]);
+        doc.setFontSize(14);
+        doc.text(`${patientStages.advanced}`, 130, 85);
+        doc.setFontSize(10);
+        doc.text("Avanzado", 130, 92);
+        
+        // Fase final
+        doc.setTextColor(155, 89, 182); // Púrpura #9B59B6
+        doc.setFontSize(14);
+        doc.text(`${patientStages.final}`, 180, 85);
+        doc.setFontSize(10);
+        doc.text("Fase Final", 180, 92);
+        
+        // Tabla de pacientes (limitada a 15 para no llenar demasiado)
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text("Detalle de Pacientes", 15, 130);
+        
+        // Crear datos para la tabla
+        const patientTableColumn = ["Paciente", "Sesiones", "Etapa"];
+        const patientTableRows = [];
+        
+        // Limitar a 15 pacientes
+        const topPatients = patientsArray.slice(0, 15);
+        
+        topPatients.forEach(patient => {
+            // Determinar etapa
+            let stage;
+            
+            if (patient.sessions === 1) {
+                stage = 'Evaluación Inicial';
+            } else if (patient.sessions >= 2 && patient.sessions <= 4) {
+                stage = 'En Tratamiento';
+            } else if (patient.sessions >= 5 && patient.sessions <= 8) {
+                stage = 'Avanzado';
+            } else {
+                stage = 'Fase Final';
+            }
+            
+            // Añadir fila (nombre capitalizado)
+            patientTableRows.push([
+                patient.name
+                    .split(' ')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' '),
+                patient.sessions,
+                stage
+            ]);
+        });
+        
+        // Generar tabla de pacientes
+        doc.autoTable({
+            head: [patientTableColumn],
+            body: patientTableRows,
+            startY: 135,
+            styles: { 
+                fontSize: 9,
+                cellPadding: 3
+            },
+            headStyles: { 
+                fillColor: [155, 89, 182], // Púrpura #9B59B6
+                textColor: [255, 255, 255],
+                fontStyle: 'bold'
+            },
+            alternateRowStyles: {
+                fillColor: [245, 247, 250]
+            },
+            margin: { top: 135 }
+        });
+        
+        // Añadir pie de página a todas las páginas
         const totalPages = doc.internal.getNumberOfPages();
         for (let i = 1; i <= totalPages; i++) {
             doc.setPage(i);
             doc.setFontSize(8);
             doc.setTextColor(150, 150, 150);
-            doc.text(`SISTEMAKINE - Página ${i} de ${totalPages}`, 10, doc.internal.pageSize.getHeight() - 10);
-            doc.text(`${new Date().toISOString().substring(0, 10)}`, doc.internal.pageSize.getWidth() - 30, doc.internal.pageSize.getHeight() - 10);
+            doc.text(`SISTEMAKINE - Página ${i} de ${totalPages}`, 15, doc.internal.pageSize.getHeight() - 10);
+            doc.text(`${new Date().toISOString().split('T')[0]}`, doc.internal.pageSize.getWidth() - 30, doc.internal.pageSize.getHeight() - 10);
         }
         
         // Guardar PDF
@@ -3023,9 +3299,9 @@ function exportStatisticsToPdf() {
     } catch (error) {
         console.error("Error al exportar a PDF:", error);
         hideSpinner();
-        showStatusMessage("Error al exportar estadísticas a PDF", "error");
+        showStatusMessage("Error al exportar estadísticas a PDF: " + error.message, "error");
     }
-}       
+}     
 
 // Función para manejar cambios en el tipo de cita (mostrar opciones de recurrencia)
 function handleAppointmentTypeChange() {
@@ -3218,6 +3494,8 @@ function setupEventListeners() {
     }
     // Configurar búsqueda de pacientes
     setupPatientSearch();
+    // Configurar filtros
+    setupFilters();
 }
 
 // Navegar entre semanas
@@ -4641,11 +4919,629 @@ function getAttendanceColor(rate) {
     if (rate >= 50) return 'var(--warning)';
     return 'var(--error)';
 }
+
+// Gráfico de tipos de cita mejorado
+function createAppointmentTypeChartFixed(typesData) {
+    console.log("🔍 Creando gráfico de tipos de tratamiento...");
+    
+    // Verificar si existe la sección para este gráfico, si no, crearla
+    let chartSection = document.getElementById('treatment-types-section');
+    
+    if (!chartSection) {
+        const statsPanel = document.querySelector('.stats-panel');
+        if (!statsPanel) {
+            console.error("❌ No se encontró el panel de estadísticas");
+            return;
+        }
+        
+        chartSection = document.createElement('div');
+        chartSection.id = 'treatment-types-section';
+        chartSection.className = 'stats-section';
+        
+        const sectionTitle = document.createElement('h4');
+        sectionTitle.className = 'therapist-stats-title';
+        sectionTitle.textContent = 'Distribución de Tipos de Tratamiento';
+        chartSection.appendChild(sectionTitle);
+        
+        statsPanel.appendChild(chartSection);
+    } else {
+        // Mantener el título pero limpiar el resto
+        const title = chartSection.querySelector('.therapist-stats-title');
+        chartSection.innerHTML = '';
+        if (title) chartSection.appendChild(title);
+    }
+    
+    // Convertir datos a array para procesamiento
+    const chartData = [];
+    let total = 0;
+    
+    for (const type in typesData) {
+        const count = typesData[type];
+        total += count;
+        chartData.push({
+            type: type,
+            typeName: getAppointmentTypeName(type),
+            count: count
+        });
+    }
+    
+    // Ordenar por cantidad (mayor a menor)
+    chartData.sort((a, b) => b.count - a.count);
+    
+    // Crear contenedor para el gráfico
+    const chartContainer = document.createElement('div');
+    chartContainer.style.display = 'flex';
+    chartContainer.style.flexDirection = 'column';
+    chartContainer.style.marginTop = '20px';
+    chartContainer.style.backgroundColor = 'white';
+    chartContainer.style.borderRadius = '8px';
+    chartContainer.style.padding = '20px';
+    chartContainer.style.boxShadow = 'var(--shadow)';
+    
+    // Mostrar total
+    const totalContainer = document.createElement('div');
+    totalContainer.style.textAlign = 'center';
+    totalContainer.style.marginBottom = '15px';
+    totalContainer.innerHTML = `<span style="font-weight: bold; font-size: 18px;">Total: ${total} citas</span>`;
+    chartContainer.appendChild(totalContainer);
+    
+    // Colores para cada tipo
+    const colors = {
+        'evaluacion-msk': '#FF5252',
+        'evaluacion-deportiva': '#4CAF50',
+        'sesion-msk': '#2196F3',
+        'sesion-deportiva': '#FFC107'
+    };
+    
+    // Crear barras para cada tipo
+    chartData.forEach(item => {
+        const barRow = document.createElement('div');
+        barRow.style.display = 'flex';
+        barRow.style.alignItems = 'center';
+        barRow.style.marginBottom = '10px';
+        
+        // Etiqueta
+        const label = document.createElement('div');
+        label.style.width = '150px';
+        label.style.fontWeight = '500';
+        label.textContent = item.typeName;
+        barRow.appendChild(label);
+        
+        // Contenedor de la barra
+        const barContainer = document.createElement('div');
+        barContainer.style.flex = '1';
+        barContainer.style.height = '24px';
+        barContainer.style.backgroundColor = '#f0f0f0';
+        barContainer.style.borderRadius = '4px';
+        barContainer.style.overflow = 'hidden';
+        barContainer.style.position = 'relative';
+        
+        // Barra de progreso
+        const bar = document.createElement('div');
+        const percentage = Math.round((item.count / total) * 100);
+        bar.style.width = `${percentage}%`;
+        bar.style.height = '100%';
+        bar.style.backgroundColor = colors[item.type] || '#2D3FE0';
+        bar.style.borderRadius = '4px';
+        bar.style.transition = 'width 1s ease-in-out';
+        barContainer.appendChild(bar);
+        
+        // Valor numérico sobre la barra
+        const value = document.createElement('div');
+        value.style.position = 'absolute';
+        value.style.top = '0';
+        value.style.left = '10px';
+        value.style.height = '100%';
+        value.style.display = 'flex';
+        value.style.alignItems = 'center';
+        value.style.color = percentage > 50 ? 'white' : 'black';
+        value.style.fontWeight = 'bold';
+        value.textContent = `${item.count} (${percentage}%)`;
+        barContainer.appendChild(value);
+        
+        barRow.appendChild(barContainer);
+        chartContainer.appendChild(barRow);
+    });
+    
+    chartSection.appendChild(chartContainer);
+    
+    console.log("✅ Gráfico de tipos de tratamiento creado");
+}
+        // Tabla de evolución de pacientes mejorada
+function createPatientEvolutionTableFixed(sessionsData) {
+    console.log("🔍 Creando tabla de evolución de pacientes...");
+    
+    // Verificar si existe la sección para esta tabla
+    let evolutionSection = document.getElementById('patient-evolution-section');
+    
+    if (!evolutionSection) {
+        const statsPanel = document.querySelector('.stats-panel');
+        if (!statsPanel) {
+            console.error("❌ No se encontró el panel de estadísticas");
+            return;
+        }
+        
+        evolutionSection = document.createElement('div');
+        evolutionSection.id = 'patient-evolution-section';
+        evolutionSection.className = 'stats-section';
+        
+        const sectionTitle = document.createElement('h4');
+        sectionTitle.className = 'therapist-stats-title';
+        sectionTitle.textContent = 'Evolución de Pacientes';
+        evolutionSection.appendChild(sectionTitle);
+        
+        statsPanel.appendChild(evolutionSection);
+    } else {
+        // Mantener el título pero limpiar el resto
+        const title = evolutionSection.querySelector('.therapist-stats-title');
+        evolutionSection.innerHTML = '';
+        if (title) evolutionSection.appendChild(title);
+    }
+    
+    // Convertir a array para ordenar
+    const patientsArray = Object.keys(sessionsData).map(patient => ({
+        name: patient,
+        sessions: sessionsData[patient]
+    }));
+    
+    // Ordenar por número de sesiones (descendente)
+    patientsArray.sort((a, b) => b.sessions - a.sessions);
+    
+    // Agrupar pacientes por estado de evolución
+    const evolution = {
+        'evaluacion': { count: 0, label: 'Evaluación Inicial', info: '1 sesión', color: '#FFC107' },
+        'tratamiento': { count: 0, label: 'En Tratamiento', info: '2-4 sesiones', color: '#2196F3' },
+        'avanzado': { count: 0, label: 'Avanzado', info: '5-8 sesiones', color: '#4CAF50' },
+        'final': { count: 0, label: 'Fase Final', info: '9+ sesiones', color: '#9C27B0' }
+    };
+    
+    // Contar pacientes por categoría
+    patientsArray.forEach(patient => {
+        if (patient.sessions === 1) {
+            evolution.evaluacion.count++;
+        } else if (patient.sessions >= 2 && patient.sessions <= 4) {
+            evolution.tratamiento.count++;
+        } else if (patient.sessions >= 5 && patient.sessions <= 8) {
+            evolution.avanzado.count++;
+        } else if (patient.sessions > 8) {
+            evolution.final.count++;
+        }
+    });
+    
+    // Crear resumen visual de evolución
+    const summaryBox = document.createElement('div');
+    summaryBox.style.display = 'flex';
+    summaryBox.style.justifyContent = 'space-between';
+    summaryBox.style.flexWrap = 'wrap';
+    summaryBox.style.gap = '15px';
+    summaryBox.style.margin = '20px 0';
+    
+    // Mostrar total de pacientes
+    const totalPatients = patientsArray.length;
+    const totalBox = document.createElement('div');
+    totalBox.style.textAlign = 'center';
+    totalBox.style.flex = '1 1 100%';
+    totalBox.style.marginBottom = '10px';
+    totalBox.innerHTML = `<span style="font-size: 18px; font-weight: bold;">Total: ${totalPatients} pacientes</span>`;
+    summaryBox.appendChild(totalBox);
+    
+    // Crear cuadros para cada estado
+    Object.keys(evolution).forEach(key => {
+        const category = evolution[key];
+        const percentage = totalPatients > 0 ? Math.round((category.count / totalPatients) * 100) : 0;
+        
+        const box = document.createElement('div');
+        box.style.flex = '1';
+        box.style.minWidth = '150px';
+        box.style.maxWidth = '220px';
+        box.style.backgroundColor = 'white';
+        box.style.borderRadius = '8px';
+        box.style.padding = '15px';
+        box.style.boxShadow = 'var(--shadow)';
+        box.style.borderTop = `4px solid ${category.color}`;
+        box.style.textAlign = 'center';
+        
+        box.innerHTML = `
+            <div style="font-weight: bold;">${category.label}</div>
+            <div style="font-size: 24px; font-weight: bold; color: ${category.color}; margin: 10px 0;">${category.count}</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">${category.info}</div>
+            <div style="font-size: 14px; margin-top: 8px;">${percentage}% del total</div>
+        `;
+        
+        summaryBox.appendChild(box);
+    });
+    
+    evolutionSection.appendChild(summaryBox);
+    
+    // Si hay pacientes, crear tabla detallada
+    if (patientsArray.length > 0) {
+        const tableContainer = document.createElement('div');
+        tableContainer.style.marginTop = '30px';
+        tableContainer.style.backgroundColor = 'white';
+        tableContainer.style.borderRadius = '8px';
+        tableContainer.style.padding = '20px';
+        tableContainer.style.boxShadow = 'var(--shadow)';
+        
+        const tableTitle = document.createElement('h5');
+        tableTitle.style.marginBottom = '15px';
+        tableTitle.style.fontSize = '16px';
+        tableTitle.style.fontWeight = '600';
+        tableTitle.textContent = 'Detalle de Pacientes por Etapa';
+        tableContainer.appendChild(tableTitle);
+        
+        // Crear tabla
+        const table = document.createElement('table');
+        table.className = 'student-stats-table';
+        table.style.width = '100%';
+        
+        // Encabezado
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        
+        ['Paciente', 'Sesiones', 'Etapa de Tratamiento'].forEach(text => {
+            const th = document.createElement('th');
+            th.textContent = text;
+            headerRow.appendChild(th);
+        });
+        
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        
+        // Cuerpo de la tabla (mostrar solo los primeros 10 pacientes)
+        const tbody = document.createElement('tbody');
+        const displayPatients = patientsArray.slice(0, 10); // Limitar a 10 filas
+        
+        displayPatients.forEach(patient => {
+            const row = document.createElement('tr');
+            
+            // Nombre del paciente (capitalizado)
+            const nameCell = document.createElement('td');
+            nameCell.textContent = patient.name
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            
+            // Número de sesiones
+            const sessionsCell = document.createElement('td');
+            sessionsCell.textContent = patient.sessions;
+            
+            // Etapa de evolución
+            const stageCell = document.createElement('td');
+            let stage, color;
+            
+            if (patient.sessions === 1) {
+                stage = 'Evaluación Inicial';
+                color = evolution.evaluacion.color;
+            } else if (patient.sessions >= 2 && patient.sessions <= 4) {
+                stage = 'En Tratamiento';
+                color = evolution.tratamiento.color;
+            } else if (patient.sessions >= 5 && patient.sessions <= 8) {
+                stage = 'Avanzado';
+                color = evolution.avanzado.color;
+            } else {
+                stage = 'Fase Final';
+                color = evolution.final.color;
+            }
+            
+            const badge = document.createElement('span');
+            badge.textContent = stage;
+            badge.style.backgroundColor = color;
+            badge.style.color = 'white';
+            badge.style.padding = '4px 8px';
+            badge.style.borderRadius = '4px';
+            badge.style.fontSize = '12px';
+            badge.style.fontWeight = '500';
+            
+            stageCell.appendChild(badge);
+            
+            row.appendChild(nameCell);
+            row.appendChild(sessionsCell);
+            row.appendChild(stageCell);
+            tbody.appendChild(row);
+        });
+        
+        table.appendChild(tbody);
+        tableContainer.appendChild(table);
+        
+        // Mostrar nota si hay más pacientes
+        if (patientsArray.length > 10) {
+            const note = document.createElement('div');
+            note.style.marginTop = '10px';
+            note.style.fontSize = '12px';
+            note.style.color = 'var(--text-secondary)';
+            note.style.textAlign = 'center';
+            note.textContent = `Mostrando 10 de ${patientsArray.length} pacientes. Exporta a Excel para ver todos.`;
+            tableContainer.appendChild(note);
+        }
+        
+        evolutionSection.appendChild(tableContainer);
+    }
+    
+    console.log("✅ Tabla de evolución de pacientes creada");
+}
+        // Gráfico de asistencia mejorado
+function createAttendanceChartFixed(attended, missed, rescheduled) {
+    console.log("🔍 Creando gráfico de asistencia...");
+    
+    // Verificar si existe la sección para este gráfico
+    let chartSection = document.getElementById('attendance-chart-section');
+    
+    if (!chartSection) {
+        const statsPanel = document.querySelector('.stats-panel');
+        if (!statsPanel) {
+            console.error("❌ No se encontró el panel de estadísticas");
+            return;
+        }
+        
+        chartSection = document.createElement('div');
+        chartSection.id = 'attendance-chart-section';
+        chartSection.className = 'stats-section';
+        
+        const sectionTitle = document.createElement('h4');
+        sectionTitle.className = 'therapist-stats-title';
+        sectionTitle.textContent = 'Distribución de Asistencia';
+        chartSection.appendChild(sectionTitle);
+        
+        statsPanel.appendChild(chartSection);
+    } else {
+        // Mantener el título pero limpiar el resto
+        const title = chartSection.querySelector('.therapist-stats-title');
+        chartSection.innerHTML = '';
+        if (title) chartSection.appendChild(title);
+    }
+    
+    // Calcular totales
+    const total = attended + missed + rescheduled;
+    
+    // Si no hay datos, mostrar mensaje
+    if (total === 0) {
+        const noDataMsg = document.createElement('div');
+        noDataMsg.textContent = 'No hay datos de asistencia disponibles';
+        noDataMsg.style.textAlign = 'center';
+        noDataMsg.style.padding = '20px';
+        noDataMsg.style.color = 'var(--text-secondary)';
+        chartSection.appendChild(noDataMsg);
+        return;
+    }
+    
+    // Crear el contenedor principal
+    const mainContainer = document.createElement('div');
+    mainContainer.style.display = 'flex';
+    mainContainer.style.flexWrap = 'wrap';
+    mainContainer.style.justifyContent = 'space-between';
+    mainContainer.style.gap = '20px';
+    mainContainer.style.marginTop = '20px';
+    
+    // 1. PANEL DE NÚMEROS GRANDES
+    const numbersPanel = document.createElement('div');
+    numbersPanel.style.flex = '1';
+    numbersPanel.style.minWidth = '300px';
+    numbersPanel.style.backgroundColor = 'white';
+    numbersPanel.style.borderRadius = '8px';
+    numbersPanel.style.padding = '20px';
+    numbersPanel.style.boxShadow = 'var(--shadow)';
+    
+    // Título del panel
+    const panelTitle = document.createElement('div');
+    panelTitle.style.fontSize = '16px';
+    panelTitle.style.fontWeight = '600';
+    panelTitle.style.marginBottom = '15px';
+    panelTitle.style.textAlign = 'center';
+    panelTitle.textContent = 'Conteo de Asistencia';
+    numbersPanel.appendChild(panelTitle);
+    
+    // Contenedor para los números
+    const numbersContainer = document.createElement('div');
+    numbersContainer.style.display = 'flex';
+    numbersContainer.style.justifyContent = 'space-around';
+    numbersContainer.style.flexWrap = 'wrap';
+    
+    // Datos de asistencia con colores
+    const attendanceData = [
+        { label: 'Asistieron', value: attended, color: 'var(--success)' },
+        { label: 'No asistieron', value: missed, color: 'var(--error)' },
+        { label: 'Reprogramadas', value: rescheduled, color: 'var(--warning)' },
+        { label: 'Total', value: total, color: 'var(--accent-blue)' }
+    ];
+    
+    // Crear cada contador
+    attendanceData.forEach(item => {
+        const counterBox = document.createElement('div');
+        counterBox.style.textAlign = 'center';
+        counterBox.style.margin = '10px';
+        counterBox.style.minWidth = '100px';
+        
+        // Número grande
+        const number = document.createElement('div');
+        number.style.fontSize = '36px';
+        number.style.fontWeight = 'bold';
+        number.style.color = item.color;
+        number.textContent = item.value;
+        
+        // Etiqueta
+        const label = document.createElement('div');
+        label.style.marginTop = '5px';
+        label.style.color = 'var(--text-secondary)';
+        label.textContent = item.label;
+        
+        counterBox.appendChild(number);
+        counterBox.appendChild(label);
+        numbersContainer.appendChild(counterBox);
+    });
+    
+    numbersPanel.appendChild(numbersContainer);
+    mainContainer.appendChild(numbersPanel);
+    
+    // 2. GRÁFICO DE BARRAS
+    const chartPanel = document.createElement('div');
+    chartPanel.style.flex = '1';
+    chartPanel.style.minWidth = '300px';
+    chartPanel.style.backgroundColor = 'white';
+    chartPanel.style.borderRadius = '8px';
+    chartPanel.style.padding = '20px';
+    chartPanel.style.boxShadow = 'var(--shadow)';
+    
+    // Título del gráfico
+    const chartTitle = document.createElement('div');
+    chartTitle.style.fontSize = '16px';
+    chartTitle.style.fontWeight = '600';
+    chartTitle.style.marginBottom = '15px';
+    chartTitle.style.textAlign = 'center';
+    chartTitle.textContent = 'Porcentajes de Asistencia';
+    chartPanel.appendChild(chartTitle);
+    
+    // Contenedor para el gráfico
+    const barChartContainer = document.createElement('div');
+    barChartContainer.style.display = 'flex';
+    barChartContainer.style.height = '200px';
+    barChartContainer.style.alignItems = 'flex-end';
+    barChartContainer.style.justifyContent = 'center';
+    barChartContainer.style.gap = '40px';
+    barChartContainer.style.marginTop = '20px';
+    barChartContainer.style.marginBottom = '20px';
+    
+    // Excluir el total para el gráfico de barras
+    const barData = attendanceData.slice(0, 3);
+    
+    // Valor máximo para escalar las barras
+    const maxValue = Math.max(...barData.map(item => item.value));
+    
+    // Crear cada barra
+    barData.forEach(item => {
+        const barContainer = document.createElement('div');
+        barContainer.style.display = 'flex';
+        barContainer.style.flexDirection = 'column';
+        barContainer.style.alignItems = 'center';
+        barContainer.style.width = '60px';
+        
+        // Porcentaje
+        const percentage = total > 0 ? Math.round((item.value / total) * 100) : 0;
+        const percentLabel = document.createElement('div');
+        percentLabel.style.marginBottom = '10px';
+        percentLabel.style.fontWeight = 'bold';
+        percentLabel.textContent = `${percentage}%`;
+        barContainer.appendChild(percentLabel);
+        
+        // Barra
+        const barWrapper = document.createElement('div');
+        barWrapper.style.width = '60px';
+        barWrapper.style.height = '160px';
+        barWrapper.style.display = 'flex';
+        barWrapper.style.alignItems = 'flex-end';
+        
+        const bar = document.createElement('div');
+        const height = maxValue > 0 ? (item.value / maxValue) * 160 : 0;
+        bar.style.height = `${height}px`;
+        bar.style.width = '100%';
+        bar.style.backgroundColor = item.color;
+        bar.style.borderRadius = '4px 4px 0 0';
+        bar.style.transition = 'height 1s ease-in-out';
+        barWrapper.appendChild(bar);
+        barContainer.appendChild(barWrapper);
+        
+        // Etiqueta
+        const label = document.createElement('div');
+        label.style.marginTop = '10px';
+        label.style.textAlign = 'center';
+        label.style.fontSize = '12px';
+        label.style.maxWidth = '70px';
+        label.textContent = item.label;
+        barContainer.appendChild(label);
+        
+        barChartContainer.appendChild(barContainer);
+    });
+    
+    chartPanel.appendChild(barChartContainer);
+    mainContainer.appendChild(chartPanel);
+    
+    // Añadir el contenedor principal a la sección
+    chartSection.appendChild(mainContainer);
+    
+    console.log("✅ Gráfico de asistencia creado");
+}
+
+        // Optimizar la carga inicial de datos
+function optimizeInitialLoad() {
+    // Mostrar una versión esqueleto mientras cargan los datos
+    console.log("Optimizando carga inicial...");
+    
+    // Primero mostrar la interfaz sin datos
+    mainContainer.style.display = 'block';
+    
+    // Cargar datos en segundo plano
+    setTimeout(() => {
+        try {
+            loadStudentNames()
+                .then(() => {
+                    loadAppointments();
+                    console.log("Carga optimizada completada");
+                });
+        } catch (error) {
+            console.error("Error en carga optimizada:", error);
+            loadSampleAppointments();
+        }
+    }, 100);
+}
+
+        // Configurar filtros de citas
+function setupFilters() {
+    const studentFilter = document.getElementById('student-filter');
+    const typeFilter = document.getElementById('type-filter');
+    const applyBtn = document.getElementById('apply-filters-btn');
+    const clearBtn = document.getElementById('clear-filters-btn');
+    
+    if (!studentFilter || !typeFilter || !applyBtn || !clearBtn) return;
+    
+    // Llenar el filtro de estudiantes
+    for (const code in studentNames) {
+        const option = document.createElement('option');
+        option.value = code;
+        option.textContent = studentNames[code];
+        studentFilter.appendChild(option);
+    }
+    
+    // Aplicar filtros
+    applyBtn.addEventListener('click', function() {
+        const selectedStudent = studentFilter.value;
+        const selectedType = typeFilter.value;
+        
+        // Ocultar todas las citas primero
+        document.querySelectorAll('.appointment').forEach(el => {
+            el.style.display = 'none';
+        });
+        
+        // Mostrar sólo las que cumplen los filtros
+        document.querySelectorAll('.appointment').forEach(el => {
+            const matchesStudent = !selectedStudent || el.classList.contains(selectedStudent);
+            const matchesType = !selectedType || el.classList.contains(selectedType);
+            
+            if (matchesStudent && matchesType) {
+                el.style.display = '';
+            }
+        });
+        
+        showStatusMessage('Filtros aplicados', 'success');
+    });
+    
+    // Limpiar filtros
+    clearBtn.addEventListener('click', function() {
+        studentFilter.value = '';
+        typeFilter.value = '';
+        
+        // Mostrar todas las citas
+        document.querySelectorAll('.appointment').forEach(el => {
+            el.style.display = '';
+        });
+        
+        showStatusMessage('Filtros limpiados', 'success');
+    });
+}
 </script>
 
 <!-- Librerías para exportar -->
-<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-<script src="https://unpkg.com/jspdf-autotable@latest/dist/jspdf.plugin.autotable.js"></script>  
+<!-- Reemplaza las líneas existentes por estas -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
 </body>
 </html>
