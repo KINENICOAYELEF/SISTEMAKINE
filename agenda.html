@@ -1449,9 +1449,11 @@ function saveStudentName(code, name) {
         });
 }
 
-// Actualizar referencias visuales del estudiante
+// Actualizar referencias visuales del estudiante y en la base de datos
 function updateStudentReferences(code, name) {
-    // Actualizar las tarjetas de cita
+    showSpinner();
+    
+    // Actualizar las tarjetas de cita visualmente
     document.querySelectorAll(`.student-badge`).forEach(el => {
         if (el.textContent.includes(code)) {
             el.textContent = name;
@@ -1464,8 +1466,48 @@ function updateStudentReferences(code, name) {
         option.textContent = name;
     }
     
-    // Volver a cargar las citas y estadísticas
-    loadAppointments();
+    // Actualizar todas las citas en la base de datos que tienen este estudiante
+    // Primero obtenemos todas las citas con este estudiante
+    db.collection('citas').where('estudiante', '==', code).get()
+        .then((querySnapshot) => {
+            // Si hay citas para actualizar
+            if (!querySnapshot.empty) {
+                const batch = db.batch();
+                querySnapshot.forEach((doc) => {
+                    // Actualizamos el campo 'estudianteNombre' en cada documento
+                    batch.update(doc.ref, { 
+                        estudianteNombre: name,
+                        historial: firebase.firestore.FieldValue.arrayUnion({
+                            accion: 'actualizacion_nombre_estudiante',
+                            usuario: currentUser ? currentUser.email : 'sistema',
+                            usuarioId: currentUser ? currentUser.uid : 'sistema',
+                            fecha: new Date(),
+                            detalles: `Nombre cambiado de ${code} a ${name}`
+                        })
+                    });
+                });
+                
+                // Ejecutar todas las actualizaciones en un lote
+                batch.commit()
+                    .then(() => {
+                        showStatusMessage(`Se actualizaron ${querySnapshot.size} citas con el nuevo nombre de estudiante`, 'success');
+                        loadAppointments(); // Recargar citas
+                    })
+                    .catch((error) => {
+                        console.error("Error al actualizar citas:", error);
+                        showStatusMessage("Error al actualizar citas", "error");
+                    });
+            } else {
+                showStatusMessage(`No se encontraron citas para el estudiante ${code}`, 'info');
+                loadAppointments(); // Recargar citas de todos modos
+            }
+            hideSpinner();
+        })
+        .catch((error) => {
+            console.error("Error al buscar citas para actualizar:", error);
+            showStatusMessage("Error al buscar citas para actualizar", "error");
+            hideSpinner();
+        });
 }
 
 // Mostrar pantalla de login
@@ -1749,10 +1791,10 @@ function renderAppointments() {
                         // Determinar si mostrar el kinesiólogo (solo para sesiones)
                         const showTherapist = appointment.tipoClase && appointment.tipoClase.startsWith('sesion-');
                         
-                        // Contenido de la cita
+                        // Contenido de la cita con icono
                         let content = `
                             <div class="appointment-title">${appointment.paciente || 'Sin nombre'}</div>
-                            <div class="appointment-type">${appointment.tipo || 'Sin tipo'}</div>
+                            <div class="appointment-type">${getAppointmentTypeIcon(appointment.tipoClase)} ${appointment.tipo || 'Sin tipo'}</div>
                         `;
                         
                         if (showTherapist) {
