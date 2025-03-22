@@ -1434,18 +1434,26 @@ function saveStudentName(code, name) {
         return;
     }
     
+    showSpinner();
+    console.log(`Guardando nombre para ${code}: ${name}`);
+    
     const updateData = {};
     updateData[code] = name;
     
     db.collection('configuracion').doc('estudiantes').update(updateData)
         .then(() => {
+            const oldName = studentNames[code] || code;
             studentNames[code] = name; // Actualizar en memoria
             showStatusMessage(`Nombre de ${code} actualizado a "${name}"`, 'success');
+            console.log(`Nombre actualizado en configuración: ${oldName} → ${name}`);
+            
+            // Primero actualizar las referencias visuales y luego recargar
             updateStudentReferences(code, name);
         })
         .catch((error) => {
             console.error("Error al guardar nombre de estudiante:", error);
             showStatusMessage("Error al guardar el nombre", "error");
+            hideSpinner();
         });
 }
 
@@ -1453,10 +1461,13 @@ function saveStudentName(code, name) {
 function updateStudentReferences(code, name) {
     showSpinner();
     
+    console.log(`Actualizando estudiante: ${code} a nombre: ${name}`);
+    
     // Actualizar las tarjetas de cita visualmente
-    document.querySelectorAll(`.student-badge`).forEach(el => {
-        if (el.textContent.includes(code)) {
-            el.textContent = name;
+    document.querySelectorAll(`.appointment`).forEach(el => {
+        const badgeEl = el.querySelector('.student-badge');
+        if (badgeEl && (badgeEl.textContent === code || badgeEl.textContent === studentNames[code])) {
+            badgeEl.textContent = name;
         }
     });
     
@@ -1467,14 +1478,14 @@ function updateStudentReferences(code, name) {
     }
     
     // Actualizar todas las citas en la base de datos que tienen este estudiante
-    // Primero obtenemos todas las citas con este estudiante
     db.collection('citas').where('estudiante', '==', code).get()
         .then((querySnapshot) => {
+            console.log(`Encontradas ${querySnapshot.size} citas para actualizar`);
+            
             // Si hay citas para actualizar
             if (!querySnapshot.empty) {
                 const batch = db.batch();
                 querySnapshot.forEach((doc) => {
-                    // Actualizamos el campo 'estudianteNombre' en cada documento
                     batch.update(doc.ref, { 
                         estudianteNombre: name,
                         historial: firebase.firestore.FieldValue.arrayUnion({
@@ -1482,7 +1493,7 @@ function updateStudentReferences(code, name) {
                             usuario: currentUser ? currentUser.email : 'sistema',
                             usuarioId: currentUser ? currentUser.uid : 'sistema',
                             fecha: new Date(),
-                            detalles: `Nombre cambiado de ${code} a ${name}`
+                            detalles: `Nombre cambiado de ${studentNames[code]} a ${name}`
                         })
                     });
                 });
@@ -1496,12 +1507,13 @@ function updateStudentReferences(code, name) {
                     .catch((error) => {
                         console.error("Error al actualizar citas:", error);
                         showStatusMessage("Error al actualizar citas", "error");
+                        hideSpinner();
                     });
             } else {
                 showStatusMessage(`No se encontraron citas para el estudiante ${code}`, 'info');
                 loadAppointments(); // Recargar citas de todos modos
+                hideSpinner();
             }
-            hideSpinner();
         })
         .catch((error) => {
             console.error("Error al buscar citas para actualizar:", error);
@@ -1801,8 +1813,10 @@ function renderAppointments() {
                             content += `<div class="appointment-therapist">${getTherapistName(appointment.terapeuta)}</div>`;
                         }
                         
-                        // Estudiante asignado
-                        content += `<div class="student-badge">${appointment.estudiante || 'Sin asignar'}</div>`;
+                        // Estudiante asignado - mostrar nombre completo en lugar del código
+                        const studentCode = appointment.estudiante || 'Sin asignar';
+                        const studentName = studentNames[studentCode] || studentCode;
+                        content += `<div class="student-badge">${studentName}</div>`;
                         
                         appointmentEl.innerHTML = content;
                         
@@ -2318,9 +2332,10 @@ function openAppointmentModal(appointment, hour, day) {
                 document.getElementById('appointment-duration').value = appointment.duracion;
             }
             
-            if (appointment.terapeuta) {
-                document.getElementById('therapist').value = appointment.terapeuta;
-            }
+            // Ya no necesitamos establecer el valor del terapeuta porque eliminamos ese campo
+            // if (appointment.terapeuta) {
+            //     document.getElementById('therapist').value = appointment.terapeuta;
+            // }
             
             document.getElementById('student').value = appointment.estudiante || 'estudiante1';
             document.getElementById('appointment-notes').value = appointment.notas || '';
