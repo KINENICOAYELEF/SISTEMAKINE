@@ -255,6 +255,8 @@
         .appointment-title {
             font-weight: 600;
             margin-bottom: 4px;
+            margin-right: 20px; /* Añadir margen derecho para evitar solapamiento */
+            padding-top: 15px; /* Espacio para la etiqueta de estudiante */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -278,10 +280,15 @@
             top: 6px;
             font-size: 10px;
             font-weight: 600;
-            color: var(--accent-blue);
-            background: rgba(45, 63, 224, 0.1);
-            padding: 2px 4px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 3px 6px;
             border-radius: 4px;
+            z-index: 5;
+            max-width: 90px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .appointment-status {
@@ -809,6 +816,31 @@
             }
         }
 
+
+        /* Buscador de pacientes */
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: var(--surface);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        
+        .search-container input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .search-container button {
+            padding: 8px 15px;
+        }
+
+        
         /* Panel de administración de estudiantes */
 .admin-panel {
     background-color: var(--surface);
@@ -883,6 +915,110 @@
     font-weight: 600;
     opacity: 0.7;
 }
+
+    /* Mejorar formato de la tabla de estadísticas */
+.student-stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: var(--shadow);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.student-stats-table thead th {
+    background-color: var(--accent-blue);
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.student-stats-table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.student-stats-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.student-stats-table tbody tr:hover {
+    background-color: var(--surface-hover);
+}
+
+/* Contenedor de exportación */
+.export-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Resaltado para búsqueda de pacientes */
+.appointment.highlighted {
+    box-shadow: 0 0 0 3px var(--accent-blue);
+    transform: translateY(-3px);
+    z-index: 10;
+}
+
+/* Gráfico circular */
+.chart-legend {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 10px;
+}
+
+.legend-item div {
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    border-radius: 2px;
+}
+
+/* Mejorar espaciado en estadísticas */
+.stats-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.therapist-stats-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+/* Buscador de pacientes */
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: var(--surface);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.search-container input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-container button {
+    padding: 8px 15px;
+}    
     </style>
 </head>
 <body>
@@ -930,6 +1066,13 @@
             </div>
         </header>
 
+        <!-- Buscador de pacientes -->
+        <div class="search-container">
+            <input type="text" id="patient-search" placeholder="Buscar paciente...">
+            <button id="search-btn" class="button save-btn">Buscar</button>
+            <button id="clear-search-btn" class="button cancel-btn">Limpiar</button>
+        </div>
+        
         <div class="scheduler-container">
             <!-- Encabezado de la semana con días -->
             <div class="days-header">
@@ -1119,6 +1262,61 @@
                     </div>
                 </div>
 
+                <!-- Comuna de residencia -->
+<div class="form-group">
+    <label for="patient-comuna">Comuna de residencia:</label>
+    <select id="patient-comuna" required>
+        <option value="">Seleccionar comuna</option>
+        <option value="Santiago">Santiago</option>
+        <option value="Providencia">Providencia</option>
+        <option value="Las Condes">Las Condes</option>
+        <option value="Ñuñoa">Ñuñoa</option>
+        <option value="La Reina">La Reina</option>
+        <option value="Vitacura">Vitacura</option>
+        <option value="Lo Barnechea">Lo Barnechea</option>
+        <option value="Maipú">Maipú</option>
+        <option value="La Florida">La Florida</option>
+        <option value="Puente Alto">Puente Alto</option>
+        <option value="San Bernardo">San Bernardo</option>
+        <option value="Peñalolén">Peñalolén</option>
+        <option value="Macul">Macul</option>
+        <option value="Estación Central">Estación Central</option>
+        <option value="Quinta Normal">Quinta Normal</option>
+        <option value="Recoleta">Recoleta</option>
+        <option value="Independencia">Independencia</option>
+        <option value="Conchalí">Conchalí</option>
+        <option value="Huechuraba">Huechuraba</option>
+        <option value="Quilicura">Quilicura</option>
+        <option value="Renca">Renca</option>
+        <option value="Cerrillos">Cerrillos</option>
+        <option value="Pedro Aguirre Cerda">Pedro Aguirre Cerda</option>
+        <option value="Lo Espejo">Lo Espejo</option>
+        <option value="San Joaquín">San Joaquín</option>
+        <option value="La Cisterna">La Cisterna</option>
+        <option value="San Miguel">San Miguel</option>
+        <option value="San Ramón">San Ramón</option>
+        <option value="La Granja">La Granja</option>
+        <option value="El Bosque">El Bosque</option>
+        <option value="La Pintana">La Pintana</option>
+        <option value="Cerro Navia">Cerro Navia</option>
+        <option value="Lo Prado">Lo Prado</option>
+        <option value="Pudahuel">Pudahuel</option>
+        <option value="Otro">Otro</option>
+    </select>
+</div>
+
+<!-- Teléfono -->
+<div class="form-group">
+    <label for="patient-phone">Teléfono:</label>
+    <input type="tel" id="patient-phone" placeholder="+56 9 XXXX XXXX">
+</div>
+
+<!-- Correo electrónico -->
+<div class="form-group">
+    <label for="patient-email">Correo electrónico:</label>
+    <input type="email" id="patient-email" placeholder="ejemplo@correo.cl">
+</div>
+                
                 <div class="form-group">
                     <label for="appointment-notes">Notas:</label>
                     <textarea id="appointment-notes"></textarea>
@@ -2503,7 +2701,7 @@ function formatDate(date) {
     return `${year}-${month}-${day}`;
 }
 
-// Abrir modal para agregar/editar cita
+// Modificar openAppointmentModal para mostrar valores de los nuevos campos
 function openAppointmentModal(appointment, hour, day) {
     if (!isAdmin) return;
     
@@ -2581,13 +2779,23 @@ function openAppointmentModal(appointment, hour, day) {
             }
             
             // Ya no necesitamos establecer el valor del terapeuta porque eliminamos ese campo
-            // if (appointment.terapeuta) {
-            //     document.getElementById('therapist').value = appointment.terapeuta;
-            // }
             
             document.getElementById('student').value = appointment.estudiante || 'estudiante1';
             document.getElementById('appointment-notes').value = appointment.notas || '';
             document.getElementById('is-web').checked = appointment.web || false;
+            
+            // Establecer valores para los nuevos campos
+            if (appointment.comuna) {
+                document.getElementById('patient-comuna').value = appointment.comuna;
+            }
+            
+            if (appointment.telefono) {
+                document.getElementById('patient-phone').value = appointment.telefono;
+            }
+            
+            if (appointment.correo) {
+                document.getElementById('patient-email').value = appointment.correo;
+            }
             
             editingAppointmentId = appointment.id;
             deleteBtn.style.display = 'block';
@@ -2599,6 +2807,9 @@ function openAppointmentModal(appointment, hour, day) {
             document.getElementById('patient-name').value = '';
             document.getElementById('appointment-notes').value = '';
             document.getElementById('is-web').checked = false;
+            document.getElementById('patient-comuna').value = '';
+            document.getElementById('patient-phone').value = '';
+            document.getElementById('patient-email').value = '';
             
             // Obtener la fecha correspondiente al día seleccionado
             const startOfWeek = getStartOfWeek(currentWeekDate);
@@ -2646,6 +2857,7 @@ function closeAppointmentModal() {
 }
 
 // Guardar cita
+// Modificar saveAppointment para incluir los nuevos campos
 function saveAppointment() {
     try {
         showSpinner();
@@ -2674,6 +2886,18 @@ function saveAppointment() {
         const student = document.getElementById('student').value;
         const notes = document.getElementById('appointment-notes').value;
         const isWeb = document.getElementById('is-web').checked;
+        
+        // Nuevos campos
+        const comuna = document.getElementById('patient-comuna').value;
+        const phone = document.getElementById('patient-phone').value;
+        const email = document.getElementById('patient-email').value;
+        
+        // Validar comuna
+        if (!comuna) {
+            hideSpinner();
+            showStatusMessage('Por favor selecciona una comuna de residencia', 'warning');
+            return;
+        }
         
         // Datos de recurrencia
         const isRecurring = document.getElementById('is-recurring').checked;
@@ -2706,7 +2930,6 @@ function saveAppointment() {
         const [hours, minutes] = appointmentTime.split(':');
         const date = new Date(year, month - 1, day, hours, minutes);
         
-        // Verificar si es feriado
         // Verificar si es feriado
         const dateStr = formatDate(date);
         const holidayMatch = holidays.find(h => h.date === dateStr);
@@ -2746,11 +2969,16 @@ function saveAppointment() {
             duracion: appointmentDuration,
             terapeuta: therapist,
             estudiante: student,
+            estudianteNombre: studentNames[student] || student,
             notas: notes,
             web: isWeb,
             esRecurrente: isRecurring,
             fecha: date,
             creado: new Date(),
+            // Nuevos campos
+            comuna: comuna,
+            telefono: phone,
+            correo: email,
             historial: [{
                 accion: editingAppointmentId ? 'modificacion' : 'creacion',
                 usuario: currentUser.email,
@@ -2842,6 +3070,7 @@ function saveAppointment() {
     }
 }
 
+
 // Modificar la función deleteAppointment para manejar citas recurrentes
 function deleteAppointment() {
     if (!editingAppointmentId) {
@@ -2893,6 +3122,365 @@ function deleteAppointment() {
     }
 }
 
+// Función para eliminar una cita específica
+function deleteSpecificAppointment(appointmentId) {
+    showSpinner();
+    
+    db.collection('citas').doc(appointmentId).delete()
+        .then(() => {
+            closeAppointmentModal();
+            showStatusMessage('Cita eliminada correctamente', 'success');
+            loadAppointments();
+        })
+        .catch((error) => {
+            console.error("Error al eliminar cita:", error);
+            hideSpinner();
+            showStatusMessage("Error al eliminar la cita", "error");
+        });
+}
+
+// Actualizar estadísticas de estudiantes
+function updateStudentStats(uniquePatients, totalSessions) {
+    const statsPanel = document.querySelector('.stats-panel');
+    if (!statsPanel) return;
+    
+    // Eliminar gráfico anterior si existe
+    const oldChartContainer = document.getElementById('student-chart');
+    const oldChartLabels = document.getElementById('student-chart-labels');
+    if (oldChartContainer) oldChartContainer.innerHTML = '';
+    if (oldChartLabels) oldChartLabels.innerHTML = '';
+    
+    // Crear nueva tabla
+    const statsTable = document.createElement('table');
+    statsTable.className = 'student-stats-table';
+    
+    // Crear encabezado
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    
+    ['Estudiante', 'Pacientes Únicos', 'Total Sesiones'].forEach(text => {
+        const th = document.createElement('th');
+        th.textContent = text;
+        headerRow.appendChild(th);
+    });
+    
+    thead.appendChild(headerRow);
+    statsTable.appendChild(thead);
+    
+    // Crear cuerpo de tabla
+    const tbody = document.createElement('tbody');
+    
+    // Ordenar estudiantes por número de pacientes
+    const sortedStudents = Object.keys(uniquePatients || {}).sort((a, b) => 
+        (uniquePatients[b] || 0) - (uniquePatients[a] || 0)
+    );
+    
+    sortedStudents.forEach(student => {
+        const row = document.createElement('tr');
+        
+        // Nombre del estudiante
+        const nameCell = document.createElement('td');
+        nameCell.textContent = studentNames[student] || student;
+        
+        // Número de pacientes únicos
+        const patientsCell = document.createElement('td');
+        patientsCell.textContent = uniquePatients[student] || 0;
+        
+        // Número total de sesiones
+        const sessionsCell = document.createElement('td');
+        sessionsCell.textContent = totalSessions[student] || 0;
+        
+        row.appendChild(nameCell);
+        row.appendChild(patientsCell);
+        row.appendChild(sessionsCell);
+        tbody.appendChild(row);
+    });
+    
+    statsTable.appendChild(tbody);
+    
+    // Añadir la tabla al contenedor
+    if (oldChartContainer) {
+        oldChartContainer.appendChild(statsTable);
+        
+        // Añadir botones de exportación
+        const exportContainer = document.createElement('div');
+        exportContainer.className = 'export-container';
+        
+        const exportExcelBtn = document.createElement('button');
+        exportExcelBtn.className = 'button save-btn';
+        exportExcelBtn.textContent = 'Exportar a Excel';
+        exportExcelBtn.onclick = function() { exportStatisticsToExcel(); };
+        
+        const exportPdfBtn = document.createElement('button');
+        exportPdfBtn.className = 'button save-btn';
+        exportPdfBtn.textContent = 'Exportar a PDF';
+        exportPdfBtn.onclick = function() { exportStatisticsToPdf(); };
+        
+        exportContainer.appendChild(exportExcelBtn);
+        exportContainer.appendChild(exportPdfBtn);
+        
+        oldChartContainer.appendChild(exportContainer);
+    }
+}
+
+// Crear gráfico circular para tipos de cita
+function createAppointmentTypeChart(typesData) {
+    // Verificar si existe la sección para este gráfico, si no, crearla
+    let chartSection = document.getElementById('treatment-types-section');
+    
+    if (!chartSection) {
+        const statsPanel = document.querySelector('.stats-panel');
+        if (!statsPanel) return;
+        
+        chartSection = document.createElement('div');
+        chartSection.id = 'treatment-types-section';
+        chartSection.className = 'stats-section';
+        chartSection.style.marginTop = '30px';
+        
+        const sectionTitle = document.createElement('h4');
+        sectionTitle.className = 'therapist-stats-title';
+        sectionTitle.textContent = 'Distribución de Tipos de Tratamiento';
+        chartSection.appendChild(sectionTitle);
+        
+        const chartCanvas = document.createElement('div');
+        chartCanvas.id = 'treatment-types-chart';
+        chartCanvas.style.height = '250px';
+        chartCanvas.style.position = 'relative';
+        chartCanvas.style.margin = '20px auto';
+        chartCanvas.style.width = '250px';
+        
+        chartSection.appendChild(chartCanvas);
+        statsPanel.appendChild(chartSection);
+    }
+    
+    const chartContainer = document.getElementById('treatment-types-chart');
+    if (!chartContainer) return;
+    
+    chartContainer.innerHTML = '';
+    
+    // Datos para el gráfico
+    const types = Object.keys(typesData);
+    const counts = Object.values(typesData);
+    const total = counts.reduce((sum, count) => sum + count, 0);
+    
+    // Si no hay datos, mostrar mensaje
+    if (total === 0) {
+        const noDataMsg = document.createElement('div');
+        noDataMsg.textContent = 'No hay datos disponibles';
+        noDataMsg.style.textAlign = 'center';
+        noDataMsg.style.padding = '20px';
+        noDataMsg.style.color = 'var(--text-secondary)';
+        chartContainer.appendChild(noDataMsg);
+        return;
+    }
+    
+    // Colores para el gráfico
+    const colors = [
+        '#2D3FE0', '#00BFA5', '#FF6B6B', '#9B59B6', 
+        '#3498DB', '#E67E22', '#27AE60', '#F1C40F'
+    ];
+    
+    // Crear el gráfico circular (pie chart)
+    let cumulativeAngle = 0;
+    const centerX = 125;
+    const centerY = 125;
+    const radius = 100;
+    
+    // Crear un SVG
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.setAttribute('viewBox', '0 0 250 250');
+    
+    types.forEach((type, index) => {
+        const count = typesData[type];
+        const percentage = (count / total) * 100;
+        const angleSize = (percentage / 100) * 360;
+        
+        // Calcular coordenadas para el arco
+        const startAngle = cumulativeAngle * Math.PI / 180;
+        const endAngle = (cumulativeAngle + angleSize) * Math.PI / 180;
+        
+        const x1 = centerX + radius * Math.cos(startAngle);
+        const y1 = centerY + radius * Math.sin(startAngle);
+        const x2 = centerX + radius * Math.cos(endAngle);
+        const y2 = centerY + radius * Math.sin(endAngle);
+        
+        // Determinar si el arco es mayor a 180 grados
+        const largeArcFlag = angleSize > 180 ? 1 : 0;
+        
+        // Crear el path para el segmento del círculo
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const d = [
+            `M ${centerX} ${centerY}`,
+            `L ${x1} ${y1}`,
+            `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+            'Z'
+        ].join(' ');
+        
+        path.setAttribute('d', d);
+        path.setAttribute('fill', colors[index % colors.length]);
+        
+        // Agregar título con información al pasar el mouse
+        const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+        title.textContent = `${getAppointmentTypeName(type)}: ${count} (${percentage.toFixed(1)}%)`;
+        path.appendChild(title);
+        
+        svg.appendChild(path);
+        
+        // Actualizar ángulo acumulado
+        cumulativeAngle += angleSize;
+    });
+    
+    chartContainer.appendChild(svg);
+    
+    // Crear leyenda
+    const legend = document.createElement('div');
+    legend.className = 'chart-legend';
+    legend.style.display = 'flex';
+    legend.style.flexWrap = 'wrap';
+    legend.style.justifyContent = 'center';
+    legend.style.marginTop = '20px';
+    
+    types.forEach((type, index) => {
+        const count = typesData[type];
+        const percentage = (count / total) * 100;
+        
+        const legendItem = document.createElement('div');
+        legendItem.className = 'legend-item';
+        legendItem.style.display = 'flex';
+        legendItem.style.alignItems = 'center';
+        legendItem.style.margin = '5px 10px';
+        
+        const colorBox = document.createElement('div');
+        colorBox.style.width = '12px';
+        colorBox.style.height = '12px';
+        colorBox.style.backgroundColor = colors[index % colors.length];
+        colorBox.style.marginRight = '5px';
+        
+        const label = document.createElement('span');
+        label.textContent = `${getAppointmentTypeName(type)}: ${count} (${percentage.toFixed(1)}%)`;
+        
+        legendItem.appendChild(colorBox);
+        legendItem.appendChild(label);
+        legend.appendChild(legendItem);
+    });
+    
+    chartContainer.appendChild(legend);
+}
+
+// Función para obtener nombre legible del tipo de cita
+function getAppointmentTypeName(typeClass) {
+    switch(typeClass) {
+        case 'evaluacion-msk': return 'Evaluación MSK';
+        case 'evaluacion-deportiva': return 'Evaluación Deportiva';
+        case 'sesion-msk': return 'Sesión MSK';
+        case 'sesion-deportiva': return 'Sesión Deportiva';
+        default: return typeClass;
+    }
+}
+
+// Crear tabla de evolución de pacientes
+function createPatientEvolutionTable(sessionsData) {
+    // Verificar si existe la sección para esta tabla, si no, crearla
+    let evolutionSection = document.getElementById('patient-evolution-section');
+    
+    if (!evolutionSection) {
+        const statsPanel = document.querySelector('.stats-panel');
+        if (!statsPanel) return;
+        
+        evolutionSection = document.createElement('div');
+        evolutionSection.id = 'patient-evolution-section';
+        evolutionSection.className = 'stats-section';
+        evolutionSection.style.marginTop = '30px';
+        
+        const sectionTitle = document.createElement('h4');
+        sectionTitle.className = 'therapist-stats-title';
+        sectionTitle.textContent = 'Evolución de Pacientes';
+        evolutionSection.appendChild(sectionTitle);
+        
+        statsPanel.appendChild(evolutionSection);
+    }
+    
+    // Convertir el objeto de sesiones por paciente a un array para ordenar
+    const patientsArray = Object.keys(sessionsData).map(patient => ({
+        name: patient,
+        sessions: sessionsData[patient]
+    }));
+    
+    // Ordenar por número de sesiones (descendente)
+    patientsArray.sort((a, b) => b.sessions - a.sessions);
+    
+    // Crear tabla
+    const table = document.createElement('table');
+    table.className = 'student-stats-table';
+    
+    // Encabezado
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    
+    ['Paciente', 'Número de Sesiones', 'Estado de Evolución'].forEach(text => {
+        const th = document.createElement('th');
+        th.textContent = text;
+        headerRow.appendChild(th);
+    });
+    
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+    
+    // Cuerpo de la tabla
+    const tbody = document.createElement('tbody');
+    
+    patientsArray.forEach(patient => {
+        const row = document.createElement('tr');
+        
+        // Nombre del paciente (con primera letra capitalizada)
+        const nameCell = document.createElement('td');
+        nameCell.textContent = patient.name.charAt(0).toUpperCase() + patient.name.slice(1);
+        
+        // Número de sesiones
+        const sessionsCell = document.createElement('td');
+        sessionsCell.textContent = patient.sessions;
+        
+        // Estado de evolución basado en número de sesiones
+        const evolutionCell = document.createElement('td');
+        let evolutionStatus = '';
+        let statusColor = '';
+        
+        if (patient.sessions === 1) {
+            evolutionStatus = 'Evaluación Inicial';
+            statusColor = '#FFC107'; // Amarillo
+        } else if (patient.sessions >= 2 && patient.sessions <= 4) {
+            evolutionStatus = 'En Tratamiento';
+            statusColor = '#2196F3'; // Azul
+        } else if (patient.sessions >= 5 && patient.sessions <= 8) {
+            evolutionStatus = 'Avanzado';
+            statusColor = '#4CAF50'; // Verde
+        } else if (patient.sessions > 8) {
+            evolutionStatus = 'Fase Final';
+            statusColor = '#9C27B0'; // Púrpura
+        }
+        
+        const statusIndicator = document.createElement('span');
+        statusIndicator.textContent = evolutionStatus;
+        statusIndicator.style.display = 'inline-block';
+        statusIndicator.style.padding = '3px 8px';
+        statusIndicator.style.borderRadius = '4px';
+        statusIndicator.style.backgroundColor = statusColor;
+        statusIndicator.style.color = 'white';
+        statusIndicator.style.fontWeight = '500';
+        statusIndicator.style.fontSize = '12px';
+        
+        evolutionCell.appendChild(statusIndicator);
+        
+        row.appendChild(nameCell);
+        row.appendChild(sessionsCell);
+        row.appendChild(evolutionCell);
+        tbody.appendChild(row);
+    });
+    
+    table.appendChil        
+        
 // Función para eliminar una cita específica
 function deleteSpecificAppointment(appointmentId) {
     showSpinner();
@@ -3080,6 +3668,8 @@ function showStatusMessage(message, type = 'success') {
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
-    
+<!-- Librerías para exportar -->
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/jspdf-autotable@latest/dist/jspdf.plugin.autotable.js"></script>    
 </body>
 </html>
