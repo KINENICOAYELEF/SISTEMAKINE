@@ -27,17 +27,23 @@
             --sesion-msk: #FFEAA7;
             --sesion-deportiva: #BEE3F8;
 
-            /* Colores por estudiante */
-            .appointment.estudiante1 { background-color: #FFD3E0; }
-            .appointment.estudiante2 { background-color: #C4F2E0; }
-            .appointment.estudiante3 { background-color: #FFEAA7; }
-            .appointment.estudiante4 { background-color: #BEE3F8; }
-            .appointment.estudiante5 { background-color: #E9D8FD; }
-            .appointment.estudiante6 { background-color: #FED7D7; }
-            .appointment.estudiante7 { background-color: #C6F6D5; }
-            .appointment.estudiante8 { background-color: #FEEBC8; }
-            .appointment.estudiante9 { background-color: #B2F5EA; }
-            .appointment.estudiante10 { background-color: #D6BCFA; }
+            /* Colores más distinguibles por estudiante */
+            .appointment.estudiante1 { background-color: #FF5252; } /* Rojo */
+            .appointment.estudiante2 { background-color: #4CAF50; } /* Verde */
+            .appointment.estudiante3 { background-color: #2196F3; } /* Azul */
+            .appointment.estudiante4 { background-color: #FFC107; } /* Amarillo */
+            .appointment.estudiante5 { background-color: #9C27B0; } /* Púrpura */
+            .appointment.estudiante6 { background-color: #FF9800; } /* Naranja */
+            .appointment.estudiante7 { background-color: #00BCD4; } /* Cian */
+            .appointment.estudiante8 { background-color: #795548; } /* Marrón */
+            .appointment.estudiante9 { background-color: #607D8B; } /* Azul grisáceo */
+            .appointment.estudiante10 { background-color: #E91E63; } /* Rosa */
+            
+            /* Asegurarse que el texto sea legible en fondos oscuros */
+            .appointment.estudiante1, .appointment.estudiante5, .appointment.estudiante8, 
+            .appointment.estudiante9, .appointment.estudiante10 {
+                color: white;
+            }
             
             /* Estados */
             --success: #4CAF50;
@@ -923,14 +929,6 @@
                 <button id="logout-btn" class="button cancel-btn" style="padding: 6px 12px; font-size: 13px;">Cerrar sesión</button>
             </div>
         </header>
-        
-        <!-- Panel de Administración de Estudiantes -->
-        <div class="admin-panel">
-            <h3 class="admin-title">Administración de Estudiantes</h3>
-            <div class="student-list" id="student-list">
-                <!-- Se llenará dinámicamente -->
-            </div>
-        </div>
 
         <div class="scheduler-container">
             <!-- Encabezado de la semana con días -->
@@ -1033,6 +1031,14 @@
             </div>
         </div>
     </div>
+
+     <!-- Panel de Administración de Estudiantes -->
+        <div class="admin-panel">
+            <h3 class="admin-title">Administración de Estudiantes</h3>
+            <div class="student-list" id="student-list">
+                <!-- Se llenará dinámicamente -->
+            </div>
+        </div>
     
     <!-- Modal para agregar/editar citas -->
     <div class="modal" id="appointment-modal">
@@ -1940,6 +1946,7 @@ function getAppointmentTypeIcon(typeClass) {
         
 // Actualizar estadísticas
 // Actualizar estadísticas
+// Actualizar estadísticas
 function updateStatistics() {
     try {
         // Calcular asistencia semanal
@@ -1974,12 +1981,16 @@ function updateStatistics() {
             }
         }
         
-        // NUEVO: Calcular pacientes únicos por estudiante (NO sesiones)
+        // NUEVO: Calcular pacientes únicos por estudiante Y sesiones totales
         uniquePatientsByStudent = {};
+        const sessionsByStudent = {};
         const patientsByStudent = {};
         
         appointments.forEach(a => {
             if (!a.estudiante || !a.paciente) return;
+            
+            // Contar sesiones totales
+            sessionsByStudent[a.estudiante] = (sessionsByStudent[a.estudiante] || 0) + 1;
             
             // Inicializar arrays si no existen
             if (!patientsByStudent[a.estudiante]) {
@@ -2003,49 +2014,286 @@ function updateStatistics() {
         document.getElementById('busiest-hour').textContent = `${busiestHour}:00`;
         
         // Actualizar gráfico de estudiantes
-        const chartContainer = document.getElementById('student-chart');
-        const chartLabels = document.getElementById('student-chart-labels');
-        
-        if (chartContainer && chartLabels) {
-            chartContainer.innerHTML = '';
-            chartLabels.innerHTML = '';
-            
-            // Obtener el valor máximo para escalar el gráfico
-            const maxValue = Math.max(...Object.values(uniquePatientsByStudent), 1);
-            
-            // Ordenar para mostrar primero los que tienen más pacientes
-            const sortedStudents = Object.keys(uniquePatientsByStudent).sort((a, b) => 
-                uniquePatientsByStudent[b] - uniquePatientsByStudent[a]
-            );
-            
-            sortedStudents.forEach(student => {
-                const value = uniquePatientsByStudent[student];
-                const height = Math.max((value / maxValue) * 100, 5); // Al menos 5% de altura
-                
-                // Crear barra
-                const barEl = document.createElement('div');
-                barEl.className = 'chart-bar';
-                barEl.style.height = `${height}%`;
-                
-                // Número de pacientes
-                const valueEl = document.createElement('div');
-                valueEl.className = 'chart-value';
-                valueEl.textContent = value;
-                barEl.appendChild(valueEl);
-                
-                chartContainer.appendChild(barEl);
-                
-                // Crear etiqueta
-                const labelEl = document.createElement('div');
-                labelEl.className = 'chart-label';
-                labelEl.textContent = studentNames[student] || student;
-                chartLabels.appendChild(labelEl);
-            });
-        }
+        updateStudentChart(uniquePatientsByStudent, sessionsByStudent);
     } catch (error) {
         console.error("Error al actualizar estadísticas:", error);
     }
 }
+
+// Nueva función para actualizar el gráfico de estudiantes con ambas métricas
+function updateStudentChart(uniquePatients, totalSessions) {
+    const chartContainer = document.getElementById('student-chart');
+    const chartLabels = document.getElementById('student-chart-labels');
+    
+    if (chartContainer && chartLabels) {
+        chartContainer.innerHTML = '';
+        chartLabels.innerHTML = '';
+        
+        // Crear tabla de estadísticas en lugar de gráfico
+        const statsTable = document.createElement('table');
+        statsTable.className = 'student-stats-table';
+        statsTable.style.width = '100%';
+        statsTable.style.borderCollapse = 'collapse';
+        statsTable.style.marginTop = '20px';
+        
+        // Crear encabezado
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        
+        ['Estudiante', 'Pacientes Únicos', 'Total Sesiones'].forEach(text => {
+            const th = document.createElement('th');
+            th.textContent = text;
+            th.style.padding = '10px';
+            th.style.textAlign = 'left';
+            th.style.borderBottom = '2px solid var(--border)';
+            headerRow.appendChild(th);
+        });
+        
+        thead.appendChild(headerRow);
+        statsTable.appendChild(thead);
+        
+        // Crear cuerpo de tabla
+        const tbody = document.createElement('tbody');
+        
+        // Ordenar estudiantes por número de pacientes
+        const sortedStudents = Object.keys(uniquePatients || {}).sort((a, b) => 
+            (uniquePatients[b] || 0) - (uniquePatients[a] || 0)
+        );
+        
+        sortedStudents.forEach(student => {
+            const row = document.createElement('tr');
+            
+            // Nombre del estudiante
+            const nameCell = document.createElement('td');
+            nameCell.textContent = studentNames[student] || student;
+            nameCell.style.padding = '10px';
+            nameCell.style.borderBottom = '1px solid var(--border)';
+            
+            // Número de pacientes únicos
+            const patientsCell = document.createElement('td');
+            patientsCell.textContent = uniquePatients[student] || 0;
+            patientsCell.style.padding = '10px';
+            patientsCell.style.borderBottom = '1px solid var(--border)';
+            
+            // Número total de sesiones
+            const sessionsCell = document.createElement('td');
+            sessionsCell.textContent = totalSessions[student] || 0;
+            sessionsCell.style.padding = '10px';
+            sessionsCell.style.borderBottom = '1px solid var(--border)';
+            
+            row.appendChild(nameCell);
+            row.appendChild(patientsCell);
+            row.appendChild(sessionsCell);
+            tbody.appendChild(row);
+        });
+        
+        statsTable.appendChild(tbody);
+        
+        // Reemplazar el gráfico con la tabla
+        chartContainer.appendChild(statsTable);
+        
+        // Añadir un botón para exportar estadísticas
+        const exportContainer = document.createElement('div');
+        exportContainer.style.marginTop = '20px';
+        exportContainer.style.textAlign = 'center';
+        
+        const exportExcelBtn = document.createElement('button');
+        exportExcelBtn.className = 'button save-btn';
+        exportExcelBtn.style.marginRight = '10px';
+        exportExcelBtn.textContent = 'Exportar a Excel';
+        exportExcelBtn.onclick = function() { exportStatisticsToExcel(); };
+        
+        const exportPdfBtn = document.createElement('button');
+        exportPdfBtn.className = 'button save-btn';
+        exportPdfBtn.textContent = 'Exportar a PDF';
+        exportPdfBtn.onclick = function() { exportStatisticsToPdf(); };
+        
+        exportContainer.appendChild(exportExcelBtn);
+        exportContainer.appendChild(exportPdfBtn);
+        
+        chartContainer.appendChild(exportContainer);
+    }
+}
+
+// Función para exportar estadísticas a Excel
+function exportStatisticsToExcel() {
+    try {
+        showSpinner();
+        
+        // Crear datos para el Excel
+        let data = [['Estudiante', 'Pacientes Únicos', 'Total Sesiones']];
+        
+        // Calcular estadísticas
+        const uniquePatients = {};
+        const totalSessions = {};
+        const patientsByStudent = {};
+        
+        appointments.forEach(a => {
+            if (!a.estudiante || !a.paciente) return;
+            
+            // Contar sesiones totales
+            totalSessions[a.estudiante] = (totalSessions[a.estudiante] || 0) + 1;
+            
+            // Inicializar arrays si no existen
+            if (!patientsByStudent[a.estudiante]) {
+                patientsByStudent[a.estudiante] = [];
+            }
+            
+            // Añadir paciente si no está ya (para evitar duplicados)
+            if (!patientsByStudent[a.estudiante].includes(a.paciente)) {
+                patientsByStudent[a.estudiante].push(a.paciente);
+            }
+        });
+        
+        // Contar pacientes únicos
+        for (const student in patientsByStudent) {
+            uniquePatients[student] = patientsByStudent[student].length;
+        }
+        
+        // Ordenar estudiantes
+        const sortedStudents = Object.keys(uniquePatients).sort((a, b) => 
+            uniquePatients[b] - uniquePatients[a]
+        );
+        
+        // Añadir datos de cada estudiante
+        sortedStudents.forEach(student => {
+            data.push([
+                studentNames[student] || student,
+                uniquePatients[student] || 0,
+                totalSessions[student] || 0
+            ]);
+        });
+        
+        // Crear workbook
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        
+        // Obtener fechas de la semana actual
+        const startOfWeek = getStartOfWeek(currentWeekDate);
+        const endDate = new Date(startOfWeek);
+        endDate.setDate(startOfWeek.getDate() + 3); // Jueves
+        
+        const startDateStr = startOfWeek.toLocaleDateString('es-ES');
+        const endDateStr = endDate.toLocaleDateString('es-ES');
+        
+        // Añadir información adicional
+        XLSX.utils.sheet_add_aoa(ws, [
+            [`Estadísticas SISTEMAKINE - Semana del ${startDateStr} al ${endDateStr}`],
+            [`Generado el: ${new Date().toLocaleDateString('es-ES')}`],
+            [`Total de citas: ${appointments.length}`],
+            []
+        ], { origin: 'A1' });
+        
+        // Mover los datos principales hacia abajo
+        XLSX.utils.sheet_add_aoa(ws, data, { origin: 'A6' });
+        
+        // Guardar el archivo
+        XLSX.utils.book_append_sheet(wb, ws, "Estadísticas");
+        XLSX.writeFile(wb, `Estadisticas_SISTEMAKINE_${startDateStr}_${endDateStr}.xlsx`);
+        
+        hideSpinner();
+        showStatusMessage('Estadísticas exportadas a Excel correctamente', 'success');
+    } catch (error) {
+        console.error("Error al exportar a Excel:", error);
+        hideSpinner();
+        showStatusMessage("Error al exportar estadísticas a Excel", "error");
+    }
+}
+
+// Función para exportar estadísticas a PDF
+function exportStatisticsToPdf() {
+    try {
+        showSpinner();
+        
+        // Obtener fechas de la semana actual
+        const startOfWeek = getStartOfWeek(currentWeekDate);
+        const endDate = new Date(startOfWeek);
+        endDate.setDate(startOfWeek.getDate() + 3); // Jueves
+        
+        const startDateStr = startOfWeek.toLocaleDateString('es-ES');
+        const endDateStr = endDate.toLocaleDateString('es-ES');
+        
+        // Crear documento PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Título
+        doc.setFontSize(18);
+        doc.text("Estadísticas SISTEMAKINE", 20, 20);
+        
+        // Subtítulo con fechas
+        doc.setFontSize(12);
+        doc.text(`Semana del ${startDateStr} al ${endDateStr}`, 20, 30);
+        doc.text(`Generado el: ${new Date().toLocaleDateString('es-ES')}`, 20, 40);
+        
+        // Información general
+        doc.text(`Total de citas: ${appointments.length}`, 20, 50);
+        
+        // Tabla de estudiantes
+        const tableColumn = ["Estudiante", "Pacientes Únicos", "Total Sesiones"];
+        let tableRows = [];
+        
+        // Calcular estadísticas
+        const uniquePatients = {};
+        const totalSessions = {};
+        const patientsByStudent = {};
+        
+        appointments.forEach(a => {
+            if (!a.estudiante || !a.paciente) return;
+            
+            // Contar sesiones totales
+            totalSessions[a.estudiante] = (totalSessions[a.estudiante] || 0) + 1;
+            
+            // Inicializar arrays si no existen
+            if (!patientsByStudent[a.estudiante]) {
+                patientsByStudent[a.estudiante] = [];
+            }
+            
+            // Añadir paciente si no está ya (para evitar duplicados)
+            if (!patientsByStudent[a.estudiante].includes(a.paciente)) {
+                patientsByStudent[a.estudiante].push(a.paciente);
+            }
+        });
+        
+        // Contar pacientes únicos
+        for (const student in patientsByStudent) {
+            uniquePatients[student] = patientsByStudent[student].length;
+        }
+        
+        // Ordenar estudiantes
+        const sortedStudents = Object.keys(uniquePatients).sort((a, b) => 
+            uniquePatients[b] - uniquePatients[a]
+        );
+        
+        // Añadir datos de cada estudiante
+        sortedStudents.forEach(student => {
+            tableRows.push([
+                studentNames[student] || student,
+                uniquePatients[student] || 0,
+                totalSessions[student] || 0
+            ]);
+        });
+        
+        // Generar tabla
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 60,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [41, 63, 224] }
+        });
+        
+        // Guardar PDF
+        doc.save(`Estadisticas_SISTEMAKINE_${startDateStr}_${endDateStr}.pdf`);
+        
+        hideSpinner();
+        showStatusMessage('Estadísticas exportadas a PDF correctamente', 'success');
+    } catch (error) {
+        console.error("Error al exportar a PDF:", error);
+        hideSpinner();
+        showStatusMessage("Error al exportar estadísticas a PDF", "error");
+    }
+}        
 
 // Función para manejar cambios en el tipo de cita (mostrar opciones de recurrencia)
 function handleAppointmentTypeChange() {
@@ -2594,33 +2842,72 @@ function saveAppointment() {
     }
 }
 
-// Eliminar cita
+// Modificar la función deleteAppointment para manejar citas recurrentes
 function deleteAppointment() {
     if (!editingAppointmentId) {
         showStatusMessage("No hay ninguna cita seleccionada para eliminar", "warning");
         return;
     }
     
+    // Obtener la cita actual
+    const currentAppointment = appointments.find(a => a.id === editingAppointmentId);
+    
+    // Verificar si es una cita recurrente
+    if (currentAppointment && currentAppointment.esRecurrente && currentAppointment.serieRecurrenteId) {
+        // Mostrar opciones para citas recurrentes
+        const deleteOption = window.confirm('Esta es una cita recurrente. ¿Deseas eliminar todas las citas de esta serie?');
+        
+        if (deleteOption) {
+            // Eliminar todas las citas de la serie
+            showSpinner();
+            
+            db.collection('citas')
+                .where('serieRecurrenteId', '==', currentAppointment.serieRecurrenteId)
+                .get()
+                .then((querySnapshot) => {
+                    const batch = db.batch();
+                    
+                    querySnapshot.forEach((doc) => {
+                        batch.delete(doc.ref);
+                    });
+                    
+                    return batch.commit();
+                })
+                .then(() => {
+                    closeAppointmentModal();
+                    showStatusMessage(`Se han eliminado todas las citas recurrentes de esta serie`, 'success');
+                    loadAppointments();
+                })
+                .catch((error) => {
+                    console.error("Error al eliminar citas recurrentes:", error);
+                    hideSpinner();
+                    showStatusMessage("Error al eliminar las citas recurrentes", "error");
+                });
+        } else {
+            // Eliminar solo esta cita
+            deleteSpecificAppointment(editingAppointmentId);
+        }
+    } else {
+        // Para citas no recurrentes, eliminar normalmente
+        deleteSpecificAppointment(editingAppointmentId);
+    }
+}
+
+// Función para eliminar una cita específica
+function deleteSpecificAppointment(appointmentId) {
     showSpinner();
     
-    try {
-        // Para simplificar, eliminamos directamente la cita
-        db.collection('citas').doc(editingAppointmentId).delete()
-            .then(() => {
-                closeAppointmentModal();
-                showStatusMessage('Cita eliminada correctamente', 'success');
-                loadAppointments();
-            })
-            .catch((error) => {
-                console.error("Error al eliminar cita:", error);
-                hideSpinner();
-                alert('Error al eliminar: ' + error.message);
-            });
-    } catch (error) {
-        console.error("Error crítico al eliminar cita:", error);
-        hideSpinner();
-        alert("Error crítico al eliminar: " + error.message);
-    }
+    db.collection('citas').doc(appointmentId).delete()
+        .then(() => {
+            closeAppointmentModal();
+            showStatusMessage('Cita eliminada correctamente', 'success');
+            loadAppointments();
+        })
+        .catch((error) => {
+            console.error("Error al eliminar cita:", error);
+            hideSpinner();
+            showStatusMessage("Error al eliminar la cita", "error");
+        });
 }
 
 // Mover una cita a una fecha y hora específicas
