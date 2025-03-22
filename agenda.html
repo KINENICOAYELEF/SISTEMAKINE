@@ -26,6 +26,18 @@
             --eval-deportiva: #C4F2E0;
             --sesion-msk: #FFEAA7;
             --sesion-deportiva: #BEE3F8;
+
+            /* Colores por estudiante */
+            .appointment.estudiante1 { background-color: #FFD3E0; }
+            .appointment.estudiante2 { background-color: #C4F2E0; }
+            .appointment.estudiante3 { background-color: #FFEAA7; }
+            .appointment.estudiante4 { background-color: #BEE3F8; }
+            .appointment.estudiante5 { background-color: #E9D8FD; }
+            .appointment.estudiante6 { background-color: #FED7D7; }
+            .appointment.estudiante7 { background-color: #C6F6D5; }
+            .appointment.estudiante8 { background-color: #FEEBC8; }
+            .appointment.estudiante9 { background-color: #B2F5EA; }
+            .appointment.estudiante10 { background-color: #D6BCFA; }
             
             /* Estados */
             --success: #4CAF50;
@@ -1054,6 +1066,8 @@
                         <option value="estudiante6">Estudiante 6</option>
                         <option value="estudiante7">Estudiante 7</option>
                         <option value="estudiante8">Estudiante 8</option>
+                        <option value="estudiante9">Estudiante 9</option>
+                        <option value="estudiante10">Estudiante 10</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1338,7 +1352,9 @@ function loadStudentNames() {
             'estudiante5': 'Estudiante 5',
             'estudiante6': 'Estudiante 6',
             'estudiante7': 'Estudiante 7',
-            'estudiante8': 'Estudiante 8'
+            'estudiante8': 'Estudiante 8',
+            'estudiante9': 'Estudiante 9',
+            'estudiante10': 'Estudiante 10'
         };
         
         db.collection('configuracion').doc('estudiantes').get()
@@ -1722,7 +1738,7 @@ function renderAppointments() {
                     if (cell) {
                         // Crear elemento de cita
                         const appointmentEl = document.createElement('div');
-                        appointmentEl.className = `appointment ${appointment.tipoClase || 'evaluacion-msk'}`;
+                        appointmentEl.className = `appointment ${appointment.estudiante || 'estudiante1'}`;
                         appointmentEl.dataset.id = appointment.id;
                         
                         // Añadir clase si es recurrente
@@ -1855,6 +1871,17 @@ function getStatusText(status) {
     }
 }
 
+// Obtener icono según tipo de cita
+function getAppointmentTypeIcon(typeClass) {
+    switch(typeClass) {
+        case 'evaluacion-msk': return '📋'; // Portapapeles para evaluación MSK
+        case 'evaluacion-deportiva': return '📕'; // Persona corriendo para evaluación deportiva
+        case 'sesion-msk': return '💪'; // Músculo para sesión MSK
+        case 'sesion-deportiva': return '🏋️‍♀️'; // Trofeo para sesión deportiva
+        default: return '📅'; // Calendario como icono por defecto
+    }
+}
+        
 // Actualizar estadísticas
 // Actualizar estadísticas
 function updateStatistics() {
@@ -2338,7 +2365,7 @@ function saveAppointment() {
         }
         
         const appointmentDuration = parseInt(document.getElementById('appointment-duration').value);
-        const therapist = document.getElementById('therapist').value;
+        const therapist = "estudiante"; // Valor por defecto ya que eliminamos el campo
         const student = document.getElementById('student').value;
         const notes = document.getElementById('appointment-notes').value;
         const isWeb = document.getElementById('is-web').checked;
