@@ -2282,6 +2282,151 @@ function updateStatistics() {
     }
 }
 
+        // Añadir esta nueva función después de la función updateStatistics
+function loadHistoricalPatientStats() {
+    showSpinner();
+    
+    // Consultar TODAS las citas en Firestore (sin filtro de fecha)
+    db.collection('citas').get()
+        .then((querySnapshot) => {
+            // Contador de sesiones por paciente (histórico)
+            const historicalSessionsByPatient = {};
+            
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.paciente) {
+                    const patientKey = data.paciente.toLowerCase();
+                    historicalSessionsByPatient[patientKey] = (historicalSessionsByPatient[patientKey] || 0) + 1;
+                }
+            });
+            
+            // Crear la sección para estadísticas históricas
+            createHistoricalPatientStatsSection(historicalSessionsByPatient);
+            hideSpinner();
+        })
+        .catch((error) => {
+            console.error("Error al cargar estadísticas históricas:", error);
+            hideSpinner();
+        });
+}
+
+// Función para crear la sección de estadísticas históricas
+function createHistoricalPatientStatsSection(historicalData) {
+    // Verificar si existe la sección, si no, crearla
+    let historicalSection = document.getElementById('historical-stats-section');
+    
+    if (!historicalSection) {
+        const statsPanel = document.querySelector('.stats-panel');
+        if (!statsPanel) return;
+        
+        historicalSection = document.createElement('div');
+        historicalSection.id = 'historical-stats-section';
+        historicalSection.className = 'stats-section';
+        
+        const sectionTitle = document.createElement('h4');
+        sectionTitle.className = 'therapist-stats-title';
+        sectionTitle.textContent = 'Historial Completo de Sesiones por Paciente';
+        historicalSection.appendChild(sectionTitle);
+        
+        statsPanel.appendChild(historicalSection);
+    } else {
+        // Limpiar contenido previo pero mantener el título
+        const title = historicalSection.querySelector('.therapist-stats-title');
+        historicalSection.innerHTML = '';
+        if (title) historicalSection.appendChild(title);
+    }
+    
+    // Convertir los datos a un array para poder ordenarlos
+    const patientsArray = Object.keys(historicalData).map(patient => ({
+        name: patient,
+        sessions: historicalData[patient]
+    }));
+    
+    // Ordenar por número de sesiones (descendente)
+    patientsArray.sort((a, b) => b.sessions - a.sessions);
+    
+    // Crear tabla
+    const table = document.createElement('table');
+    table.className = 'student-stats-table';
+    
+    // Encabezado
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    
+    ['Paciente', 'Total Histórico de Sesiones', 'Estado de Evolución'].forEach(text => {
+        const th = document.createElement('th');
+        th.textContent = text;
+        headerRow.appendChild(th);
+    });
+    
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+    
+    // Cuerpo de la tabla
+    const tbody = document.createElement('tbody');
+    
+    patientsArray.forEach(patient => {
+        const row = document.createElement('tr');
+        
+        // Nombre del paciente (con primera letra capitalizada)
+        const nameCell = document.createElement('td');
+        nameCell.textContent = patient.name.charAt(0).toUpperCase() + patient.name.slice(1);
+        
+        // Número de sesiones
+        const sessionsCell = document.createElement('td');
+        sessionsCell.textContent = patient.sessions;
+        
+        // Estado de evolución basado en número de sesiones
+        const evolutionCell = document.createElement('td');
+        let evolutionStatus = '';
+        let statusColor = '';
+        
+        if (patient.sessions === 1) {
+            evolutionStatus = 'Evaluación Inicial';
+            statusColor = '#FFC107'; // Amarillo
+        } else if (patient.sessions >= 2 && patient.sessions <= 4) {
+            evolutionStatus = 'En Tratamiento';
+            statusColor = '#2196F3'; // Azul
+        } else if (patient.sessions >= 5 && patient.sessions <= 8) {
+            evolutionStatus = 'Avanzado';
+            statusColor = '#4CAF50'; // Verde
+        } else if (patient.sessions > 8) {
+            evolutionStatus = 'Fase Final';
+            statusColor = '#9C27B0'; // Púrpura
+        }
+        
+        const statusIndicator = document.createElement('span');
+        statusIndicator.textContent = evolutionStatus;
+        statusIndicator.style.display = 'inline-block';
+        statusIndicator.style.padding = '3px 8px';
+        statusIndicator.style.borderRadius = '4px';
+        statusIndicator.style.backgroundColor = statusColor;
+        statusIndicator.style.color = 'white';
+        statusIndicator.style.fontWeight = '500';
+        statusIndicator.style.fontSize = '12px';
+        
+        evolutionCell.appendChild(statusIndicator);
+        
+        row.appendChild(nameCell);
+        row.appendChild(sessionsCell);
+        row.appendChild(evolutionCell);
+        tbody.appendChild(row);
+    });
+    
+    table.appendChild(tbody);
+    historicalSection.appendChild(table);
+}
+
+// Llamar a esta función al inicializar la aplicación
+// Añadir esta línea al final de la función loadAppointments
+function loadAppointments() {
+    // ... código existente ...
+    
+    // Al final de la función, justo antes de hideSpinner():
+    loadHistoricalPatientStats();
+}
+
+        
 // Nueva función para actualizar el gráfico de estudiantes con ambas métricas
 function updateStudentChart(uniquePatients, totalSessions) {
     const chartContainer = document.getElementById('student-chart');
