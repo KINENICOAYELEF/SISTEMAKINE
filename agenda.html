@@ -2016,132 +2016,156 @@ function loadSampleAppointments() {
 
 // Mejorar la función renderAppointments() con más logs y mejor manejo de errores
 function renderAppointments() {
+console.log("🔍 Iniciando renderizado de citas...");
+    console.log(`📊 Total de citas encontradas: ${appointments.length}`);
+    
     try {
-        // Limpiar citas existentes
-        document.querySelectorAll('.appointment').forEach(el => el.remove());
+        // Primero limpiar todas las citas existentes
+        const existingAppointments = document.querySelectorAll('.appointment');
+        existingAppointments.forEach(el => el.remove());
+        console.log(`🧹 Se eliminaron ${existingAppointments.length} citas existentes del DOM`);
+        
+        // Si no hay citas, mostrar mensaje y salir
+        if (appointments.length === 0) {
+            console.log("⚠️ No hay citas para mostrar en esta semana");
+            return;
+        }
         
         // Fecha de referencia (lunes de la semana actual)
         const startOfWeek = getStartOfWeek(currentWeekDate);
+        console.log(`📅 Semana actual comienza: ${startOfWeek.toDateString()}`);
         
-        console.log("Renderizando citas. Total:", appointments.length);
-        console.log("Semana actual desde:", startOfWeek);
-        
-        // Renderizar cada cita de la semana actual
+        // Renderizar citas
         appointments.forEach((appointment, index) => {
             try {
                 if (!appointment.fecha) {
-                    console.error("Cita sin fecha:", appointment);
+                    console.error(`❌ Cita #${index+1} sin fecha:`, appointment);
                     return;
                 }
                 
                 const appointmentDate = appointment.fecha;
                 
                 // Calcular diferencia de días desde el inicio de la semana
-                const dayDiff = Math.floor((appointmentDate - startOfWeek) / (24 * 60 * 60 * 1000));
+                const timeDiff = appointmentDate.getTime() - startOfWeek.getTime();
+                const dayDiff = Math.floor(timeDiff / (24 * 60 * 60 * 1000));
+                
+                console.log(`📌 Cita #${index+1} - Paciente: ${appointment.paciente} - Día: ${dayDiff} - Hora: ${appointmentDate.getHours()}`);
                 
                 // Solo mostrar citas de lunes a jueves (0-3)
                 if (dayDiff >= 0 && dayDiff < 4) {
                     const hour = appointmentDate.getHours();
                     const dayIndex = dayDiff + 1; // 1 para lunes, 2 para martes, etc.
                     
-                    console.log(`Cita ${index+1}: ${appointment.paciente} - Día ${dayIndex}, Hora ${hour}`);
+                    // Buscar la celda correcta en el DOM
+                    const cellSelector = `.schedule-cell[data-hour="${hour}"][data-day="${dayIndex}"]`;
+                    const cell = document.querySelector(cellSelector);
                     
-                    // Encontrar la celda correcta
-                    const cell = document.querySelector(`.schedule-cell[data-hour="${hour}"][data-day="${dayIndex}"]`);
+                    if (!cell) {
+                        console.warn(`⚠️ No se encontró celda para día ${dayIndex}, hora ${hour} (selector: ${cellSelector})`);
+                        return;
+                    }
                     
-                    if (cell) {
-                        // Crear elemento de cita
-                        const appointmentEl = document.createElement('div');
-                        appointmentEl.className = `appointment ${appointment.tipoClase || ''} ${appointment.estudiante || 'estudiante1'}`;
-                        appointmentEl.dataset.id = appointment.id;
-                        
-                        // Añadir clase si es recurrente
-                        if (appointment.esRecurrente) {
-                            appointmentEl.classList.add('recurring');
-                        }
-                        
-                        // Determinar si mostrar el kinesiólogo (solo para sesiones)
-                        const showTherapist = appointment.tipoClase && appointment.tipoClase.startsWith('sesion-');
-                        
-                        // Contenido de la cita con icono
-                        let content = `
-                            <div class="appointment-title">${appointment.paciente || 'Sin nombre'}</div>
-                            <div class="appointment-type">${getAppointmentTypeIcon(appointment.tipoClase)} ${appointment.tipo || 'Sin tipo'}</div>
-                        `;
-                        
-                        if (showTherapist) {
-                            content += `<div class="appointment-therapist">${getTherapistName(appointment.terapeuta)}</div>`;
-                        }
-                        
-                        // Estudiante asignado - mostrar nombre completo en lugar del código
-                        const studentCode = appointment.estudiante || 'Sin asignar';
-                        const studentName = studentNames[studentCode] || studentCode;
-                        content += `<div class="student-badge">${studentName}</div>`;
-                        
-                        appointmentEl.innerHTML = content;
-                        
-                        // Indicador de estado si existe
-                        if (appointment.estado) {
-                            const statusEl = document.createElement('div');
-                            statusEl.className = `appointment-status ${appointment.estado}`;
-                            appointmentEl.appendChild(statusEl);
-                        }
-                        
-                        // Indicador web si aplica
-                        if (appointment.web) {
-                            const webEl = document.createElement('div');
-                            webEl.className = 'web-indicator';
-                            webEl.innerHTML = '🌐';
-                            appointmentEl.appendChild(webEl);
-                        }
-                        
-                        // Agregar a la celda
-                        cell.appendChild(appointmentEl);
-                        
-                        // Eventos para la cita
-                        appointmentEl.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const app = appointments.find(a => a.id === this.dataset.id);
-                            if (app) {
-                                // Si la cita ya pasó, mostrar modal de asistencia
-                                const today = new Date();
-                                if (app.fecha < today) {
-                                    if (isAdmin) {
-                                        openAttendanceModal(app);
-                                    } else {
-                                        viewAppointmentDetails(app);
-                                    }
+                    console.log(`✅ Celda encontrada para día ${dayIndex}, hora ${hour}`);
+                    
+                    // Crear elemento de cita
+                    const appointmentEl = document.createElement('div');
+                    appointmentEl.className = `appointment ${appointment.tipoClase || ''}`;
+                    
+                    // Añadir clase de estudiante
+                    if (appointment.estudiante) {
+                        appointmentEl.classList.add(appointment.estudiante);
+                    } else {
+                        appointmentEl.classList.add('estudiante1'); // Estudiante por defecto
+                    }
+                    
+                    // ID de la cita
+                    appointmentEl.dataset.id = appointment.id;
+                    
+                    // Si es recurrente
+                    if (appointment.esRecurrente) {
+                        appointmentEl.classList.add('recurring');
+                    }
+                    
+                    // Mostrar kinesiólogo para sesiones
+                    const showTherapist = appointment.tipoClase && appointment.tipoClase.startsWith('sesion-');
+                    
+                    // Contenido de la cita
+                    let content = `
+                        <div class="appointment-title">${appointment.paciente || 'Sin nombre'}</div>
+                        <div class="appointment-type">${getAppointmentTypeIcon(appointment.tipoClase)} ${appointment.tipo || 'Sin tipo'}</div>
+                    `;
+                    
+                    if (showTherapist) {
+                        content += `<div class="appointment-therapist">${getTherapistName(appointment.terapeuta)}</div>`;
+                    }
+                    
+                    // Estudiante asignado
+                    const studentCode = appointment.estudiante || 'Sin asignar';
+                    const studentName = studentNames[studentCode] || studentCode;
+                    content += `<div class="student-badge">${studentName}</div>`;
+                    
+                    appointmentEl.innerHTML = content;
+                    
+                    // Estado de la cita
+                    if (appointment.estado) {
+                        const statusEl = document.createElement('div');
+                        statusEl.className = `appointment-status ${appointment.estado}`;
+                        appointmentEl.appendChild(statusEl);
+                    }
+                    
+                    // Indicador web
+                    if (appointment.web) {
+                        const webEl = document.createElement('div');
+                        webEl.className = 'web-indicator';
+                        webEl.innerHTML = '🌐';
+                        appointmentEl.appendChild(webEl);
+                    }
+                    
+                    // Agregar a la celda
+                    cell.appendChild(appointmentEl);
+                    console.log(`✅ Cita #${index+1} añadida a la celda`);
+                    
+                    // Configurar eventos
+                    appointmentEl.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const app = appointments.find(a => a.id === this.dataset.id);
+                        if (app) {
+                            const today = new Date();
+                            if (app.fecha < today) {
+                                if (isAdmin) {
+                                    openAttendanceModal(app);
                                 } else {
-                                    // Si es una cita futura
-                                    if (isAdmin) {
-                                        openAppointmentModal(app);
-                                    } else {
-                                        viewAppointmentDetails(app);
-                                    }
+                                    viewAppointmentDetails(app);
+                                }
+                            } else {
+                                if (isAdmin) {
+                                    openAppointmentModal(app);
+                                } else {
+                                    viewAppointmentDetails(app);
                                 }
                             }
-                        });
-                        
-                        // Hacer que las citas sean arrastrables para administradores
-                        if (isAdmin) {
-                            appointmentEl.setAttribute('draggable', 'true');
-                            appointmentEl.addEventListener('dragstart', function(e) {
-                                e.dataTransfer.setData('text/plain', this.dataset.id);
-                            });
                         }
-                    } else {
-                        console.warn(`No se encontró celda para día ${dayIndex}, hora ${hour}`);
+                    });
+                    
+                    // Arrastrar y soltar
+                    if (isAdmin) {
+                        appointmentEl.setAttribute('draggable', 'true');
+                        appointmentEl.addEventListener('dragstart', function(e) {
+                            e.dataTransfer.setData('text/plain', this.dataset.id);
+                        });
                     }
                 } else {
-                    console.log(`Cita ${index+1} fuera del rango de la semana actual (diferencia: ${dayDiff} días)`);
+                    console.log(`⏩ Cita #${index+1} fuera del rango de la semana (dayDiff: ${dayDiff})`);
                 }
             } catch (error) {
-                console.error("Error al renderizar cita individual:", error, appointment);
+                console.error(`❌ Error al renderizar cita #${index+1}:`, error, appointment);
             }
         });
+        
+        console.log("✅ Renderizado de citas completado");
     } catch (error) {
-        console.error("Error al renderizar citas:", error);
-        showStatusMessage("Error al mostrar las citas", "error");
+        console.error("❌ Error general al renderizar citas:", error);
+        showStatusMessage("Error al mostrar las citas en la agenda", "error");
     }
 }
 
