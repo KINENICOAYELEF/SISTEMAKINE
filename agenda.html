@@ -2654,8 +2654,8 @@ function createHistoricalPatientStatsSection(historicalData, attendedData, misse
         rescheduled: rescheduledData[patient] || 0
     }));
     
-    // Ordenar por número de sesiones (descendente)
-    patientsArray.sort((a, b) => b.sessions - a.sessions);
+    // Ordenar por número de ASISTENCIAS (descendente)
+    patientsArray.sort((a, b) => b.attended - a.attended);
     
     // Crear tabla
     const table = document.createElement('table');
@@ -2705,21 +2705,24 @@ function createHistoricalPatientStatsSection(historicalData, attendedData, misse
         const missedCell = document.createElement('td');
         missedCell.textContent = patient.missed;
         
-        // Estado de evolución basado en número de sesiones
+        // Estado de evolución basado en ASISTENCIAS con nuevos umbrales
         const evolutionCell = document.createElement('td');
         let evolutionStatus = '';
         let statusColor = '';
         
-        if (patient.sessions === 1) {
+        if (patient.attended === 0) {
+            evolutionStatus = 'Sin asistencias';
+            statusColor = '#B0BEC5'; // Gris
+        } else if (patient.attended === 1) {
             evolutionStatus = 'Evaluación Inicial';
             statusColor = '#FFC107'; // Amarillo
-        } else if (patient.sessions >= 2 && patient.sessions <= 4) {
+        } else if (patient.attended >= 2 && patient.attended <= 14) {
             evolutionStatus = 'En Tratamiento';
             statusColor = '#2196F3'; // Azul
-        } else if (patient.sessions >= 5 && patient.sessions <= 8) {
+        } else if (patient.attended >= 15 && patient.attended <= 19) {
             evolutionStatus = 'Avanzado';
             statusColor = '#4CAF50'; // Verde
-        } else if (patient.sessions > 8) {
+        } else if (patient.attended >= 20) {
             evolutionStatus = 'Fase Final';
             statusColor = '#9C27B0'; // Púrpura
         }
@@ -2755,17 +2758,19 @@ function createHistoricalPatientStatsSection(historicalData, attendedData, misse
     summaryContainer.style.justifyContent = 'center';
     summaryContainer.style.gap = '15px';
     
+    // CORRECCIÓN: Actualizar categorías con nuevos umbrales
     const statusTypes = [
-        { name: 'Evaluación Inicial', criteria: 'pacientes con 1 sesión', color: '#FFC107' },
-        { name: 'En Tratamiento', criteria: 'pacientes con 2-4 sesiones', color: '#2196F3' },
-        { name: 'Avanzado', criteria: 'pacientes con 5-8 sesiones', color: '#4CAF50' },
-        { name: 'Fase Final', criteria: 'pacientes con más de 8 sesiones', color: '#9C27B0' }
+        { name: 'Evaluación Inicial', criteria: 'pacientes con 1 sesión asistida', color: '#FFC107' },
+        { name: 'En Tratamiento', criteria: 'pacientes con 2-14 sesiones asistidas', color: '#2196F3' },
+        { name: 'Avanzado', criteria: 'pacientes con 15-19 sesiones asistidas', color: '#4CAF50' },
+        { name: 'Fase Final', criteria: 'pacientes con 20+ sesiones asistidas', color: '#9C27B0' }
     ];
     
-    const initialCount = patientsArray.filter(p => p.sessions === 1).length;
-    const treatmentCount = patientsArray.filter(p => p.sessions >= 2 && p.sessions <= 4).length;
-    const advancedCount = patientsArray.filter(p => p.sessions >= 5 && p.sessions <= 8).length;
-    const finalCount = patientsArray.filter(p => p.sessions > 8).length;
+    // Contar pacientes por etapa basado en ASISTENCIAS
+    const initialCount = patientsArray.filter(p => p.attended === 1).length;
+    const treatmentCount = patientsArray.filter(p => p.attended >= 2 && p.attended <= 14).length;
+    const advancedCount = patientsArray.filter(p => p.attended >= 15 && p.attended <= 19).length;
+    const finalCount = patientsArray.filter(p => p.attended >= 20).length;
     
     const counts = [initialCount, treatmentCount, advancedCount, finalCount];
     
@@ -3410,11 +3415,11 @@ function exportStatisticsToPdf() {
         patientsArray.forEach(patient => {
             if (patient.attendedSessions === 1) {
                 patientStages.evaluation++;
-            } else if (patient.attendedSessions >= 2 && patient.attendedSessions <= 4) {
+            } else if (patient.attendedSessions >= 2 && patient.attendedSessions <= 14) {
                 patientStages.treatment++;
-            } else if (patient.attendedSessions >= 5 && patient.attendedSessions <= 8) {
+            } else if (patient.attendedSessions >= 15 && patient.attendedSessions <= 19) {
                 patientStages.advanced++;
-            } else if (patient.attendedSessions > 8) {
+            } else if (patient.attendedSessions >= 20) {
                 patientStages.final++;
             }
         });
@@ -3481,13 +3486,14 @@ function exportStatisticsToPdf() {
             // Determinar etapa basada en asistencias reales
             let stage;
             
+            // Calcular etapa de evolución
             if (patient.attendedSessions === 1) {
                 stage = 'Evaluación Inicial';
-            } else if (patient.attendedSessions >= 2 && patient.attendedSessions <= 4) {
+            } else if (patient.attendedSessions >= 2 && patient.attendedSessions <= 14) {
                 stage = 'En Tratamiento';
-            } else if (patient.attendedSessions >= 5 && patient.attendedSessions <= 8) {
+            } else if (patient.attendedSessions >= 15 && patient.attendedSessions <= 19) {
                 stage = 'Avanzado';
-            } else if (patient.attendedSessions > 8) {
+            } else if (patient.attendedSessions >= 20) {
                 stage = 'Fase Final';
             } else {
                 stage = 'Sin asistencias';
@@ -5475,20 +5481,20 @@ function createPatientEvolutionTableFixed(agendadasData, asistidasData) {
     // Agrupar pacientes por estado de evolución BASADO EN ASISTENCIAS
     const evolution = {
         'evaluacion': { count: 0, label: 'Evaluación Inicial', info: '1 sesión asistida', color: '#FFC107' },
-        'tratamiento': { count: 0, label: 'En Tratamiento', info: '2-4 sesiones asistidas', color: '#2196F3' },
-        'avanzado': { count: 0, label: 'Avanzado', info: '5-8 sesiones asistidas', color: '#4CAF50' },
-        'final': { count: 0, label: 'Fase Final', info: '9+ sesiones asistidas', color: '#9C27B0' }
+        'tratamiento': { count: 0, label: 'En Tratamiento', info: '2-14 sesiones asistidas', color: '#2196F3' },
+        'avanzado': { count: 0, label: 'Avanzado', info: '15-19 sesiones asistidas', color: '#4CAF50' },
+        'final': { count: 0, label: 'Fase Final', info: '20+ sesiones asistidas', color: '#9C27B0' }
     };
     
     // Contar pacientes por categoría BASADO EN ASISTENCIAS
     patientsArray.forEach(patient => {
         if (patient.attendedSessions === 1) {
             evolution.evaluacion.count++;
-        } else if (patient.attendedSessions >= 2 && patient.attendedSessions <= 4) {
+        } else if (patient.attendedSessions >= 2 && patient.attendedSessions <= 14) {
             evolution.tratamiento.count++;
-        } else if (patient.attendedSessions >= 5 && patient.attendedSessions <= 8) {
+        } else if (patient.attendedSessions >= 15 && patient.attendedSessions <= 19) {
             evolution.avanzado.count++;
-        } else if (patient.attendedSessions > 8) {
+        } else if (patient.attendedSessions >= 20) {
             evolution.final.count++;
         }
     });
@@ -5501,7 +5507,7 @@ function createPatientEvolutionTableFixed(agendadasData, asistidasData) {
     summaryBox.style.gap = '15px';
     summaryBox.style.margin = '20px 0';
     
-    // NUEVO: Mensaje aclaratorio
+    // Mensaje aclaratorio
     const clarificationMsg = document.createElement('div');
     clarificationMsg.style.flex = '1 1 100%';
     clarificationMsg.style.padding = '10px';
@@ -5611,21 +5617,21 @@ function createPatientEvolutionTableFixed(agendadasData, asistidasData) {
             const stageCell = document.createElement('td');
             let stage, color;
             
-            if (patient.attendedSessions === 1) {
+            if (patient.attendedSessions === 0) {
+                stage = 'Sin asistencias';
+                color = '#B0BEC5'; // Gris
+            } else if (patient.attendedSessions === 1) {
                 stage = 'Evaluación Inicial';
                 color = evolution.evaluacion.color;
-            } else if (patient.attendedSessions >= 2 && patient.attendedSessions <= 4) {
+            } else if (patient.attendedSessions >= 2 && patient.attendedSessions <= 14) {
                 stage = 'En Tratamiento';
                 color = evolution.tratamiento.color;
-            } else if (patient.attendedSessions >= 5 && patient.attendedSessions <= 8) {
+            } else if (patient.attendedSessions >= 15 && patient.attendedSessions <= 19) {
                 stage = 'Avanzado';
                 color = evolution.avanzado.color;
-            } else if (patient.attendedSessions > 8) {
+            } else if (patient.attendedSessions >= 20) {
                 stage = 'Fase Final';
                 color = evolution.final.color;
-            } else {
-                stage = 'Sin asistencias';
-                color = '#B0BEC5'; // Gris para sin asistencias
             }
             
             const badge = document.createElement('span');
