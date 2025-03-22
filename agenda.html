@@ -1018,7 +1018,50 @@
 
 .search-container button {
     padding: 8px 15px;
-}    
+}  
+        /* Añadir estos estilos al final de la sección de CSS */
+.stats-panel {
+    position: relative;
+    overflow: visible;
+    padding-bottom: 50px; /* Añadir espacio adicional abajo */
+}
+
+.student-stats-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    box-shadow: var(--shadow);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    z-index: 10; /* Aumentar para evitar solapamientos */
+}
+
+/* Mejorar separación entre secciones de estadísticas */
+.stats-section {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid var(--border);
+    clear: both; /* Evitar solapamientos con elementos flotantes */
+}
+
+h4.therapist-stats-title {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    clear: both;
+}
+
+/* Botones de exportación */
+.export-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+    position: relative;
+    z-index: 20; /* Asegurar que los botones estén encima */
+}
     </style>
 </head>
 <body>
