@@ -1942,7 +1942,7 @@ function loadAppointments() {
                 renderAppointments();
                 updateStatistics();
                 
-                // Cargar estadísticas históricas
+                // Cargar estadísticas históricas (solo una vez aquí)
                 loadHistoricalPatientStats();
                 
                 hideSpinner();
@@ -2618,16 +2618,6 @@ function createHistoricalPatientStatsSection(historicalData, attendedData, misse
     
     historicalSection.appendChild(summaryContainer);
 }
-
-// Llamar a esta función al inicializar la aplicación
-// Añadir esta línea al final de la función loadAppointments
-function loadAppointments() {
-    // ... código existente ...
-    
-    // Al final de la función, justo antes de hideSpinner():
-    loadHistoricalPatientStats();
-}
-
         
 // Nueva función para actualizar el gráfico de estudiantes con ambas métricas
 function updateStudentChart(uniquePatients, totalSessions) {
