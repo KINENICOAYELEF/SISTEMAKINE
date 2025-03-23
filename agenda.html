@@ -2358,18 +2358,28 @@ console.log("🔍 Iniciando renderizado de citas...");
                     
                     // Configurar eventos
                     appointmentEl.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const app = appointments.find(a => a.id === this.dataset.id);
-                        if (app) {
+                    e.stopPropagation();
+                    const app = appointments.find(a => a.id === this.dataset.id);
+                    if (app) {
+                        const today = new Date();
+                        if (app.fecha < today) {
+                            // Para citas pasadas
                             if (isAdmin) {
-                                // Si es administrador, siempre permite editar cualquier cita
+                                // Mostrar modal de asistencia por defecto
+                                openAttendanceModal(app);
+                            } else {
+                                viewAppointmentDetails(app);
+                            }
+                        } else {
+                            // Para citas futuras o del día actual
+                            if (isAdmin) {
                                 openAppointmentModal(app);
                             } else {
-                                // Si no es administrador, solo mostrar detalles
                                 viewAppointmentDetails(app);
                             }
                         }
-                    });
+                    }
+                });
                     
                     // Arrastrar y soltar
                     if (isAdmin) {
@@ -4321,6 +4331,28 @@ function saveAppointment() {
 // Modificar la función deleteAppointment para manejar citas recurrentes
 function deleteAppointment() {
     if (!editingAppointmentId) {
+    showStatusMessage("No hay ninguna cita seleccionada para eliminar", "warning");
+    return;
+    }
+    
+    // Obtener la cita actual
+    const currentAppointment = appointments.find(a => a.id === editingAppointmentId);
+    if (!currentAppointment) {
+        showStatusMessage("No se encontró la cita para eliminar", "error");
+        return;
+    }
+    
+    // Mensaje específico si es cita pasada
+    let confirmMessage = '¿Estás seguro de que deseas eliminar esta cita?';
+    if (currentAppointment.fecha < new Date()) {
+        confirmMessage = '⚠️ ADVERTENCIA: Está eliminando una cita PASADA. Esta acción es irreversible y puede afectar las estadísticas históricas. ¿Está completamente seguro?';
+    }
+    
+    // Pedir confirmación
+    if (!confirm(confirmMessage)) {
+        return;
+    }
+    if (!editingAppointmentId) {
         showStatusMessage("No hay ninguna cita seleccionada para eliminar", "warning");
         return;
     }
@@ -4913,6 +4945,61 @@ function openAttendanceModal(appointment) {
     } catch (error) {
         console.error("Error al abrir modal de asistencia:", error);
         showStatusMessage("Error al abrir el formulario de asistencia", "error");
+    }
+        // Añadir botón para editar cita pasada (nuevo)
+    const editPastButton = document.createElement('button');
+    editPastButton.className = 'button save-btn';
+    editPastButton.style.marginRight = '5px';
+    editPastButton.textContent = 'Editar Cita';
+    editPastButton.onclick = function() {
+        attendanceModal.style.display = 'none'; // Cerrar modal de asistencia
+        openAppointmentModal(appointment); // Abrir modal de edición
+    };
+    
+    // Agregar el botón al footer del modal
+    const modalFooter = document.querySelector('#attendance-modal .modal-footer');
+    if (modalFooter) {
+        // Insertar al principio del footer
+        modalFooter.insertBefore(editPastButton, modalFooter.firstChild);
+    }
+
+
+        // Añadir mensaje informativo si la cita ya tiene un estado
+    if (appointment.estado) {
+        const statusInfo = document.createElement('div');
+        statusInfo.style.marginTop = '15px';
+        statusInfo.style.paddingTop = '10px';
+        statusInfo.style.borderTop = '1px solid #eee';
+        
+        let statusText = '';
+        let statusColor = '';
+        
+        switch(appointment.estado) {
+            case 'attended':
+                statusText = 'Paciente asistió a esta cita';
+                statusColor = 'var(--success)';
+                break;
+            case 'missed':
+                statusText = 'Paciente no asistió a esta cita';
+                statusColor = 'var(--error)';
+                break;
+            case 'rescheduled':
+                statusText = 'Esta cita fue reprogramada';
+                statusColor = 'var(--warning)';
+                break;
+        }
+        
+        statusInfo.innerHTML = `
+            <p style="color: ${statusColor}; font-weight: 500;">
+                <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: ${statusColor}; margin-right: 5px;"></span>
+                ${statusText}
+            </p>
+        `;
+        
+        const modalBody = document.querySelector('#attendance-modal .modal-body');
+        if (modalBody) {
+            modalBody.appendChild(statusInfo);
+        }
     }
 }
 
