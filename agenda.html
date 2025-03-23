@@ -2361,19 +2361,12 @@ console.log("🔍 Iniciando renderizado de citas...");
                         e.stopPropagation();
                         const app = appointments.find(a => a.id === this.dataset.id);
                         if (app) {
-                            const today = new Date();
-                            if (app.fecha < today) {
-                                if (isAdmin) {
-                                    openAttendanceModal(app);
-                                } else {
-                                    viewAppointmentDetails(app);
-                                }
+                            if (isAdmin) {
+                                // Si es administrador, siempre permite editar cualquier cita
+                                openAppointmentModal(app);
                             } else {
-                                if (isAdmin) {
-                                    openAppointmentModal(app);
-                                } else {
-                                    viewAppointmentDetails(app);
-                                }
+                                // Si no es administrador, solo mostrar detalles
+                                viewAppointmentDetails(app);
                             }
                         }
                     });
