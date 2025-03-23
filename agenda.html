@@ -3906,17 +3906,59 @@ function openAppointmentModal(appointment, hour, day) {
     }
 }
 
-// Cerrar modal de citas
 function closeAppointmentModal() {
     appointmentModal.style.display = 'none';
     editingAppointmentId = null;
     
-    // Limpiar formulario
+    // Limpiar TODOS los campos del formulario
     document.getElementById('patient-name').value = '';
     document.getElementById('appointment-notes').value = '';
     document.getElementById('is-web').checked = false;
     document.getElementById('is-recurring').checked = false;
     document.getElementById('recurring-details').style.display = 'none';
+    
+    // Limpiar campos adicionales que faltaban
+    document.getElementById('patient-comuna').value = '';
+    document.getElementById('patient-phone').value = '';
+    document.getElementById('patient-email').value = '';
+    
+    // Restablecer tipo de cita al valor predeterminado (primer option)
+    const typeSelect = document.getElementById('appointment-type');
+    if (typeSelect && typeSelect.options.length > 0) {
+        typeSelect.selectedIndex = 0;
+    }
+    
+    // Restablecer duración al valor predeterminado
+    const durationSelect = document.getElementById('appointment-duration');
+    if (durationSelect && durationSelect.options.length > 0) {
+        durationSelect.selectedIndex = 0; // Generalmente 60 minutos
+    }
+    
+    // Restablecer estudiante al valor predeterminado
+    const studentSelect = document.getElementById('student');
+    if (studentSelect && studentSelect.options.length > 0) {
+        studentSelect.selectedIndex = 0;
+    }
+    
+    // Desmarcar todos los días de la semana para recurrencia
+    document.querySelectorAll('input[name="weekday"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    
+    // Limpiar la fecha fin de recurrencia
+    const recurrenceEndInput = document.getElementById('recurrence-end');
+    if (recurrenceEndInput) {
+        recurrenceEndInput.value = '';
+    }
+    
+    // Ocultar sección de recurrencia
+    const recurrenceOptions = document.getElementById('recurrence-options');
+    if (recurrenceOptions) {
+        recurrenceOptions.style.display = 'none';
+    }
+    
+    // Esto ayuda a evitar problemas de memoria y referencias persistentes
+    console.log("Formulario limpiado completamente");
 }
 
 // Guardar cita
