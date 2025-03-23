@@ -16643,6 +16643,541 @@
     </div>
   </div>
 
+            <!-- SECCIÓN DE EVALUACIÓN DE LONGITUD/EXTENSIBILIDAD MUSCULAR -->
+<h4>6.5 Evaluación de Longitud/Extensibilidad Muscular</h4>
+<div class="cuestionarios-acordeon">
+  <div class="cuestionario-item">
+    <div class="cuestionario-header" onclick="toggleCuestionario('longitud-muscular-content')">
+      <h4><i class="fas fa-plus-circle"></i> Evaluación de Longitud/Extensibilidad Muscular</h4>
+      <div class="resultado-badge" id="longitud-muscular-badge">No completado</div>
+    </div>
+    <div class="cuestionario-content" id="longitud-muscular-content" style="display: none;">
+      <!-- Notas generales y filtros -->
+      <div class="form-row mb-4">
+        <div class="form-col form-col-md-9">
+          <div class="form-group">
+            <label for="notas_longitud_muscular" class="form-label">Notas generales de evaluación</label>
+            <textarea id="notas_longitud_muscular" name="notas_longitud_muscular" class="form-control" rows="2" placeholder="Describa detalles generales o contexto de la evaluación..."></textarea>
+          </div>
+        </div>
+        <div class="form-col form-col-md-3">
+          <div class="form-group">
+            <label for="filtro_region" class="form-label">Filtrar por región</label>
+            <select id="filtro_region" class="form-select" onchange="filtrarPruebasPorRegion()">
+              <option value="todas">Todas las regiones</option>
+              <option value="mi">Miembro Inferior</option>
+              <option value="ms">Miembro Superior</option>
+              <option value="ct">Columna y Tronco</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de referencia rápida de resultados -->
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Resumen de Resultados</h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Test</th>
+                  <th>Resultado Izquierdo</th>
+                  <th>Resultado Derecho</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-resumen-longitud">
+                <tr>
+                  <td colspan="4" class="text-center">Complete la evaluación para ver el resumen</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- MIEMBRO INFERIOR -->
+      <div class="card mb-4 region-card" data-region="mi">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Miembro Inferior</h5>
+        </div>
+        <div class="card-body">
+          <!-- Test de Thomas -->
+          <div class="test-container mb-4 pb-3 border-bottom">
+            <div class="test-header">
+              <h6 class="test-title">Test de Thomas (psoas ilíaco, recto femoral y TFL)</h6>
+              <button type="button" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Evalúa la flexibilidad del psoas ilíaco, recto femoral y tensor de la fascia lata. Paciente en decúbito supino, flexiona cadera no evaluada hacia el pecho. Se observa si la pierna evaluada se eleva del plano de la camilla o si la rodilla se extiende.">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+            
+            <div class="form-row mt-3">
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Psoas ilíaco izquierdo</label>
+                  <div class="input-group">
+                    <input type="number" id="thomas_psoas_izq" name="thomas_psoas_izq" class="form-control" value="0" min="-30" max="30" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Elevación sobre plano (-) o por debajo (+)</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Psoas ilíaco derecho</label>
+                  <div class="input-group">
+                    <input type="number" id="thomas_psoas_der" name="thomas_psoas_der" class="form-control" value="0" min="-30" max="30" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Elevación sobre plano (-) o por debajo (+)</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Recto femoral izquierdo</label>
+                  <div class="input-group">
+                    <input type="number" id="thomas_recto_izq" name="thomas_recto_izq" class="form-control" value="90" min="0" max="150" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Ángulo de flexión rodilla (90° normal)</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Recto femoral derecho</label>
+                  <div class="input-group">
+                    <input type="number" id="thomas_recto_der" name="thomas_recto_der" class="form-control" value="90" min="0" max="150" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Ángulo de flexión rodilla (90° normal)</small>
+                </div>
+              </div>
+            </div>
+            
+            <div class="test-status mt-2">
+              <div class="test-result test-result-izq" id="thomas-result-izq">
+                <span class="badge bg-success">Normal</span>
+              </div>
+              <div class="test-result test-result-der" id="thomas-result-der">
+                <span class="badge bg-success">Normal</span>
+              </div>
+            </div>
+            
+            <div class="form-row mt-2">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="thomas_notas" class="form-label">Notas específicas</label>
+                  <textarea id="thomas_notas" name="thomas_notas" class="form-control" rows="1" placeholder="Observaciones adicionales sobre el test..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Test de Ober -->
+          <div class="test-container mb-4 pb-3 border-bottom">
+            <div class="test-header">
+              <h6 class="test-title">Test de Ober (TFL/banda iliotibial)</h6>
+              <button type="button" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Evalúa la tensión de la banda iliotibial y TFL. Paciente en decúbito lateral, con la pierna inferior flexionada y la superior en abducción, extensión y posteriormente se deja caer en aducción.">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+            
+            <div class="form-row mt-3">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Aducción cadera izquierda</label>
+                  <div class="input-group">
+                    <input type="number" id="ober_izq" name="ober_izq" class="form-control" value="0" min="-30" max="30" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Grados de aducción por debajo del plano horizontal</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Aducción cadera derecha</label>
+                  <div class="input-group">
+                    <input type="number" id="ober_der" name="ober_der" class="form-control" value="0" min="-30" max="30" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Grados de aducción por debajo del plano horizontal</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Criterio de normalidad</label>
+                  <select id="ober_criterio" class="form-select" onchange="actualizarResultadosLongitud()">
+                    <option value="liberal">Liberal (aducción ≥ -5°)</option>
+                    <option value="conservador" selected>Conservador (aducción ≥ -10°)</option>
+                    <option value="deportivo">Deportivo (aducción ≥ -15°)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="test-status mt-2">
+              <div class="test-result test-result-izq" id="ober-result-izq">
+                <span class="badge bg-success">Normal</span>
+              </div>
+              <div class="test-result test-result-der" id="ober-result-der">
+                <span class="badge bg-success">Normal</span>
+              </div>
+            </div>
+            
+            <div class="form-row mt-2">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="ober_notas" class="form-label">Notas específicas</label>
+                  <textarea id="ober_notas" name="ober_notas" class="form-control" rows="1" placeholder="Observaciones adicionales sobre el test..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test del ángulo poplíteo -->
+          <div class="test-container mb-4 pb-3 border-bottom">
+            <div class="test-header">
+              <h6 class="test-title">Test del ángulo poplíteo (isquiotibiales)</h6>
+              <button type="button" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Evalúa la extensibilidad de los isquiotibiales. Paciente en decúbito supino, cadera y rodilla a 90°, se extiende la rodilla hasta la resistencia o aparición de dolor.">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+            
+            <div class="form-row mt-3">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Ángulo poplíteo izquierdo</label>
+                  <div class="input-group">
+                    <input type="number" id="popliteo_izq" name="popliteo_izq" class="form-control" value="20" min="0" max="90" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Grados para extensión completa (0° óptimo)</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Ángulo poplíteo derecho</label>
+                  <div class="input-group">
+                    <input type="number" id="popliteo_der" name="popliteo_der" class="form-control" value="20" min="0" max="90" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Grados para extensión completa (0° óptimo)</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Criterio de normalidad</label>
+                  <select id="popliteo_criterio" class="form-select" onchange="actualizarResultadosLongitud()">
+                    <option value="general">General (≤ 20°)</option>
+                    <option value="deportivo" selected>Deportivo (≤ 15°)</option>
+                    <option value="alto_rendimiento">Alto rendimiento (≤ 10°)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="test-status mt-2">
+              <div class="test-result test-result-izq" id="popliteo-result-izq">
+                <span class="badge bg-success">Normal</span>
+              </div>
+              <div class="test-result test-result-der" id="popliteo-result-der">
+                <span class="badge bg-success">Normal</span>
+              </div>
+            </div>
+            
+            <div class="form-row mt-2">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="popliteo_notas" class="form-label">Notas específicas</label>
+                  <textarea id="popliteo_notas" name="popliteo_notas" class="form-control" rows="1" placeholder="Observaciones adicionales sobre el test..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test 90-90 para isquiotibiales -->
+          <div class="test-container mb-4 pb-3 border-bottom">
+            <div class="test-header">
+              <h6 class="test-title">Test 90-90 para isquiotibiales</h6>
+              <button type="button" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Evalúa la extensibilidad de los isquiotibiales con alta fiabilidad. Paciente en decúbito supino, cadera y rodilla a 90°, se extiende activamente la rodilla hasta el máximo.">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+            
+            <div class="form-row mt-3">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Extensión izquierda</label>
+                  <div class="input-group">
+                    <input type="number" id="test9090_izq" name="test9090_izq" class="form-control" value="0" min="-45" max="45" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Grados de extensión de rodilla desde 90° (- falta extensión)</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Extensión derecha</label>
+                  <div class="input-group">
+                    <input type="number" id="test9090_der" name="test9090_der" class="form-control" value="0" min="-45" max="45" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Grados de extensión de rodilla desde 90° (- falta extensión)</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Criterio de normalidad</label>
+                  <select id="test9090_criterio" class="form-select" onchange="actualizarResultadosLongitud()">
+                    <option value="general">General (≥ -20°)</option>
+                    <option value="deportivo" selected>Deportivo (≥ -15°)</option>
+                    <option value="alto_rendimiento">Alto rendimiento (≥ -10°)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="test-status mt-2">
+              <div class="test-result test-result-izq" id="test9090-result-izq">
+                <span class="badge bg-success">Normal</span>
+              </div>
+              <div class="test-result test-result-der" id="test9090-result-der">
+                <span class="badge bg-success">Normal</span>
+              </div>
+            </div>
+            
+            <div class="form-row mt-2">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="test9090_notas" class="form-label">Notas específicas</label>
+                  <textarea id="test9090_notas" name="test9090_notas" class="form-control" rows="1" placeholder="Observaciones adicionales sobre el test..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test de Silfverskiöld -->
+          <div class="test-container mb-4 pb-3 border-bottom">
+            <div class="test-header">
+              <h6 class="test-title">Test de Silfverskiöld (gastrocnemios vs sóleo)</h6>
+              <button type="button" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Diferencia restricción de gastrocnemios vs sóleo. Se mide la dorsiflexión de tobillo con rodilla extendida y luego flexionada.">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+            
+            <div class="form-row mt-3">
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Rodilla extendida izq.</label>
+                  <div class="input-group">
+                    <input type="number" id="silfverskiold_ext_izq" name="silfverskiold_ext_izq" class="form-control" value="10" min="-20" max="30" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Grados de dorsiflexión (normal ≥ 10°)</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Rodilla extendida der.</label>
+                  <div class="input-group">
+                    <input type="number" id="silfverskiold_ext_der" name="silfverskiold_ext_der" class="form-control" value="10" min="-20" max="30" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Grados de dorsiflexión (normal ≥ 10°)</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Rodilla flexionada izq.</label>
+                  <div class="input-group">
+                    <input type="number" id="silfverskiold_flex_izq" name="silfverskiold_flex_izq" class="form-control" value="20" min="-10" max="40" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Grados de dorsiflexión (normal ≥ 20°)</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Rodilla flexionada der.</label>
+                  <div class="input-group">
+                    <input type="number" id="silfverskiold_flex_der" name="silfverskiold_flex_der" class="form-control" value="20" min="-10" max="40" step="1" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">°</span>
+                  </div>
+                  <small class="form-text text-muted">Grados de dorsiflexión (normal ≥ 20°)</small>
+                </div>
+              </div>
+            </div>
+            
+            <div class="test-status mt-2">
+              <div class="test-result test-result-izq" id="silfverskiold-result-izq">
+                <span class="badge bg-success">Normal</span>
+              </div>
+              <div class="test-result test-result-der" id="silfverskiold-result-der">
+                <span class="badge bg-success">Normal</span>
+              </div>
+            </div>
+            
+            <div class="form-row mt-2">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="silfverskiold_notas" class="form-label">Notas específicas</label>
+                  <textarea id="silfverskiold_notas" name="silfverskiold_notas" class="form-control" rows="1" placeholder="Observaciones adicionales sobre el test..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test de Lunge para dorsiflexión de tobillo -->
+          <div class="test-container mb-4 pb-3 border-bottom">
+            <div class="test-header">
+              <h6 class="test-title">Test de Lunge para dorsiflexión de tobillo</h6>
+              <button type="button" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Evalúa la dorsiflexión funcional del tobillo. Paciente en bipedestación, realiza lunge adelantando el pie a evaluar, se mide la distancia máxima del pie a la pared manteniendo el talón apoyado.">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+            
+            <div class="form-row mt-3">
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Distancia pie-pared izquierdo</label>
+                  <div class="input-group">
+                    <input type="number" id="lunge_izq" name="lunge_izq" class="form-control" value="10" min="0" max="25" step="0.5" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">cm</span>
+                  </div>
+                  <small class="form-text text-muted">Distancia máxima con talón apoyado</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Distancia pie-pared derecho</label>
+                  <div class="input-group">
+                    <input type="number" id="lunge_der" name="lunge_der" class="form-control" value="10" min="0" max="25" step="0.5" onchange="actualizarResultadosLongitud()">
+                    <span class="input-group-text">cm</span>
+                  </div>
+                  <small class="form-text text-muted">Distancia máxima con talón apoyado</small>
+                </div>
+              </div>
+              <div class="form-col form-col-md-4">
+                <div class="form-group">
+                  <label class="form-label">Criterio de normalidad</label>
+                  <select id="lunge_criterio" class="form-select" onchange="actualizarResultadosLongitud()">
+                    <option value="general">General (≥ 8 cm)</option>
+                    <option value="deportivo" selected>Deportivo (≥ 10 cm)</option>
+                    <option value="alto_rendimiento">Alto rendimiento (≥ 12 cm)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="test-status mt-2">
+              <div class="test-result test-result-izq" id="lunge-result-izq">
+                <span class="badge bg-success">Normal</span>
+              </div>
+              <div class="test-result test-result-der" id="lunge-result-der">
+                <span class="badge bg-success">Normal</span>
+              </div>
+            </div>
+            
+            <div class="form-row mt-2">
+              <div class="form-col form-col-md-12">
+                <div class="form-group">
+                  <label for="lunge_notas" class="form-label">Notas específicas</label>
+                  <textarea id="lunge_notas" name="lunge_notas" class="form-control" rows="1" placeholder="Observaciones adicionales sobre el test..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Continuar con los otros tests de Miembro Inferior... -->
+          <!-- Test de extensibilidad de aductores en sedestación -->
+          <!-- Test de extensibilidad del piramidal/piriforme -->
+          <!-- Test de extensibilidad de los rotadores de cadera -->
+        </div>
+      </div>
+
+      <!-- MIEMBRO SUPERIOR -->
+      <div class="card mb-4 region-card" data-region="ms">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Miembro Superior</h5>
+        </div>
+        <div class="card-body">
+          <!-- Implementar los tests de miembro superior aquí, siguiendo el mismo patrón -->
+          <!-- Test de longitud de pectorales -->
+          <!-- Test de longitud del dorsal ancho -->
+          <!-- Test de extensibilidad del trapecio superior -->
+          <!-- Test de movilidad glenohumeral posterior -->
+          <!-- Test de Apley (Scratch test) -->
+          <!-- Test de extensibilidad de flexores de muñeca -->
+          <!-- Test de extensibilidad de los rotadores externos del hombro -->
+        </div>
+      </div>
+
+      <!-- COLUMNA Y TRONCO -->
+      <div class="card mb-4 region-card" data-region="ct">
+        <div class="card-header bg-warning text-dark">
+          <h5 class="mb-0">Columna y Tronco</h5>
+        </div>
+        <div class="card-body">
+          <!-- Implementar los tests de columna y tronco aquí, siguiendo el mismo patrón -->
+          <!-- Test de extensibilidad de la cadena posterior (Sit & Reach modificado) -->
+          <!-- Test de extensibilidad de la cadena anterior (Thomas modificado) -->
+          <!-- Test de rotación torácica en sedestación -->
+        </div>
+      </div>
+
+      <!-- INTERPRETACIÓN CLÍNICA Y RECOMENDACIONES -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Interpretación Clínica y Recomendaciones</h5>
+        </div>
+        <div class="card-body">
+          <div id="resumen_longitud" class="alert alert-info">
+            <strong><i class="fas fa-clipboard-check"></i> Estado general:</strong> Complete la evaluación para obtener un resumen clínico.
+          </div>
+          
+          <div id="interpretacion_longitud" class="mb-3">
+            <div class="interpretacion-clinica-container">
+              <h6>Interpretación Clínica:</h6>
+              <div class="interpretacion-clinica" id="interpretacion-longitud-texto">
+                Complete la evaluación para obtener la interpretación clínica.
+              </div>
+            </div>
+          </div>
+          
+          <div id="implicaciones_biomecanicas" class="mb-3">
+            <div class="implicaciones-container">
+              <h6>Implicaciones Biomecánicas:</h6>
+              <div class="implicaciones" id="implicaciones-texto">
+                Complete la evaluación para obtener las implicaciones biomecánicas.
+              </div>
+            </div>
+          </div>
+          
+          <div id="recomendaciones_longitud" class="mb-3">
+            <div class="recomendaciones-container">
+              <h6>Recomendaciones para el Plan de Tratamiento:</h6>
+              <div class="recomendaciones" id="recomendaciones-longitud-texto">
+                Complete la evaluación para obtener recomendaciones para el plan de tratamiento.
+              </div>
+            </div>
+          </div>
+          
+          <div id="consideraciones_adicionales_longitud" class="mb-3">
+            <div class="consideraciones-container">
+              <h6>Consideraciones Adicionales para la Evaluación:</h6>
+              <div class="consideraciones" id="consideraciones-adicionales-texto">
+                Complete la evaluación para obtener consideraciones adicionales.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
             <!-- Evaluación Neural -->
 <div class="cuestionario-item">
   <div class="cuestionario-header" onclick="toggleCuestionario('evaluacion-neural-content')">
