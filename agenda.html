@@ -1193,6 +1193,17 @@ h4.therapist-stats-title {
         margin-bottom: 5px;
     }
 }
+        .selected-period {
+    font-weight: bold;
+    box-shadow: 0 0 0 2px rgba(45, 63, 224, 0.5);
+}
+
+.time-period-selector {
+    background-color: var(--surface);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
     </style>
 </head>
 <body>
@@ -1337,6 +1348,28 @@ h4.therapist-stats-title {
         
         <div class="stats-panel">
             <h3 class="stats-title">Estadísticas</h3>
+            <div class="time-period-selector" style="margin-bottom: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="weekly-stats-btn" class="button save-btn selected-period">Estadísticas Semanales</button>
+                <button id="monthly-stats-btn" class="button cancel-btn">Estadísticas Mensuales</button>
+                <select id="month-selector" style="padding: 8px; border-radius: 4px; display: none;">
+                    <option value="0">Enero</option>
+                    <option value="1">Febrero</option>
+                    <option value="2">Marzo</option>
+                    <option value="3">Abril</option>
+                    <option value="4">Mayo</option>
+                    <option value="5">Junio</option>
+                    <option value="6">Julio</option>
+                    <option value="7">Agosto</option>
+                    <option value="8">Septiembre</option>
+                    <option value="9">Octubre</option>
+                    <option value="10">Noviembre</option>
+                    <option value="11">Diciembre</option>
+                </select>
+                <select id="year-selector" style="padding: 8px; border-radius: 4px; display: none;">
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                </select>
+            </div>
             
             <div class="stats-grid">
                 <div class="stat-box">
@@ -2100,6 +2133,149 @@ function loadAppointments() {
     }
 }
 
+       // Variable para almacenar el modo actual (semanal o mensual)
+let statsMode = 'weekly';
+
+// Función para cargar citas de un mes específico
+function loadMonthlyAppointments(year, month) {
+    showSpinner();
+    
+    // Crear fecha de inicio y fin del mes
+    const startOfMonth = new Date(year, month, 1);
+    const endOfMonth = new Date(year, month + 1, 0); // El día 0 del mes siguiente es el último día del mes actual
+    
+    try {
+        // Consulta a Firestore sin filtros de fecha (traemos todas y filtramos en memoria)
+        db.collection('citas').get()
+            .then((querySnapshot) => {
+                appointments = [];
+                
+                querySnapshot.forEach((doc) => {
+                    try {
+                        // Convertir datos a formato utilizable
+                        const data = doc.data();
+                        
+                        // Convertir el campo fecha a un objeto Date
+                        let appointmentDate;
+                        if (data.fecha && data.fecha.toDate) {
+                            appointmentDate = data.fecha.toDate();
+                        } else if (data.fecha) {
+                            appointmentDate = new Date(data.fecha);
+                        } else {
+                            // Si no hay fecha, saltarse esta cita
+                            console.warn("Cita sin fecha encontrada, ID:", doc.id);
+                            return;
+                        }
+                        
+                        // Filtrar solo las citas de este mes
+                        if (appointmentDate >= startOfMonth && appointmentDate <= endOfMonth) {
+                            const appointment = {
+                                id: doc.id,
+                                ...data,
+                                fecha: appointmentDate
+                            };
+                            
+                            appointments.push(appointment);
+                        }
+                    } catch (error) {
+                        console.error("Error procesando cita individual:", error);
+                    }
+                });
+                
+                console.log(`Se cargaron ${appointments.length} citas para el mes de ${getMonthName(month)} de ${year}`);
+                
+                // Actualizar estadísticas con los datos mensuales
+                updateStatistics(true); // El parámetro true indica que son estadísticas mensuales
+                updateMonthDisplay(month, year);
+                
+                // No renderizamos las citas en la agenda semanal cuando vemos estadísticas mensuales
+                hideSpinner();
+            })
+            .catch((error) => {
+                console.error("Error al cargar citas mensuales:", error);
+                showStatusMessage("Error al cargar citas mensuales.", "error");
+                hideSpinner();
+            });
+    } catch (error) {
+        console.error("Error crítico al cargar citas mensuales:", error);
+        showStatusMessage("Error de conexión al cargar citas mensuales.", "error");
+        hideSpinner();
+    }
+}
+
+// Actualizar la visualización del mes seleccionado
+function updateMonthDisplay(month, year) {
+    const statsTitle = document.querySelector('.stats-title');
+    if (statsTitle) {
+        statsTitle.textContent = `Estadísticas: ${getMonthName(month)} ${year}`;
+    }
+}
+
+// Configurar selectores de mes y año
+function setupTimePeriodSelectors() {
+    const weeklyBtn = document.getElementById('weekly-stats-btn');
+    const monthlyBtn = document.getElementById('monthly-stats-btn');
+    const monthSelector = document.getElementById('month-selector');
+    const yearSelector = document.getElementById('year-selector');
+    
+    if (!weeklyBtn || !monthlyBtn || !monthSelector || !yearSelector) return;
+    
+    // Establecer mes y año actuales como valores predeterminados
+    const currentDate = new Date();
+    monthSelector.value = currentDate.getMonth();
+    yearSelector.value = currentDate.getFullYear();
+    
+    // Botón de estadísticas semanales
+    weeklyBtn.addEventListener('click', function() {
+        statsMode = 'weekly';
+        weeklyBtn.classList.add('selected-period');
+        weeklyBtn.classList.remove('cancel-btn');
+        weeklyBtn.classList.add('save-btn');
+        
+        monthlyBtn.classList.remove('selected-period');
+        monthlyBtn.classList.add('cancel-btn');
+        monthlyBtn.classList.remove('save-btn');
+        
+        monthSelector.style.display = 'none';
+        yearSelector.style.display = 'none';
+        
+        // Cargar citas de la semana actual
+        loadAppointments();
+    });
+    
+    // Botón de estadísticas mensuales
+    monthlyBtn.addEventListener('click', function() {
+        statsMode = 'monthly';
+        monthlyBtn.classList.add('selected-period');
+        monthlyBtn.classList.remove('cancel-btn');
+        monthlyBtn.classList.add('save-btn');
+        
+        weeklyBtn.classList.remove('selected-period');
+        weeklyBtn.classList.add('cancel-btn');
+        weeklyBtn.classList.remove('save-btn');
+        
+        monthSelector.style.display = 'block';
+        yearSelector.style.display = 'block';
+        
+        // Cargar citas del mes seleccionado
+        loadMonthlyAppointments(parseInt(yearSelector.value), parseInt(monthSelector.value));
+    });
+    
+    // Cambio de mes
+    monthSelector.addEventListener('change', function() {
+        if (statsMode === 'monthly') {
+            loadMonthlyAppointments(parseInt(yearSelector.value), parseInt(this.value));
+        }
+    });
+    
+    // Cambio de año
+    yearSelector.addEventListener('change', function() {
+        if (statsMode === 'monthly') {
+            loadMonthlyAppointments(parseInt(this.value), parseInt(monthSelector.value));
+        }
+    });
+} 
+        
         // Función para normalizar el nombre de un paciente (para comparaciones)
 function normalizePatientName(name) {
     return name.toLowerCase().trim().replace(/\s+/g, ' ');
