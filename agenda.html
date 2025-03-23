@@ -2100,6 +2100,98 @@ function loadAppointments() {
     }
 }
 
+        // Función para normalizar el nombre de un paciente (para comparaciones)
+function normalizePatientName(name) {
+    return name.toLowerCase().trim().replace(/\s+/g, ' ');
+}
+
+// Función para actualizar todas las citas futuras de un paciente
+function updateFutureAppointmentsForPatient(patientName, updatedData) {
+    if (!patientName) return Promise.resolve();
+    
+    showSpinner();
+    console.log(`Actualizando datos del paciente "${patientName}" en citas futuras...`);
+    
+    // Normalizar el nombre para búsqueda insensible a mayúsculas/minúsculas
+    const normalizedName = normalizePatientName(patientName);
+    
+    // Obtener fecha actual para filtrar solo citas futuras
+    const now = new Date();
+    
+    // Consultar todas las citas futuras (no podemos filtrar por nombre normalizado en Firestore)
+    return db.collection('citas')
+        .where('fecha', '>', now)
+        .get()
+        .then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                console.log(`No se encontraron citas futuras`);
+                return Promise.resolve();
+            }
+            
+            // Filtrar manualmente por nombre normalizado
+            const matchingDocs = [];
+            querySnapshot.forEach(doc => {
+                const data = doc.data();
+                if (data.paciente && normalizePatientName(data.paciente) === normalizedName) {
+                    matchingDocs.push(doc);
+                }
+            });
+            
+            if (matchingDocs.length === 0) {
+                console.log(`No se encontraron citas futuras para ${patientName}`);
+                return Promise.resolve();
+            }
+            
+            console.log(`Se encontraron ${matchingDocs.length} citas futuras para actualizar`);
+            
+            // Crear batch para actualización masiva
+            const batch = db.batch();
+            let updatedCount = 0;
+            
+            matchingDocs.forEach(doc => {
+                // Solo actualizar datos de contacto y detalles personales
+                // (no fechas, estudiantes, etc.)
+                const updateFields = {};
+                
+                if (updatedData.telefono !== undefined) updateFields.telefono = updatedData.telefono;
+                if (updatedData.correo !== undefined) updateFields.correo = updatedData.correo;
+                if (updatedData.comuna !== undefined) updateFields.comuna = updatedData.comuna;
+                
+                // Añadir registro en historial
+                updateFields.historial = firebase.firestore.FieldValue.arrayUnion({
+                    accion: 'actualizacion_datos_contacto',
+                    usuario: currentUser ? currentUser.email : 'sistema',
+                    usuarioId: currentUser ? currentUser.uid : 'sistema',
+                    fecha: new Date(),
+                    detalles: 'Actualización automática de datos de contacto'
+                });
+                
+                // Solo actualizar si hay campos para actualizar
+                if (Object.keys(updateFields).length > 0) {
+                    batch.update(doc.ref, updateFields);
+                    updatedCount++;
+                }
+            });
+            
+            // Ejecutar batch solo si hay actualizaciones
+            if (updatedCount > 0) {
+                return batch.commit().then(() => {
+                    console.log(`Actualizadas ${updatedCount} citas futuras para ${patientName}`);
+                    return updatedCount;
+                });
+            } else {
+                console.log('No se requieren actualizaciones');
+                return Promise.resolve(0);
+            }
+        })
+        .catch(error => {
+            console.error("Error al actualizar citas futuras:", error);
+            hideSpinner();
+            showStatusMessage("Error al actualizar datos en citas futuras", "error");
+            return Promise.reject(error);
+        });
+}
+        
 // Cargar citas de ejemplo (en caso de error o para la primera vez)
 function loadSampleAppointments() {
     // Fecha de referencia (lunes de la semana actual)
@@ -3962,7 +4054,6 @@ function closeAppointmentModal() {
 }
 
 // Guardar cita
-// Modificar saveAppointment para incluir los nuevos campos
 function saveAppointment() {
     try {
         showSpinner();
@@ -4102,12 +4193,61 @@ function saveAppointment() {
         }
         
         if (editingAppointmentId) {
-            // Actualizar cita existente
-            db.collection('citas').doc(editingAppointmentId).set(baseAppointmentData)
-                .then(() => {
-                    closeAppointmentModal();
-                    showStatusMessage('Cita actualizada correctamente', 'success');
-                    loadAppointments();
+            // Guardar datos actuales para comparar
+            const oldAppointmentRef = db.collection('citas').doc(editingAppointmentId);
+            
+            oldAppointmentRef.get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const oldData = doc.data();
+                        
+                        // Normalizar nombres para comparación insensible a mayúsculas/minúsculas
+                        const oldPatientNameNormalized = normalizePatientName(oldData.paciente || '');
+                        const newPatientNameNormalized = normalizePatientName(patientName);
+                        
+                        const patientNameChanged = oldPatientNameNormalized !== newPatientNameNormalized;
+                        
+                        // Primero actualizar la cita actual
+                        return oldAppointmentRef.set(baseAppointmentData)
+                            .then(() => {
+                                // Si se modificaron datos de contacto y el nombre NO cambió (ignorando mayúsculas/minúsculas),
+                                // actualizar todas las citas futuras del mismo paciente
+                                if (!patientNameChanged && (
+                                    oldData.telefono !== phone ||
+                                    oldData.correo !== email ||
+                                    oldData.comuna !== comuna
+                                )) {
+                                    // Crear objeto con datos actualizados
+                                    const updatedContactData = {
+                                        telefono: phone,
+                                        correo: email,
+                                        comuna: comuna
+                                    };
+                                    
+                                    // Actualizar citas futuras
+                                    return updateFutureAppointmentsForPatient(patientName, updatedContactData)
+                                        .then((updatedCount) => {
+                                            closeAppointmentModal();
+                                            if (updatedCount > 0) {
+                                                showStatusMessage(`Cita actualizada y ${updatedCount} citas futuras actualizadas`, 'success');
+                                            } else {
+                                                showStatusMessage('Cita actualizada correctamente', 'success');
+                                            }
+                                            loadAppointments();
+                                        });
+                                } else {
+                                    // Si el nombre cambió o no hay cambios en datos de contacto
+                                    closeAppointmentModal();
+                                    showStatusMessage('Cita actualizada correctamente', 'success');
+                                    loadAppointments();
+                                }
+                            });
+                    } else {
+                        // La cita no existe
+                        closeAppointmentModal();
+                        showStatusMessage('La cita ya no existe', 'warning');
+                        hideSpinner();
+                    }
                 })
                 .catch((error) => {
                     console.error("Error al actualizar cita:", error);
