@@ -3325,26 +3325,89 @@ function updateStudentChart(uniquePatients, totalSessions) {
 }
 
 // Función para exportar estadísticas a Excel
+// Función para exportar estadísticas a Excel
 function exportStatisticsToExcel() {
     try {
         showSpinner();
         
-        // Crear datos para el Excel
-        let data = [['Estudiante', 'Pacientes Únicos', 'Total Sesiones']];
+        // Crear datos para el Excel - Tabla principal
+        let data = [['Estudiante', 'Pacientes Únicos', 'Total Sesiones', 'Sesiones Asistidas', 'Tasa de Asistencia']];
         
-        // Resto del código...
-        
-        // Modificar esta parte para asegurar que XLSX esté disponible
-        if (typeof XLSX === 'undefined') {
-            throw new Error("La biblioteca XLSX no está cargada correctamente");
+        // Recorrer estudiantes
+        for (const student in uniquePatientsByStudent) {
+            const totalSessions = sessionsByStudent[student] || 0;
+            const attendedSessions = attendedSessionsByStudent[student] || 0;
+            const attendanceRate = totalSessions > 0 
+                ? Math.round((attendedSessions / totalSessions) * 100) 
+                : 0;
+            
+            data.push([
+                studentNames[student] || student,
+                uniquePatientsByStudent[student] || 0,
+                totalSessions,
+                attendedSessions,
+                `${attendanceRate}%`
+            ]);
         }
         
         // Crear workbook
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.aoa_to_sheet(data);
         
-        // Resto del código...
+        // Añadir hoja de cálculo al libro
+        XLSX.utils.book_append_sheet(wb, ws, "Estadísticas por Estudiante");
         
+        // Segunda hoja - Pacientes
+        const patientsData = [['Paciente', 'Sesiones Agendadas', 'Sesiones Asistidas', 'Etapa de Evolución']];
+        
+        // Recorrer pacientes
+        for (const patient in sessionsPerPatient) {
+            const totalSessions = sessionsPerPatient[patient] || 0;
+            const attendedSessions = attendedSessionsPerPatient[patient] || 0;
+            
+            // Determinar etapa
+            let stage;
+            if (attendedSessions === 0) {
+                stage = 'Sin asistencias';
+            } else if (attendedSessions === 1) {
+                stage = 'Evaluación Inicial';
+            } else if (attendedSessions >= 2 && attendedSessions <= 14) {
+                stage = 'En Tratamiento';
+            } else if (attendedSessions >= 15 && attendedSessions <= 19) {
+                stage = 'Avanzado';
+            } else {
+                stage = 'Fase Final';
+            }
+            
+            patientsData.push([
+                patient.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                totalSessions,
+                attendedSessions,
+                stage
+            ]);
+        }
+        
+        // Añadir segunda hoja
+        const ws2 = XLSX.utils.aoa_to_sheet(patientsData);
+        XLSX.utils.book_append_sheet(wb, ws2, "Evolución de Pacientes");
+        
+        // Definir nombre del archivo
+        let fileName;
+        if (statsMode === 'monthly') {
+            const monthValue = parseInt(document.getElementById('month-selector').value);
+            const yearValue = parseInt(document.getElementById('year-selector').value);
+            const monthName = getMonthName(monthValue);
+            fileName = `Estadisticas_SISTEMAKINE_${monthName}_${yearValue}.xlsx`;
+        } else {
+            const startOfWeek = getStartOfWeek(currentWeekDate);
+            fileName = `Estadisticas_SISTEMAKINE_Semana_${startOfWeek.toISOString().split('T')[0]}.xlsx`;
+        }
+        
+        // Guardar archivo
+        XLSX.writeFile(wb, fileName);
+        
+        hideSpinner();
+        showStatusMessage('Estadísticas exportadas a Excel correctamente', 'success');
     } catch (error) {
         console.error("Error al exportar a Excel:", error);
         hideSpinner();
@@ -3364,9 +3427,12 @@ function exportStatisticsToPdf() {
             const monthName = getMonthName(monthValue);
             periodTitle = `Estadísticas Mensuales`;
             periodDateStr = `${monthName} de ${yearValue}`;
+            
+            // Definir estas variables para evitar el error
+            const startDateStr = periodDateStr;
+            const endDateStr = periodDateStr;
         } else {
-        
-        // Obtener fechas de la semana actual
+            // Obtener fechas de la semana actual
             const startOfWeek = getStartOfWeek(currentWeekDate);
             const endDate = new Date(startOfWeek);
             endDate.setDate(startOfWeek.getDate() + 3); // Jueves
