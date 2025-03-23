@@ -3766,7 +3766,16 @@ function setupEventListeners() {
         
         document.getElementById('delete-appointment').addEventListener('click', function() {
             if (isAdmin) {
-                if (confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
+                // Obtener la cita que se está eliminando
+                const appointment = appointments.find(a => a.id === editingAppointmentId);
+                let confirmMessage = '¿Estás seguro de que deseas eliminar esta cita?';
+                
+                // Verificar si es una cita pasada
+                if (appointment && appointment.fecha < new Date()) {
+                    confirmMessage = '⚠️ ADVERTENCIA: Está eliminando una cita PASADA. Esta acción es irreversible y puede afectar las estadísticas históricas. ¿Está completamente seguro?';
+                }
+                
+                if (confirm(confirmMessage)) {
                     try {
                         deleteAppointment();
                     } catch (error) {
@@ -3974,7 +3983,7 @@ function openAppointmentModal(appointment, hour, day) {
             }
             
             editingAppointmentId = null;
-            deleteBtn.style.display = 'none';
+            deleteBtn.style.display = 'block'; // Siempre mostrar el botón de eliminar
             
             // Inicialmente ocultar detalles de recurrencia
             isRecurringCheckbox.checked = false;
