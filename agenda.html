@@ -1204,6 +1204,137 @@ h4.therapist-stats-title {
     border-radius: 8px;
     box-shadow: var(--shadow);
 }
+
+/* Mejoras para dispositivos móviles */
+@media (max-width: 767px) {
+    /* Contenedor principal más ajustado */
+    .container {
+        padding: 8px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    /* Reducir tamaño del encabezado */
+    header {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    
+    .app-title {
+        font-size: 18px;
+    }
+    
+    /* Ajustar barra de navegación */
+    .week-navigation {
+        width: 100%;
+        padding: 5px;
+    }
+    
+    #current-week {
+        font-size: 14px;
+    }
+    
+    /* Mejorar buscador y filtros */
+    .search-container, .filters-container {
+        flex-direction: column;
+        padding: 8px;
+    }
+    
+    .filter-select, 
+    .search-container input,
+    .filters-container button,
+    .search-container button {
+        width: 100%;
+        margin-bottom: 5px;
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    /* Ajustar tabla de agenda */
+    .days-header, .dates-header, .schedule-grid {
+        grid-template-columns: 40px repeat(4, 1fr);
+    }
+    
+    .time-cell {
+        font-size: 10px;
+        padding: 2px;
+    }
+    
+    .schedule-cell {
+        min-height: 70px;
+        padding: 2px;
+    }
+    
+    /* Hacer las citas más compactas */
+    .appointment {
+        padding: 4px;
+        font-size: 10px;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .appointment-title {
+        font-size: 11px;
+        padding-top: 10px;
+        white-space: normal;
+    }
+    
+    .appointment-type, .appointment-therapist {
+        font-size: 9px;
+    }
+    
+    .student-badge {
+        font-size: 8px;
+        padding: 2px;
+    }
+    
+    /* Mejorar botones */
+    .button {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    /* Ajustar gráficos y tablas */
+    .student-stats-table th,
+    .student-stats-table td {
+        padding: 6px 4px;
+        font-size: 11px;
+    }
+    
+    .export-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    /* Navegación */
+    .day-header, .date-header {
+        font-size: 12px;
+        padding: 8px 5px;
+    }
+}
+
+/* Ajuste específico para pantallas muy pequeñas */
+@media (max-width: 380px) {
+    .app-title {
+        font-size: 16px;
+    }
+    
+    #current-week {
+        font-size: 12px;
+    }
+    
+    .day-header {
+        font-size: 11px;
+        padding: 5px 2px;
+    }
+    
+    .date-header {
+        font-size: 10px;
+        padding: 5px 2px;
+    }
+}        
     </style>
 </head>
 <body>
