@@ -467,3 +467,115 @@
   display: flex;
   align-items: center;
 }
+
+/* Estilos para la sección de Evaluación de Longitud/Extensibilidad Muscular */
+
+/* Contenedor de cada test */
+.test-container {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.test-container:hover {
+  background-color: #f0f0f0;
+}
+
+/* Encabezado del test */
+.test-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.test-title {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Estado del test (normal, alterado, etc.) */
+.test-status {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.test-result {
+  display: flex;
+  align-items: center;
+}
+
+.test-result-izq::before {
+  content: "Izquierdo: ";
+  margin-right: 5px;
+  font-weight: 500;
+}
+
+.test-result-der::before {
+  content: "Derecho: ";
+  margin-right: 5px;
+  font-weight: 500;
+}
+
+/* Interpretación clínica y recomendaciones */
+.interpretacion-clinica-container,
+.implicaciones-container,
+.recomendaciones-container,
+.consideraciones-container {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-left: 3px solid #007bff;
+  background-color: #f8f9fa;
+}
+
+.implicaciones-container {
+  border-left-color: #6c757d;
+}
+
+.recomendaciones-container {
+  border-left-color: #28a745;
+}
+
+.consideraciones-container {
+  border-left-color: #ffc107;
+}
+
+.interpretacion-clinica,
+.implicaciones,
+.recomendaciones,
+.consideraciones {
+  padding: 5px 0;
+}
+
+/* Estilos para el resumen de resultados */
+#tabla-resumen-longitud tr.restriccion-leve {
+  background-color: #fff3cd;
+}
+
+#tabla-resumen-longitud tr.restriccion-moderada {
+  background-color: #ffe5d0;
+}
+
+#tabla-resumen-longitud tr.restriccion-severa {
+  background-color: #f8d7da;
+}
+
+/* Estilos para los badges de estado */
+.badge-estado-normal {
+  background-color: #28a745 !important;
+}
+
+.badge-estado-leve {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.badge-estado-moderado {
+  background-color: #fd7e14 !important;
+}
+
+.badge-estado-severo {
+  background-color: #dc3545 !important;
+}
