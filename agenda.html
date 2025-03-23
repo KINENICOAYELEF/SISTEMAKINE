@@ -1802,6 +1802,149 @@ function loadStudentNames() {
     });
 }
 
+        // Variable para almacenar el modo actual (semanal o mensual)
+let statsMode = 'weekly';
+
+// Función para cargar citas de un mes específico
+function loadMonthlyAppointments(year, month) {
+    showSpinner();
+    
+    // Crear fecha de inicio y fin del mes
+    const startOfMonth = new Date(year, month, 1);
+    const endOfMonth = new Date(year, month + 1, 0); // El día 0 del mes siguiente es el último día del mes actual
+    
+    try {
+        // Consulta a Firestore sin filtros de fecha (traemos todas y filtramos en memoria)
+        db.collection('citas').get()
+            .then((querySnapshot) => {
+                appointments = [];
+                
+                querySnapshot.forEach((doc) => {
+                    try {
+                        // Convertir datos a formato utilizable
+                        const data = doc.data();
+                        
+                        // Convertir el campo fecha a un objeto Date
+                        let appointmentDate;
+                        if (data.fecha && data.fecha.toDate) {
+                            appointmentDate = data.fecha.toDate();
+                        } else if (data.fecha) {
+                            appointmentDate = new Date(data.fecha);
+                        } else {
+                            // Si no hay fecha, saltarse esta cita
+                            console.warn("Cita sin fecha encontrada, ID:", doc.id);
+                            return;
+                        }
+                        
+                        // Filtrar solo las citas de este mes
+                        if (appointmentDate >= startOfMonth && appointmentDate <= endOfMonth) {
+                            const appointment = {
+                                id: doc.id,
+                                ...data,
+                                fecha: appointmentDate
+                            };
+                            
+                            appointments.push(appointment);
+                        }
+                    } catch (error) {
+                        console.error("Error procesando cita individual:", error);
+                    }
+                });
+                
+                console.log(`Se cargaron ${appointments.length} citas para el mes de ${getMonthName(month)} de ${year}`);
+                
+                // Actualizar estadísticas con los datos mensuales
+                updateStatistics(true); // El parámetro true indica que son estadísticas mensuales
+                updateMonthDisplay(month, year);
+                
+                // No renderizamos las citas en la agenda semanal cuando vemos estadísticas mensuales
+                hideSpinner();
+            })
+            .catch((error) => {
+                console.error("Error al cargar citas mensuales:", error);
+                showStatusMessage("Error al cargar citas mensuales.", "error");
+                hideSpinner();
+            });
+    } catch (error) {
+        console.error("Error crítico al cargar citas mensuales:", error);
+        showStatusMessage("Error de conexión al cargar citas mensuales.", "error");
+        hideSpinner();
+    }
+}
+
+// Actualizar la visualización del mes seleccionado
+function updateMonthDisplay(month, year) {
+    const statsTitle = document.querySelector('.stats-title');
+    if (statsTitle) {
+        statsTitle.textContent = `Estadísticas: ${getMonthName(month)} ${year}`;
+    }
+}
+
+// Configurar selectores de mes y año
+function setupTimePeriodSelectors() {
+    const weeklyBtn = document.getElementById('weekly-stats-btn');
+    const monthlyBtn = document.getElementById('monthly-stats-btn');
+    const monthSelector = document.getElementById('month-selector');
+    const yearSelector = document.getElementById('year-selector');
+    
+    if (!weeklyBtn || !monthlyBtn || !monthSelector || !yearSelector) return;
+    
+    // Establecer mes y año actuales como valores predeterminados
+    const currentDate = new Date();
+    monthSelector.value = currentDate.getMonth();
+    yearSelector.value = currentDate.getFullYear();
+    
+    // Botón de estadísticas semanales
+    weeklyBtn.addEventListener('click', function() {
+        statsMode = 'weekly';
+        weeklyBtn.classList.add('selected-period');
+        weeklyBtn.classList.remove('cancel-btn');
+        weeklyBtn.classList.add('save-btn');
+        
+        monthlyBtn.classList.remove('selected-period');
+        monthlyBtn.classList.add('cancel-btn');
+        monthlyBtn.classList.remove('save-btn');
+        
+        monthSelector.style.display = 'none';
+        yearSelector.style.display = 'none';
+        
+        // Cargar citas de la semana actual
+        loadAppointments();
+    });
+    
+    // Botón de estadísticas mensuales
+    monthlyBtn.addEventListener('click', function() {
+        statsMode = 'monthly';
+        monthlyBtn.classList.add('selected-period');
+        monthlyBtn.classList.remove('cancel-btn');
+        monthlyBtn.classList.add('save-btn');
+        
+        weeklyBtn.classList.remove('selected-period');
+        weeklyBtn.classList.add('cancel-btn');
+        weeklyBtn.classList.remove('save-btn');
+        
+        monthSelector.style.display = 'block';
+        yearSelector.style.display = 'block';
+        
+        // Cargar citas del mes seleccionado
+        loadMonthlyAppointments(parseInt(yearSelector.value), parseInt(monthSelector.value));
+    });
+    
+    // Cambio de mes
+    monthSelector.addEventListener('change', function() {
+        if (statsMode === 'monthly') {
+            loadMonthlyAppointments(parseInt(yearSelector.value), parseInt(this.value));
+        }
+    });
+    
+    // Cambio de año
+    yearSelector.addEventListener('change', function() {
+        if (statsMode === 'monthly') {
+            loadMonthlyAppointments(parseInt(this.value), parseInt(monthSelector.value));
+        }
+    });
+}
+
 // Generar la lista de estudiantes en el panel de administración
 function generateStudentsList() {
     const studentList = document.getElementById('student-list');
@@ -2639,8 +2782,9 @@ function getAppointmentTypeIcon(typeClass) {
 // Actualizar estadísticas
 // Actualizar estadísticas
 // Actualizar estadísticas con clara diferenciación
-function updateStatistics() {
-    console.log("🔍 Actualizando estadísticas...");
+// Actualizar estadísticas
+function updateStatistics(isMonthly = false) {
+    console.log(`🔍 Actualizando estadísticas ${isMonthly ? 'mensuales' : 'semanales'}...`);
     
     try {
         // Sesiones AGENDADAS vs REALIZADAS
@@ -2787,6 +2931,17 @@ function updateStatistics() {
         document.getElementById('attendance-rate').textContent = `${attendanceRate}%`;
         document.getElementById('total-appointments').textContent = appointments.length;
         document.getElementById('busiest-hour').textContent = `${busiestHour}:00`;
+        
+        // Modificar algunos títulos para reflejar el período
+        if (isMonthly) {
+            document.getElementById('attendance-rate').parentElement.querySelector('.stat-label').textContent = 'Asistencia mensual';
+            document.getElementById('total-appointments').parentElement.querySelector('.stat-label').textContent = 'Citas totales del mes';
+            document.getElementById('busiest-hour').parentElement.querySelector('.stat-label').textContent = 'Hora más ocupada del mes';
+        } else {
+            document.getElementById('attendance-rate').parentElement.querySelector('.stat-label').textContent = 'Asistencia semanal';
+            document.getElementById('total-appointments').parentElement.querySelector('.stat-label').textContent = 'Citas totales';
+            document.getElementById('busiest-hour').parentElement.querySelector('.stat-label').textContent = 'Hora más ocupada';
+        }
         
         // Actualizar tabla de estudiantes con datos diferenciados
         updateStudentStatsTable(
@@ -3209,18 +3364,32 @@ function exportStatisticsToExcel() {
 function exportStatisticsToPdf() {
     try {
         showSpinner();
+
+        // Determinar el título según el modo de estadísticas
+        let periodTitle, periodDateStr;
+        if (statsMode === 'monthly') {
+            const monthValue = parseInt(document.getElementById('month-selector').value);
+            const yearValue = parseInt(document.getElementById('year-selector').value);
+            const monthName = getMonthName(monthValue);
+            periodTitle = `Estadísticas Mensuales`;
+            periodDateStr = `${monthName} de ${yearValue}`;
+        } else {
         
         // Obtener fechas de la semana actual
-        const startOfWeek = getStartOfWeek(currentWeekDate);
-        const endDate = new Date(startOfWeek);
-        endDate.setDate(startOfWeek.getDate() + 3); // Jueves
-        
-        const startDateStr = startOfWeek.toLocaleDateString('es-ES', {
-            day: '2-digit', month: 'long', year: 'numeric'
-        });
-        const endDateStr = endDate.toLocaleDateString('es-ES', {
-            day: '2-digit', month: 'long', year: 'numeric'
-        });
+            const startOfWeek = getStartOfWeek(currentWeekDate);
+            const endDate = new Date(startOfWeek);
+            endDate.setDate(startOfWeek.getDate() + 3); // Jueves
+            
+            const startDateStr = startOfWeek.toLocaleDateString('es-ES', {
+                day: '2-digit', month: 'long', year: 'numeric'
+            });
+            const endDateStr = endDate.toLocaleDateString('es-ES', {
+                day: '2-digit', month: 'long', year: 'numeric'
+            });
+            
+            periodTitle = `Estadísticas Semanales`;
+            periodDateStr = `Semana del ${startDateStr} al ${endDateStr}`;
+        }
         
         // Crear documento PDF
         const doc = new jspdf.jsPDF();
@@ -3244,13 +3413,13 @@ function exportStatisticsToPdf() {
         doc.setTextColor(0, 0, 0);
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(16);
-        doc.text("Reporte de Estadísticas", 15, 40);
+        doc.text(periodTitle, 15, 40);
         
         // Información del período
         doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
-        doc.text(`Semana del ${startDateStr} al ${endDateStr}`, 15, 50);
+        doc.text(periodDateStr, 15, 50);
         doc.text(`Generado el: ${new Date().toLocaleDateString('es-ES', {
             day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
         })}`, 15, 58);
@@ -3811,8 +3980,8 @@ function exportStatisticsToPdf() {
             doc.text(`${new Date().toISOString().split('T')[0]}`, doc.internal.pageSize.getWidth() - 30, doc.internal.pageSize.getHeight() - 10);
         }
         
-        // Guardar PDF
-        doc.save(`Estadisticas_SISTEMAKINE_${startDateStr.replace(/ /g, '_')}.pdf`);
+        // Guardar PDF con nombre que refleje el período
+        doc.save(`Estadisticas_SISTEMAKINE_${periodDateStr.replace(/ /g, '_')}.pdf`);
         
         hideSpinner();
         showStatusMessage('Estadísticas exportadas a PDF correctamente', 'success');
@@ -3821,7 +3990,7 @@ function exportStatisticsToPdf() {
         hideSpinner();
         showStatusMessage("Error al exportar estadísticas a PDF: " + error.message, "error");
     }
-}  
+}
 
 // Función para manejar cambios en el tipo de cita (mostrar opciones de recurrencia)
 function handleAppointmentTypeChange() {
