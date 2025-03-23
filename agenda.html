@@ -3330,16 +3330,63 @@ function exportStatisticsToExcel() {
     try {
         showSpinner();
         
+        // Calcular datos dentro de esta función para asegurar que estén disponibles
+        const uniquePatientsByStudent = {};
+        const sessionsByStudent = {};
+        const attendedSessionsByStudent = {};
+        const attendanceRates = {};
+        const patientsByStudent = {};
+        const sessionsPerPatient = {};
+        const attendedSessionsPerPatient = {};
+        
+        // Poblar los datos con la información de las citas
+        appointments.forEach(a => {
+            if (!a.estudiante || !a.paciente) return;
+            
+            // Para estudiantes
+            sessionsByStudent[a.estudiante] = (sessionsByStudent[a.estudiante] || 0) + 1;
+            if (a.estado === 'attended') {
+                attendedSessionsByStudent[a.estudiante] = (attendedSessionsByStudent[a.estudiante] || 0) + 1;
+            }
+            
+            // Para pacientes
+            const patientKey = a.paciente.toLowerCase();
+            sessionsPerPatient[patientKey] = (sessionsPerPatient[patientKey] || 0) + 1;
+            if (a.estado === 'attended') {
+                attendedSessionsPerPatient[patientKey] = (attendedSessionsPerPatient[patientKey] || 0) + 1;
+            }
+            
+            // Para pacientes únicos por estudiante
+            if (!patientsByStudent[a.estudiante]) {
+                patientsByStudent[a.estudiante] = [];
+            }
+            if (!patientsByStudent[a.estudiante].includes(a.paciente)) {
+                patientsByStudent[a.estudiante].push(a.paciente);
+            }
+        });
+        
+        // Calcular pacientes únicos por estudiante
+        for (const student in patientsByStudent) {
+            uniquePatientsByStudent[student] = patientsByStudent[student].length;
+        }
+        
+        // Calcular tasas de asistencia
+        for (const student in sessionsByStudent) {
+            const attended = attendedSessionsByStudent[student] || 0;
+            const total = sessionsByStudent[student] || 0;
+            attendanceRates[student] = total > 0 ? Math.round((attended / total) * 100) : 0;
+        }
+        
+        // Ahora podemos usar estas variables para crear Excel
+        
         // Crear datos para el Excel - Tabla principal
         let data = [['Estudiante', 'Pacientes Únicos', 'Total Sesiones', 'Sesiones Asistidas', 'Tasa de Asistencia']];
         
-        // Recorrer estudiantes
+        // Resto del código de exportación...
         for (const student in uniquePatientsByStudent) {
             const totalSessions = sessionsByStudent[student] || 0;
             const attendedSessions = attendedSessionsByStudent[student] || 0;
-            const attendanceRate = totalSessions > 0 
-                ? Math.round((attendedSessions / totalSessions) * 100) 
-                : 0;
+            const attendanceRate = attendanceRates[student] || 0;
             
             data.push([
                 studentNames[student] || student,
@@ -3421,6 +3468,8 @@ function exportStatisticsToPdf() {
 
         // Determinar el título según el modo de estadísticas
         let periodTitle, periodDateStr;
+        let startDateStr, endDateStr; // Declarar estas variables FUERA de los bloques if/else
+        
         if (statsMode === 'monthly') {
             const monthValue = parseInt(document.getElementById('month-selector').value);
             const yearValue = parseInt(document.getElementById('year-selector').value);
@@ -3428,19 +3477,20 @@ function exportStatisticsToPdf() {
             periodTitle = `Estadísticas Mensuales`;
             periodDateStr = `${monthName} de ${yearValue}`;
             
-            // Definir estas variables para evitar el error
-            const startDateStr = periodDateStr;
-            const endDateStr = periodDateStr;
+            // Asignar a las variables ya declaradas
+            startDateStr = periodDateStr;
+            endDateStr = periodDateStr;
         } else {
             // Obtener fechas de la semana actual
             const startOfWeek = getStartOfWeek(currentWeekDate);
             const endDate = new Date(startOfWeek);
             endDate.setDate(startOfWeek.getDate() + 3); // Jueves
             
-            const startDateStr = startOfWeek.toLocaleDateString('es-ES', {
+            // Asignar a las variables ya declaradas
+            startDateStr = startOfWeek.toLocaleDateString('es-ES', {
                 day: '2-digit', month: 'long', year: 'numeric'
             });
-            const endDateStr = endDate.toLocaleDateString('es-ES', {
+            endDateStr = endDate.toLocaleDateString('es-ES', {
                 day: '2-digit', month: 'long', year: 'numeric'
             });
             
