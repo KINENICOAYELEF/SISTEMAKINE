@@ -4934,60 +4934,71 @@ function openAttendanceModal(appointment) {
         // Mostrar modal
         attendanceModal.style.display = 'block';
         
-        // Añadir botón para editar cita pasada (nuevo)
-        const editPastButton = document.createElement('button');
-        editPastButton.className = 'button save-btn';
-        editPastButton.style.marginRight = '5px';
-        editPastButton.textContent = 'Editar Cita';
-        editPastButton.onclick = function() {
-            attendanceModal.style.display = 'none'; // Cerrar modal de asistencia
-            openAppointmentModal(appointment); // Abrir modal de edición
-        };
+        // Eliminar botones de edición anteriores
+const existingEditButtons = document.querySelectorAll('#attendance-modal .edit-past-button');
+existingEditButtons.forEach(button => button.remove());
+
+// Añadir botón para editar cita pasada (nuevo)
+const editPastButton = document.createElement('button');
+editPastButton.className = 'button save-btn edit-past-button'; // Añadida clase para identificarlo
+editPastButton.id = 'edit-past-button'; // Añadido ID para fácil referencia
+editPastButton.style.marginRight = '5px';
+editPastButton.textContent = 'Editar Cita';
+editPastButton.onclick = function() {
+    attendanceModal.style.display = 'none'; // Cerrar modal de asistencia
+    openAppointmentModal(appointment); // Abrir modal de edición
+};
+
+// Agregar el botón al footer del modal
+const modalFooter = document.querySelector('#attendance-modal .modal-footer');
+if (modalFooter) {
+    // Insertar al principio del footer
+    modalFooter.insertBefore(editPastButton, modalFooter.firstChild);
+}
         
-        // Agregar el botón al footer del modal
-        const modalFooter = document.querySelector('#attendance-modal .modal-footer');
-        if (modalFooter) {
-            // Insertar al principio del footer
-            modalFooter.insertBefore(editPastButton, modalFooter.firstChild);
-        }
-        
-        // Añadir mensaje informativo si la cita ya tiene un estado
-        if (appointment.estado) {
-            const statusInfo = document.createElement('div');
-            statusInfo.style.marginTop = '15px';
-            statusInfo.style.paddingTop = '10px';
-            statusInfo.style.borderTop = '1px solid #eee';
-            
-            let statusText = '';
-            let statusColor = '';
-            
-            switch(appointment.estado) {
-                case 'attended':
-                    statusText = 'Paciente asistió a esta cita';
-                    statusColor = 'var(--success)';
-                    break;
-                case 'missed':
-                    statusText = 'Paciente no asistió a esta cita';
-                    statusColor = 'var(--error)';
-                    break;
-                case 'rescheduled':
-                    statusText = 'Esta cita fue reprogramada';
-                    statusColor = 'var(--warning)';
-                    break;
-            }
-            
-            statusInfo.innerHTML = `
-                <p style="color: ${statusColor}; font-weight: 500;">
-                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: ${statusColor}; margin-right: 5px;"></span>
-                    ${statusText}
-                </p>
-            `;
-            
-            const modalBody = document.querySelector('#attendance-modal .modal-body');
-            if (modalBody) {
-                modalBody.appendChild(statusInfo);
-            }
-        }
+        // Eliminar mensajes de estado anteriores
+const existingStatusInfos = document.querySelectorAll('#attendance-modal .status-info');
+existingStatusInfos.forEach(info => info.remove());
+
+// Añadir mensaje informativo si la cita ya tiene un estado
+if (appointment.estado) {
+    const statusInfo = document.createElement('div');
+    statusInfo.className = 'status-info'; // Añadida clase para identificarlo
+    statusInfo.id = 'attendance-status-info'; // Añadido ID para fácil referencia
+    statusInfo.style.marginTop = '15px';
+    statusInfo.style.paddingTop = '10px';
+    statusInfo.style.borderTop = '1px solid #eee';
+    
+    let statusText = '';
+    let statusColor = '';
+    
+    switch(appointment.estado) {
+        case 'attended':
+            statusText = 'Paciente asistió a esta cita';
+            statusColor = 'var(--success)';
+            break;
+        case 'missed':
+            statusText = 'Paciente no asistió a esta cita';
+            statusColor = 'var(--error)';
+            break;
+        case 'rescheduled':
+            statusText = 'Esta cita fue reprogramada';
+            statusColor = 'var(--warning)';
+            break;
+    }
+    
+    statusInfo.innerHTML = `
+        <p style="color: ${statusColor}; font-weight: 500;">
+            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: ${statusColor}; margin-right: 5px;"></span>
+            ${statusText}
+        </p>
+    `;
+    
+    const modalBody = document.querySelector('#attendance-modal .modal-body');
+    if (modalBody) {
+        modalBody.appendChild(statusInfo);
+    }
+}
     } catch (error) {
         console.error("Error al abrir modal de asistencia:", error);
         showStatusMessage("Error al abrir el formulario de asistencia", "error");
