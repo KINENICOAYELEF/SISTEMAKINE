@@ -1,0 +1,1228 @@
+<!-- 3. Cuestionarios -->
+<div class="tab-content" id="cuestionarios">
+  <h3>3. Cuestionarios Clínicos</h3>
+  <p class="mb-3">Seleccione los cuestionarios apropiados para la condición del paciente. Los resultados se interpretan automáticamente con códigos de color.</p>
+  
+  <!-- Acordeón de cuestionarios -->
+  <div class="cuestionarios-acordeon">
+    <!-- PSFS (Patient-Specific Functional Scale) -->
+    <div class="cuestionario-item">
+      <div class="cuestionario-header" onclick="toggleCuestionario('psfs-content')">
+        <h4><i class="fas fa-plus-circle"></i> PSFS (Patient-Specific Functional Scale)</h4>
+        <div class="resultado-badge" id="psfs-badge">No completado</div>
+      </div>
+      <div class="cuestionario-content" id="psfs-content" style="display: none;">
+        <p class="mb-3">Identificar hasta 3 actividades importantes que el paciente no puede realizar o tiene dificultad debido a su problema. Calificar la capacidad para realizar cada actividad en una escala de 0-10.</p>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-8">
+            <div class="form-group">
+              <label for="psfs_actividad1" class="form-label">Actividad 1</label>
+              <input type="text" id="psfs_actividad1" name="psfs_actividad1" class="form-control" placeholder="Ej: Subir escaleras, Levantar objetos pesados, etc.">
+            </div>
+          </div>
+          <div class="form-col form-col-md-4">
+            <div class="form-group">
+              <label for="psfs_puntuacion1" class="form-label">Puntuación (0-10)</label>
+              <select id="psfs_puntuacion1" name="psfs_puntuacion1" class="form-select" onchange="calcularPSFS()">
+                <option value="">Seleccionar</option>
+                <option value="0">0 - Incapaz de realizar la actividad</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10 - Capaz de realizar la actividad al mismo nivel que antes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-8">
+            <div class="form-group">
+              <label for="psfs_actividad2" class="form-label">Actividad 2</label>
+              <input type="text" id="psfs_actividad2" name="psfs_actividad2" class="form-control" placeholder="Ej: Sentarse por periodos prolongados, Dormir, etc.">
+            </div>
+          </div>
+          <div class="form-col form-col-md-4">
+            <div class="form-group">
+              <label for="psfs_puntuacion2" class="form-label">Puntuación (0-10)</label>
+              <select id="psfs_puntuacion2" name="psfs_puntuacion2" class="form-select" onchange="calcularPSFS()">
+                <option value="">Seleccionar</option>
+                <option value="0">0 - Incapaz de realizar la actividad</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10 - Capaz de realizar la actividad al mismo nivel que antes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-8">
+            <div class="form-group">
+              <label for="psfs_actividad3" class="form-label">Actividad 3</label>
+              <input type="text" id="psfs_actividad3" name="psfs_actividad3" class="form-control" placeholder="Ej: Girar el cuello, Practicar deporte, etc.">
+            </div>
+          </div>
+          <div class="form-col form-col-md-4">
+            <div class="form-group">
+              <label for="psfs_puntuacion3" class="form-label">Puntuación (0-10)</label>
+              <select id="psfs_puntuacion3" name="psfs_puntuacion3" class="form-select" onchange="calcularPSFS()">
+                <option value="">Seleccionar</option>
+                <option value="0">0 - Incapaz de realizar la actividad</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10 - Capaz de realizar la actividad al mismo nivel que antes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-col form-col-md-12">
+            <div class="resultado-container" id="psfs-resultado">
+              <div class="resultado-label">Puntuación PSFS:</div>
+              <div class="resultado-valor" id="psfs-valor">-</div>
+              <div class="resultado-interpretacion" id="psfs-interpretacion">Complete al menos una actividad para obtener un resultado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- GROC (Global Rating of Change) -->
+    <div class="cuestionario-item">
+      <div class="cuestionario-header" onclick="toggleCuestionario('groc-content')">
+        <h4><i class="fas fa-plus-circle"></i> GROC (Global Rating of Change)</h4>
+        <div class="resultado-badge" id="groc-badge">No completado</div>
+      </div>
+      <div class="cuestionario-content" id="groc-content" style="display: none;">
+        <p class="mb-3">Esta escala evalúa la percepción del paciente sobre el cambio en su condición desde que comenzó el tratamiento.</p>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-12">
+            <div class="form-group">
+              <label class="form-label">¿Cómo se siente ahora en comparación con cuando comenzó el tratamiento?</label>
+              <div class="groc-scale-container">
+                <div class="groc-scale">
+                  <input type="radio" id="groc_-7" name="groc" value="-7" onchange="calcularGROC()">
+                  <label for="groc_-7">-7<br>Extremadamente peor</label>
+                  
+                  <input type="radio" id="groc_-6" name="groc" value="-6" onchange="calcularGROC()">
+                  <label for="groc_-6">-6</label>
+                  
+                  <input type="radio" id="groc_-5" name="groc" value="-5" onchange="calcularGROC()">
+                  <label for="groc_-5">-5<br>Mucho peor</label>
+                  
+                  <input type="radio" id="groc_-4" name="groc" value="-4" onchange="calcularGROC()">
+                  <label for="groc_-4">-4</label>
+                  
+                  <input type="radio" id="groc_-3" name="groc" value="-3" onchange="calcularGROC()">
+                  <label for="groc_-3">-3<br>Moderadamente peor</label>
+                  
+                  <input type="radio" id="groc_-2" name="groc" value="-2" onchange="calcularGROC()">
+                  <label for="groc_-2">-2</label>
+                  
+                  <input type="radio" id="groc_-1" name="groc" value="-1" onchange="calcularGROC()">
+                  <label for="groc_-1">-1<br>Un poco peor</label>
+                  
+                  <input type="radio" id="groc_0" name="groc" value="0" onchange="calcularGROC()">
+                  <label for="groc_0">0<br>Sin cambios</label>
+                  
+                  <input type="radio" id="groc_1" name="groc" value="1" onchange="calcularGROC()">
+                  <label for="groc_1">+1<br>Un poco mejor</label>
+                  
+                  <input type="radio" id="groc_2" name="groc" value="2" onchange="calcularGROC()">
+                  <label for="groc_2">+2</label>
+                  
+                  <input type="radio" id="groc_3" name="groc" value="3" onchange="calcularGROC()">
+                  <label for="groc_3">+3<br>Moderadamente mejor</label>
+                  
+                  <input type="radio" id="groc_4" name="groc" value="4" onchange="calcularGROC()">
+                  <label for="groc_4">+4</label>
+                  
+                  <input type="radio" id="groc_5" name="groc" value="5" onchange="calcularGROC()">
+                  <label for="groc_5">+5<br>Mucho mejor</label>
+                  
+                  <input type="radio" id="groc_6" name="groc" value="6" onchange="calcularGROC()">
+                  <label for="groc_6">+6</label>
+                  
+                  <input type="radio" id="groc_7" name="groc" value="7" onchange="calcularGROC()">
+                  <label for="groc_7">+7<br>Completamente recuperado</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-col form-col-md-12">
+            <div class="resultado-container" id="groc-resultado">
+              <div class="resultado-label">Resultado GROC:</div>
+              <div class="resultado-valor" id="groc-valor">-</div>
+              <div class="resultado-interpretacion" id="groc-interpretacion">Seleccione una opción para obtener un resultado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- SANE (Single Assessment Numeric Evaluation) -->
+    <div class="cuestionario-item">
+      <div class="cuestionario-header" onclick="toggleCuestionario('sane-content')">
+        <h4><i class="fas fa-plus-circle"></i> SANE (Single Assessment Numeric Evaluation)</h4>
+        <div class="resultado-badge" id="sane-badge">No completado</div>
+      </div>
+      <div class="cuestionario-content" id="sane-content" style="display: none;">
+        <p class="mb-3">Una evaluación numérica única donde el paciente califica su función general en una escala de 0-100.</p>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-12">
+            <div class="form-group">
+              <label for="sane_puntuacion" class="form-label">En una escala de 0 a 100, ¿cómo calificaría su [área afectada] hoy?</label>
+              <p class="text-muted small mb-2">(0 = completamente incapacitado, 100 = normal)</p>
+              <input type="range" id="sane_puntuacion" name="sane_puntuacion" class="form-range w-100" min="0" max="100" step="1" value="50" oninput="calcularSANE()">
+              <div class="d-flex justify-content-between mt-1">
+                <span>0</span>
+                <span id="sane_puntuacion_value">50</span>
+                <span>100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-col form-col-md-12">
+            <div class="resultado-container" id="sane-resultado">
+              <div class="resultado-label">Puntuación SANE:</div>
+              <div class="resultado-valor" id="sane-valor">50%</div>
+              <div class="resultado-interpretacion" id="sane-interpretacion">Función moderada</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- BPI (Inventario Breve de Dolor) -->
+      <div class="cuestionario-item">
+        <div class="cuestionario-header" onclick="toggleCuestionario('bpi-content')">
+          <h4><i class="fas fa-plus-circle"></i> Inventario Breve de Dolor (BPI)</h4>
+          <div class="resultado-badge" id="bpi-badge">No completado</div>
+        </div>
+        <div class="cuestionario-content" id="bpi-content" style="display: none;">
+          <p class="mb-3">Este cuestionario evalúa la intensidad del dolor y su interferencia en las actividades diarias.</p>
+          
+          <h5>Parte 1: Intensidad del dolor</h5>
+          <p class="text-muted small mb-2">Califique su dolor en una escala de 0 a 10 (0 = sin dolor, 10 = el peor dolor imaginable)</p>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_dolor_actual" class="form-label">Dolor ahora mismo</label>
+                <input type="range" id="bpi_dolor_actual" name="bpi_dolor_actual" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_dolor_actual_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_dolor_actual_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_dolor_promedio" class="form-label">Dolor promedio en las últimas 24 horas</label>
+                <input type="range" id="bpi_dolor_promedio" name="bpi_dolor_promedio" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_dolor_promedio_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_dolor_promedio_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_dolor_peor" class="form-label">Peor dolor en las últimas 24 horas</label>
+                <input type="range" id="bpi_dolor_peor" name="bpi_dolor_peor" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_dolor_peor_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_dolor_peor_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_dolor_menor" class="form-label">Menor dolor en las últimas 24 horas</label>
+                <input type="range" id="bpi_dolor_menor" name="bpi_dolor_menor" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_dolor_menor_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_dolor_menor_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <h5 class="mt-4">Parte 2: Interferencia del dolor</h5>
+          <p class="text-muted small mb-2">Califique cómo el dolor ha interferido en las siguientes actividades en una escala de 0 a 10 (0 = no interfiere, 10 = interfiere completamente)</p>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_actividad" class="form-label">Actividad general</label>
+                <input type="range" id="bpi_interferencia_actividad" name="bpi_interferencia_actividad" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_actividad_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_actividad_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_animo" class="form-label">Estado de ánimo</label>
+                <input type="range" id="bpi_interferencia_animo" name="bpi_interferencia_animo" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_animo_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_animo_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_caminar" class="form-label">Capacidad para caminar</label>
+                <input type="range" id="bpi_interferencia_caminar" name="bpi_interferencia_caminar" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_caminar_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_caminar_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_trabajo" class="form-label">Trabajo habitual</label>
+                <input type="range" id="bpi_interferencia_trabajo" name="bpi_interferencia_trabajo" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_trabajo_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_trabajo_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_relaciones" class="form-label">Relaciones con otras personas</label>
+                <input type="range" id="bpi_interferencia_relaciones" name="bpi_interferencia_relaciones" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_relaciones_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_relaciones_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_sueno" class="form-label">Sueño</label>
+                <input type="range" id="bpi_interferencia_sueno" name="bpi_interferencia_sueno" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_sueno_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_sueno_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label for="bpi_interferencia_vida" class="form-label">Capacidad de disfrutar de la vida</label>
+                <input type="range" id="bpi_interferencia_vida" name="bpi_interferencia_vida" class="form-range w-100" min="0" max="10" step="1" value="0" oninput="document.getElementById('bpi_interferencia_vida_value').textContent = this.value; calcularBPI();">
+                <div class="d-flex justify-content-between mt-1">
+                  <span>0</span>
+                  <span id="bpi_interferencia_vida_value">0</span>
+                  <span>10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-12">
+              <div class="resultado-container" id="bpi-resultado">
+                <div class="resultado-label">Resultados BPI:</div>
+                <div class="form-row">
+                  <div class="form-col form-col-md-6">
+                    <div class="resultado-sublabel">Intensidad del dolor:</div>
+                    <div class="resultado-valor" id="bpi-intensidad-valor">0/10</div>
+                    <div class="resultado-interpretacion" id="bpi-intensidad-interpretacion">Sin dolor</div>
+                  </div>
+                  <div class="form-col form-col-md-6">
+                    <div class="resultado-sublabel">Interferencia del dolor:</div>
+                    <div class="resultado-valor" id="bpi-interferencia-valor">0/10</div>
+                    <div class="resultado-interpretacion" id="bpi-interferencia-interpretacion">Sin interferencia</div>
+                  </div>
+                </div>
+                
+                <div class="interpretacion-clinica-container">
+                  <h5>Interpretación Clínica:</h5>
+                  <div class="interpretacion-clinica" id="bpi-interpretacion-clinica">
+                    Complete el cuestionario para obtener la interpretación clínica.
+                  </div>
+                </div>
+                
+                <div class="recomendaciones-container">
+                  <h5>Recomendaciones Terapéuticas:</h5>
+                  <div class="recomendaciones" id="bpi-recomendaciones">
+                    Complete el cuestionario para obtener recomendaciones terapéuticas.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PCS (Escala de Catastrofización ante el Dolor) -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('pcs-content')">
+    <h4><i class="fas fa-plus-circle"></i> Escala de Catastrofización ante el Dolor (PCS)</h4>
+    <div class="resultado-badge" id="pcs-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="pcs-content" style="display: none;">
+    <p class="mb-3">Este cuestionario evalúa los pensamientos y sentimientos catastróficos asociados con el dolor. Indique el grado en que experimenta cada uno de estos pensamientos o sentimientos cuando siente dolor.</p>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th>Cuando siento dolor...</th>
+          <th>Nada</th>
+          <th>Leve</th>
+          <th>Moderado</th>
+          <th>Intenso</th>
+          <th>Todo el tiempo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Rumiación -->
+        <tr>
+          <td>1. Estoy preocupado todo el tiempo pensando en si el dolor desaparecerá</td>
+          <td class="text-center"><input type="radio" name="pcs_item1" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item1" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item1" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item1" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item1" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        <tr>
+          <td>2. Siento que no puedo continuar</td>
+          <td class="text-center"><input type="radio" name="pcs_item2" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item2" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item2" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item2" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item2" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        <tr>
+          <td>3. Es terrible y pienso que esto nunca va a mejorar</td>
+          <td class="text-center"><input type="radio" name="pcs_item3" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item3" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item3" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item3" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item3" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        <tr>
+          <td>4. Es horrible y siento que esto me supera</td>
+          <td class="text-center"><input type="radio" name="pcs_item4" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item4" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item4" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item4" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item4" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        
+        <!-- Magnificación -->
+        <tr>
+          <td>5. Siento que no puedo soportarlo más</td>
+          <td class="text-center"><input type="radio" name="pcs_item5" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item5" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item5" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item5" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item5" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        <tr>
+          <td>6. Temo que el dolor empeore</td>
+          <td class="text-center"><input type="radio" name="pcs_item6" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item6" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item6" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item6" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item6" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        <tr>
+          <td>7. Sigo pensando en otras situaciones dolorosas</td>
+          <td class="text-center"><input type="radio" name="pcs_item7" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item7" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item7" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item7" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item7" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        
+        <!-- Desesperanza -->
+        <tr>
+          <td>8. Deseo desesperadamente que desaparezca el dolor</td>
+          <td class="text-center"><input type="radio" name="pcs_item8" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item8" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item8" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item8" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item8" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        <tr>
+          <td>9. No puedo apartar el dolor de mi mente</td>
+          <td class="text-center"><input type="radio" name="pcs_item9" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item9" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item9" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item9" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item9" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        <tr>
+          <td>10. Sigo pensando en lo mucho que me duele</td>
+          <td class="text-center"><input type="radio" name="pcs_item10" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item10" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item10" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item10" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item10" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        <tr>
+          <td>11. Sigo pensando en lo mucho que deseo que desaparezca el dolor</td>
+          <td class="text-center"><input type="radio" name="pcs_item11" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item11" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item11" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item11" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item11" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        <tr>
+          <td>12. No hay nada que pueda hacer para reducir la intensidad del dolor</td>
+          <td class="text-center"><input type="radio" name="pcs_item12" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item12" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item12" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item12" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item12" value="4" onchange="calcularPCS()"></td>
+        </tr>
+        <tr>
+          <td>13. Me pregunto si me puede pasar algo grave</td>
+          <td class="text-center"><input type="radio" name="pcs_item13" value="0" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item13" value="1" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item13" value="2" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item13" value="3" onchange="calcularPCS()"></td>
+          <td class="text-center"><input type="radio" name="pcs_item13" value="4" onchange="calcularPCS()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="form-row">
+      <div class="form-col form-col-md-12">
+        <div class="resultado-container" id="pcs-resultado">
+          <div class="form-row">
+            <div class="form-col form-col-md-4">
+              <div class="resultado-label">Puntuación Total:</div>
+              <div class="resultado-valor" id="pcs-valor-total">-/52</div>
+              <div class="resultado-interpretacion" id="pcs-interpretacion-total">Complete el cuestionario</div>
+            </div>
+            <div class="form-col form-col-md-8">
+              <div class="resultado-label">Subescalas:</div>
+              <div class="form-row">
+                <div class="form-col form-col-md-4">
+                  <div class="resultado-sublabel">Rumiación:</div>
+                  <div class="resultado-valor" id="pcs-valor-rumiacion">-/16</div>
+                </div>
+                <div class="form-col form-col-md-4">
+                  <div class="resultado-sublabel">Magnificación:</div>
+                  <div class="resultado-valor" id="pcs-valor-magnificacion">-/12</div>
+                </div>
+                <div class="form-col form-col-md-4">
+                  <div class="resultado-sublabel">Desesperanza:</div>
+                  <div class="resultado-valor" id="pcs-valor-desesperanza">-/24</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="interpretacion-clinica-container mt-3">
+            <h5>Interpretación Clínica:</h5>
+            <div class="interpretacion-clinica" id="pcs-interpretacion-clinica">
+              Complete el cuestionario para obtener la interpretación clínica.
+            </div>
+          </div>
+          
+          <div class="recomendaciones-container mt-3">
+            <h5>Recomendaciones Terapéuticas:</h5>
+            <div class="recomendaciones" id="pcs-recomendaciones">
+              Complete el cuestionario para obtener recomendaciones terapéuticas.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- CSI (Inventario de Sensibilización Central) -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('csi-content')">
+    <h4><i class="fas fa-plus-circle"></i> Inventario de Sensibilización Central (CSI)</h4>
+    <div class="resultado-badge" id="csi-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="csi-content" style="display: none;">
+    <p class="mb-3">Este cuestionario evalúa la presencia de síntomas relacionados con la sensibilización central. Por favor, indique con qué frecuencia ha experimentado cada uno de los siguientes síntomas en los últimos 3 meses.</p>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th>Síntoma</th>
+          <th>Nunca</th>
+          <th>Raramente</th>
+          <th>A veces</th>
+          <th>A menudo</th>
+          <th>Siempre</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. Siento dolor en todo mi cuerpo</td>
+          <td class="text-center"><input type="radio" name="csi_item1" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item1" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item1" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item1" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item1" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>2. Tengo ataques de dolor súbito o como si fueran calambres</td>
+          <td class="text-center"><input type="radio" name="csi_item2" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item2" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item2" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item2" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item2" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>3. Tengo dolor en las articulaciones</td>
+          <td class="text-center"><input type="radio" name="csi_item3" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item3" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item3" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item3" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item3" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>4. Siento las piernas débiles</td>
+          <td class="text-center"><input type="radio" name="csi_item4" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item4" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item4" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item4" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item4" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>5. Tengo poca energía o me siento fatigado/a</td>
+          <td class="text-center"><input type="radio" name="csi_item5" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item5" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item5" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item5" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item5" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>6. Tengo dolores musculares</td>
+          <td class="text-center"><input type="radio" name="csi_item6" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item6" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item6" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item6" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item6" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>7. Tengo dolores de cabeza o migrañas</td>
+          <td class="text-center"><input type="radio" name="csi_item7" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item7" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item7" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item7" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item7" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>8. Tengo dolor o molestias en el cuello</td>
+          <td class="text-center"><input type="radio" name="csi_item8" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item8" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item8" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item8" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item8" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>9. Tengo dolor o molestias en la mandíbula</td>
+          <td class="text-center"><input type="radio" name="csi_item9" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item9" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item9" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item9" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item9" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>10. Tengo sensibilidad en la vejiga o ardor al orinar</td>
+          <td class="text-center"><input type="radio" name="csi_item10" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item10" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item10" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item10" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item10" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>11. Necesito orinar frecuentemente</td>
+          <td class="text-center"><input type="radio" name="csi_item11" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item11" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item11" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item11" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item11" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>12. Tengo dolor entre las piernas (vagina/pelvis/recto)</td>
+          <td class="text-center"><input type="radio" name="csi_item12" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item12" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item12" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item12" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item12" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>13. Tengo molestias cuando voy al baño</td>
+          <td class="text-center"><input type="radio" name="csi_item13" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item13" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item13" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item13" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item13" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>14. Tengo malestar abdominal y problemas digestivos</td>
+          <td class="text-center"><input type="radio" name="csi_item14" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item14" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item14" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item14" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item14" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>15. Tengo síndrome de colon irritable</td>
+          <td class="text-center"><input type="radio" name="csi_item15" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item15" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item15" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item15" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item15" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>16. Siento entumecimiento u hormigueo en partes de mi cuerpo</td>
+          <td class="text-center"><input type="radio" name="csi_item16" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item16" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item16" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item16" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item16" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>17. Tengo dolor en la región del pecho</td>
+          <td class="text-center"><input type="radio" name="csi_item17" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item17" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item17" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item17" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item17" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>18. Soy sensible a las luces brillantes</td>
+          <td class="text-center"><input type="radio" name="csi_item18" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item18" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item18" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item18" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item18" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>19. Soy sensible a los ruidos</td>
+          <td class="text-center"><input type="radio" name="csi_item19" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item19" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item19" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item19" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item19" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>20. Siento algunas cosas (como ciertos olores, químicos, medicamentos) que empeoran mi dolor</td>
+          <td class="text-center"><input type="radio" name="csi_item20" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item20" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item20" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item20" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item20" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>21. Me siento estresado/a cuando tengo que hacer muchas cosas en poco tiempo</td>
+          <td class="text-center"><input type="radio" name="csi_item21" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item21" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item21" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item21" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item21" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>22. Tengo problemas para concentrarme</td>
+          <td class="text-center"><input type="radio" name="csi_item22" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item22" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item22" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item22" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item22" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>23. Duermo mal</td>
+          <td class="text-center"><input type="radio" name="csi_item23" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item23" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item23" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item23" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item23" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>24. Me siento cansado/a cuando me despierto</td>
+          <td class="text-center"><input type="radio" name="csi_item24" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item24" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item24" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item24" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item24" value="4" onchange="calcularCSI()"></td>
+        </tr>
+        <tr>
+          <td>25. Tengo ansiedad</td>
+          <td class="text-center"><input type="radio" name="csi_item25" value="0" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item25" value="1" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item25" value="2" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item25" value="3" onchange="calcularCSI()"></td>
+          <td class="text-center"><input type="radio" name="csi_item25" value="4" onchange="calcularCSI()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="form-row">
+      <div class="form-col form-col-md-12">
+        <h5 class="mb-3">Parte B: Diagnósticos relacionados con Sensibilización Central</h5>
+        <p>Marque las condiciones que le han sido diagnosticadas por un médico:</p>
+        
+        <div class="form-row mb-3">
+          <div class="form-col form-col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_fibromialgia" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_fibromialgia">Fibromialgia</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_sindrome_fatiga" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_sindrome_fatiga">Síndrome de fatiga crónica</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_tmd" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_tmd">Trastorno temporomandibular (TMD)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_migranas" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_migranas">Migrañas o cefaleas tensionales</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_sii" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_sii">Síndrome de intestino irritable (SII)</label>
+            </div>
+          </div>
+          <div class="form-col form-col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_reflujo" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_reflujo">Reflujo o dolor torácico no cardíaco</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_vejiga" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_vejiga">Vejiga irritable o cistitis intersticial</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_quimico" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_quimico">Sensibilidad a químicos/medicamentos</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_lesion_cuello" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_lesion_cuello">Lesión de cuello (incluyendo latigazo)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="csi_ansiedad" onchange="calcularCSI()">
+              <label class="form-check-label" for="csi_ansiedad">Ansiedad o ataques de pánico</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-col form-col-md-12">
+        <div class="resultado-container" id="csi-resultado">
+          <div class="form-row">
+            <div class="form-col form-col-md-6">
+              <div class="resultado-label">Puntuación Parte A:</div>
+              <div class="resultado-valor" id="csi-valor-a">-/100</div>
+              <div class="resultado-interpretacion" id="csi-interpretacion-a">Complete el cuestionario</div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="resultado-label">Diagnósticos Parte B:</div>
+              <div class="resultado-valor" id="csi-valor-b">-/10</div>
+              <div class="resultado-interpretacion" id="csi-interpretacion-b">Condiciones relacionadas con SC</div>
+            </div>
+          </div>
+          
+          <div class="interpretacion-clinica-container mt-3">
+            <h5>Interpretación Clínica:</h5>
+            <div class="interpretacion-clinica" id="csi-interpretacion-clinica">
+              Complete el cuestionario para obtener la interpretación clínica.
+            </div>
+          </div>
+          
+          <div class="recomendaciones-container mt-3">
+            <h5>Recomendaciones Terapéuticas:</h5>
+            <div class="recomendaciones" id="csi-recomendaciones">
+              Complete el cuestionario para obtener recomendaciones terapéuticas.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- TSK-11 (Escala de Tampa de Kinesiofobia - versión corta) -->
+<div class="cuestionario-item">
+  <div class="cuestionario-header" onclick="toggleCuestionario('tsk-content')">
+    <h4><i class="fas fa-plus-circle"></i> Escala de Tampa de Kinesiofobia (TSK-11)</h4>
+    <div class="resultado-badge" id="tsk-badge">No completado</div>
+  </div>
+  <div class="cuestionario-content" id="tsk-content" style="display: none;">
+    <p class="mb-3">Esta escala evalúa el miedo al movimiento y a la reinjuria. Indique su grado de acuerdo con cada afirmación.</p>
+    
+    <table class="table table-bordered mb-4">
+      <thead>
+        <tr>
+          <th>Afirmación</th>
+          <th>Totalmente en desacuerdo</th>
+          <th>En desacuerdo</th>
+          <th>De acuerdo</th>
+          <th>Totalmente de acuerdo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. Tengo miedo de lesionarme si hago ejercicio</td>
+          <td class="text-center"><input type="radio" name="tsk_item1" value="1" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item1" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item1" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item1" value="4" onchange="calcularTSK()"></td>
+        </tr>
+        <tr>
+          <td>2. Si dejara que mi dolor aumentara, después no disminuiría</td>
+          <td class="text-center"><input type="radio" name="tsk_item2" value="1" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item2" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item2" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item2" value="4" onchange="calcularTSK()"></td>
+        </tr>
+        <tr>
+          <td>3. Mi cuerpo me dice que tengo algo peligroso</td>
+          <td class="text-center"><input type="radio" name="tsk_item3" value="1" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item3" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item3" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item3" value="4" onchange="calcularTSK()"></td>
+        </tr>
+        <tr>
+          <td>4. Mi dolor probablemente se aliviaría si hiciera ejercicio</td>
+          <td class="text-center"><input type="radio" name="tsk_item4" value="4" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item4" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item4" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item4" value="1" onchange="calcularTSK()"></td>
+        </tr>
+        <tr>
+          <td>5. Las personas no se toman mi condición médica con suficiente seriedad</td>
+          <td class="text-center"><input type="radio" name="tsk_item5" value="1" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item5" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item5" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item5" value="4" onchange="calcularTSK()"></td>
+        </tr>
+        <tr>
+          <td>6. Mi lesión ha puesto en riesgo mi cuerpo para siempre</td>
+          <td class="text-center"><input type="radio" name="tsk_item6" value="1" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item6" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item6" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item6" value="4" onchange="calcularTSK()"></td>
+        </tr>
+        <tr>
+          <td>7. El dolor siempre significa que me he lesionado</td>
+          <td class="text-center"><input type="radio" name="tsk_item7" value="1" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item7" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item7" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item7" value="4" onchange="calcularTSK()"></td>
+        </tr>
+        <tr>
+          <td>8. Aunque algo me provoque mucho dolor, no es realmente peligroso</td>
+          <td class="text-center"><input type="radio" name="tsk_item8" value="4" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item8" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item8" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item8" value="1" onchange="calcularTSK()"></td>
+        </tr>
+        <tr>
+          <td>9. Tengo miedo de lesionarme accidentalmente</td>
+          <td class="text-center"><input type="radio" name="tsk_item9" value="1" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item9" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item9" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item9" value="4" onchange="calcularTSK()"></td>
+        </tr>
+        <tr>
+          <td>10. La manera más segura de evitar que mi dolor empeore es simplemente ser cuidadoso y no hacer movimientos innecesarios</td>
+          <td class="text-center"><input type="radio" name="tsk_item10" value="1" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item10" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item10" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item10" value="4" onchange="calcularTSK()"></td>
+        </tr>
+        <tr>
+          <td>11. No tendría tanto dolor si no estuviera ocurriendo algo potencialmente peligroso en mi cuerpo</td>
+          <td class="text-center"><input type="radio" name="tsk_item11" value="1" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item11" value="2" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item11" value="3" onchange="calcularTSK()"></td>
+          <td class="text-center"><input type="radio" name="tsk_item11" value="4" onchange="calcularTSK()"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="form-row">
+      <div class="form-col form-col-md-12">
+        <div class="resultado-container" id="tsk-resultado">
+          <div class="resultado-label">Puntuación TSK-11:</div>
+          <div class="resultado-valor" id="tsk-valor">-/44</div>
+          <div class="resultado-interpretacion" id="tsk-interpretacion">Complete el cuestionario para obtener un resultado</div>
+          
+          <div class="interpretacion-clinica-container">
+            <h5>Interpretación Clínica:</h5>
+            <div class="interpretacion-clinica" id="tsk-interpretacion-clinica">
+              Complete el cuestionario para obtener la interpretación clínica.
+            </div>
+          </div>
+          
+          <div class="recomendaciones-container">
+            <h5>Recomendaciones Terapéuticas:</h5>
+            <div class="recomendaciones" id="tsk-recomendaciones">
+              Complete el cuestionario para obtener recomendaciones terapéuticas.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+      <!-- DN4 (Cuestionario de Dolor Neuropático) -->
+      <div class="cuestionario-item">
+        <div class="cuestionario-header" onclick="toggleCuestionario('dn4-content')">
+          <h4><i class="fas fa-plus-circle"></i> Cuestionario de Dolor Neuropático (DN4)</h4>
+          <div class="resultado-badge" id="dn4-badge">No completado</div>
+        </div>
+        <div class="cuestionario-content" id="dn4-content" style="display: none;">
+          <p class="mb-3">Este cuestionario ayuda a identificar el dolor neuropático. Responda Sí o No a las siguientes preguntas basadas en las características del dolor del paciente.</p>
+          
+          <h5>Parte 1: Entrevista al paciente</h5>
+          <p class="text-muted small mb-2">¿El dolor tiene una o más de las siguientes características?</p>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">1. ¿Quemazón?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_quemazon" id="dn4_quemazon_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_quemazon_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_quemazon" id="dn4_quemazon_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_quemazon_no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">2. ¿Sensación de frío doloroso?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_frio" id="dn4_frio_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_frio_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_frio" id="dn4_frio_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_frio_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">3. ¿Descargas eléctricas?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_descargas" id="dn4_descargas_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_descargas_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_descargas" id="dn4_descargas_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_descargas_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <h5 class="mt-4">¿Se asocia el dolor con uno o más de los siguientes síntomas en la misma zona?</h5>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">4. ¿Hormigueo?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hormigueo" id="dn4_hormigueo_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hormigueo_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hormigueo" id="dn4_hormigueo_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hormigueo_no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">5. ¿Alfileres y agujas?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_alfileres" id="dn4_alfileres_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_alfileres_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_alfileres" id="dn4_alfileres_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_alfileres_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">6. ¿Entumecimiento?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_entumecimiento" id="dn4_entumecimiento_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_entumecimiento_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_entumecimiento" id="dn4_entumecimiento_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_entumecimiento_no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">7. ¿Picazón?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_picazon" id="dn4_picazon_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_picazon_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_picazon" id="dn4_picazon_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_picazon_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <h5 class="mt-4">Parte 2: Examen del paciente</h5>
+          <p class="text-muted small mb-2">¿El dolor está localizado en una zona donde el examen físico puede mostrar una o más de las siguientes características?</p>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">8. ¿Hipoestesia al tacto?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hipoestesia" id="dn4_hipoestesia_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hipoestesia_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hipoestesia" id="dn4_hipoestesia_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hipoestesia_no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">9. ¿Hipoestesia al pinchazo?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hipoestesia_pinchazo" id="dn4_hipoestesia_pinchazo_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hipoestesia_pinchazo_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_hipoestesia_pinchazo" id="dn4_hipoestesia_pinchazo_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_hipoestesia_pinchazo_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row mb-3">
+            <div class="form-col form-col-md-6">
+              <div class="form-group">
+                <label class="form-label">10. ¿Se provoca o incrementa el dolor por cepillado?</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_cepillado" id="dn4_cepillado_si" value="1" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_cepillado_si">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dn4_cepillado" id="dn4_cepillado_no" value="0" onchange="calcularDN4()">
+                  <label class="form-check-label" for="dn4_cepillado_no">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col form-col-md-12">
+              <div class="resultado-container" id="dn4-resultado">
+                <div class="resultado-label">Puntuación DN4:</div>
+                <div class="resultado-valor" id="dn4-valor">0/10</div>
+                <div class="resultado-interpretacion" id="dn4-interpretacion">Complete el cuestionario para obtener un resultado</div>
+                
+                <div class="interpretacion-clinica-container">
+                  <h5>Interpretación Clínica:</h5>
+                  <div class="interpretacion-clinica" id="dn4-interpretacion-clinica">
+                    Complete el cuestionario para obtener la interpretación clínica.
+                  </div>
+                </div>
+                
+                <div class="recomendaciones-container">
+                  <h5>Recomendaciones Terapéuticas:</h5>
+                  <div class="recomendaciones" id="dn4-recomendaciones">
+                    Complete el cuestionario para obtener recomendaciones terapéuticas.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- Cierre de cuestionario-item para DN4 -->
+    </div> <!-- Cierre de cuestionarios-acordeon -->
+
+
+
+
